@@ -1,8 +1,16 @@
 [
   {
     "name": "frontend",
-    "image": "alphagov/frontend:deployed-to-production",
+    "image": "govuk/frontend:deployed-to-production",
     "essential": true,
+    "environment": [
+      { "name": "RAILS_ENV", "value": "production" },
+      { "name": "SECRET_KEY_BASE", "value": "875c6bf4c48da9bb41f4cfd25d09bf5e2a62d88b39efc4bd9c498e6c8f61e4df740af87386f97269525e01b5f74402512eb6a4723882579f10aa95f6e2971fc2" },
+      { "name": "ASSET_HOST", "value": "www.gov.uk" },
+      { "name": "WEBSITE_ROOT", "value": "www.gov.uk" },
+      { "name": "PLEK_SERVICE_CONTENT_STORE_URI", "value": "https://www.gov.uk/api" },
+      { "name": "PLEK_SERVICE_STATIC_URI", "value": "assets.test.publishing.service.gov.uk" }
+    ],
     "portMappings": [
       {
         "containerPort": 3005,
