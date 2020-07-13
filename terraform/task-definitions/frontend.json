@@ -7,14 +7,26 @@
       { "name": "RAILS_ENV", "value": "production" },
       { "name": "SECRET_KEY_BASE", "value": "875c6bf4c48da9bb41f4cfd25d09bf5e2a62d88b39efc4bd9c498e6c8f61e4df740af87386f97269525e01b5f74402512eb6a4723882579f10aa95f6e2971fc2" },
       { "name": "ASSET_HOST", "value": "www.gov.uk" },
+      { "name": "GOVUK_APP_DOMAIN", "value": "www.gov.uk" },
+      { "name": "GOVUK_WEBSITE_ROOT", "value": "www.gov.uk" },
       { "name": "WEBSITE_ROOT", "value": "www.gov.uk" },
       { "name": "PLEK_SERVICE_CONTENT_STORE_URI", "value": "https://www.gov.uk/api" },
-      { "name": "PLEK_SERVICE_STATIC_URI", "value": "assets.test.publishing.service.gov.uk" }
+      { "name": "PLEK_SERVICE_STATIC_URI", "value": "https://assets.publishing.service.gov.uk" },
+      { "name": "GOVUK_ASSET_ROOT", "value": "https://assets.digital.cabinet-office.gov.uk" }
     ],
+    "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+            "awslogs-create-group": "true",
+            "awslogs-group": "awslogs-fargate",
+            "awslogs-region": "eu-west-1",
+            "awslogs-stream-prefix": "awslogs-frontend"
+        }
+    },
     "portMappings": [
       {
         "containerPort": 3005,
-        "hostPort": 3005
+        "protocol": "tcp"
       }
     ]
   }
