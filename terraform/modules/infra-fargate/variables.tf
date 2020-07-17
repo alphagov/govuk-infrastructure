@@ -12,3 +12,26 @@ variable "desired_count" {
   description = "The desired number of container instances"
   type        = number
 }
+
+variable "private_subnets" {
+  description = "The subnet ids for govuk_private_a, govuk_private_b, and govuk_private_c"
+  type        = list
+  default     = ["subnet-6dc4370b", "subnet-463bfd0e", "subnet-bfecd0e4"]
+}
+
+variable "govuk_management_access_security_group" {
+  description = "Group used to allow access by management systems"
+  type        = string
+  default     = "sg-0b873470482f6232d"
+}
+
+variable "container_ingress_port" {
+  description = "The port which the container will accept connections on"
+  type        = number
+}
+
+variable "lb_tg_protocol" {
+  description = "The protocol to use for routing traffic to the targets: TCP, TLS, UDP, TCP_UDP, HTTP..."
+  type        = string
+  default     = "HTTP"
+}

@@ -13,8 +13,9 @@ provider "aws" {
 }
 
 module "infra-fargate" {
-  source                = "../modules/infra-fargate"
-  service_name          = "frontend"
-  container_definitions = file("../task-definitions/frontend.json")
-  desired_count         = 1
+  source                 = "../modules/infra-fargate"
+  service_name           = "frontend"
+  container_definitions  = file("../task-definitions/frontend.json")
+  desired_count          = 1
+  container_ingress_port = 3005
 }
