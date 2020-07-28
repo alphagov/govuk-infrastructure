@@ -65,3 +65,39 @@ resource "aws_iam_role_policy_attachment" "task_exec_policy" {
   role       = aws_iam_role.task_execution_role.name
   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
 }
+
+
+#
+# Allow apps in ECS Fargate containers to access secrets
+#
+# This allows *all* apps to access *any* secret. We should create a task execution
+# role and policy for each app to permit apps to only access required secrets.
+#
+
+resource "aws_iam_policy" "access_secrets" {
+  name        = "access_secrets"
+  path        = "/accessSecretsPolicy/"
+  description = "Access AWS Secrets Manager secrets policy managed by Terraform"
+
+  policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": [
+        "secretsmanager:GetSecretValue"
+      ],
+      "Resource": [
+        "arn:aws:secretsmanager:eu-west-1:430354129336:secret:*"
+      ]
+    }
+  ]
+}
+EOF
+}
+
+resource "aws_iam_role_policy_attachment" "access_secrets_attachment_policy" {
+  role       = aws_iam_role.task_execution_role.name
+  policy_arn = aws_iam_policy.access_secrets.arn
+}
