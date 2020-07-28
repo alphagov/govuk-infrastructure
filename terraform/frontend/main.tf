@@ -19,3 +19,9 @@ module "infra-fargate" {
   desired_count          = 1
   container_ingress_port = 3005
 }
+
+module "fargate-console" {
+  source                = "../modules/fargate-console"
+  service_name          = "frontend_console"
+  container_definitions = file("../task-definitions/frontend_console.json")
+}
