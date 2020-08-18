@@ -19,7 +19,7 @@ resource "aws_lb" "alb" {
   name               = "fargate-${var.service_name}-alb"
   internal           = "true"
   load_balancer_type = "application"
-  security_groups    = ["sg-0e63eaee8bd5f4315"] # TODO: frontend elb security group
+  security_groups    = [aws_security_group.alb_sg.id]
   subnets            = var.private_subnets
 }
 
@@ -29,6 +29,10 @@ resource "aws_lb_target_group" "lb_tg" {
   protocol    = "HTTP"
   vpc_id      = data.aws_vpc.vpc.id
   target_type = "ip"
+
+  health_check {
+    path      = "/healthcheck"
+  }
 }
 
 # Forwards LB requests to the Fargate targets
@@ -45,7 +49,7 @@ resource "aws_lb_listener" "listener" {
   }
 }
 
-resource "aws_security_group" "alb_sg" {
+resource "aws_security_group" "service_sg" {
   name        = "fargate_${var.service_name}_elb_access"
   vpc_id      = data.aws_vpc.vpc.id
   description = "Access to the fargate ${var.service_name} service from its ELB"
@@ -58,10 +62,31 @@ resource "aws_security_group_rule" "ingress_alb_http" {
   protocol  = "tcp"
 
   # Which security group is the rule assigned to
-  security_group_id = aws_security_group.alb_sg.id
+  security_group_id = aws_security_group.service_sg.id
 
   # Which security group can use this rule
-  source_security_group_id = "sg-0e63eaee8bd5f4315" # TODO: frontend elb security group
+  source_security_group_id = aws_security_group.alb_sg.id
+}
+
+resource "aws_security_group" "alb_sg" {
+  name        = "fargate_${var.service_name}_elb"
+  vpc_id      = data.aws_vpc.vpc.id
+  description = "ALB ingress and egress security group for ${var.service_name} ECS service"
+
+  ingress {
+    description = "${var.service_name} can be spoken to by the Internet"
+    from_port   = 443
+    to_port     = 443
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
 }
 
 #
@@ -81,7 +106,7 @@ resource "aws_ecs_service" "service" {
   launch_type     = "FARGATE"
 
   network_configuration {
-    security_groups = [aws_security_group.alb_sg.id, var.govuk_management_access_security_group]
+    security_groups = [aws_security_group.service_sg.id, var.govuk_management_access_security_group]
     subnets         = var.private_subnets
   }
 
