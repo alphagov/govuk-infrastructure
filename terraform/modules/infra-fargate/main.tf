@@ -32,6 +32,8 @@ resource "aws_lb_target_group" "lb_tg" {
 
   health_check {
     path      = "/healthcheck"
+    timeout   = 30
+    interval  = 60
   }
 }
 
