@@ -18,4 +18,12 @@ module "infra-fargate" {
   container_definitions  = file("../task-definitions/publisher.json")
   desired_count          = 1
   container_ingress_port = 3000
+  public_service_sg_id   = module.public_alb.public_service_sg_id
+  public_tg_arn          = module.public_alb.public_tg_arn
+}
+
+module "public_alb" {
+  source                 = "../modules/public-alb"
+  service_name           = "publisher"
+  container_ingress_port = 3000
 }
