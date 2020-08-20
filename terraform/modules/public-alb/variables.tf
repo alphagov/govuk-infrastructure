@@ -3,10 +3,10 @@ variable "service_name" {
   type        = string
 }
 
-variable "private_subnets" {
+variable "public_subnets" {
   description = "The subnet ids for govuk_private_a, govuk_private_b, and govuk_private_c"
   type        = list
-  default     = ["subnet-6dc4370b", "subnet-463bfd0e", "subnet-bfecd0e4"]
+  default     = ["subnet-6cc4370a", "subnet-ba30f6f2", "subnet-bfe6dae4"]
 }
 
 variable "govuk_management_access_security_group" {

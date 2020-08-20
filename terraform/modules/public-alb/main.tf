@@ -21,7 +21,7 @@ resource "aws_lb" "alb" {
   internal           = false
   load_balancer_type = "application"
   security_groups    = [aws_security_group.alb_sg.id]
-  subnets            = var.private_subnets
+  subnets            = var.public_subnets
 }
 
 resource "aws_lb_target_group" "lb_tg" {
