@@ -2,8 +2,13 @@ data "aws_vpc" "vpc" {
   id = "vpc-9e62bcf8"
 }
 
+data "aws_acm_certificate" "default_elb_cert" {
+  domain   = "*.test.govuk.digital"
+  statuses = ["ISSUED"]
+}
+
 data "aws_acm_certificate" "elb_cert" {
-  domain   = "*.test.govuk-internal.digital"
+  domain   = "*.test.publishing.service.gov.uk"
   statuses = ["ISSUED"]
 }
 
@@ -39,12 +44,18 @@ resource "aws_lb_listener" "listener" {
   port              = "443"
   protocol          = "HTTPS"
   ssl_policy        = "ELBSecurityPolicy-2016-08"
-  certificate_arn   = data.aws_acm_certificate.elb_cert.arn
+  certificate_arn   = data.aws_acm_certificate.default_elb_cert.arn
 
   default_action {
     type             = "forward"
     target_group_arn = aws_lb_target_group.lb_tg.arn
   }
+}
+
+# Adds .publishing.service.gov.uk cert to ALB listener
+resource "aws_lb_listener_certificate" "publishing_service_listener_cert" {
+  listener_arn    = aws_lb_listener.listener.arn
+  certificate_arn = data.aws_acm_certificate.elb_cert.arn
 }
 
 resource "aws_security_group_rule" "ingress_alb_http" {
@@ -86,4 +97,3 @@ resource "aws_security_group" "public_service_sg" {
   vpc_id      = data.aws_vpc.vpc.id
   description = "Access to the fargate ${var.service_name} service from its public ELB"
 }
-
