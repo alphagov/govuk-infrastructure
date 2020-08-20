@@ -1,50 +1,35 @@
 [
   {
     "name": "publisher",
-    "image": "govuk/publisher:deployed-to-production",
+    "image": "govuk/publisher:serve-assets-in-prod",
     "essential": true,
     "environment": [
-      { "name": "RAILS_ENV", "value": "production" },
       { "name": "ASSET_HOST", "value": "www.gov.uk" },
-      { "name": "GOVUK_APP_DOMAIN", "value": "test.publishing.service.gov.uk" },
-      { "name": "GOVUK_WEBSITE_ROOT", "value": "test.publishing.service.gov.uk" },
-      { "name": "WEBSITE_ROOT", "value": "test.publishing.service.gov.uk" },
-      { "name": "PLEK_SERVICE_CONTENT_STORE_URI", "value": "https://www.gov.uk/api" },
-      { "name": "PLEK_SERVICE_STATIC_URI", "value": "https://assets.publishing.service.gov.uk" },
-      { "name": "GOVUK_ASSET_ROOT", "value": "https://assets.digital.cabinet-office.gov.uk" },
-      { "name": "STATSD_PROTOCOL", "value": "tcp" },
-      { "name": "STATSD_HOST", "value": "statsd.test.govuk-internal.digital" },
-      { "name": "GOVUK_STATSD_PREFIX", "value": "fargate" },
       { "name": "BASIC_AUTH_USERNAME", "value": "gds" },
-      { "name": "EMAIL_GROUP_BUSINESS", "value": "mainstream-publisher-notifications-test@digital.cabinet-office.gov.uk" },
-      { "name": "EMAIL_GROUP_CITIZEN", "value": "mainstream-publisher-notifications-test@digital.cabinet-office.gov.uk" },
-      { "name": "EMAIL_GROUP_DEV", "value": "mainstream-publisher-notifications-test@digital.cabinet-office.gov.uk" },
-      { "name": "EMAIL_GROUP_FORCE_PUBLISH_ALERTS", "value": "mainstream-publisher-notifications-test@digital.cabinet-office.gov.uk" },
-      { "name": "FACT_CHECK_USERNAME", "value": "mainstream-publisher-notifications-test@digital.cabinet-office.gov.uk" },
-      { "name": "RAILS_ENV", "value":  "production"},
-      { "name": "ASSET_HOST", "value":  "www.gov.uk"},
-      { "name": "GOVUK_APP_DOMAIN", "value":  "test.publishing.service.gov.uk"},
-      { "name": "GOVUK_WEBSITE_ROOT", "value":  "test.publishing.service.gov.uk"},
-      { "name": "WEBSITE_ROOT", "value":  "test.publishing.service.gov.uk"},
-      { "name": "PLEK_SERVICE_CONTENT_STORE_URI", "value" : "https://www.gov.uk/api"},
-      { "name": "PLEK_SERVICE_STATIC_URI", "value" : "https://assets.publishing.service.gov.uk"},
-      { "name": "GOVUK_ASSET_ROOT", "value" : "https://assets.digital.cabinet-office.gov.uk"},
-      { "name": "GOVUK_STATSD_PREFIX", "value": "fargate"},
-      { "name": "BASIC_AUTH_USERNAME", "value": "gds"},
-      { "name": "EMAIL_GROUP_BUSINESS", "value": "mainstream-publisher-notifications-test@digital.cabinet-office.gov.uk"},
-      { "name": "EMAIL_GROUP_CITIZEN", "value": "mainstream-publisher-notifications-test@digital.cabinet-office.gov.uk"},
-      { "name": "EMAIL_GROUP_DEV", "value": "mainstream-publisher-notifications-test@digital.cabinet-office.gov.uk"},
-      { "name": "EMAIL_GROUP_FORCE_PUBLISH_ALERTS", "value":  "mainstream-publisher-notifications-test@digital.cabinet-office.gov.uk"},
-      { "name": "FACT_CHECK_SUBJECT_PREFIX", "value":  "dev"},
-      { "name": "FACT_CHECK_USERNAME", "value": " govuk-fact-check-integration@digital.cabinet-office.gov.uk"},
+      { "name": "EMAIL_GROUP_BUSINESS", "value": "test-address@digital.cabinet-office.gov.uk" },
+      { "name": "EMAIL_GROUP_CITIZEN", "value": "test-address@digital.cabinet-office.gov.uk" },
+      { "name": "EMAIL_GROUP_DEV", "value": "test-address@digital.cabinet-office.gov.uk" },
+      { "name": "EMAIL_GROUP_FORCE_PUBLISH_ALERTS", "value": "test-address@digital.cabinet-office.gov.uk" },
+      { "name": "FACT_CHECK_SUBJECT_PREFIX", "value": "dev"},
+      { "name": "FACT_CHECK_USERNAME", "value": "govuk-fact-check-test@digital.cabinet-office.gov.uk"},
+      { "name": "GOVUK_APP_DOMAIN", "value": "test.govuk-internal.digital" },
       { "name": "GOVUK_APP_NAME", "value": "publisher"},
       { "name": "GOVUK_APP_TYPE", "value": "rack"},
-      { "name": "GOVUK_GROUP", "value":  "deploy"},
-      { "name": "GOVUK_STATSD_PREFIX", "value": "govuk.app.publisher.ip-10-200-6-246"},
-      { "name": "GOVUK_USER", "value":  "deploy"},
-      { "name": "REDIS_HOST", "value":  "pink-backend-redis.0f3erf.ng.0001.euw1.cache.amazonaws.com"},
-      { "name": "REDIS_PORT", "value":  "6379"},
-      { "name": "REDIS_URL", "value": "redis://pink-backend-redis.0f3erf.ng.0001.euw1.cache.amazonaws.com:6379"}
+      { "name": "GOVUK_STATSD_PREFIX", "value": "fargate" },
+      { "name": "GOVUK_ASSET_ROOT", "value": "https://assets.digital.cabinet-office.gov.uk" },
+      { "name": "GOVUK_GROUP", "value": "deploy"},
+      { "name": "GOVUK_USER", "value": "deploy"},
+      { "name": "GOVUK_WEBSITE_ROOT", "value": "https://www.gov.uk" },
+      { "name": "PLEK_SERVICE_CONTENT_STORE_URI", "value": "https://www.gov.uk/api" },
+      { "name": "PLEK_SERVICE_STATIC_URI", "value": "https://assets.publishing.service.gov.uk" },
+      { "name": "RAILS_ENV", "value": "production" },
+      { "name": "RAILS_SERVE_STATIC_FILES", "value": "true" },
+      { "name": "REDIS_HOST", "value": "pink-backend-redis.0f3erf.ng.0001.euw1.cache.amazonaws.com"},
+      { "name": "REDIS_PORT", "value": "6379"},
+      { "name": "REDIS_URL", "value": "redis://pink-backend-redis.0f3erf.ng.0001.euw1.cache.amazonaws.com:6379"},
+      { "name": "STATSD_PROTOCOL", "value": "tcp" },
+      { "name": "STATSD_HOST", "value": "statsd.test.govuk-internal.digital" },
+      { "name": "WEBSITE_ROOT", "value": "test.publishing.service.gov.uk" }
     ],
     "logConfiguration": {
         "logDriver": "awslogs",
@@ -55,9 +40,11 @@
             "awslogs-stream-prefix": "awslogs-publisher"
         }
     },
+    "mountPoints": [],
     "portMappings": [
       {
         "containerPort": 3000,
+        "hostPort": 3000,
         "protocol": "tcp"
       }
     ],
@@ -125,6 +112,3 @@
     ]
   }
 ]
-
-
-
