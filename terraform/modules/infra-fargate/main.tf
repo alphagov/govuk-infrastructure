@@ -31,9 +31,9 @@ resource "aws_lb_target_group" "lb_tg" {
   target_type = "ip"
 
   health_check {
-    path      = "/healthcheck"
-    timeout   = 30
-    interval  = 60
+    path     = "/healthcheck"
+    timeout  = 30
+    interval = 60
   }
 }
 
