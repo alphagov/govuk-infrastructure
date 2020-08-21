@@ -56,7 +56,7 @@ resource "aws_ecs_service" "service" {
   launch_type     = "FARGATE"
 
   network_configuration {
-    security_groups = [aws_security_group.service.id, aws_security_group.public_service.id, var.govuk_management_access_security_group]
+    security_groups = [aws_security_group.service.id, aws_security_group.public_service.id, var.govuk_management_access_security_group, aws_security_group.publisher_dependencies.id]
     subnets         = var.private_subnets
   }
 
@@ -109,8 +109,10 @@ resource "aws_lb_target_group" "internal_lb_tg" {
 
   health_check {
     path     = "/healthcheck"
-    timeout  = 30
-    interval = 60
+    timeout  = 120
+    interval = 300
+    unhealthy_threshold = 10
+    healthy_threshold   = 2
   }
 }
 
@@ -194,8 +196,10 @@ resource "aws_lb_target_group" "public_lb_tg" {
 
   health_check {
     path     = "/healthcheck"
-    timeout  = 30
-    interval = 60
+    timeout  = 120
+    interval = 300
+    unhealthy_threshold = 10
+    healthy_threshold   = 2
   }
 }
 
@@ -256,4 +260,43 @@ resource "aws_security_group" "public_service" {
   name        = "fargate_public_${var.service_name}_elb_access"
   vpc_id      = data.aws_vpc.vpc.id
   description = "Access to the fargate ${var.service_name} service from its public ELB"
+}
+
+#
+# Redis
+#
+
+resource "aws_security_group" "publisher_dependencies" {
+  name        = "fargate_${var.service_name}_app"
+  vpc_id      = data.aws_vpc.vpc.id
+  description = "${var.service_name} service dependencies"
+}
+
+resource "aws_security_group_rule" "ingress_redis" {
+  type      = "ingress"
+  from_port = 6379
+  to_port   = 6379
+  protocol  = "tcp"
+
+  # Which security group is the rule assigned to
+  security_group_id = var.redis_security_group_id
+
+  # Which security group can use this rule
+  source_security_group_id = aws_security_group.publisher_dependencies.id
+}
+
+#
+# DocumentDB
+#
+resource "aws_security_group_rule" "ingress_documentdb" {
+  type      = "ingress"
+  from_port = 27017
+  to_port   = 27017
+  protocol  = "tcp"
+
+  # Which security group is the rule assigned to
+  security_group_id = var.documentdb_security_group_id
+
+  # Which security group can use this rule
+  source_security_group_id = aws_security_group.publisher_dependencies.id
 }

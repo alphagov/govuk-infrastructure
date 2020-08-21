@@ -37,3 +37,15 @@ variable "desired_count" {
   type        = number
   default     = 1
 }
+
+variable "redis_security_group_id" {
+  description = "The redis security group id"
+  type = string
+  default = "sg-0a8a92451bfde8aa3"
+}
+
+variable "documentdb_security_group_id" {
+  description = "The documentdb security group id"
+  type = string
+  default = "sg-08a20d332cbc59c3c"
+}
