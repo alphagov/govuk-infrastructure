@@ -108,9 +108,9 @@ resource "aws_lb_target_group" "internal_lb_tg" {
   target_type = "ip"
 
   health_check {
-    path     = "/healthcheck"
-    timeout  = 120
-    interval = 300
+    path                = "/healthcheck"
+    timeout             = 120
+    interval            = 300
     unhealthy_threshold = 10
     healthy_threshold   = 2
   }
@@ -195,9 +195,9 @@ resource "aws_lb_target_group" "public_lb_tg" {
   target_type = "ip"
 
   health_check {
-    path     = "/healthcheck"
-    timeout  = 120
-    interval = 300
+    path                = "/healthcheck"
+    timeout             = 120
+    interval            = 300
     unhealthy_threshold = 10
     healthy_threshold   = 2
   }
@@ -299,4 +299,52 @@ resource "aws_security_group_rule" "ingress_documentdb" {
 
   # Which security group can use this rule
   source_security_group_id = aws_security_group.publisher_dependencies.id
+}
+
+#
+# DNS
+#
+
+data "aws_route53_zone" "internal" {
+  name         = var.internal_domain_name
+  private_zone = true
+}
+
+data "aws_route53_zone" "public" {
+  name         = var.public_domain_name
+  private_zone = false
+}
+
+resource "aws_route53_record" "internal_service_names" {
+  zone_id = data.aws_route53_zone.internal.zone_id
+  name    = "${var.service_name}.${var.internal_domain_name}"
+  type    = "CNAME"
+  records = ["${var.service_name}.pink.${var.internal_domain_name}"]
+  ttl     = "300"
+}
+
+
+resource "aws_route53_record" "internal_service_record" {
+  zone_id = data.aws_route53_zone.internal.zone_id
+  name    = "${var.service_name}.pink.${var.internal_domain_name}"
+  type    = "A"
+
+  alias {
+    name                   = aws_lb.internal_alb.dns_name
+    zone_id                = aws_lb.internal_alb.zone_id
+    evaluate_target_health = false
+  }
+}
+
+
+resource "aws_route53_record" "public_service_record" {
+  zone_id = data.aws_route53_zone.public.zone_id
+  name    = "${var.service_name}.${var.public_domain_name}"
+  type    = "A"
+
+  alias {
+    name                   = aws_lb.public.dns_name
+    zone_id                = aws_lb.public.zone_id
+    evaluate_target_health = false
+  }
 }
