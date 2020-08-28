@@ -30,8 +30,12 @@ variable "container_ingress_port" {
   type        = number
 }
 
-variable "lb_tg_protocol" {
-  description = "The protocol to use for routing traffic to the targets: TCP, TLS, UDP, TCP_UDP, HTTP..."
+variable "public_service_sg_id" {
+  description = "The security group to link the public load balancer to the service"
   type        = string
-  default     = "HTTP"
+}
+
+variable "public_tg_arn" {
+  description = "The target group to link the public load balancer to the service"
+  type        = string
 }
