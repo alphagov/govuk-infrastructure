@@ -20,11 +20,6 @@ data "aws_vpc" "vpc" {
   id = "vpc-9e62bcf8"
 }
 
-# TODO: Move publisher under GOV.UK Cluster
-# data "aws_ecs_cluster" "govuk" {
-#   cluster_name = "govuk"
-# }
-
 #
 # ECS Cluster, Service, Task
 #
@@ -43,17 +38,18 @@ resource "aws_ecs_task_definition" "service" {
   requires_compatibilities = ["FARGATE"]
   container_definitions    = file("../task-definitions/publisher.json")
   network_mode             = "awsvpc"
-  cpu                      = 2048
-  memory                   = 4096
+  cpu                      = 512
+  memory                   = 1024
   execution_role_arn       = data.aws_iam_role.task_execution_role.arn
 }
 
 resource "aws_ecs_service" "service" {
-  name            = var.service_name
-  cluster         = aws_ecs_cluster.cluster.id
-  task_definition = aws_ecs_task_definition.service.arn
-  desired_count   = var.desired_count
-  launch_type     = "FARGATE"
+  name                              = var.service_name
+  cluster                           = aws_ecs_cluster.cluster.id
+  task_definition                   = aws_ecs_task_definition.service.arn
+  desired_count                     = var.desired_count
+  launch_type                       = "FARGATE"
+  health_check_grace_period_seconds = 300
 
   network_configuration {
     security_groups = [aws_security_group.service.id, aws_security_group.public_service.id, var.govuk_management_access_security_group, aws_security_group.publisher_dependencies.id]
@@ -108,11 +104,7 @@ resource "aws_lb_target_group" "internal_lb_tg" {
   target_type = "ip"
 
   health_check {
-    path                = "/healthcheck"
-    timeout             = 120
-    interval            = 300
-    unhealthy_threshold = 10
-    healthy_threshold   = 2
+    path = "/healthcheck"
   }
 }
 
@@ -195,11 +187,7 @@ resource "aws_lb_target_group" "public_lb_tg" {
   target_type = "ip"
 
   health_check {
-    path                = "/healthcheck"
-    timeout             = 120
-    interval            = 300
-    unhealthy_threshold = 10
-    healthy_threshold   = 2
+    path = "/healthcheck"
   }
 }
 
