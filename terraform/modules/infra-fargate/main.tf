@@ -108,18 +108,12 @@ resource "aws_ecs_service" "service" {
   launch_type     = "FARGATE"
 
   network_configuration {
-    security_groups = [aws_security_group.service_sg.id, var.govuk_management_access_security_group, var.public_service_sg_id]
+    security_groups = [aws_security_group.service_sg.id, var.govuk_management_access_security_group]
     subnets         = var.private_subnets
   }
 
   load_balancer {
     target_group_arn = aws_lb_target_group.lb_tg.arn
-    container_name   = var.service_name
-    container_port   = var.container_ingress_port
-  }
-
-  load_balancer {
-    target_group_arn = var.public_tg_arn
     container_name   = var.service_name
     container_port   = var.container_ingress_port
   }
