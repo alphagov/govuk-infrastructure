@@ -29,13 +29,3 @@ variable "container_ingress_port" {
   description = "The port which the container will accept connections on"
   type        = number
 }
-
-variable "public_service_sg_id" {
-  description = "The security group to link the public load balancer to the service"
-  type        = string
-}
-
-variable "public_tg_arn" {
-  description = "The target group to link the public load balancer to the service"
-  type        = string
-}

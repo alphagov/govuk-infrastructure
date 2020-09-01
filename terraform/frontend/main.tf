@@ -25,3 +25,22 @@ module "fargate-console" {
   service_name          = "frontend_console"
   container_definitions = file("../task-definitions/frontend_console.json")
 }
+
+# Internal DNS record
+
+data "aws_route53_zone" "internal" {
+  name         = "test.govuk-internal.digital"
+  private_zone = true
+}
+
+resource "aws_route53_record" "internal_service_name" {
+  zone_id = data.aws_route53_zone.internal.zone_id
+  name    = "frontend-ecs.test.govuk-internal.digital"
+  type    = "A"
+
+  alias {
+    name                   = module.infra-fargate.dns_name
+    zone_id                = module.infra-fargate.alb_zone_id
+    evaluate_target_health = true
+  }
+}
