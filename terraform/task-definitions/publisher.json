@@ -13,6 +13,7 @@
       { "name": "FACT_CHECK_SUBJECT_PREFIX", "value": "dev"},
       { "name": "FACT_CHECK_USERNAME", "value": "govuk-fact-check-test@digital.cabinet-office.gov.uk"},
       { "name": "GOVUK_APP_DOMAIN", "value": "test.govuk-internal.digital" },
+      { "name": "GOVUK_APP_DOMAIN_EXTERNAL", "value": "test.govuk.digital" },
       { "name": "GOVUK_APP_NAME", "value": "publisher"},
       { "name": "GOVUK_APP_TYPE", "value": "rack"},
       { "name": "GOVUK_STATSD_PREFIX", "value": "fargate" },
