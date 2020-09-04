@@ -4,6 +4,7 @@
     "image": "govuk/publishing-api:with-content-schemas",
     "essential": true,
     "environment": [
+      { "name": "APPMESH_VIRTUAL_NODE_NAME", "value": "mesh/govuk/virtualNode/publishing-api" },
       { "name": "CONTENT_API_PROTOTYPE", "value": "yes" },
       { "name": "CONTENT_STORE", "value": "https://content-store.test.publishing.service.gov.uk" },
       { "name": "DRAFT_CONTENT_STORE", "value": "https://draft-content-store.test.publishing.service.gov.uk" },
@@ -49,6 +50,19 @@
         "protocol": "tcp"
       }
     ],
+    "proxyConfiguration": {
+      "type": "APPMESH",
+      "containerName": "envoy",
+      "properties": [
+        { "name": "IgnoredUID", "value": "" },
+        { "name": "IgnoredGID", "value": "" },
+        { "name": "AppPorts", "value": "3000" },
+        { "name": "ProxyIngressPort", "value": "3000" },
+        { "name": "ProxyEgressPort", "value": "8080" },
+        { "name": "EgressIgnoredPorts", "value": "" },
+        { "name": "EgressIgnoredIPs", "value": "" }
+      ]
+    },
     "secrets": [
       {
         "name": "CONTENT_STORE_BEARER_TOKEN",
@@ -89,6 +103,30 @@
       {
         "name": "SENTRY_DSN",
         "valueFrom": "arn:aws:secretsmanager:eu-west-1:430354129336:secret:publishing_api-SENTRY_DSN-pCCOSJ"
+      }
+    ]
+  },
+  {
+    "name": "envoy",
+    "image": "840364872350.dkr.ecr.eu-west-1.amazonaws.com/aws-appmesh-envoy:v1.15.0.0-prod",
+    "environment": [
+      { "name": "APPMESH_VIRTUAL_NODE_NAME", "value": "mesh/govuk/virtualNode/publishing-api" },
+      { "name": "ENVOY_LOG_LEVEL", "value": "debug" }
+    ],
+    "essential": true,
+    "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+            "awslogs-create-group": "true",
+            "awslogs-group": "awslogs-fargate",
+            "awslogs-region": "eu-west-1",
+            "awslogs-stream-prefix": "awslogs-publishing-api-envoy"
+        }
+    },
+    "portMappings": [
+      {
+        "containerPort": 8080,
+        "protocol": "tcp"
       }
     ]
   }

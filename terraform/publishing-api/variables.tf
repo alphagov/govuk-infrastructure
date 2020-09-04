@@ -33,3 +33,16 @@ variable "internal_domain_name" {
   type        = string
   default     = "test.govuk-internal.digital"
 }
+
+variable "appmesh_mesh_govuk_id" {
+  type = string
+  default = "govuk"
+}
+
+variable "govuk_publishing_platform_http_namespace_id" {
+  type = string
+}
+
+variable "govuk_publishing_platform_http_namespace_name" {
+  type = string
+}
