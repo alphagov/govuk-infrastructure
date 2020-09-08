@@ -50,6 +50,7 @@ resource "aws_ecs_service" "service" {
   desired_count                     = var.desired_count
   launch_type                       = "FARGATE"
   health_check_grace_period_seconds = 300
+  depends_on                        = [aws_lb_listener.internal_listener, aws_lb_listener.public_listener]
 
   network_configuration {
     security_groups = [aws_security_group.service.id, aws_security_group.public_service.id, var.govuk_management_access_security_group, aws_security_group.publisher_dependencies.id]
