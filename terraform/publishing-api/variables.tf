@@ -19,7 +19,7 @@ variable "govuk_management_access_security_group" {
 variable "container_ingress_port" {
   description = "The port which the container will accept connections on"
   type        = number
-  default     = 3093
+  default     = 80
 }
 
 variable "desired_count" {
@@ -35,14 +35,14 @@ variable "internal_domain_name" {
 }
 
 variable "appmesh_mesh_govuk_id" {
-  type = string
+  type    = string
   default = "govuk"
 }
 
-variable "govuk_publishing_platform_http_namespace_id" {
+variable "govuk_publishing_platform_namespace_id" {
   type = string
 }
 
-variable "govuk_publishing_platform_http_namespace_name" {
+variable "govuk_publishing_platform_namespace_name" {
   type = string
 }

@@ -19,6 +19,10 @@ data "aws_iam_role" "task_execution_role" {
   name = "fargate_task_execution_role"
 }
 
+data "aws_iam_role" "task_role" {
+  name = "fargate_task_role"
+}
+
 data "aws_ecs_cluster" "cluster" {
   cluster_name = "govuk"
 }
@@ -31,6 +35,20 @@ resource "aws_ecs_task_definition" "service" {
   cpu                      = 512
   memory                   = 1024
   execution_role_arn       = data.aws_iam_role.task_execution_role.arn
+  task_role_arn            = data.aws_iam_role.task_role.arn
+
+  proxy_configuration {
+    type           = "APPMESH"
+    container_name = "envoy"
+
+    properties = {
+      AppPorts         = "3000"
+      EgressIgnoredIPs = "169.254.170.2,169.254.169.254"
+      IgnoredUID       = "1337"
+      ProxyEgressPort  = 15001
+      ProxyIngressPort = 15000
+    }
+  }
 }
 
 resource "aws_ecs_service" "service" {
@@ -39,10 +57,16 @@ resource "aws_ecs_service" "service" {
   task_definition                   = aws_ecs_task_definition.service.arn
   desired_count                     = var.desired_count
   launch_type                       = "FARGATE"
+  health_check_grace_period_seconds = 60
 
   network_configuration {
-    security_groups = [aws_security_group.service.id, aws_security_group.public_service.id, var.govuk_management_access_security_group, aws_security_group.publisher_dependencies.id]
-    subnets         = var.private_subnets
+    security_groups = [
+      aws_security_group.service.id,
+      aws_security_group.public_service.id,
+      var.govuk_management_access_security_group,
+      aws_security_group.publisher_dependencies.id, # Allows Publisher to talk to Dependencies
+    ]
+    subnets = var.private_subnets
   }
 
   load_balancer {
@@ -52,68 +76,17 @@ resource "aws_ecs_service" "service" {
   }
 
   service_registries {
-    registry_arn = aws_service_discovery_service.publisher.arn
+    registry_arn   = aws_service_discovery_service.publisher.arn
     container_name = "publisher"
   }
-  
+
   depends_on = [
     aws_lb_listener.public_listener,
     aws_service_discovery_service.publisher
   ]
+
+  depends_on = [aws_service_discovery_service.publisher]
 }
-
-##
-
-#
-# AppMesh
-#
-
-# A virtual service is an abstraction of a real service that
-# is provided by a virtual node
-resource "aws_appmesh_virtual_service" "publisher" {
-  name      = "${var.service_name}.govuk.local"
-  mesh_name = var.appmesh_mesh_govuk_id
-
-  spec {
-    provider {
-      virtual_node {
-        virtual_node_name = aws_appmesh_virtual_node.publisher.name
-      }
-    }
-  }
-}
-
-# A virtual node acts as a logical pointer to an Amazon ECS service
-resource "aws_appmesh_virtual_node" "publisher" {
-  name      = var.service_name
-  mesh_name = var.appmesh_mesh_govuk_id
-
-  spec {
-    backend {
-      # The ECS service
-      virtual_service {
-        virtual_service_name = "${var.service_name}-app.govuk.local"
-      }
-    }
-
-    listener {
-      # Incoming traffic to the node
-      port_mapping {
-        port     = 8080
-        protocol = "http"
-      }
-    }
-
-    service_discovery {
-      aws_cloud_map {
-        namespace_name = var.govuk_publishing_platform_http_namespace_name
-        service_name = aws_service_discovery_service.publisher.name
-      }
-    }
-  }
-}
-
-##
 
 #
 # ECS Service Security groups
@@ -123,6 +96,18 @@ resource "aws_security_group" "service" {
   name        = "fargate_${var.service_name}_alb_access"
   vpc_id      = data.aws_vpc.vpc.id
   description = "Allow the public and internal ALBs for the fargate ${var.service_name} service to access the service"
+}
+
+# TODO: Is this is the best way to achieve this, should it instead
+resource "aws_security_group_rule" "service_ingress" {
+  description = "Allow publisher ingress to publishing-api"
+  type        = "ingress"
+  from_port   = "80"
+  to_port     = "80"
+  protocol    = "tcp"
+
+  security_group_id        = var.publishing_api_ingress_security_group
+  source_security_group_id = aws_security_group.publisher_dependencies.id
 }
 
 #
@@ -159,6 +144,8 @@ resource "aws_lb_target_group" "public_lb_tg" {
   health_check {
     path = "/healthcheck"
   }
+
+  depends_on = [aws_lb.public]
 }
 
 resource "aws_lb_listener" "public_listener" {
@@ -228,6 +215,13 @@ resource "aws_security_group" "publisher_dependencies" {
   name        = "fargate_${var.service_name}_app"
   vpc_id      = data.aws_vpc.vpc.id
   description = "${var.service_name} service dependencies"
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
 }
 
 resource "aws_security_group_rule" "ingress_redis" {

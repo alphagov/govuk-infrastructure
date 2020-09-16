@@ -1,5 +1,5 @@
 variable "appmesh_mesh_govuk_id" {
-  type = string
+  type    = string
   default = "govuk"
 }
 
@@ -9,11 +9,11 @@ variable "service_name" {
   default     = "publisher"
 }
 
-variable "govuk_publishing_platform_http_namespace_id" {
+variable "govuk_publishing_platform_namespace_id" {
   type = string
 }
 
-variable "govuk_publishing_platform_http_namespace_name" {
+variable "govuk_publishing_platform_namespace_name" {
   type = string
 }
 
@@ -45,6 +45,10 @@ variable "desired_count" {
   description = "The desired number of container instances"
   type        = number
   default     = 1
+}
+
+variable "publishing_api_ingress_security_group" {
+  type = string
 }
 
 variable "redis_security_group_id" {

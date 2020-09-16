@@ -28,22 +28,24 @@ resource "aws_appmesh_mesh" "govuk" {
   }
 }
 
-resource "aws_service_discovery_http_namespace" "govuk_publishing_platform" {
-  name = "govuk-publishing-platform"
+resource "aws_service_discovery_private_dns_namespace" "govuk_publishing_platform" {
+  name = "govuk.local"
+  vpc  = "vpc-9e62bcf8"
 }
 
 module "publisher_service" {
-  appmesh_mesh_govuk_id = aws_appmesh_mesh.govuk.id
-  govuk_publishing_platform_http_namespace_id = aws_service_discovery_http_namespace.govuk_publishing_platform.id
-  govuk_publishing_platform_http_namespace_name = aws_service_discovery_http_namespace.govuk_publishing_platform.name
-  source = "../publisher"
+  appmesh_mesh_govuk_id                    = aws_appmesh_mesh.govuk.id
+  govuk_publishing_platform_namespace_id   = aws_service_discovery_private_dns_namespace.govuk_publishing_platform.id
+  govuk_publishing_platform_namespace_name = aws_service_discovery_private_dns_namespace.govuk_publishing_platform.name
+  publishing_api_ingress_security_group    = module.publishing_api_service.ingress_security_group
+  source                                   = "../publisher"
 }
 
 module "publishing_api_service" {
-  appmesh_mesh_govuk_id = aws_appmesh_mesh.govuk.id
-  govuk_publishing_platform_http_namespace_id = aws_service_discovery_http_namespace.govuk_publishing_platform.id
-  govuk_publishing_platform_http_namespace_name = aws_service_discovery_http_namespace.govuk_publishing_platform.name
-  source = "../publishing-api"
+  appmesh_mesh_govuk_id                    = aws_appmesh_mesh.govuk.id
+  govuk_publishing_platform_namespace_id   = aws_service_discovery_private_dns_namespace.govuk_publishing_platform.id
+  govuk_publishing_platform_namespace_name = aws_service_discovery_private_dns_namespace.govuk_publishing_platform.name
+  source                                   = "../publishing-api"
 }
 
 # TODO: Create a Virtual gateway.

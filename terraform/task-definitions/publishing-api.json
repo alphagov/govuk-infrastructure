@@ -20,7 +20,7 @@
       { "name": "GOVUK_STATSD_PREFIX", "value": "fargate" },
       { "name": "GOVUK_USER", "value": "deploy" },
       { "name": "GOVUK_WEBSITE_ROOT", "value": "https://www.gov.uk" },
-      { "name": "PORT", "value": "3093" },
+      { "name": "PORT", "value": "80" },
       { "name": "RABBITMQ_HOSTS", "value": "rabbitmq.test.govuk-internal.digital" },
       { "name": "RABBITMQ_USER", "value": "publishing_api" },
       { "name": "RABBITMQ_VHOST", "value": "/" },
@@ -33,6 +33,10 @@
       { "name": "SUPPRESS_DRAFT_STORE_502_ERROR", "value": "" },
       { "name": "UNICORN_WORKER_PROCESSES", "value": "8" }
     ],
+    "dependsOn": [{
+      "containerName": "envoy",
+      "condition": "START"
+    }],
     "logConfiguration": {
         "logDriver": "awslogs",
         "options": {
@@ -45,24 +49,11 @@
     "mountPoints": [],
     "portMappings": [
       {
-        "containerPort": 3093,
-        "hostPort": 3093,
+        "containerPort": 80,
+        "hostPort": 80,
         "protocol": "tcp"
       }
     ],
-    "proxyConfiguration": {
-      "type": "APPMESH",
-      "containerName": "envoy",
-      "properties": [
-        { "name": "IgnoredUID", "value": "" },
-        { "name": "IgnoredGID", "value": "" },
-        { "name": "AppPorts", "value": "3000" },
-        { "name": "ProxyIngressPort", "value": "3000" },
-        { "name": "ProxyEgressPort", "value": "8080" },
-        { "name": "EgressIgnoredPorts", "value": "" },
-        { "name": "EgressIgnoredIPs", "value": "" }
-      ]
-    },
     "secrets": [
       {
         "name": "CONTENT_STORE_BEARER_TOKEN",
@@ -109,6 +100,7 @@
   {
     "name": "envoy",
     "image": "840364872350.dkr.ecr.eu-west-1.amazonaws.com/aws-appmesh-envoy:v1.15.0.0-prod",
+    "user": "1337",
     "environment": [
       { "name": "APPMESH_VIRTUAL_NODE_NAME", "value": "mesh/govuk/virtualNode/publishing-api" },
       { "name": "ENVOY_LOG_LEVEL", "value": "debug" }
@@ -122,12 +114,6 @@
             "awslogs-region": "eu-west-1",
             "awslogs-stream-prefix": "awslogs-publishing-api-envoy"
         }
-    },
-    "portMappings": [
-      {
-        "containerPort": 8080,
-        "protocol": "tcp"
-      }
-    ]
+    }
   }
 ]

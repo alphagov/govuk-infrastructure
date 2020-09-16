@@ -1,17 +1,17 @@
-resource "aws_appmesh_virtual_service" "service" {
+resource "aws_appmesh_virtual_service" "publisher" {
   name      = "${var.service_name}.govuk.local"
   mesh_name = var.appmesh_mesh_govuk_id
 
   spec {
     provider {
       virtual_node {
-        virtual_node_name = aws_appmesh_virtual_node.service.name
+        virtual_node_name = aws_appmesh_virtual_node.publisher.name
       }
     }
   }
 }
 
-resource "aws_appmesh_virtual_node" "service" {
+resource "aws_appmesh_virtual_node" "publisher" {
   name      = var.service_name
   mesh_name = var.appmesh_mesh_govuk_id
 
@@ -26,7 +26,7 @@ resource "aws_appmesh_virtual_node" "service" {
     listener {
       # Incoming traffic to the node
       port_mapping {
-        port     = var.container_ingress_port
+        port     = 3000
         protocol = "http"
       }
     }
@@ -34,10 +34,10 @@ resource "aws_appmesh_virtual_node" "service" {
     service_discovery {
       aws_cloud_map {
         namespace_name = var.govuk_publishing_platform_namespace_name
-        service_name   = aws_service_discovery_service.service.name
+        service_name   = aws_service_discovery_service.publisher.name
       }
     }
   }
 
-  depends_on = [aws_service_discovery_service.service]
+  depends_on = [aws_service_discovery_service.publisher]
 }
