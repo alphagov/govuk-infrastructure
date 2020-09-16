@@ -23,7 +23,7 @@
       { "name": "GOVUK_USER", "value": "deploy"},
       { "name": "GOVUK_WEBSITE_ROOT", "value": "https://www.gov.uk" },
       { "name": "PLEK_SERVICE_CONTENT_STORE_URI", "value": "https://www.gov.uk/api" },
-      { "name": "PLEK_SERVICE_PUBLISHING_API_URI", "value": "http://publishing-api.govuk.local" },
+      { "name": "PLEK_SERVICE_PUBLISHING_API_URI", "value": "http://publishing-api.govuk-publishing-platform" },
       { "name": "PLEK_SERVICE_STATIC_URI", "value": "https://assets.test.publishing.service.gov.uk" },
       { "name": "RAILS_ENV", "value": "production" },
       { "name": "RAILS_SERVE_STATIC_FILES", "value": "true" },

@@ -1,5 +1,5 @@
 resource "aws_appmesh_virtual_service" "service" {
-  name      = "${var.service_name}.govuk.local"
+  name      = "${var.service_name}.govuk-publishing-platform"
   mesh_name = var.appmesh_mesh_govuk_id
 
   spec {
@@ -19,7 +19,7 @@ resource "aws_appmesh_virtual_node" "service" {
     backend {
       # The ECS service
       virtual_service {
-        virtual_service_name = "${var.service_name}.govuk.local"
+        virtual_service_name = "${var.service_name}.govuk-publishing-platform"
       }
     }
 

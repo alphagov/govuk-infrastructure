@@ -28,23 +28,29 @@ resource "aws_appmesh_mesh" "govuk" {
   }
 }
 
-resource "aws_service_discovery_private_dns_namespace" "govuk_publishing_platform" {
-  name = "govuk.local"
-  vpc  = "vpc-9e62bcf8"
+resource "aws_service_discovery_http_namespace" "govuk_publishing_platform" {
+  name = "govuk-publishing-platform"
 }
+
+# Error: only alphanumeric characters, underscores and hyphens allowed in "name"
+
+# Error: error deleting Service Discovery Service (srv-mo6wycszvyez7fxc):
+# ResourceInUse: Service contains registered instances; delete the instances before deleting the service
+# Error: error deleting Service Discovery Private DNS Namespace (ns-vwoi6tzke55tpjkb): ResourceInUse: Namespace has associated services; delete the services before deleting the namespace
+# Error: Error deleting ECS cluster: ClusterContainsTasksException: The Cluster cannot be deleted while Tasks are active.
 
 module "publisher_service" {
   appmesh_mesh_govuk_id                    = aws_appmesh_mesh.govuk.id
-  govuk_publishing_platform_namespace_id   = aws_service_discovery_private_dns_namespace.govuk_publishing_platform.id
-  govuk_publishing_platform_namespace_name = aws_service_discovery_private_dns_namespace.govuk_publishing_platform.name
+  govuk_publishing_platform_namespace_id   = aws_service_discovery_http_namespace.govuk_publishing_platform.id
+  govuk_publishing_platform_namespace_name = aws_service_discovery_http_namespace.govuk_publishing_platform.name
   publishing_api_ingress_security_group    = module.publishing_api_service.ingress_security_group
   source                                   = "../publisher"
 }
 
 module "publishing_api_service" {
   appmesh_mesh_govuk_id                    = aws_appmesh_mesh.govuk.id
-  govuk_publishing_platform_namespace_id   = aws_service_discovery_private_dns_namespace.govuk_publishing_platform.id
-  govuk_publishing_platform_namespace_name = aws_service_discovery_private_dns_namespace.govuk_publishing_platform.name
+  govuk_publishing_platform_namespace_id   = aws_service_discovery_http_namespace.govuk_publishing_platform.id
+  govuk_publishing_platform_namespace_name = aws_service_discovery_http_namespace.govuk_publishing_platform.name
   source                                   = "../publishing-api"
 }
 
