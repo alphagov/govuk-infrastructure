@@ -59,8 +59,13 @@ resource "aws_ecs_service" "service" {
   launch_type     = "FARGATE"
 
   network_configuration {
-    security_groups = [aws_security_group.service.id, var.govuk_management_access_security_group, data.aws_security_group.service_dependencies.id]
-    subnets         = var.private_subnets
+    security_groups = [
+      aws_security_group.service.id,
+      var.govuk_management_access_security_group,
+      data.aws_security_group.service_dependencies.id,
+      aws_security_group.dependencies.id
+    ]
+    subnets = var.private_subnets
   }
 
   service_registries {
@@ -79,6 +84,30 @@ resource "aws_security_group" "service" {
   name        = "fargate_${var.service_name}_ingress"
   vpc_id      = data.aws_vpc.vpc.id
   description = "Permit internal services to access the ${var.service_name} ECS service"
+}
+
+resource "aws_security_group" "dependencies" {
+  name        = "fargate_${var.service_name}_app"
+  vpc_id      = data.aws_vpc.vpc.id
+  description = "Allows ingress from ${var.service_name} to its dependencies"
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+}
+
+resource "aws_security_group_rule" "service_ingress" {
+  description = "Allow publishing-api ingress to content-store"
+  type        = "ingress"
+  from_port   = "80"
+  to_port     = "80"
+  protocol    = "tcp"
+
+  security_group_id        = var.content_store_ingress_security_group
+  source_security_group_id = aws_security_group.dependencies.id
 }
 
 #

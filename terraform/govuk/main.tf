@@ -41,14 +41,18 @@ module "publisher_service" {
   source                                   = "../publisher"
 }
 
+module "content_store_service" {
+  appmesh_mesh_govuk_id                    = aws_appmesh_mesh.govuk.id
+  govuk_publishing_platform_namespace_id   = aws_service_discovery_private_dns_namespace.govuk_publishing_platform.id
+  govuk_publishing_platform_namespace_name = aws_service_discovery_private_dns_namespace.govuk_publishing_platform.name
+  publishing_api_ingress_security_group    = module.publishing_api_service.ingress_security_group
+  source                                   = "../content-store"
+}
+
 module "publishing_api_service" {
   appmesh_mesh_govuk_id                    = aws_appmesh_mesh.govuk.id
   govuk_publishing_platform_namespace_id   = aws_service_discovery_private_dns_namespace.govuk_publishing_platform.id
   govuk_publishing_platform_namespace_name = aws_service_discovery_private_dns_namespace.govuk_publishing_platform.name
+  content_store_ingress_security_group     = module.content_store_service.ingress_security_group
   source                                   = "../publishing-api"
 }
-
-# TODO: Create a Virtual gateway.
-# https://docs.aws.amazon.com/app-mesh/latest/userguide/virtual_gateways.html
-# A virtual gateway allows resources that are outside of your mesh
-# to communicate to resources that are inside of your mesh.

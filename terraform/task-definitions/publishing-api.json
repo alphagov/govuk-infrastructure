@@ -6,7 +6,7 @@
     "environment": [
       { "name": "APPMESH_VIRTUAL_NODE_NAME", "value": "mesh/govuk/virtualNode/publishing-api" },
       { "name": "CONTENT_API_PROTOTYPE", "value": "yes" },
-      { "name": "CONTENT_STORE", "value": "https://content-store.test.publishing.service.gov.uk" },
+      { "name": "CONTENT_STORE", "value": "http://content-store.mesh.govuk-internal.digital" },
       { "name": "DRAFT_CONTENT_STORE", "value": "https://draft-content-store.test.publishing.service.gov.uk" },
       { "name": "EVENT_LOG_AWS_ACCESS_ID", "value": "AKIAJE6VSW25CYBUMQJA" },
       { "name": "EVENT_LOG_AWS_BUCKETNAME", "value": "govuk-publishing-api-event-log-test" },
@@ -20,6 +20,7 @@
       { "name": "GOVUK_STATSD_PREFIX", "value": "fargate" },
       { "name": "GOVUK_USER", "value": "deploy" },
       { "name": "GOVUK_WEBSITE_ROOT", "value": "https://www.gov.uk" },
+      { "name": "PLEK_SERVICE_CONTENT_STORE_URI", "value": "http://content-store.mesh.govuk-internal.digital" },
       { "name": "PORT", "value": "80" },
       { "name": "RABBITMQ_HOSTS", "value": "rabbitmq.test.govuk-internal.digital" },
       { "name": "RABBITMQ_USER", "value": "publishing_api" },

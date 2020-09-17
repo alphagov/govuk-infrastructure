@@ -84,8 +84,6 @@ resource "aws_ecs_service" "service" {
     aws_lb_listener.public_listener,
     aws_service_discovery_service.publisher
   ]
-
-  depends_on = [aws_service_discovery_service.publisher]
 }
 
 #
@@ -98,7 +96,6 @@ resource "aws_security_group" "service" {
   description = "Allow the public and internal ALBs for the fargate ${var.service_name} service to access the service"
 }
 
-# TODO: Is this is the best way to achieve this, should it instead
 resource "aws_security_group_rule" "service_ingress" {
   description = "Allow publisher ingress to publishing-api"
   type        = "ingress"

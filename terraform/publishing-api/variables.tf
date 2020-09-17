@@ -46,3 +46,7 @@ variable "govuk_publishing_platform_namespace_id" {
 variable "govuk_publishing_platform_namespace_name" {
   type = string
 }
+
+variable "content_store_ingress_security_group" {
+  type = string
+}
