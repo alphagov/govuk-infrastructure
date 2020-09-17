@@ -29,7 +29,7 @@ resource "aws_appmesh_mesh" "govuk" {
 }
 
 resource "aws_service_discovery_private_dns_namespace" "govuk_publishing_platform" {
-  name = "govuk.local"
+  name = "mesh.govuk-internal.digital"
   vpc  = "vpc-9e62bcf8"
 }
 
