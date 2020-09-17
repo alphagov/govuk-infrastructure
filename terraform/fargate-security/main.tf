@@ -129,8 +129,3 @@ resource "aws_iam_role_policy_attachment" "appmesh_envoy_access" {
   role       = aws_iam_role.task_role.name
   policy_arn = "arn:aws:iam::aws:policy/AWSAppMeshEnvoyAccess"
 }
-
-resource "aws_iam_role_policy_attachment" "discover_instances" {
-  role       = aws_iam_role.task_role.name
-  policy_arn = "arn:aws:iam::aws:policy/AWSCloudMapDiscoverInstanceAccess"
-}
