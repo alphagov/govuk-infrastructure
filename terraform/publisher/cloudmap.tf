@@ -5,7 +5,7 @@ resource "aws_service_discovery_service" "publisher" {
     namespace_id = var.govuk_publishing_platform_namespace_id
 
     dns_records {
-      ttl  = 60
+      ttl  = 10
       type = "A"
     }
 
