@@ -1,11 +1,20 @@
-#
-# Variables
-#
+variable "appmesh_mesh_govuk_id" {
+  type    = string
+  default = "govuk"
+}
 
 variable "service_name" {
   description = "Service name of the Fargate service, cluster, task etc."
   type        = string
   default     = "publisher"
+}
+
+variable "govuk_publishing_platform_namespace_id" {
+  type = string
+}
+
+variable "govuk_publishing_platform_namespace_name" {
+  type = string
 }
 
 variable "private_subnets" {
@@ -36,6 +45,10 @@ variable "desired_count" {
   description = "The desired number of container instances"
   type        = number
   default     = 1
+}
+
+variable "publishing_api_ingress_security_group" {
+  type = string
 }
 
 variable "redis_security_group_id" {

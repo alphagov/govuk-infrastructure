@@ -101,3 +101,31 @@ resource "aws_iam_role_policy_attachment" "access_secrets_attachment_policy" {
   role       = aws_iam_role.task_execution_role.name
   policy_arn = aws_iam_policy.access_secrets.arn
 }
+
+# Proxy authorization for ECS tasks
+# https://docs.aws.amazon.com/app-mesh/latest/userguide/proxy-authorization.html
+
+resource "aws_iam_role" "task_role" {
+  name        = "fargate_task_role"
+  description = "Allows ECS tasks to call ECS services (like AppMesh)."
+
+  assume_role_policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Action": "sts:AssumeRole",
+      "Principal": {
+        "Service": "ecs-tasks.amazonaws.com"
+      },
+      "Effect": "Allow"
+    }
+  ]
+}
+EOF
+}
+
+resource "aws_iam_role_policy_attachment" "appmesh_envoy_access" {
+  role       = aws_iam_role.task_role.name
+  policy_arn = "arn:aws:iam::aws:policy/AWSAppMeshEnvoyAccess"
+}

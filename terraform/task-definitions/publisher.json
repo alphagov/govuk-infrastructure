@@ -5,6 +5,7 @@
     "essential": true,
     "environment": [
       { "name": "ASSET_HOST", "value": "www.gov.uk" },
+      { "name": "APPMESH_VIRTUAL_NODE_NAME", "value": "mesh/govuk/virtualNode/publisher" },
       { "name": "BASIC_AUTH_USERNAME", "value": "gds" },
       { "name": "EMAIL_GROUP_BUSINESS", "value": "test-address@digital.cabinet-office.gov.uk" },
       { "name": "EMAIL_GROUP_CITIZEN", "value": "test-address@digital.cabinet-office.gov.uk" },
@@ -22,6 +23,7 @@
       { "name": "GOVUK_USER", "value": "deploy"},
       { "name": "GOVUK_WEBSITE_ROOT", "value": "https://www.gov.uk" },
       { "name": "PLEK_SERVICE_CONTENT_STORE_URI", "value": "https://www.gov.uk/api" },
+      { "name": "PLEK_SERVICE_PUBLISHING_API_URI", "value": "http://publishing-api.mesh.govuk-internal.digital" },
       { "name": "PLEK_SERVICE_STATIC_URI", "value": "https://assets.test.publishing.service.gov.uk" },
       { "name": "RAILS_ENV", "value": "production" },
       { "name": "RAILS_SERVE_STATIC_FILES", "value": "true" },
@@ -32,6 +34,10 @@
       { "name": "STATSD_HOST", "value": "statsd.test.govuk-internal.digital" },
       { "name": "WEBSITE_ROOT", "value": "test.publishing.service.gov.uk" }
     ],
+    "dependsOn": [{
+      "containerName": "envoy",
+      "condition": "START"
+    }],
     "logConfiguration": {
         "logDriver": "awslogs",
         "options": {
@@ -111,5 +117,24 @@
         "valueFrom": "arn:aws:secretsmanager:eu-west-1:430354129336:secret:publisher_app-MONGODB_URI-x2sw5T"
       }
     ]
+  },
+  {
+    "name": "envoy",
+    "image": "840364872350.dkr.ecr.eu-west-1.amazonaws.com/aws-appmesh-envoy:v1.15.0.0-prod",
+    "user": "1337",
+    "environment": [
+      { "name": "APPMESH_VIRTUAL_NODE_NAME", "value": "mesh/govuk/virtualNode/publisher" },
+      { "name": "ENVOY_LOG_LEVEL", "value": "debug" }
+    ],
+    "essential": true,
+    "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+            "awslogs-create-group": "true",
+            "awslogs-group": "awslogs-fargate",
+            "awslogs-region": "eu-west-1",
+            "awslogs-stream-prefix": "awslogs-publisher-envoy"
+        }
+    }
   }
 ]
