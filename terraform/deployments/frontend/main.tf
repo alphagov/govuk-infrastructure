@@ -13,17 +13,17 @@ provider "aws" {
 }
 
 module "infra-fargate" {
-  source                 = "../modules/infra-fargate"
+  source                 = "../../modules/infra-fargate"
   service_name           = "frontend"
-  container_definitions  = file("../task-definitions/frontend.json")
+  container_definitions  = file("frontend.json")
   desired_count          = 1
   container_ingress_port = 3005
 }
 
 module "fargate-console" {
-  source                = "../modules/fargate-console"
+  source                = "../../modules/fargate-console"
   service_name          = "frontend_console"
-  container_definitions = file("../task-definitions/frontend_console.json")
+  container_definitions = file("frontend_console.json")
 }
 
 # Internal DNS record

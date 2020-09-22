@@ -137,7 +137,7 @@ resource "aws_ecs_service" "service" {
 resource "aws_ecs_task_definition" "service" {
   family                   = var.service_name
   requires_compatibilities = ["FARGATE"]
-  container_definitions    = file("../task-definitions/statsd.json")
+  container_definitions    = file("statsd.json")
   network_mode             = "awsvpc"
   cpu                      = 2048
   memory                   = 4096
