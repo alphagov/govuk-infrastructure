@@ -28,6 +28,13 @@ resource "aws_service_discovery_private_dns_namespace" "govuk_publishing_platfor
   vpc  = "vpc-9e62bcf8"
 }
 
+module "frontend_service" {
+  appmesh_mesh_govuk_id                    = aws_appmesh_mesh.govuk.id
+  govuk_publishing_platform_namespace_id   = aws_service_discovery_private_dns_namespace.govuk_publishing_platform.id
+  govuk_publishing_platform_namespace_name = aws_service_discovery_private_dns_namespace.govuk_publishing_platform.name
+  source                                   = "../../modules/apps/frontend"
+}
+
 module "publisher_service" {
   appmesh_mesh_govuk_id                    = aws_appmesh_mesh.govuk.id
   govuk_publishing_platform_namespace_id   = aws_service_discovery_private_dns_namespace.govuk_publishing_platform.id

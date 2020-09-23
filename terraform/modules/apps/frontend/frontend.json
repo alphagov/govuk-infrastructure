@@ -27,7 +27,7 @@
     },
     "portMappings": [
       {
-        "containerPort": 3005,
+        "containerPort": 80,
         "protocol": "tcp"
       }
     ],
@@ -37,5 +37,24 @@
         "valueFrom": "arn:aws:secretsmanager:eu-west-1:430354129336:secret:frontend_app-SECRET_KEY_BASE-Em3aWA"
       }
     ]
+  },
+  {
+    "name": "envoy",
+    "image": "840364872350.dkr.ecr.eu-west-1.amazonaws.com/aws-appmesh-envoy:v1.15.0.0-prod",
+    "user": "1337",
+    "environment": [
+      { "name": "APPMESH_VIRTUAL_NODE_NAME", "value": "mesh/govuk/virtualNode/frontend" },
+      { "name": "ENVOY_LOG_LEVEL", "value": "debug" }
+    ],
+    "essential": true,
+    "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+            "awslogs-create-group": "true",
+            "awslogs-group": "awslogs-fargate",
+            "awslogs-region": "eu-west-1",
+            "awslogs-stream-prefix": "awslogs-frontend-envoy"
+        }
+    }
   }
 ]
