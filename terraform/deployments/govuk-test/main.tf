@@ -38,7 +38,7 @@ module "publisher_service" {
   govuk_publishing_platform_namespace_id   = aws_service_discovery_private_dns_namespace.govuk_publishing_platform.id
   govuk_publishing_platform_namespace_name = aws_service_discovery_private_dns_namespace.govuk_publishing_platform.name
   publishing_api_ingress_security_group    = module.publishing_api_service.ingress_security_group
-  source                                   = "../publisher"
+  source                                   = "../../modules/apps/publisher"
 }
 
 module "content_store_service" {
@@ -46,7 +46,7 @@ module "content_store_service" {
   govuk_publishing_platform_namespace_id   = aws_service_discovery_private_dns_namespace.govuk_publishing_platform.id
   govuk_publishing_platform_namespace_name = aws_service_discovery_private_dns_namespace.govuk_publishing_platform.name
   publishing_api_ingress_security_group    = module.publishing_api_service.ingress_security_group
-  source                                   = "../content-store"
+  source                                   = "../../modules/apps/content-store"
 }
 
 module "publishing_api_service" {
@@ -54,5 +54,5 @@ module "publishing_api_service" {
   govuk_publishing_platform_namespace_id   = aws_service_discovery_private_dns_namespace.govuk_publishing_platform.id
   govuk_publishing_platform_namespace_name = aws_service_discovery_private_dns_namespace.govuk_publishing_platform.name
   content_store_ingress_security_group     = module.content_store_service.ingress_security_group
-  source                                   = "../publishing-api"
+  source                                   = "../../modules/apps/publishing-api"
 }

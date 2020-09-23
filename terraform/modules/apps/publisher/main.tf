@@ -30,7 +30,7 @@ data "aws_ecs_cluster" "cluster" {
 resource "aws_ecs_task_definition" "service" {
   family                   = var.service_name
   requires_compatibilities = ["FARGATE"]
-  container_definitions    = file("../task-definitions/publisher.json")
+  container_definitions    = file("${path.module}/publisher.json")
   network_mode             = "awsvpc"
   cpu                      = 512
   memory                   = 1024
