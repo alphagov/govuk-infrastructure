@@ -7,30 +7,6 @@ terraform {
   }
 }
 
-#
-# Data
-#
-
-data "aws_vpc" "vpc" {
-  id = "vpc-9e62bcf8"
-}
-
-#
-# ECS Cluster, Service, Task
-#
-
-data "aws_iam_role" "task_execution_role" {
-  name = "fargate_task_execution_role"
-}
-
-data "aws_iam_role" "task_role" {
-  name = "fargate_task_role"
-}
-
-data "aws_ecs_cluster" "cluster" {
-  cluster_name = "govuk"
-}
-
 resource "aws_ecs_task_definition" "service" {
   family                   = var.service_name
   requires_compatibilities = ["FARGATE"]
@@ -38,8 +14,8 @@ resource "aws_ecs_task_definition" "service" {
   network_mode             = "awsvpc"
   cpu                      = 512
   memory                   = 1024
-  execution_role_arn       = data.aws_iam_role.task_execution_role.arn
-  task_role_arn            = data.aws_iam_role.task_role.arn
+  task_role_arn            = var.task_role_arn
+  execution_role_arn       = var.execution_role_arn
 
   proxy_configuration {
     type           = "APPMESH"
@@ -57,7 +33,7 @@ resource "aws_ecs_task_definition" "service" {
 
 resource "aws_ecs_service" "service" {
   name                              = var.service_name
-  cluster                           = data.aws_ecs_cluster.cluster.id
+  cluster                           = var.cluster_id
   task_definition                   = aws_ecs_task_definition.service.arn
   desired_count                     = var.desired_count
   launch_type                       = "FARGATE"
@@ -96,7 +72,7 @@ resource "aws_ecs_service" "service" {
 
 resource "aws_security_group" "service" {
   name        = "fargate_${var.service_name}_alb_access"
-  vpc_id      = data.aws_vpc.vpc.id
+  vpc_id      = var.vpc_id
   description = "Allow the public and internal ALBs for the fargate ${var.service_name} service to access the service"
 }
 
@@ -139,7 +115,7 @@ resource "aws_lb_target_group" "public_lb_tg" {
   name        = "${var.service_name}-public"
   port        = var.container_ingress_port
   protocol    = "HTTP"
-  vpc_id      = data.aws_vpc.vpc.id
+  vpc_id      = var.vpc_id
   target_type = "ip"
 
   health_check {
@@ -183,7 +159,7 @@ resource "aws_security_group_rule" "public_alb_ingress" {
 
 resource "aws_security_group" "public_alb" {
   name        = "fargate_${var.service_name}_public_elb"
-  vpc_id      = data.aws_vpc.vpc.id
+  vpc_id      = var.vpc_id
   description = "Public ALB ingress and egress security group for ${var.service_name} ECS service"
 
   ingress {
@@ -204,7 +180,7 @@ resource "aws_security_group" "public_alb" {
 
 resource "aws_security_group" "public_service" {
   name        = "fargate_public_${var.service_name}_elb_access"
-  vpc_id      = data.aws_vpc.vpc.id
+  vpc_id      = var.vpc_id
   description = "Access to the fargate ${var.service_name} service from its public ELB"
 }
 
@@ -214,7 +190,7 @@ resource "aws_security_group" "public_service" {
 
 resource "aws_security_group" "publisher_dependencies" {
   name        = "fargate_${var.service_name}_app"
-  vpc_id      = data.aws_vpc.vpc.id
+  vpc_id      = var.vpc_id
   description = "${var.service_name} service dependencies"
 
   egress {

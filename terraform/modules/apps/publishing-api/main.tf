@@ -7,30 +7,6 @@ terraform {
   }
 }
 
-#
-# Data
-#
-
-data "aws_vpc" "vpc" {
-  id = "vpc-9e62bcf8"
-}
-
-#
-# ECS Cluster, Service, Task
-#
-
-data "aws_iam_role" "task_execution_role" {
-  name = "fargate_task_execution_role"
-}
-
-data "aws_iam_role" "task_role" {
-  name = "fargate_task_role"
-}
-
-data "aws_ecs_cluster" "cluster" {
-  cluster_name = "govuk"
-}
-
 resource "aws_ecs_task_definition" "service" {
   family                   = var.service_name
   requires_compatibilities = ["FARGATE"]
@@ -38,8 +14,8 @@ resource "aws_ecs_task_definition" "service" {
   network_mode             = "awsvpc"
   cpu                      = 512
   memory                   = 1024
-  execution_role_arn       = data.aws_iam_role.task_execution_role.arn
-  task_role_arn            = data.aws_iam_role.task_role.arn
+  task_role_arn            = var.task_role_arn
+  execution_role_arn       = var.execution_role_arn
 
   proxy_configuration {
     type           = "APPMESH"
@@ -57,7 +33,7 @@ resource "aws_ecs_task_definition" "service" {
 
 resource "aws_ecs_service" "service" {
   name            = var.service_name
-  cluster         = data.aws_ecs_cluster.cluster.id
+  cluster         = var.cluster_id
   task_definition = aws_ecs_task_definition.service.arn
   desired_count   = var.desired_count
   launch_type     = "FARGATE"
@@ -86,13 +62,13 @@ resource "aws_ecs_service" "service" {
 
 resource "aws_security_group" "service" {
   name        = "fargate_${var.service_name}_ingress"
-  vpc_id      = data.aws_vpc.vpc.id
+  vpc_id      = var.vpc_id
   description = "Permit internal services to access the ${var.service_name} ECS service"
 }
 
 resource "aws_security_group" "dependencies" {
   name        = "fargate_${var.service_name}_app"
-  vpc_id      = data.aws_vpc.vpc.id
+  vpc_id      = var.vpc_id
   description = "Allows ingress from ${var.service_name} to its dependencies"
 
   egress {
