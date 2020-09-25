@@ -1,23 +1,27 @@
-#
-# IAM role for Fargate tasks
-#
+# All services running on GOV.UK run in this single cluster.
+resource "aws_ecs_cluster" "cluster" {
+  name               = "govuk"
+  capacity_providers = ["FARGATE"]
+}
 
-terraform {
-  backend "s3" {
-    bucket  = "govuk-terraform-test"
-    key     = "projects/fargate-iam.tfstate"
-    region  = "eu-west-1"
-    encrypt = true
+resource "aws_appmesh_mesh" "govuk" {
+  name = "govuk"
+
+  spec {
+    egress_filter {
+      type = "ALLOW_ALL"
+    }
   }
 }
 
-provider "aws" {
-  version = "~> 2.69"
-  region  = "eu-west-1"
+resource "aws_service_discovery_private_dns_namespace" "govuk_publishing_platform" {
+  name = "mesh.govuk-internal.digital"
+  vpc  = var.vpc_id
 }
 
-resource "aws_iam_role" "task_execution_role" {
-  name = "fargate_task_execution_role"
+resource "aws_iam_role" "execution" {
+  name        = "fargate_execution_role"
+  description = "Role for the ECS container agent and Docker daemon to manage the app container."
 
   assume_role_policy = <<EOF
 {
@@ -56,28 +60,23 @@ EOF
 
 # Allow tasks to create log groups
 resource "aws_iam_role_policy_attachment" "log_group_attachment_policy" {
-  role       = aws_iam_role.task_execution_role.name
+  role       = aws_iam_role.execution.id
   policy_arn = aws_iam_policy.create_log_group_policy.arn
 }
 
-# Attach managed AmazonECSTaskExecutionRolePolicy policy to task execution role
 resource "aws_iam_role_policy_attachment" "task_exec_policy" {
-  role       = aws_iam_role.task_execution_role.name
+  role       = aws_iam_role.execution.id
   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
 }
 
-
+# Allow apps in ECS to access secrets.
 #
-# Allow apps in ECS Fargate containers to access secrets
-#
-# This allows *all* apps to access *any* secret. We should create a task execution
+# TODO: This allows *all* apps to access *any* secret. We should create a task execution
 # role and policy for each app to permit apps to only access required secrets.
-#
-
 resource "aws_iam_policy" "access_secrets" {
   name        = "access_secrets"
   path        = "/accessSecretsPolicy/"
-  description = "Access AWS Secrets Manager secrets policy managed by Terraform"
+  description = "Allow apps in ECS to access secrets"
 
   policy = <<EOF
 {
@@ -98,16 +97,15 @@ EOF
 }
 
 resource "aws_iam_role_policy_attachment" "access_secrets_attachment_policy" {
-  role       = aws_iam_role.task_execution_role.name
+  role       = aws_iam_role.execution.id
   policy_arn = aws_iam_policy.access_secrets.arn
 }
 
 # Proxy authorization for ECS tasks
 # https://docs.aws.amazon.com/app-mesh/latest/userguide/proxy-authorization.html
-
-resource "aws_iam_role" "task_role" {
+resource "aws_iam_role" "task" {
   name        = "fargate_task_role"
-  description = "Allows ECS tasks to call ECS services (like AppMesh)."
+  description = "Role for GOV.UK Publishing app containers (ECS tasks) to talk to other AWS services."
 
   assume_role_policy = <<EOF
 {
@@ -126,6 +124,8 @@ EOF
 }
 
 resource "aws_iam_role_policy_attachment" "appmesh_envoy_access" {
-  role       = aws_iam_role.task_role.name
+  role       = aws_iam_role.task.id
   policy_arn = "arn:aws:iam::aws:policy/AWSAppMeshEnvoyAccess"
 }
+
+

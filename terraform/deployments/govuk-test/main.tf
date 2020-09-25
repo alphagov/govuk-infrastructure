@@ -13,4 +13,5 @@ provider "aws" {
 
 module "govuk" {
   source = "../../modules/govuk"
+  vpc_id = "vpc-9e62bcf8" # TODO: hardcoded
 }
