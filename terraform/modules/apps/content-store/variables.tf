@@ -26,7 +26,7 @@ variable "service_name" {
 variable "private_subnets" {
   description = "The subnet ids for govuk_private_a, govuk_private_b, and govuk_private_c"
   type        = list
-  default     = ["subnet-6dc4370b", "subnet-463bfd0e", "subnet-bfecd0e4"]
+  default     = ["subnet-6dc4370b", "subnet-463bfd0e", "subnet-bfecd0e4"] # TODO hardcoded
 }
 
 variable "govuk_management_access_security_group" {
@@ -42,13 +42,14 @@ variable "container_ingress_port" {
 }
 
 variable "desired_count" {
-  description = "The desired number of container instances"
+  description = "Number of instances of the ECS task."
   type        = number
   default     = 1
 }
 
+# TODO: internal_domain_name should be redundant now that internal traffic is via AppMesh.
 variable "internal_domain_name" {
-  description = "The internal root root domain name"
+  description = "Apex domain name for non-Internet-facing traffic."
   type        = string
   default     = "test.govuk-internal.digital"
 }

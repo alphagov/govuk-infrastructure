@@ -14,22 +14,30 @@ data "aws_secretsmanager_secret" "oauth_secret" {
   name = "content_store_app-OAUTH_SECRET"
 }
 data "aws_secretsmanager_secret" "publishing_api_bearer_token" {
-  name = "content_store_app-PUBLISHING_API_BEARER_TOKEN"
+  name = "content_store_app-PUBLISHING_API_BEARER_TOKEN" # pragma: allowlist secret
 }
 data "aws_secretsmanager_secret" "router_api_bearer_token" {
-  name = "content_store_app-ROUTER_API_BEARER_TOKEN"
+  name = "content_store_app-ROUTER_API_BEARER_TOKEN" # pragma: allowlist secret
 }
 data "aws_secretsmanager_secret" "secret_key_base" {
-  name = "content_store_app-SECRET_KEY_BASE"
+  name = "content_store_app-SECRET_KEY_BASE" # pragma: allowlist secret
 }
 data "aws_secretsmanager_secret" "sentry_dsn" {
   name = "content_store_app-SENTRY_DSN"
 }
 
-resource "aws_ecs_task_definition" "service" {
-  family                   = var.service_name
-  requires_compatibilities = ["FARGATE"]
-  container_definitions = jsonencode([
+module "app" {
+  source                                   = "../../app"
+  vpc_id                                   = var.vpc_id
+  cluster_id                               = var.cluster_id
+  service_name                             = var.service_name
+  private_subnets                          = var.private_subnets
+  govuk_publishing_platform_namespace_id   = var.govuk_publishing_platform_namespace_id
+  govuk_publishing_platform_namespace_name = var.govuk_publishing_platform_namespace_name
+  task_role_arn                            = var.task_role_arn
+  execution_role_arn                       = var.execution_role_arn
+  extra_security_groups                    = [var.govuk_management_access_security_group]
+  container_definitions = [
     {
       "name" : "content-store",
       "image" : "govuk/content-store:with-content-schemas",
@@ -100,104 +108,6 @@ resource "aws_ecs_task_definition" "service" {
           "valueFrom" : data.aws_secretsmanager_secret.sentry_dsn.arn
         }
       ]
-    },
-    {
-      "name" : "envoy",
-      "image" : "840364872350.dkr.ecr.eu-west-1.amazonaws.com/aws-appmesh-envoy:v1.15.0.0-prod",
-      "user" : "1337",
-      "environment" : [
-        { "name" : "APPMESH_VIRTUAL_NODE_NAME", "value" : "mesh/govuk/virtualNode/content-store" },
-        { "name" : "ENVOY_LOG_LEVEL", "value" : "debug" }
-      ],
-      "essential" : true,
-      "logConfiguration" : {
-        "logDriver" : "awslogs",
-        "options" : {
-          "awslogs-create-group" : "true",
-          "awslogs-group" : "awslogs-fargate",
-          "awslogs-region" : "eu-west-1",
-          "awslogs-stream-prefix" : "awslogs-content-store-envoy"
-        }
-      }
     }
-  ])
-  network_mode       = "awsvpc"
-  cpu                = 512
-  memory             = 1024
-  task_role_arn      = var.task_role_arn
-  execution_role_arn = var.execution_role_arn
-
-  proxy_configuration {
-    type           = "APPMESH"
-    container_name = "envoy"
-
-    properties = {
-      AppPorts         = var.container_ingress_port
-      EgressIgnoredIPs = "169.254.170.2,169.254.169.254"
-      IgnoredUID       = "1337"
-      ProxyEgressPort  = 15001
-      ProxyIngressPort = 15000
-    }
-  }
-}
-
-resource "aws_ecs_service" "service" {
-  name            = var.service_name
-  cluster         = var.cluster_id
-  task_definition = aws_ecs_task_definition.service.arn
-  desired_count   = var.desired_count
-  launch_type     = "FARGATE"
-
-  network_configuration {
-    security_groups = [
-      aws_security_group.service.id,
-      var.govuk_management_access_security_group,
-      data.aws_security_group.service_dependencies.id,
-      aws_security_group.dependencies.id
-    ]
-    subnets = var.private_subnets
-  }
-
-  service_registries {
-    registry_arn   = aws_service_discovery_service.service.arn
-    container_name = var.service_name
-  }
-}
-
-#
-# ECS Service Security groups
-#
-
-resource "aws_security_group" "service" {
-  name        = "fargate_${var.service_name}_ingress"
-  vpc_id      = var.vpc_id
-  description = "Permit internal services to access the ${var.service_name} ECS service"
-}
-
-resource "aws_security_group" "dependencies" {
-  name        = "fargate_${var.service_name}_app"
-  vpc_id      = var.vpc_id
-  description = "Allows ingress from ${var.service_name} to its dependencies"
-
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-}
-
-resource "aws_security_group_rule" "service_ingress" {
-  description = "Allow content-store ingress to publishing-api"
-  type        = "ingress"
-  from_port   = "80"
-  to_port     = "80"
-  protocol    = "tcp"
-
-  security_group_id        = var.publishing_api_ingress_security_group
-  source_security_group_id = aws_security_group.dependencies.id
-}
-
-data "aws_security_group" "service_dependencies" {
-  id = "sg-0fa32025e3d7af478" # govuk_content-store_access
+  ]
 }

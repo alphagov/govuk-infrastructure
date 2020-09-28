@@ -79,17 +79,6 @@ resource "aws_security_group" "dependencies" {
   }
 }
 
-resource "aws_security_group_rule" "service_ingress" {
-  description = "Allow publishing-api ingress to content-store"
-  type        = "ingress"
-  from_port   = "80"
-  to_port     = "80"
-  protocol    = "tcp"
-
-  security_group_id        = var.content_store_ingress_security_group
-  source_security_group_id = aws_security_group.dependencies.id
-}
-
 #
 # Dependencies
 #
