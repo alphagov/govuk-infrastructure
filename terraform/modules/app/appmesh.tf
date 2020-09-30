@@ -1,6 +1,7 @@
 resource "aws_appmesh_virtual_service" "service" {
+  # TODO: hardcoded name
   name      = "${var.service_name}.mesh.govuk-internal.digital"
-  mesh_name = var.appmesh_mesh_govuk_id
+  mesh_name = var.appmesh_id
 
   spec {
     provider {
@@ -13,18 +14,17 @@ resource "aws_appmesh_virtual_service" "service" {
 
 resource "aws_appmesh_virtual_node" "service" {
   name      = var.service_name
-  mesh_name = var.appmesh_mesh_govuk_id
+  mesh_name = var.appmesh_id
 
   spec {
     backend {
-      # The ECS service
       virtual_service {
+        # TODO: hardcoded name
         virtual_service_name = "${var.service_name}.mesh.govuk-internal.digital"
       }
     }
 
     listener {
-      # Incoming traffic to the node
       port_mapping {
         port     = var.container_ingress_port
         protocol = "http"
@@ -33,7 +33,7 @@ resource "aws_appmesh_virtual_node" "service" {
 
     service_discovery {
       aws_cloud_map {
-        namespace_name = var.govuk_publishing_platform_namespace_name
+        namespace_name = var.service_discovery_namespace_name
         service_name   = aws_service_discovery_service.service.name
       }
     }

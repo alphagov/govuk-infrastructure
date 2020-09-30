@@ -13,17 +13,16 @@ variable "private_subnets" {
   type        = list
 }
 
-# TODO: improve name
-variable "appmesh_mesh_govuk_id" {
+variable "appmesh_id" {
   type    = string
   default = "govuk"
 }
 
-variable "govuk_publishing_platform_namespace_id" {
+variable "service_discovery_namespace_id" {
   type = string
 }
 
-variable "govuk_publishing_platform_namespace_name" {
+variable "service_discovery_namespace_name" {
   type = string
 }
 

@@ -27,18 +27,18 @@ data "aws_secretsmanager_secret" "sentry_dsn" {
 }
 
 module "app" {
-  source                                   = "../../app"
-  cpu                                      = "512"
-  memory                                   = "1024"
-  vpc_id                                   = var.vpc_id
-  cluster_id                               = var.cluster_id
-  service_name                             = var.service_name
-  private_subnets                          = var.private_subnets
-  govuk_publishing_platform_namespace_id   = var.govuk_publishing_platform_namespace_id
-  govuk_publishing_platform_namespace_name = var.govuk_publishing_platform_namespace_name
-  task_role_arn                            = var.task_role_arn
-  execution_role_arn                       = var.execution_role_arn
-  extra_security_groups                    = [var.govuk_management_access_security_group]
+  source                           = "../../app"
+  cpu                              = "512"
+  memory                           = "1024"
+  vpc_id                           = var.vpc_id
+  cluster_id                       = var.cluster_id
+  service_name                     = var.service_name
+  private_subnets                  = var.private_subnets
+  service_discovery_namespace_id   = var.service_discovery_namespace_id
+  service_discovery_namespace_name = var.service_discovery_namespace_name
+  task_role_arn                    = var.task_role_arn
+  execution_role_arn               = var.execution_role_arn
+  extra_security_groups            = [var.govuk_management_access_security_group]
   container_definitions = [
     {
       "name" : "content-store",

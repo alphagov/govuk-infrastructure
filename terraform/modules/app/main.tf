@@ -21,7 +21,7 @@ locals {
       "image" : "840364872350.dkr.ecr.eu-west-1.amazonaws.com/aws-appmesh-envoy:v1.15.0.0-prod",
       "user" : "1337",
       "environment" : [
-        { "name" : "APPMESH_VIRTUAL_NODE_NAME", "value" : "mesh/${var.appmesh_mesh_govuk_id}/virtualNode/${var.service_name}" }
+        { "name" : "APPMESH_VIRTUAL_NODE_NAME", "value" : "mesh/${var.appmesh_id}/virtualNode/${var.service_name}" }
       ],
       "essential" : true,
       "logConfiguration" : {
