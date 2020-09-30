@@ -37,6 +37,16 @@ variable "container_definitions" {
   type        = list
 }
 
+variable "cpu" {
+  description = "CPU hard limit for the ECS task (total for all containers). 1024 units = 1 vCPU. Only certain pairs of CPU/memory values are valid on Fargate. See https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task_definition_parameters.html"
+  type        = number
+}
+
+variable "memory" {
+  description = "RAM hard limit for the ECS task (total for all containers) in MiB. Only certain pairs of CPU/memory values are valid on Fargate. See https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task_definition_parameters.html"
+  type        = number
+}
+
 variable "container_ingress_port" {
   description = "Port on which the app container accepts connections."
   type        = number

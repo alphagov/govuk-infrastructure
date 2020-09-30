@@ -28,6 +28,8 @@ data "aws_secretsmanager_secret" "sentry_dsn" {
 
 module "app" {
   source                                   = "../../app"
+  cpu                                      = "512"
+  memory                                   = "1024"
   vpc_id                                   = var.vpc_id
   cluster_id                               = var.cluster_id
   service_name                             = var.service_name

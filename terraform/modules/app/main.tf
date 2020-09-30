@@ -42,8 +42,8 @@ resource "aws_ecs_task_definition" "service" {
   requires_compatibilities = ["FARGATE"]
   container_definitions    = jsonencode(concat(var.container_definitions, local.container_definitions))
   network_mode             = "awsvpc"
-  cpu                      = 512  # TODO: hardcoded
-  memory                   = 1024 # TODO: hardcoded
+  cpu                      = var.cpu
+  memory                   = var.memory
   task_role_arn            = var.task_role_arn
   execution_role_arn       = var.execution_role_arn
 
