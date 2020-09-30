@@ -1,0 +1,42 @@
+jobs:
+- name: update-pipeline
+  plan:
+  - get: govuk-infrastructure
+    trigger: true
+  - file: govuk-infrastructure/concourse/pipelines/cd-frontend.yml
+    set_pipeline: govuk-cd-frontend
+- name: deploy
+  plan:
+  - get: govuk-infrastructure
+  - get: release
+    trigger: true
+  - file: govuk-infrastructure/concourse/tasks/deploy-app.yml
+    params:
+      APPLICATION: frontend
+    task: deploy-app
+  serial: true
+- name: smoke-test
+  plan:
+  - get: govuk-infrastructure
+    passed:
+    - deploy
+    trigger: true
+  - file: govuk-infrastructure/concourse/tasks/basic-smoke-test.yml
+    params:
+      MESSAGE: Checking the app is not serving HTTP error codes.
+      URL: https://www.gov.uk/
+    task: smoke-test
+resources:
+- icon: github
+  name: govuk-infrastructure
+  source:
+    branch: main
+    uri: https://github.com/alphagov/govuk-infrastructure
+  type: git
+- icon: github
+  name: release
+  type: git
+  source:
+    branch: master
+    uri: https://github.com/alphagov/frontend
+    tag_filter: release_*

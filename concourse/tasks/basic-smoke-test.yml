@@ -1,0 +1,16 @@
+platform: linux
+image_resource:
+  type: docker-image
+  source:
+    repository: governmentpaas/curl-ssl
+params:
+  URL:
+  MESSAGE:
+run:
+  path: sh
+  args:
+    - '-c'
+    - |
+      set -eu
+      echo "$MESSAGE"
+      curl --fail --verbose "$URL"
