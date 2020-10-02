@@ -24,9 +24,8 @@ variable "service_name" {
 }
 
 variable "private_subnets" {
-  description = "The subnet ids for govuk_private_a, govuk_private_b, and govuk_private_c"
+  description = "Subnet IDs to use for non-Internet-facing resources."
   type        = list
-  default     = ["subnet-6dc4370b", "subnet-463bfd0e", "subnet-bfecd0e4"] # TODO hardcoded
 }
 
 variable "govuk_management_access_security_group" {

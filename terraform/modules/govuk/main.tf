@@ -40,6 +40,7 @@ module "content_store_service" {
   task_role_arn                    = aws_iam_role.task.arn
   execution_role_arn               = aws_iam_role.execution.arn
   vpc_id                           = var.vpc_id
+  private_subnets                  = var.private_subnets
   cluster_id                       = aws_ecs_cluster.cluster.id
   govuk_app_domain_external        = var.govuk_app_domain_external
   govuk_website_root               = var.govuk_website_root
