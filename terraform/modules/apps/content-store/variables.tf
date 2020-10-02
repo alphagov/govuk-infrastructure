@@ -59,6 +59,10 @@ variable "service_discovery_namespace_name" {
   type = string
 }
 
-variable "publishing_api_ingress_security_group" {
+variable "govuk_app_domain_external" {
+  type = string
+}
+
+variable "govuk_website_root" {
   type = string
 }

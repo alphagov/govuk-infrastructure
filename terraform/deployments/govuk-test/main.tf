@@ -12,6 +12,8 @@ provider "aws" {
 }
 
 module "govuk" {
-  source = "../../modules/govuk"
-  vpc_id = "vpc-9e62bcf8" # TODO: hardcoded
+  source                    = "../../modules/govuk"
+  vpc_id                    = "vpc-9e62bcf8" # TODO: hardcoded
+  govuk_app_domain_external = "test.govuk.digital"
+  govuk_website_root        = "test.publishing.service.gov.uk"
 }
