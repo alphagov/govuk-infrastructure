@@ -7,9 +7,8 @@ variable "cluster_id" {
   type        = string
 }
 
-# TODO: improve name/description (private_subnet_ids or perhaps just subnet_ids, depending on how it's really being used)
-variable "private_subnets" {
-  description = "The subnet ids for govuk_private_a, govuk_private_b, and govuk_private_c"
+variable "subnets" {
+  description = "IDs of the subnets where the ECS task will run."
   type        = list
 }
 

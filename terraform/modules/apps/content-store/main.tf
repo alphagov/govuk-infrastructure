@@ -33,7 +33,7 @@ module "app" {
   vpc_id                           = var.vpc_id
   cluster_id                       = var.cluster_id
   service_name                     = var.service_name
-  private_subnets                  = var.private_subnets
+  subnets                          = var.private_subnets
   service_discovery_namespace_id   = var.service_discovery_namespace_id
   service_discovery_namespace_name = var.service_discovery_namespace_name
   task_role_arn                    = var.task_role_arn

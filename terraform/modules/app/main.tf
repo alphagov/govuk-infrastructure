@@ -71,7 +71,7 @@ resource "aws_ecs_service" "service" {
 
   network_configuration {
     security_groups = concat([aws_security_group.service.id], var.extra_security_groups)
-    subnets         = var.private_subnets
+    subnets         = var.subnets
   }
 
   service_registries {
