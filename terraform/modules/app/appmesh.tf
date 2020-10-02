@@ -1,6 +1,9 @@
+locals {
+  virtual_service_name = "${var.service_name}.${var.service_discovery_namespace_name}"
+}
+
 resource "aws_appmesh_virtual_service" "service" {
-  # TODO: hardcoded name
-  name      = "${var.service_name}.mesh.govuk-internal.digital"
+  name      = local.virtual_service_name
   mesh_name = var.mesh_name
 
   spec {
@@ -19,8 +22,7 @@ resource "aws_appmesh_virtual_node" "service" {
   spec {
     backend {
       virtual_service {
-        # TODO: hardcoded name
-        virtual_service_name = "${var.service_name}.mesh.govuk-internal.digital"
+        virtual_service_name = local.virtual_service_name
       }
     }
 
