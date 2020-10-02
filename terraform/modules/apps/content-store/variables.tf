@@ -66,3 +66,8 @@ variable "govuk_app_domain_external" {
 variable "govuk_website_root" {
   type = string
 }
+
+variable "mongodb_hostname" {
+  type = string
+}
+

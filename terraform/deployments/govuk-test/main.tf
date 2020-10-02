@@ -16,4 +16,5 @@ module "govuk" {
   vpc_id                    = "vpc-9e62bcf8" # TODO: hardcoded
   govuk_app_domain_external = "test.govuk.digital"
   govuk_website_root        = "test.publishing.service.gov.uk"
+  mongodb_hostname          = "mongo-1.test.govuk-internal.digital,mongo-2.test.govuk-internal.digital,mongo-3.test.govuk-internal.digital"
 }

@@ -43,6 +43,7 @@ module "content_store_service" {
   cluster_id                       = aws_ecs_cluster.cluster.id
   govuk_app_domain_external        = var.govuk_app_domain_external
   govuk_website_root               = var.govuk_website_root
+  mongodb_hostname                 = var.mongodb_hostname
   source                           = "../../modules/apps/content-store"
 }
 
