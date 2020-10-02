@@ -34,7 +34,7 @@ module "publisher_service" {
 }
 
 module "content_store_service" {
-  appmesh_mesh_govuk_id                 = aws_appmesh_mesh.govuk.id
+  mesh_name                             = aws_appmesh_mesh.govuk.id
   service_discovery_namespace_id        = aws_service_discovery_private_dns_namespace.govuk_publishing_platform.id
   service_discovery_namespace_name      = aws_service_discovery_private_dns_namespace.govuk_publishing_platform.name
   publishing_api_ingress_security_group = module.publishing_api_service.security_group_id

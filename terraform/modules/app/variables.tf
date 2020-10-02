@@ -12,9 +12,8 @@ variable "subnets" {
   type        = list
 }
 
-variable "appmesh_id" {
-  type    = string
-  default = "govuk"
+variable "mesh_name" {
+  type = string
 }
 
 variable "service_discovery_namespace_id" {

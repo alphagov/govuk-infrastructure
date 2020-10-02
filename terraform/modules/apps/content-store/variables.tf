@@ -47,16 +47,8 @@ variable "desired_count" {
   default     = 1
 }
 
-# TODO: internal_domain_name should be redundant now that internal traffic is via AppMesh.
-variable "internal_domain_name" {
-  description = "Apex domain name for non-Internet-facing traffic."
-  type        = string
-  default     = "test.govuk-internal.digital"
-}
-
-variable "appmesh_mesh_govuk_id" {
-  type    = string
-  default = "govuk"
+variable "mesh_name" {
+  type = string
 }
 
 variable "service_discovery_namespace_id" {

@@ -1,7 +1,7 @@
 resource "aws_appmesh_virtual_service" "service" {
   # TODO: hardcoded name
   name      = "${var.service_name}.mesh.govuk-internal.digital"
-  mesh_name = var.appmesh_id
+  mesh_name = var.mesh_name
 
   spec {
     provider {
@@ -14,7 +14,7 @@ resource "aws_appmesh_virtual_service" "service" {
 
 resource "aws_appmesh_virtual_node" "service" {
   name      = var.service_name
-  mesh_name = var.appmesh_id
+  mesh_name = var.mesh_name
 
   spec {
     backend {

@@ -34,6 +34,7 @@ module "app" {
   cluster_id                       = var.cluster_id
   service_name                     = var.service_name
   subnets                          = var.private_subnets
+  mesh_name                        = var.mesh_name
   service_discovery_namespace_id   = var.service_discovery_namespace_id
   service_discovery_namespace_name = var.service_discovery_namespace_name
   task_role_arn                    = var.task_role_arn
@@ -45,7 +46,8 @@ module "app" {
       "image" : "govuk/content-store:with-content-schemas",
       "essential" : true,
       "environment" : [
-        { "name" : "APPMESH_VIRTUAL_NODE_NAME", "value" : "mesh/govuk/virtualNode/content-store" },
+        # TODO: factor our hardcoded stuff
+        { "name" : "APPMESH_VIRTUAL_NODE_NAME", "value" : "mesh/${var.mesh_name}/virtualNode/content-store" },
         { "name" : "DEFAULT_TTL", "value" : "1800" },
         { "name" : "GOVUK_APP_DOMAIN", "value" : "test.govuk-internal.digital" },
         { "name" : "GOVUK_APP_DOMAIN_EXTERNAL", "value" : "test.govuk.digital" },
