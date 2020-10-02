@@ -58,7 +58,7 @@ module "app" {
         { "name" : "GOVUK_STATSD_PREFIX", "value" : "fargate" },
         { "name" : "GOVUK_USER", "value" : "deploy" }, # TODO: clean up?
         { "name" : "GOVUK_WEBSITE_ROOT", "value" : var.govuk_website_root },
-        { "name" : "MONGODB_URI", "value" : "mongodb://${var.mongodb_hostname}/content_store_production" },
+        { "name" : "MONGODB_URI", "value" : "mongodb://${var.mongodb_host}/content_store_production" },
         { "name" : "PLEK_SERVICE_PERFORMANCEPLATFORM_BIG_SCREEN_VIEW_URI", "value" : "" },
         { "name" : "PLEK_SERVICE_PUBLISHING_API_URI", "value" : "http://publishing-api.${var.service_discovery_namespace_name}" },
         { "name" : "PLEK_SERVICE_RUMMAGER_URI", "value" : "" },
@@ -66,7 +66,7 @@ module "app" {
         { "name" : "PORT", "value" : "80" },
         { "name" : "RAILS_ENV", "value" : "production" },
         { "name" : "STATSD_PROTOCOL", "value" : "tcp" },
-        { "name" : "STATSD_HOST", "value" : "statsd.test.govuk-internal.digital" },
+        { "name" : "STATSD_HOST", "value" : var.statsd_host },
         { "name" : "UNICORN_WORKER_PROCESSES", "value" : "12" }
       ],
       "logConfiguration" : {

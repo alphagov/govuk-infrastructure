@@ -10,7 +10,11 @@ variable "govuk_website_root" {
   type = string
 }
 
-variable "mongodb_hostname" {
+variable "mongodb_host" {
+  type = string
+}
+
+variable "statsd_host" {
   type = string
 }
 
