@@ -8,6 +8,7 @@ jobs:
 - name: deploy
   plan:
   - get: govuk-infrastructure
+    passed: [update-pipeline]
   - get: release
     trigger: true
   - file: govuk-infrastructure/concourse/tasks/deploy-app.yml
