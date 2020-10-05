@@ -128,4 +128,31 @@ resource "aws_iam_role_policy_attachment" "appmesh_envoy_access" {
   policy_arn = "arn:aws:iam::aws:policy/AWSAppMeshEnvoyAccess"
 }
 
+#
+# Allow RE Autom8 Concourse role to deploy ECS apps in an account
+#
 
+resource "aws_iam_role" "govuk_concourse_deployer" {
+  name        = "govuk-concourse-deployer"
+  description = "Deploys applications to ECS from Concourse"
+
+  assume_role_policy = <<EOF
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Action": "sts:AssumeRole",
+            "Principal": {
+              "AWS": "arn:aws:iam::047969882937:role/cd-govuk-tools-concourse-worker"
+            }
+        }
+    ]
+}
+EOF
+}
+
+resource "aws_iam_role_policy_attachment" "concourse_ecs_admin" {
+  role       = aws_iam_role.govuk_concourse_deployer.id
+  policy_arn = "arn:aws:iam::aws:policy/AmazonECS_FullAccess"
+}
