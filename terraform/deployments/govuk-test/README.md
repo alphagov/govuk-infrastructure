@@ -1,4 +1,6 @@
-# GOV.UK Project
+# govuk-test root module
 
-This is the main GOV.UK project for spinning GOV.UK up. It calls all of the
-necessary modules to have a functioning environment up and running.
+This root module configures the GOV.UK Publishing test environment.
+
+The only thing that it should do is pass the settings for the test environment
+to the [`govuk`](../../modules/govuk) composition module.
