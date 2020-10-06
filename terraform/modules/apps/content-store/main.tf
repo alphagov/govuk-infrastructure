@@ -43,7 +43,7 @@ module "app" {
   container_definitions = [
     {
       "name" : "content-store",
-      "image" : "govuk/content-store:with-content-schemas",  # TODO: replace temporary label
+      "image" : "govuk/content-store:with-content-schemas", # TODO: replace temporary label
       "essential" : true,
       "environment" : [
         { "name" : "APPMESH_VIRTUAL_NODE_NAME", "value" : "mesh/${var.mesh_name}/virtualNode/content-store" },
@@ -68,9 +68,9 @@ module "app" {
         { "name" : "STATSD_HOST", "value" : var.statsd_host },
         { "name" : "UNICORN_WORKER_PROCESSES", "value" : "12" }
       ],
-      "dependsOn": [{
-        "containerName": "envoy",
-        "condition": "START"
+      "dependsOn" : [{
+        "containerName" : "envoy",
+        "condition" : "START"
       }],
       "logConfiguration" : {
         "logDriver" : "awslogs",
