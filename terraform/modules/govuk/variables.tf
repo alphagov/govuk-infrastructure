@@ -23,4 +23,9 @@ variable "private_subnets" {
   type        = list
 }
 
+variable "public_subnets" {
+  description = "Subnet IDs to use for Internet-facing resources."
+  type        = list
+}
+
 # TODO: pull common vars up from the app modules into here so that they can vary by environment.

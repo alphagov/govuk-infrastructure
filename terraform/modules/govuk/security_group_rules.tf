@@ -23,8 +23,8 @@ resource "aws_security_group_rule" "content_store_from_publishing_api_http" {
   from_port                = "80"
   to_port                  = "80"
   protocol                 = "tcp"
-  security_group_id        = module.content_store_service.security_group_id
-  source_security_group_id = module.publishing_api_service.security_group_id
+  security_group_id        = module.content_store_service.app_security_group_id
+  source_security_group_id = module.publishing_api_service.app_security_group_id
 }
 
 # TODO: fix overly broad egress rule
@@ -35,7 +35,30 @@ resource "aws_security_group_rule" "content_store_to_any_any" {
   to_port           = "0"
   protocol          = "all"
   cidr_blocks       = ["0.0.0.0/0"]
-  security_group_id = module.content_store_service.security_group_id
+  security_group_id = module.content_store_service.app_security_group_id
+}
+
+# TODO: add Publisher ingress rule for its load balancer to send requests to it.
+# TODO: fix overly broad egress rule
+resource "aws_security_group_rule" "publisher_to_any_any" {
+  description       = "Content Store sends requests to anywhere over any protocol"
+  type              = "egress"
+  from_port         = "0"
+  to_port           = "0"
+  protocol          = "all"
+  cidr_blocks       = ["0.0.0.0/0"]
+  security_group_id = module.content_store_service.app_security_group_id
+}
+
+resource "aws_security_group_rule" "publishing_api_from_publisher_http" {
+  description = "Publishing API accepts requests from Publisher over HTTP"
+  type        = "ingress"
+  from_port   = "80"
+  to_port     = "80"
+  protocol    = "tcp"
+
+  security_group_id        = module.publishing_api_service.app_security_group_id
+  source_security_group_id = module.publisher_service.app_security_group_id
 }
 
 # TODO: move the rest of the rules into this file.
