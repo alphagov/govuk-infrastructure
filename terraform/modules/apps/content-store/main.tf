@@ -28,8 +28,8 @@ data "aws_secretsmanager_secret" "sentry_dsn" {
 
 module "app" {
   source                           = "../../app"
-  cpu                              = "512"
-  memory                           = "1024"
+  cpu                              = 512
+  memory                           = 1024
   vpc_id                           = var.vpc_id
   cluster_id                       = var.cluster_id
   service_name                     = var.service_name
@@ -43,10 +43,9 @@ module "app" {
   container_definitions = [
     {
       "name" : "content-store",
-      "image" : "govuk/content-store:with-content-schemas",
+      "image" : "govuk/content-store:with-content-schemas",  # TODO: replace temporary label
       "essential" : true,
       "environment" : [
-        # TODO: factor our hardcoded stuff
         { "name" : "APPMESH_VIRTUAL_NODE_NAME", "value" : "mesh/${var.mesh_name}/virtualNode/content-store" },
         { "name" : "DEFAULT_TTL", "value" : "1800" },
         { "name" : "GOVUK_APP_DOMAIN", "value" : var.service_discovery_namespace_name },
@@ -78,7 +77,7 @@ module "app" {
         "options" : {
           "awslogs-create-group" : "true",
           "awslogs-group" : "awslogs-fargate",
-          "awslogs-region" : "eu-west-1",
+          "awslogs-region" : "eu-west-1", # TODO: hardcoded region
           "awslogs-stream-prefix" : "awslogs-content-store"
         }
       },
