@@ -69,6 +69,10 @@ module "app" {
         { "name" : "STATSD_HOST", "value" : var.statsd_host },
         { "name" : "UNICORN_WORKER_PROCESSES", "value" : "12" }
       ],
+      "dependsOn": [{
+        "containerName": "envoy",
+        "condition": "START"
+      }],
       "logConfiguration" : {
         "logDriver" : "awslogs",
         "options" : {
