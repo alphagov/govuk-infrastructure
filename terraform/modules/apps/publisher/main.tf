@@ -7,6 +7,52 @@ terraform {
   }
 }
 
+data "aws_secretsmanager_secret" "asset_manager_bearer_token" {
+  name = "publisher_app-ASSET_MANAGER_BEARER_TOKEN"
+}
+data "aws_secretsmanager_secret" "fact_check_password" {
+  name = "publisher_app-FACT_CHECK_PASSWORD"
+}
+data "aws_secretsmanager_secret" "fact_check_reply_to_address" {
+  name = "publisher_app-FACT_CHECK_REPLY_TO_ADDRESS"
+}
+data "aws_secretsmanager_secret" "fact_check_reply_to_id" {
+  name = "publisher_app-FACT_CHECK_REPLY_TO_ID"
+}
+data "aws_secretsmanager_secret" "govuk_notify_api_key" {
+  name = "publisher_app-GOVUK_NOTIFY_API_KEY"
+}
+data "aws_secretsmanager_secret" "govuk_notify_template_id" {
+  name = "publisher_app-GOVUK_NOTIFY_TEMPLATE_ID" # pragma: allowlist secret
+}
+data "aws_secretsmanager_secret" "jwt_auth_secret" {
+  name = "publisher_app-JWT_AUTH_SECRET"
+}
+data "aws_secretsmanager_secret" "link_checker_api_bearer_token" {
+  name = "publisher_app-LINK_CHECKER_API_BEARER_TOKEN"
+}
+data "aws_secretsmanager_secret" "link_checker_api_secret_token" {
+  name = "publisher_app-LINK_CHECKER_API_SECRET_TOKEN"
+}
+data "aws_secretsmanager_secret" "mongodb_uri" {
+  name = "publisher_app-MONGODB_URI"
+}
+data "aws_secretsmanager_secret" "oauth_id" {
+  name = "publisher_app-OAUTH_ID"
+}
+data "aws_secretsmanager_secret" "oauth_secret" {
+  name = "publisher_app-OAUTH_SECRET"
+}
+data "aws_secretsmanager_secret" "publishing_api_bearer_token" {
+  name = "publisher_app-PUBLISHING_API_BEARER_TOKEN" # pragma: allowlist secret
+}
+data "aws_secretsmanager_secret" "secret_key_base" {
+  name = "publisher_app-SECRET_KEY_BASE" # pragma: allowlist secret
+}
+data "aws_secretsmanager_secret" "sentry_dsn" {
+  name = "publisher_app-SENTRY_DSN"
+}
+
 module "app" {
   source                           = "../../app"
   cpu                              = 512
@@ -81,64 +127,64 @@ module "app" {
       ],
       "secrets": [
         {
+          "name": "ASSET_MANAGER_BEARER_TOKEN",
+          "valueFrom": data.aws_secretsmanager_secret.asset_manager_bearer_token.arn
+        },
+        {
           "name": "FACT_CHECK_PASSWORD",
-          "valueFrom": "arn:aws:secretsmanager:eu-west-1:430354129336:secret:publisher_app-FACT_CHECK_PASSWORD-A2UM6N"
+          "valueFrom": data.aws_secretsmanager_secret.fact_check_password.arn
         },
         {
           "name": "FACT_CHECK_REPLY_TO_ADDRESS",
-          "valueFrom": "arn:aws:secretsmanager:eu-west-1:430354129336:secret:publisher_app-FACT_CHECK_REPLY_TO_ADDRESS-zZ9I9x"
+          "valueFrom": data.aws_secretsmanager_secret.fact_check_reply_to_address.arn
         },
         {
           "name": "FACT_CHECK_REPLY_TO_ID",
-          "valueFrom": "arn:aws:secretsmanager:eu-west-1:430354129336:secret:publisher_app-FACT_CHECK_REPLY_TO_ID-c725KL"
+          "valueFrom": data.aws_secretsmanager_secret.fact_check_reply_to_id.arn
         },
         {
           "name": "GOVUK_NOTIFY_API_KEY",
-          "valueFrom": "arn:aws:secretsmanager:eu-west-1:430354129336:secret:publisher_app-GOVUK_NOTIFY_API_KEY-jYkPCM"
+          "valueFrom": data.aws_secretsmanager_secret.govuk_notify_api_key.arn
         },
         {
           "name": "GOVUK_NOTIFY_TEMPLATE_ID",
-          "valueFrom": "arn:aws:secretsmanager:eu-west-1:430354129336:secret:publisher_app-GOVUK_NOTIFY_TEMPLATE_ID-SP4yN4"
+          "valueFrom": data.aws_secretsmanager_secret.govuk_notify_template_id.arn
         },
         {
           "name": "JWT_AUTH_SECRET",
-          "valueFrom": "arn:aws:secretsmanager:eu-west-1:430354129336:secret:publisher_app-JWT_AUTH_SECRET-B2eSmG"
+          "valueFrom": data.aws_secretsmanager_secret.jwt_auth_secret.arn
         },
         {
           "name": "LINK_CHECKER_API_BEARER_TOKEN",
-          "valueFrom": "arn:aws:secretsmanager:eu-west-1:430354129336:secret:publisher_app-LINK_CHECKER_API_BEARER_TOKEN-EYi5Aw"
+          "valueFrom": data.aws_secretsmanager_secret.link_checker_api_bearer_token.arn
         },
         {
           "name": "LINK_CHECKER_API_SECRET_TOKEN",
-          "valueFrom": "arn:aws:secretsmanager:eu-west-1:430354129336:secret:publisher_app-LINK_CHECKER_API_SECRET_TOKEN-BRoP1C"
-        },
-        {
-          "name": "OAUTH_ID",
-          "valueFrom": "arn:aws:secretsmanager:eu-west-1:430354129336:secret:publisher_app-OAUTH_ID-8M80If"
-        },
-        {
-          "name": "OAUTH_SECRET",
-          "valueFrom": "arn:aws:secretsmanager:eu-west-1:430354129336:secret:publisher_app-OAUTH_SECRET-C32Skq"
-        },
-        {
-          "name": "PUBLISHING_API_BEARER_TOKEN",
-          "valueFrom": "arn:aws:secretsmanager:eu-west-1:430354129336:secret:publisher_app-PUBLISHING_API_BEARER_TOKEN-xmUsEI"
-        },
-        {
-          "name": "SECRET_KEY_BASE",
-          "valueFrom": "arn:aws:secretsmanager:eu-west-1:430354129336:secret:publisher_app-SECRET_KEY_BASE-nvxDoL"
-        },
-        {
-          "name": "SENTRY_DSN",
-          "valueFrom": "arn:aws:secretsmanager:eu-west-1:430354129336:secret:publisher_app-SENTRY_DSN-mXnCNx"
-        },
-        {
-          "name": "ASSET_MANAGER_BEARER_TOKEN",
-          "valueFrom": "arn:aws:secretsmanager:eu-west-1:430354129336:secret:publisher_app-ASSET_MANAGER_BEARER_TOKEN-a2lgat"
+          "valueFrom": data.aws_secretsmanager_secret.link_checker_api_secret_token.arn
         },
         {
           "name": "MONGODB_URI",
-          "valueFrom": "arn:aws:secretsmanager:eu-west-1:430354129336:secret:publisher_app-MONGODB_URI-x2sw5T"
+          "valueFrom": data.aws_secretsmanager_secret.mongodb_uri.arn
+        },
+        {
+          "name" : "OAUTH_ID",
+          "valueFrom" : data.aws_secretsmanager_secret.oauth_id.arn
+        },
+        {
+          "name" : "OAUTH_SECRET",
+          "valueFrom" : data.aws_secretsmanager_secret.oauth_secret.arn
+        },
+        {
+          "name" : "PUBLISHING_API_BEARER_TOKEN",
+          "valueFrom" : data.aws_secretsmanager_secret.publishing_api_bearer_token.arn
+        },
+        {
+          "name" : "SECRET_KEY_BASE",
+          "valueFrom" : data.aws_secretsmanager_secret.secret_key_base.arn
+        },
+        {
+          "name" : "SENTRY_DSN",
+          "valueFrom" : data.aws_secretsmanager_secret.sentry_dsn.arn
         }
       ]
     }
