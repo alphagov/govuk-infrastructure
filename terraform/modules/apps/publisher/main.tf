@@ -261,47 +261,7 @@ resource "aws_security_group" "public_alb" {
   name        = "fargate_${var.service_name}_public_alb"
   vpc_id      = var.vpc_id
   description = "${var.service_name} Internet-facing ALB"
-
-  ingress {
-    description = "${var.service_name} can be spoken to by the Internet"
-    from_port   = 443
-    to_port     = 443
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "all"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
 }
-
-# TODO: move these SG rules to the govuk composition module.
-resource "aws_security_group_rule" "ingress_redis" {
-  type      = "ingress"
-  from_port = 6379
-  to_port   = 6379
-  protocol  = "tcp"
-
-  security_group_id        = var.redis_security_group_id
-  source_security_group_id = module.app.security_group_id
-}
-
-resource "aws_security_group_rule" "ingress_documentdb" {
-  type      = "ingress"
-  from_port = 27017
-  to_port   = 27017
-  protocol  = "tcp"
-
-  security_group_id        = var.documentdb_security_group_id
-  source_security_group_id = module.app.security_group_id
-}
-
-#
-# DNS
-#
 
 data "aws_route53_zone" "public" {
   name         = var.public_domain_name

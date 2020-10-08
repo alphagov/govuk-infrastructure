@@ -53,20 +53,6 @@ variable "desired_count" {
   default     = 1
 }
 
-# TODO: remove
-variable "redis_security_group_id" {
-  description = "The redis security group id"
-  type        = string
-  default     = "sg-0a8a92451bfde8aa3"
-}
-
-# TODO: remove
-variable "documentdb_security_group_id" {
-  description = "The documentdb security group id"
-  type        = string
-  default     = "sg-08a20d332cbc59c3c"
-}
-
 variable "public_domain_name" {
   description = "Apex domain for Internet-facing services. For example, staging.publishing.service.gov.uk"
   type        = string
