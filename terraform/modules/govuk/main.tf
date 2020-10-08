@@ -31,9 +31,11 @@ module "publisher_service" {
   vpc_id                           = var.vpc_id
   private_subnets                  = var.private_subnets
   public_subnets                   = var.public_subnets
+  asset_host                       = var.asset_host
   govuk_app_domain_external        = var.govuk_app_domain_external
   govuk_website_root               = var.govuk_website_root
   statsd_host                      = var.statsd_host
+  redis_host                       = var.redis_host
   source                           = "../../modules/apps/publisher"
 }
 

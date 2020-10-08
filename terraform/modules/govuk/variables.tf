@@ -20,8 +20,23 @@ variable "public_subnets" {
   type        = list
 }
 
+# TODO: find out how asset_host is actually used and add a description to disambiguate it.
+variable "asset_host" {
+  type = string
+}
+
 variable "mongodb_host" {
   type = string
+}
+
+variable "redis_host" {
+  description = "Hostname for the shared Redis (which isn't managed by this Terraform repo, at least initially)."
+  type        = string
+}
+
+variable "redis_security_group_id" {
+  description = "ID of security group for the shared Redis (which isn't managed by this Terraform repo, at least initially)."
+  type        = string
 }
 
 variable "statsd_host" {
@@ -30,11 +45,6 @@ variable "statsd_host" {
 
 variable "documentdb_security_group_id" {
   description = "ID of security group for the shared DocumentDB (which isn't managed by this Terraform repo, at least initially)."
-  type        = string
-}
-
-variable "redis_security_group_id" {
-  description = "ID of security group for the shared Redis (which isn't managed by this Terraform repo, at least initially)."
   type        = string
 }
 

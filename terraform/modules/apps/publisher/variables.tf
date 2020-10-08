@@ -63,6 +63,10 @@ variable "mesh_name" {
   type = string
 }
 
+variable "asset_host" {
+  type = string
+}
+
 variable "govuk_app_domain_external" {
   type = string
 }
@@ -73,4 +77,13 @@ variable "govuk_website_root" {
 
 variable "statsd_host" {
   type = string
+}
+
+variable "redis_host" {
+  type = string
+}
+
+variable "redis_port" {
+  type    = number
+  default = 6379
 }

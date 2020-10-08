@@ -46,7 +46,7 @@ module "app" {
       "image" : "govuk/content-store:with-content-schemas", # TODO: replace temporary label
       "essential" : true,
       "environment" : [
-        { "name" : "APPMESH_VIRTUAL_NODE_NAME", "value" : "mesh/${var.mesh_name}/virtualNode/content-store" },
+        { "name" : "APPMESH_VIRTUAL_NODE_NAME", "value" : "mesh/${var.mesh_name}/virtualNode/${var.service_name}" },
         { "name" : "DEFAULT_TTL", "value" : "1800" },
         { "name" : "GOVUK_APP_DOMAIN", "value" : var.service_discovery_namespace_name },
         { "name" : "GOVUK_APP_DOMAIN_EXTERNAL", "value" : var.govuk_app_domain_external },

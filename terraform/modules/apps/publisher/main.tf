@@ -69,13 +69,13 @@ module "app" {
   extra_security_groups            = [var.govuk_management_access_security_group]
   container_definitions = [
     {
-      # TODO: factor out hardcoded values
+      # TODO: factor out all the remaining hardcoded values (see ../content-store for an example where this has been done)
       "name" : "publisher",
       "image" : "govuk/publisher:serve-assets-in-prod", # TODO: use deployed-to-production label or similar.
       "essential" : true,
       "environment" : [
-        { "name" : "ASSET_HOST", "value" : "www.gov.uk" },
-        { "name" : "APPMESH_VIRTUAL_NODE_NAME", "value" : "mesh/${var.mesh_name}/virtualNode/publisher" },
+        { "name" : "ASSET_HOST", "value" : var.asset_host },
+        { "name" : "APPMESH_VIRTUAL_NODE_NAME", "value" : "mesh/${var.mesh_name}/virtualNode/${var.service_name}" },
         { "name" : "BASIC_AUTH_USERNAME", "value" : "gds" },
         { "name" : "EMAIL_GROUP_BUSINESS", "value" : "test-address@digital.cabinet-office.gov.uk" },
         { "name" : "EMAIL_GROUP_CITIZEN", "value" : "test-address@digital.cabinet-office.gov.uk" },
@@ -88,21 +88,23 @@ module "app" {
         { "name" : "GOVUK_APP_NAME", "value" : "publisher" },
         { "name" : "GOVUK_APP_TYPE", "value" : "rack" },
         { "name" : "GOVUK_STATSD_PREFIX", "value" : "fargate" },
+        # TODO: how does GOVUK_ASSET_ROOT relate to ASSET_HOST? Is one a function of the other? Are they both really in use? Is GOVUK_ASSET_ROOT always just "https://${ASSET_HOST}"?
         { "name" : "GOVUK_ASSET_ROOT", "value" : "https://assets.test.publishing.service.gov.uk" },
         { "name" : "GOVUK_GROUP", "value" : "deploy" },
         { "name" : "GOVUK_USER", "value" : "deploy" },
         { "name" : "GOVUK_WEBSITE_ROOT", "value" : var.govuk_website_root },
-        { "name" : "PLEK_SERVICE_CONTENT_STORE_URI", "value" : "https://www.gov.uk/api" },
-        { "name" : "PLEK_SERVICE_PUBLISHING_API_URI", "value" : "http://publishing-api.mesh.govuk-internal.digital" },
+        { "name" : "PLEK_SERVICE_CONTENT_STORE_URI", "value" : "https://www.gov.uk/api" }, # TODO: looks suspicious
+        { "name" : "PLEK_SERVICE_PUBLISHING_API_URI", "value" : "http://publishing-api.${var.service_discovery_namespace_name}" },
         { "name" : "PLEK_SERVICE_STATIC_URI", "value" : "https://assets.test.publishing.service.gov.uk" },
         { "name" : "RAILS_ENV", "value" : "production" },
-        { "name" : "RAILS_SERVE_STATIC_FILES", "value" : "true" },
-        { "name" : "REDIS_HOST", "value" : "pink-backend-redis.0f3erf.ng.0001.euw1.cache.amazonaws.com" },
-        { "name" : "REDIS_PORT", "value" : "6379" },
-        { "name" : "REDIS_URL", "value" : "redis://pink-backend-redis.0f3erf.ng.0001.euw1.cache.amazonaws.com:6379" },
+        { "name" : "RAILS_SERVE_STATIC_FILES", "value" : "true" }, # TODO: temporary hack?
+        # TODO: we shouldn't be specifying both REDIS_{HOST,PORT} *and* REDIS_URL.
+        { "name" : "REDIS_HOST", "value" : var.redis_host },
+        { "name" : "REDIS_PORT", "value" : tostring(var.redis_port) },
+        { "name" : "REDIS_URL", "value" : "redis://${var.redis_host}:${var.redis_port}" },
         { "name" : "STATSD_PROTOCOL", "value" : "tcp" },
         { "name" : "STATSD_HOST", "value" : var.statsd_host },
-        { "name" : "WEBSITE_ROOT", "value" : "test.publishing.service.gov.uk" }
+        { "name" : "WEBSITE_ROOT", "value" : var.govuk_website_root }
       ],
       "dependsOn" : [{
         "containerName" : "envoy",
