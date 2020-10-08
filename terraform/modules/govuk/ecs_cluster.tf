@@ -2,6 +2,11 @@
 resource "aws_ecs_cluster" "cluster" {
   name               = "govuk"
   capacity_providers = ["FARGATE"]
+
+  setting {
+    name  = "containerInsights"
+    value = "enabled"
+  }
 }
 
 resource "aws_appmesh_mesh" "govuk" {

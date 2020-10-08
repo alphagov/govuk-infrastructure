@@ -15,4 +15,9 @@ provider "aws" {
 resource "aws_ecs_cluster" "task_runner" {
   name               = "task_runner"
   capacity_providers = ["FARGATE"]
+
+  setting {
+    name  = "containerInsights"
+    value = "enabled"
+  }
 }
