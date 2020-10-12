@@ -249,16 +249,6 @@ resource "aws_lb_listener_certificate" "publishing_service" {
   certificate_arn = data.aws_acm_certificate.public_lb_alternate.arn
 }
 
-resource "aws_security_group_rule" "public_alb_ingress" {
-  type      = "ingress"
-  from_port = 80
-  to_port   = 80
-  protocol  = "tcp"
-
-  security_group_id        = module.app.security_group_id
-  source_security_group_id = aws_security_group.public_alb.id
-}
-
 resource "aws_security_group" "public_alb" {
   name        = "fargate_${var.service_name}_public_alb"
   vpc_id      = var.vpc_id
