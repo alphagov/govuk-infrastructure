@@ -29,6 +29,11 @@ variable "asset_host" {
   type = string
 }
 
+variable "govuk_management_access_sg_id" {
+  description = "ID of security group (defined outside this Terraform repo) for access from jumpboxes etc. This SG is added to all ECS instances."
+  type        = string
+}
+
 variable "mongodb_host" {
   type = string
 }

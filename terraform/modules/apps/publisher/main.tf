@@ -66,7 +66,7 @@ module "app" {
   service_discovery_namespace_name = var.service_discovery_namespace_name
   task_role_arn                    = var.task_role_arn
   execution_role_arn               = var.execution_role_arn
-  extra_security_groups            = [var.govuk_management_access_security_group]
+  extra_security_groups            = [var.govuk_management_access_sg_id]
   container_definitions = [
     {
       # TODO: factor out all the remaining hardcoded values (see ../content-store for an example where this has been done)

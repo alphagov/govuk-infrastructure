@@ -41,10 +41,9 @@ variable "public_subnets" {
   type        = list
 }
 
-variable "govuk_management_access_security_group" {
-  description = "Group used to allow access by management systems"
+variable "govuk_management_access_sg_id" {
+  description = "ID of security group (defined outside this Terraform repo) for access from jumpboxes etc. This SG is added to all ECS instances."
   type        = string
-  default     = "sg-0b873470482f6232d"
 }
 
 variable "desired_count" {
