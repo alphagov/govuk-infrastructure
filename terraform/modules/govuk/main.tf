@@ -56,12 +56,20 @@ module "content_store_service" {
 }
 
 module "publishing_api_service" {
-  appmesh_mesh_govuk_id                    = aws_appmesh_mesh.govuk.id
+  mesh_name                                = aws_appmesh_mesh.govuk.id
+  service_discovery_namespace_id           = aws_service_discovery_private_dns_namespace.govuk_publishing_platform.id
+  service_discovery_namespace_name         = aws_service_discovery_private_dns_namespace.govuk_publishing_platform.name
   govuk_publishing_platform_namespace_id   = aws_service_discovery_private_dns_namespace.govuk_publishing_platform.id
   govuk_publishing_platform_namespace_name = aws_service_discovery_private_dns_namespace.govuk_publishing_platform.name
   task_role_arn                            = aws_iam_role.task.arn
   execution_role_arn                       = aws_iam_role.execution.arn
   vpc_id                                   = var.vpc_id
+  govuk_app_domain_external                = var.govuk_app_domain_external
+  govuk_app_domain_internal                = var.govuk_app_domain_internal
+  govuk_website_root                       = var.govuk_website_root
   cluster_id                               = aws_ecs_cluster.cluster.id
+  statsd_host                              = var.statsd_host
+  redis_host                               = var.redis_host
+  redis_port                               = var.redis_port
   source                                   = "../../modules/apps/publishing-api"
 }
