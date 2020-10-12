@@ -31,7 +31,9 @@ module "publisher_service" {
   vpc_id                           = var.vpc_id
   private_subnets                  = var.private_subnets
   public_subnets                   = var.public_subnets
+  public_lb_domain_name            = var.public_lb_domain_name
   govuk_management_access_sg_id    = var.govuk_management_access_sg_id
+  # App environment variables
   asset_host                       = var.asset_host
   govuk_app_domain_external        = var.govuk_app_domain_external
   govuk_website_root               = var.govuk_website_root

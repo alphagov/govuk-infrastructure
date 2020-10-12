@@ -256,18 +256,17 @@ resource "aws_security_group" "public_alb" {
 }
 
 data "aws_route53_zone" "public" {
-  name         = var.public_domain_name
-  private_zone = false
+  name         = var.public_lb_domain_name
 }
 
-resource "aws_route53_record" "public_service_record" {
+resource "aws_route53_record" "public_alb" {
   zone_id = data.aws_route53_zone.public.zone_id
-  name    = "${var.service_name}.${var.public_domain_name}"
+  name    = var.service_name
   type    = "A"
 
   alias {
     name                   = aws_lb.public.dns_name
     zone_id                = aws_lb.public.zone_id
-    evaluate_target_health = false
+    evaluate_target_health = true
   }
 }

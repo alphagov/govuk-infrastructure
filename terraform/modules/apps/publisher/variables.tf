@@ -41,6 +41,11 @@ variable "public_subnets" {
   type        = list
 }
 
+variable "public_lb_domain_name" {
+  description = "Domain in which to create DNS records for the app's Internet-facing load balancer. For example, staging.govuk.digital"
+  type        = string
+}
+
 variable "govuk_management_access_sg_id" {
   description = "ID of security group (defined outside this Terraform repo) for access from jumpboxes etc. This SG is added to all ECS instances."
   type        = string
@@ -52,13 +57,8 @@ variable "desired_count" {
   default     = 1
 }
 
-variable "public_domain_name" {
-  description = "Apex domain for Internet-facing services. For example, staging.publishing.service.gov.uk"
-  type        = string
-  default     = "test.govuk.digital"
-}
-
 variable "mesh_name" {
+  description = "App Mesh mesh name. For example, 'govuk'"
   type = string
 }
 
@@ -67,6 +67,7 @@ variable "asset_host" {
 }
 
 variable "govuk_app_domain_external" {
+  description = "Apex domain for Internet-facing services, as passed to apps for use in redirects etc. For example, staging.publishing.service.gov.uk"
   type = string
 }
 
