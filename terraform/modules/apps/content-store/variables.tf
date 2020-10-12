@@ -34,12 +34,6 @@ variable "govuk_management_access_security_group" {
   default     = "sg-0b873470482f6232d"
 }
 
-variable "container_ingress_port" {
-  description = "The port which the container will accept connections on"
-  type        = number
-  default     = 80
-}
-
 variable "desired_count" {
   description = "Number of instances of the ECS task."
   type        = number
@@ -73,4 +67,3 @@ variable "mongodb_host" {
 variable "statsd_host" {
   type = string
 }
-

@@ -28,8 +28,8 @@ data "aws_secretsmanager_secret" "sentry_dsn" {
 
 module "app" {
   source                           = "../../app"
-  cpu                              = "512"
-  memory                           = "1024"
+  cpu                              = 512
+  memory                           = 1024
   vpc_id                           = var.vpc_id
   cluster_id                       = var.cluster_id
   service_name                     = var.service_name
@@ -43,11 +43,10 @@ module "app" {
   container_definitions = [
     {
       "name" : "content-store",
-      "image" : "govuk/content-store:with-content-schemas",
+      "image" : "govuk/content-store:with-content-schemas", # TODO: replace temporary label
       "essential" : true,
       "environment" : [
-        # TODO: factor our hardcoded stuff
-        { "name" : "APPMESH_VIRTUAL_NODE_NAME", "value" : "mesh/${var.mesh_name}/virtualNode/content-store" },
+        { "name" : "APPMESH_VIRTUAL_NODE_NAME", "value" : "mesh/${var.mesh_name}/virtualNode/${var.service_name}" },
         { "name" : "DEFAULT_TTL", "value" : "1800" },
         { "name" : "GOVUK_APP_DOMAIN", "value" : var.service_discovery_namespace_name },
         { "name" : "GOVUK_APP_DOMAIN_EXTERNAL", "value" : var.govuk_app_domain_external },
@@ -69,12 +68,16 @@ module "app" {
         { "name" : "STATSD_HOST", "value" : var.statsd_host },
         { "name" : "UNICORN_WORKER_PROCESSES", "value" : "12" }
       ],
+      "dependsOn" : [{
+        "containerName" : "envoy",
+        "condition" : "START"
+      }],
       "logConfiguration" : {
         "logDriver" : "awslogs",
         "options" : {
           "awslogs-create-group" : "true",
           "awslogs-group" : "awslogs-fargate",
-          "awslogs-region" : "eu-west-1",
+          "awslogs-region" : "eu-west-1", # TODO: hardcoded region
           "awslogs-stream-prefix" : "awslogs-content-store"
         }
       },

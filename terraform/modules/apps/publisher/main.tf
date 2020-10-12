@@ -7,102 +7,208 @@ terraform {
   }
 }
 
-resource "aws_ecs_task_definition" "service" {
-  family                   = var.service_name
-  requires_compatibilities = ["FARGATE"]
-  container_definitions    = file("${path.module}/publisher.json")
-  network_mode             = "awsvpc"
-  cpu                      = 512
-  memory                   = 1024
-  task_role_arn            = var.task_role_arn
-  execution_role_arn       = var.execution_role_arn
-
-  proxy_configuration {
-    type           = "APPMESH"
-    container_name = "envoy"
-
-    properties = {
-      AppPorts         = "3000"
-      EgressIgnoredIPs = "169.254.170.2,169.254.169.254"
-      IgnoredUID       = "1337"
-      ProxyEgressPort  = 15001
-      ProxyIngressPort = 15000
-    }
-  }
+data "aws_secretsmanager_secret" "asset_manager_bearer_token" {
+  name = "publisher_app-ASSET_MANAGER_BEARER_TOKEN"
+}
+data "aws_secretsmanager_secret" "fact_check_password" {
+  name = "publisher_app-FACT_CHECK_PASSWORD"
+}
+data "aws_secretsmanager_secret" "fact_check_reply_to_address" {
+  name = "publisher_app-FACT_CHECK_REPLY_TO_ADDRESS"
+}
+data "aws_secretsmanager_secret" "fact_check_reply_to_id" {
+  name = "publisher_app-FACT_CHECK_REPLY_TO_ID"
+}
+data "aws_secretsmanager_secret" "govuk_notify_api_key" {
+  name = "publisher_app-GOVUK_NOTIFY_API_KEY"
+}
+data "aws_secretsmanager_secret" "govuk_notify_template_id" {
+  name = "publisher_app-GOVUK_NOTIFY_TEMPLATE_ID" # pragma: allowlist secret
+}
+data "aws_secretsmanager_secret" "jwt_auth_secret" {
+  name = "publisher_app-JWT_AUTH_SECRET"
+}
+data "aws_secretsmanager_secret" "link_checker_api_bearer_token" {
+  name = "publisher_app-LINK_CHECKER_API_BEARER_TOKEN"
+}
+data "aws_secretsmanager_secret" "link_checker_api_secret_token" {
+  name = "publisher_app-LINK_CHECKER_API_SECRET_TOKEN"
+}
+data "aws_secretsmanager_secret" "mongodb_uri" {
+  name = "publisher_app-MONGODB_URI"
+}
+data "aws_secretsmanager_secret" "oauth_id" {
+  name = "publisher_app-OAUTH_ID"
+}
+data "aws_secretsmanager_secret" "oauth_secret" {
+  name = "publisher_app-OAUTH_SECRET"
+}
+data "aws_secretsmanager_secret" "publishing_api_bearer_token" {
+  name = "publisher_app-PUBLISHING_API_BEARER_TOKEN" # pragma: allowlist secret
+}
+data "aws_secretsmanager_secret" "secret_key_base" {
+  name = "publisher_app-SECRET_KEY_BASE" # pragma: allowlist secret
+}
+data "aws_secretsmanager_secret" "sentry_dsn" {
+  name = "publisher_app-SENTRY_DSN"
 }
 
-resource "aws_ecs_service" "service" {
-  name                              = var.service_name
-  cluster                           = var.cluster_id
-  task_definition                   = aws_ecs_task_definition.service.arn
-  desired_count                     = var.desired_count
-  launch_type                       = "FARGATE"
-  health_check_grace_period_seconds = 60
-
-  network_configuration {
-    security_groups = [
-      aws_security_group.service.id,
-      aws_security_group.public_service.id,
-      var.govuk_management_access_security_group,
-      aws_security_group.publisher_dependencies.id, # Allows Publisher to talk to Dependencies
-    ]
-    subnets = var.private_subnets
-  }
-
-  load_balancer {
-    target_group_arn = aws_lb_target_group.public_lb_tg.arn
-    container_name   = var.service_name
-    container_port   = var.container_ingress_port
-  }
-
-  service_registries {
-    registry_arn   = aws_service_discovery_service.publisher.arn
-    container_name = "publisher"
-  }
-
-  depends_on = [
-    aws_lb_listener.public_listener,
-    aws_service_discovery_service.publisher
+module "app" {
+  source                           = "../../app"
+  cpu                              = 512
+  memory                           = 1024
+  vpc_id                           = var.vpc_id
+  cluster_id                       = var.cluster_id
+  service_name                     = var.service_name
+  subnets                          = var.private_subnets
+  mesh_name                        = var.mesh_name
+  service_discovery_namespace_id   = var.service_discovery_namespace_id
+  service_discovery_namespace_name = var.service_discovery_namespace_name
+  task_role_arn                    = var.task_role_arn
+  execution_role_arn               = var.execution_role_arn
+  extra_security_groups            = [var.govuk_management_access_security_group]
+  container_definitions = [
+    {
+      # TODO: factor out all the remaining hardcoded values (see ../content-store for an example where this has been done)
+      "name" : "publisher",
+      "image" : "govuk/publisher:serve-assets-in-prod", # TODO: use deployed-to-production label or similar.
+      "essential" : true,
+      "environment" : [
+        { "name" : "ASSET_HOST", "value" : var.asset_host },
+        { "name" : "APPMESH_VIRTUAL_NODE_NAME", "value" : "mesh/${var.mesh_name}/virtualNode/${var.service_name}" },
+        { "name" : "BASIC_AUTH_USERNAME", "value" : "gds" },
+        { "name" : "EMAIL_GROUP_BUSINESS", "value" : "test-address@digital.cabinet-office.gov.uk" },
+        { "name" : "EMAIL_GROUP_CITIZEN", "value" : "test-address@digital.cabinet-office.gov.uk" },
+        { "name" : "EMAIL_GROUP_DEV", "value" : "test-address@digital.cabinet-office.gov.uk" },
+        { "name" : "EMAIL_GROUP_FORCE_PUBLISH_ALERTS", "value" : "test-address@digital.cabinet-office.gov.uk" },
+        { "name" : "FACT_CHECK_SUBJECT_PREFIX", "value" : "dev" },
+        { "name" : "FACT_CHECK_USERNAME", "value" : "govuk-fact-check-test@digital.cabinet-office.gov.uk" },
+        { "name" : "GOVUK_APP_DOMAIN", "value" : var.service_discovery_namespace_name },
+        { "name" : "GOVUK_APP_DOMAIN_EXTERNAL", "value" : var.govuk_app_domain_external },
+        { "name" : "GOVUK_APP_NAME", "value" : "publisher" },
+        { "name" : "GOVUK_APP_TYPE", "value" : "rack" },
+        { "name" : "GOVUK_STATSD_PREFIX", "value" : "fargate" },
+        # TODO: how does GOVUK_ASSET_ROOT relate to ASSET_HOST? Is one a function of the other? Are they both really in use? Is GOVUK_ASSET_ROOT always just "https://${ASSET_HOST}"?
+        { "name" : "GOVUK_ASSET_ROOT", "value" : "https://assets.test.publishing.service.gov.uk" },
+        { "name" : "GOVUK_GROUP", "value" : "deploy" },
+        { "name" : "GOVUK_USER", "value" : "deploy" },
+        { "name" : "GOVUK_WEBSITE_ROOT", "value" : var.govuk_website_root },
+        { "name" : "PLEK_SERVICE_CONTENT_STORE_URI", "value" : "https://www.gov.uk/api" }, # TODO: looks suspicious
+        { "name" : "PLEK_SERVICE_PUBLISHING_API_URI", "value" : "http://publishing-api.${var.service_discovery_namespace_name}" },
+        { "name" : "PLEK_SERVICE_STATIC_URI", "value" : "https://assets.test.publishing.service.gov.uk" },
+        { "name" : "RAILS_ENV", "value" : "production" },
+        { "name" : "RAILS_SERVE_STATIC_FILES", "value" : "true" }, # TODO: temporary hack?
+        # TODO: we shouldn't be specifying both REDIS_{HOST,PORT} *and* REDIS_URL.
+        { "name" : "REDIS_HOST", "value" : var.redis_host },
+        { "name" : "REDIS_PORT", "value" : tostring(var.redis_port) },
+        { "name" : "REDIS_URL", "value" : "redis://${var.redis_host}:${var.redis_port}" },
+        { "name" : "STATSD_PROTOCOL", "value" : "tcp" },
+        { "name" : "STATSD_HOST", "value" : var.statsd_host },
+        { "name" : "WEBSITE_ROOT", "value" : var.govuk_website_root }
+      ],
+      "dependsOn" : [{
+        "containerName" : "envoy",
+        "condition" : "START"
+      }],
+      "logConfiguration" : {
+        "logDriver" : "awslogs",
+        "options" : {
+          "awslogs-create-group" : "true",
+          "awslogs-group" : "awslogs-fargate",
+          "awslogs-region" : "eu-west-1", # TODO: hardcoded region
+          "awslogs-stream-prefix" : "awslogs-publisher"
+        }
+      },
+      "mountPoints" : [],
+      "portMappings" : [
+        {
+          "containerPort" : 80,
+          "hostPort" : 80,
+          "protocol" : "tcp"
+        }
+      ],
+      "secrets" : [
+        {
+          "name" : "ASSET_MANAGER_BEARER_TOKEN",
+          "valueFrom" : data.aws_secretsmanager_secret.asset_manager_bearer_token.arn
+        },
+        {
+          "name" : "FACT_CHECK_PASSWORD",
+          "valueFrom" : data.aws_secretsmanager_secret.fact_check_password.arn
+        },
+        {
+          "name" : "FACT_CHECK_REPLY_TO_ADDRESS",
+          "valueFrom" : data.aws_secretsmanager_secret.fact_check_reply_to_address.arn
+        },
+        {
+          "name" : "FACT_CHECK_REPLY_TO_ID",
+          "valueFrom" : data.aws_secretsmanager_secret.fact_check_reply_to_id.arn
+        },
+        {
+          "name" : "GOVUK_NOTIFY_API_KEY",
+          "valueFrom" : data.aws_secretsmanager_secret.govuk_notify_api_key.arn
+        },
+        {
+          "name" : "GOVUK_NOTIFY_TEMPLATE_ID",
+          "valueFrom" : data.aws_secretsmanager_secret.govuk_notify_template_id.arn
+        },
+        {
+          "name" : "JWT_AUTH_SECRET",
+          "valueFrom" : data.aws_secretsmanager_secret.jwt_auth_secret.arn
+        },
+        {
+          "name" : "LINK_CHECKER_API_BEARER_TOKEN",
+          "valueFrom" : data.aws_secretsmanager_secret.link_checker_api_bearer_token.arn
+        },
+        {
+          "name" : "LINK_CHECKER_API_SECRET_TOKEN",
+          "valueFrom" : data.aws_secretsmanager_secret.link_checker_api_secret_token.arn
+        },
+        {
+          "name" : "MONGODB_URI",
+          "valueFrom" : data.aws_secretsmanager_secret.mongodb_uri.arn
+        },
+        {
+          "name" : "OAUTH_ID",
+          "valueFrom" : data.aws_secretsmanager_secret.oauth_id.arn
+        },
+        {
+          "name" : "OAUTH_SECRET",
+          "valueFrom" : data.aws_secretsmanager_secret.oauth_secret.arn
+        },
+        {
+          "name" : "PUBLISHING_API_BEARER_TOKEN",
+          "valueFrom" : data.aws_secretsmanager_secret.publishing_api_bearer_token.arn
+        },
+        {
+          "name" : "SECRET_KEY_BASE",
+          "valueFrom" : data.aws_secretsmanager_secret.secret_key_base.arn
+        },
+        {
+          "name" : "SENTRY_DSN",
+          "valueFrom" : data.aws_secretsmanager_secret.sentry_dsn.arn
+        }
+      ]
+    }
   ]
 }
 
 #
-# ECS Service Security groups
+# Internet-facing load balancer
 #
 
-resource "aws_security_group" "service" {
-  name        = "fargate_${var.service_name}_alb_access"
-  vpc_id      = var.vpc_id
-  description = "Allow the public and internal ALBs for the fargate ${var.service_name} service to access the service"
-}
-
-resource "aws_security_group_rule" "service_ingress" {
-  description = "Allow publisher ingress to publishing-api"
-  type        = "ingress"
-  from_port   = "80"
-  to_port     = "80"
-  protocol    = "tcp"
-
-  security_group_id        = var.publishing_api_ingress_security_group
-  source_security_group_id = aws_security_group.publisher_dependencies.id
-}
-
-#
-# Public Load balancer
-#
-
-# Certificates needed for the public load balancer
-data "aws_acm_certificate" "default_public_elb_cert" {
+# TODO: use a single, ACM-managed cert with both domains on. There is already
+# such a cert in integration/staging/prod (but it needs defining in Terraform).
+data "aws_acm_certificate" "public_lb_default" {
   domain   = "*.test.govuk.digital"
   statuses = ["ISSUED"]
 }
 
-data "aws_acm_certificate" "public_elb_cert" {
+data "aws_acm_certificate" "public_lb_alternate" {
   domain   = "*.test.publishing.service.gov.uk"
   statuses = ["ISSUED"]
 }
 
-# The public Application Load Balancer (ALB)
 resource "aws_lb" "public" {
   name               = "fargate-public-${var.service_name}"
   internal           = false
@@ -111,9 +217,9 @@ resource "aws_lb" "public" {
   subnets            = var.public_subnets
 }
 
-resource "aws_lb_target_group" "public_lb_tg" {
+resource "aws_lb_target_group" "public" {
   name        = "${var.service_name}-public"
-  port        = var.container_ingress_port
+  port        = 80
   protocol    = "HTTP"
   vpc_id      = var.vpc_id
   target_type = "ip"
@@ -125,114 +231,39 @@ resource "aws_lb_target_group" "public_lb_tg" {
   depends_on = [aws_lb.public]
 }
 
-resource "aws_lb_listener" "public_listener" {
+resource "aws_lb_listener" "public" {
   load_balancer_arn = aws_lb.public.arn
-  port              = "443"
+  port              = 443
   protocol          = "HTTPS"
   ssl_policy        = "ELBSecurityPolicy-2016-08"
-  certificate_arn   = data.aws_acm_certificate.default_public_elb_cert.arn
+  certificate_arn   = data.aws_acm_certificate.public_lb_default.arn
 
   default_action {
     type             = "forward"
-    target_group_arn = aws_lb_target_group.public_lb_tg.arn
+    target_group_arn = aws_lb_target_group.public.arn
   }
 }
 
-# Adds .publishing.service.gov.uk cert to ALB listener
-resource "aws_lb_listener_certificate" "publishing_service_listener_cert" {
-  listener_arn    = aws_lb_listener.public_listener.arn
-  certificate_arn = data.aws_acm_certificate.public_elb_cert.arn
+resource "aws_lb_listener_certificate" "publishing_service" {
+  listener_arn    = aws_lb_listener.public.arn
+  certificate_arn = data.aws_acm_certificate.public_lb_alternate.arn
 }
 
 resource "aws_security_group_rule" "public_alb_ingress" {
   type      = "ingress"
-  from_port = var.container_ingress_port
-  to_port   = var.container_ingress_port
+  from_port = 80
+  to_port   = 80
   protocol  = "tcp"
 
-  # Which security group is the rule assigned to
-  security_group_id = aws_security_group.public_service.id
-
-  # Which security group can use this rule
+  security_group_id        = module.app.security_group_id
   source_security_group_id = aws_security_group.public_alb.id
 }
 
 resource "aws_security_group" "public_alb" {
-  name        = "fargate_${var.service_name}_public_elb"
+  name        = "fargate_${var.service_name}_public_alb"
   vpc_id      = var.vpc_id
-  description = "Public ALB ingress and egress security group for ${var.service_name} ECS service"
-
-  ingress {
-    description = "${var.service_name} can be spoken to by the Internet"
-    from_port   = 443
-    to_port     = 443
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
+  description = "${var.service_name} Internet-facing ALB"
 }
-
-resource "aws_security_group" "public_service" {
-  name        = "fargate_public_${var.service_name}_elb_access"
-  vpc_id      = var.vpc_id
-  description = "Access to the fargate ${var.service_name} service from its public ELB"
-}
-
-#
-# Redis
-#
-
-resource "aws_security_group" "publisher_dependencies" {
-  name        = "fargate_${var.service_name}_app"
-  vpc_id      = var.vpc_id
-  description = "${var.service_name} service dependencies"
-
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-}
-
-resource "aws_security_group_rule" "ingress_redis" {
-  type      = "ingress"
-  from_port = 6379
-  to_port   = 6379
-  protocol  = "tcp"
-
-  # Which security group is the rule assigned to
-  security_group_id = var.redis_security_group_id
-
-  # Which security group can use this rule
-  source_security_group_id = aws_security_group.publisher_dependencies.id
-}
-
-#
-# DocumentDB
-#
-resource "aws_security_group_rule" "ingress_documentdb" {
-  type      = "ingress"
-  from_port = 27017
-  to_port   = 27017
-  protocol  = "tcp"
-
-  # Which security group is the rule assigned to
-  security_group_id = var.documentdb_security_group_id
-
-  # Which security group can use this rule
-  source_security_group_id = aws_security_group.publisher_dependencies.id
-}
-
-#
-# DNS
-#
 
 data "aws_route53_zone" "public" {
   name         = var.public_domain_name
