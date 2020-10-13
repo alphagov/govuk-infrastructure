@@ -92,7 +92,7 @@ module "app" {
         { "name" : "RABBITMQ_USER", "value" : "publishing_api" },
         { "name" : "RABBITMQ_VHOST", "value" : "/" },
         { "name" : "REDIS_HOST", "value" : var.redis_host },
-        { "name" : "REDIS_PORT", "value" : var.redis_port },
+        { "name" : "REDIS_PORT", "value" : tostring(var.redis_port) },
         { "name" : "REDIS_URL", "value" : "redis://${var.redis_host}:${var.redis_port}" },
         { "name" : "RAILS_ENV", "value" : "production" },
         { "name" : "STATSD_PROTOCOL", "value" : "tcp" },
