@@ -25,6 +25,7 @@ module "govuk" {
   private_subnets              = ["subnet-6dc4370b", "subnet-463bfd0e", "subnet-bfecd0e4"] # TODO: hardcoded
   public_subnets               = ["subnet-6cc4370a", "subnet-ba30f6f2", "subnet-bfe6dae4"] # TODO: hardcoded
   govuk_app_domain_external    = "test.govuk.digital"
+  govuk_app_domain_internal    = "test.govuk-internal.digital"
   govuk_website_root           = "test.publishing.service.gov.uk"
   asset_host                   = "www.gov.uk" # TODO: this looks wrong
   mongodb_host                 = "mongo-1.test.govuk-internal.digital,mongo-2.test.govuk-internal.digital,mongo-3.test.govuk-internal.digital"

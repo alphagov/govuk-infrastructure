@@ -6,6 +6,10 @@ variable "govuk_app_domain_external" {
   type = string
 }
 
+variable "govuk_app_domain_internal" {
+  type = string
+}
+
 variable "govuk_website_root" {
   type = string
 }
@@ -32,6 +36,12 @@ variable "mongodb_host" {
 variable "redis_host" {
   description = "Hostname for the shared Redis (which isn't managed by this Terraform repo, at least initially)."
   type        = string
+}
+
+variable "redis_port" {
+  description = "Port of the shared Redis"
+  type        = number
+  default     = 6379
 }
 
 variable "redis_security_group_id" {

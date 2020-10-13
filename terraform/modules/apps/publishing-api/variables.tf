@@ -47,15 +47,24 @@ variable "desired_count" {
   default     = 1
 }
 
-variable "internal_domain_name" {
-  description = "The internal root root domain name"
-  type        = string
-  default     = "test.govuk-internal.digital"
+variable "mesh_name" {
+  type = string
 }
 
-variable "appmesh_mesh_govuk_id" {
-  type    = string
-  default = "govuk"
+variable "service_discovery_namespace_id" {
+  type = string
+}
+
+variable "service_discovery_namespace_name" {
+  type = string
+}
+
+variable "govuk_app_domain_external" {
+  type = string
+}
+
+variable "govuk_app_domain_internal" {
+  type = string
 }
 
 variable "govuk_publishing_platform_namespace_id" {
@@ -63,5 +72,23 @@ variable "govuk_publishing_platform_namespace_id" {
 }
 
 variable "govuk_publishing_platform_namespace_name" {
+  type = string
+}
+
+variable "govuk_website_root" {
+  type = string
+}
+
+variable "redis_host" {
+  description = "FQDN of the redis cluster for Publishing API"
+  type        = string
+}
+
+variable "redis_port" {
+  description = "Port of the Redis Cluster for Publishing API"
+  type        = number
+}
+
+variable "statsd_host" {
   type = string
 }
