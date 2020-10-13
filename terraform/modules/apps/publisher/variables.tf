@@ -59,7 +59,7 @@ variable "desired_count" {
 
 variable "mesh_name" {
   description = "App Mesh mesh name. For example, 'govuk'"
-  type = string
+  type        = string
 }
 
 variable "asset_host" {
@@ -68,7 +68,7 @@ variable "asset_host" {
 
 variable "govuk_app_domain_external" {
   description = "Apex domain for Internet-facing services, as passed to apps for use in redirects etc. For example, staging.publishing.service.gov.uk"
-  type = string
+  type        = string
 }
 
 variable "govuk_website_root" {

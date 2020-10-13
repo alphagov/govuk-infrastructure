@@ -256,7 +256,7 @@ resource "aws_security_group" "public_alb" {
 }
 
 data "aws_route53_zone" "public" {
-  name         = var.public_lb_domain_name
+  name = var.public_lb_domain_name
 }
 
 resource "aws_route53_record" "public_alb" {

@@ -49,11 +49,11 @@ resource "aws_security_group_rule" "publisher_to_any_any" {
 }
 
 resource "aws_security_group_rule" "publisher_from_alb_http" {
-  description = "Publisher receives requests from its public ALB over HTTP"
-  type      = "ingress"
-  from_port = 80
-  to_port   = 80
-  protocol  = "tcp"
+  description              = "Publisher receives requests from its public ALB over HTTP"
+  type                     = "ingress"
+  from_port                = 80
+  to_port                  = 80
+  protocol                 = "tcp"
   security_group_id        = module.publisher_service.app_security_group_id
   source_security_group_id = module.publisher_service.alb_security_group_id
 }

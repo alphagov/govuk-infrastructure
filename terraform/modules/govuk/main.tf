@@ -34,12 +34,12 @@ module "publisher_service" {
   public_lb_domain_name            = var.public_lb_domain_name
   govuk_management_access_sg_id    = var.govuk_management_access_sg_id
   # App environment variables
-  asset_host                       = var.asset_host
-  govuk_app_domain_external        = var.govuk_app_domain_external
-  govuk_website_root               = var.govuk_website_root
-  statsd_host                      = var.statsd_host
-  redis_host                       = var.redis_host
-  source                           = "../../modules/apps/publisher"
+  asset_host                = var.asset_host
+  govuk_app_domain_external = var.govuk_app_domain_external
+  govuk_website_root        = var.govuk_website_root
+  statsd_host               = var.statsd_host
+  redis_host                = var.redis_host
+  source                    = "../../modules/apps/publisher"
 }
 
 module "content_store_service" {
