@@ -28,7 +28,7 @@ variable "private_subnets" {
   type        = list
 }
 
-variable "govuk_management_access_security_group" {
+variable "govuk_management_access_sg_id" {
   description = "Group used to allow access by management systems"
   type        = string
   default     = "sg-0b873470482f6232d"
@@ -53,6 +53,6 @@ variable "service_discovery_namespace_name" {
   type = string
 }
 
-variable "mongodb_host" {
+variable "router_mongodb_host" {
   type = string
 }

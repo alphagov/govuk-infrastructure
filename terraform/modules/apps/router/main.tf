@@ -13,8 +13,8 @@ data "aws_secretsmanager_secret" "sentry_dsn" {
 
 module "app" {
   source                           = "../../app"
-  cpu                              = "512"
-  memory                           = "1024"
+  cpu                              = 512
+  memory                           = 1024
   vpc_id                           = var.vpc_id
   cluster_id                       = var.cluster_id
   service_name                     = var.service_name
@@ -28,25 +28,17 @@ module "app" {
   container_definitions = [
     {
       "name" : "router",
-      "image" : "govuk/${var.service_name}:deploy-to-production",
+      "image" : "govuk/router:deployed-to-production",
       "essential" : true,
       "environment" : [
         { "name" : "GOVUK_APP_NAME", "value" : "router" },
         { "name" : "GOVUK_APP_ROOT", "value" : "/var/apps/router" },
-
-        # these are set by default in the app
-        # { "name" : "ROUTER_BACKEND_CONNECT_TIMEOUT", "value" : "1s" },
-        # { "name" : "ROUTER_BACKEND_HEADER_TIMEOUT", "value" : "15s" },
-        # { "name" : "ROUTER_ERROR_LOG", "value" : "STDERR" },
-        # { "name" : "ROUTER_TLS_SKIP_VERIFY", "value" : ""},
-
-        { "name" : "SENTRY_DSN", "value" : "" },
-        { "name" : "SENTRY_ENVIRONMENT", "value" : "" },
-        { "name" : "ROUTER_PUBADDR", "value" : ":3054" },
-        { "name" : "ROUTER_APIADDR", "value" : ":3055" },
-        { "name" : "ROUTER_MONGO_URL", "value" : "mongodb://${var.mongodb_host}" },
+        { "name" : "ROUTER_APIADDR", "value" : ":8081" },
+        { "name" : "ROUTER_BACKEND_HEADER_TIMEOUT", "value" : "20s" },
+        { "name" : "ROUTER_PUBADDR", "value" : ":8080" },
         { "name" : "ROUTER_MONGO_DB", "value" : "router" },
-        { "name" : "DEBUG", "value" : "true" }
+        { "name" : "ROUTER_MONGO_URL", "value" : "mongodb://${var.router_mongodb_host}" },
+        { "name" : "SENTRY_ENVIRONMENT", "value" : "test" }
       ],
       "dependsOn" : [{
         "containerName" : "envoy",
@@ -64,13 +56,13 @@ module "app" {
       "mountPoints" : [],
       "portMappings" : [
         {
-          "containerPort" : 3054,
-          "hostPort" : 3054,
+          "containerPort" : 8080,
+          "hostPort" : 8080,
           "protocol" : "tcp"
         },
         {
-          "containerPort" : 3055,
-          "hostPort" : 3055,
+          "containerPort" : 8081,
+          "hostPort" : 8081,
           "protocol" : "tcp"
         }
       ],

@@ -83,8 +83,9 @@ module "router_service" {
   service_discovery_namespace_name = aws_service_discovery_private_dns_namespace.govuk_publishing_platform.name
   task_role_arn                    = aws_iam_role.task.arn
   execution_role_arn               = aws_iam_role.execution.arn
+  private_subnets                  = var.private_subnets
   vpc_id                           = var.vpc_id
   cluster_id                       = aws_ecs_cluster.cluster.id
-  mongodb_host                     = var.mongodb_host
+  router_mongodb_host              = var.router_mongodb_host
   source                           = "../../modules/apps/router"
 }
