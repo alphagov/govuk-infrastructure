@@ -66,7 +66,7 @@ module "app" {
   service_discovery_namespace_name = var.service_discovery_namespace_name
   task_role_arn                    = var.task_role_arn
   execution_role_arn               = var.execution_role_arn
-  extra_security_groups            = [var.govuk_management_access_security_group]
+  extra_security_groups            = [var.govuk_management_access_sg_id]
   container_definitions = [
     {
       # TODO: factor out all the remaining hardcoded values (see ../content-store for an example where this has been done)
@@ -249,16 +249,6 @@ resource "aws_lb_listener_certificate" "publishing_service" {
   certificate_arn = data.aws_acm_certificate.public_lb_alternate.arn
 }
 
-resource "aws_security_group_rule" "public_alb_ingress" {
-  type      = "ingress"
-  from_port = 80
-  to_port   = 80
-  protocol  = "tcp"
-
-  security_group_id        = module.app.security_group_id
-  source_security_group_id = aws_security_group.public_alb.id
-}
-
 resource "aws_security_group" "public_alb" {
   name        = "fargate_${var.service_name}_public_alb"
   vpc_id      = var.vpc_id
@@ -266,18 +256,17 @@ resource "aws_security_group" "public_alb" {
 }
 
 data "aws_route53_zone" "public" {
-  name         = var.public_domain_name
-  private_zone = false
+  name = var.public_lb_domain_name
 }
 
-resource "aws_route53_record" "public_service_record" {
+resource "aws_route53_record" "public_alb" {
   zone_id = data.aws_route53_zone.public.zone_id
-  name    = "${var.service_name}.${var.public_domain_name}"
+  name    = var.service_name
   type    = "A"
 
   alias {
     name                   = aws_lb.public.dns_name
     zone_id                = aws_lb.public.zone_id
-    evaluate_target_health = false
+    evaluate_target_health = true
   }
 }
