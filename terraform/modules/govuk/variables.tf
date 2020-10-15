@@ -69,4 +69,9 @@ variable "documentdb_security_group_id" {
   type        = string
 }
 
+variable "router_mongodb_host" {
+  description = "Hostname for the Router MongoDB (defined outside this Terraform repo)."
+  type        = string
+}
+
 # TODO: pull common vars up from the app modules into here so that they can vary by environment.
