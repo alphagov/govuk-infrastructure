@@ -11,14 +11,18 @@ terraform {
 # to outputs e.g. in security_group_rules.tf.
 # TODO: alphabetise
 module "frontend_service" {
-  appmesh_mesh_govuk_id                    = aws_appmesh_mesh.govuk.id
-  govuk_publishing_platform_namespace_id   = aws_service_discovery_private_dns_namespace.govuk_publishing_platform.id
-  govuk_publishing_platform_namespace_name = aws_service_discovery_private_dns_namespace.govuk_publishing_platform.name
-  task_role_arn                            = aws_iam_role.task.arn
-  execution_role_arn                       = aws_iam_role.execution.arn
-  vpc_id                                   = var.vpc_id
-  cluster_id                               = aws_ecs_cluster.cluster.id
-  source                                   = "../../modules/apps/frontend"
+  mesh_name                        = aws_appmesh_mesh.govuk.id
+  service_discovery_namespace_id   = aws_service_discovery_private_dns_namespace.govuk_publishing_platform.id
+  service_discovery_namespace_name = aws_service_discovery_private_dns_namespace.govuk_publishing_platform.name
+  task_role_arn                    = aws_iam_role.task.arn
+  execution_role_arn               = aws_iam_role.execution.arn
+  vpc_id                           = var.vpc_id
+  cluster_id                       = aws_ecs_cluster.cluster.id
+  statsd_host                      = var.statsd_host
+  mongodb_host                     = var.mongodb_host
+  govuk_website_root               = var.govuk_website_root
+  govuk_app_domain_external        = var.govuk_app_domain_external
+  source                           = "../../modules/apps/frontend"
 }
 
 module "publisher_service" {

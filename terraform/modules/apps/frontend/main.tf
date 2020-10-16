@@ -28,29 +28,29 @@ module "app" {
   container_definitions = [
     {
 
-      "name": "frontend",
-      "image": "govuk/frontend:fargate-statsd",
+      "name" : "frontend",
+      "image" : "govuk/frontend:fargate-statsd",
       "essential" : true,
       "environment" : [
-        { "name": "RAILS_ENV", "value": "production" },
-        { "name": "ASSET_HOST", "value": "www.gov.uk" },
-        { "name": "GOVUK_APP_DOMAIN", "value": "www.gov.uk" },
-        { "name": "GOVUK_WEBSITE_ROOT", "value": "www.gov.uk" },
-        { "name": "WEBSITE_ROOT", "value": "www.gov.uk" },
-        { "name": "PLEK_SERVICE_CONTENT_STORE_URI", "value": "https://www.gov.uk/api" },
-        { "name": "PLEK_SERVICE_STATIC_URI", "value": "https://assets.publishing.service.gov.uk" },
-        { "name": "GOVUK_ASSET_ROOT", "value": "https://assets.digital.cabinet-office.gov.uk" },
-        { "name": "STATSD_PROTOCOL", "value": "tcp" },
-        { "name": "STATSD_HOST", "value": "statsd.test.govuk-internal.digital" },
-        { "name": "GOVUK_STATSD_PREFIX", "value": "fargate" }
+        { "name" : "RAILS_ENV", "value" : "production" },
+        { "name" : "ASSET_HOST", "value" : "www.gov.uk" },
+        { "name" : "GOVUK_APP_DOMAIN", "value" : "www.gov.uk" },
+        { "name" : "GOVUK_WEBSITE_ROOT", "value" : "www.gov.uk" },
+        { "name" : "WEBSITE_ROOT", "value" : "www.gov.uk" },
+        { "name" : "PLEK_SERVICE_CONTENT_STORE_URI", "value" : "https://www.gov.uk/api" },
+        { "name" : "PLEK_SERVICE_STATIC_URI", "value" : "https://assets.publishing.service.gov.uk" },
+        { "name" : "GOVUK_ASSET_ROOT", "value" : "https://assets.digital.cabinet-office.gov.uk" },
+        { "name" : "STATSD_PROTOCOL", "value" : "tcp" },
+        { "name" : "STATSD_HOST", "value" : "statsd.test.govuk-internal.digital" },
+        { "name" : "GOVUK_STATSD_PREFIX", "value" : "fargate" }
       ],
       "logConfiguration" : {
-        "logDriver": "awslogs",
-        "options": {
-          "awslogs-create-group": "true",
-          "awslogs-group": "awslogs-fargate",
-          "awslogs-region": "eu-west-1",
-          "awslogs-stream-prefix": "awslogs-frontend"
+        "logDriver" : "awslogs",
+        "options" : {
+          "awslogs-create-group" : "true",
+          "awslogs-group" : "awslogs-fargate",
+          "awslogs-region" : "eu-west-1",
+          "awslogs-stream-prefix" : "awslogs-frontend"
         }
       },
       "mountPoints" : [],
@@ -63,8 +63,8 @@ module "app" {
       ],
       "secrets" : [
         {
-          "name": "SECRET_KEY_BASE",
-          "valueFrom": data.aws_secretsmanager_secret.secret_key_base.arn
+          "name" : "SECRET_KEY_BASE",
+          "valueFrom" : data.aws_secretsmanager_secret.secret_key_base.arn
         }
       ]
     }
