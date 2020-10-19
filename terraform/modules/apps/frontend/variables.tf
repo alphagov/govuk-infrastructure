@@ -47,23 +47,30 @@ variable "desired_count" {
   default     = 1
 }
 
-variable "internal_domain_name" {
-  description = "The internal root root domain name"
-  type        = string
-  default     = "test.govuk-internal.digital"
-}
-
-variable "appmesh_mesh_govuk_id" {
-  type    = string
-  default = "govuk"
-}
-
-variable "govuk_publishing_platform_namespace_id" {
+variable "mesh_name" {
   type = string
 }
 
-variable "govuk_publishing_platform_namespace_name" {
+variable "service_discovery_namespace_id" {
   type = string
 }
 
-# TODO: pass in security groups of dependencies?
+variable "service_discovery_namespace_name" {
+  type = string
+}
+
+variable "govuk_app_domain_external" {
+  type = string
+}
+
+variable "govuk_website_root" {
+  type = string
+}
+
+variable "mongodb_host" {
+  type = string
+}
+
+variable "statsd_host" {
+  type = string
+}
