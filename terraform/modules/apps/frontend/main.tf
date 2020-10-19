@@ -13,8 +13,8 @@ data "aws_secretsmanager_secret" "secret_key_base" {
 
 module "app" {
   source                           = "../../app"
-  cpu                              = "512"
-  memory                           = "1024"
+  cpu                              = 512
+  memory                           = 1024
   vpc_id                           = var.vpc_id
   cluster_id                       = var.cluster_id
   service_name                     = var.service_name
