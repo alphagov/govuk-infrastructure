@@ -48,7 +48,6 @@ module "govuk" {
   vpc_id          = data.terraform_remote_state.infra_networking.outputs.vpc_id
   private_subnets = data.terraform_remote_state.infra_networking.outputs.private_subnet_ids
   public_subnets  = data.terraform_remote_state.infra_networking.outputs.public_subnet_ids
-
   govuk_management_access_sg_id = data.aws_security_group.govuk_management_access.id
   documentdb_security_group_id  = data.aws_security_group.documentdb.id
   redis_security_group_id       = data.aws_security_group.redis.id
