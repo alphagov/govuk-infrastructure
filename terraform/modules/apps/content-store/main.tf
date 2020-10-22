@@ -8,22 +8,22 @@ terraform {
 }
 
 data "aws_secretsmanager_secret" "oauth_id" {
-  name = "content_store_app-OAUTH_ID"
+  name = "${var.service_name}_OAUTH_ID"
 }
 data "aws_secretsmanager_secret" "oauth_secret" {
-  name = "content_store_app-OAUTH_SECRET"
+  name = "${var.service_name}_OAUTH_SECRET"
 }
 data "aws_secretsmanager_secret" "publishing_api_bearer_token" {
-  name = "content_store_app-PUBLISHING_API_BEARER_TOKEN" # pragma: allowlist secret
+  name = "${var.service_name}_PUBLISHING_API_BEARER_TOKEN" # pragma: allowlist secret
 }
 data "aws_secretsmanager_secret" "router_api_bearer_token" {
-  name = "content_store_app-ROUTER_API_BEARER_TOKEN" # pragma: allowlist secret
+  name = "${var.service_name}_ROUTER_API_BEARER_TOKEN" # pragma: allowlist secret
 }
 data "aws_secretsmanager_secret" "secret_key_base" {
-  name = "content_store_app-SECRET_KEY_BASE" # pragma: allowlist secret
+  name = "${var.service_name}_SECRET_KEY_BASE" # pragma: allowlist secret
 }
 data "aws_secretsmanager_secret" "sentry_dsn" {
-  name = "content_store_app-SENTRY_DSN"
+  name = "${var.service_name}_SENTRY_DSN"
 }
 
 module "app" {
@@ -57,7 +57,7 @@ module "app" {
         { "name" : "GOVUK_STATSD_PREFIX", "value" : "fargate" },
         { "name" : "GOVUK_USER", "value" : "deploy" }, # TODO: clean up?
         { "name" : "GOVUK_WEBSITE_ROOT", "value" : var.govuk_website_root },
-        { "name" : "MONGODB_URI", "value" : "mongodb://${var.mongodb_host}/content_store_production" },
+        { "name" : "MONGODB_URI", "value" : "${var.mongodb_url}" },
         { "name" : "PLEK_SERVICE_PERFORMANCEPLATFORM_BIG_SCREEN_VIEW_URI", "value" : "" },
         { "name" : "PLEK_SERVICE_PUBLISHING_API_URI", "value" : "http://publishing-api.${var.service_discovery_namespace_name}" },
         { "name" : "PLEK_SERVICE_RUMMAGER_URI", "value" : "" },
@@ -78,7 +78,7 @@ module "app" {
           "awslogs-create-group" : "true",
           "awslogs-group" : "awslogs-fargate",
           "awslogs-region" : "eu-west-1", # TODO: hardcoded region
-          "awslogs-stream-prefix" : "awslogs-content-store"
+          "awslogs-stream-prefix" : "awslogs-${var.service_name}",
         }
       },
       "mountPoints" : [],
