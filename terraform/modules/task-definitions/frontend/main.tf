@@ -19,32 +19,28 @@ data "aws_secretsmanager_secret" "sentry_dsn" {
   name = "SENTRY_DSN"
 }
 
-locals {
-  service_name = "frontend"
-}
-
 module "task_definition" {
   source             = "../../task-definition"
   mesh_name          = var.mesh_name
-  service_name       = local.service_name
+  service_name       = var.service_name
   cpu                = 512
   memory             = 1024
   execution_role_arn = var.execution_role_arn
   task_role_arn      = var.task_role_arn
   container_definitions = [
     {
-      "name" : local.service_name,
-      "image" : "govuk/${local.service_name}:${var.image_tag}",
+      "name" : var.service_name,
+      "image" : "govuk/frontend:${var.image_tag}",
       "essential" : true,
       "environment" : [
         { "name" : "RAILS_ENV", "value" : "production" },
-        { "name" : "ASSET_HOST", "value" : var.asset_host },
+        { "name" : "ASSET_HOST", "value" : var.assets_url },
         { "name" : "GOVUK_APP_DOMAIN", "value" : var.service_discovery_namespace_name },
         { "name" : "GOVUK_WEBSITE_ROOT", "value" : var.govuk_website_root },
         { "name" : "WEBSITE_ROOT", "value" : var.govuk_website_root },
-        { "name" : "PLEK_SERVICE_CONTENT_STORE_URI", "value" : "${var.govuk_website_root}/api" }, # TODO: looks suspicious
-        { "name" : "PLEK_SERVICE_STATIC_URI", "value" : "https://assets.test.publishing.service.gov.uk" },
-        { "name" : "GOVUK_ASSET_ROOT", "value" : "https://assets.test.publishing.service.gov.uk" },
+        { "name" : "PLEK_SERVICE_CONTENT_STORE_URI", "value" : var.content_store_url },
+        { "name" : "PLEK_SERVICE_STATIC_URI", "value" : var.static_url },
+        { "name" : "GOVUK_ASSET_ROOT", "value" : var.assets_url },
         { "name" : "SENTRY_ENVIRONMENT", "value" : var.sentry_environment },
         { "name" : "STATSD_PROTOCOL", "value" : "tcp" },
         { "name" : "STATSD_HOST", "value" : var.statsd_host },
@@ -56,7 +52,7 @@ module "task_definition" {
           "awslogs-create-group" : "true",
           "awslogs-group" : "awslogs-fargate",
           "awslogs-region" : "eu-west-1",
-          "awslogs-stream-prefix" : "awslogs-frontend"
+          "awslogs-stream-prefix" : "awslogs-${var.service_name}"
         }
       },
       "portMappings" : [

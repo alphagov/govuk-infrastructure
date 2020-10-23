@@ -31,6 +31,21 @@ variable "service_discovery_namespace_name" {
   type = string
 }
 
-variable "asset_host" {
+variable "service_name" {
   type = string
+}
+
+variable "assets_url" {
+  type        = string
+  description = "URL of the Assets service"
+}
+
+variable "content_store_url" {
+  type        = string
+  description = "URL of the Content Store service"
+}
+
+variable "static_url" {
+  type        = string
+  description = "URL of the Static service"
 }

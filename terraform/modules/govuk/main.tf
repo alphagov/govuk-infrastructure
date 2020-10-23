@@ -24,10 +24,32 @@ module "frontend_service" {
   statsd_host                      = var.statsd_host
   govuk_website_root               = var.govuk_website_root
   govuk_app_domain_external        = var.govuk_app_domain_external
-  source                           = "../../modules/apps/frontend"
-  asset_host                       = var.asset_host
+  assets_url                       = "https://assets.${aws_service_discovery_private_dns_namespace.govuk_publishing_platform.name}"
+  content_store_url                = "https://content-store.${aws_service_discovery_private_dns_namespace.govuk_publishing_platform.name}"
+  static_url                       = "https://static.${aws_service_discovery_private_dns_namespace.govuk_publishing_platform.name}"
   image_tag                        = local.default_image_tag
   sentry_environment               = var.sentry_environment
+  source                           = "../../modules/apps/frontend"
+}
+
+module "draft_frontend_service" {
+  service_name                     = "draft-frontend"
+  mesh_name                        = aws_appmesh_mesh.govuk.id
+  service_discovery_namespace_id   = aws_service_discovery_private_dns_namespace.govuk_publishing_platform.id
+  service_discovery_namespace_name = aws_service_discovery_private_dns_namespace.govuk_publishing_platform.name
+  task_role_arn                    = aws_iam_role.task.arn
+  execution_role_arn               = aws_iam_role.execution.arn
+  vpc_id                           = var.vpc_id
+  cluster_id                       = aws_ecs_cluster.cluster.id
+  statsd_host                      = var.statsd_host
+  govuk_website_root               = var.govuk_website_root
+  govuk_app_domain_external        = var.govuk_app_domain_external
+  assets_url                       = "https://draft-assets.${aws_service_discovery_private_dns_namespace.govuk_publishing_platform.name}"
+  content_store_url                = "https://draft-content-store.${aws_service_discovery_private_dns_namespace.govuk_publishing_platform.name}"
+  static_url                       = "https://draft-static.${aws_service_discovery_private_dns_namespace.govuk_publishing_platform.name}"
+  image_tag                        = local.default_image_tag
+  sentry_environment               = var.sentry_environment
+  source                           = "../../modules/apps/frontend"
 }
 
 # TODO: alphabetise

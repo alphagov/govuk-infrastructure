@@ -9,6 +9,7 @@ terraform {
 
 module "task_definition" {
   source                           = "../../task-definitions/frontend"
+  service_name                     = var.service_name
   govuk_website_root               = var.govuk_website_root
   image_tag                        = var.image_tag
   mesh_name                        = var.mesh_name
@@ -17,7 +18,9 @@ module "task_definition" {
   sentry_environment               = var.sentry_environment
   statsd_host                      = var.statsd_host
   service_discovery_namespace_name = var.service_discovery_namespace_name
-  asset_host                       = var.asset_host
+  assets_url                       = var.assets_url
+  content_store_url                = var.content_store_url
+  static_url                       = var.static_url
 }
 
 module "app" {

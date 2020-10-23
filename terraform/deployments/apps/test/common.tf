@@ -10,6 +10,9 @@ locals {
   redis_host                       = "pink-backend-redis.0f3erf.ng.0001.euw1.cache.amazonaws.com"
   redis_port                       = 6379
   asset_host                       = "www.gov.uk" # TODO: this looks wrong
+  assets_url                       = "https://assets.${local.service_discovery_namespace_name}"
+  content_store_url                = "https://content-store.${local.service_discovery_namespace_name}"
+  static_url                       = "https://static.${local.service_discovery_namespace_name}"
 }
 
 data "aws_iam_role" "execution" {
