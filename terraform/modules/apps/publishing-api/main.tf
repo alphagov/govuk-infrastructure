@@ -44,7 +44,7 @@ data "aws_secretsmanager_secret" "secret_key_base" {
 }
 
 data "aws_secretsmanager_secret" "sentry_dsn" {
-  name = "publishing_api_app-SENTRY_DSN"
+  name = "SENTRY_DSN"
 }
 
 

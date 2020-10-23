@@ -8,7 +8,7 @@ terraform {
 }
 
 data "aws_secretsmanager_secret" "sentry_dsn" {
-  name = "router_app-SENTRY_DSN"
+  name = "SENTRY_DSN"
 }
 
 module "app" {

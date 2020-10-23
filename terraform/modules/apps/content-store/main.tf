@@ -23,7 +23,7 @@ data "aws_secretsmanager_secret" "secret_key_base" {
   name = "${var.service_name}_SECRET_KEY_BASE" # pragma: allowlist secret
 }
 data "aws_secretsmanager_secret" "sentry_dsn" {
-  name = "${var.service_name}_SENTRY_DSN"
+  name = "SENTRY_DSN"
 }
 
 module "app" {

@@ -50,7 +50,7 @@ data "aws_secretsmanager_secret" "secret_key_base" {
   name = "publisher_app-SECRET_KEY_BASE" # pragma: allowlist secret
 }
 data "aws_secretsmanager_secret" "sentry_dsn" {
-  name = "publisher_app-SENTRY_DSN"
+  name = "SENTRY_DSN"
 }
 
 module "app" {
