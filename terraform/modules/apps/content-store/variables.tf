@@ -60,7 +60,7 @@ variable "govuk_website_root" {
   type = string
 }
 
-variable "mongodb_host" {
+variable "mongodb_url" {
   type = string
 }
 

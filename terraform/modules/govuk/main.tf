@@ -57,7 +57,24 @@ module "content_store_service" {
   private_subnets                  = var.private_subnets
   govuk_app_domain_external        = var.govuk_app_domain_external
   govuk_website_root               = var.govuk_website_root
-  mongodb_host                     = var.mongodb_host
+  mongodb_url                      = "mongodb://${var.mongodb_host}/content_store_production"
+  statsd_host                      = var.statsd_host
+  source                           = "../../modules/apps/content-store"
+}
+
+module "draft_content_store_service" {
+  service_name                     = "draft-content-store"
+  mesh_name                        = aws_appmesh_mesh.govuk.id
+  service_discovery_namespace_id   = aws_service_discovery_private_dns_namespace.govuk_publishing_platform.id
+  service_discovery_namespace_name = aws_service_discovery_private_dns_namespace.govuk_publishing_platform.name
+  task_role_arn                    = aws_iam_role.task.arn
+  execution_role_arn               = aws_iam_role.execution.arn
+  cluster_id                       = aws_ecs_cluster.cluster.id
+  vpc_id                           = var.vpc_id
+  private_subnets                  = var.private_subnets
+  govuk_app_domain_external        = var.govuk_app_domain_external
+  govuk_website_root               = var.govuk_website_root
+  mongodb_url                      = "mongodb://${var.mongodb_host}/draft_content_store_production"
   statsd_host                      = var.statsd_host
   source                           = "../../modules/apps/content-store"
 }
