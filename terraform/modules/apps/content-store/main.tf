@@ -40,7 +40,7 @@ module "sidekiq-worker" {
       "image" : "govuk/content-store:with-content-schemas", # TODO: replace temporary label
       "essential" : true,
       "command" : [
-        "bundle exec sidekiq -C ./config/sidekiq.yml --tag frontend"
+        "bundle exec sidekiq -C ./config/sidekiq.yml"
       ]
       "environment" : [
         { "name" : "APPMESH_VIRTUAL_NODE_NAME", "value" : "mesh/${var.mesh_name}/virtualNode/${var.service_name}" },
