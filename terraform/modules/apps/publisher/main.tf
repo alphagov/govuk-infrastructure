@@ -159,10 +159,6 @@ module "sidekiq-worker" {
         { "name" : "STATSD_HOST", "value" : var.statsd_host },
         { "name" : "WEBSITE_ROOT", "value" : var.govuk_website_root }
       ],
-      "dependsOn" : [{
-        "containerName" : "envoy",
-        "condition" : "START"
-      }],
       "logConfiguration" : {
         "logDriver" : "awslogs",
         "options" : {
