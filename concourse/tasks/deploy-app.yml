@@ -1,0 +1,45 @@
+platform: linux
+image_resource:
+  type: docker-image
+  source:
+    repository: govuk/concourse-deploy
+    tag: latest
+inputs:
+  - name: govuk-infrastructure
+    path: src
+  - name: release
+params:
+  AWS_REGION: eu-west-1
+  APPLICATION:
+  GOVUK_ENVIRONMENT:
+run:
+  path: sh
+  # TODO: Move this script into a .sh file for portability, linting, and testing
+  args:
+    - '-c'
+    - |
+      set -eu
+      BUILD_TAG=$(cat release/.git/ref)
+      echo "Deploying $APPLICATION:$BUILD_TAG to ECS..."
+      echo "================================================="
+      echo "Authenticating with AWS..."
+
+      creds=$(aws sts assume-role --role-arn arn:aws:iam::430354129336:role/govuk-concourse-deployer \
+      --role-session-name "concourse-deploy-session-$APPLICATION-$BUILD_TAG")
+
+      export AWS_ACCESS_KEY_ID=$(echo $creds | jq .Credentials.AccessKeyId -r)
+      export AWS_SECRET_ACCESS_KEY=$(echo $creds | jq .Credentials.SecretAccessKey -r)
+      export AWS_SESSION_TOKEN=$(echo $creds | jq .Credentials.SessionToken -r)
+
+      cd src/terraform/deployments/apps/$GOVUK_ENVIRONMENT/$APPLICATION
+      terraform apply -var=image_tag=$BUILD_TAG
+      task_definition_arn=$(terraform output task_definition_arn)
+
+      echo "Updating $APPLICATION service..."
+
+      aws ecs update-service --cluster govuk --service $APPLICATION \
+      --task-definition $task_definition_arn --region $AWS_REGION
+
+      echo "Waiting for $APPLICATION ECS service to reach steady state..."
+      aws ecs wait services-stable --cluster govuk --services $APPLICATION --region $AWS_REGION
+      echo "Finished deploying $APPLICATION:$BUILD_TAG to ECS."
