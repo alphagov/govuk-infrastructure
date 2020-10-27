@@ -118,6 +118,8 @@ module "router_service" {
   private_subnets                  = var.private_subnets
   vpc_id                           = var.vpc_id
   cluster_id                       = aws_ecs_cluster.cluster.id
-  router_mongodb_host              = var.router_mongodb_host
+  mongodb_host                     = var.router_mongodb_host
+  image_tag                        = local.default_image_tag
+  sentry_environment               = var.sentry_environment
   source                           = "../../modules/apps/router"
 }
