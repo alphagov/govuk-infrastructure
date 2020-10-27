@@ -22,10 +22,12 @@ module "frontend_service" {
   vpc_id                           = var.vpc_id
   cluster_id                       = aws_ecs_cluster.cluster.id
   statsd_host                      = var.statsd_host
-  mongodb_host                     = var.mongodb_host
   govuk_website_root               = var.govuk_website_root
   govuk_app_domain_external        = var.govuk_app_domain_external
   source                           = "../../modules/apps/frontend"
+  asset_host                       = var.asset_host
+  image_tag                        = local.default_image_tag
+  sentry_environment               = var.sentry_environment
 }
 
 module "publisher_service" {
