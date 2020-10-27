@@ -7,6 +7,10 @@ variable "cluster_id" {
   type        = string
 }
 
+variable "image_tag" {
+  type = string
+}
+
 variable "task_role_arn" {
   description = "ARN of IAM role for app's container (ECS task) to talk to other AWS services."
   type        = string
@@ -86,4 +90,8 @@ variable "redis_host" {
 variable "redis_port" {
   type    = number
   default = 6379
+}
+
+variable "sentry_environment" {
+  type = string
 }

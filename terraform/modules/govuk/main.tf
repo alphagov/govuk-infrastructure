@@ -30,7 +30,9 @@ module "frontend_service" {
   sentry_environment               = var.sentry_environment
 }
 
+# TODO: alphabetise
 module "publisher_service" {
+  image_tag                        = local.default_image_tag
   mesh_name                        = aws_appmesh_mesh.govuk.id
   service_discovery_namespace_id   = aws_service_discovery_private_dns_namespace.govuk_publishing_platform.id
   service_discovery_namespace_name = aws_service_discovery_private_dns_namespace.govuk_publishing_platform.name
@@ -48,6 +50,7 @@ module "publisher_service" {
   govuk_website_root        = var.govuk_website_root
   statsd_host               = var.statsd_host
   redis_host                = var.redis_host
+  sentry_environment        = var.sentry_environment
   source                    = "../../modules/apps/publisher"
 }
 
