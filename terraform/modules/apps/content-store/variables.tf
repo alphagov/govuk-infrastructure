@@ -67,3 +67,12 @@ variable "mongodb_url" {
 variable "statsd_host" {
   type = string
 }
+
+variable "image_tag" {
+  description = "Container Image Tag"
+  type        = string
+}
+
+variable "sentry_environment" {
+  type = string
+}
