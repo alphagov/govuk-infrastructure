@@ -29,7 +29,6 @@ variable "public_lb_domain_name" {
   type        = string
 }
 
-
 # TODO: find out how asset_host is actually used and add a description to disambiguate it.
 variable "asset_host" {
   type = string
@@ -72,6 +71,14 @@ variable "documentdb_security_group_id" {
 variable "router_mongodb_host" {
   description = "Hostname for the Router MongoDB (defined outside this Terraform repo)."
   type        = string
+}
+
+variable "sentry_environment" {
+  type = string
+}
+
+variable "govuk_environment" {
+  type = string
 }
 
 # TODO: pull common vars up from the app modules into here so that they can vary by environment.
