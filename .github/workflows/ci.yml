@@ -7,10 +7,11 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: terraform fmt
+        working-directory: terraform
         run: |
           brew install tfenv
           tfenv install
-          find . -name '*.tf' | xargs tools/terraform-format.sh
+          find . -name '*.tf' | xargs ../tools/terraform-format.sh
 
       - name: JSON Check
         run: find . -name '*.json' | xargs tools/json-check.sh
