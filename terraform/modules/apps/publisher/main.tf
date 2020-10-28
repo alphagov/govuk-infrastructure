@@ -67,6 +67,13 @@ module "app" {
   task_role_arn                    = var.task_role_arn
   execution_role_arn               = var.execution_role_arn
   extra_security_groups            = [var.govuk_management_access_sg_id]
+
+  load_balancers = [{
+    target_group_arn = aws_lb_target_group.public.arn
+    container_name   = "publisher"
+    container_port   = 80
+  }]
+
   container_definitions = [
     {
       # TODO: factor out all the remaining hardcoded values (see ../content-store for an example where this has been done)

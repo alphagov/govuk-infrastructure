@@ -71,3 +71,15 @@ variable "extra_security_groups" {
   type        = list
   default     = []
 }
+
+variable "load_balancers" {
+  description = "Optional list of maps {target_group_arn, container_name, container_port} for attaching ALB/NLB target groups to the app's ECS service. See https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/ecs_service#load_balancer"
+  type        = list
+  default     = []
+}
+
+variable "health_check_grace_period_seconds" {
+  description = "Meaningful only if load_balancers is non-empty. See healthCheckGracePeriodSeconds in https://docs.aws.amazon.com/AmazonECS/latest/developerguide/service_definition_parameters.html"
+  type        = number
+  default     = 60
+}
