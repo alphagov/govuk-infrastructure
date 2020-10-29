@@ -1,4 +1,4 @@
-**This is an alpha. This code does not represent production infrastructure. For the canonical source of GOV.UK's infrastructure, see [alphagov/govuk-aws](https://github.com/alphagov/govuk-aws) and [alphagov/govuk-puppet](https://github.com/alphagov/govuk-puppet) repos.**
+**This is a work in progress. This code does not represent production infrastructure yet. For the canonical source of GOV.UK's infrastructure, see [alphagov/govuk-aws](https://github.com/alphagov/govuk-aws) and [alphagov/govuk-puppet](https://github.com/alphagov/govuk-puppet) repos.**
 
 ### Usage
 
