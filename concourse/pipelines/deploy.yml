@@ -98,14 +98,15 @@ jobs:
     plan:
     - get: govuk-infrastructure
       trigger: true
-    - file: govuk-infrastructure/concourse/pipelines/deploy-app.yml
+    - file: govuk-infrastructure/concourse/pipelines/deploy.yml
       set_pipeline: govuk-cd-frontend
 
   - name: deploy-frontend
     plan:
     - get: govuk-infrastructure
       passed: [update-pipeline]
-    - get: frontend
+    - get: release
+      resource: frontend
       trigger: true
     - file: govuk-infrastructure/concourse/tasks/deploy-app.yml
       params:
@@ -139,7 +140,8 @@ jobs:
     plan:
     - get: govuk-infrastructure
       passed: [update-pipeline]
-    - get: publisher
+    - get: release
+      resource: publisher
       trigger: true
     - file: govuk-infrastructure/concourse/tasks/deploy-app.yml
       params:
@@ -154,7 +156,8 @@ jobs:
     plan:
     - get: govuk-infrastructure
       passed: [update-pipeline]
-    - get: publishing-api
+    - get: release
+      resource: publishing-api
       trigger: true
     - file: govuk-infrastructure/concourse/tasks/deploy-app.yml
       params:
@@ -169,7 +172,8 @@ jobs:
     plan:
     - get: govuk-infrastructure
       passed: [update-pipeline]
-    - get: content-store
+    - get: release
+      resource: content-store
       trigger: true
     - file: govuk-infrastructure/concourse/tasks/deploy-app.yml
       params:
@@ -184,7 +188,8 @@ jobs:
     plan:
     - get: govuk-infrastructure
       passed: [update-pipeline]
-    - get: router
+    - get: release
+      resource: router
       trigger: true
     - file: govuk-infrastructure/concourse/tasks/deploy-app.yml
       params:
