@@ -19,7 +19,7 @@ provider "aws" {
 }
 
 module "task_definition" {
-  source                           = "../../../../modules/task-definitions/publisher"
+  source                           = "../../../modules/task-definitions/publisher"
   govuk_app_domain_external        = local.govuk_app_domain_external
   govuk_website_root               = local.govuk_website_root
   image_tag                        = var.image_tag

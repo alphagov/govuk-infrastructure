@@ -19,7 +19,7 @@ provider "aws" {
 }
 
 module "task_definition" {
-  source                           = "../../../../modules/task-definitions/content-store"
+  source                           = "../../../modules/task-definitions/content-store"
   service_name                     = "content-store"
   govuk_app_domain_external        = local.govuk_app_domain_external
   govuk_website_root               = local.govuk_website_root

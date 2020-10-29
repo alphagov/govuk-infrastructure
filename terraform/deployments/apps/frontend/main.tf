@@ -19,7 +19,7 @@ provider "aws" {
 }
 
 module "task_definition" {
-  source                           = "../../../../modules/task-definitions/frontend"
+  source                           = "../../../modules/task-definitions/frontend"
   service_name                     = "frontend"
   assets_url                       = local.assets_url
   content_store_url                = local.content_store_url

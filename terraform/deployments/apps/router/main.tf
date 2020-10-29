@@ -19,7 +19,7 @@ provider "aws" {
 }
 
 module "task_definition" {
-  source             = "../../../../modules/task-definitions/router"
+  source             = "../../../modules/task-definitions/router"
   image_tag          = var.image_tag
   mesh_name          = local.mesh_name
   execution_role_arn = data.aws_iam_role.execution.arn
