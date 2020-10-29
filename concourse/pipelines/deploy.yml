@@ -180,7 +180,7 @@ jobs:
     on_failure:
       <<: *notify-slack-failure
 
-- name: deploy-router
+  - name: deploy-router
     plan:
     - get: govuk-infrastructure
       passed: [update-pipeline]
