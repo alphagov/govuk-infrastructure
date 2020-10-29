@@ -29,21 +29,6 @@ variable "service_name" {
   type        = string
 }
 
-variable "container_definitions" {
-  description = "List of ECS ContainerDefinitions for the app, as maps in HCL/JSON syntax (not strings). The module adds the Envoy sidecar to this list."
-  type        = list
-}
-
-variable "cpu" {
-  description = "CPU hard limit for the ECS task (total for all containers). 1024 units = 1 vCPU. Only certain pairs of CPU/memory values are valid on Fargate. See https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task_definition_parameters.html"
-  type        = number
-}
-
-variable "memory" {
-  description = "RAM hard limit for the ECS task (total for all containers) in MiB. Only certain pairs of CPU/memory values are valid on Fargate. See https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task_definition_parameters.html"
-  type        = number
-}
-
 variable "container_ingress_port" {
   description = "Port on which the app container accepts connections."
   type        = number
@@ -54,16 +39,6 @@ variable "desired_count" {
   description = "Number of instances of the ECS task."
   type        = number
   default     = 1
-}
-
-variable "task_role_arn" {
-  description = "ARN of IAM role for the app's ECS task to talk to other AWS services."
-  type        = string
-}
-
-variable "execution_role_arn" {
-  description = "ARN of IAM role for the ECS container agent and Docker daemon to manage the app container."
-  type        = string
 }
 
 variable "extra_security_groups" {
@@ -82,4 +57,8 @@ variable "health_check_grace_period_seconds" {
   description = "Meaningful only if load_balancers is non-empty. See healthCheckGracePeriodSeconds in https://docs.aws.amazon.com/AmazonECS/latest/developerguide/service_definition_parameters.html"
   type        = number
   default     = 60
+}
+
+variable "task_definition_arn" {
+  type = string
 }

@@ -31,6 +31,7 @@ module "govuk" {
   public_lb_domain_name         = "test.govuk.digital"
   govuk_app_domain_external     = "test.govuk.digital"
   govuk_app_domain_internal     = "test.govuk-internal.digital"
+  govuk_environment             = "test"
   govuk_website_root            = "test.publishing.service.gov.uk"
   asset_host                    = "www.gov.uk" # TODO: this looks wrong
   router_mongodb_host           = "router-backend-1.test.govuk-internal.digital,router-backend-2.test.govuk-internal.digital,router-backend-3.test.govuk-internal.digital"
@@ -40,4 +41,5 @@ module "govuk" {
   govuk_management_access_sg_id = data.aws_security_group.govuk_management_access.id
   documentdb_security_group_id  = data.aws_security_group.documentdb.id
   redis_security_group_id       = data.aws_security_group.redis.id
+  sentry_environment            = "test"
 }

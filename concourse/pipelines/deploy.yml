@@ -1,0 +1,196 @@
+---
+definitions:
+
+resource_types:
+  - name: slack-notification
+    type: docker-image
+    source:
+      repository: cfcommunity/slack-notification-resource
+      tag: latest
+
+resources:
+  - &git-repo
+    icon: github
+    name: govuk-infrastructure
+    source:
+      branch: main
+      uri: https://github.com/alphagov/govuk-infrastructure
+    type: git
+
+  - <<: *git-repo
+    name: frontend
+    source:
+      branch: master
+      uri: https://github.com/alphagov/frontend
+      tag_filter: release_*
+
+  - <<: *git-repo
+    name: publisher
+    source:
+      branch: master
+      uri: https://github.com/alphagov/publisher
+      tag_filter: release_*
+
+  - <<: *git-repo
+    name: publishing-api
+    source:
+      branch: master
+      uri: https://github.com/alphagov/publishing-api
+      tag_filter: release_*
+
+  - <<: *git-repo
+    name: content-store
+    source:
+      branch: master
+      uri: https://github.com/alphagov/content-store
+      tag_filter: release_*
+
+  - <<: *git-repo
+    name: router
+    source:
+      branch: master
+      uri: https://github.com/alphagov/router
+      tag_filter: release_*
+
+  - name: deploy-slack-channel
+    type: slack-notification
+    source:
+      url: https://hooks.slack.com/services/((slack_webhook))
+
+groups:
+  - name: all
+    jobs:
+      - update-pipeline
+      - deploy-content-store
+      - deploy-frontend
+      - smoke-test-frontend
+      - deploy-publisher
+      - deploy-publishing-api
+      - deploy-router
+
+  - name: admin
+    jobs:
+      - update-pipeline
+
+  - name: content-store
+    jobs:
+      - deploy-content-store
+
+  - name: frontend
+    jobs:
+      - deploy-frontend
+      - smoke-test-frontend
+
+  - name: publisher
+    jobs:
+      - deploy-publisher
+
+  - name: publishing-api
+    jobs:
+      - deploy-publishing-api
+
+  - name: router
+    jobs:
+      - deploy-router
+
+jobs:
+  - name: update-pipeline
+    plan:
+    - get: govuk-infrastructure
+      trigger: true
+    - file: govuk-infrastructure/concourse/pipelines/deploy-app.yml
+      set_pipeline: govuk-cd-frontend
+
+  - name: deploy-frontend
+    plan:
+    - get: govuk-infrastructure
+      passed: [update-pipeline]
+    - get: frontend
+      trigger: true
+    - file: govuk-infrastructure/concourse/tasks/deploy-app.yml
+      params:
+        APPLICATION: frontend
+        GOVUK_ENVIRONMENT: test
+      task: deploy-app
+    serial: true
+    on_failure: &notify-slack-failure
+      put: deploy-slack-channel
+      params:
+        channel: "#govuk-deploy-test"
+        username: 'Concourse deploy pipeline'
+        icon_emoji: ':concourse:'
+        silent: true
+        text: |
+          :red_circle: Failed build: http://cd.gds-reliability.engineering/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME
+
+  - name: smoke-test-frontend
+    plan:
+    - get: govuk-infrastructure
+      passed:
+      - deploy-frontend
+      trigger: true
+    - file: govuk-infrastructure/concourse/tasks/basic-smoke-test.yml
+      params:
+        MESSAGE: Checking the app is not serving HTTP error codes.
+        URL: https://www.gov.uk/
+      task: smoke-test
+
+  - name: deploy-publisher
+    plan:
+    - get: govuk-infrastructure
+      passed: [update-pipeline]
+    - get: publisher
+      trigger: true
+    - file: govuk-infrastructure/concourse/tasks/deploy-app.yml
+      params:
+        APPLICATION: publisher
+        GOVUK_ENVIRONMENT: test
+      task: deploy-app
+    serial: true
+    on_failure:
+      <<: *notify-slack-failure
+
+  - name: deploy-publishing-api
+    plan:
+    - get: govuk-infrastructure
+      passed: [update-pipeline]
+    - get: publishing-api
+      trigger: true
+    - file: govuk-infrastructure/concourse/tasks/deploy-app.yml
+      params:
+        APPLICATION: publishing-api
+        GOVUK_ENVIRONMENT: test
+      task: deploy-app
+    serial: true
+    on_failure:
+      <<: *notify-slack-failure
+
+  - name: deploy-content-store
+    plan:
+    - get: govuk-infrastructure
+      passed: [update-pipeline]
+    - get: content-store
+      trigger: true
+    - file: govuk-infrastructure/concourse/tasks/deploy-app.yml
+      params:
+        APPLICATION: content-store
+        GOVUK_ENVIRONMENT: test
+      task: deploy-app
+    serial: true
+    on_failure:
+      <<: *notify-slack-failure
+
+- name: deploy-router
+    plan:
+    - get: govuk-infrastructure
+      passed: [update-pipeline]
+    - get: router
+      trigger: true
+    - file: govuk-infrastructure/concourse/tasks/deploy-app.yml
+      params:
+        APPLICATION: router
+        GOVUK_ENVIRONMENT: test
+      task: deploy-app
+    serial: true
+    on_failure:
+      <<: *notify-slack-failure
