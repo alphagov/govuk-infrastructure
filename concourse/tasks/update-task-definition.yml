@@ -1,0 +1,40 @@
+platform: linux
+image_resource:
+  type: docker-image
+  source:
+    repository: governmentpaas/terraform
+    tag: terraform-0.13.3
+    username: ((docker_hub_username))
+    password: ((docker_hub_authtoken))
+inputs:
+  - name: govuk-infrastructure
+    path: src
+  - name: release
+outputs:
+  - name: terraform-outputs
+params:
+  AWS_REGION: eu-west-1
+  ASSUME_ROLE_ARN: 'arn:aws:iam::430354129336:role/govuk-concourse-deployer'
+  APPLICATION:
+  GOVUK_ENVIRONMENT:
+run:
+  path: sh
+  # TODO: Move this script into a .sh file for portability, linting, and testing
+  args:
+    - '-c'
+    - |
+      set -eu
+
+      root_dir=$(pwd)
+
+      BUILD_TAG=$(cat release/.git/ref)
+      echo "Creating a new task definition for $APPLICATION:$BUILD_TAG in ECS"
+      echo "================================================="
+
+      cd "src/terraform/deployments/apps/$GOVUK_ENVIRONMENT/$APPLICATION"
+
+      terraform init -backend-config "role_arn=$ASSUME_ROLE_ARN"
+
+      terraform apply -auto-approve -var "image_tag=$BUILD_TAG" -var "assume_role_arn=$ASSUME_ROLE_ARN"
+
+      terraform output task_definition_arn > "$root_dir/terraform-outputs/task_definition_arn"

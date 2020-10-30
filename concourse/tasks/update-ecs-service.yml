@@ -1,0 +1,48 @@
+platform: linux
+image_resource:
+  type: docker-image
+  source:
+    repository: governmentpaas/awscli
+    tag: latest
+    username: ((docker_hub_username))
+    password: ((docker_hub_authtoken))
+inputs:
+  - name: terraform-outputs
+params:
+  AWS_REGION: eu-west-1
+  ASSUME_ROLE_ARN: 'arn:aws:iam::430354129336:role/govuk-concourse-deployer'
+  APPLICATION:
+run:
+  path: sh
+  # TODO: Move this script into a .sh file for portability, linting, and testing
+  args:
+    - '-c'
+    - |
+      set -eu
+
+      mkdir -p ~/.aws
+
+      cat <<EOF > ~/.aws/config
+      [profile default]
+      role_arn = $ASSUME_ROLE_ARN
+      credential_source = Ec2InstanceMetadata
+      EOF
+
+      echo "Updating $APPLICATION service..."
+
+      task_definition_arn=$(cat terraform-outputs/task_definition_arn)
+
+      aws ecs update-service \
+        --cluster govuk \
+        --service "$APPLICATION" \
+        --task-definition "$task_definition_arn" \
+        --region "$AWS_REGION"
+
+      echo "Waiting for $APPLICATION ECS service to reach steady state..."
+
+      aws ecs wait services-stable \
+        --cluster govuk \
+        --services "$APPLICATION" \
+        --region "$AWS_REGION"
+
+      echo "Finished updating $APPLICATION to task definition $task_definition_arn."

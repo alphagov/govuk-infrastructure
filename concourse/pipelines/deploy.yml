@@ -106,15 +106,19 @@ jobs:
   - name: deploy-frontend
     plan:
     - get: govuk-infrastructure
-      passed: [update-pipeline]
     - get: release
       resource: frontend
       trigger: true
-    - file: govuk-infrastructure/concourse/tasks/deploy-app.yml
+    - task: update-task-definition
+      file: govuk-infrastructure/concourse/tasks/update-task-definition.yml
       params:
         APPLICATION: frontend
         GOVUK_ENVIRONMENT: test
-      task: deploy-app
+    - task: update-ecs-service
+      file: govuk-infrastructure/concourse/tasks/update-ecs-service.yml
+      params:
+        APPLICATION: frontend
+        GOVUK_ENVIRONMENT: test
     serial: true
     on_failure: &notify-slack-failure
       put: deploy-slack-channel
@@ -141,15 +145,19 @@ jobs:
   - name: deploy-publisher
     plan:
     - get: govuk-infrastructure
-      passed: [update-pipeline]
     - get: release
       resource: publisher
       trigger: true
-    - file: govuk-infrastructure/concourse/tasks/deploy-app.yml
+    - task: update-task-definition
+      file: govuk-infrastructure/concourse/tasks/update-task-definition.yml
       params:
         APPLICATION: publisher
         GOVUK_ENVIRONMENT: test
-      task: deploy-app
+    - task: update-ecs-service
+      file: govuk-infrastructure/concourse/tasks/update-ecs-service.yml
+      params:
+        APPLICATION: publisher
+        GOVUK_ENVIRONMENT: test
     serial: true
     on_failure:
       <<: *notify-slack-failure
@@ -157,15 +165,19 @@ jobs:
   - name: deploy-publishing-api
     plan:
     - get: govuk-infrastructure
-      passed: [update-pipeline]
     - get: release
       resource: publishing-api
       trigger: true
-    - file: govuk-infrastructure/concourse/tasks/deploy-app.yml
+    - task: update-task-definition
+      file: govuk-infrastructure/concourse/tasks/update-task-definition.yml
       params:
         APPLICATION: publishing-api
         GOVUK_ENVIRONMENT: test
-      task: deploy-app
+    - task: update-ecs-service
+      file: govuk-infrastructure/concourse/tasks/update-ecs-service.yml
+      params:
+        APPLICATION: publishing-api
+        GOVUK_ENVIRONMENT: test
     serial: true
     on_failure:
       <<: *notify-slack-failure
@@ -173,15 +185,19 @@ jobs:
   - name: deploy-content-store
     plan:
     - get: govuk-infrastructure
-      passed: [update-pipeline]
     - get: release
       resource: content-store
       trigger: true
-    - file: govuk-infrastructure/concourse/tasks/deploy-app.yml
+    - task: update-task-definition
+      file: govuk-infrastructure/concourse/tasks/update-task-definition.yml
       params:
         APPLICATION: content-store
         GOVUK_ENVIRONMENT: test
-      task: deploy-app
+    - task: update-ecs-service
+      file: govuk-infrastructure/concourse/tasks/update-ecs-service.yml
+      params:
+        APPLICATION: content-store
+        GOVUK_ENVIRONMENT: test
     serial: true
     on_failure:
       <<: *notify-slack-failure
@@ -189,15 +205,19 @@ jobs:
   - name: deploy-router
     plan:
     - get: govuk-infrastructure
-      passed: [update-pipeline]
     - get: release
       resource: router
       trigger: true
-    - file: govuk-infrastructure/concourse/tasks/deploy-app.yml
+    - task: update-task-definition
+      file: govuk-infrastructure/concourse/tasks/update-task-definition.yml
       params:
         APPLICATION: router
         GOVUK_ENVIRONMENT: test
-      task: deploy-app
+    - task: update-ecs-service
+      file: govuk-infrastructure/concourse/tasks/update-ecs-service.yml
+      params:
+        APPLICATION: router
+        GOVUK_ENVIRONMENT: test
     serial: true
     on_failure:
       <<: *notify-slack-failure
