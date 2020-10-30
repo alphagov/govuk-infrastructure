@@ -13,6 +13,7 @@ data "aws_secretsmanager_secret" "sentry_dsn" {
 
 module "app" {
   source                           = "../../app"
+  execution_role_arn               = var.execution_role_arn
   vpc_id                           = var.vpc_id
   cluster_id                       = var.cluster_id
   service_name                     = var.service_name

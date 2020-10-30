@@ -52,3 +52,8 @@ variable "health_check_grace_period_seconds" {
   type        = number
   default     = 60
 }
+
+variable "execution_role_arn" {
+  description = "For use during bootstrapping"
+  type        = string
+}

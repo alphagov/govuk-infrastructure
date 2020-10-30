@@ -45,3 +45,8 @@ variable "mesh_name" {
   description = "App Mesh mesh name. For example, 'govuk'"
   type        = string
 }
+
+variable "execution_role_arn" {
+  description = "For use during bootstrapping"
+  type        = string
+}

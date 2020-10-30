@@ -35,3 +35,8 @@ variable "service_discovery_namespace_id" {
 variable "service_discovery_namespace_name" {
   type = string
 }
+
+variable "execution_role_arn" {
+  description = "For use during bootstrapping"
+  type        = string
+}

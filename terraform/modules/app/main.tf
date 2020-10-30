@@ -38,9 +38,20 @@ resource "aws_ecs_service" "service" {
     container_name = var.service_name
   }
 
+  # For bootstrapping
+  task_definition = module.bootstrap_task_definition.arn
+
   lifecycle {
+    # It is essential that we ignore changes to task_definition.
+    # If this is removed, the bootstrapping image will be deployed.
     ignore_changes = [task_definition, desired_count]
   }
+}
+
+module "bootstrap_task_definition" {
+  service_name       = var.service_name
+  execution_role_arn = var.execution_role_arn
+  source             = "../task-definitions/bootstrap"
 }
 
 resource "aws_security_group" "service" {
