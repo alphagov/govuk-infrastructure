@@ -1,18 +1,15 @@
 locals {
-  govuk_app_domain_external        = "www.test.publishing.service.gov.uk"
-  govuk_app_domain_internal        = "test.govuk-internal.digital"
-  govuk_website_root               = "www.test.publishing.service.gov.uk"
-  mesh_name                        = "govuk"
-  mongodb_host                     = "mongo-1.test.govuk-internal.digital,mongo-2.test.govuk-internal.digital,mongo-3.test.govuk-internal.digital"
-  service_discovery_namespace_name = "mesh.govuk-internal.digital"
-  sentry_environment               = "test"
-  statsd_host                      = "statsd.test.govuk-internal.digital"
-  redis_host                       = "pink-backend-redis.0f3erf.ng.0001.euw1.cache.amazonaws.com"
+  app_domain_external              = "www.${var.app_domain}"
+  app_domain_internal              = "${var.app_domain_internal}"
+  asset_host                       = local.website_root
+  assets_url                       = "https://assets.${var.mesh_domain}"
+  content_store_url                = "https://content-store.${var.mesh_domain}"
   redis_port                       = 6379
-  asset_host                       = "www.gov.uk" # TODO: this looks wrong
-  assets_url                       = "https://assets.${local.service_discovery_namespace_name}"
-  content_store_url                = "https://content-store.${local.service_discovery_namespace_name}"
-  static_url                       = "https://static.${local.service_discovery_namespace_name}"
+  service_discovery_namespace_name = var.mesh_domain
+  sentry_environment               = "${var.govuk_environment}-ecs"
+  static_url                       = "https://static.${var.mesh_domain}"
+  statsd_host                      = "statsd.${var.mesh_domain}" # TODO: Put Statsd in App Mesh
+  website_root                     = "https://www.${var.app_domain}"
 }
 
 data "aws_iam_role" "execution" {

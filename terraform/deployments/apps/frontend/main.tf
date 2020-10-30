@@ -25,10 +25,10 @@ module "task_definition" {
   content_store_url                = local.content_store_url
   static_url                       = local.static_url
   execution_role_arn               = data.aws_iam_role.execution.arn
-  govuk_website_root               = local.govuk_website_root
+  govuk_website_root               = local.website_root
   image_tag                        = var.image_tag
-  mesh_name                        = local.mesh_name
-  sentry_environment               = local.sentry_environment
+  mesh_name                        = var.mesh_name
+  sentry_environment               = var.sentry_environment
   service_discovery_namespace_name = local.service_discovery_namespace_name
   statsd_host                      = local.statsd_host
   task_role_arn                    = data.aws_iam_role.task.arn

@@ -20,16 +20,16 @@ provider "aws" {
 
 module "task_definition" {
   source                           = "../../../modules/task-definitions/publisher"
-  govuk_app_domain_external        = local.govuk_app_domain_external
-  govuk_website_root               = local.govuk_website_root
+  govuk_app_domain_external        = local.app_domain_external
+  govuk_website_root               = local.website_root
   image_tag                        = var.image_tag
-  mesh_name                        = local.mesh_name
+  mesh_name                        = var.mesh_name
   service_discovery_namespace_name = local.service_discovery_namespace_name
   statsd_host                      = local.statsd_host
   execution_role_arn               = data.aws_iam_role.execution.arn
   task_role_arn                    = data.aws_iam_role.task.arn
-  redis_host                       = local.redis_host
+  redis_host                       = var.redis_host
   redis_port                       = local.redis_port
   asset_host                       = local.asset_host
-  sentry_environment               = local.sentry_environment
+  sentry_environment               = var.sentry_environment
 }
