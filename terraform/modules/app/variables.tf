@@ -35,12 +35,6 @@ variable "container_ingress_port" {
   default     = 80
 }
 
-variable "desired_count" {
-  description = "Number of instances of the ECS task."
-  type        = number
-  default     = 1
-}
-
 variable "extra_security_groups" {
   description = "Additional security groups to attach to the app's ECS service/tasks."
   type        = list
@@ -57,8 +51,4 @@ variable "health_check_grace_period_seconds" {
   description = "Meaningful only if load_balancers is non-empty. See healthCheckGracePeriodSeconds in https://docs.aws.amazon.com/AmazonECS/latest/developerguide/service_definition_parameters.html"
   type        = number
   default     = 60
-}
-
-variable "task_definition_arn" {
-  type = string
 }
