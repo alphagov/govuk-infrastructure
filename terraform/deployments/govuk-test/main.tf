@@ -5,6 +5,13 @@ terraform {
     region  = "eu-west-1"
     encrypt = true
   }
+
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 3.13"
+    }
+  }
 }
 
 provider "aws" {
