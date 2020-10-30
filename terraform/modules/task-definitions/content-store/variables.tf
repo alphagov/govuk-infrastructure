@@ -42,3 +42,9 @@ variable "sentry_environment" {
 variable "task_role_arn" {
   type = string
 }
+
+variable "assume_role_arn" {
+  type        = string
+  description = "(optional) AWS IAM role to assume. Uses the role from the environment by default."
+  default     = null
+}
