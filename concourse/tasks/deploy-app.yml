@@ -4,6 +4,8 @@ image_resource:
   source:
     repository: govuk/concourse-deploy
     tag: latest
+    username: ((docker_hub_username))
+    password: ((docker_hub_authtoken))
 inputs:
   - name: govuk-infrastructure
     path: src
