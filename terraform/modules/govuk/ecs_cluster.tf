@@ -10,7 +10,7 @@ resource "aws_ecs_cluster" "cluster" {
 }
 
 resource "aws_appmesh_mesh" "govuk" {
-  name = "govuk"
+  name = var.mesh_name
 
   spec {
     egress_filter {
@@ -20,7 +20,7 @@ resource "aws_appmesh_mesh" "govuk" {
 }
 
 resource "aws_service_discovery_private_dns_namespace" "govuk_publishing_platform" {
-  name = "mesh.govuk-internal.digital"
+  name = var.mesh_domain
   vpc  = var.vpc_id
 }
 

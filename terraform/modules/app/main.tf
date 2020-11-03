@@ -12,11 +12,9 @@ terraform {
 }
 
 resource "aws_ecs_service" "service" {
-  name            = var.service_name
-  cluster         = var.cluster_id
-  task_definition = var.task_definition_arn
-  desired_count   = var.desired_count
-  launch_type     = "FARGATE"
+  name        = var.service_name
+  cluster     = var.cluster_id
+  launch_type = "FARGATE"
 
   health_check_grace_period_seconds = length(var.load_balancers) > 0 ? var.health_check_grace_period_seconds : null
 
@@ -40,9 +38,20 @@ resource "aws_ecs_service" "service" {
     container_name = var.service_name
   }
 
+  # For bootstrapping
+  task_definition = module.bootstrap_task_definition.arn
+
   lifecycle {
-    ignore_changes = [task_definition]
+    # It is essential that we ignore changes to task_definition.
+    # If this is removed, the bootstrapping image will be deployed.
+    ignore_changes = [task_definition, desired_count]
   }
+}
+
+module "bootstrap_task_definition" {
+  service_name       = var.service_name
+  execution_role_arn = var.execution_role_arn
+  source             = "../task-definitions/bootstrap"
 }
 
 resource "aws_security_group" "service" {

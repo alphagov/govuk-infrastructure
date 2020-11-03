@@ -35,12 +35,6 @@ variable "container_ingress_port" {
   default     = 80
 }
 
-variable "desired_count" {
-  description = "Number of instances of the ECS task."
-  type        = number
-  default     = 1
-}
-
 variable "extra_security_groups" {
   description = "Additional security groups to attach to the app's ECS service/tasks."
   type        = list
@@ -59,6 +53,7 @@ variable "health_check_grace_period_seconds" {
   default     = 60
 }
 
-variable "task_definition_arn" {
-  type = string
+variable "execution_role_arn" {
+  description = "For use during bootstrapping"
+  type        = string
 }

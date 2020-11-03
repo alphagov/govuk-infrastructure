@@ -19,11 +19,11 @@ provider "aws" {
 }
 
 module "task_definition" {
-  source             = "../../../../modules/task-definitions/router"
+  source             = "../../../modules/task-definitions/router"
   image_tag          = var.image_tag
-  mesh_name          = local.mesh_name
+  mesh_name          = var.mesh_name
   execution_role_arn = data.aws_iam_role.execution.arn
-  mongodb_host       = "router-backend-1.test.govuk-internal.digital,router-backend-2.test.govuk-internal.digital,router-backend-3.test.govuk-internal.digital"
+  mongodb_host       = var.router_mongodb_host
   task_role_arn      = data.aws_iam_role.task.arn
-  sentry_environment = local.sentry_environment
+  sentry_environment = var.sentry_environment
 }
