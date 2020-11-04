@@ -9,6 +9,10 @@ terraform {
 
 provider "aws" {
   region = "eu-west-1"
+
+  assume_role {
+    role_arn = var.assume_role_arn
+  }
 }
 
 data "aws_secretsmanager_secret" "asset_manager_bearer_token" {

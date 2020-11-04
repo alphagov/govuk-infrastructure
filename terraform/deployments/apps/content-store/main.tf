@@ -16,6 +16,10 @@ terraform {
 
 provider "aws" {
   region = "eu-west-1"
+
+  assume_role {
+    role_arn = var.assume_role_arn
+  }
 }
 
 module "task_definition" {
@@ -31,4 +35,5 @@ module "task_definition" {
   execution_role_arn               = data.aws_iam_role.execution.arn
   task_role_arn                    = data.aws_iam_role.task.arn
   sentry_environment               = var.sentry_environment
+  assume_role_arn                  = var.assume_role_arn
 }

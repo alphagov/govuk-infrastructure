@@ -161,3 +161,31 @@ resource "aws_iam_role_policy_attachment" "concourse_ecs_admin" {
   role       = aws_iam_role.govuk_concourse_deployer.id
   policy_arn = "arn:aws:iam::aws:policy/AmazonECS_FullAccess"
 }
+
+# TODO - this policy is overly permissive - concourse doesn't need to be able
+# to administer every S3 bucket. Currently it only needs to be able to read and
+# write the terraform state files.
+resource "aws_iam_role_policy_attachment" "concourse_s3_admin" {
+  role       = aws_iam_role.govuk_concourse_deployer.id
+  policy_arn = "arn:aws:iam::aws:policy/AmazonS3FullAccess"
+}
+
+
+# TODO - this policy is overly permissive - concourse doesn't need to be able
+# to read every secret, or write any (yet). Currently it only needs to be able to
+# describe secrets, and it's ECS which actually reads them.
+resource "aws_iam_role_policy_attachment" "concourse_secrets_manager_read_write" {
+  role       = aws_iam_role.govuk_concourse_deployer.id
+  policy_arn = "arn:aws:iam::aws:policy/SecretsManagerReadWrite"
+}
+
+# TODO - this policy is overly permissive - concourse doesn't need to be able
+# to read all of IAM. Currently it only needs to be able to
+# get the fargate_task_role / fargate_execution_role so it can create the right
+# ECS task definitions.
+resource "aws_iam_role_policy_attachment" "concourse_iam_read" {
+  role       = aws_iam_role.govuk_concourse_deployer.id
+  policy_arn = "arn:aws:iam::aws:policy/IAMReadOnlyAccess"
+}
+
+

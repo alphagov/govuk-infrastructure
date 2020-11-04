@@ -16,6 +16,10 @@ terraform {
 
 provider "aws" {
   region = "eu-west-1"
+
+  assume_role {
+    role_arn = var.assume_role_arn
+  }
 }
 
 module "task_definition" {
@@ -32,4 +36,5 @@ module "task_definition" {
   redis_port                       = local.redis_port
   asset_host                       = local.asset_host
   sentry_environment               = var.sentry_environment
+  assume_role_arn                  = var.assume_role_arn
 }
