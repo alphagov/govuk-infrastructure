@@ -10,6 +10,7 @@ locals {
   static_url                       = "https://static.${var.mesh_domain}"
   statsd_host                      = "statsd.${var.mesh_domain}" # TODO: Put Statsd in App Mesh
   website_root                     = "https://www.${var.app_domain}"
+  router_urls                      = "router.${var.mesh_domain}:3055"
 }
 
 data "aws_iam_role" "execution" {
