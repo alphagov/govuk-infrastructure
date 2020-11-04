@@ -77,7 +77,7 @@ module "task_definition" {
     {
       # TODO: factor out all the remaining hardcoded values (see ../content-store for an example where this has been done)
       "name" : "publisher",
-      "image" : "govuk/publisher:serve-assets-in-prod", # TODO: use deployed-to-production label or similar.
+      "image" : "govuk/publisher:${var.image_tag}", # TODO: use deployed-to-production label or similar.
       "essential" : true,
       "environment" : [
         { "name" : "ASSET_HOST", "value" : var.asset_host },
