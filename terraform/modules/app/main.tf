@@ -11,6 +11,10 @@ terraform {
   }
 }
 
+locals {
+  service_security_groups = concat([aws_security_group.service.id], var.extra_security_groups)
+}
+
 resource "aws_ecs_service" "service" {
   name        = var.service_name
   cluster     = var.cluster_id
@@ -29,7 +33,7 @@ resource "aws_ecs_service" "service" {
   }
 
   network_configuration {
-    security_groups = concat([aws_security_group.service.id], var.extra_security_groups)
+    security_groups = local.service_security_groups
     subnets         = var.subnets
   }
 
