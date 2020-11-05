@@ -31,10 +31,15 @@ run:
       echo "Creating a new task definition for $APPLICATION:$BUILD_TAG in ECS"
       echo "================================================="
 
-      cd "src/terraform/deployments/apps/$GOVUK_ENVIRONMENT/$APPLICATION"
+      APP_DIR="src/terraform/deployments/apps/$APPLICATION"
+      cd ${APP_DIR}
 
       terraform init -backend-config "role_arn=$ASSUME_ROLE_ARN"
 
-      terraform apply -auto-approve -var "image_tag=$BUILD_TAG" -var "assume_role_arn=$ASSUME_ROLE_ARN"
+      terraform apply -var-file=../../variables/$GOVUK_ENVIRONMENT/common.tfvars \
+      -var-file=../../variables/$GOVUK_ENVIRONMENT/apps.tfvars \
+      -var=image_tag=$BUILD_TAG \
+      -var "assume_role_arn=$ASSUME_ROLE_ARN" \
+      -auto-approve
 
       terraform output task_definition_arn > "$root_dir/terraform-outputs/task_definition_arn"
