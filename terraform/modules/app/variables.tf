@@ -29,10 +29,10 @@ variable "service_name" {
   type        = string
 }
 
-variable "container_ingress_port" {
-  description = "Port on which the app container accepts connections."
-  type        = number
-  default     = 80
+variable "custom_container_services" {
+  description = "list of services in map format {container_service, port, protocol} that an app container exposes."
+  type        = list
+  default     = []
 }
 
 variable "extra_security_groups" {

@@ -1,42 +1,40 @@
-locals {
-  virtual_service_name = "${var.service_name}.${var.service_discovery_namespace_name}"
-}
-
 resource "aws_appmesh_virtual_service" "service" {
-  name      = local.virtual_service_name
+  count     = length(local.container_services)
+  name      = "${local.container_services[count.index].container_service}.${var.service_discovery_namespace_name}"
   mesh_name = var.mesh_name
 
   spec {
     provider {
       virtual_node {
-        virtual_node_name = aws_appmesh_virtual_node.service.name
+        virtual_node_name = aws_appmesh_virtual_node.service[count.index].name
       }
     }
   }
 }
 
 resource "aws_appmesh_virtual_node" "service" {
-  name      = var.service_name
+  count     = length(local.container_services)
+  name      = local.container_services[count.index].container_service
   mesh_name = var.mesh_name
 
   spec {
     backend {
       virtual_service {
-        virtual_service_name = local.virtual_service_name
+        virtual_service_name = "${local.container_services[count.index].container_service}.${var.service_discovery_namespace_name}"
       }
     }
 
     listener {
       port_mapping {
-        port     = var.container_ingress_port
-        protocol = "http"
+        port     = local.container_services[count.index].port
+        protocol = local.container_services[count.index].protocol
       }
     }
 
     service_discovery {
       aws_cloud_map {
         namespace_name = var.service_discovery_namespace_name
-        service_name   = aws_service_discovery_service.service.name
+        service_name   = aws_service_discovery_service.service[count.index].name
       }
     }
   }
