@@ -22,10 +22,10 @@ variable "memory" {
   type        = number
 }
 
-variable "container_ingress_port" {
-  description = "Port on which the app container accepts connections."
-  type        = number
-  default     = 80
+variable "container_ingress_ports" {
+  description = "Comma-separated string listing ports on which the app container accepts connections."
+  type        = string
+  default     = "80"
 }
 
 variable "execution_role_arn" {

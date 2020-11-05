@@ -20,13 +20,14 @@ data "aws_secretsmanager_secret" "sentry_dsn" {
 }
 
 module "task_definition" {
-  source             = "../../task-definition"
-  mesh_name          = var.mesh_name
-  service_name       = var.service_name
-  cpu                = 512
-  memory             = 1024
-  execution_role_arn = var.execution_role_arn
-  task_role_arn      = var.task_role_arn
+  source                  = "../../task-definition"
+  mesh_name               = var.mesh_name
+  service_name            = var.service_name
+  cpu                     = 512
+  memory                  = 1024
+  execution_role_arn      = var.execution_role_arn
+  task_role_arn           = var.task_role_arn
+  container_ingress_ports = "3054,3055"
 
   container_definitions = [
     {

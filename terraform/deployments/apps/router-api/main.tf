@@ -1,7 +1,7 @@
 terraform {
   backend "s3" {
     bucket  = "govuk-terraform-test"
-    key     = "projects/router.tfstate"
+    key     = "projects/router-api.tfstate"
     region  = "eu-west-1"
     encrypt = true
   }
