@@ -1,0 +1,80 @@
+---
+# Deploy pipeline for the frontend app in integration
+definitions:
+
+resource_types:
+  - name: slack-notification
+    type: docker-image
+    source:
+      repository: cfcommunity/slack-notification-resource
+      tag: latest
+      username: ((docker_hub_username))
+      password: ((docker_hub_authtoken))
+
+resources:
+  - &git-repo
+    icon: github
+    name: govuk-infrastructure
+    source:
+      branch: govuk-cd-frontend
+      uri: https://github.com/alphagov/govuk-infrastructure
+    type: git
+
+  - <<: *git-repo
+    name: frontend
+    source:
+      branch: master
+      uri: https://github.com/alphagov/frontend
+
+  - name: deploy-slack-channel
+    type: slack-notification
+    source:
+      url: https://hooks.slack.com/services/((slack_webhook))
+
+jobs:
+  - name: update-pipeline
+    plan:
+    - get: govuk-infrastructure
+      trigger: true
+    - file: govuk-infrastructure/concourse/pipelines/frontend-integration.yml
+      set_pipeline: govuk-cd-frontend
+    serial: true
+
+  - name: deploy-frontend
+    plan:
+    - get: govuk-infrastructure
+    - get: release
+      resource: frontend
+      trigger: true
+    - task: update-task-definition
+      file: govuk-infrastructure/concourse/tasks/update-task-definition.yml
+      params:
+        APPLICATION: frontend
+        GOVUK_ENVIRONMENT: test
+    - task: update-ecs-service
+      file: govuk-infrastructure/concourse/tasks/update-ecs-service.yml
+      params:
+        APPLICATION: frontend
+        GOVUK_ENVIRONMENT: test
+    serial: true
+    on_failure: &notify-slack-failure
+      put: deploy-slack-channel
+      params:
+        channel: "#govuk-deploy-test"
+        username: 'Concourse deploy pipeline'
+        icon_emoji: ':concourse:'
+        silent: true
+        text: |
+          :red_circle: Failed build: http://cd.gds-reliability.engineering/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME
+
+  - name: smoke-test-frontend
+    plan:
+    - get: govuk-infrastructure
+      passed:
+      - deploy-frontend
+      trigger: true
+    - file: govuk-infrastructure/concourse/tasks/basic-smoke-test.yml
+      params:
+        MESSAGE: Checking the app is not serving HTTP error codes.
+        URL: https://www.gov.uk/
+      task: smoke-test
