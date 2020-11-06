@@ -48,7 +48,7 @@ resource "aws_ecs_task_definition" "definition" {
     container_name = "envoy"
 
     properties = {
-      AppPorts         = var.container_ingress_port
+      AppPorts         = var.container_ingress_ports
       EgressIgnoredIPs = "169.254.170.2,169.254.169.254" # TODO: no longer required (try omitting, might need to stay but empty?)
       IgnoredUID       = "1337"
       ProxyEgressPort  = 15001

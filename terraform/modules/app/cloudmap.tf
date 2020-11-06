@@ -1,5 +1,7 @@
 resource "aws_service_discovery_service" "service" {
-  name = var.service_name
+  count = length(local.container_services)
+
+  name = local.container_services[count.index].container_service
 
   dns_config {
     namespace_id = var.service_discovery_namespace_id

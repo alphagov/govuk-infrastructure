@@ -27,23 +27,20 @@ module "task_definition" {
   memory                  = 1024
   execution_role_arn      = var.execution_role_arn
   task_role_arn           = var.task_role_arn
-  container_ingress_ports = "3054,3055"
+  container_ingress_ports = "3056"
 
   container_definitions = [
     {
       "name" : var.service_name,
-      "image" : "govuk/router:${var.image_tag}",
+      "image" : "govuk/router-api:${var.image_tag}",
       "essential" : true,
       "environment" : [
         { "name" : "GOVUK_APP_NAME", "value" : var.service_name },
         { "name" : "GOVUK_APP_ROOT", "value" : "/var/apps/${var.service_name}" },
         { "name" : "GOVUK_STATSD_PREFIX", "value" : "fargate" },
-        { "name" : "PORT", "value" : "3054" },
-        { "name" : "ROUTER_APIADDR", "value" : ":3055" },
-        { "name" : "ROUTER_BACKEND_HEADER_TIMEOUT", "value" : "20s" },
-        { "name" : "ROUTER_PUBADDR", "value" : ":3054" },
-        { "name" : "ROUTER_MONGO_DB", "value" : "router" },
-        { "name" : "ROUTER_MONGO_URL", "value" : "${var.mongodb_url}" },
+        { "name" : "PORT", "value" : "3056" },
+        { "name" : "ROUTER_NODES", "value" : var.router_urls },
+        { "name" : "MONGO_URI", "value" : var.mongodb_url },
         { "name" : "SENTRY_ENVIRONMENT", "value" : var.sentry_environment }
       ],
       "dependsOn" : [{
@@ -62,15 +59,10 @@ module "task_definition" {
       "mountPoints" : [],
       "portMappings" : [
         {
-          "containerPort" : 3054,
-          "hostPort" : 3054,
+          "containerPort" : 3056,
+          "hostPort" : 3056,
           "protocol" : "tcp"
         },
-        {
-          "containerPort" : 3055,
-          "hostPort" : 3055,
-          "protocol" : "tcp"
-        }
       ],
       "secrets" : [
         {

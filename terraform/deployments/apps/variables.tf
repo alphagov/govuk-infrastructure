@@ -49,8 +49,8 @@ variable "redis_host" {
   type        = string
 }
 
-variable "router_mongodb_host" {
-  description = "Hostname for the Router MongoDB (defined outside this Terraform repo)."
+variable "router_mongodb_url" {
+  description = "URL for the Router MongoDB (defined outside this Terraform repo)."
   type        = string
 }
 

@@ -32,3 +32,8 @@ variable "assume_role_arn" {
 variable "service_name" {
   type = string
 }
+
+variable "router_urls" {
+  type        = string
+  description = "Comma-separated list of router nodes"
+}

@@ -12,6 +12,7 @@ terraform {
 }
 
 locals {
+  container_services      = "${length(var.custom_container_services) == 0 ? [{ container_service = "${var.service_name}", port = 80, protocol = "http" }] : var.custom_container_services}"
   service_security_groups = concat([aws_security_group.service.id], var.extra_security_groups)
 }
 
@@ -38,7 +39,7 @@ resource "aws_ecs_service" "service" {
   }
 
   service_registries {
-    registry_arn   = aws_service_discovery_service.service.arn
+    registry_arn   = aws_service_discovery_service.service[0].arn
     container_name = var.service_name
   }
 
