@@ -22,42 +22,42 @@ resources:
   - <<: *git-repo
     name: frontend
     source:
-      branch: master
+      branch: ((frontend-branch))
       uri: https://github.com/alphagov/frontend
       tag_filter: release_*
 
   - <<: *git-repo
     name: publisher
     source:
-      branch: master
+      branch: ((publisher-branch))
       uri: https://github.com/alphagov/publisher
       tag_filter: release_*
 
   - <<: *git-repo
     name: publishing-api
     source:
-      branch: master
+      branch: ((publishing-api-branch))
       uri: https://github.com/alphagov/publishing-api
       tag_filter: release_*
 
   - <<: *git-repo
     name: content-store
     source:
-      branch: master
+      branch: ((content-store-branch))
       uri: https://github.com/alphagov/content-store
       tag_filter: release_*
 
   - <<: *git-repo
     name: router
     source:
-      branch: master
+      branch: ((router-branch))
       uri: https://github.com/alphagov/router
       tag_filter: release_*
 
   - <<: *git-repo
     name: router-api
     source:
-      branch: master
+      branch: ((router-api-branch))
       uri: https://github.com/alphagov/router
       tag_filter: release_*
 
@@ -108,8 +108,10 @@ jobs:
     plan:
     - get: govuk-infrastructure
       trigger: true
-    - file: govuk-infrastructure/concourse/pipelines/deploy.yml
-      set_pipeline: deploy-apps-test
+    - set_pipeline: deploy-apps-test
+      file: govuk-infrastructure/concourse/pipelines/deploy.yml
+      var_files:
+      - govuk-infrastructure/concourse/settings/test.yml
 
   - name: deploy-frontend
     plan:

@@ -1,0 +1,8 @@
+---
+content-store-branch: master
+frontend-branch: master
+publisher-branch: master
+publishing-api-branch: master
+router-api-branch: master
+router-branch: master
+
