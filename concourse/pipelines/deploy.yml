@@ -101,7 +101,7 @@ jobs:
     - get: govuk-infrastructure
       trigger: true
     - file: govuk-infrastructure/concourse/pipelines/deploy.yml
-      set_pipeline: govuk-cd-frontend
+      set_pipeline: deploy-apps-test
 
   - name: deploy-frontend
     plan:
