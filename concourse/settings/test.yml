@@ -1,4 +1,6 @@
 ---
+govuk-infrastructure-branch: main
+
 content-store-branch: master
 frontend-branch: master
 publisher-branch: master
