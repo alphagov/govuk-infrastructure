@@ -17,6 +17,9 @@ module "frontend_service" {
   cluster_id                       = aws_ecs_cluster.cluster.id
   source                           = "../../modules/apps/frontend"
   execution_role_arn               = aws_iam_role.execution.arn
+  desired_count                    = var.frontend_desired_count
+  public_subnets                   = var.public_subnets
+  public_lb_domain_name            = var.public_lb_domain_name
 }
 
 module "draft_frontend_service" {
@@ -28,6 +31,8 @@ module "draft_frontend_service" {
   cluster_id                       = aws_ecs_cluster.cluster.id
   source                           = "../../modules/apps/frontend"
   execution_role_arn               = aws_iam_role.execution.arn
+  public_subnets                   = var.public_subnets
+  public_lb_domain_name            = var.public_lb_domain_name
 }
 
 module "publisher_service" {

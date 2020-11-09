@@ -2,7 +2,7 @@
 # App variables
 #--------------------------------------------------------------
 
-app_domain          = "test.publishing.service.gov.uk"
+app_domain          = "test.govuk.digital" # TODO: changed from test.publishing.service.gov.uk for easier testing.
 app_domain_internal = "test.govuk-internal.digital"
 govuk_environment   = "test"
 mongodb_host        = "mongo-1.test.govuk-internal.digital,mongo-2.test.govuk-internal.digital,mongo-3.test.govuk-internal.digital"

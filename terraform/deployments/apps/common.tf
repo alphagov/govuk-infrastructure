@@ -1,7 +1,8 @@
 locals {
   asset_host                       = local.website_root
-  assets_url                       = "https://assets.${var.mesh_domain}"
-  content_store_url                = "https://content-store.${var.mesh_domain}"
+  assets_url                       = "https://static-ecs.${var.app_domain}"
+  frontend_assets_url              = "https://frontend.${var.app_domain}"
+  content_store_url                = "http://content-store.${var.mesh_domain}"
   redis_port                       = 6379
   service_discovery_namespace_name = var.mesh_domain
   sentry_environment               = "${var.govuk_environment}-ecs"

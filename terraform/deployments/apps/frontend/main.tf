@@ -25,7 +25,7 @@ provider "aws" {
 module "task_definition" {
   source                           = "../../../modules/task-definitions/frontend"
   service_name                     = "frontend"
-  assets_url                       = local.assets_url
+  assets_url                       = local.frontend_assets_url
   content_store_url                = local.content_store_url
   static_url                       = local.static_url
   execution_role_arn               = data.aws_iam_role.execution.arn
@@ -37,4 +37,5 @@ module "task_definition" {
   statsd_host                      = local.statsd_host
   task_role_arn                    = data.aws_iam_role.task.arn
   assume_role_arn                  = var.assume_role_arn
+  govuk_app_domain_external        = var.app_domain
 }

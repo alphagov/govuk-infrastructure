@@ -41,3 +41,19 @@ variable "execution_role_arn" {
   description = "For use during bootstrapping"
   type        = string
 }
+
+variable "desired_count" {
+  description = "Desired count of Application instances"
+  type        = number
+  default     = 1
+}
+
+variable "public_subnets" {
+  description = "Subnet IDs to use for Internet-facing resources."
+  type        = list
+}
+
+variable "public_lb_domain_name" {
+  description = "Domain in which to create DNS records for the app's Internet-facing load balancer. For example, staging.govuk.digital"
+  type        = string
+}

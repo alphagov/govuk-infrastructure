@@ -55,3 +55,7 @@ variable "assume_role_arn" {
   description = "(optional) AWS IAM role to assume. Uses the role from the environment by default."
   default     = null
 }
+
+variable "govuk_app_domain_external" {
+  type = string
+}
