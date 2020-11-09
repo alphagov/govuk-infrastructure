@@ -58,7 +58,7 @@ resources:
     name: router-api
     source:
       branch: master
-      uri: https://github.com/alphagov/router
+      uri: https://github.com/alphagov/router-api
       tag_filter: release_*
 
   - <<: *git-repo
@@ -110,6 +110,10 @@ groups:
   - name: router
     jobs:
       - deploy-router
+
+  - name: router-api
+    jobs:
+      - deploy-router-api
 
   - name: static
     jobs:
@@ -255,15 +259,19 @@ jobs:
   - name: deploy-router-api
     plan:
     - get: govuk-infrastructure
-      passed: [update-pipeline]
     - get: release
       resource: router-api
       trigger: true
-    - file: govuk-infrastructure/concourse/tasks/deploy-app.yml
+    - task: update-task-definition
+      file: govuk-infrastructure/concourse/tasks/update-task-definition.yml
       params:
         APPLICATION: router-api
         GOVUK_ENVIRONMENT: test
-      task: deploy-app
+    - task: update-ecs-service
+      file: govuk-infrastructure/concourse/tasks/update-ecs-service.yml
+      params:
+        APPLICATION: router-api
+        GOVUK_ENVIRONMENT: test
     serial: true
     on_failure:
       <<: *notify-slack-failure
