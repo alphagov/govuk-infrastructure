@@ -61,6 +61,13 @@ resources:
       uri: https://github.com/alphagov/router
       tag_filter: release_*
 
+  - <<: *git-repo
+    name: static
+    source:
+      branch: master
+      uri: https://github.com/alphagov/static
+      tag_filter: release_*
+
   - name: deploy-slack-channel
     type: slack-notification
     source:
@@ -77,6 +84,7 @@ groups:
       - deploy-publishing-api
       - deploy-router
       - deploy-router-api
+      - deploy-static
 
   - name: admin
     jobs:
@@ -102,6 +110,10 @@ groups:
   - name: router
     jobs:
       - deploy-router
+
+  - name: static
+    jobs:
+      - deploy-static
 
 jobs:
   - name: update-pipeline
@@ -252,6 +264,26 @@ jobs:
         APPLICATION: router-api
         GOVUK_ENVIRONMENT: test
       task: deploy-app
+    serial: true
+    on_failure:
+      <<: *notify-slack-failure
+
+  - name: deploy-static
+    plan:
+    - get: govuk-infrastructure
+    - get: release
+      resource: static
+      trigger: true
+    - task: update-task-definition
+      file: govuk-infrastructure/concourse/tasks/update-task-definition.yml
+      params:
+        APPLICATION: static
+        GOVUK_ENVIRONMENT: test
+    - task: update-ecs-service
+      file: govuk-infrastructure/concourse/tasks/update-ecs-service.yml
+      params:
+        APPLICATION: static
+        GOVUK_ENVIRONMENT: test
     serial: true
     on_failure:
       <<: *notify-slack-failure
