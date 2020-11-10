@@ -54,6 +54,16 @@ variable "router_mongodb_url" {
   type        = string
 }
 
+variable "signon_db_url" {
+  description = "URL for the signon database (defined outside this Terraform repo)."
+  type        = string
+}
+
+variable "signon_test_db_url" {
+  description = "URL for the signon_test database (defined outside this Terraform repo)."
+  type        = string
+}
+
 variable "sentry_environment" {
   type        = string
   description = "Usually will match the govuk_environment, e.g. test, staging"

@@ -108,6 +108,7 @@ module "static_service" {
   cluster_id                       = aws_ecs_cluster.cluster.id
   execution_role_arn               = aws_iam_role.execution.arn
   source                           = "../../modules/apps/static"
+}
 
 module "signon_service" {
   mesh_name                        = aws_appmesh_mesh.govuk.id
