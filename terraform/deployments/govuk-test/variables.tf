@@ -32,4 +32,3 @@ variable "static_desired_count" {
   type    = number
   default = 1
 }
-

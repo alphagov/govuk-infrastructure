@@ -114,6 +114,9 @@ module "static_service" {
   cluster_id                       = aws_ecs_cluster.cluster.id
   execution_role_arn               = aws_iam_role.execution.arn
   source                           = "../../modules/apps/static"
+  desired_count                    = var.static_desired_count
+  public_subnets                   = var.public_subnets
+  public_lb_domain_name            = var.public_lb_domain_name
 }
 
 module "signon_service" {
