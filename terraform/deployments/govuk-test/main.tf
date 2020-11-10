@@ -52,4 +52,5 @@ module "govuk" {
   documentdb_security_group_id  = data.aws_security_group.documentdb.id
   redis_security_group_id       = data.aws_security_group.redis.id
   frontend_desired_count        = var.frontend_desired_count
+  content_store_desired_count   = var.content_store_desired_count
 }

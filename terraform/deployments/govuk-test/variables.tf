@@ -33,7 +33,3 @@ variable "static_desired_count" {
   default = 1
 }
 
-variable "frontend_desired_count" {
-  type    = number
-  default = 1
-}

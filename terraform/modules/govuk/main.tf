@@ -58,6 +58,7 @@ module "content_store_service" {
   private_subnets                  = var.private_subnets
   execution_role_arn               = aws_iam_role.execution.arn
   source                           = "../../modules/apps/content-store"
+  desired_count                    = var.content_store_desired_count
 }
 
 module "draft_content_store_service" {

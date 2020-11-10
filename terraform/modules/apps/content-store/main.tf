@@ -18,4 +18,5 @@ module "app" {
   service_discovery_namespace_id   = var.service_discovery_namespace_id
   service_discovery_namespace_name = var.service_discovery_namespace_name
   extra_security_groups            = [var.govuk_management_access_security_group]
+  desired_count                    = var.desired_count
 }
