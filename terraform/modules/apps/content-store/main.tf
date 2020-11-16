@@ -19,4 +19,3 @@ module "app" {
   service_discovery_namespace_name = var.service_discovery_namespace_name
   extra_security_groups            = [var.govuk_management_access_security_group]
 }
-

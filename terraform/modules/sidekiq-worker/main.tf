@@ -7,16 +7,8 @@ terraform {
   }
 }
 
-data "aws_iam_role" "task_execution_role" {
-  name = "fargate_execution_role"
-}
-
-data "aws_vpc" "vpc" {
-  id = "vpc-9e62bcf8"
-}
-
 resource "aws_ecs_service" "sidekiq" {
-  name            = "publisher-sidekiq"
+  name            = "${var.service_name}-sidekiq"
   cluster         = var.cluster_id
   task_definition = aws_ecs_task_definition.service.arn
   desired_count   = var.desired_count
@@ -35,12 +27,12 @@ resource "aws_ecs_task_definition" "service" {
   network_mode             = "awsvpc"
   cpu                      = 2048
   memory                   = 4096
-  execution_role_arn       = data.aws_iam_role.task_execution_role.arn
+  execution_role_arn       = var.execution_role_arn
 }
 
 resource "aws_security_group" "service_sg" {
   name        = "fargate_${var.service_name}_elb_access"
-  vpc_id      = data.aws_vpc.vpc.id
+  vpc_id      = var.vpc_id
   description = "Access to the fargate ${var.service_name} service from its ELB"
 }
 

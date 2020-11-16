@@ -124,7 +124,7 @@ module "sidekiq-worker" {
       "image" : "govuk/publisher:serve-assets-in-prod", # TODO: use deployed-to-production label or similar.
       "essential" : true,
       "command" : [
-        "bundle exec sidekiq -C ./config/sidekiq.yml"
+        "foreman", "run", "worker"
       ]
       "environment" : [
         { "name" : "ASSET_HOST", "value" : var.asset_host },
