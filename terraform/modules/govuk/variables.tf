@@ -26,22 +26,27 @@ variable "public_lb_domain_name" {
 }
 
 variable "govuk_management_access_sg_id" {
-  description = "ID of security group (defined outside this Terraform repo) for access from jumpboxes etc. This SG is added to all ECS instances."
+  description = "ID of security group (from the govuk-aws repo) for access from jumpboxes etc. This SG is added to all ECS instances."
+  type        = string
+}
+
+variable "postgresql_security_group_id" {
+  description = "ID of security group (from the govuk-aws repo) for the shared Postgres RDS."
   type        = string
 }
 
 variable "redis_security_group_id" {
-  description = "ID of security group for the shared Redis (defined outside this Terraform repo)."
+  description = "ID of security group (from the govuk-aws repo) for the shared Redis."
   type        = string
 }
 
 variable "documentdb_security_group_id" {
-  description = "ID of security group for the shared DocumentDB (which isn't managed by this Terraform repo, at least initially)."
+  description = "ID of security group (from the govuk-aws repo) for the shared DocumentDB."
   type        = string
 }
 
 variable "mongodb_security_group_id" {
-  description = "ID of security group for the shared MongoDB (which isn't managed by this Terraform repo, at least initially)."
+  description = "ID of security group (from the govuk-aws repo) for the shared MongoDB."
   type        = string
 }
 
