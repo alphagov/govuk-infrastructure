@@ -46,10 +46,12 @@ resource "aws_ecs_service" "service" {
   # For bootstrapping
   task_definition = module.bootstrap_task_definition.arn
 
+  desired_count = 1
+
   lifecycle {
     # It is essential that we ignore changes to task_definition.
     # If this is removed, the bootstrapping image will be deployed.
-    ignore_changes = [task_definition, desired_count]
+    ignore_changes = [task_definition]
   }
 }
 
