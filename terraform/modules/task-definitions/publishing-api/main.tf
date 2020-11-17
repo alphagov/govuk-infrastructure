@@ -144,11 +144,11 @@ module "task_definition" {
           "valueFrom" : data.aws_secretsmanager_secret.event_log_aws_secret_key.arn
         },
         {
-          "name" : "OAUTH_ID",
+          "name" : "GDS_SSO_OAUTH_ID",
           "valueFrom" : data.aws_secretsmanager_secret.oauth_id.arn
         },
         {
-          "name" : "OAUTH_SECRET",
+          "name" : "GDS_SSO_OAUTH_SECRET",
           "valueFrom" : data.aws_secretsmanager_secret.oauth_secret.arn
         },
         {

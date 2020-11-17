@@ -24,8 +24,8 @@ provider "aws" {
 
 module "task_definition" {
   source                           = "../../../modules/task-definitions/publishing-api"
-  govuk_app_domain_external        = local.app_domain_external
-  govuk_app_domain_internal        = local.app_domain_internal
+  govuk_app_domain_external        = var.app_domain
+  govuk_app_domain_internal        = var.app_domain_internal
   govuk_website_root               = local.website_root
   image_tag                        = var.image_tag
   mesh_name                        = var.mesh_name

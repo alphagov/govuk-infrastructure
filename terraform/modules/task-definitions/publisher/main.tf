@@ -102,6 +102,7 @@ module "task_definition" {
         { "name" : "PLEK_SERVICE_CONTENT_STORE_URI", "value" : "https://www.gov.uk/api" }, # TODO: looks suspicious
         { "name" : "PLEK_SERVICE_PUBLISHING_API_URI", "value" : "http://publishing-api.${var.service_discovery_namespace_name}" },
         { "name" : "PLEK_SERVICE_STATIC_URI", "value" : "https://assets.test.publishing.service.gov.uk" },
+        { "name" : "PORT", "value" : "80" },
         { "name" : "RAILS_ENV", "value" : "production" },
         { "name" : "RAILS_SERVE_STATIC_FILES", "value" : "true" }, # TODO: temporary hack?
         # TODO: we shouldn't be specifying both REDIS_{HOST,PORT} *and* REDIS_URL.
@@ -172,15 +173,16 @@ module "task_definition" {
           "valueFrom" : data.aws_secretsmanager_secret.link_checker_api_secret_token.arn
         },
         {
+          # TODO: Only the password should be a secret in the MONGODB_URI.
           "name" : "MONGODB_URI",
           "valueFrom" : data.aws_secretsmanager_secret.mongodb_uri.arn
         },
         {
-          "name" : "OAUTH_ID",
+          "name" : "GDS_SSO_OAUTH_ID",
           "valueFrom" : data.aws_secretsmanager_secret.oauth_id.arn
         },
         {
-          "name" : "OAUTH_SECRET",
+          "name" : "GDS_SSO_OAUTH_SECRET",
           "valueFrom" : data.aws_secretsmanager_secret.oauth_secret.arn
         },
         {
