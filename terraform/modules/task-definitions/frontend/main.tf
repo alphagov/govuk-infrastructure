@@ -57,8 +57,9 @@ module "task_definition" {
         { "name" : "STATSD_PROTOCOL", "value" : "tcp" },
         { "name" : "STATSD_HOST", "value" : var.statsd_host },
         { "name" : "GOVUK_STATSD_PREFIX", "value" : "fargate" },
-        { "name" : "RAILS_SERVE_STATIC_FILES", "value" : "enabled" },
+        { "name" : "RAILS_SERVE_STATIC_FILES", "value" : "yes" },
         { "name" : "RAILS_SERVE_STATIC_ASSETS", "value" : "yes" },
+        { "name" : "HEROKU_APP_NAME", "value" : "yes" },
       ],
       "logConfiguration" : {
         "logDriver" : "awslogs",
