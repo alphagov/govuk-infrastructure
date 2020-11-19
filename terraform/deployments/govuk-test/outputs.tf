@@ -5,3 +5,7 @@ output "private_subnets" {
 output "publisher_security_groups" {
   value = module.govuk.publisher_security_groups
 }
+
+output "frontend_security_groups" {
+  value = module.govuk.frontend_security_groups
+}
