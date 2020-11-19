@@ -17,6 +17,9 @@ module "frontend_service" {
   cluster_id                       = aws_ecs_cluster.cluster.id
   source                           = "../../modules/apps/frontend"
   execution_role_arn               = aws_iam_role.execution.arn
+  desired_count                    = var.frontend_desired_count
+  public_subnets                   = var.public_subnets
+  public_lb_domain_name            = var.public_lb_domain_name
 }
 
 module "draft_frontend_service" {
@@ -28,6 +31,8 @@ module "draft_frontend_service" {
   cluster_id                       = aws_ecs_cluster.cluster.id
   source                           = "../../modules/apps/frontend"
   execution_role_arn               = aws_iam_role.execution.arn
+  public_subnets                   = var.public_subnets
+  public_lb_domain_name            = var.public_lb_domain_name
 }
 
 module "publisher_service" {
@@ -53,6 +58,7 @@ module "content_store_service" {
   private_subnets                  = var.private_subnets
   execution_role_arn               = aws_iam_role.execution.arn
   source                           = "../../modules/apps/content-store"
+  desired_count                    = var.content_store_desired_count
 }
 
 module "draft_content_store_service" {
@@ -108,6 +114,9 @@ module "static_service" {
   cluster_id                       = aws_ecs_cluster.cluster.id
   execution_role_arn               = aws_iam_role.execution.arn
   source                           = "../../modules/apps/static"
+  desired_count                    = var.static_desired_count
+  public_subnets                   = var.public_subnets
+  public_lb_domain_name            = var.public_lb_domain_name
 }
 
 module "signon_service" {

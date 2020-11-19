@@ -42,3 +42,15 @@ variable "assets_url" {
   type        = string
   description = "URL of the Assets service"
 }
+
+variable "service_discovery_namespace_name" {
+  type = string
+}
+
+variable "govuk_website_root" {
+  type = string
+}
+
+variable "govuk_app_domain_external" {
+  type = string
+}

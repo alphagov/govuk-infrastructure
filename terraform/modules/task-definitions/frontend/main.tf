@@ -31,8 +31,8 @@ module "task_definition" {
   source             = "../../task-definition"
   mesh_name          = var.mesh_name
   service_name       = var.service_name
-  cpu                = 512
-  memory             = 1024
+  cpu                = 1024
+  memory             = 2048
   execution_role_arn = var.execution_role_arn
   task_role_arn      = var.task_role_arn
   container_definitions = [
@@ -41,11 +41,14 @@ module "task_definition" {
       "image" : "govuk/frontend:${var.image_tag}",
       "essential" : true,
       "environment" : [
+        { "name" : "APPMESH_VIRTUAL_NODE_NAME", "value" : "mesh/${var.mesh_name}/virtualNode/${var.service_name}" },
         { "name" : "RAILS_ENV", "value" : "production" },
         { "name" : "ASSET_HOST", "value" : var.assets_url },
         { "name" : "GOVUK_APP_DOMAIN", "value" : var.service_discovery_namespace_name },
+        { "name" : "GOVUK_APP_DOMAIN_EXTERNAL", "value" : var.govuk_app_domain_external },
         { "name" : "GOVUK_WEBSITE_ROOT", "value" : var.govuk_website_root },
         { "name" : "WEBSITE_ROOT", "value" : var.govuk_website_root },
+        { "name" : "PORT", "value" : "80" },
         { "name" : "PLEK_SERVICE_CONTENT_STORE_URI", "value" : var.content_store_url },
         { "name" : "PLEK_SERVICE_STATIC_URI", "value" : var.static_url },
         { "name" : "PLEK_SERVICE_PUBLISHING_API_URI", "value" : "http://publishing-api.${var.service_discovery_namespace_name}" },
@@ -53,7 +56,9 @@ module "task_definition" {
         { "name" : "SENTRY_ENVIRONMENT", "value" : var.sentry_environment },
         { "name" : "STATSD_PROTOCOL", "value" : "tcp" },
         { "name" : "STATSD_HOST", "value" : var.statsd_host },
-        { "name" : "GOVUK_STATSD_PREFIX", "value" : "fargate" }
+        { "name" : "GOVUK_STATSD_PREFIX", "value" : "fargate" },
+        { "name" : "RAILS_SERVE_STATIC_FILES", "value" : "enabled" },
+        { "name" : "RAILS_SERVE_STATIC_ASSETS", "value" : "yes" },
       ],
       "logConfiguration" : {
         "logDriver" : "awslogs",
@@ -67,6 +72,7 @@ module "task_definition" {
       "portMappings" : [
         {
           "containerPort" : 80,
+          "hostPort" : 80,
           "protocol" : "tcp"
         }
       ],

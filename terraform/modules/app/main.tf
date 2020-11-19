@@ -21,6 +21,8 @@ resource "aws_ecs_service" "service" {
   cluster     = var.cluster_id
   launch_type = "FARGATE"
 
+  desired_count = var.desired_count
+
   health_check_grace_period_seconds = length(var.load_balancers) > 0 ? var.health_check_grace_period_seconds : null
 
   dynamic "load_balancer" {
@@ -45,8 +47,6 @@ resource "aws_ecs_service" "service" {
 
   # For bootstrapping
   task_definition = module.bootstrap_task_definition.arn
-
-  desired_count = 1
 
   lifecycle {
     # It is essential that we ignore changes to task_definition.

@@ -39,3 +39,24 @@ variable "documentdb_security_group_id" {
   description = "ID of security group for the shared DocumentDB (which isn't managed by this Terraform repo, at least initially)."
   type        = string
 }
+
+variable "frontend_desired_count" {
+  description = "Desired count of Frontend Application instances"
+  type        = number
+}
+
+variable "content_store_desired_count" {
+  description = "Desired count of Frontend Application instances"
+  type        = number
+}
+
+variable "static_desired_count" {
+  description = "Desired count of Static Application instances"
+  type        = number
+}
+
+variable "office_cidrs_list" {
+  description = "List of GDS office CIDRs"
+  type        = list
+  default     = ["213.86.153.212/32", "213.86.153.213/32", "213.86.153.214/32", "213.86.153.235/32", "213.86.153.236/32", "213.86.153.237/32", "85.133.67.244/32"]
+}

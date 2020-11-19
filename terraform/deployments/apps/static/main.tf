@@ -23,15 +23,18 @@ provider "aws" {
 }
 
 module "task_definition" {
-  source             = "../../../modules/task-definitions/static"
-  service_name       = "static"
-  image_tag          = var.image_tag
-  mesh_name          = var.mesh_name
-  execution_role_arn = data.aws_iam_role.execution.arn
-  assets_url         = local.assets_url
-  redis_host         = var.redis_host
-  redis_port         = local.redis_port
-  task_role_arn      = data.aws_iam_role.task.arn
-  sentry_environment = var.sentry_environment
-  assume_role_arn    = var.assume_role_arn
+  source                           = "../../../modules/task-definitions/static"
+  service_name                     = "static"
+  image_tag                        = var.image_tag
+  mesh_name                        = var.mesh_name
+  execution_role_arn               = data.aws_iam_role.execution.arn
+  assets_url                       = local.assets_url
+  redis_host                       = var.redis_host
+  redis_port                       = local.redis_port
+  task_role_arn                    = data.aws_iam_role.task.arn
+  sentry_environment               = var.sentry_environment
+  assume_role_arn                  = var.assume_role_arn
+  service_discovery_namespace_name = local.service_discovery_namespace_name
+  govuk_app_domain_external        = var.app_domain
+  govuk_website_root               = local.website_root
 }
