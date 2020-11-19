@@ -147,7 +147,7 @@ jobs:
     on_failure: &notify-slack-failure
       put: deploy-slack-channel
       params:
-        channel: "#govuk-deploy-test"
+        channel: "#govuk-deploy-alerts"
         username: 'Concourse deploy pipeline'
         icon_emoji: ':concourse:'
         silent: true
