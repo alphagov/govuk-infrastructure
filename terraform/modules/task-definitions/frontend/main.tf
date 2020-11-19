@@ -19,6 +19,10 @@ data "aws_secretsmanager_secret" "secret_key_base" {
   name = "frontend_app-SECRET_KEY_BASE" # pragma: allowlist secret
 }
 
+data "aws_secretsmanager_secret" "publishing_api_bearer_token" {
+  name = "frontend_app_PUBLISHING_API_BEARER_TOKEN" # pragma: allowlist secret
+}
+
 data "aws_secretsmanager_secret" "sentry_dsn" {
   name = "SENTRY_DSN"
 }
@@ -44,6 +48,7 @@ module "task_definition" {
         { "name" : "WEBSITE_ROOT", "value" : var.govuk_website_root },
         { "name" : "PLEK_SERVICE_CONTENT_STORE_URI", "value" : var.content_store_url },
         { "name" : "PLEK_SERVICE_STATIC_URI", "value" : var.static_url },
+        { "name" : "PLEK_SERVICE_PUBLISHING_API_URI", "value" : "http://publishing-api.${var.service_discovery_namespace_name}" },
         { "name" : "GOVUK_ASSET_ROOT", "value" : var.assets_url },
         { "name" : "SENTRY_ENVIRONMENT", "value" : var.sentry_environment },
         { "name" : "STATSD_PROTOCOL", "value" : "tcp" },
@@ -73,6 +78,10 @@ module "task_definition" {
         {
           "name" : "SENTRY_DSN",
           "valueFrom" : data.aws_secretsmanager_secret.sentry_dsn.arn
+        },
+        {
+          "name" : "PUBLISHING_API_BEARER_TOKEN",
+          "valueFrom" : data.aws_secretsmanager_secret.publishing_api_bearer_token.arn
         }
       ]
     }
