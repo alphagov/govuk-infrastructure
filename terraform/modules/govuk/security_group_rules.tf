@@ -107,4 +107,15 @@ resource "aws_security_group_rule" "publishing_api_from_publisher_http" {
   source_security_group_id = module.publisher_service.app_security_group_id
 }
 
+resource "aws_security_group_rule" "publishing_api_from_frontend_http" {
+  description = "Publishing API accepts requests from Frontend over HTTP"
+  type        = "ingress"
+  from_port   = 80
+  to_port     = 80
+  protocol    = "tcp"
+
+  security_group_id        = module.publishing_api_service.app_security_group_id
+  source_security_group_id = module.frontend_service.app_security_group_id
+}
+
 # TODO: move the rest of the rules into this file.
