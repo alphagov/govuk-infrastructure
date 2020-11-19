@@ -27,7 +27,7 @@ module "task_definition" {
   govuk_app_domain_external        = var.app_domain
   govuk_app_domain_internal        = var.app_domain_internal
   govuk_website_root               = local.website_root
-  image_tag                        = var.image_tag
+  image_tag                        = "bilbof_dockerfile-fix" # TODO: Pinned due to content-schemas issue
   mesh_name                        = var.mesh_name
   service_discovery_namespace_name = local.service_discovery_namespace_name
   statsd_host                      = local.statsd_host
