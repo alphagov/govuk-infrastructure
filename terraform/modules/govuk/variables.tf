@@ -40,6 +40,11 @@ variable "documentdb_security_group_id" {
   type        = string
 }
 
+variable "mongodb_security_group_id" {
+  description = "ID of security group for the shared MongoDB (which isn't managed by this Terraform repo, at least initially)."
+  type        = string
+}
+
 variable "frontend_desired_count" {
   description = "Desired count of Frontend Application instances"
   type        = number
