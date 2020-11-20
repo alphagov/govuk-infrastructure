@@ -39,7 +39,7 @@ module "task_definition" {
       "essential" : true,
       "environment" : [
         { "name" : "GOVUK_APP_NAME", "value" : local.service_name },
-        { "name" : "GOVUK_APP_ROOT", "value" : "/var/apps/${local.service_name}" },
+        { "name" : "GOVUK_APP_ROOT", "value" : "/app" },
         { "name" : "PORT", "value" : "8080" },
         { "name" : "DATABASE_URL", "value" : var.signon_db_url },
         { "name" : "RAILS_ENV", "value" : "development" },
