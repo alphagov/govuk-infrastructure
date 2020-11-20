@@ -18,27 +18,20 @@ provider "aws" {
   region = "eu-west-1"
 }
 
-data "aws_security_group" "documentdb" {
-  name = "govuk_shared_documentdb_access"
-}
-
-data "aws_security_group" "govuk_management_access" {
-  name = "govuk_management_access"
-}
-
-data "aws_security_group" "redis" {
-  name = "govuk_backend-redis_access"
-}
-
-data "aws_security_group" "govuk_mongo_access" {
-  name = "govuk_mongo_access"
-}
-
 data "terraform_remote_state" "infra_networking" {
   backend = "s3"
   config = {
-    bucket = var.infra_networking_state_bucket
+    bucket = var.govuk_aws_state_bucket
     key    = "govuk/infra-networking.tfstate"
+    region = "eu-west-1"
+  }
+}
+
+data "terraform_remote_state" "infra_security_groups" {
+  backend = "s3"
+  config = {
+    bucket = var.govuk_aws_state_bucket
+    key    = "govuk/infra-security-groups.tfstate"
     region = "eu-west-1"
   }
 }
@@ -52,10 +45,10 @@ module "govuk" {
   vpc_id                        = data.terraform_remote_state.infra_networking.outputs.vpc_id
   private_subnets               = data.terraform_remote_state.infra_networking.outputs.private_subnet_ids
   public_subnets                = data.terraform_remote_state.infra_networking.outputs.public_subnet_ids
-  govuk_management_access_sg_id = data.aws_security_group.govuk_management_access.id
-  documentdb_security_group_id  = data.aws_security_group.documentdb.id
-  redis_security_group_id       = data.aws_security_group.redis.id
-  mongodb_security_group_id     = data.aws_security_group.govuk_mongo_access.id
+  govuk_management_access_sg_id = data.terraform_remote_state.infra_security_groups.outputs.sg_management_id
+  documentdb_security_group_id  = data.terraform_remote_state.infra_security_groups.outputs.sg_shared_documentdb_id
+  redis_security_group_id       = data.terraform_remote_state.infra_security_groups.outputs.sg_backend-redis_id
+  mongodb_security_group_id     = data.terraform_remote_state.infra_security_groups.outputs.sg_mongo_id
   frontend_desired_count        = var.frontend_desired_count
   content_store_desired_count   = var.content_store_desired_count
   static_desired_count          = var.static_desired_count
