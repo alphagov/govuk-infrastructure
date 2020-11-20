@@ -207,6 +207,25 @@ resource "aws_security_group_rule" "static_alb_from_office_https" {
   cidr_blocks       = var.office_cidrs_list
 }
 
+data "aws_nat_gateway" "govuk" {
+  count     = length(var.public_subnets)
+  subnet_id = var.public_subnets[count.index]
+}
+
+resource "aws_security_group_rule" "frontend_alb_from_test_nat_gateways_https" {
+  description = "Frontend ALB receives HTTPS requests from apps in ECS"
+  type        = "ingress"
+  from_port   = 443
+  to_port     = 443
+  protocol    = "tcp"
+
+  security_group_id = module.frontend_service.alb_security_group_id
+  cidr_blocks = [
+    for nat_gateway in data.aws_nat_gateway.govuk :
+    "${nat_gateway.public_ip}/32"
+  ]
+}
+
 resource "aws_security_group_rule" "static_alb_to_any_any" {
   type      = "egress"
   protocol  = "-1"

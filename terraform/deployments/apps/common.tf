@@ -7,8 +7,8 @@ locals {
   service_discovery_namespace_name = var.mesh_domain
   sentry_environment               = "${var.govuk_environment}-ecs"
   static_url                       = "http://static.${var.mesh_domain}"
-  statsd_host                      = "statsd.${var.mesh_domain}"     # TODO: Put Statsd in App Mesh
-  website_root                     = "https://www.${var.app_domain}" # TODO: Is this correct?
+  statsd_host                      = "statsd.${var.mesh_domain}"          # TODO: Put Statsd in App Mesh
+  website_root                     = "https://frontend.${var.app_domain}" # TODO: Change back to www once router is up
   router_urls                      = "router.${var.mesh_domain}:3055"
 }
 
