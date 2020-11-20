@@ -38,12 +38,12 @@ module "task_definition" {
       "image" : "govuk/signon:deployed-to-production",
       "essential" : true,
       "environment" : [
-        { "name" : "GOVUK_APP_NAME", "value" : "signon" },
-        { "name" : "GOVUK_APP_ROOT", "value" : "/var/apps/signon" },
+        { "name" : "GOVUK_APP_NAME", "value" : local.service_name },
+        { "name" : "GOVUK_APP_ROOT", "value" : "/app" },
         { "name" : "PORT", "value" : "8080" },
-        { "name" : "DATABASE_URL", "value" : "${var.signon_db_url}" },
+        { "name" : "DATABASE_URL", "value" : var.signon_db_url },
         { "name" : "RAILS_ENV", "value" : "development" },
-        { "name" : "TEST_DATABASE_URL", "value" : "${var.signon_test_db_url}" },
+        { "name" : "TEST_DATABASE_URL", "value" : var.signon_test_db_url },
         { "name" : "SENTRY_ENVIRONMENT", "value" : var.sentry_environment }
       ],
       "dependsOn" : [{
@@ -56,7 +56,7 @@ module "task_definition" {
           "awslogs-create-group" : "true",
           "awslogs-group" : "awslogs-fargate",
           "awslogs-region" : "eu-west-1",
-          "awslogs-stream-prefix" : "awslogs-${var.service_name}"
+          "awslogs-stream-prefix" : "awslogs-${local.service_name}"
         }
       },
       "mountPoints" : [],
