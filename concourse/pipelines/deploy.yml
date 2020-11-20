@@ -62,6 +62,13 @@ resources:
       tag_filter: release_*
 
   - <<: *git-repo
+    name: signon
+    source:
+      branch: master
+      uri: https://github.com/alphagov/signon
+      tag_filter: release_*
+
+  - <<: *git-repo
     name: static
     source:
       branch: master
@@ -84,6 +91,7 @@ groups:
       - deploy-publishing-api
       - deploy-router
       - deploy-router-api
+      - deploy-signon
       - deploy-static
 
   - name: admin
@@ -114,6 +122,10 @@ groups:
   - name: router-api
     jobs:
       - deploy-router-api
+
+  - name: signon
+    jobs:
+      - deploy-signon
 
   - name: static
     jobs:
@@ -271,6 +283,26 @@ jobs:
       file: govuk-infrastructure/concourse/tasks/update-ecs-service.yml
       params:
         APPLICATION: router-api
+        GOVUK_ENVIRONMENT: test
+    serial: true
+    on_failure:
+      <<: *notify-slack-failure
+
+  - name: deploy-signon
+    plan:
+    - get: govuk-infrastructure
+    - get: release
+      resource: signon
+      trigger: true
+    - task: update-task-definition
+      file: govuk-infrastructure/concourse/tasks/update-task-definition.yml
+      params:
+        APPLICATION: signon
+        GOVUK_ENVIRONMENT: test
+    - task: update-ecs-service
+      file: govuk-infrastructure/concourse/tasks/update-ecs-service.yml
+      params:
+        APPLICATION: signon
         GOVUK_ENVIRONMENT: test
     serial: true
     on_failure:
