@@ -47,7 +47,7 @@ module "task_definition" {
       "image" : "govuk/static:${var.image_tag}",
       "essential" : true,
       "environment" : [
-        { "name" : "APPMESH_VIRTUAL_NODE_NAME", "value" : "mesh/${var.mesh_name}/virtualNode/${var.service_name}" },
+        { "name" : "APPMESH_RESOURCE_ARN", "value" : "mesh/${var.mesh_name}/virtualNode/${var.service_name}" },
         { "name" : "GOVUK_APP_NAME", "value" : var.service_name },
         { "name" : "GOVUK_APP_DOMAIN", "value" : var.service_discovery_namespace_name },
         { "name" : "GOVUK_APP_DOMAIN_EXTERNAL", "value" : var.govuk_app_domain_external },
@@ -60,6 +60,8 @@ module "task_definition" {
         { "name" : "REDIS_URL", "value" : "redis://${var.redis_host}:${var.redis_port}" },
         { "name" : "SENTRY_ENVIRONMENT", "value" : var.sentry_environment },
         { "name" : "RAILS_ENV", "value" : "production" },
+        # TODO: Setting RAILS_SERVE_STATIC_FILES and RAILS_SERVE_STATIC_ASSETS are temporary workarounds for serving static assets.
+        # Remove them once we have a production solution for assets.
         { "name" : "RAILS_SERVE_STATIC_FILES", "value" : "enabled" },
         { "name" : "RAILS_SERVE_STATIC_ASSETS", "value" : "yes" },
       ],

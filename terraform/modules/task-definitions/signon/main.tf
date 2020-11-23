@@ -38,6 +38,7 @@ module "task_definition" {
       "image" : "govuk/signon:deployed-to-production",
       "essential" : true,
       "environment" : [
+        { "name" : "APPMESH_RESOURCE_ARN", "value" : "mesh/${var.mesh_name}/virtualNode/${local.service_name}" },
         { "name" : "GOVUK_APP_NAME", "value" : local.service_name },
         { "name" : "GOVUK_APP_ROOT", "value" : "/app" },
         { "name" : "PORT", "value" : "8080" },
