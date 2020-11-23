@@ -37,6 +37,14 @@ resource "aws_appmesh_virtual_node" "service" {
         service_name   = aws_service_discovery_service.service[count.index].name
       }
     }
+
+    logging {
+      access_log {
+        file {
+          path = "/dev/stdout"
+        }
+      }
+    }
   }
 
   depends_on = [aws_service_discovery_service.service]
