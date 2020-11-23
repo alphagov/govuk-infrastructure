@@ -35,7 +35,6 @@ module "task_definition" {
       "image" : "govuk/router-api:${var.image_tag}",
       "essential" : true,
       "environment" : [
-        { "name" : "APPMESH_RESOURCE_ARN", "value" : "mesh/${var.mesh_name}/virtualNode/${var.service_name}" },
         { "name" : "GOVUK_APP_NAME", "value" : var.service_name },
         { "name" : "GOVUK_APP_ROOT", "value" : "/var/apps/${var.service_name}" },
         { "name" : "GOVUK_STATSD_PREFIX", "value" : "fargate" },
