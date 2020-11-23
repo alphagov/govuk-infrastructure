@@ -81,7 +81,7 @@ module "task_definition" {
       "essential" : true,
       "environment" : [
         { "name" : "ASSET_HOST", "value" : var.asset_host },
-        { "name" : "APPMESH_VIRTUAL_NODE_NAME", "value" : "mesh/${var.mesh_name}/virtualNode/${local.service_name}" },
+        { "name" : "APPMESH_RESOURCE_ARN", "value" : "mesh/${var.mesh_name}/virtualNode/${local.service_name}" },
         { "name" : "BASIC_AUTH_USERNAME", "value" : "gds" },
         { "name" : "EMAIL_GROUP_BUSINESS", "value" : "test-address@digital.cabinet-office.gov.uk" },
         { "name" : "EMAIL_GROUP_CITIZEN", "value" : "test-address@digital.cabinet-office.gov.uk" },

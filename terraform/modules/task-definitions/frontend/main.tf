@@ -41,7 +41,7 @@ module "task_definition" {
       "image" : "govuk/frontend:${var.image_tag}",
       "essential" : true,
       "environment" : [
-        { "name" : "APPMESH_VIRTUAL_NODE_NAME", "value" : "mesh/${var.mesh_name}/virtualNode/${var.service_name}" },
+        { "name" : "APPMESH_RESOURCE_ARN", "value" : "mesh/${var.mesh_name}/virtualNode/${var.service_name}" },
         { "name" : "RAILS_ENV", "value" : "production" },
         { "name" : "ASSET_HOST", "value" : var.assets_url },
         { "name" : "GOVUK_APP_DOMAIN", "value" : var.service_discovery_namespace_name },
