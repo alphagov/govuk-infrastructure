@@ -60,6 +60,8 @@ module "task_definition" {
         { "name" : "REDIS_URL", "value" : "redis://${var.redis_host}:${var.redis_port}" },
         { "name" : "SENTRY_ENVIRONMENT", "value" : var.sentry_environment },
         { "name" : "RAILS_ENV", "value" : "production" },
+        # TODO: Setting RAILS_SERVE_STATIC_FILES and RAILS_SERVE_STATIC_ASSETS are temporary workarounds for serving static assets.
+        # Remove them once we have a production solution for assets.
         { "name" : "RAILS_SERVE_STATIC_FILES", "value" : "enabled" },
         { "name" : "RAILS_SERVE_STATIC_ASSETS", "value" : "yes" },
       ],

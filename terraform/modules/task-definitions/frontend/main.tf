@@ -57,9 +57,11 @@ module "task_definition" {
         { "name" : "STATSD_PROTOCOL", "value" : "tcp" },
         { "name" : "STATSD_HOST", "value" : var.statsd_host },
         { "name" : "GOVUK_STATSD_PREFIX", "value" : "fargate" },
+        # TODO: Setting RAILS_SERVE_STATIC_FILES, RAILS_SERVE_STATIC_ASSETS and HEROKU_APP_NAME are temporary workarounds for serving static assets.
+        # Remove them once we have a production solution for assets.
         { "name" : "RAILS_SERVE_STATIC_FILES", "value" : "yes" },
         { "name" : "RAILS_SERVE_STATIC_ASSETS", "value" : "yes" },
-        { "name" : "HEROKU_APP_NAME", "value" : "yes" },
+        { "name" : "HEROKU_APP_NAME", "value" : var.service_name },
       ],
       "logConfiguration" : {
         "logDriver" : "awslogs",
