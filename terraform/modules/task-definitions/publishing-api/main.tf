@@ -75,7 +75,6 @@ module "task_definition" {
       "essential" : true,
       "environment" : [
         # TODO: factor our hardcoded stuff
-        { "name" : "APPMESH_RESOURCE_ARN", "value" : "mesh/${var.mesh_name}/virtualNode/${local.service_name}" },
         { "name" : "CONTENT_API_PROTOTYPE", "value" : "yes" },
         { "name" : "CONTENT_STORE", "value" : "http://content-store.${var.service_discovery_namespace_name}" },
         { "name" : "DRAFT_CONTENT_STORE", "value" : "https://draft-content-store.${var.service_discovery_namespace_name}" },
