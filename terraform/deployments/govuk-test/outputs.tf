@@ -9,3 +9,7 @@ output "publisher_security_groups" {
 output "frontend_security_groups" {
   value = module.govuk.frontend_security_groups
 }
+
+output "signon_security_groups" {
+  value = module.govuk.signon_security_groups
+}

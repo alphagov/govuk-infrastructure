@@ -38,11 +38,14 @@ module "task_definition" {
       "image" : "govuk/signon:deployed-to-production",
       "essential" : true,
       "environment" : [
+        { "name" : "GOVUK_APP_DOMAIN", "value" : var.service_discovery_namespace_name },
+        { "name" : "GOVUK_APP_DOMAIN_EXTERNAL", "value" : var.govuk_app_domain_external },
         { "name" : "GOVUK_APP_NAME", "value" : local.service_name },
         { "name" : "GOVUK_APP_ROOT", "value" : "/app" },
-        { "name" : "PORT", "value" : "8080" },
+        { "name" : "GOVUK_APP_TYPE", "value" : "rack" },
+        { "name" : "PORT", "value" : "80" },
         { "name" : "DATABASE_URL", "value" : var.signon_db_url },
-        { "name" : "RAILS_ENV", "value" : "development" },
+        { "name" : "RAILS_ENV", "value" : "production" },
         { "name" : "TEST_DATABASE_URL", "value" : var.signon_test_db_url },
         { "name" : "SENTRY_ENVIRONMENT", "value" : var.sentry_environment }
       ],
@@ -62,8 +65,8 @@ module "task_definition" {
       "mountPoints" : [],
       "portMappings" : [
         {
-          "containerPort" : 8080,
-          "hostPort" : 8080,
+          "containerPort" : 80,
+          "hostPort" : 80,
           "protocol" : "tcp"
         },
       ],
