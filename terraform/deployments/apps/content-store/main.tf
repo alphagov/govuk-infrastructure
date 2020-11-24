@@ -27,7 +27,7 @@ module "task_definition" {
   service_name                     = "content-store"
   govuk_app_domain_external        = var.app_domain
   govuk_website_root               = local.website_root
-  image_tag                        = var.image_tag
+  image_tag                        = "bill-content-schemas" # TODO: Change back once content schemas are available
   mesh_name                        = var.mesh_name
   mongodb_url                      = "mongodb://${var.mongodb_host}/content_store_production"
   service_discovery_namespace_name = local.service_discovery_namespace_name
