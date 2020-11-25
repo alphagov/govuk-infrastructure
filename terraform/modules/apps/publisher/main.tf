@@ -27,6 +27,23 @@ module "app" {
 }
 
 #
+# Sidekiq Worker Service
+#
+
+module "worker" {
+  source                           = "../../app"
+  execution_role_arn               = var.execution_role_arn
+  vpc_id                           = var.vpc_id
+  cluster_id                       = var.cluster_id
+  service_name                     = "${var.service_name}-worker"
+  subnets                          = var.private_subnets
+  mesh_name                        = var.mesh_name
+  service_discovery_namespace_id   = var.service_discovery_namespace_id
+  service_discovery_namespace_name = var.service_discovery_namespace_name
+  extra_security_groups            = [module.app.security_group_id, var.govuk_management_access_sg_id]
+}
+
+#
 # Internet-facing load balancer
 #
 
