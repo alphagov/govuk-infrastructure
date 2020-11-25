@@ -13,3 +13,11 @@ output "frontend_security_groups" {
 output "signon_security_groups" {
   value = module.govuk.signon_security_groups
 }
+
+output "content-store_security_groups" {
+  value = module.govuk.content_store_security_groups
+}
+
+output "draft-content-store_security_groups" {
+  value = module.govuk.draft_content_store_security_groups
+}
