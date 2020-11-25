@@ -27,6 +27,16 @@ resource "aws_security_group_rule" "content_store_from_publishing_api_http" {
   source_security_group_id = module.publishing_api_service.app_security_group_id
 }
 
+resource "aws_security_group_rule" "draft_content_store_from_publishing_api_http" {
+  description              = "Draft Content Store accepts requests from Publishing API over HTTP"
+  type                     = "ingress"
+  from_port                = 80
+  to_port                  = 80
+  protocol                 = "tcp"
+  security_group_id        = module.draft_content_store_service.app_security_group_id
+  source_security_group_id = module.publishing_api_service.app_security_group_id
+}
+
 resource "aws_security_group_rule" "content_store_from_frontend_http" {
   description              = "Content Store accepts requests from Frontend over HTTP"
   type                     = "ingress"
