@@ -264,5 +264,16 @@ resource "aws_security_group_rule" "mongodb_from_draft_content_store_mongodb" {
   source_security_group_id = module.draft_content_store_service.app_security_group_id
 }
 
+resource "aws_security_group_rule" "router_api_from_content_store_http" {
+  description = "Router API accepts requests from Content Store over HTTP"
+  type        = "ingress"
+  from_port   = 80
+  to_port     = 80
+  protocol    = "tcp"
+
+  security_group_id        = module.router_api_service.app_security_group_id
+  source_security_group_id = module.content_store_service.app_security_group_id
+}
+
 
 # TODO: move the rest of the rules into this file.
