@@ -85,6 +85,7 @@ groups:
     jobs:
       - update-pipeline
       - deploy-content-store
+      - deploy-draft-content-store
       - deploy-frontend
       - smoke-test-frontend
       - deploy-publisher
@@ -101,6 +102,10 @@ groups:
   - name: content-store
     jobs:
       - deploy-content-store
+
+  - name: draft-content-store
+    jobs:
+      - deploy-draft-content-store
 
   - name: frontend
     jobs:
@@ -243,6 +248,26 @@ jobs:
       file: govuk-infrastructure/concourse/tasks/update-ecs-service.yml
       params:
         APPLICATION: content-store
+        GOVUK_ENVIRONMENT: test
+    serial: true
+    on_failure:
+      <<: *notify-slack-failure
+
+  - name: deploy-draft-content-store
+    plan:
+    - get: govuk-infrastructure
+    - get: release
+      resource: content-store
+      trigger: true
+    - task: update-task-definition
+      file: govuk-infrastructure/concourse/tasks/update-task-definition.yml
+      params:
+        APPLICATION: draft-content-store
+        GOVUK_ENVIRONMENT: test
+    - task: update-ecs-service
+      file: govuk-infrastructure/concourse/tasks/update-ecs-service.yml
+      params:
+        APPLICATION: draft-content-store
         GOVUK_ENVIRONMENT: test
     serial: true
     on_failure:

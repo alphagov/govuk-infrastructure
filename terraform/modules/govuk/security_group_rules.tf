@@ -27,6 +27,16 @@ resource "aws_security_group_rule" "content_store_from_publishing_api_http" {
   source_security_group_id = module.publishing_api_service.app_security_group_id
 }
 
+resource "aws_security_group_rule" "draft_content_store_from_publishing_api_http" {
+  description              = "Draft Content Store accepts requests from Publishing API over HTTP"
+  type                     = "ingress"
+  from_port                = 80
+  to_port                  = 80
+  protocol                 = "tcp"
+  security_group_id        = module.draft_content_store_service.app_security_group_id
+  source_security_group_id = module.publishing_api_service.app_security_group_id
+}
+
 resource "aws_security_group_rule" "content_store_from_frontend_http" {
   description              = "Content Store accepts requests from Frontend over HTTP"
   type                     = "ingress"
@@ -242,6 +252,26 @@ resource "aws_security_group_rule" "mongodb_from_content_store_mongodb" {
   to_port                  = 27017
   protocol                 = "tcp"
   security_group_id        = var.mongodb_security_group_id
+  source_security_group_id = module.content_store_service.app_security_group_id
+}
+
+resource "aws_security_group_rule" "mongodb_from_draft_content_store_mongodb" {
+  type                     = "ingress"
+  from_port                = 27017
+  to_port                  = 27017
+  protocol                 = "tcp"
+  security_group_id        = var.mongodb_security_group_id
+  source_security_group_id = module.draft_content_store_service.app_security_group_id
+}
+
+resource "aws_security_group_rule" "router_api_from_content_store_http" {
+  description = "Router API accepts requests from Content Store over HTTP"
+  type        = "ingress"
+  from_port   = 80
+  to_port     = 80
+  protocol    = "tcp"
+
+  security_group_id        = module.router_api_service.app_security_group_id
   source_security_group_id = module.content_store_service.app_security_group_id
 }
 

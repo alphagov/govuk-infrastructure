@@ -6,6 +6,12 @@ variable "govuk_website_root" {
   type = string
 }
 
+variable "router_api_hostname_prefix" {
+  type        = string
+  default     = ""
+  description = "Leave unset, or use 'draft-' to send requests to the draft router-api."
+}
+
 variable "image_tag" {
   description = "Container Image Tag"
   type        = string
