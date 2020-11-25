@@ -61,14 +61,10 @@ data "aws_secretsmanager_secret" "sentry_dsn" {
   name = "SENTRY_DSN"
 }
 
-locals {
-  service_name = "publisher"
-}
-
 module "task_definition" {
   source             = "../../task-definition"
   mesh_name          = var.mesh_name
-  service_name       = local.service_name
+  service_name       = var.service_name
   cpu                = 512
   memory             = 1024
   execution_role_arn = var.execution_role_arn
@@ -76,7 +72,8 @@ module "task_definition" {
   container_definitions = [
     {
       # TODO: factor out all the remaining hardcoded values (see ../content-store for an example where this has been done)
-      "name" : "publisher",
+      "command" : var.command,
+      "name" : var.service_name,
       "image" : "govuk/publisher:${var.image_tag}", # TODO: use deployed-to-production label or similar.
       "essential" : true,
       "environment" : [
