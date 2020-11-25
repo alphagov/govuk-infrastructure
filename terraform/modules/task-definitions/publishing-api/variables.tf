@@ -53,3 +53,9 @@ variable "assume_role_arn" {
   description = "(optional) AWS IAM role to assume. Uses the role from the environment by default."
   default     = null
 }
+
+variable "worker_count" {
+  type        = number
+  description = "Specify the number of worker containers per task"
+  default     = 1
+}
