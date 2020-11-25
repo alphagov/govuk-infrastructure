@@ -38,12 +38,12 @@ module "task_definition" {
         { "name" : "GOVUK_APP_NAME", "value" : var.service_name },
         { "name" : "GOVUK_APP_ROOT", "value" : "/var/apps/${var.service_name}" },
         { "name" : "GOVUK_STATSD_PREFIX", "value" : "fargate" },
-        { "name" : "PORT", "value" : "3054" },
+        { "name" : "PORT", "value" : "80" },
         { "name" : "ROUTER_APIADDR", "value" : ":3055" },
         { "name" : "ROUTER_BACKEND_HEADER_TIMEOUT", "value" : "20s" },
-        { "name" : "ROUTER_PUBADDR", "value" : ":3054" },
-        { "name" : "ROUTER_MONGO_DB", "value" : "router" },
-        { "name" : "ROUTER_MONGO_URL", "value" : "${var.mongodb_url}" },
+        { "name" : "ROUTER_PUBADDR", "value" : ":80" },
+        { "name" : "ROUTER_MONGO_DB", "value" : var.db_name },
+        { "name" : "ROUTER_MONGO_URL", "value" : var.mongodb_url },
         { "name" : "SENTRY_ENVIRONMENT", "value" : var.sentry_environment }
       ],
       "dependsOn" : [{
@@ -62,8 +62,8 @@ module "task_definition" {
       "mountPoints" : [],
       "portMappings" : [
         {
-          "containerPort" : 3054,
-          "hostPort" : 3054,
+          "containerPort" : 80,
+          "hostPort" : 80,
           "protocol" : "tcp"
         },
         {

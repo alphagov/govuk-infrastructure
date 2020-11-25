@@ -50,3 +50,9 @@ variable "execution_role_arn" {
   description = "For use during bootstrapping"
   type        = string
 }
+
+variable "desired_count" {
+  description = "Desired count of Application instances"
+  type        = number
+  default     = 1
+}

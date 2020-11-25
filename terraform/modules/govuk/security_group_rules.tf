@@ -47,6 +47,16 @@ resource "aws_security_group_rule" "content_store_from_frontend_http" {
   source_security_group_id = module.frontend_service.app_security_group_id
 }
 
+resource "aws_security_group_rule" "draft_content_store_from_frontend_http" {
+  description              = "Draft Content Store accepts requests from Draft Frontend over HTTP"
+  type                     = "ingress"
+  from_port                = 80
+  to_port                  = 80
+  protocol                 = "tcp"
+  security_group_id        = module.draft_content_store_service.app_security_group_id
+  source_security_group_id = module.draft_frontend_service.app_security_group_id
+}
+
 # TODO: fix overly broad egress rules
 resource "aws_security_group_rule" "content_store_to_any_any" {
   description       = "Content Store sends requests to anywhere over any protocol"
@@ -198,6 +208,66 @@ resource "aws_security_group_rule" "frontend_alb_to_any_any" {
   cidr_blocks       = ["0.0.0.0/0"]
 }
 
+resource "aws_security_group_rule" "draft_frontend_to_any_any" {
+  description       = "Draft Frontend sends requests to anywhere over any protocol"
+  type              = "egress"
+  from_port         = 0
+  to_port           = 0
+  protocol          = -1
+  cidr_blocks       = ["0.0.0.0/0"]
+  security_group_id = module.draft_frontend_service.app_security_group_id
+}
+
+resource "aws_security_group_rule" "draft_frontend_from_alb_http" {
+  description              = "Draft Frontend receives requests from its public ALB over HTTP"
+  type                     = "ingress"
+  from_port                = 80
+  to_port                  = 80
+  protocol                 = "tcp"
+  security_group_id        = module.draft_frontend_service.app_security_group_id
+  source_security_group_id = module.draft_frontend_service.alb_security_group_id
+}
+
+resource "aws_security_group_rule" "draft_frontend_alb_from_office_https" {
+  type      = "ingress"
+  from_port = 443
+  to_port   = 443
+  protocol  = "tcp"
+
+  security_group_id = module.draft_frontend_service.alb_security_group_id
+  cidr_blocks       = var.office_cidrs_list
+}
+
+resource "aws_security_group_rule" "draft_frontend_alb_to_any_any" {
+  type      = "egress"
+  protocol  = "-1"
+  from_port = 0
+  to_port   = 0
+
+  security_group_id = module.draft_frontend_service.alb_security_group_id
+  cidr_blocks       = ["0.0.0.0/0"]
+}
+
+
+data "aws_nat_gateway" "govuk" {
+  count     = length(var.public_subnets)
+  subnet_id = var.public_subnets[count.index]
+}
+
+resource "aws_security_group_rule" "frontend_alb_from_test_nat_gateways_https" {
+  description = "Frontend ALB receives HTTPS requests from apps in ECS"
+  type        = "ingress"
+  from_port   = 443
+  to_port     = 443
+  protocol    = "tcp"
+
+  security_group_id = module.frontend_service.alb_security_group_id
+  cidr_blocks = [
+    for nat_gateway in data.aws_nat_gateway.govuk :
+    "${nat_gateway.public_ip}/32"
+  ]
+}
+
 resource "aws_security_group_rule" "static_to_any_any" {
   description       = "Static sends requests to anywhere over any protocol"
   type              = "egress"
@@ -228,23 +298,14 @@ resource "aws_security_group_rule" "static_alb_from_office_https" {
   cidr_blocks       = var.office_cidrs_list
 }
 
-data "aws_nat_gateway" "govuk" {
-  count     = length(var.public_subnets)
-  subnet_id = var.public_subnets[count.index]
-}
-
-resource "aws_security_group_rule" "frontend_alb_from_test_nat_gateways_https" {
-  description = "Frontend ALB receives HTTPS requests from apps in ECS"
-  type        = "ingress"
-  from_port   = 443
-  to_port     = 443
-  protocol    = "tcp"
-
-  security_group_id = module.frontend_service.alb_security_group_id
-  cidr_blocks = [
-    for nat_gateway in data.aws_nat_gateway.govuk :
-    "${nat_gateway.public_ip}/32"
-  ]
+resource "aws_security_group_rule" "static_from_frontend_http" {
+  description              = "Static receives requests from Frontend over HTTP"
+  type                     = "ingress"
+  from_port                = 80
+  to_port                  = 80
+  protocol                 = "tcp"
+  security_group_id        = module.static_service.app_security_group_id
+  source_security_group_id = module.frontend_service.app_security_group_id
 }
 
 resource "aws_security_group_rule" "static_alb_to_any_any" {
@@ -254,6 +315,56 @@ resource "aws_security_group_rule" "static_alb_to_any_any" {
   to_port   = 0
 
   security_group_id = module.static_service.alb_security_group_id
+  cidr_blocks       = ["0.0.0.0/0"]
+}
+
+resource "aws_security_group_rule" "draft_static_to_any_any" {
+  description       = "Draft Static sends requests to anywhere over any protocol"
+  type              = "egress"
+  from_port         = 0
+  to_port           = 0
+  protocol          = -1
+  cidr_blocks       = ["0.0.0.0/0"]
+  security_group_id = module.draft_static_service.app_security_group_id
+}
+
+resource "aws_security_group_rule" "draft_static_from_alb_http" {
+  description              = "Draft Static receives requests from its public ALB over HTTP"
+  type                     = "ingress"
+  from_port                = 80
+  to_port                  = 80
+  protocol                 = "tcp"
+  security_group_id        = module.draft_static_service.app_security_group_id
+  source_security_group_id = module.draft_static_service.alb_security_group_id
+}
+
+resource "aws_security_group_rule" "draft_static_alb_from_office_https" {
+  type      = "ingress"
+  from_port = 443
+  to_port   = 443
+  protocol  = "tcp"
+
+  security_group_id = module.draft_static_service.alb_security_group_id
+  cidr_blocks       = var.office_cidrs_list
+}
+
+resource "aws_security_group_rule" "draft_static_from_frontend_http" {
+  description              = "Draft Static receives requests from Draft Frontend over HTTP"
+  type                     = "ingress"
+  from_port                = 80
+  to_port                  = 80
+  protocol                 = "tcp"
+  security_group_id        = module.draft_static_service.app_security_group_id
+  source_security_group_id = module.draft_frontend_service.app_security_group_id
+}
+
+resource "aws_security_group_rule" "draft_static_alb_to_any_any" {
+  type      = "egress"
+  protocol  = "-1"
+  from_port = 0
+  to_port   = 0
+
+  security_group_id = module.draft_static_service.alb_security_group_id
   cidr_blocks       = ["0.0.0.0/0"]
 }
 
@@ -284,6 +395,75 @@ resource "aws_security_group_rule" "router_api_from_content_store_http" {
 
   security_group_id        = module.router_api_service.app_security_group_id
   source_security_group_id = module.content_store_service.app_security_group_id
+}
+
+resource "aws_security_group_rule" "routerdb_from_router_api_mongodb" {
+  type                     = "ingress"
+  from_port                = 27017
+  to_port                  = 27017
+  protocol                 = "tcp"
+  security_group_id        = var.routerdb_security_group_id
+  source_security_group_id = module.router_api_service.app_security_group_id
+}
+
+resource "aws_security_group_rule" "routerdb_from_draft_router_api_mongodb" {
+  type                     = "ingress"
+  from_port                = 27017
+  to_port                  = 27017
+  protocol                 = "tcp"
+  security_group_id        = var.routerdb_security_group_id
+  source_security_group_id = module.draft_router_api_service.app_security_group_id
+}
+
+resource "aws_security_group_rule" "draft_router_api_from_draft_content_store_http" {
+  description = "Draft Router API accepts requests from Draft Content Store over HTTP"
+  type        = "ingress"
+  from_port   = 80
+  to_port     = 80
+  protocol    = "tcp"
+
+  security_group_id        = module.draft_router_api_service.app_security_group_id
+  source_security_group_id = module.draft_content_store_service.app_security_group_id
+}
+
+resource "aws_security_group_rule" "routerdb_from_router_mongodb" {
+  type                     = "ingress"
+  from_port                = 27017
+  to_port                  = 27017
+  protocol                 = "tcp"
+  security_group_id        = var.routerdb_security_group_id
+  source_security_group_id = module.router_service.app_security_group_id
+}
+
+resource "aws_security_group_rule" "router_from_router_api_tcp" {
+  description = "Router accepts requests from Router API over TCP"
+  type        = "ingress"
+  from_port   = 3055
+  to_port     = 3055
+  protocol    = "tcp"
+
+  security_group_id        = module.router_service.app_security_group_id
+  source_security_group_id = module.router_api_service.app_security_group_id
+}
+
+resource "aws_security_group_rule" "routerdb_from_draft_router_mongodb" {
+  type                     = "ingress"
+  from_port                = 27017
+  to_port                  = 27017
+  protocol                 = "tcp"
+  security_group_id        = var.routerdb_security_group_id
+  source_security_group_id = module.draft_router_service.app_security_group_id
+}
+
+resource "aws_security_group_rule" "draft_router_from_draft_router_api_tcp" {
+  description = "Draft Router accepts requests from Draft Router API over TCP"
+  type        = "ingress"
+  from_port   = 3055
+  to_port     = 3055
+  protocol    = "tcp"
+
+  security_group_id        = module.draft_router_service.app_security_group_id
+  source_security_group_id = module.draft_router_api_service.app_security_group_id
 }
 
 # TODO: move the rest of the rules into this file.

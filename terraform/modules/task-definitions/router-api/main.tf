@@ -38,7 +38,7 @@ module "task_definition" {
         { "name" : "GOVUK_APP_NAME", "value" : var.service_name },
         { "name" : "GOVUK_APP_ROOT", "value" : "/var/apps/${var.service_name}" },
         { "name" : "GOVUK_STATSD_PREFIX", "value" : "fargate" },
-        { "name" : "PORT", "value" : "3056" },
+        { "name" : "PORT", "value" : "80" },
         { "name" : "ROUTER_NODES", "value" : var.router_urls },
         { "name" : "MONGO_URI", "value" : var.mongodb_url },
         { "name" : "SENTRY_ENVIRONMENT", "value" : var.sentry_environment }
@@ -59,8 +59,8 @@ module "task_definition" {
       "mountPoints" : [],
       "portMappings" : [
         {
-          "containerPort" : 3056,
-          "hostPort" : 3056,
+          "containerPort" : 80,
+          "hostPort" : 80,
           "protocol" : "tcp"
         },
       ],

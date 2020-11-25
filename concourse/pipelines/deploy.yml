@@ -88,12 +88,16 @@ groups:
       - deploy-draft-content-store
       - deploy-frontend
       - smoke-test-frontend
+      - deploy-draft-frontend
       - deploy-publisher
       - deploy-publishing-api
       - deploy-router
+      - deploy-draft-router
       - deploy-router-api
+      - deploy-draft-router-api
       - deploy-signon
       - deploy-static
+      - deploy-draft-static
 
   - name: admin
     jobs:
@@ -112,6 +116,10 @@ groups:
       - deploy-frontend
       - smoke-test-frontend
 
+  - name: draft-frontend
+    jobs:
+      - deploy-draft-frontend
+
   - name: publisher
     jobs:
       - deploy-publisher
@@ -124,9 +132,17 @@ groups:
     jobs:
       - deploy-router
 
+  - name: draft-router
+    jobs:
+      - deploy-draft-router
+
   - name: router-api
     jobs:
       - deploy-router-api
+
+  - name: draft-router-api
+    jobs:
+      - deploy-draft-router-api
 
   - name: signon
     jobs:
@@ -135,6 +151,10 @@ groups:
   - name: static
     jobs:
       - deploy-static
+
+  - name: draft-static
+    jobs:
+      - deploy-draft-static
 
 jobs:
   - name: update-pipeline
@@ -182,6 +202,34 @@ jobs:
         MESSAGE: Checking the app is not serving HTTP error codes.
         URL: https://www.gov.uk/
       task: smoke-test
+
+  - name: deploy-draft-frontend
+    plan:
+    - get: govuk-infrastructure
+    - get: release
+      resource: frontend
+      trigger: true
+    - task: update-task-definition
+      file: govuk-infrastructure/concourse/tasks/update-task-definition.yml
+      params:
+        APPLICATION: draft-frontend
+        GOVUK_ENVIRONMENT: test
+    - task: update-ecs-service
+      file: govuk-infrastructure/concourse/tasks/update-ecs-service.yml
+      params:
+        APPLICATION: draft-frontend
+        GOVUK_ENVIRONMENT: test
+    serial: true
+    on_failure: &notify-slack-failure
+      put: deploy-slack-channel
+      params:
+        channel: "#govuk-deploy-alerts"
+        username: 'Concourse deploy pipeline'
+        icon_emoji: ':concourse:'
+        silent: true
+        text: |
+          :red_circle: Failed build: http://cd.gds-reliability.engineering/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME
+
 
   - name: deploy-publisher
     plan:
@@ -303,6 +351,26 @@ jobs:
     on_failure:
       <<: *notify-slack-failure
 
+  - name: deploy-draft-router
+    plan:
+    - get: govuk-infrastructure
+    - get: release
+      resource: router
+      trigger: true
+    - task: update-task-definition
+      file: govuk-infrastructure/concourse/tasks/update-task-definition.yml
+      params:
+        APPLICATION: draft-router
+        GOVUK_ENVIRONMENT: test
+    - task: update-ecs-service
+      file: govuk-infrastructure/concourse/tasks/update-ecs-service.yml
+      params:
+        APPLICATION: draft-router
+        GOVUK_ENVIRONMENT: test
+    serial: true
+    on_failure:
+      <<: *notify-slack-failure
+
   - name: deploy-router-api
     plan:
     - get: govuk-infrastructure
@@ -318,6 +386,26 @@ jobs:
       file: govuk-infrastructure/concourse/tasks/update-ecs-service.yml
       params:
         APPLICATION: router-api
+        GOVUK_ENVIRONMENT: test
+    serial: true
+    on_failure:
+      <<: *notify-slack-failure
+
+  - name: deploy-draft-router-api
+    plan:
+    - get: govuk-infrastructure
+    - get: release
+      resource: router-api
+      trigger: true
+    - task: update-task-definition
+      file: govuk-infrastructure/concourse/tasks/update-task-definition.yml
+      params:
+        APPLICATION: draft-router-api
+        GOVUK_ENVIRONMENT: test
+    - task: update-ecs-service
+      file: govuk-infrastructure/concourse/tasks/update-ecs-service.yml
+      params:
+        APPLICATION: draft-router-api
         GOVUK_ENVIRONMENT: test
     serial: true
     on_failure:
@@ -358,6 +446,26 @@ jobs:
       file: govuk-infrastructure/concourse/tasks/update-ecs-service.yml
       params:
         APPLICATION: static
+        GOVUK_ENVIRONMENT: test
+    serial: true
+    on_failure:
+      <<: *notify-slack-failure
+
+  - name: deploy-draft-static
+    plan:
+    - get: govuk-infrastructure
+    - get: release
+      resource: static
+      trigger: true
+    - task: update-task-definition
+      file: govuk-infrastructure/concourse/tasks/update-task-definition.yml
+      params:
+        APPLICATION: draft-static
+        GOVUK_ENVIRONMENT: test
+    - task: update-ecs-service
+      file: govuk-infrastructure/concourse/tasks/update-ecs-service.yml
+      params:
+        APPLICATION: draft-static
         GOVUK_ENVIRONMENT: test
     serial: true
     on_failure:

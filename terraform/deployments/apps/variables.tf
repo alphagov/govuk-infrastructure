@@ -54,6 +54,11 @@ variable "router_mongodb_url" {
   type        = string
 }
 
+variable "draft_router_mongodb_url" {
+  description = "URL for the Draft Router MongoDB (defined outside this Terraform repo)."
+  type        = string
+}
+
 variable "signon_db_url" {
   description = "URL for the signon database (defined outside this Terraform repo)."
   type        = string

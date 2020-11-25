@@ -50,18 +50,73 @@ variable "mongodb_security_group_id" {
   type        = string
 }
 
+variable "routerdb_security_group_id" {
+  description = "ID of security group (from the govuk-aws repo) for the Router MongoDB."
+  type        = string
+}
+
 variable "frontend_desired_count" {
   description = "Desired count of Frontend Application instances"
   type        = number
 }
 
+variable "draft_frontend_desired_count" {
+  description = "Desired count of Draft-Frontend Application instances"
+  type        = number
+}
+
 variable "content_store_desired_count" {
-  description = "Desired count of Frontend Application instances"
+  description = "Desired count of Content-Store Application instances"
+  type        = number
+}
+
+variable "draft_content_store_desired_count" {
+  description = "Desired count of Draft-Content-Store Application instances"
+  type        = number
+}
+
+variable "publisher_desired_count" {
+  description = "Desired count of Publisher Application instances"
+  type        = number
+}
+
+variable "publishing_api_desired_count" {
+  description = "Desired count of Publishing-API Application instances"
+  type        = number
+}
+
+variable "router_desired_count" {
+  description = "Desired count of Router Application instances"
+  type        = number
+}
+
+variable "draft_router_desired_count" {
+  description = "Desired count of Draft-Router Application instances"
+  type        = number
+}
+
+variable "router_api_desired_count" {
+  description = "Desired count of Router-API Application instances"
+  type        = number
+}
+
+variable "draft_router_api_desired_count" {
+  description = "Desired count of Draft-Router-API Application instances"
   type        = number
 }
 
 variable "static_desired_count" {
   description = "Desired count of Static Application instances"
+  type        = number
+}
+
+variable "draft_static_desired_count" {
+  description = "Desired count of Draft-Static Application instances"
+  type        = number
+}
+
+variable "signon_desired_count" {
+  description = "Desired count of Signon Application instances"
   type        = number
 }
 

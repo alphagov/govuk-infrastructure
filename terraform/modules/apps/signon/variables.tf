@@ -42,3 +42,8 @@ variable "execution_role_arn" {
   type        = string
 }
 
+variable "desired_count" {
+  description = "Desired count of Application instances"
+  type        = number
+  default     = 1
+}
