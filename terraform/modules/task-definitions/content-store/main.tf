@@ -63,6 +63,7 @@ module "task_definition" {
         { "name" : "MONGODB_URI", "value" : var.mongodb_url },
         { "name" : "PLEK_SERVICE_PERFORMANCEPLATFORM_BIG_SCREEN_VIEW_URI", "value" : "" },
         { "name" : "PLEK_SERVICE_PUBLISHING_API_URI", "value" : "http://publishing-api.${var.service_discovery_namespace_name}" },
+        { "name" : "PLEK_SERVICE_ROUTER_API_URI", "value" : "http://${var.router_api_hostname_prefix}router-api.${var.service_discovery_namespace_name}" },
         { "name" : "PLEK_SERVICE_RUMMAGER_URI", "value" : "" },
         { "name" : "PLEK_SERVICE_SPOTLIGHT_URI", "value" : "" },
         { "name" : "PORT", "value" : "80" },

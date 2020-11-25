@@ -30,6 +30,7 @@ module "task_definition" {
   image_tag                        = "bill-content-schemas" # TODO: Change back once content schemas are available
   mesh_name                        = var.mesh_name
   mongodb_url                      = "mongodb://${var.mongodb_host}/draft_content_store_production"
+  router_api_hostname_prefix       = "draft-"
   service_discovery_namespace_name = local.service_discovery_namespace_name
   statsd_host                      = local.statsd_host
   execution_role_arn               = data.aws_iam_role.execution.arn
