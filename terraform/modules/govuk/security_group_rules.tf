@@ -245,5 +245,14 @@ resource "aws_security_group_rule" "mongodb_from_content_store_mongodb" {
   source_security_group_id = module.content_store_service.app_security_group_id
 }
 
+resource "aws_security_group_rule" "mongodb_from_draft_content_store_mongodb" {
+  type                     = "ingress"
+  from_port                = 27017
+  to_port                  = 27017
+  protocol                 = "tcp"
+  security_group_id        = var.mongodb_security_group_id
+  source_security_group_id = module.draft_content_store_service.app_security_group_id
+}
+
 
 # TODO: move the rest of the rules into this file.
