@@ -42,4 +42,4 @@ run:
       -var "assume_role_arn=$ASSUME_ROLE_ARN" \
       -auto-approve
 
-      terraform output task_definition_arn > "$root_dir/terraform-outputs/task_definition_arn"
+      terraform output task_definition_arn > "$root_dir/terraform-outputs/${APPLICATION}_task_definition_arn"

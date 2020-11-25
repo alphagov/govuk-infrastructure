@@ -30,7 +30,7 @@ run:
 
       echo "Updating $APPLICATION service..."
 
-      task_definition_arn=$(cat terraform-outputs/task_definition_arn)
+      task_definition_arn="$(cat terraform-outputs/${APPLICATION}_task_definition_arn)"
 
       aws ecs update-service \
         --cluster govuk \

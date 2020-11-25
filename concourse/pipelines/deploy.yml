@@ -194,6 +194,11 @@ jobs:
       params:
         APPLICATION: publisher
         GOVUK_ENVIRONMENT: test
+    - task: update-worker-task-definition
+      file: govuk-infrastructure/concourse/tasks/update-task-definition.yml
+      params:
+        APPLICATION: publisher-worker
+        GOVUK_ENVIRONMENT: test
     - task: fetch-db-migrations-config
       file: govuk-infrastructure/concourse/tasks/fetch-task-network-config.yml
       params:
@@ -208,6 +213,11 @@ jobs:
       file: govuk-infrastructure/concourse/tasks/update-ecs-service.yml
       params:
         APPLICATION: publisher
+        GOVUK_ENVIRONMENT: test
+    - task: update-worker-ecs-service
+      file: govuk-infrastructure/concourse/tasks/update-ecs-service.yml
+      params:
+        APPLICATION: publisher-worker
         GOVUK_ENVIRONMENT: test
     serial: true
     on_failure:
