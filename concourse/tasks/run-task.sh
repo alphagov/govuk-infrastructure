@@ -22,7 +22,7 @@ credential_source = Ec2InstanceMetadata
 region = $AWS_REGION
 EOF
 
-task_definition_arn=$(cat terraform-outputs/task_definition_arn)
+task_definition_arn="$(cat terraform-outputs/${APPLICATION}_task_definition_arn)"
 network_config=$(cat terraform-outputs/task_network_config)
 
 echo "Starting task..."

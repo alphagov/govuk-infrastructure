@@ -1,7 +1,7 @@
 terraform {
   backend "s3" {
     bucket  = "govuk-terraform-test"
-    key     = "projects/publisher.tfstate"
+    key     = "projects/publisher-web.tfstate"
     region  = "eu-west-1"
     encrypt = true
   }
@@ -34,6 +34,7 @@ module "task_definition" {
   task_role_arn                    = data.aws_iam_role.task.arn
   redis_host                       = var.redis_host
   redis_port                       = local.redis_port
+  service_name                     = "publisher-web"
   asset_host                       = local.asset_host
   sentry_environment               = var.sentry_environment
   assume_role_arn                  = var.assume_role_arn

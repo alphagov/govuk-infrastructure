@@ -2,6 +2,12 @@ variable "mesh_name" {
   type = string
 }
 
+variable "mesh_subdomain" {
+  type        = string
+  default     = ""
+  description = "Must match the mesh_subdomain defined in the app module. Defaults to service_name if unset."
+}
+
 variable "service_name" {
   description = "Service name of the Fargate service, cluster, task etc."
   type        = string

@@ -35,14 +35,14 @@ shift $((OPTIND-1))
 [ "${1:-}" = "--" ] && shift
 command=$@
 
-if [ -z "${application}" ]; then echo "[Error] You must set the application arg" && show_help && exit 1; fi
+if [ -z "${application}" ]; then echo "[Error] You must set the application arg e.g. publisher" && show_help && exit 1; fi
 if [ -z "${command}" ]; then echo "[Error] You must provide a command" && show_help && exit 1; fi
 
 echo "[Warning] This is a temporary tool for use by the replatforming team."
 
 root_dir="${PWD}"
 
-app_dir="$root_dir/terraform/deployments/apps/$application"
+app_dir="$root_dir/terraform/deployments/apps/$application-web"
 env_dir="$root_dir/terraform/deployments/govuk-test"
 
 echo "Fetching task_definition_arn from Terraform statefile in $app_dir"
@@ -71,7 +71,7 @@ task=$(aws ecs run-task --cluster $cluster \
 --started-by $(whoami) \
 --overrides '{
   "containerOverrides": [{
-    "name": "'"$application"'",
+    "name": "'"$application-web"'",
     "command": ["/bin/bash", "-c", "'"$command"'"]
   }]
 }')
