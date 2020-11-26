@@ -47,6 +47,7 @@ module "govuk" {
   public_subnets                = data.terraform_remote_state.infra_networking.outputs.public_subnet_ids
   govuk_management_access_sg_id = data.terraform_remote_state.infra_security_groups.outputs.sg_management_id
   documentdb_security_group_id  = data.terraform_remote_state.infra_security_groups.outputs.sg_shared_documentdb_id
+  postgresql_security_group_id  = data.terraform_remote_state.infra_security_groups.outputs.sg_postgresql-primary_id
   redis_security_group_id       = data.terraform_remote_state.infra_security_groups.outputs.sg_backend-redis_id
   mongodb_security_group_id     = data.terraform_remote_state.infra_security_groups.outputs.sg_mongo_id
   frontend_desired_count        = var.frontend_desired_count

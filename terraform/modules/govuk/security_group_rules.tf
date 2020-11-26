@@ -107,6 +107,17 @@ resource "aws_security_group_rule" "redis_from_publisher_resp" {
   source_security_group_id = module.publisher_service.app_security_group_id
 }
 
+resource "aws_security_group_rule" "postgres_from_publishing_api_5432" {
+  description = "Postgres RDS accepts requests from Publishing API"
+  type        = "ingress"
+  from_port   = 5432
+  to_port     = 5432
+  protocol    = "tcp"
+
+  security_group_id        = var.postgresql_security_group_id
+  source_security_group_id = module.publishing_api_service.app_security_group_id
+}
+
 resource "aws_security_group_rule" "redis_from_publishing_api_resp" {
   type                     = "ingress"
   from_port                = 6379
@@ -274,6 +285,5 @@ resource "aws_security_group_rule" "router_api_from_content_store_http" {
   security_group_id        = module.router_api_service.app_security_group_id
   source_security_group_id = module.content_store_service.app_security_group_id
 }
-
 
 # TODO: move the rest of the rules into this file.
