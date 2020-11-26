@@ -8,6 +8,8 @@ terraform {
 }
 
 locals {
+  virtual_node_name = coalesce(var.mesh_subdomain, var.service_name)
+
   container_definitions = [
     {
       "name" : "envoy",
@@ -17,7 +19,7 @@ locals {
       "image" : "840364872350.dkr.ecr.eu-west-1.amazonaws.com/aws-appmesh-envoy:v1.15.1.0-prod",
       "user" : "1337",
       "environment" : [
-        { "name" : "APPMESH_RESOURCE_ARN", "value" : "mesh/${var.mesh_name}/virtualNode/${var.service_name}" },
+        { "name" : "APPMESH_RESOURCE_ARN", "value" : "mesh/${var.mesh_name}/virtualNode/${local.virtual_node_name}" },
       ],
       "essential" : true,
       "logConfiguration" : {

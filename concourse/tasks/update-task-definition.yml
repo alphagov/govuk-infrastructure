@@ -10,6 +10,8 @@ inputs:
   - name: govuk-infrastructure
     path: src
   - name: release
+  - name: terraform-outputs
+    optional: true
 outputs:
   - name: terraform-outputs
 params:
