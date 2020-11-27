@@ -14,6 +14,10 @@ variable "public_lb_domain_name" {
   type = string
 }
 
+variable "internal_domain_name" {
+  type = string
+}
+
 variable "govuk_aws_state_bucket" {
   type        = string
   description = "The name of the S3 bucket used for govuk-aws's terraform state files"

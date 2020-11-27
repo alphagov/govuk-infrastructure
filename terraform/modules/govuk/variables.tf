@@ -35,11 +35,6 @@ variable "postgresql_security_group_id" {
   type        = string
 }
 
-variable "redis_security_group_id" {
-  description = "ID of security group (from the govuk-aws repo) for the shared Redis."
-  type        = string
-}
-
 variable "documentdb_security_group_id" {
   description = "ID of security group (from the govuk-aws repo) for the shared DocumentDB."
   type        = string
@@ -124,4 +119,14 @@ variable "office_cidrs_list" {
   description = "List of GDS office CIDRs"
   type        = list
   default     = ["213.86.153.212/32", "213.86.153.213/32", "213.86.153.214/32", "213.86.153.235/32", "213.86.153.236/32", "213.86.153.237/32", "85.133.67.244/32"]
+}
+
+variable "internal_domain_name" {
+  description = "Domain in which to create DNS records for private resources. For example, test.govuk-internal.digital"
+  type        = string
+}
+
+variable "redis_subnets" {
+  description = "Subnet IDs to use for Redis cluster"
+  type        = list
 }

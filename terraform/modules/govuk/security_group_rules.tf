@@ -113,7 +113,7 @@ resource "aws_security_group_rule" "redis_from_publisher_resp" {
   from_port                = 6379
   to_port                  = 6379
   protocol                 = "tcp"
-  security_group_id        = var.redis_security_group_id
+  security_group_id        = module.shared_redis_cluster.security_group_id
   source_security_group_id = module.publisher_service.app_security_group_id
 }
 
@@ -133,7 +133,7 @@ resource "aws_security_group_rule" "redis_from_publishing_api_resp" {
   from_port                = 6379
   to_port                  = 6379
   protocol                 = "tcp"
-  security_group_id        = var.redis_security_group_id
+  security_group_id        = module.shared_redis_cluster.security_group_id
   source_security_group_id = module.publishing_api_service.app_security_group_id
 }
 
