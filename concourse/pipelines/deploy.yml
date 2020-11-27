@@ -282,10 +282,20 @@ jobs:
       params:
         APPLICATION: publishing-api-web
         GOVUK_ENVIRONMENT: test
+    - task: update-worker-task-definition
+      file: govuk-infrastructure/concourse/tasks/update-task-definition.yml
+      params:
+        APPLICATION: publishing-api-worker
+        GOVUK_ENVIRONMENT: test
     - task: update-web-ecs-service
       file: govuk-infrastructure/concourse/tasks/update-ecs-service.yml
       params:
         APPLICATION: publishing-api-web
+        GOVUK_ENVIRONMENT: test
+    - task: update-worker-ecs-service
+      file: govuk-infrastructure/concourse/tasks/update-ecs-service.yml
+      params:
+        APPLICATION: publishing-api-worker
         GOVUK_ENVIRONMENT: test
     serial: true
     on_failure:
