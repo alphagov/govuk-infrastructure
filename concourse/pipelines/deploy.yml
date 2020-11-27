@@ -277,15 +277,15 @@ jobs:
     - get: release
       resource: publishing-api
       trigger: true
-    - task: update-task-definition
+    - task: update-web-task-definition
       file: govuk-infrastructure/concourse/tasks/update-task-definition.yml
       params:
-        APPLICATION: publishing-api
+        APPLICATION: publishing-api-web
         GOVUK_ENVIRONMENT: test
-    - task: update-ecs-service
+    - task: update-web-ecs-service
       file: govuk-infrastructure/concourse/tasks/update-ecs-service.yml
       params:
-        APPLICATION: publishing-api
+        APPLICATION: publishing-api-web
         GOVUK_ENVIRONMENT: test
     serial: true
     on_failure:
