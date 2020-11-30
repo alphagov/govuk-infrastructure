@@ -1,7 +1,7 @@
 terraform {
   backend "s3" {
     bucket  = "govuk-terraform-test"
-    key     = "projects/publishing-api.tfstate"
+    key     = "projects/publishing-api-worker.tfstate"
     region  = "eu-west-1"
     encrypt = true
   }
@@ -29,11 +29,13 @@ module "task_definition" {
   govuk_website_root               = local.website_root
   image_tag                        = "bilbof_dockerfile-fix" # TODO: Pinned due to content-schemas issue
   mesh_name                        = var.mesh_name
+  mesh_subdomain                   = "publishing-api-worker"
   service_discovery_namespace_name = local.service_discovery_namespace_name
   statsd_host                      = local.statsd_host
   execution_role_arn               = data.aws_iam_role.execution.arn
   task_role_arn                    = data.aws_iam_role.task.arn
   redis_host                       = var.redis_host
   sentry_environment               = var.sentry_environment
+  service_name                     = "publishing-api-worker"
   assume_role_arn                  = var.assume_role_arn
 }

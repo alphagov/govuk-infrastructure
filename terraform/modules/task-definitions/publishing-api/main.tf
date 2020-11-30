@@ -16,7 +16,7 @@ provider "aws" {
 }
 
 locals {
-  service_name = "publishing-api"
+  app_name = "publishing-api"
 }
 
 data "aws_secretsmanager_secret" "content_store_bearer_token" {
@@ -62,16 +62,18 @@ data "aws_secretsmanager_secret" "sentry_dsn" {
 module "task_definition" {
   source             = "../../task-definition"
   mesh_name          = var.mesh_name
-  service_name       = local.service_name
+  service_name       = var.service_name
   cpu                = 512
   memory             = 1024
+  mesh_subdomain     = var.mesh_subdomain
   execution_role_arn = var.execution_role_arn
   task_role_arn      = var.task_role_arn
 
   container_definitions = [
     {
-      "name" : local.service_name,
-      "image" : "govuk/${local.service_name}:${var.image_tag}",
+      "command" : var.command,
+      "name" : var.service_name,
+      "image" : "govuk/${local.app_name}:${var.image_tag}",
       "essential" : true,
       "environment" : [
         # TODO: factor our hardcoded stuff
@@ -79,12 +81,12 @@ module "task_definition" {
         { "name" : "CONTENT_STORE", "value" : "http://content-store.${var.service_discovery_namespace_name}" },
         { "name" : "DRAFT_CONTENT_STORE", "value" : "https://draft-content-store.${var.service_discovery_namespace_name}" },
         { "name" : "EVENT_LOG_AWS_ACCESS_ID", "value" : "AKIAJE6VSW25CYBUMQJA" },
-        { "name" : "EVENT_LOG_AWS_BUCKETNAME", "value" : "govuk-${local.service_name}-event-log-test" },
-        { "name" : "EVENT_LOG_AWS_USERNAME", "value" : "govuk-${local.service_name}-event-log_user" },
+        { "name" : "EVENT_LOG_AWS_BUCKETNAME", "value" : "govuk-${local.app_name}-event-log-test" },
+        { "name" : "EVENT_LOG_AWS_USERNAME", "value" : "govuk-${local.app_name}-event-log_user" },
         { "name" : "DEFAULT_TTL", "value" : "1800" },
         { "name" : "GOVUK_APP_DOMAIN", "value" : var.service_discovery_namespace_name },
         { "name" : "GOVUK_APP_DOMAIN_EXTERNAL", "value" : var.govuk_app_domain_external },
-        { "name" : "GOVUK_APP_NAME", "value" : "publishing-api" },
+        { "name" : "GOVUK_APP_NAME", "value" : local.app_name },
         { "name" : "GOVUK_APP_TYPE", "value" : "rack" },
         { "name" : "GOVUK_CONTENT_SCHEMAS_PATH", "value" : "/govuk-content-schemas" },
         { "name" : "GOVUK_GROUP", "value" : "deploy" }, # TODO: clean up?
@@ -115,7 +117,7 @@ module "task_definition" {
           "awslogs-create-group" : "true",
           "awslogs-group" : "awslogs-fargate",
           "awslogs-region" : "eu-west-1",
-          "awslogs-stream-prefix" : "awslogs-${local.service_name}"
+          "awslogs-stream-prefix" : "awslogs-${local.app_name}"
         }
       },
       "mountPoints" : [],

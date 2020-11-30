@@ -1,3 +1,9 @@
+variable "command" {
+  type        = list
+  default     = ["foreman", "run", "web"]
+  description = "The Docker CMD instruction, in exec form."
+}
+
 variable "execution_role_arn" {
   type = string
 }
@@ -23,6 +29,11 @@ variable "mesh_name" {
   type = string
 }
 
+variable "mesh_subdomain" {
+  type    = string
+  default = "publishing-api"
+}
+
 variable "redis_host" {
   type = string
 }
@@ -46,6 +57,11 @@ variable "sentry_environment" {
 
 variable "service_discovery_namespace_name" {
   type = string
+}
+
+variable "service_name" {
+  type        = string
+  description = "The ECS Service name, e.g. publishing-api-web or publishing-api-worker"
 }
 
 variable "assume_role_arn" {
