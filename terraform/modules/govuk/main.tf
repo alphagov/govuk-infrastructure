@@ -177,3 +177,10 @@ module "signon_service" {
   source                           = "../../modules/apps/signon"
   desired_count                    = var.signon_desired_count
 }
+
+module "shared_redis_cluster" {
+  source               = "../../modules/redis"
+  vpc_id               = var.vpc_id
+  internal_domain_name = var.internal_domain_name
+  subnet_ids           = var.redis_subnets
+}
