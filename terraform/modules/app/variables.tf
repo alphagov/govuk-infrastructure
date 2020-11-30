@@ -16,12 +16,6 @@ variable "mesh_name" {
   type = string
 }
 
-variable "mesh_subdomain" {
-  type        = string
-  default     = ""
-  description = "The subdomain for the service in Cloud Map. Defaults to service_name if unset."
-}
-
 variable "service_discovery_namespace_id" {
   type = string
 }

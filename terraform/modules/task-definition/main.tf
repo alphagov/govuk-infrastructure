@@ -8,7 +8,7 @@ terraform {
 }
 
 locals {
-  virtual_node_name = coalesce(var.mesh_subdomain, var.service_name)
+  virtual_node_name = var.service_name
 
   container_definitions = [
     {

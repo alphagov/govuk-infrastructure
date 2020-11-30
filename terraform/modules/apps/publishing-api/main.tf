@@ -16,7 +16,6 @@ module "web" {
   subnets                          = var.private_subnets
   mesh_name                        = var.mesh_name
   desired_count                    = var.desired_count
-  mesh_subdomain                   = "publishing-api"
   service_discovery_namespace_id   = var.service_discovery_namespace_id
   service_discovery_namespace_name = var.service_discovery_namespace_name
   extra_security_groups            = [var.govuk_management_access_security_group]
@@ -31,7 +30,6 @@ module "worker" {
   subnets                          = var.private_subnets
   mesh_name                        = var.mesh_name
   desired_count                    = var.desired_count
-  mesh_subdomain                   = "publishing-api-worker"
   service_discovery_namespace_id   = var.service_discovery_namespace_id
   service_discovery_namespace_name = var.service_discovery_namespace_name
   extra_security_groups            = [module.web.security_group_id, var.govuk_management_access_security_group]

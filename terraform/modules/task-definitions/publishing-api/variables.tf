@@ -29,11 +29,6 @@ variable "mesh_name" {
   type = string
 }
 
-variable "mesh_subdomain" {
-  type    = string
-  default = "publishing-api"
-}
-
 variable "redis_host" {
   type = string
 }

@@ -21,11 +21,6 @@ variable "mesh_name" {
   type = string
 }
 
-variable "mesh_subdomain" {
-  type    = string
-  default = "publisher"
-}
-
 variable "execution_role_arn" {
   type = string
 }

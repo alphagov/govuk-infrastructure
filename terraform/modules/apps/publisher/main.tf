@@ -15,7 +15,6 @@ module "app" {
   service_name                     = "${var.service_name}-web"
   subnets                          = var.private_subnets
   mesh_name                        = var.mesh_name
-  mesh_subdomain                   = "publisher"
   desired_count                    = var.desired_count
   service_discovery_namespace_id   = var.service_discovery_namespace_id
   service_discovery_namespace_name = var.service_discovery_namespace_name
