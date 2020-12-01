@@ -50,7 +50,7 @@ module "task_definition" {
         { "name" : "PORT", "value" : "80" },
         { "name" : "PLEK_SERVICE_CONTENT_STORE_URI", "value" : var.content_store_url },
         { "name" : "PLEK_SERVICE_STATIC_URI", "value" : var.static_url },
-        { "name" : "PLEK_SERVICE_PUBLISHING_API_URI", "value" : "http://publishing-api.${var.service_discovery_namespace_name}" },
+        { "name" : "PLEK_SERVICE_PUBLISHING_API_URI", "value" : "http://publishing-api-web.${var.service_discovery_namespace_name}" },
         { "name" : "GOVUK_ASSET_ROOT", "value" : var.assets_url },
         { "name" : "SENTRY_ENVIRONMENT", "value" : var.sentry_environment },
         { "name" : "STATSD_PROTOCOL", "value" : "tcp" },

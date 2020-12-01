@@ -97,7 +97,7 @@ module "task_definition" {
         { "name" : "GOVUK_USER", "value" : "deploy" },
         { "name" : "GOVUK_WEBSITE_ROOT", "value" : var.govuk_website_root },
         { "name" : "PLEK_SERVICE_CONTENT_STORE_URI", "value" : "https://www.gov.uk/api" }, # TODO: looks suspicious
-        { "name" : "PLEK_SERVICE_PUBLISHING_API_URI", "value" : "http://publishing-api.${var.service_discovery_namespace_name}" },
+        { "name" : "PLEK_SERVICE_PUBLISHING_API_URI", "value" : "http://publishing-api-web.${var.service_discovery_namespace_name}" },
         { "name" : "PLEK_SERVICE_STATIC_URI", "value" : "https://assets.test.publishing.service.gov.uk" },
         { "name" : "PORT", "value" : "80" },
         { "name" : "RAILS_ENV", "value" : "production" },
