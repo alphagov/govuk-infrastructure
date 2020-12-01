@@ -29,6 +29,16 @@ variable "mesh_name" {
   type        = string
 }
 
+variable "public_lb_domain_name" {
+  description = "Domain in which to create DNS records for the app's Internet-facing load balancer. For example, staging.govuk.digital"
+  type        = string
+}
+
+variable "public_subnets" {
+  description = "Subnet IDs to use for Internet-facing resources."
+  type        = list
+}
+
 variable "service_discovery_namespace_id" {
   type = string
 }
