@@ -27,7 +27,7 @@ module "task_definition" {
   memory                  = 1024
   execution_role_arn      = var.execution_role_arn
   task_role_arn           = var.task_role_arn
-  container_ingress_ports = "3054,3055"
+  container_ingress_ports = "80"
 
   container_definitions = [
     {
@@ -35,10 +35,13 @@ module "task_definition" {
       "image" : "govuk/router:${var.image_tag}",
       "essential" : true,
       "environment" : [
+        { "name" : "GOVUK_APP_DOMAIN", "value" : var.service_discovery_namespace_name },
+        { "name" : "GOVUK_APP_DOMAIN_EXTERNAL", "value" : var.govuk_app_domain_external },
         { "name" : "GOVUK_APP_NAME", "value" : var.service_name },
         { "name" : "GOVUK_APP_ROOT", "value" : "/var/apps/${var.service_name}" },
         { "name" : "GOVUK_STATSD_PREFIX", "value" : "fargate" },
         { "name" : "PORT", "value" : "80" },
+        { "name" : "RAILS_ENV", "value" : "production" },
         { "name" : "ROUTER_APIADDR", "value" : ":3055" },
         { "name" : "ROUTER_BACKEND_HEADER_TIMEOUT", "value" : "20s" },
         { "name" : "ROUTER_PUBADDR", "value" : ":80" },

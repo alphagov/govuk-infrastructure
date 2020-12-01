@@ -36,3 +36,11 @@ variable "assume_role_arn" {
 variable "service_name" {
   type = string
 }
+
+variable "service_discovery_namespace_name" {
+  type = string
+}
+
+variable "govuk_app_domain_external" {
+  type = string
+}
