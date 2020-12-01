@@ -24,6 +24,7 @@ provider "aws" {
 
 module "task_definition" {
   source                           = "../../../modules/task-definitions/publishing-api"
+  command                          = ["foreman", "run", "worker"]
   govuk_app_domain_external        = var.app_domain
   govuk_app_domain_internal        = var.app_domain_internal
   govuk_website_root               = local.website_root
