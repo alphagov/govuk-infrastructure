@@ -15,6 +15,18 @@ provider "aws" {
   }
 }
 
+data "aws_secretsmanager_secret" "oauth_id" {
+  name = "${var.service_name}_OAUTH_ID"
+}
+
+data "aws_secretsmanager_secret" "oauth_secret" {
+  name = "${var.service_name}_OAUTH_SECRET"
+}
+
+data "aws_secretsmanager_secret" "secret_key_base" {
+  name = "${var.service_name}_SECRET_KEY_BASE"
+}
+
 data "aws_secretsmanager_secret" "sentry_dsn" {
   name = "SENTRY_DSN"
 }
@@ -65,6 +77,18 @@ module "task_definition" {
         },
       ],
       "secrets" : [
+        {
+          "name" : "GDS_SSO_OAUTH_ID",
+          "valueFrom" : data.aws_secretsmanager_secret.oauth_id.arn
+        },
+        {
+          "name" : "GDS_SSO_OAUTH_SECRET",
+          "valueFrom" : data.aws_secretsmanager_secret.oauth_secret.arn
+        },
+        {
+          "name" : "SECRET_KEY_BASE",
+          "valueFrom" : data.aws_secretsmanager_secret.secret_key_base.arn
+        },
         {
           "name" : "SENTRY_DSN",
           "valueFrom" : data.aws_secretsmanager_secret.sentry_dsn.arn
