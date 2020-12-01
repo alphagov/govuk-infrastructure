@@ -466,4 +466,14 @@ resource "aws_security_group_rule" "draft_router_from_draft_router_api_tcp" {
   source_security_group_id = module.draft_router_api_service.app_security_group_id
 }
 
+resource "aws_security_group_rule" "redis_to_any_any" {
+  description       = "Redis cluster sends requests to anywhere over any protocol"
+  type              = "egress"
+  from_port         = 0
+  to_port           = 0
+  protocol          = -1
+  cidr_blocks       = ["0.0.0.0/0"]
+  security_group_id = module.shared_redis_cluster.security_group_id
+}
+
 # TODO: move the rest of the rules into this file.
