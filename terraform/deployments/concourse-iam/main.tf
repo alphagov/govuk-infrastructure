@@ -6,6 +6,26 @@
 # the role in our account, which allows concourse to do the things it needs to
 # do.
 
+terraform {
+  backend "s3" {
+    bucket  = "govuk-terraform-test"
+    key     = "projects/concourse-iam.tfstate"
+    region  = "eu-west-1"
+    encrypt = true
+  }
+
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 3.13"
+    }
+  }
+}
+
+provider "aws" {
+  region = "eu-west-1"
+}
+
 resource "aws_iam_role" "govuk_concourse_deployer" {
   name        = "govuk-concourse-deployer"
   description = "Deploys applications to ECS from Concourse"
