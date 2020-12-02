@@ -16,6 +16,10 @@ terraform {
 
 provider "aws" {
   region = "eu-west-1"
+
+  assume_role {
+    role_arn = var.assume_role_arn
+  }
 }
 
 data "terraform_remote_state" "infra_networking" {

@@ -15,7 +15,7 @@ resources:
     icon: github
     name: govuk-infrastructure
     source:
-      branch: main
+      branch: cd-terraform
       uri: https://github.com/alphagov/govuk-infrastructure
     type: git
 
@@ -84,6 +84,7 @@ groups:
   - name: all
     jobs:
       - update-pipeline
+      - run-terraform
       - deploy-content-store
       - deploy-draft-content-store
       - deploy-frontend
@@ -98,6 +99,10 @@ groups:
       - deploy-signon
       - deploy-static
       - deploy-draft-static
+
+  - name: terraform
+    jobs:
+      - run-terraform
 
   - name: admin
     jobs:
@@ -163,6 +168,40 @@ jobs:
       trigger: true
     - file: govuk-infrastructure/concourse/pipelines/deploy.yml
       set_pipeline: deploy-apps-test
+
+  - name: run-terraform
+    plan:
+    - get: govuk-infrastructure
+      trigger: true
+    - task:
+      config:
+        inputs:
+        - name: govuk-infrastructure
+        params:
+          AWS_REGION: eu-west-1
+          ASSUME_ROLE_ARN: 'arn:aws:iam::430354129336:role/govuk-concourse-deployer'
+        platform: linux
+        image_resource:
+          type: docker-image
+          source:
+            repository: governmentpaas/terraform
+            tag: terraform-0.13.3
+            username: ((docker_hub_username))
+            password: ((docker_hub_authtoken))
+        run:
+          dir: govuk-infrastructure/terraform/deployments/govuk-test
+          path: sh
+          args:
+          - '-c'
+          - |
+            set -eu
+
+            terraform init -backend-config "role_arn=$ASSUME_ROLE_ARN"
+            terraform apply \
+              -var "assume_role_arn=$ASSUME_ROLE_ARN" \
+              -var-file ../variables/test/common.tfvars \
+              -var-file ../variables/test/infrastructure.tfvars \
+              -auto-approve
 
   - name: deploy-frontend
     plan:
