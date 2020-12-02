@@ -30,7 +30,6 @@ module "task_definition" {
   govuk_website_root               = local.website_root
   image_tag                        = "bilbof_dockerfile-fix" # TODO: Pinned due to content-schemas issue
   mesh_name                        = var.mesh_name
-  mesh_subdomain                   = "publishing-api-worker"
   service_discovery_namespace_name = local.service_discovery_namespace_name
   statsd_host                      = local.statsd_host
   execution_role_arn               = data.aws_iam_role.execution.arn

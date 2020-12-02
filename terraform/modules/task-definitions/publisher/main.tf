@@ -67,7 +67,6 @@ module "task_definition" {
   service_name       = var.service_name
   cpu                = 512
   memory             = 1024
-  mesh_subdomain     = var.mesh_subdomain
   execution_role_arn = var.execution_role_arn
   task_role_arn      = var.task_role_arn
   container_definitions = [
@@ -98,7 +97,7 @@ module "task_definition" {
         { "name" : "GOVUK_USER", "value" : "deploy" },
         { "name" : "GOVUK_WEBSITE_ROOT", "value" : var.govuk_website_root },
         { "name" : "PLEK_SERVICE_CONTENT_STORE_URI", "value" : "https://www.gov.uk/api" }, # TODO: looks suspicious
-        { "name" : "PLEK_SERVICE_PUBLISHING_API_URI", "value" : "http://publishing-api.${var.service_discovery_namespace_name}" },
+        { "name" : "PLEK_SERVICE_PUBLISHING_API_URI", "value" : "http://publishing-api-web.${var.service_discovery_namespace_name}" },
         { "name" : "PLEK_SERVICE_STATIC_URI", "value" : "https://assets.test.publishing.service.gov.uk" },
         # TODO: remove PLEK_SERVICE_DRAFT_ORIGIN_URI once we have the draft origin properly set up with multiple frontends
         { "name" : "PLEK_SERVICE_DRAFT_ORIGIN_URI", "value" : "https://draft-frontend.${var.govuk_app_domain_external}" },

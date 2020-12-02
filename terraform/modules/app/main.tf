@@ -12,7 +12,7 @@ terraform {
 }
 
 locals {
-  subdomain               = coalesce(var.mesh_subdomain, var.service_name)
+  subdomain               = var.service_name
   container_services      = "${length(var.custom_container_services) == 0 ? [{ container_service = "${local.subdomain}", port = 80, protocol = "http" }] : var.custom_container_services}"
   service_security_groups = concat([aws_security_group.service.id], var.extra_security_groups)
 }
