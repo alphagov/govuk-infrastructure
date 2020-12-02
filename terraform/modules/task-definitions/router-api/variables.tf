@@ -37,3 +37,11 @@ variable "router_urls" {
   type        = string
   description = "Comma-separated list of router nodes"
 }
+
+variable "service_discovery_namespace_name" {
+  type = string
+}
+
+variable "govuk_app_domain_external" {
+  type = string
+}
