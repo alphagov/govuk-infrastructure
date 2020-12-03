@@ -206,6 +206,9 @@ jobs:
   - name: deploy-frontend
     plan:
     - get: govuk-infrastructure
+      passed:
+      - run-terraform
+      trigger: true
     - get: release
       resource: frontend
       trigger: true
@@ -245,6 +248,9 @@ jobs:
   - name: deploy-draft-frontend
     plan:
     - get: govuk-infrastructure
+      passed:
+      - run-terraform
+      trigger: true
     - get: release
       resource: frontend
       trigger: true
@@ -273,6 +279,9 @@ jobs:
   - name: deploy-publisher
     plan:
     - get: govuk-infrastructure
+      passed:
+      - run-terraform
+      trigger: true
     - get: release
       resource: publisher
       trigger: true
@@ -313,6 +322,9 @@ jobs:
   - name: deploy-publishing-api
     plan:
     - get: govuk-infrastructure
+      passed:
+      - run-terraform
+      trigger: true
     - get: release
       resource: publishing-api
       trigger: true
@@ -343,6 +355,9 @@ jobs:
   - name: deploy-content-store
     plan:
     - get: govuk-infrastructure
+      passed:
+      - run-terraform
+      trigger: true
     - get: release
       resource: content-store
       trigger: true
@@ -363,6 +378,9 @@ jobs:
   - name: deploy-draft-content-store
     plan:
     - get: govuk-infrastructure
+      passed:
+      - run-terraform
+      trigger: true
     - get: release
       resource: content-store
       trigger: true
@@ -383,6 +401,9 @@ jobs:
   - name: deploy-router
     plan:
     - get: govuk-infrastructure
+      passed:
+      - run-terraform
+      trigger: true
     - get: release
       resource: router
       trigger: true
@@ -403,6 +424,9 @@ jobs:
   - name: deploy-draft-router
     plan:
     - get: govuk-infrastructure
+      passed:
+      - run-terraform
+      trigger: true
     - get: release
       resource: router
       trigger: true
@@ -423,6 +447,9 @@ jobs:
   - name: deploy-router-api
     plan:
     - get: govuk-infrastructure
+      passed:
+      - run-terraform
+      trigger: true
     - get: release
       resource: router-api
       trigger: true
@@ -443,6 +470,9 @@ jobs:
   - name: deploy-draft-router-api
     plan:
     - get: govuk-infrastructure
+      passed:
+      - run-terraform
+      trigger: true
     - get: release
       resource: router-api
       trigger: true
@@ -463,6 +493,9 @@ jobs:
   - name: deploy-signon
     plan:
     - get: govuk-infrastructure
+      passed:
+      - run-terraform
+      trigger: true
     - get: release
       resource: signon
       trigger: true
@@ -483,6 +516,9 @@ jobs:
   - name: deploy-static
     plan:
     - get: govuk-infrastructure
+      passed:
+      - run-terraform
+      trigger: true
     - get: release
       resource: static
       trigger: true
@@ -503,6 +539,9 @@ jobs:
   - name: deploy-draft-static
     plan:
     - get: govuk-infrastructure
+      passed:
+      - run-terraform
+      trigger: true
     - get: release
       resource: static
       trigger: true
