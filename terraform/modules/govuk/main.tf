@@ -176,6 +176,8 @@ module "signon_service" {
   cluster_id                       = aws_ecs_cluster.cluster.id
   source                           = "../../modules/apps/signon"
   desired_count                    = var.signon_desired_count
+  public_lb_domain_name            = var.public_lb_domain_name
+  public_subnets                   = var.public_subnets
 }
 
 module "shared_redis_cluster" {

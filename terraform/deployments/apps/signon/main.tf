@@ -23,13 +23,16 @@ provider "aws" {
 }
 
 module "task_definition" {
-  source             = "../../../modules/task-definitions/signon"
-  image_tag          = var.image_tag
-  mesh_name          = var.mesh_name
-  execution_role_arn = data.aws_iam_role.execution.arn
-  signon_db_url      = var.signon_db_url
-  signon_test_db_url = var.signon_test_db_url
-  task_role_arn      = data.aws_iam_role.task.arn
-  sentry_environment = var.sentry_environment
-  assume_role_arn    = var.assume_role_arn
+  source                           = "../../../modules/task-definitions/signon"
+  image_tag                        = var.image_tag
+  execution_role_arn               = data.aws_iam_role.execution.arn
+  govuk_app_domain_external        = var.app_domain
+  govuk_website_root               = local.website_root
+  mesh_name                        = var.mesh_name
+  redis_host                       = var.redis_host
+  redis_port                       = local.redis_port
+  service_discovery_namespace_name = local.service_discovery_namespace_name
+  task_role_arn                    = data.aws_iam_role.task.arn
+  sentry_environment               = var.sentry_environment
+  assume_role_arn                  = var.assume_role_arn
 }

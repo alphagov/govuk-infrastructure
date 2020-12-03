@@ -64,6 +64,7 @@ module "task_definition" {
         { "name" : "PLEK_SERVICE_PUBLISHING_API_URI", "value" : "http://publishing-api-web.${var.service_discovery_namespace_name}" },
         { "name" : "PLEK_SERVICE_ROUTER_API_URI", "value" : "http://${var.router_api_hostname_prefix}router-api.${var.service_discovery_namespace_name}" },
         { "name" : "PLEK_SERVICE_RUMMAGER_URI", "value" : "" },
+        { "name" : "PLEK_SERVICE_SIGNON_URI", "value" : "https://signon-ecs.${var.govuk_app_domain_external}" },
         { "name" : "PLEK_SERVICE_SPOTLIGHT_URI", "value" : "" },
         { "name" : "PORT", "value" : "80" },
         { "name" : "RAILS_ENV", "value" : "production" },

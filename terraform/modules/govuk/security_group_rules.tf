@@ -476,4 +476,33 @@ resource "aws_security_group_rule" "redis_to_any_any" {
   security_group_id = module.shared_redis_cluster.security_group_id
 }
 
-# TODO: move the rest of the rules into this file.
+resource "aws_security_group_rule" "redis_from_signon_resp" {
+  type                     = "ingress"
+  from_port                = 6379
+  to_port                  = 6379
+  protocol                 = "tcp"
+  security_group_id        = module.shared_redis_cluster.security_group_id
+  source_security_group_id = module.signon_service.app_security_group_id
+}
+
+resource "aws_security_group_rule" "mysql_from_signon_mysql" {
+  type                     = "ingress"
+  from_port                = 3306
+  to_port                  = 3306
+  protocol                 = "tcp"
+  security_group_id        = var.mysql_security_group_id
+  source_security_group_id = module.signon_service.app_security_group_id
+}
+
+resource "aws_security_group_rule" "signon_to_any_any" {
+  description       = "Signon sends requests to anywhere over any protocol"
+  type              = "egress"
+  from_port         = 0
+  to_port           = 0
+  protocol          = -1
+  cidr_blocks       = ["0.0.0.0/0"]
+  security_group_id = module.signon_service.app_security_group_id
+}
+
+# TODO: move the rest of the rules into this file unless there's a good reason
+#       for them to stay in other files.

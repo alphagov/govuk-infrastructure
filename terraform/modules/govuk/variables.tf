@@ -45,6 +45,11 @@ variable "mongodb_security_group_id" {
   type        = string
 }
 
+variable "mysql_security_group_id" {
+  description = "ID of security group (from the govuk-aws repo) for the shared MySQL RDS."
+  type        = string
+}
+
 variable "routerdb_security_group_id" {
   description = "ID of security group (from the govuk-aws repo) for the Router MongoDB."
   type        = string
