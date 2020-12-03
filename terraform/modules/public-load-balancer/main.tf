@@ -48,20 +48,6 @@ resource "aws_lb_listener" "public" {
   }
 }
 
-#
-# Security groups
-#
-
-resource "aws_security_group" "public_alb" {
-  name        = "fargate_${var.app_name}_${var.workspace_suffix}_public_alb"
-  vpc_id      = var.vpc_id
-  description = "${var.app_name} Internet-facing ALB in ${var.workspace_suffix} cluster"
-}
-
-#
-# DNS
-#
-
 data "aws_route53_zone" "public" {
   name = var.public_lb_domain_name
 }

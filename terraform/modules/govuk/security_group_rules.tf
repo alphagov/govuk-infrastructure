@@ -504,34 +504,5 @@ resource "aws_security_group_rule" "signon_to_any_any" {
   security_group_id = module.signon_service.app_security_group_id
 }
 
-resource "aws_security_group_rule" "signon_from_alb_http" {
-  description              = "Signon receives requests from its public ALB over HTTP"
-  type                     = "ingress"
-  from_port                = 80
-  to_port                  = 80
-  protocol                 = "tcp"
-  security_group_id        = module.signon_service.app_security_group_id
-  source_security_group_id = module.signon_service.alb_security_group_id
-}
-
-resource "aws_security_group_rule" "signon_alb_from_any_https" {
-  description       = "Signon ALB receives requests from anywhere over HTTPS"
-  type              = "ingress"
-  from_port         = 443
-  to_port           = 443
-  protocol          = "tcp"
-  cidr_blocks       = ["0.0.0.0/0"]
-  security_group_id = module.signon_service.alb_security_group_id
-}
-
-resource "aws_security_group_rule" "signon_alb_to_any_any" {
-  type      = "egress"
-  protocol  = "-1"
-  from_port = 0
-  to_port   = 0
-
-  security_group_id = module.signon_service.alb_security_group_id
-  cidr_blocks       = ["0.0.0.0/0"]
-}
-
-# TODO: move the rest of the rules into this file.
+# TODO: move the rest of the rules into this file unless there's a good reason
+#       for them to stay in other files.

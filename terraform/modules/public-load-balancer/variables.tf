@@ -28,6 +28,11 @@ variable "public_lb_domain_name" {
   description = "Domain in which to create DNS records for the app's Internet-facing load balancer. For example, staging.govuk.digital"
 }
 
+variable "service_security_group_id" {
+  type        = string
+  description = "Security group ID for the associated ECS Service."
+}
+
 variable "vpc_id" {
   type = string
 }
