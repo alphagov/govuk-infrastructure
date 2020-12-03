@@ -94,6 +94,7 @@ module "task_definition" {
         { "name" : "GOVUK_WEBSITE_ROOT", "value" : var.govuk_website_root },
         { "name" : "PLEK_SERVICE_CONTENT_STORE_URI", "value" : "http://content-store.${var.service_discovery_namespace_name}" },
         { "name" : "PLEK_SERVICE_DRAFT_CONTENT_STORE_URI", "value" : "http://draft-content-store.${var.service_discovery_namespace_name}" },
+        { "name" : "PLEK_SERVICE_SIGNON_URI", "value" : "https://signon-ecs.${var.govuk_app_domain_external}" },
         { "name" : "PORT", "value" : "80" },
         { "name" : "RABBITMQ_HOSTS", "value" : "rabbitmq.${var.govuk_app_domain_internal}" },
         { "name" : "RABBITMQ_USER", "value" : "publishing_api" },
