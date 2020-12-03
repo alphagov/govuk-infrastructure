@@ -28,14 +28,32 @@ run:
       credential_source = Ec2InstanceMetadata
       EOF
 
+      current_task_definition_arn="$(aws ecs describe-services --services "$APPLICATION" --cluster govuk --region "$AWS_REGION" | jq -r '.services[0].taskDefinition')"
+      if [ -z "${current_task_definition_arn}"]; then
+        echo "failed to retrieve current task definition for ${APPLICATION}, exiting..."
+        exit 1
+      fi
+
+      new_task_definition_arn="$(cat "terraform-outputs/${APPLICATION}_task_definition_arn")"
+      if [ -z "${new_task_definition_arn}"]; then
+        echo "failed to retrieve new task definition for ${APPLICATION}, exiting..."
+        exit 1
+      fi
+
+      # This conditional is used to skip `aws ecs update-service` below since its outputs may confuse readers and
+      # lead them to believe that `aws ecs update-service` is not idempotent
+      if [ "${current_task_definition_arn}" = "${new_task_definition_arn}" ]; then
+        echo "No need to update ${APPLICATION} service since its task definition was not updated"
+        exit 0
+      fi
+
       echo "Updating $APPLICATION service..."
 
-      task_definition_arn="$(cat "terraform-outputs/${APPLICATION}_task_definition_arn")"
 
       aws ecs update-service \
         --cluster govuk \
         --service "$APPLICATION" \
-        --task-definition "$task_definition_arn" \
+        --task-definition "$new_task_definition_arn" \
         --region "$AWS_REGION"
 
       echo "Waiting for $APPLICATION ECS service to reach steady state..."
@@ -45,4 +63,4 @@ run:
         --services "$APPLICATION" \
         --region "$AWS_REGION"
 
-      echo "Finished updating $APPLICATION to task definition $task_definition_arn."
+      echo "Finished updating $APPLICATION to task definition $new_task_definition_arn."

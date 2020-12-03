@@ -15,7 +15,7 @@ resources:
     icon: github
     name: govuk-infrastructure
     source:
-      branch: cd-terraform
+      branch: main
       uri: https://github.com/alphagov/govuk-infrastructure
     type: git
 
@@ -238,7 +238,6 @@ jobs:
     - get: govuk-infrastructure
       passed:
       - deploy-frontend
-      trigger: true
     - file: govuk-infrastructure/concourse/tasks/basic-smoke-test.yml
       params:
         MESSAGE: Checking the app is not serving HTTP error codes.
