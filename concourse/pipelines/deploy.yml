@@ -84,6 +84,7 @@ groups:
   - name: all
     jobs:
       - update-pipeline
+      - run-terraform
       - deploy-content-store
       - deploy-draft-content-store
       - deploy-frontend
@@ -98,6 +99,10 @@ groups:
       - deploy-signon
       - deploy-static
       - deploy-draft-static
+
+  - name: terraform
+    jobs:
+      - run-terraform
 
   - name: admin
     jobs:
@@ -164,9 +169,46 @@ jobs:
     - file: govuk-infrastructure/concourse/pipelines/deploy.yml
       set_pipeline: deploy-apps-test
 
+  - name: run-terraform
+    plan:
+    - get: govuk-infrastructure
+      trigger: true
+    - task:
+      config:
+        inputs:
+        - name: govuk-infrastructure
+        params:
+          AWS_REGION: eu-west-1
+          ASSUME_ROLE_ARN: 'arn:aws:iam::430354129336:role/govuk-concourse-deployer'
+        platform: linux
+        image_resource:
+          type: docker-image
+          source:
+            repository: governmentpaas/terraform
+            tag: terraform-0.13.3
+            username: ((docker_hub_username))
+            password: ((docker_hub_authtoken))
+        run:
+          dir: govuk-infrastructure/terraform/deployments/govuk-test
+          path: sh
+          args:
+          - '-c'
+          - |
+            set -eu
+
+            terraform init -backend-config "role_arn=$ASSUME_ROLE_ARN"
+            terraform apply \
+              -var "assume_role_arn=$ASSUME_ROLE_ARN" \
+              -var-file ../variables/test/common.tfvars \
+              -var-file ../variables/test/infrastructure.tfvars \
+              -auto-approve
+
   - name: deploy-frontend
     plan:
     - get: govuk-infrastructure
+      passed:
+      - run-terraform
+      trigger: true
     - get: release
       resource: frontend
       trigger: true
@@ -206,6 +248,9 @@ jobs:
   - name: deploy-draft-frontend
     plan:
     - get: govuk-infrastructure
+      passed:
+      - run-terraform
+      trigger: true
     - get: release
       resource: frontend
       trigger: true
@@ -234,6 +279,9 @@ jobs:
   - name: deploy-publisher
     plan:
     - get: govuk-infrastructure
+      passed:
+      - run-terraform
+      trigger: true
     - get: release
       resource: publisher
       trigger: true
@@ -274,6 +322,9 @@ jobs:
   - name: deploy-publishing-api
     plan:
     - get: govuk-infrastructure
+      passed:
+      - run-terraform
+      trigger: true
     - get: release
       resource: publishing-api
       trigger: true
@@ -304,6 +355,9 @@ jobs:
   - name: deploy-content-store
     plan:
     - get: govuk-infrastructure
+      passed:
+      - run-terraform
+      trigger: true
     - get: release
       resource: content-store
       trigger: true
@@ -324,6 +378,9 @@ jobs:
   - name: deploy-draft-content-store
     plan:
     - get: govuk-infrastructure
+      passed:
+      - run-terraform
+      trigger: true
     - get: release
       resource: content-store
       trigger: true
@@ -344,6 +401,9 @@ jobs:
   - name: deploy-router
     plan:
     - get: govuk-infrastructure
+      passed:
+      - run-terraform
+      trigger: true
     - get: release
       resource: router
       trigger: true
@@ -364,6 +424,9 @@ jobs:
   - name: deploy-draft-router
     plan:
     - get: govuk-infrastructure
+      passed:
+      - run-terraform
+      trigger: true
     - get: release
       resource: router
       trigger: true
@@ -384,6 +447,9 @@ jobs:
   - name: deploy-router-api
     plan:
     - get: govuk-infrastructure
+      passed:
+      - run-terraform
+      trigger: true
     - get: release
       resource: router-api
       trigger: true
@@ -404,6 +470,9 @@ jobs:
   - name: deploy-draft-router-api
     plan:
     - get: govuk-infrastructure
+      passed:
+      - run-terraform
+      trigger: true
     - get: release
       resource: router-api
       trigger: true
@@ -424,6 +493,9 @@ jobs:
   - name: deploy-signon
     plan:
     - get: govuk-infrastructure
+      passed:
+      - run-terraform
+      trigger: true
     - get: release
       resource: signon
       trigger: true
@@ -444,6 +516,9 @@ jobs:
   - name: deploy-static
     plan:
     - get: govuk-infrastructure
+      passed:
+      - run-terraform
+      trigger: true
     - get: release
       resource: static
       trigger: true
@@ -464,6 +539,9 @@ jobs:
   - name: deploy-draft-static
     plan:
     - get: govuk-infrastructure
+      passed:
+      - run-terraform
+      trigger: true
     - get: release
       resource: static
       trigger: true
