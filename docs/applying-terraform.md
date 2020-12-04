@@ -10,11 +10,22 @@ We have attempted - where possible - to separate infrastructure concerns
 Therefore, there is a single command (`terraform apply`) to create or update the
 infrastructure, and another set of commands to update application concerns.
 
+### Automated Deployment via Concourse
 
-## Updating the infrastructure
+Once you have merged your code in the `main`, this will kick off a new deployment
+in [Concourse](https://cd.gds-reliability.engineering/teams/govuk-tools/pipelines/deploy-apps-test)
+which will terraform the base infrastructure to reflect the code in the `main` branch.
 
-Example for updating the test environment below. The ideal scenario is that
-we will have separate tfvars files for each environment.
+After the base infrastructure has been terraformed, the Concourse pipeline will create new task definitions
+for any services/applications that have changed. If a new task definition has been created, the respective
+ECS Service will be updated/deployed.
+
+## Local Deployment
+
+### Infrastructure
+
+You can update the base infrastructure from your machine to test things.
+For example, run the following commands to update the test environment:
 
 ```sh
 cd terraform/deployments/govuk-test
@@ -22,7 +33,7 @@ terraform apply -var-file=../variables/test/common.tfvars \
    -var-file=../variables/test/infrastructure.tfvars
 ```
 
-## Deploying an application
+### Application
 
 To deploy app changes to ECS Services, we update the task definition using
 the deployment module in `terraform/deployments/apps` and then run a

@@ -16,29 +16,23 @@ terraform {
 
 provider "aws" {
   region = "eu-west-1"
-
-  assume_role {
-    role_arn = var.assume_role_arn
-  }
 }
 
 data "terraform_remote_state" "infra_networking" {
   backend = "s3"
   config = {
-    bucket   = var.govuk_aws_state_bucket
-    key      = "govuk/infra-networking.tfstate"
-    region   = "eu-west-1"
-    role_arn = var.assume_role_arn
+    bucket = var.govuk_aws_state_bucket
+    key    = "govuk/infra-networking.tfstate"
+    region = "eu-west-1"
   }
 }
 
 data "terraform_remote_state" "infra_security_groups" {
   backend = "s3"
   config = {
-    bucket   = var.govuk_aws_state_bucket
-    key      = "govuk/infra-security-groups.tfstate"
-    region   = "eu-west-1"
-    role_arn = var.assume_role_arn
+    bucket = var.govuk_aws_state_bucket
+    key    = "govuk/infra-security-groups.tfstate"
+    region = "eu-west-1"
   }
 }
 
