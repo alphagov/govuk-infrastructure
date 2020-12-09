@@ -49,6 +49,8 @@ module "govuk" {
   public_lb_domain_name = var.public_lb_domain_name
   internal_domain_name  = var.internal_domain_name
 
+  ecs_default_capacity_provider = var.ecs_default_capacity_provider
+
   vpc_id                            = data.terraform_remote_state.infra_networking.outputs.vpc_id
   private_subnets                   = data.terraform_remote_state.infra_networking.outputs.private_subnet_ids
   public_subnets                    = data.terraform_remote_state.infra_networking.outputs.public_subnet_ids
