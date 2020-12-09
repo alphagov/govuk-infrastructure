@@ -10,6 +10,10 @@ variable "mesh_domain" {
   type = string
 }
 
+variable "ecs_default_capacity_provider" {
+  type = string
+}
+
 variable "public_lb_domain_name" {
   type = string
 }

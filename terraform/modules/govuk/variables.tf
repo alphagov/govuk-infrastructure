@@ -10,6 +10,12 @@ variable "mesh_name" {
   type = string
 }
 
+variable "ecs_default_capacity_provider" {
+  description = "Set this to FARGATE_SPOT to use spot instances in the ECS cluster by default. If unset, the cluster will use on-demand (regular) instances by default. Tasks can still override the default capacity provider in either case."
+  type        = string
+  default     = "FARGATE"
+}
+
 variable "private_subnets" {
   description = "Subnet IDs to use for non-Internet-facing resources."
   type        = list
