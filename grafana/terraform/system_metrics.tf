@@ -1,5 +1,5 @@
 locals {
-  dashboard_config = {
+  system_metrics_dashboard_config = {
     "annotations" : {
       "list" : [
         {
@@ -471,6 +471,6 @@ locals {
 resource "grafana_dashboard" "system_metrics" {
   folder = grafana_folder.govuk_publishing_platform.id
 
-  config_json = jsonencode(local.dashboard_config)
+  config_json = jsonencode(local.system_metrics_dashboard_config)
 }
 
