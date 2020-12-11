@@ -20,11 +20,10 @@ jobs:
           key:
             ${{ env.cache-name }}-${{ steps.get-date.outputs.date }}-${{ hashFiles('terraform/deployments/**/main.tf', 'terraform/deployments/**/versions.tf') }}
 
-      - name: install terraform
-        working-directory: terraform
-        run: |
-          brew install tfenv
-          tfenv install
+      - uses: hashicorp/setup-terraform@v1
+        with:
+          terraform_version: 0.13.3
+          terraform_wrapper: false
 
       - name: terraform fmt
         working-directory: terraform
