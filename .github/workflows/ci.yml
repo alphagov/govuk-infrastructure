@@ -11,7 +11,8 @@ jobs:
         run: |
           brew install tfenv
           tfenv install
-          find . -name '*.tf' | xargs ../tools/terraform-format.sh
+          if ! terraform fmt -write=false -diff=true -list=true -recursive -check .
+          then
+            >&2 echo "Some terraform files weren't formatted correctly. Run 'terraform fmt' to fix them."
+          fi
 
-      - name: JSON Check
-        run: find . -name '*.json' | xargs tools/json-check.sh
