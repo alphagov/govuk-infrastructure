@@ -11,6 +11,10 @@ jobs:
         run: |
           echo "::set-output name=date::$(/bin/date -u "+%Y%m%d")"
 
+      - uses: actions/setup-ruby@v1
+        with:
+          ruby-version: '2.7.2'
+
       - name: cache terraform plugins
         uses: actions/cache@v2
         env:
@@ -32,6 +36,11 @@ jobs:
           then
             >&2 echo "Some terraform files weren't formatted correctly. Run 'terraform fmt' to fix them."
           fi
+
+      - name: rspec
+        run: |
+          bundle install
+          rspec
 
       - name: terraform validate
         working-directory: terraform
