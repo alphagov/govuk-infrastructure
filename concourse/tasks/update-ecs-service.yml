@@ -29,13 +29,13 @@ run:
       EOF
 
       current_task_definition_arn="$(aws ecs describe-services --services "$APPLICATION" --cluster govuk --region "$AWS_REGION" | jq -r '.services[0].taskDefinition')"
-      if [ -z "${current_task_definition_arn}"]; then
+      if [ -z "${current_task_definition_arn}" ]; then
         echo "failed to retrieve current task definition for ${APPLICATION}, exiting..."
         exit 1
       fi
 
       new_task_definition_arn="$(cat "terraform-outputs/${APPLICATION}_task_definition_arn")"
-      if [ -z "${new_task_definition_arn}"]; then
+      if [ -z "${new_task_definition_arn}" ]; then
         echo "failed to retrieve new task definition for ${APPLICATION}, exiting..."
         exit 1
       fi
