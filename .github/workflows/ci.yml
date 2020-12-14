@@ -11,9 +11,7 @@ jobs:
         run: |
           echo "::set-output name=date::$(/bin/date -u "+%Y%m%d")"
 
-      - uses: actions/setup-ruby@v1
-        with:
-          ruby-version: '2.7.2'
+      - uses: ruby/setup-ruby@v1
 
       - name: cache terraform plugins
         uses: actions/cache@v2

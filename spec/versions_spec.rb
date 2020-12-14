@@ -36,22 +36,4 @@ RSpec.describe "Versions" do
     end
 
   end
-
-  describe "Ruby" do
-    canonical_ruby_version = File.read(".ruby-version").chomp
-
-    describe "GitHub Actions" do
-      paths = [
-        YamlPath.new(".github/workflows/ci.yml", ["jobs", "test", "steps", 2, "with", "ruby-version"])
-      ]
-
-      paths.each do |yaml_path|
-        it "#{yaml_path.file} should use the canonical ruby version (#{canonical_ruby_version})" do
-          yaml = YAML.load_file(yaml_path.file)
-          ruby_version = yaml.dig(*yaml_path.path)
-          expect(ruby_version).to eql canonical_ruby_version
-        end
-      end
-    end
-  end
 end
