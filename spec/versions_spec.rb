@@ -1,39 +1,36 @@
 require 'yaml'
 
-YamlPath = Struct.new(:file, :path)
-
 RSpec.describe "Versions" do
   describe "Terraform" do
     canonical_terraform_version = File.read("terraform/.terraform-version").chomp
 
     describe "Concourse" do
-      paths = [
-        YamlPath.new("concourse/pipelines/deploy.yml", ["jobs", 1, "plan", 1, "config", "image_resource", "source", "tag"]),
-        YamlPath.new("concourse/tasks/update-task-definition.yml", ["image_resource", "source", "tag"]),
-      ]
+      it "concourse/pipelines/deploy.yml should use the canonical terraform version (#{canonical_terraform_version})" do
+        pipeline = YAML.load_file("concourse/pipelines/deploy.yml")
+        terraform_image_tag = pipeline
+          .dig("jobs").find{ |job  | job["name"]   == "run-terraform" }
+          .dig("plan").find{ |stage| stage["task"] == "terraform-apply" }
+          .dig("config", "image_resource", "source", "tag")
 
-      paths.each do |yaml_path|
-        it "#{yaml_path.file} should use the canonical terraform version (#{canonical_terraform_version})" do
-          yaml = YAML.load_file(yaml_path.file)
-          terraform_image_tag = yaml.dig(*yaml_path.path)
-          expect(terraform_image_tag).to eql "terraform-#{canonical_terraform_version}"
-        end
+        expect(terraform_image_tag).to eql "terraform-#{canonical_terraform_version}"
+      end
+
+      it "concourse/tasks/update-task-definition.yml should use the canonical terraform version (#{canonical_terraform_version})" do
+        task = YAML.load_file("concourse/tasks/update-task-definition.yml")
+        terraform_image_tag = task.dig("image_resource", "source", "tag")
+        expect(terraform_image_tag).to eql "terraform-#{canonical_terraform_version}"
       end
     end
 
     describe "GitHub Actions" do
-      paths = [
-        YamlPath.new(".github/workflows/ci.yml", ["jobs", "test", "steps", 1, "with", "terraform_version"])
-      ]
-
-      paths.each do |yaml_path|
-        it "#{yaml_path.file} should use the canonical terraform version (#{canonical_terraform_version})" do
-          yaml = YAML.load_file(yaml_path.file)
-          terraform_version = yaml.dig(*yaml_path.path)
-          expect(terraform_version).to eql canonical_terraform_version
-        end
+      it ".github/workflows/ci.yml should use the canonical terraform version (#{canonical_terraform_version})" do
+        workflow = YAML.load_file(".github/workflows/ci.yml")
+        terraform_version = workflow
+            .dig("jobs", "test", "steps")
+            .find{ |step| step["uses"] == "hashicorp/setup-terraform@v1" }
+            .dig("with", "terraform_version")
+        expect(terraform_version).to eql canonical_terraform_version
       end
     end
-
   end
 end
