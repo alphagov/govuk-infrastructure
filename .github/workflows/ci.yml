@@ -5,6 +5,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      - uses: ruby/setup-ruby@v1
+      - uses: hashicorp/setup-terraform@v1
+        with:
+          terraform_version: 0.13.3
+          terraform_wrapper: false
 
       - name: get date
         id: get-date
@@ -20,11 +25,6 @@ jobs:
           key:
             ${{ env.cache-name }}-${{ steps.get-date.outputs.date }}-${{ hashFiles('terraform/deployments/**/main.tf', 'terraform/deployments/**/versions.tf') }}
 
-      - uses: hashicorp/setup-terraform@v1
-        with:
-          terraform_version: 0.13.3
-          terraform_wrapper: false
-
       - name: terraform fmt
         working-directory: terraform
         run: |
@@ -32,6 +32,11 @@ jobs:
           then
             >&2 echo "Some terraform files weren't formatted correctly. Run 'terraform fmt' to fix them."
           fi
+
+      - name: rspec
+        run: |
+          bundle install
+          rspec
 
       - name: terraform validate
         working-directory: terraform

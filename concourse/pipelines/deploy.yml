@@ -173,7 +173,7 @@ jobs:
     plan:
     - get: govuk-infrastructure
       trigger: true
-    - task:
+    - task: terraform-apply
       config:
         inputs:
         - name: govuk-infrastructure
