@@ -16,16 +16,19 @@ variable "secrets_from_arns" {
 variable "aws_region" {
   type = string
 }
+variable "depends_on" {
+  type        = map
+  default     = {}
+  description = "Other containers which this depends on (e.g. for envoy, set this to {envoy: \"START\"})"
+}
+
 output "value" {
   value = {
     "name" : var.name,
     "image" : var.image,
     "essential" : true,
     "environment" : [for key, value in var.environment_variables : { name : key, value : value }],
-    "dependsOn" : [{
-      "containerName" : "envoy",
-      "condition" : "START"
-    }],
+    "dependsOn" : [for key, value in var.depends_on : { containerName : key, condition : value }],
     "logConfiguration" : {
       "logDriver" : "awslogs",
       "options" : {
