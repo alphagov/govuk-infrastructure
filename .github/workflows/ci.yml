@@ -5,13 +5,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      - uses: ruby/setup-ruby@v1
+      - uses: hashicorp/setup-terraform@v1
+        with:
+          terraform_version: 0.13.3
+          terraform_wrapper: false
 
       - name: get date
         id: get-date
         run: |
           echo "::set-output name=date::$(/bin/date -u "+%Y%m%d")"
-
-      - uses: ruby/setup-ruby@v1
 
       - name: cache terraform plugins
         uses: actions/cache@v2
@@ -21,11 +24,6 @@ jobs:
           path: ~/.terraform/plugin-cache
           key:
             ${{ env.cache-name }}-${{ steps.get-date.outputs.date }}-${{ hashFiles('terraform/deployments/**/main.tf', 'terraform/deployments/**/versions.tf') }}
-
-      - uses: hashicorp/setup-terraform@v1
-        with:
-          terraform_version: 0.13.3
-          terraform_wrapper: false
 
       - name: terraform fmt
         working-directory: terraform
