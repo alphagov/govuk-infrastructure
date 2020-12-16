@@ -1,0 +1,26 @@
+platform: linux
+image_resource:
+  type: docker-image
+  source:
+    repository: governmentpaas/terraform
+    tag: terraform-0.13.3
+    username: ((docker_hub_username))
+    password: ((docker_hub_authtoken))
+inputs:
+  - name: govuk-infrastructure
+params:
+  ASSUME_ROLE_ARN: 'arn:aws:iam::430354129336:role/govuk-concourse-deployer'
+  AWS_REGION: eu-west-1
+  TF_IN_AUTOMATION: true
+run:
+  dir: govuk-infrastructure/terraform/deployments/govuk-test
+  path: sh
+  args:
+  - '-c'
+  - |
+    set -eu
+    terraform init -backend-config "role_arn=$ASSUME_ROLE_ARN"
+    terraform plan \
+      -var "assume_role_arn=$ASSUME_ROLE_ARN" \
+      -var-file ../variables/test/common.tfvars \
+      -var-file ../variables/test/infrastructure.tfvars

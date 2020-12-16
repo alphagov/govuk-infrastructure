@@ -1,0 +1,43 @@
+# TODO: Factor this out into a Resource Type for use in other projects
+# TODO: Having this as a put step would be much better...
+platform: linux
+image_resource:
+  type: docker-image
+  source:
+    repository: governmentpaas/curl-ssl
+    tag: terraform-0.13.3
+    username: ((docker_hub_username))
+    password: ((docker_hub_authtoken))
+inputs:
+  - name: govuk-infrastructure
+params:
+  JOB:
+  GITHUB_ACCESS_TOKEN:
+  STATE:
+  JOBS_URL:
+run:
+  path: sh
+  args:
+  - '-c'
+  - |
+    set -eu
+
+    commit_sha=$(cat govuk-infrastructure/.git/ref)
+
+    TARGET_URL="$JOBS_URL/$JOB"
+
+    echo '{
+      "state":"'"$STATE"'",
+      "context":"'"$JOB"'",
+      "target_url":"'"$TARGET_URL"'"
+    }'
+
+    curl -u govuk-ci:$GITHUB_ACCESS_TOKEN \
+    -X POST \
+    -H "Accept: application/vnd.github.v3+json" \
+    "https://api.github.com/repos/alphagov/govuk-infrastructure/statuses/$commit_sha" \
+    -d '{
+      "state":"'"$STATE"'",
+      "context":"'"$JOB"'",
+      "target_url":"'"$TARGET_URL"'"
+    }'
