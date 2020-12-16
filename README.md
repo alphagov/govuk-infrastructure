@@ -10,6 +10,16 @@ cd terraform/
 tfenv install
 ```
 
+### Working on this repo
+
+We have some recommended pre-commit scripts. If you're making changes to this
+repo, it's worth setting up the pre-commit hooks on your machine:
+
+[https://pre-commit.com/#install](https://pre-commit.com/#install)
+
+See [alphagov/gds-pre-commit](https://github.com/alphagov/gds-pre-commit) for
+more recommendations on using pre-commit.
+
 ### Documentation
 
 Further documentation about how to perform various tasks can be found [here](./docs)
