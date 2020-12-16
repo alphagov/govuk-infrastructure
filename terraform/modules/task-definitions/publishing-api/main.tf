@@ -79,7 +79,7 @@ module "task_definition" {
         { "name" : "CONTENT_API_PROTOTYPE", "value" : "yes" },
         { "name" : "CONTENT_STORE", "value" : "http://content-store.${var.service_discovery_namespace_name}" },
         { "name" : "DRAFT_CONTENT_STORE", "value" : "https://draft-content-store.${var.service_discovery_namespace_name}" },
-        { "name" : "EVENT_LOG_AWS_ACCESS_ID", "value" : "AKIAJE6VSW25CYBUMQJA" },
+        { "name" : "EVENT_LOG_AWS_ACCESS_ID", "value" : "AKIAJE6VSW25CYBUMQJA" }, # TODO: hardcoded
         { "name" : "EVENT_LOG_AWS_BUCKETNAME", "value" : "govuk-${local.app_name}-event-log-test" },
         { "name" : "EVENT_LOG_AWS_USERNAME", "value" : "govuk-${local.app_name}-event-log_user" },
         { "name" : "DEFAULT_TTL", "value" : "1800" },

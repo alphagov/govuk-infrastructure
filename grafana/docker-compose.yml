@@ -10,8 +10,10 @@ services:
     - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
     - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
     - AWS_SESSION_TOKEN=${AWS_SESSION_TOKEN}
+
+    # These creds are hardcoded, but it's okay because they're only used on localhost
     - GF_SECURITY_ADMIN_USER=admin
-    - GF_SECURITY_ADMIN_PASSWORD=admin
+    - GF_SECURITY_ADMIN_PASSWORD=admin # pragma: allowlist secret
   grafana-setup:
     image: governmentpaas/terraform:terraform-0.13.3
     depends_on:
