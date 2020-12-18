@@ -7,13 +7,13 @@ image_resource:
     username: ((docker_hub_username))
     password: ((docker_hub_authtoken))
 inputs:
-  - name: govuk-infrastructure
+  - name: govuk-infrastructure-commit
 params:
   ASSUME_ROLE_ARN: 'arn:aws:iam::430354129336:role/govuk-concourse-deployer'
   AWS_REGION: eu-west-1
   TF_IN_AUTOMATION: true
 run:
-  dir: govuk-infrastructure/terraform/deployments/govuk-test
+  dir: govuk-infrastructure-commit/repo/terraform/deployments/govuk-test
   path: sh
   args:
   - '-c'

@@ -7,7 +7,7 @@ image_resource:
     username: ((docker_hub_username))
     password: ((docker_hub_authtoken))
 inputs:
-  - name: govuk-infrastructure
+  - name: govuk-infrastructure-commit
   - name: frontend
   - name: content-store
   - name: publisher
@@ -29,7 +29,7 @@ run:
   - |
     set -eux
     IMAGE_TAG=$(cat "$APPLICATION/.git/ref")
-    cd "govuk-infrastructure/terraform/deployments/apps/$DEPLOYMENT"
+    cd "govuk-infrastructure-commit/repo/terraform/deployments/apps/$DEPLOYMENT"
     terraform init -backend-config "role_arn=$ASSUME_ROLE_ARN"
     terraform plan \
       -var "assume_role_arn=$ASSUME_ROLE_ARN" \

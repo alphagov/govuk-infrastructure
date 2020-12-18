@@ -1,12 +1,28 @@
 ---
 definitions:
 
+resource_types:
+  - name: github-commit
+    type: registry-image
+    source:
+      repository: govuk/github-commit
+      tag: 0.1.0
+
 resources:
+  - name: govuk-infrastructure-commit
+    type: github-commit
+    icon: github
+    source:
+      # Will fetch commits from *any* branch
+      repository: alphagov/govuk-infrastructure
+      access_token: ((govuk_ci_replatforming_github_access_token))
+      path: govuk-infrastructure-commit
+
   - &git-repo
     icon: github
     name: govuk-infrastructure
     source:
-      branch: bilbof/concourse-ci-terraform # TODO: set branch in variable
+      branch: main
       uri: https://github.com/alphagov/govuk-infrastructure
     type: git
 
@@ -72,24 +88,20 @@ jobs:
     - get: govuk-infrastructure
       trigger: true
     - file: govuk-infrastructure/concourse/pipelines/ci.yml
-      set_pipeline: ci-govuk-infrastructure-main # TODO: Set in variable
+      set_pipeline: ci-govuk-infrastructure-main
 
   - name: terraform-fmt
     plan:
-    - get: govuk-infrastructure
+    - get: govuk-infrastructure-commit
       trigger: true
-    - &github-commit
-      task: github-commit-status
-      file: govuk-infrastructure/concourse/tasks/github-commit-status.yml
-      params: &github-commit-params
-        JOB: terraform-fmt
-        STATE: pending
-        JOBS_URL: https://cd.gds-reliability.engineering/teams/govuk-tools/pipelines/ci-govuk-infrastructure-main/jobs
-        GITHUB_ACCESS_TOKEN: ((govuk_ci_replatforming_github_access_token))
+    - put: govuk-infrastructure-commit
+      params:
+        status: pending
+        context: terraform-fmt
     - task: terraform-fmt
       config:
         inputs:
-        - name: govuk-infrastructure
+        - name: govuk-infrastructure-commit
         params:
           TF_IN_AUTOMATION: true
         platform: linux
@@ -101,7 +113,7 @@ jobs:
             username: ((docker_hub_username))
             password: ((docker_hub_authtoken))
         run:
-          dir: govuk-infrastructure/terraform
+          dir: govuk-infrastructure-commit/repo/terraform
           path: sh
           args:
           - '-c'
@@ -111,46 +123,31 @@ jobs:
             then
               >&2 echo "Some terraform files weren't formatted correctly. Run 'terraform fmt' to fix them."
             fi
-      on_success:
-        <<: *github-commit
-        params:
-          <<: *github-commit-params
-          JOB: terraform-fmt
-          STATE: success
-      on_failure:
-        <<: *github-commit
-        params:
-          <<: *github-commit-params
-          JOB: terraform-fmt
-          STATE: failure
-      on_abort:
-        <<: *github-commit
-        params:
-          <<: *github-commit-params
-          JOB: terraform-fmt
-          STATE: error
-      on_error:
-        <<: *github-commit
-        params:
-          <<: *github-commit-params
-          JOB: terraform-fmt
-          STATE: error
-
-# TODO: Join govuk-app-deployments into one job.
+    on_success:
+      put: govuk-infrastructure-commit
+      params: {status: success, context: terraform-fmt} # puts a success status on the GitHub commit
+    on_failure:
+      put: govuk-infrastructure-commit
+      params: {status: failure, context: terraform-fmt}
+    on_abort:
+      put: govuk-infrastructure-commit
+      params: {status: error, context: terraform-fmt}
+    on_error:
+      put: govuk-infrastructure-commit
+      params: {status: error, context: terraform-fmt}
 
   - name: rspec
     plan:
-    - get: govuk-infrastructure
+    - get: govuk-infrastructure-commit
       trigger: true
-    - <<: *github-commit
+    - put: govuk-infrastructure-commit
       params:
-        <<: *github-commit-params
-        JOB: rspec
-        STATE: pending
+        status: pending
+        context: rspec
     - task: rspec
       config:
         inputs:
-        - name: govuk-infrastructure
+        - name: govuk-infrastructure-commit
         platform: linux
         image_resource:
           type: docker-image
@@ -160,7 +157,7 @@ jobs:
             username: ((docker_hub_username))
             password: ((docker_hub_authtoken))
         run:
-          dir: govuk-infrastructure
+          dir: govuk-infrastructure-commit/repo
           path: sh
           args:
           - '-c'
@@ -169,70 +166,43 @@ jobs:
             bundle install
             rspec
       on_success:
-        <<: *github-commit
-        params:
-          <<: *github-commit-params
-          JOB: rspec
-          STATE: success
+        put: govuk-infrastructure-commit
+        params: {status: success, context: rspec}
       on_failure:
-        <<: *github-commit
-        params:
-          <<: *github-commit-params
-          JOB: rspec
-          STATE: failure
+        put: govuk-infrastructure-commit
+        params: {status: failure, context: rspec}
       on_abort:
-        <<: *github-commit
-        params:
-          <<: *github-commit-params
-          JOB: rspec
-          STATE: error
+        put: govuk-infrastructure-commit
+        params: {status: error, context: rspec}
       on_error:
-        <<: *github-commit
-        params:
-          <<: *github-commit-params
-          JOB: rspec
-          STATE: error
+        put: govuk-infrastructure-commit
+        params: {status: error, context: rspec}
 
   - name: terraform-plan-govuk-deployment
     plan:
-    - get: govuk-infrastructure
+    - get: govuk-infrastructure-commit
       trigger: true
-    - <<: *github-commit
-      params:
-        <<: *github-commit-params
-        JOB: terraform-plan-govuk-deployment
-        STATE: pending
+    - put: govuk-infrastructure-commit
+      params: {status: pending, context: terraform-plan-govuk-deployment}
     - task: terraform-plan
-      file: govuk-infrastructure/concourse/tasks/terraform-plan-govuk-deployment.yml
+      file: govuk-infrastructure-commit/repo/concourse/tasks/terraform-plan-govuk-deployment.yml
       on_success:
-        <<: *github-commit
-        params:
-          <<: *github-commit-params
-          JOB: terraform-plan-govuk-deployment
-          STATE: success
+        put: govuk-infrastructure-commit
+        params: {status: success, context: terraform-plan-govuk-deployment}
       on_failure:
-        <<: *github-commit
-        params:
-          <<: *github-commit-params
-          JOB: terraform-plan-govuk-deployment
-          STATE: failure
+        put: govuk-infrastructure-commit
+        params: {status: failure, context: terraform-plan-govuk-deployment}
       on_abort:
-        <<: *github-commit
-        params:
-          <<: *github-commit-params
-          JOB: terraform-plan-govuk-deployment
-          STATE: error
+        put: govuk-infrastructure-commit
+        params: {status: error, context: terraform-plan-govuk-deployment}
       on_error:
-        <<: *github-commit
-        params:
-          <<: *github-commit-params
-          JOB: terraform-plan-govuk-deployment
-          STATE: error
+        put: govuk-infrastructure-commit
+        params: {status: error, context: terraform-plan-govuk-deployment}
 
   - name: terraform-plan-apps-deployment
     plan:
     - in_parallel:
-      - get: govuk-infrastructure
+      - get: govuk-infrastructure-commit
         trigger: true
       - get: frontend
       - get: content-store
@@ -242,103 +212,90 @@ jobs:
       - get: router-api
       - get: signon
       - get: static
-    - <<: *github-commit
+    - put: govuk-infrastructure-commit
       params:
-        <<: *github-commit-params
-        JOB: terraform-plan-apps-deployment
-        STATE: pending
+        status: pending
+        context: terraform-plan-apps-deployment
     - in_parallel:
       - task: terraform-plan-frontend
-        file: govuk-infrastructure/concourse/tasks/terraform-plan-app-deployment.yml
+        file: govuk-infrastructure-commit/repo/concourse/tasks/terraform-plan-app-deployment.yml
         params:
           APPLICATION: frontend
           DEPLOYMENT: frontend
       - task: terraform-plan-draft-frontend
-        file: govuk-infrastructure/concourse/tasks/terraform-plan-app-deployment.yml
+        file: govuk-infrastructure-commit/repo/concourse/tasks/terraform-plan-app-deployment.yml
         params:
           APPLICATION: frontend
           DEPLOYMENT: draft-frontend
       - task: terraform-plan-content-store
-        file: govuk-infrastructure/concourse/tasks/terraform-plan-app-deployment.yml
+        file: govuk-infrastructure-commit/repo/concourse/tasks/terraform-plan-app-deployment.yml
         params:
           APPLICATION: content-store
           DEPLOYMENT: content-store
       - task: terraform-plan-draft-content-store
-        file: govuk-infrastructure/concourse/tasks/terraform-plan-app-deployment.yml
+        file: govuk-infrastructure-commit/repo/concourse/tasks/terraform-plan-app-deployment.yml
         params:
           APPLICATION: content-store
           DEPLOYMENT: draft-content-store
       - task: terraform-plan-publisher-web
-        file: govuk-infrastructure/concourse/tasks/terraform-plan-app-deployment.yml
+        file: govuk-infrastructure-commit/repo/concourse/tasks/terraform-plan-app-deployment.yml
         params:
           APPLICATION: publisher
           DEPLOYMENT: publisher-web
       - task: terraform-plan-publisher-worker
-        file: govuk-infrastructure/concourse/tasks/terraform-plan-app-deployment.yml
+        file: govuk-infrastructure-commit/repo/concourse/tasks/terraform-plan-app-deployment.yml
         params:
           APPLICATION: publisher
           DEPLOYMENT: publisher-worker
       - task: terraform-plan-publishing-api-web
-        file: govuk-infrastructure/concourse/tasks/terraform-plan-app-deployment.yml
+        file: govuk-infrastructure-commit/repo/concourse/tasks/terraform-plan-app-deployment.yml
         params:
           APPLICATION: publishing-api
           DEPLOYMENT: publishing-api-web
       - task: terraform-plan-publishing-api-worker
-        file: govuk-infrastructure/concourse/tasks/terraform-plan-app-deployment.yml
+        file: govuk-infrastructure-commit/repo/concourse/tasks/terraform-plan-app-deployment.yml
         params:
           APPLICATION: publishing-api
           DEPLOYMENT: publishing-api-worker
       - task: terraform-plan-router
-        file: govuk-infrastructure/concourse/tasks/terraform-plan-app-deployment.yml
+        file: govuk-infrastructure-commit/repo/concourse/tasks/terraform-plan-app-deployment.yml
         params:
           APPLICATION: router
           DEPLOYMENT: router
       - task: terraform-plan-draft-router
-        file: govuk-infrastructure/concourse/tasks/terraform-plan-app-deployment.yml
+        file: govuk-infrastructure-commit/repo/concourse/tasks/terraform-plan-app-deployment.yml
         params:
           APPLICATION: router
           DEPLOYMENT: draft-router
       - task: terraform-plan-router-api
-        file: govuk-infrastructure/concourse/tasks/terraform-plan-app-deployment.yml
+        file: govuk-infrastructure-commit/repo/concourse/tasks/terraform-plan-app-deployment.yml
         params:
           APPLICATION: router-api
           DEPLOYMENT: router-api
       - task: terraform-plan-draft-router-api
-        file: govuk-infrastructure/concourse/tasks/terraform-plan-app-deployment.yml
+        file: govuk-infrastructure-commit/repo/concourse/tasks/terraform-plan-app-deployment.yml
         params:
           APPLICATION: router-api
           DEPLOYMENT: draft-router-api
       - task: terraform-plan-signon-api
-        file: govuk-infrastructure/concourse/tasks/terraform-plan-app-deployment.yml
+        file: govuk-infrastructure-commit/repo/concourse/tasks/terraform-plan-app-deployment.yml
         params:
           APPLICATION: signon
           DEPLOYMENT: signon
       - task: terraform-plan-static-api
-        file: govuk-infrastructure/concourse/tasks/terraform-plan-app-deployment.yml
+        file: govuk-infrastructure-commit/repo/concourse/tasks/terraform-plan-app-deployment.yml
         params:
           APPLICATION: static
           DEPLOYMENT: static
-    on_success:
-      <<: *github-commit
-      params:
-        <<: *github-commit-params
-        JOB: terraform-plan-apps-deployment
-        STATE: success
-    on_failure:
-      <<: *github-commit
-      params:
-        <<: *github-commit-params
-        JOB: terraform-plan-apps-deployment
-        STATE: failure
-    on_abort:
-      <<: *github-commit
-      params:
-        <<: *github-commit-params
-        JOB: terraform-plan-apps-deployment
-        STATE: error
-    on_error:
-      <<: *github-commit
-      params:
-        <<: *github-commit-params
-        JOB: terraform-plan-apps-deployment
-        STATE: error
+      on_success:
+        put: govuk-infrastructure-commit
+        params: {status: success, context: terraform-plan-apps-deployment}
+      on_failure:
+        put: govuk-infrastructure-commit
+        params: {status: failure, context: terraform-plan-apps-deployment}
+      on_abort:
+        put: govuk-infrastructure-commit
+        params: {status: error, context: terraform-plan-apps-deployment}
+      on_error:
+        put: govuk-infrastructure-commit
+        params: {status: error, context: terraform-plan-apps-deployment}
