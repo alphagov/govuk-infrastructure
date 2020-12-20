@@ -48,6 +48,11 @@ variable "desired_count" {
   default     = 1
 }
 
+variable "public_hosted_zone_id" {
+  description = "Hosted Zone ID to add DNS records to for Internet-facing load balancers."
+  type        = string
+}
+
 variable "public_subnets" {
   description = "Subnet IDs to use for Internet-facing resources."
   type        = list

@@ -18,6 +18,7 @@ module "frontend_service" {
   source                           = "../../modules/apps/frontend"
   execution_role_arn               = aws_iam_role.execution.arn
   desired_count                    = var.frontend_desired_count
+  public_hosted_zone_id            = var.public_hosted_zone_id
   public_subnets                   = var.public_subnets
   public_lb_domain_name            = var.public_lb_domain_name
 }
@@ -32,6 +33,7 @@ module "draft_frontend_service" {
   source                           = "../../modules/apps/frontend"
   execution_role_arn               = aws_iam_role.execution.arn
   desired_count                    = var.draft_frontend_desired_count
+  public_hosted_zone_id            = var.public_hosted_zone_id
   public_subnets                   = var.public_subnets
   public_lb_domain_name            = var.public_lb_domain_name
 }
@@ -41,6 +43,7 @@ module "publisher_service" {
   govuk_management_access_sg_id    = var.govuk_management_access_sg_id
   mesh_name                        = aws_appmesh_mesh.govuk.id
   private_subnets                  = var.private_subnets
+  public_hosted_zone_id            = var.public_hosted_zone_id
   public_subnets                   = var.public_subnets
   public_lb_domain_name            = var.public_lb_domain_name
   service_discovery_namespace_id   = aws_service_discovery_private_dns_namespace.govuk_publishing_platform.id
@@ -147,6 +150,7 @@ module "static_service" {
   execution_role_arn               = aws_iam_role.execution.arn
   source                           = "../../modules/apps/static"
   desired_count                    = var.static_desired_count
+  public_hosted_zone_id            = var.public_hosted_zone_id
   public_subnets                   = var.public_subnets
   public_lb_domain_name            = var.public_lb_domain_name
 }
@@ -162,6 +166,7 @@ module "draft_static_service" {
   execution_role_arn               = aws_iam_role.execution.arn
   source                           = "../../modules/apps/static"
   desired_count                    = var.draft_static_desired_count
+  public_hosted_zone_id            = var.public_hosted_zone_id
   public_subnets                   = var.public_subnets
   public_lb_domain_name            = var.public_lb_domain_name
 }

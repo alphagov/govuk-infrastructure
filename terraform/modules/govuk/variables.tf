@@ -35,6 +35,11 @@ variable "public_lb_domain_name" {
   type        = string
 }
 
+variable "public_hosted_zone_id" {
+  description = "Hosted Zone ID to add DNS records to for Internet-facing load balancers."
+  type        = string
+}
+
 variable "govuk_management_access_sg_id" {
   description = "ID of security group (from the govuk-aws repo) for access from jumpboxes etc. This SG is added to all ECS instances."
   type        = string

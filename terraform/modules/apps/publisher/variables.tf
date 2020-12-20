@@ -21,6 +21,11 @@ variable "service_discovery_namespace_name" {
   type = string
 }
 
+variable "public_hosted_zone_id" {
+  description = "Hosted Zone ID to add DNS records to for Internet-facing load balancers."
+  type        = string
+}
+
 variable "private_subnets" {
   description = "Subnet IDs to use for non-Internet-facing resources."
   type        = list
