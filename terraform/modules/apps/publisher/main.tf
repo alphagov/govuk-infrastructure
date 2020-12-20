@@ -61,7 +61,7 @@ data "aws_acm_certificate" "public_lb_alternate" {
 }
 
 resource "aws_lb" "public" {
-  name               = "fargate-public-${var.service_name}"
+  name               = "${var.service_name}-${terraform.workspace}"
   internal           = false
   load_balancer_type = "application"
   security_groups    = [aws_security_group.public_alb.id]
@@ -69,7 +69,7 @@ resource "aws_lb" "public" {
 }
 
 resource "aws_lb_target_group" "public" {
-  name        = "${var.service_name}-public"
+  name        = "${var.service_name}-${terraform.workspace}-public"
   port        = 80
   protocol    = "HTTP"
   vpc_id      = var.vpc_id
@@ -101,7 +101,7 @@ resource "aws_lb_listener_certificate" "publishing_service" {
 }
 
 resource "aws_security_group" "public_alb" {
-  name        = "fargate_${var.service_name}_public_alb"
+  name        = "fargate_${var.service_name}_${terraform.workspace}_public_alb"
   vpc_id      = var.vpc_id
   description = "${var.service_name} Internet-facing ALB"
 }
