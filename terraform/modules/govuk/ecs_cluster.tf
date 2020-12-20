@@ -1,6 +1,6 @@
 # All services running on GOV.UK run in this single cluster.
 resource "aws_ecs_cluster" "cluster" {
-  name               = "govuk"
+  name               = var.ecs_cluster_name
   capacity_providers = ["FARGATE", "FARGATE_SPOT"]
 
   default_capacity_provider_strategy {
@@ -29,7 +29,7 @@ resource "aws_service_discovery_private_dns_namespace" "govuk_publishing_platfor
 }
 
 resource "aws_iam_role" "execution" {
-  name        = "fargate_execution_role"
+  name        = "fargate_execution_role_${terraform.workspace}"
   description = "Role for the ECS container agent and Docker daemon to manage the app container."
 
   assume_role_policy = <<EOF
@@ -49,7 +49,7 @@ EOF
 }
 
 resource "aws_iam_policy" "create_log_group_policy" {
-  name        = "create_log_group_policy"
+  name        = "create_log_group_policy_${terraform.workspace}"
   path        = "/createLogsGroupPolicy/"
   description = "Create Logs group"
 
@@ -83,7 +83,7 @@ resource "aws_iam_role_policy_attachment" "task_exec_policy" {
 # TODO: This allows *all* apps to access *any* secret. We should create a task execution
 # role and policy for each app to permit apps to only access required secrets.
 resource "aws_iam_policy" "access_secrets" {
-  name        = "access_secrets"
+  name        = "access_secrets_${terraform.workspace}"
   path        = "/accessSecretsPolicy/"
   description = "Allow apps in ECS to access secrets"
 
@@ -113,7 +113,7 @@ resource "aws_iam_role_policy_attachment" "access_secrets_attachment_policy" {
 # Proxy authorization for ECS tasks
 # https://docs.aws.amazon.com/app-mesh/latest/userguide/proxy-authorization.html
 resource "aws_iam_role" "task" {
-  name        = "fargate_task_role"
+  name        = "fargate_task_role_${terraform.workspace}"
   description = "Role for GOV.UK Publishing app containers (ECS tasks) to talk to other AWS services."
 
   assume_role_policy = <<EOF
