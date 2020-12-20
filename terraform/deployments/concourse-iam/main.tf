@@ -27,7 +27,7 @@ provider "aws" {
 }
 
 resource "aws_iam_role" "govuk_concourse_deployer" {
-  name        = "govuk-concourse-deployer"
+  name        = "govuk-concourse-deployer-${terraform.workspace}"
   description = "Deploys applications to ECS from Concourse"
 
   assume_role_policy = <<EOF
