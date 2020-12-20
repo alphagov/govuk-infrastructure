@@ -15,6 +15,7 @@ locals {
   subdomain               = var.service_name
   container_services      = "${length(var.custom_container_services) == 0 ? [{ container_service = "${local.subdomain}", port = 80, protocol = "http" }] : var.custom_container_services}"
   service_security_groups = concat([aws_security_group.service.id], var.extra_security_groups)
+  security_group_name     = "${terraform.workspace == "default" ? var.service_name : "${var.service_name}-${terraform.workspace}"}"
 }
 
 resource "aws_ecs_service" "service" {
@@ -63,7 +64,7 @@ module "bootstrap_task_definition" {
 }
 
 resource "aws_security_group" "service" {
-  name        = "fargate_${var.service_name}"
+  name        = "fargate_${local.security_group_name}"
   vpc_id      = var.vpc_id
-  description = "${var.service_name} app ECS tasks"
+  description = "${local.security_group_name} app ECS tasks"
 }
