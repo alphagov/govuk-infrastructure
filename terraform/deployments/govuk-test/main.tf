@@ -85,4 +85,12 @@ module "govuk" {
   signon_desired_count              = var.signon_desired_count
   static_desired_count              = var.static_desired_count
   draft_static_desired_count        = var.draft_static_desired_count
+  depends_on = [
+    aws_route53_zone.workspace_public,
+    aws_route53_zone.internal_public,
+    aws_route53_zone.internal_private,
+    aws_acm_certificate_validation.workspace_public,
+    aws_route53_record.workspace_public,
+    aws_acm_certificate.workspace_public,
+  ]
 }
