@@ -12,12 +12,6 @@ resource "aws_route53_record" "workspace_public_zone_ns" {
   ttl     = "30"
 
   records = aws_route53_zone.workspace_public.name_servers
-  # [
-  #   aws_route53_zone.external_zone.name_servers.0,
-  #   aws_route53_zone.external_zone.name_servers.1,
-  #   aws_route53_zone.external_zone.name_servers.2,
-  #   aws_route53_zone.external_zone.name_servers.3,
-  # ]
 }
 
 resource "aws_acm_certificate" "workspace_public" {
