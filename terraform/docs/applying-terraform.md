@@ -66,3 +66,68 @@ aws ecs wait services-stable \
  --services "$APPLICATION" \
  --region "$AWS_REGION"
 ```
+
+### Monitoring
+
+The monitoring stack of GOV.UK is in a separate cluster compared to the one where
+the GOV.UK apps run. Below are the details how to run deploy the monitoring stack
+which includes only Grafana for now.
+
+1. Github Secrets
+
+You need to ask a GitHub admin for the `alphagov` organisation to create a new
+OAuth app for Grafana authentication. The redirect URL for OAuth is usually in
+the format `https://<fqdn_grafana>/login/github` where `<fqdn_grafana>` is the
+Fully Qualified Domain Name under which Grafana can be accessed.
+
+Once a Grafana GitHub OAuth is created, you need to add to AWS Secret Manager
+the `client_id` and the `client_secret` as `grafana_github_client_id` and
+`grafana_github_client_secret` respectively.
+
+2. Infrastructure
+
+```sh
+cd terraform/deployments/monitoring-test/infra
+
+gds aws govuk-test-admin -- terraform init
+
+gds aws govuk-test-admin -- terraform apply \
+ -var-file=../../variables/test/common.tfvars \
+ -var-file=../../variables/test/infrastructure.tfvars
+```
+
+3. Grafana Task Definition & Service Update
+
+```sh
+cd terraform/deployments/monitoring-test/grafana
+
+gds aws govuk-test-admin -- terraform init
+
+gds aws govuk-test-admin -- terraform apply
+
+task_definition_arn=$(gds aws govuk-test-admin -- terraform output task_definition_arn)
+
+gds aws govuk-test-admin -- aws ecs update-service  \
+ --cluster monitoring \
+ --service "grafana" \
+ --task-definition "$task_definition_arn" \
+ --region eu-west-1
+
+ aws ecs wait services-stable \
+  --cluster monitoring \
+  --services "grafana" \
+  --region eu-west-1
+```
+
+4. Grafana Internal Configuration
+
+```sh
+cd terraform/deployments/monitoring-test/grafana/app-config
+
+gds aws govuk-test-admin -- terraform init
+
+gds aws govuk-test-admin -- terraform apply
+```
+
+If you get an error: `Error: status: 404, body: {"message":"Data source not found"}`,
+you should run: `gds aws govuk-test-admin -- terraform state rm module.grafana-app-config.grafana_data_source.cloudwatch` before re-applying the terraform.

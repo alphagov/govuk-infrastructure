@@ -27,6 +27,11 @@ variable "govuk_aws_state_bucket" {
   description = "The name of the S3 bucket used for govuk-aws's terraform state files"
 }
 
+variable "office_cidrs_list" {
+  description = "List of GDS office CIDRs"
+  type        = list
+}
+
 variable "frontend_desired_count" {
   type    = number
   default = 1

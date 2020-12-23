@@ -1,3 +1,13 @@
+output "service_discovery_private_dns_namespace_id" {
+  value       = aws_service_discovery_private_dns_namespace.govuk_publishing_platform.id
+  description = "ID of the private DNS namespace for service dicovery"
+}
+
+output "service_discovery_private_dns_namespace_name" {
+  value       = aws_service_discovery_private_dns_namespace.govuk_publishing_platform.name
+  description = "Name of the private DNS namespace for service dicovery"
+}
+
 output "publisher_security_groups" {
   value       = module.publisher_service.security_groups
   description = "The security groups applied to the Publisher ECS Service."

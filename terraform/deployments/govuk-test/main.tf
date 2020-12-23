@@ -61,6 +61,7 @@ module "govuk" {
   mongodb_security_group_id         = data.terraform_remote_state.infra_security_groups.outputs.sg_mongo_id
   mysql_security_group_id           = data.terraform_remote_state.infra_security_groups.outputs.sg_mysql-primary_id
   routerdb_security_group_id        = data.terraform_remote_state.infra_security_groups.outputs.sg_router-backend_id
+  office_cidrs_list                 = var.office_cidrs_list
   frontend_desired_count            = var.frontend_desired_count
   draft_frontend_desired_count      = var.draft_frontend_desired_count
   publisher_desired_count           = var.publisher_desired_count

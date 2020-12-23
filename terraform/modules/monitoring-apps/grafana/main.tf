@@ -1,15 +1,21 @@
 terraform {
-  backend "local" {}
-}
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = ">= 3.0"
+    }
 
-variable "grafana_url" {
-  type    = string
-  default = "http://localhost:3000"
+    grafana = {
+      source  = "grafana/grafana"
+      version = "1.8.0"
+    }
+  }
 }
 
 provider "grafana" {
-  url  = var.grafana_url
-  auth = "admin:admin"
+  url    = var.url
+  auth   = var.auth
+  org_id = 1
 }
 
 resource "grafana_data_source" "cloudwatch" {
@@ -24,4 +30,3 @@ resource "grafana_data_source" "cloudwatch" {
 resource "grafana_folder" "govuk_publishing_platform" {
   title = "GOV.UK Publishing Platform"
 }
-

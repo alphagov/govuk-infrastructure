@@ -19,6 +19,11 @@ variable "aws_region" {
   type = string
 }
 
+variable "port" {
+  type    = string
+  default = "80"
+}
+
 locals {
   # 1337 is an arbitrary choice copied from the examples in the user guide.
   user_id = "1337"
@@ -49,7 +54,7 @@ output "container_definition" {
 
 output "proxy_properties" {
   value = {
-    AppPorts = "80"
+    AppPorts = var.port
 
     # From the user guide: "Envoy doesn't proxy traffic to these IP addresses.
     # Set this value to 169.254.170.2,169.254.169.254, which ignores the Amazon

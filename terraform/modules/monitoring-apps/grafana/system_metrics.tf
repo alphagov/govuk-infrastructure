@@ -469,8 +469,8 @@ locals {
 }
 
 resource "grafana_dashboard" "system_metrics" {
-  folder = grafana_folder.govuk_publishing_platform.id
-
+  folder      = grafana_folder.govuk_publishing_platform.id
   config_json = jsonencode(local.system_metrics_dashboard_config)
-}
 
+  depends_on = [grafana_data_source.cloudwatch]
+}
