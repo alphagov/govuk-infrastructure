@@ -53,3 +53,28 @@ resource "aws_iam_role_policy_attachment" "concourse_admin" {
   role       = aws_iam_role.govuk_concourse_deployer.id
   policy_arn = "arn:aws:iam::aws:policy/AdministratorAccess"
 }
+
+resource "aws_iam_role" "govuk_concourse_terraform_planner" {
+  name        = "govuk-concourse-deployer"
+  description = "Runs Terraform plan from Concourse"
+
+  assume_role_policy = <<EOF
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Action": "sts:AssumeRole",
+            "Principal": {
+              "AWS": "arn:aws:iam::047969882937:role/cd-govuk-tools-concourse-worker"
+            }
+        }
+    ]
+}
+EOF
+}
+
+resource "aws_iam_role_policy_attachment" "concourse_readonly" {
+  role       = aws_iam_role.govuk_concourse_terraform_planner.id
+  policy_arn = "arn:aws:iam::aws:policy/ReadOnlyAccess"
+}
