@@ -32,7 +32,7 @@ output "value" {
     "logConfiguration" : {
       "logDriver" : "awslogs",
       "options" : {
-        "awslogs-create-group" : "true",
+        "awslogs-create-group" : "true", # TODO create the log group in terraform so we can configure the retention policy
         "awslogs-group" : var.log_group,
         "awslogs-region" : var.aws_region,
         "awslogs-stream-prefix" : var.name,

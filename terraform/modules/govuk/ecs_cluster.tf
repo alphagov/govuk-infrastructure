@@ -48,6 +48,8 @@ resource "aws_iam_role" "execution" {
 EOF
 }
 
+# TODO don't let tasks create their own log groups -
+# create the log group in terraform
 resource "aws_iam_policy" "create_log_group_policy" {
   name        = "create_log_group_policy"
   path        = "/createLogsGroupPolicy/"
