@@ -1,6 +1,6 @@
 terraform {
   backend "s3" {
-    bucket  = "govuk-terraform-test"
+    bucket  = "govuk-terraform-test"               # TODO make this configurable so we don't hardcode test
     key     = "projects/content-store-tmp.tfstate" # TODO remove -tmp
     region  = "eu-west-1"
     encrypt = true
@@ -36,29 +36,45 @@ data "aws_secretsmanager_secret" "sentry_dsn" {
   name = "SENTRY_DSN"
 }
 
-# TODO pass this ARN in from the govuk deployment (via terraform remote state) instead of using a data source
-data "aws_iam_role" "execution" {
-  name = "fargate_execution_role"
+data "terraform_remote_state" "govuk_aws_mongo" {
+  backend = "s3"
+  config = {
+    bucket   = "govuk-terraform-steppingstone-${var.environment}"
+    key      = "${var.environment == "test" ? "pink" : "blue"}/app-mongo.tfstate"
+    region   = data.aws_region.current.name
+    role_arn = var.assume_role_arn
+  }
 }
 
-# TODO pass this ARN in from the govuk deployment (via terraform remote state) instead of using a data source
-data "aws_iam_role" "task" {
-  name = "fargate_task_role"
+data "terraform_remote_state" "govuk" {
+  backend   = "s3"
+  workspace = terraform.workspace
+  config = {
+    bucket   = "govuk-terraform-${var.environment}"
+    key      = "projects/govuk.tfstate"
+    region   = data.aws_region.current.name
+    role_arn = var.assume_role_arn
+  }
 }
 
 locals {
-  # --------------------------------------------------------------------------------------------
-  # TODO pass all of these locals in from the govuk deployment (e.g. via terraform remote state)
-  log_group           = "govuk"
-  mesh_name           = "govuk"
-  mesh_domain         = "mesh.govuk-internal.digital"
-  app_domain          = "test.govuk.digital" # TODO: changed from test.publishing.service.gov.uk for easier testing.
-  app_domain_internal = "test.govuk-internal.digital"
-  mongodb_host        = join(",", [for i in [1, 2, 3] : "mongo-${i}.${local.app_domain_internal}"])
-  sentry_environment  = "test"
-  govuk_website_root  = "https://frontend.${local.app_domain}" # TODO: Change back to www once router is up
-  statsd_host         = "statsd.${local.mesh_domain}"          # TODO: Put Statsd in App Mesh
-  # --------------------------------------------------------------------------------------------
+  app_domain                     = data.terraform_remote_state.govuk.outputs.app_domain
+  app_domain_internal            = data.terraform_remote_state.govuk.outputs.app_domain_internal
+  fargate_execution_iam_role_arn = data.terraform_remote_state.govuk.outputs.fargate_execution_iam_role_arn
+  fargate_task_iam_role_arn      = data.terraform_remote_state.govuk.outputs.fargate_task_iam_role_arn
+  govuk_website_root             = data.terraform_remote_state.govuk.outputs.govuk_website_root
+  log_group                      = data.terraform_remote_state.govuk.outputs.log_group
+  mesh_domain                    = data.terraform_remote_state.govuk.outputs.mesh_domain
+  mesh_name                      = data.terraform_remote_state.govuk.outputs.mesh_name
+
+  mongodb_host = join(",", [
+    data.terraform_remote_state.govuk_aws_mongo.outputs.mongo_1_service_dns_name,
+    data.terraform_remote_state.govuk_aws_mongo.outputs.mongo_2_service_dns_name,
+    data.terraform_remote_state.govuk_aws_mongo.outputs.mongo_3_service_dns_name,
+  ])
+
+  sentry_environment = "${var.environment}-ecs"
+  statsd_host        = "statsd.${local.mesh_domain}" # TODO: Put Statsd in App Mesh
 
   environment_variables = {
     DEFAULT_TTL                     = 1800,

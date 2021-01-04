@@ -35,8 +35,8 @@ resource "aws_ecs_task_definition" "draft" {
   network_mode       = "awsvpc"
   cpu                = 512
   memory             = 1024
-  task_role_arn      = data.aws_iam_role.task.arn
-  execution_role_arn = data.aws_iam_role.execution.arn
+  task_role_arn      = local.fargate_task_iam_role_arn
+  execution_role_arn = local.fargate_execution_iam_role_arn
 
   proxy_configuration {
     type           = "APPMESH"
