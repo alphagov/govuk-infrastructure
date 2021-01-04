@@ -1,12 +1,12 @@
-module "draft_container_definition" {
+module "live_container_definition" {
   source = "../../../modules/app-container-definition"
-  name   = "draft-content-store"
+  name   = "live-content-store"
   image  = "govuk/content-store:bill-content-schemas" # TODO use "govuk/content-store:${var.image_tag}"
   environment_variables = merge(
     local.environment_variables,
     {
-      PLEK_SERVICE_ROUTER_API_URI = "http://draft-router-api.${local.mesh_domain}"
-      MONGODB_URI                 = "mongodb://${local.mongodb_host}/draft_content_store_production"
+      PLEK_SERVICE_ROUTER_API_URI = "http://router-api.${local.mesh_domain}"
+      MONGODB_URI                 = "mongodb://${local.mongodb_host}/live_content_store_production"
     },
   )
   log_group             = local.log_group
@@ -15,21 +15,21 @@ module "draft_container_definition" {
   depends_on_containers = { envoy : "START" }
 }
 
-module "draft_envoy_configuration" {
+module "live_envoy_configuration" {
   source = "../../../modules/envoy-configuration"
 
   mesh_name    = local.mesh_name
-  service_name = "draft-content-store"
+  service_name = "live-content-store"
   log_group    = local.log_group
   aws_region   = data.aws_region.current.name
 }
 
-resource "aws_ecs_task_definition" "draft" {
-  family                   = "draft-content-store"
+resource "aws_ecs_task_definition" "live" {
+  family                   = "content-store"
   requires_compatibilities = ["FARGATE"]
   container_definitions = jsonencode([
-    module.draft_container_definition.value,
-    module.draft_envoy_configuration.container_definition,
+    module.live_container_definition.value,
+    module.live_envoy_configuration.container_definition,
   ])
 
   network_mode       = "awsvpc"
@@ -41,6 +41,6 @@ resource "aws_ecs_task_definition" "draft" {
   proxy_configuration {
     type           = "APPMESH"
     container_name = "envoy"
-    properties     = module.draft_envoy_configuration.proxy_properties
+    properties     = module.live_envoy_configuration.proxy_properties
   }
 }
