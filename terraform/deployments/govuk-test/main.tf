@@ -46,7 +46,7 @@ locals {
   internal_domain_name  = "${terraform.workspace == "default" ? var.internal_domain_name : "${terraform.workspace}.${var.internal_domain_name}"}" #plouf.test.govuk-internal.digital
   public_lb_subdomain   = "${terraform.workspace == "default" ? var.govuk_environment : "${terraform.workspace}.${var.govuk_environment}"}"       #plouf.test
   public_lb_domain_name = "${local.public_lb_subdomain}.${var.public_domain}"                                                                     #plouf.test.govuk.digital
-  mesh_domain           = "${var.mesh_subdomain}.${local.internal_domain_name}"                                                                   #mesh.plouf.govuk-internal.digital
+  mesh_domain           = "${var.mesh_subdomain}.${local.internal_domain_name}"                                                                   #mesh.plouf.test.govuk-internal.digital
   mesh_name             = "${terraform.workspace == "default" ? var.mesh_name : "${var.mesh_name}-${terraform.workspace}"}"                       #govuk-plouf
   ecs_cluster_name      = "${terraform.workspace == "default" ? var.ecs_cluster_name : "${var.ecs_cluster_name}-${terraform.workspace}"}"         #ecs-plouf
 }
