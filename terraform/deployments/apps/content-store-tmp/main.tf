@@ -1,6 +1,5 @@
 terraform {
   backend "s3" {
-    bucket  = "govuk-terraform-test"               # TODO make this configurable so we don't hardcode test
     key     = "projects/content-store-tmp.tfstate" # TODO remove -tmp
     region  = "eu-west-1"
     encrypt = true
