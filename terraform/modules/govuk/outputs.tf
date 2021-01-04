@@ -22,3 +22,11 @@ output "draft_content_store_security_groups" {
   value       = module.draft_content_store_service.security_groups
   description = "The security groups applied to the Draft Content Store ECS Service."
 }
+
+output "fargate_execution_iam_role_arn" {
+  value = aws_iam_role.execution.arn
+}
+
+output "fargate_task_iam_role_arn" {
+  value = aws_iam_role.task.arn
+}
