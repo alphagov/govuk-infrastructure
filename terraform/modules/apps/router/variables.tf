@@ -29,6 +29,10 @@ variable "mesh_name" {
   type        = string
 }
 
+variable "mesh_service_sg_id" {
+  type = string
+}
+
 variable "service_discovery_namespace_id" {
   type = string
 }

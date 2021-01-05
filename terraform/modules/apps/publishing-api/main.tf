@@ -18,7 +18,7 @@ module "web" {
   desired_count                    = var.desired_count
   service_discovery_namespace_id   = var.service_discovery_namespace_id
   service_discovery_namespace_name = var.service_discovery_namespace_name
-  extra_security_groups            = [var.govuk_management_access_security_group]
+  extra_security_groups            = [var.govuk_management_access_security_group, var.mesh_service_sg_id]
 }
 
 module "worker" {
@@ -32,5 +32,5 @@ module "worker" {
   desired_count                    = var.desired_count
   service_discovery_namespace_id   = var.service_discovery_namespace_id
   service_discovery_namespace_name = var.service_discovery_namespace_name
-  extra_security_groups            = [module.web.security_group_id, var.govuk_management_access_security_group]
+  extra_security_groups            = [module.web.security_group_id, var.govuk_management_access_security_group, var.mesh_service_sg_id]
 }

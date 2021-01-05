@@ -11,6 +11,7 @@ terraform {
 # to outputs e.g. in security_group_rules.tf.
 module "frontend_service" {
   mesh_name                        = aws_appmesh_mesh.govuk.id
+  mesh_service_sg_id               = aws_security_group.mesh_ecs_service.id
   service_discovery_namespace_id   = aws_service_discovery_private_dns_namespace.govuk_publishing_platform.id
   service_discovery_namespace_name = aws_service_discovery_private_dns_namespace.govuk_publishing_platform.name
   vpc_id                           = var.vpc_id
@@ -25,6 +26,7 @@ module "frontend_service" {
 module "draft_frontend_service" {
   service_name                     = "draft-frontend"
   mesh_name                        = aws_appmesh_mesh.govuk.id
+  mesh_service_sg_id               = aws_security_group.mesh_ecs_service.id
   service_discovery_namespace_id   = aws_service_discovery_private_dns_namespace.govuk_publishing_platform.id
   service_discovery_namespace_name = aws_service_discovery_private_dns_namespace.govuk_publishing_platform.name
   vpc_id                           = var.vpc_id
@@ -40,6 +42,7 @@ module "publisher_service" {
   cluster_id                       = aws_ecs_cluster.cluster.id
   govuk_management_access_sg_id    = var.govuk_management_access_sg_id
   mesh_name                        = aws_appmesh_mesh.govuk.id
+  mesh_service_sg_id               = aws_security_group.mesh_ecs_service.id
   private_subnets                  = var.private_subnets
   public_subnets                   = var.public_subnets
   public_lb_domain_name            = var.public_lb_domain_name
@@ -53,6 +56,7 @@ module "publisher_service" {
 
 module "content_store_service" {
   mesh_name                        = aws_appmesh_mesh.govuk.id
+  mesh_service_sg_id               = aws_security_group.mesh_ecs_service.id
   service_discovery_namespace_id   = aws_service_discovery_private_dns_namespace.govuk_publishing_platform.id
   service_discovery_namespace_name = aws_service_discovery_private_dns_namespace.govuk_publishing_platform.name
   cluster_id                       = aws_ecs_cluster.cluster.id
@@ -66,6 +70,7 @@ module "content_store_service" {
 module "draft_content_store_service" {
   service_name                     = "draft-content-store"
   mesh_name                        = aws_appmesh_mesh.govuk.id
+  mesh_service_sg_id               = aws_security_group.mesh_ecs_service.id
   service_discovery_namespace_id   = aws_service_discovery_private_dns_namespace.govuk_publishing_platform.id
   service_discovery_namespace_name = aws_service_discovery_private_dns_namespace.govuk_publishing_platform.name
   cluster_id                       = aws_ecs_cluster.cluster.id
@@ -78,6 +83,7 @@ module "draft_content_store_service" {
 
 module "publishing_api_service" {
   mesh_name                        = aws_appmesh_mesh.govuk.id
+  mesh_service_sg_id               = aws_security_group.mesh_ecs_service.id
   service_discovery_namespace_id   = aws_service_discovery_private_dns_namespace.govuk_publishing_platform.id
   service_discovery_namespace_name = aws_service_discovery_private_dns_namespace.govuk_publishing_platform.name
   vpc_id                           = var.vpc_id
@@ -89,6 +95,7 @@ module "publishing_api_service" {
 
 module "router_service" {
   mesh_name                        = aws_appmesh_mesh.govuk.id
+  mesh_service_sg_id               = aws_security_group.mesh_ecs_service.id
   service_discovery_namespace_id   = aws_service_discovery_private_dns_namespace.govuk_publishing_platform.id
   service_discovery_namespace_name = aws_service_discovery_private_dns_namespace.govuk_publishing_platform.name
   private_subnets                  = var.private_subnets
@@ -102,6 +109,7 @@ module "router_service" {
 module "draft_router_service" {
   service_name                     = "draft-router"
   mesh_name                        = aws_appmesh_mesh.govuk.id
+  mesh_service_sg_id               = aws_security_group.mesh_ecs_service.id
   service_discovery_namespace_id   = aws_service_discovery_private_dns_namespace.govuk_publishing_platform.id
   service_discovery_namespace_name = aws_service_discovery_private_dns_namespace.govuk_publishing_platform.name
   private_subnets                  = var.private_subnets
@@ -114,6 +122,7 @@ module "draft_router_service" {
 
 module "router_api_service" {
   mesh_name                        = aws_appmesh_mesh.govuk.id
+  mesh_service_sg_id               = aws_security_group.mesh_ecs_service.id
   service_discovery_namespace_id   = aws_service_discovery_private_dns_namespace.govuk_publishing_platform.id
   service_discovery_namespace_name = aws_service_discovery_private_dns_namespace.govuk_publishing_platform.name
   private_subnets                  = var.private_subnets
@@ -127,6 +136,7 @@ module "router_api_service" {
 module "draft_router_api_service" {
   service_name                     = "draft-router-api"
   mesh_name                        = aws_appmesh_mesh.govuk.id
+  mesh_service_sg_id               = aws_security_group.mesh_ecs_service.id
   service_discovery_namespace_id   = aws_service_discovery_private_dns_namespace.govuk_publishing_platform.id
   service_discovery_namespace_name = aws_service_discovery_private_dns_namespace.govuk_publishing_platform.name
   private_subnets                  = var.private_subnets
@@ -139,6 +149,7 @@ module "draft_router_api_service" {
 
 module "static_service" {
   mesh_name                        = aws_appmesh_mesh.govuk.id
+  mesh_service_sg_id               = aws_security_group.mesh_ecs_service.id
   service_discovery_namespace_id   = aws_service_discovery_private_dns_namespace.govuk_publishing_platform.id
   service_discovery_namespace_name = aws_service_discovery_private_dns_namespace.govuk_publishing_platform.name
   private_subnets                  = var.private_subnets
@@ -154,6 +165,7 @@ module "static_service" {
 module "draft_static_service" {
   service_name                     = "draft-static"
   mesh_name                        = aws_appmesh_mesh.govuk.id
+  mesh_service_sg_id               = aws_security_group.mesh_ecs_service.id
   service_discovery_namespace_id   = aws_service_discovery_private_dns_namespace.govuk_publishing_platform.id
   service_discovery_namespace_name = aws_service_discovery_private_dns_namespace.govuk_publishing_platform.name
   private_subnets                  = var.private_subnets
@@ -168,6 +180,7 @@ module "draft_static_service" {
 
 module "signon_service" {
   mesh_name                        = aws_appmesh_mesh.govuk.id
+  mesh_service_sg_id               = aws_security_group.mesh_ecs_service.id
   service_discovery_namespace_id   = aws_service_discovery_private_dns_namespace.govuk_publishing_platform.id
   service_discovery_namespace_name = aws_service_discovery_private_dns_namespace.govuk_publishing_platform.name
   execution_role_arn               = aws_iam_role.execution.arn
