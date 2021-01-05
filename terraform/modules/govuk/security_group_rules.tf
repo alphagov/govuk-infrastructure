@@ -506,3 +506,20 @@ resource "aws_security_group_rule" "signon_to_any_any" {
 
 # TODO: move the rest of the rules into this file unless there's a good reason
 #       for them to stay in other files.
+
+# TODO: create SG rules for UDP ingress from apps to Statsd (tons, find shorthand)
+
+resource "aws_security_group" "statsd_service" {
+  name        = "fargate_statsd"
+  vpc_id      = var.vpc_id
+  description = "Statsd ECS Service"
+}
+
+resource "aws_security_group_rule" "statsd_from_signon_udp" {
+  type                     = "egress"
+  from_port                = "8125"
+  to_port                  = "8125"
+  protocol                 = "udp"
+  security_group_id        = aws_security_group.statsd_service.id
+  source_security_group_id = module.signon_service.app_security_group_id
+}

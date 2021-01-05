@@ -42,7 +42,7 @@ resource "aws_ecs_service" "service" {
   }
 
   service_registries {
-    registry_arn   = aws_service_discovery_service.service[0].arn
+    registry_arn   = module.service_mesh_node[0].discovery_service_arn
     container_name = var.service_name
   }
 
@@ -60,6 +60,18 @@ module "bootstrap_task_definition" {
   service_name       = var.service_name
   execution_role_arn = var.execution_role_arn
   source             = "../task-definitions/bootstrap"
+}
+
+module "service_mesh_node" {
+  count = length(local.container_services)
+
+  source                           = "../service-mesh-node"
+  mesh_name                        = var.mesh_name
+  port                             = local.container_services[count.index].port
+  protocol                         = local.container_services[count.index].protocol
+  service_discovery_namespace_id   = var.service_discovery_namespace_id
+  service_discovery_namespace_name = var.service_discovery_namespace_name
+  service_name                     = local.container_services[count.index].container_service
 }
 
 resource "aws_security_group" "service" {
