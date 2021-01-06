@@ -51,7 +51,7 @@ module "worker" {
 # TODO: use a single, ACM-managed cert with both domains on. There is already
 # such a cert in integration/staging/prod (but it needs defining in Terraform).
 data "aws_acm_certificate" "public_lb_default" {
-  domain   = "*.${var.public_lb_domain_name}"
+  domain   = "*.test.govuk.digital"
   statuses = ["ISSUED"]
 }
 
@@ -61,7 +61,7 @@ data "aws_acm_certificate" "public_lb_alternate" {
 }
 
 resource "aws_lb" "public" {
-  name               = "${var.service_name}-${terraform.workspace}"
+  name               = "fargate-public-${var.service_name}"
   internal           = false
   load_balancer_type = "application"
   security_groups    = [aws_security_group.public_alb.id]
@@ -69,7 +69,7 @@ resource "aws_lb" "public" {
 }
 
 resource "aws_lb_target_group" "public" {
-  name        = "${var.service_name}-${terraform.workspace}-public"
+  name        = "${var.service_name}-public"
   port        = 80
   protocol    = "HTTP"
   vpc_id      = var.vpc_id
@@ -101,13 +101,17 @@ resource "aws_lb_listener_certificate" "publishing_service" {
 }
 
 resource "aws_security_group" "public_alb" {
-  name        = "fargate_${var.service_name}_${terraform.workspace}_public_alb"
+  name        = "fargate_${var.service_name}_public_alb"
   vpc_id      = var.vpc_id
   description = "${var.service_name} Internet-facing ALB"
 }
 
+data "aws_route53_zone" "public" {
+  name = var.public_lb_domain_name
+}
+
 resource "aws_route53_record" "public_alb" {
-  zone_id = var.public_hosted_zone_id
+  zone_id = data.aws_route53_zone.public.zone_id
   name    = var.service_name
   type    = "A"
 

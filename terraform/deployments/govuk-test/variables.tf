@@ -2,10 +2,6 @@
 # Network
 #--------------------------------------------------------------
 
-variable "govuk_environment" {
-  type = string
-}
-
 variable "mesh_name" {
   type = string
 }
@@ -14,19 +10,7 @@ variable "mesh_domain" {
   type = string
 }
 
-variable "mesh_subdomain" {
-  type = string
-}
-
-variable "ecs_cluster_name" {
-  type = string
-}
-
 variable "ecs_default_capacity_provider" {
-  type = string
-}
-
-variable "public_domain" {
   type = string
 }
 
