@@ -25,6 +25,11 @@ variable "govuk_management_access_security_group" {
   default     = "sg-0b873470482f6232d"
 }
 
+variable "public_hosted_zone_id" {
+  description = "Hosted Zone ID to add DNS records to for Internet-facing load balancers."
+  type        = string
+}
+
 variable "service_discovery_namespace_id" {
   type = string
 }

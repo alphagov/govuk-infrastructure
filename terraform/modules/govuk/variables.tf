@@ -6,6 +6,10 @@ variable "mesh_domain" {
   type = string
 }
 
+variable "ecs_cluster_name" {
+  type = string
+}
+
 variable "mesh_name" {
   type = string
 }
@@ -28,6 +32,11 @@ variable "public_subnets" {
 
 variable "public_lb_domain_name" {
   description = "Domain in which to create DNS records for Internet-facing load balancers. For example, staging.govuk.digital"
+  type        = string
+}
+
+variable "public_hosted_zone_id" {
+  description = "Hosted Zone ID to add DNS records to for Internet-facing load balancers."
   type        = string
 }
 
