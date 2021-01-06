@@ -29,11 +29,6 @@ variable "mesh_name" {
   type        = string
 }
 
-variable "public_hosted_zone_id" {
-  description = "Hosted Zone ID to add DNS records to for Internet-facing load balancers."
-  type        = string
-}
-
 variable "public_lb_domain_name" {
   description = "Domain in which to create DNS records for the app's Internet-facing load balancer. For example, staging.govuk.digital"
   type        = string

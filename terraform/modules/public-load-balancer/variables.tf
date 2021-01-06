@@ -18,11 +18,6 @@ variable "dns_a_record_name" {
   description = "DNS A Record name. Should be cluster and environment-aware."
 }
 
-variable "public_hosted_zone_id" {
-  description = "Hosted Zone ID to add DNS records to for Internet-facing load balancers."
-  type        = string
-}
-
 variable "public_subnets" {
   type = list
 }
