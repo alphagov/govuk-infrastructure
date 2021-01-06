@@ -41,6 +41,10 @@ variable "service_discovery_namespace_name" {
   type = string
 }
 
+variable "statsd_host" {
+  type = string
+}
+
 variable "task_role_arn" {
   type = string
 }

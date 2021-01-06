@@ -15,6 +15,10 @@ provider "aws" {
   }
 }
 
+locals {
+  app_name = "frontend"
+}
+
 data "aws_secretsmanager_secret" "secret_key_base" {
   name = "frontend_app-SECRET_KEY_BASE" # pragma: allowlist secret
 }
@@ -45,6 +49,9 @@ module "task_definition" {
         { "name" : "ASSET_HOST", "value" : var.assets_url },
         { "name" : "GOVUK_APP_DOMAIN", "value" : var.service_discovery_namespace_name },
         { "name" : "GOVUK_APP_DOMAIN_EXTERNAL", "value" : var.govuk_app_domain_external },
+        { "name" : "GOVUK_STATSD_HOST", "value" : var.statsd_host },
+        { "name" : "GOVUK_STATSD_PREFIX", "value" : "govuk.app.${local.app_name}.ecs" },
+        { "name" : "GOVUK_STATSD_PROTOCOL", "value" : "tcp" },
         { "name" : "GOVUK_WEBSITE_ROOT", "value" : var.govuk_website_root },
         { "name" : "WEBSITE_ROOT", "value" : var.govuk_website_root },
         { "name" : "PORT", "value" : "80" },
@@ -54,9 +61,6 @@ module "task_definition" {
         { "name" : "PLEK_SERVICE_SIGNON_URI", "value" : "https://signon-ecs.${var.govuk_app_domain_external}" },
         { "name" : "GOVUK_ASSET_ROOT", "value" : var.assets_url },
         { "name" : "SENTRY_ENVIRONMENT", "value" : var.sentry_environment },
-        { "name" : "STATSD_PROTOCOL", "value" : "tcp" },
-        { "name" : "STATSD_HOST", "value" : var.statsd_host },
-        { "name" : "GOVUK_STATSD_PREFIX", "value" : "fargate" },
         # TODO: Setting RAILS_SERVE_STATIC_FILES, RAILS_SERVE_STATIC_ASSETS and HEROKU_APP_NAME are temporary workarounds for serving static assets.
         # Remove them once we have a production solution for assets.
         { "name" : "RAILS_SERVE_STATIC_FILES", "value" : "yes" },

@@ -34,5 +34,6 @@ module "task_definition" {
   service_discovery_namespace_name = local.service_discovery_namespace_name
   task_role_arn                    = data.aws_iam_role.task.arn
   sentry_environment               = var.sentry_environment
+  statsd_host                      = local.statsd_host
   assume_role_arn                  = var.assume_role_arn
 }

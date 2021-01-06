@@ -34,5 +34,6 @@ module "task_definition" {
   router_urls                      = local.router_urls
   task_role_arn                    = data.aws_iam_role.task.arn
   sentry_environment               = var.sentry_environment
+  statsd_host                      = local.statsd_host
   assume_role_arn                  = var.assume_role_arn
 }
