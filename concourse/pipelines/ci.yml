@@ -1,0 +1,55 @@
+---
+definitions:
+
+resource_types:
+  - name: github-commit
+    type: registry-image
+    source:
+      repository: govuk/github-commit
+      tag: 0.1.0
+
+resources:
+  - name: govuk-infrastructure-commit
+    type: github-commit
+    icon: github
+    source:
+      # Will fetch commits from *any* branch
+      repository: alphagov/govuk-infrastructure
+      access_token: ((github_access_token))
+      path: govuk-infrastructure-commit
+
+  - icon: github
+    name: govuk-infrastructure
+    source:
+      branch: main
+      uri: https://github.com/alphagov/govuk-infrastructure
+    type: git
+
+jobs:
+  - name: update-pipeline
+    plan:
+    - get: govuk-infrastructure
+      trigger: true
+    - file: govuk-infrastructure/concourse/pipelines/ci.yml
+      set_pipeline: ci-govuk-infrastructure-main
+
+  - name: terraform-plan-govuk-deployment
+    plan:
+    - get: govuk-infrastructure-commit
+      trigger: true
+    - put: govuk-infrastructure-commit
+      params: {status: pending, context: terraform-plan-govuk-deployment}
+    - task: terraform-plan
+      file: govuk-infrastructure-commit/repo/concourse/tasks/terraform-plan-govuk-deployment.yml
+      on_success:
+        put: govuk-infrastructure-commit
+        params: {status: success, context: terraform-plan-govuk-deployment}
+      on_failure:
+        put: govuk-infrastructure-commit
+        params: {status: failure, context: terraform-plan-govuk-deployment}
+      on_abort:
+        put: govuk-infrastructure-commit
+        params: {status: error, context: terraform-plan-govuk-deployment}
+      on_error:
+        put: govuk-infrastructure-commit
+        params: {status: error, context: terraform-plan-govuk-deployment}
