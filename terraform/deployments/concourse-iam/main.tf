@@ -55,7 +55,7 @@ resource "aws_iam_role_policy_attachment" "concourse_admin" {
 }
 
 resource "aws_iam_role" "govuk_concourse_terraform_planner" {
-  name        = "govuk-concourse-deployer"
+  name        = "govuk-ci-concourse"
   description = "Runs Terraform plan from Concourse"
 
   assume_role_policy = <<EOF
@@ -66,7 +66,7 @@ resource "aws_iam_role" "govuk_concourse_terraform_planner" {
             "Effect": "Allow",
             "Action": "sts:AssumeRole",
             "Principal": {
-              "AWS": "arn:aws:iam::047969882937:role/cd-govuk-tools-concourse-worker"
+              "AWS": "arn:aws:iam::047969882937:role/cd-govuk-ci-concourse-worker"
             }
         }
     ]

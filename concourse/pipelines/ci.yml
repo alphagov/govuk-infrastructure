@@ -15,7 +15,7 @@ resources:
     source:
       # Will fetch commits from *any* branch
       repository: alphagov/govuk-infrastructure
-      access_token: ((govuk_ci_replatforming_github_access_token))
+      access_token: ((github_access_token))
       path: govuk-infrastructure-commit
 
   - icon: github
