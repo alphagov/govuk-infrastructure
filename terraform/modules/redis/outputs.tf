@@ -3,7 +3,11 @@ output "security_group_id" {
   description = "ID of the security group for Redis cluster"
 }
 
-output "service_dns_name" {
-  value       = "${aws_route53_record.internal_service_record.fqdn}"
+output "redis_host" {
+  value       = aws_route53_record.internal_service_record.fqdn
   description = "Internal DNS name to access the Redis service"
+}
+
+output "redis_port" {
+  value = local.redis_port
 }
