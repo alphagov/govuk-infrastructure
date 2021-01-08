@@ -19,6 +19,7 @@ run:
   - '-c'
   - |
     set -eu
+    echo "Hello, World!"
     terraform init -backend-config "role_arn=$ASSUME_ROLE_ARN"
     terraform plan \
       -var "assume_role_arn=$ASSUME_ROLE_ARN" \
