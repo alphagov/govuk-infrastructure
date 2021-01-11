@@ -111,19 +111,13 @@ groups:
   - name: content-store
     jobs:
       - deploy-content-store
-
-  - name: draft-content-store
-    jobs:
       - deploy-draft-content-store
 
   - name: frontend
     jobs:
       - deploy-frontend
-      - smoke-test-frontend
-
-  - name: draft-frontend
-    jobs:
       - deploy-draft-frontend
+      - smoke-test-frontend
 
   - name: publisher
     jobs:
@@ -136,17 +130,11 @@ groups:
   - name: router
     jobs:
       - deploy-router
-
-  - name: draft-router
-    jobs:
       - deploy-draft-router
 
   - name: router-api
     jobs:
       - deploy-router-api
-
-  - name: draft-router-api
-    jobs:
       - deploy-draft-router-api
 
   - name: signon
@@ -156,9 +144,6 @@ groups:
   - name: static
     jobs:
       - deploy-static
-
-  - name: draft-static
-    jobs:
       - deploy-draft-static
 
 jobs:
