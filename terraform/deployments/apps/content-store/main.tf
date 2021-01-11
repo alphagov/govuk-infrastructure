@@ -38,8 +38,8 @@ data "aws_secretsmanager_secret" "sentry_dsn" {
 data "terraform_remote_state" "govuk_aws_mongo" {
   backend = "s3"
   config = {
-    bucket   = "govuk-terraform-steppingstone-${var.environment}"
-    key      = "${var.environment == "test" ? "pink" : "blue"}/app-mongo.tfstate"
+    bucket   = "govuk-terraform-steppingstone-${var.govuk_environment}"
+    key      = "${var.govuk_environment == "test" ? "pink" : "blue"}/app-mongo.tfstate"
     region   = data.aws_region.current.name
     role_arn = var.assume_role_arn
   }
@@ -49,7 +49,7 @@ data "terraform_remote_state" "govuk" {
   backend   = "s3"
   workspace = terraform.workspace
   config = {
-    bucket   = "govuk-terraform-${var.environment}"
+    bucket   = "govuk-terraform-${var.govuk_environment}"
     key      = "projects/govuk.tfstate"
     region   = data.aws_region.current.name
     role_arn = var.assume_role_arn
@@ -72,7 +72,7 @@ locals {
     data.terraform_remote_state.govuk_aws_mongo.outputs.mongo_3_service_dns_name,
   ])
 
-  sentry_environment = "${var.environment}-ecs"
+  sentry_environment = "${var.govuk_environment}-ecs"
   statsd_host        = "statsd.${local.mesh_domain}" # TODO: Put Statsd in App Mesh
 
   environment_variables = {

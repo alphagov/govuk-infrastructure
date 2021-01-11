@@ -16,5 +16,6 @@ params:
   APPLICATION:
   CLUSTER: task_runner
   COMMAND:
+  TASK_DEFINITION: task_definition_arn
 run:
   path: ./src/concourse/tasks/run-task.sh

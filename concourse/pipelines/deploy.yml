@@ -205,7 +205,7 @@ jobs:
     - task: update-ecs-service
       file: govuk-infrastructure/concourse/tasks/update-ecs-service.yml
       params:
-        APPLICATION: frontend
+        ECS_SERVICE: frontend
         GOVUK_ENVIRONMENT: test
     serial: true
     on_failure: &notify-slack-failure
@@ -247,7 +247,7 @@ jobs:
     - task: update-ecs-service
       file: govuk-infrastructure/concourse/tasks/update-ecs-service.yml
       params:
-        APPLICATION: draft-frontend
+        ECS_SERVICE: draft-frontend
         GOVUK_ENVIRONMENT: test
     serial: true
     on_failure: &notify-slack-failure
@@ -275,31 +275,37 @@ jobs:
       params:
         APPLICATION: publisher-web
         GOVUK_ENVIRONMENT: test
+        TASK_DEFINITION: web_task_definition
     - task: update-worker-task-definition
       file: govuk-infrastructure/concourse/tasks/update-task-definition.yml
       params:
         APPLICATION: publisher-worker
         GOVUK_ENVIRONMENT: test
+        TASK_DEFINITION: worker_task_definition
     - task: fetch-db-migrations-config
       file: govuk-infrastructure/concourse/tasks/fetch-task-network-config.yml
       params:
         APPLICATION: publisher-web
         GOVUK_ENVIRONMENT: test
+        TASK_DEFINITION: web_task_definition
     - task: run-db-migrations
       file: govuk-infrastructure/concourse/tasks/run-task.yml
       params:
         APPLICATION: publisher-web
         COMMAND: "rails db:migrate"
+        TASK_DEFINITION: web_task_definition
     - task: update-web-ecs-service
       file: govuk-infrastructure/concourse/tasks/update-ecs-service.yml
       params:
-        APPLICATION: publisher-web
+        ECS_SERVICE: publisher-web
         GOVUK_ENVIRONMENT: test
+        TASK_DEFINITION: web_task_definition
     - task: update-worker-ecs-service
       file: govuk-infrastructure/concourse/tasks/update-ecs-service.yml
       params:
-        APPLICATION: publisher-worker
+        ECS_SERVICE: publisher-worker
         GOVUK_ENVIRONMENT: test
+        TASK_DEFINITION: worker_task_definition
     serial: true
     on_failure:
       <<: *notify-slack-failure
@@ -318,21 +324,25 @@ jobs:
       params:
         APPLICATION: publishing-api-web
         GOVUK_ENVIRONMENT: test
+        TASK_DEFINITION: web_task_definition
     - task: update-worker-task-definition
       file: govuk-infrastructure/concourse/tasks/update-task-definition.yml
       params:
         APPLICATION: publishing-api-worker
         GOVUK_ENVIRONMENT: test
+        TASK_DEFINITION: worker_task_definition
     - task: update-web-ecs-service
       file: govuk-infrastructure/concourse/tasks/update-ecs-service.yml
       params:
-        APPLICATION: publishing-api-web
+        ECS_SERVICE: publishing-api-web
         GOVUK_ENVIRONMENT: test
+        TASK_DEFINITION: web_task_definition
     - task: update-worker-ecs-service
       file: govuk-infrastructure/concourse/tasks/update-ecs-service.yml
       params:
-        APPLICATION: publishing-api-worker
+        ECS_SERVICE: publishing-api-worker
         GOVUK_ENVIRONMENT: test
+        TASK_DEFINITION: worker_task_definition
     serial: true
     on_failure:
       <<: *notify-slack-failure
@@ -351,11 +361,13 @@ jobs:
       params:
         APPLICATION: content-store
         GOVUK_ENVIRONMENT: test
+        TASK_DEFINITION: live_task_definition
     - task: update-ecs-service
       file: govuk-infrastructure/concourse/tasks/update-ecs-service.yml
       params:
-        APPLICATION: content-store
+        ECS_SERVICE: content-store
         GOVUK_ENVIRONMENT: test
+        TASK_DEFINITION: live_task_definition
     serial: true
     on_failure:
       <<: *notify-slack-failure
@@ -372,13 +384,15 @@ jobs:
     - task: update-task-definition
       file: govuk-infrastructure/concourse/tasks/update-task-definition.yml
       params:
-        APPLICATION: draft-content-store
+        APPLICATION: content-store
         GOVUK_ENVIRONMENT: test
+        TASK_DEFINITION: draft_task_definition
     - task: update-ecs-service
       file: govuk-infrastructure/concourse/tasks/update-ecs-service.yml
       params:
-        APPLICATION: draft-content-store
+        ECS_SERVICE: draft-content-store
         GOVUK_ENVIRONMENT: test
+        TASK_DEFINITION: draft_task_definition
     serial: true
     on_failure:
       <<: *notify-slack-failure
@@ -400,7 +414,7 @@ jobs:
     - task: update-ecs-service
       file: govuk-infrastructure/concourse/tasks/update-ecs-service.yml
       params:
-        APPLICATION: router
+        ECS_SERVICE: router
         GOVUK_ENVIRONMENT: test
     serial: true
     on_failure:
@@ -423,7 +437,7 @@ jobs:
     - task: update-ecs-service
       file: govuk-infrastructure/concourse/tasks/update-ecs-service.yml
       params:
-        APPLICATION: draft-router
+        ECS_SERVICE: draft-router
         GOVUK_ENVIRONMENT: test
     serial: true
     on_failure:
@@ -446,7 +460,7 @@ jobs:
     - task: update-ecs-service
       file: govuk-infrastructure/concourse/tasks/update-ecs-service.yml
       params:
-        APPLICATION: router-api
+        ECS_SERVICE: router-api
         GOVUK_ENVIRONMENT: test
     serial: true
     on_failure:
@@ -469,7 +483,7 @@ jobs:
     - task: update-ecs-service
       file: govuk-infrastructure/concourse/tasks/update-ecs-service.yml
       params:
-        APPLICATION: draft-router-api
+        ECS_SERVICE: draft-router-api
         GOVUK_ENVIRONMENT: test
     serial: true
     on_failure:
@@ -492,7 +506,7 @@ jobs:
     - task: update-ecs-service
       file: govuk-infrastructure/concourse/tasks/update-ecs-service.yml
       params:
-        APPLICATION: signon
+        ECS_SERVICE: signon
         GOVUK_ENVIRONMENT: test
     serial: true
     on_failure:
@@ -515,7 +529,7 @@ jobs:
     - task: update-ecs-service
       file: govuk-infrastructure/concourse/tasks/update-ecs-service.yml
       params:
-        APPLICATION: static
+        ECS_SERVICE: static
         GOVUK_ENVIRONMENT: test
     serial: true
     on_failure:
@@ -538,7 +552,7 @@ jobs:
     - task: update-ecs-service
       file: govuk-infrastructure/concourse/tasks/update-ecs-service.yml
       params:
-        APPLICATION: draft-static
+        ECS_SERVICE: draft-static
         GOVUK_ENVIRONMENT: test
     serial: true
     on_failure:
