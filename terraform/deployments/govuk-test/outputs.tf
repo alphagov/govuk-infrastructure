@@ -53,3 +53,11 @@ output "fargate_execution_iam_role_arn" {
 output "fargate_task_iam_role_arn" {
   value = module.govuk.fargate_task_iam_role_arn
 }
+
+output "redis_host" {
+  value = module.govuk.redis_host
+}
+
+output "redis_port" {
+  value = module.govuk.redis_port
+}
