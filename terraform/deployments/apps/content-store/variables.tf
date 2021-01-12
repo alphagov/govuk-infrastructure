@@ -3,7 +3,7 @@ variable "image_tag" {
   description = "The Docker image tag to be specified in a task definition"
 }
 
-variable "environment" {
+variable "govuk_environment" {
   type        = string
   description = "test, integration, staging or production"
 }

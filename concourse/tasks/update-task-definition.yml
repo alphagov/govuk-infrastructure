@@ -19,6 +19,7 @@ params:
   ASSUME_ROLE_ARN: 'arn:aws:iam::430354129336:role/govuk-concourse-deployer'
   APPLICATION:
   GOVUK_ENVIRONMENT:
+  TASK_DEFINITION: task_definition_arn
 run:
   path: sh
   # TODO: Move this script into a .sh file for portability, linting, and testing
@@ -36,12 +37,14 @@ run:
       APP_DIR="src/terraform/deployments/apps/$APPLICATION"
       cd ${APP_DIR}
 
-      terraform init -backend-config "role_arn=$ASSUME_ROLE_ARN"
+      terraform init -backend-config="bucket=govuk-terraform-$GOVUK_ENVIRONMENT" -backend-config="role_arn=$ASSUME_ROLE_ARN"
 
+      # TODO: These var-files won't be necessary once refactoring is complete
       terraform apply -var-file=../../variables/$GOVUK_ENVIRONMENT/common.tfvars \
       -var-file=../../variables/$GOVUK_ENVIRONMENT/apps.tfvars \
       -var=image_tag=$BUILD_TAG \
-      -var "assume_role_arn=$ASSUME_ROLE_ARN" \
+      -var="govuk_environment=$GOVUK_ENVIRONMENT" \
+      -var="assume_role_arn=$ASSUME_ROLE_ARN" \
       -auto-approve
 
-      terraform output task_definition_arn > "$root_dir/terraform-outputs/${APPLICATION}_task_definition_arn"
+      terraform output "${TASK_DEFINITION}" > "$root_dir/terraform-outputs/${TASK_DEFINITION}"

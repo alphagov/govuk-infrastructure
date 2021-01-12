@@ -12,6 +12,7 @@ root_dir=$(pwd)
 : "${APPLICATION:?APPLICATION not set}"
 : "${COMMAND:?COMMAND not set}"
 : "${CLUSTER:?COMMAND not set}"
+: "${TASK_DEFINITION:?TASK_DEFINITION not set}"
 
 mkdir -p ~/.aws
 
@@ -22,7 +23,7 @@ credential_source = Ec2InstanceMetadata
 region = $AWS_REGION
 EOF
 
-task_definition_arn="$(cat terraform-outputs/${APPLICATION}_task_definition_arn)"
+task_definition_arn="$(cat terraform-outputs/${TASK_DEFINITION})"
 network_config=$(cat terraform-outputs/task_network_config)
 
 echo "Starting task..."
