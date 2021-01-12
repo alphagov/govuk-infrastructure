@@ -1,5 +1,10 @@
 # Terraform for GOV.UK Publishing on ECS
 
+## Docs
+
+* [Applying Terraform](docs/applying-terraform.md)
+* [Adding an app](docs/adding-an-app.md)
+
 ## Directory structure
 
 * `deployments`: root modules, from where you can run Terraform commands.
