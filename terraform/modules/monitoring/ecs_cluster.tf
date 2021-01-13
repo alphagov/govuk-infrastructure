@@ -70,7 +70,7 @@ resource "aws_iam_role_policy_attachment" "monitoring_task_exec_policy" {
 # TODO: This allows *all* apps to access *any* secret. We should create a task execution
 # role and policy for each app to permit apps to only access required secrets.
 resource "aws_iam_policy" "monitoring_access_secrets" {
-  name        = "monnitoring_access_secrets"
+  name        = "monitoring_access_secrets"
   path        = "/accessSecretsPolicy/"
   description = "Allow Monitoring apps in ECS to access secrets"
 
@@ -117,4 +117,9 @@ resource "aws_iam_role" "monitoring_task" {
   ]
 }
 EOF
+}
+
+resource "aws_iam_role_policy_attachment" "monitoring_cloudwatch_read_access" {
+  role       = aws_iam_role.monitoring_task.id
+  policy_arn = "arn:aws:iam::aws:policy/CloudWatchReadOnlyAccess"
 }
