@@ -257,8 +257,8 @@ locals {
 }
 
 resource "grafana_dashboard" "billing" {
-  folder = grafana_folder.govuk_publishing_platform.id
-
+  folder      = grafana_folder.govuk_publishing_platform.id
   config_json = jsonencode(local.billing_dashboard_config)
-}
 
+  depends_on = [grafana_data_source.cloudwatch]
+}

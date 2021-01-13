@@ -36,3 +36,18 @@ variable "service_security_group_id" {
 variable "vpc_id" {
   type = string
 }
+
+variable "health_check_path" {
+  type    = string
+  default = "/healthcheck"
+}
+
+variable "target_port" {
+  type    = number
+  default = 80
+}
+
+variable "external_cidrs_list" {
+  type    = list
+  default = ["0.0.0.0/0"]
+}

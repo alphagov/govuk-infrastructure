@@ -5,3 +5,7 @@ variable "service_name" {
 variable "execution_role_arn" {
   type = string
 }
+
+variable "ports" {
+  type = list
+}

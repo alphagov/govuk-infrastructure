@@ -13,7 +13,7 @@ terraform {
 
 locals {
   subdomain               = var.service_name
-  container_services      = "${length(var.custom_container_services) == 0 ? [{ container_service = "${local.subdomain}", port = 80, protocol = "http" }] : var.custom_container_services}"
+  container_services      = var.custom_container_services == null ? [{ container_service = "${local.subdomain}", port = 80, protocol = "http" }] : var.custom_container_services
   service_security_groups = concat([aws_security_group.service.id], var.extra_security_groups)
 }
 
@@ -41,9 +41,12 @@ resource "aws_ecs_service" "service" {
     subnets         = var.subnets
   }
 
-  service_registries {
-    registry_arn   = module.service_mesh_node[0].discovery_service_arn
-    container_name = var.service_name
+  dynamic "service_registries" {
+    for_each = var.service_mesh ? [1] : []
+    content {
+      registry_arn   = aws_service_discovery_service.service[0].arn
+      container_name = var.service_name
+    }
   }
 
   # For bootstrapping
@@ -60,10 +63,11 @@ module "bootstrap_task_definition" {
   service_name       = var.service_name
   execution_role_arn = var.execution_role_arn
   source             = "../task-definitions/bootstrap"
+  ports              = [for x in local.container_services : x.port]
 }
 
 module "service_mesh_node" {
-  count = length(local.container_services)
+  count = var.service_mesh ? length(local.container_services) : 0
 
   source                           = "../service-mesh-node"
   mesh_name                        = var.mesh_name
