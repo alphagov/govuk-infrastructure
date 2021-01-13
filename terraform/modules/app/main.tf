@@ -44,7 +44,7 @@ resource "aws_ecs_service" "service" {
   dynamic "service_registries" {
     for_each = var.service_mesh ? [1] : []
     content {
-      registry_arn   = aws_service_discovery_service.service[0].arn
+      registry_arn   = module.service_mesh_node[0].discovery_service_arn
       container_name = var.service_name
     }
   }
