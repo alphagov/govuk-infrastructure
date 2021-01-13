@@ -1,6 +1,6 @@
 module "live_container_definition" {
   source = "../../../modules/app-container-definition"
-  name   = "live-content-store"
+  name   = "content-store"
   image  = "govuk/content-store:bill-content-schemas" # TODO use "govuk/content-store:${var.image_tag}"
   environment_variables = merge(
     local.environment_variables,
@@ -19,7 +19,7 @@ module "live_envoy_configuration" {
   source = "../../../modules/envoy-configuration"
 
   mesh_name    = local.mesh_name
-  service_name = "live-content-store"
+  service_name = "content-store"
   log_group    = local.log_group
   aws_region   = data.aws_region.current.name
 }
