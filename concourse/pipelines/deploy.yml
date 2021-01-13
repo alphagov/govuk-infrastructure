@@ -294,18 +294,19 @@ jobs:
         APPLICATION: publisher-web
         COMMAND: "rails db:migrate"
         TASK_DEFINITION: web_task_definition
-    - task: update-web-ecs-service
-      file: govuk-infrastructure/concourse/tasks/update-ecs-service.yml
-      params:
-        ECS_SERVICE: publisher-web
-        GOVUK_ENVIRONMENT: test
-        TASK_DEFINITION: web_task_definition
-    - task: update-worker-ecs-service
-      file: govuk-infrastructure/concourse/tasks/update-ecs-service.yml
-      params:
-        ECS_SERVICE: publisher-worker
-        GOVUK_ENVIRONMENT: test
-        TASK_DEFINITION: worker_task_definition
+    - in_parallel:
+      - task: update-web-ecs-service
+        file: govuk-infrastructure/concourse/tasks/update-ecs-service.yml
+        params:
+          ECS_SERVICE: publisher-web
+          GOVUK_ENVIRONMENT: test
+          TASK_DEFINITION: web_task_definition
+      - task: update-worker-ecs-service
+        file: govuk-infrastructure/concourse/tasks/update-ecs-service.yml
+        params:
+          ECS_SERVICE: publisher-worker
+          GOVUK_ENVIRONMENT: test
+          TASK_DEFINITION: worker_task_definition
     serial: true
     on_failure:
       <<: *notify-slack-failure
@@ -331,18 +332,19 @@ jobs:
         APPLICATION: publishing-api-worker
         GOVUK_ENVIRONMENT: test
         TASK_DEFINITION: worker_task_definition
-    - task: update-web-ecs-service
-      file: govuk-infrastructure/concourse/tasks/update-ecs-service.yml
-      params:
-        ECS_SERVICE: publishing-api-web
-        GOVUK_ENVIRONMENT: test
-        TASK_DEFINITION: web_task_definition
-    - task: update-worker-ecs-service
-      file: govuk-infrastructure/concourse/tasks/update-ecs-service.yml
-      params:
-        ECS_SERVICE: publishing-api-worker
-        GOVUK_ENVIRONMENT: test
-        TASK_DEFINITION: worker_task_definition
+    - in_parallel:
+      - task: update-web-ecs-service
+        file: govuk-infrastructure/concourse/tasks/update-ecs-service.yml
+        params:
+          ECS_SERVICE: publishing-api-web
+          GOVUK_ENVIRONMENT: test
+          TASK_DEFINITION: web_task_definition
+      - task: update-worker-ecs-service
+        file: govuk-infrastructure/concourse/tasks/update-ecs-service.yml
+        params:
+          ECS_SERVICE: publishing-api-worker
+          GOVUK_ENVIRONMENT: test
+          TASK_DEFINITION: worker_task_definition
     serial: true
     on_failure:
       <<: *notify-slack-failure
