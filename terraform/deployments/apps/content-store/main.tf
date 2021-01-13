@@ -57,6 +57,8 @@ data "terraform_remote_state" "govuk" {
 }
 
 locals {
+  app_name = "content-store"
+
   app_domain                     = data.terraform_remote_state.govuk.outputs.app_domain
   app_domain_internal            = data.terraform_remote_state.govuk.outputs.app_domain_internal
   fargate_execution_iam_role_arn = data.terraform_remote_state.govuk.outputs.fargate_execution_iam_role_arn
@@ -73,7 +75,7 @@ locals {
   ])
 
   sentry_environment = "${var.govuk_environment}-ecs"
-  statsd_host        = "statsd.${local.mesh_domain}" # TODO: Put Statsd in App Mesh
+  statsd_host        = "statsd.${local.mesh_domain}" # TODO: Duplicated, move into variable
 
   environment_variables = {
     DEFAULT_TTL                     = 1800,
@@ -84,6 +86,8 @@ locals {
     GOVUK_CONTENT_SCHEMAS_PATH      = "/govuk-content-schemas",
     GOVUK_GROUP                     = "deploy",  # TODO: clean up?
     GOVUK_STATSD_PREFIX             = "fargate", # TODO: use a better prefix?
+    GOVUK_STATSD_HOST               = local.statsd_host
+    GOVUK_STATSD_PROTOCOL           = "tcp"
     GOVUK_USER                      = "deploy",  # TODO: clean up?
     GOVUK_WEBSITE_ROOT              = local.govuk_website_root,
     PLEK_SERVICE_PUBLISHING_API_URI = "http://publishing-api-web.${local.mesh_domain}",
@@ -94,8 +98,6 @@ locals {
     PORT                            = 80,
     RAILS_ENV                       = "production",
     SENTRY_ENVIRONMENT              = local.sentry_environment,
-    STATSD_PROTOCOL                 = "tcp",
-    STATSD_HOST                     = local.statsd_host,
     UNICORN_WORKER_PROCESSES        = 12,
 
     PLEK_SERVICE_PERFORMANCEPLATFORM_BIG_SCREEN_VIEW_URI = "",

@@ -35,6 +35,7 @@ module "task_definition" {
   sentry_environment               = var.sentry_environment
   assume_role_arn                  = var.assume_role_arn
   service_discovery_namespace_name = local.service_discovery_namespace_name
+  statsd_host                      = local.statsd_host
   govuk_app_domain_external        = var.app_domain
   govuk_website_root               = local.website_root
 }

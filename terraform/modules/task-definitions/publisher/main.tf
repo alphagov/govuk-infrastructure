@@ -15,6 +15,10 @@ provider "aws" {
   }
 }
 
+locals {
+  app_name = "publisher"
+}
+
 data "aws_secretsmanager_secret" "asset_manager_bearer_token" {
   name = "publisher_app-ASSET_MANAGER_BEARER_TOKEN"
 }
@@ -90,7 +94,9 @@ module "task_definition" {
         { "name" : "GOVUK_APP_NAME", "value" : "publisher" },
         { "name" : "GOVUK_APP_ROOT", "value" : "/app" },
         { "name" : "GOVUK_APP_TYPE", "value" : "rack" },
-        { "name" : "GOVUK_STATSD_PREFIX", "value" : "fargate" },
+        { "name" : "GOVUK_STATSD_HOST", "value" : var.statsd_host },
+        { "name" : "GOVUK_STATSD_PREFIX", "value" : "govuk.app.${local.app_name}.ecs" },
+        { "name" : "GOVUK_STATSD_PROTOCOL", "value" : "tcp" },
         # TODO: how does GOVUK_ASSET_ROOT relate to ASSET_HOST? Is one a function of the other? Are they both really in use? Is GOVUK_ASSET_ROOT always just "https://${ASSET_HOST}"?
         { "name" : "GOVUK_ASSET_ROOT", "value" : "https://assets.test.publishing.service.gov.uk" },
         { "name" : "GOVUK_GROUP", "value" : "deploy" },
@@ -109,8 +115,6 @@ module "task_definition" {
         { "name" : "REDIS_HOST", "value" : var.redis_host },
         { "name" : "REDIS_PORT", "value" : tostring(var.redis_port) },
         { "name" : "REDIS_URL", "value" : "redis://${var.redis_host}:${var.redis_port}" },
-        { "name" : "STATSD_PROTOCOL", "value" : "tcp" },
-        { "name" : "STATSD_HOST", "value" : var.statsd_host },
         { "name" : "WEBSITE_ROOT", "value" : var.govuk_website_root },
         { "name" : "SENTRY_ENVIRONMENT", "value" : var.sentry_environment }
       ],

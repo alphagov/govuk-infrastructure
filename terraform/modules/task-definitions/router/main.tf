@@ -15,6 +15,10 @@ provider "aws" {
   }
 }
 
+locals {
+  app_name = "router"
+}
+
 data "aws_secretsmanager_secret" "sentry_dsn" {
   name = "SENTRY_DSN"
 }
@@ -39,7 +43,6 @@ module "task_definition" {
         { "name" : "GOVUK_APP_DOMAIN_EXTERNAL", "value" : var.govuk_app_domain_external },
         { "name" : "GOVUK_APP_NAME", "value" : var.service_name },
         { "name" : "GOVUK_APP_ROOT", "value" : "/var/apps/${var.service_name}" },
-        { "name" : "GOVUK_STATSD_PREFIX", "value" : "fargate" },
         { "name" : "PORT", "value" : "80" },
         { "name" : "RAILS_ENV", "value" : "production" },
         { "name" : "ROUTER_APIADDR", "value" : ":3055" },

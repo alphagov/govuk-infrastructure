@@ -46,6 +46,10 @@ variable "mesh_name" {
   type        = string
 }
 
+variable "mesh_service_sg_id" {
+  type = string
+}
+
 variable "execution_role_arn" {
   description = "For use during bootstrapping"
   type        = string

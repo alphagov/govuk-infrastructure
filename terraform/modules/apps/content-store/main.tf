@@ -17,6 +17,6 @@ module "app" {
   mesh_name                        = var.mesh_name
   service_discovery_namespace_id   = var.service_discovery_namespace_id
   service_discovery_namespace_name = var.service_discovery_namespace_name
-  extra_security_groups            = [var.govuk_management_access_security_group]
+  extra_security_groups            = [var.govuk_management_access_security_group, var.mesh_service_sg_id]
   desired_count                    = var.desired_count
 }

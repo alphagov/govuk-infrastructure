@@ -89,7 +89,9 @@ module "task_definition" {
         { "name" : "GOVUK_APP_TYPE", "value" : "rack" },
         { "name" : "GOVUK_CONTENT_SCHEMAS_PATH", "value" : "/govuk-content-schemas" },
         { "name" : "GOVUK_GROUP", "value" : "deploy" }, # TODO: clean up?
-        { "name" : "GOVUK_STATSD_PREFIX", "value" : "fargate" },
+        { "name" : "GOVUK_STATSD_HOST", "value" : var.statsd_host },
+        { "name" : "GOVUK_STATSD_PREFIX", "value" : "govuk.app.${local.app_name}.ecs" },
+        { "name" : "GOVUK_STATSD_PROTOCOL", "value" : "tcp" },
         { "name" : "GOVUK_USER", "value" : "deploy" }, # TODO: clean up?
         { "name" : "GOVUK_WEBSITE_ROOT", "value" : var.govuk_website_root },
         { "name" : "PLEK_SERVICE_CONTENT_STORE_URI", "value" : "http://content-store.${var.service_discovery_namespace_name}" },
@@ -103,8 +105,6 @@ module "task_definition" {
         { "name" : "REDIS_PORT", "value" : tostring(var.redis_port) },
         { "name" : "REDIS_URL", "value" : "redis://${var.redis_host}:${var.redis_port}" },
         { "name" : "RAILS_ENV", "value" : "production" },
-        { "name" : "STATSD_PROTOCOL", "value" : "tcp" },
-        { "name" : "STATSD_HOST", "value" : var.statsd_host },
         { "name" : "UNICORN_WORKER_PROCESSES", "value" : "8" }
       ],
       "dependsOn" : [{

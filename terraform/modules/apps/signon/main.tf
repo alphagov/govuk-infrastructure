@@ -18,7 +18,7 @@ module "app" {
   desired_count                    = var.desired_count
   service_discovery_namespace_id   = var.service_discovery_namespace_id
   service_discovery_namespace_name = var.service_discovery_namespace_name
-  extra_security_groups            = [var.govuk_management_access_security_group]
+  extra_security_groups            = [var.govuk_management_access_security_group, var.mesh_service_sg_id]
 
   load_balancers = [{
     target_group_arn = module.public_alb.target_group_arn

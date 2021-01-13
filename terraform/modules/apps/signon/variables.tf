@@ -29,6 +29,10 @@ variable "mesh_name" {
   type        = string
 }
 
+variable "mesh_service_sg_id" {
+  type = string
+}
+
 variable "public_lb_domain_name" {
   description = "Domain in which to create DNS records for the app's Internet-facing load balancer. For example, staging.govuk.digital"
   type        = string

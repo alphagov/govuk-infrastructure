@@ -504,5 +504,15 @@ resource "aws_security_group_rule" "signon_to_any_any" {
   security_group_id = module.signon_service.app_security_group_id
 }
 
+resource "aws_security_group_rule" "statsd_from_apps_tcp" {
+  description              = "Allow services in the App Mesh to send metrics to the mesh Statsd via TCP"
+  type                     = "egress"
+  from_port                = "8125"
+  to_port                  = "8125"
+  protocol                 = "tcp"
+  security_group_id        = module.statsd.security_group_id
+  source_security_group_id = aws_security_group.mesh_ecs_service.id
+}
+
 # TODO: move the rest of the rules into this file unless there's a good reason
 #       for them to stay in other files.

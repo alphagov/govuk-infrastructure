@@ -5,6 +5,7 @@ module "live_container_definition" {
   environment_variables = merge(
     local.environment_variables,
     {
+      GOVUK_STATSD_PREFIX         = "govuk.app.${local.app_name}.ecs"
       PLEK_SERVICE_ROUTER_API_URI = "http://router-api.${local.mesh_domain}"
       MONGODB_URI                 = "mongodb://${local.mongodb_host}/live_content_store_production"
     },
