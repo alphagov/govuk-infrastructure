@@ -25,6 +25,11 @@ variable "private_subnets" {
   type        = list
 }
 
+variable "security_groups" {
+  description = "Additional security groups to attach to the Statsd ECS Service."
+  type        = list
+}
+
 variable "service_discovery_namespace_id" {
   type = string
 }

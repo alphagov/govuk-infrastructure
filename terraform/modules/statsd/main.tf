@@ -19,7 +19,7 @@ resource "aws_ecs_service" "statsd" {
   desired_count = 1
 
   network_configuration {
-    security_groups = [aws_security_group.service.id]
+    security_groups = concat([aws_security_group.service.id], var.security_groups)
     subnets         = var.private_subnets
   }
 

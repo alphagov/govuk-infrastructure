@@ -207,6 +207,7 @@ module "statsd" {
   govuk_management_access_sg_id    = var.govuk_management_access_sg_id
   mesh_name                        = var.mesh_name
   private_subnets                  = var.private_subnets
+  security_groups                  = [aws_security_group.mesh_ecs_service.id]
   service_discovery_namespace_id   = aws_service_discovery_private_dns_namespace.govuk_publishing_platform.id
   service_discovery_namespace_name = aws_service_discovery_private_dns_namespace.govuk_publishing_platform.name
   source                           = "../../modules/statsd"

@@ -506,12 +506,52 @@ resource "aws_security_group_rule" "signon_to_any_any" {
 
 resource "aws_security_group_rule" "statsd_from_apps_tcp" {
   description              = "Allow services in the App Mesh to send metrics to the mesh Statsd via TCP"
-  type                     = "egress"
+  type                     = "ingress"
   from_port                = "8125"
   to_port                  = "8125"
   protocol                 = "tcp"
   security_group_id        = module.statsd.security_group_id
   source_security_group_id = aws_security_group.mesh_ecs_service.id
+}
+
+resource "aws_security_group_rule" "mesh_service_to_any_https" {
+  description       = "Mesh services send requests to anywhere over HTTPS"
+  type              = "egress"
+  from_port         = 443
+  to_port           = 443
+  protocol          = "tcp"
+  cidr_blocks       = ["0.0.0.0/0"]
+  security_group_id = aws_security_group.mesh_ecs_service.id
+}
+
+resource "aws_security_group_rule" "mesh_service_to_any_dns_tcp" {
+  description       = "Mesh services send DNS queries anywhere over TCP"
+  type              = "egress"
+  from_port         = 53
+  to_port           = 53
+  protocol          = "tcp"
+  cidr_blocks       = ["0.0.0.0/0"]
+  security_group_id = aws_security_group.mesh_ecs_service.id
+}
+
+resource "aws_security_group_rule" "mesh_service_to_any_dns_udp" {
+  description       = "Mesh services send DNS queries anywhere over UDP"
+  type              = "egress"
+  from_port         = 53
+  to_port           = 53
+  protocol          = "udp"
+  cidr_blocks       = ["0.0.0.0/0"]
+  security_group_id = aws_security_group.mesh_ecs_service.id
+}
+
+resource "aws_security_group_rule" "mesh_service_to_mesh_service_http" {
+  description              = "Mesh services send to requests to other mesh services over HTTP"
+  type                     = "egress"
+  protocol                 = "tcp"
+  from_port                = 80
+  to_port                  = 80
+  source_security_group_id = aws_security_group.mesh_ecs_service.id
+  security_group_id        = aws_security_group.mesh_ecs_service.id
 }
 
 # TODO: move the rest of the rules into this file unless there's a good reason
