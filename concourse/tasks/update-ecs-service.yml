@@ -11,6 +11,7 @@ inputs:
 params:
   AWS_REGION: eu-west-1
   ASSUME_ROLE_ARN: 'arn:aws:iam::430354129336:role/govuk-concourse-deployer'
+  APPLICATION:
   ECS_SERVICE:
   TASK_DEFINITION: task_definition_arn
 run:
@@ -35,7 +36,10 @@ run:
         exit 1
       fi
 
-      new_task_definition_arn="$(cat "terraform-outputs/${TASK_DEFINITION}")"
+      # TODO: Remove this once the publisher is refactored and the prefix is no longer needed
+      terraform_output_prefix=${APPLICATION:-${ECS_SERVICE}}
+
+      new_task_definition_arn="$(jq -r ".${TASK_DEFINITION}.value" terraform-outputs/${terraform_output_prefix}-terraform-outputs.json)"
       if [ -z "${new_task_definition_arn}" ]; then
         echo "failed to retrieve new task definition for ${TASK_DEFINITION}, exiting..."
         exit 1

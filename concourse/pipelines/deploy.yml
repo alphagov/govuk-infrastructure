@@ -86,7 +86,6 @@ groups:
       - update-pipeline
       - run-terraform
       - deploy-content-store
-      - deploy-draft-content-store
       - deploy-frontend
       - smoke-test-frontend
       - deploy-draft-frontend
@@ -107,11 +106,6 @@ groups:
   - name: admin
     jobs:
       - update-pipeline
-
-  - name: content-store
-    jobs:
-      - deploy-content-store
-      - deploy-draft-content-store
 
   - name: frontend
     jobs:
@@ -278,13 +272,11 @@ jobs:
       params:
         APPLICATION: publisher-web
         GOVUK_ENVIRONMENT: test
-        TASK_DEFINITION: web_task_definition
     - task: update-worker-task-definition
       file: govuk-infrastructure/concourse/tasks/update-task-definition.yml
       params:
         APPLICATION: publisher-worker
         GOVUK_ENVIRONMENT: test
-        TASK_DEFINITION: worker_task_definition
     - task: fetch-db-migrations-config
       file: govuk-infrastructure/concourse/tasks/fetch-task-network-config.yml
       params:
@@ -329,13 +321,11 @@ jobs:
       params:
         APPLICATION: publishing-api-web
         GOVUK_ENVIRONMENT: test
-        TASK_DEFINITION: web_task_definition
     - task: update-worker-task-definition
       file: govuk-infrastructure/concourse/tasks/update-task-definition.yml
       params:
         APPLICATION: publishing-api-worker
         GOVUK_ENVIRONMENT: test
-        TASK_DEFINITION: worker_task_definition
     - in_parallel:
       - task: update-web-ecs-service
         file: govuk-infrastructure/concourse/tasks/update-ecs-service.yml
@@ -368,39 +358,23 @@ jobs:
       params:
         APPLICATION: content-store
         GOVUK_ENVIRONMENT: test
-        TASK_DEFINITION: live_task_definition
-    - task: update-ecs-service
-      file: govuk-infrastructure/concourse/tasks/update-ecs-service.yml
-      params:
-        ECS_SERVICE: content-store
-        GOVUK_ENVIRONMENT: test
-        TASK_DEFINITION: live_task_definition
-    serial: true
-    on_failure:
-      <<: *notify-slack-failure
-
-  - name: deploy-draft-content-store
-    plan:
     - in_parallel:
-      - get: govuk-infrastructure
-        passed:
-        - run-terraform
-        trigger: true
-      - get: release
-        resource: content-store
-        trigger: true
-    - task: update-task-definition
-      file: govuk-infrastructure/concourse/tasks/update-task-definition.yml
-      params:
-        APPLICATION: content-store
-        GOVUK_ENVIRONMENT: test
-        TASK_DEFINITION: draft_task_definition
-    - task: update-ecs-service
-      file: govuk-infrastructure/concourse/tasks/update-ecs-service.yml
-      params:
-        ECS_SERVICE: draft-content-store
-        GOVUK_ENVIRONMENT: test
-        TASK_DEFINITION: draft_task_definition
+      - task: update-live-ecs-service
+        file: govuk-infrastructure/concourse/tasks/update-ecs-service.yml
+        params:
+          # TODO: remove this APPLICATION variable once it's no longer needed by update-ecs-service
+          APPLICATION: content-store
+          ECS_SERVICE: content-store
+          GOVUK_ENVIRONMENT: test
+          TASK_DEFINITION: live_task_definition
+      - task: update-draft-ecs-service
+        file: govuk-infrastructure/concourse/tasks/update-ecs-service.yml
+        params:
+          # TODO: remove this APPLICATION variable once it's no longer needed by update-ecs-service
+          APPLICATION: content-store
+          ECS_SERVICE: draft-content-store
+          GOVUK_ENVIRONMENT: test
+          TASK_DEFINITION: draft_task_definition
     serial: true
     on_failure:
       <<: *notify-slack-failure

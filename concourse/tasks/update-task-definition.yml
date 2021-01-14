@@ -19,7 +19,6 @@ params:
   ASSUME_ROLE_ARN: 'arn:aws:iam::430354129336:role/govuk-concourse-deployer'
   APPLICATION:
   GOVUK_ENVIRONMENT:
-  TASK_DEFINITION: task_definition_arn
 run:
   path: sh
   # TODO: Move this script into a .sh file for portability, linting, and testing
@@ -35,7 +34,7 @@ run:
       echo "================================================="
 
       APP_DIR="src/terraform/deployments/apps/$APPLICATION"
-      cd ${APP_DIR}
+      cd "${APP_DIR}"
 
       terraform init -backend-config="bucket=govuk-terraform-$GOVUK_ENVIRONMENT" -backend-config="role_arn=$ASSUME_ROLE_ARN"
 
@@ -47,4 +46,5 @@ run:
       -var="assume_role_arn=$ASSUME_ROLE_ARN" \
       -auto-approve
 
-      terraform output "${TASK_DEFINITION}" > "$root_dir/terraform-outputs/${TASK_DEFINITION}"
+      # TODO - remove the ${APPLICATION} interpolation from this once publisher only has one terraform apply
+      terraform output -json > "$root_dir/terraform-outputs/${APPLICATION}-terraform-outputs.json"

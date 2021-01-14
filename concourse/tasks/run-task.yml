@@ -10,6 +10,7 @@ inputs:
   - name: govuk-infrastructure
     path: src
   - name: terraform-outputs
+  - name: task-network-config
 params:
   AWS_REGION: eu-west-1
   ASSUME_ROLE_ARN: 'arn:aws:iam::430354129336:role/govuk-concourse-deployer'
