@@ -60,5 +60,5 @@ module "monitoring" {
   private_subnets               = data.terraform_remote_state.infra_networking.outputs.private_subnet_ids
   public_subnets                = data.terraform_remote_state.infra_networking.outputs.public_subnet_ids
   govuk_management_access_sg_id = data.terraform_remote_state.infra_security_groups.outputs.sg_management_id
-  office_cidrs_list             = var.office_cidrs_list
+  grafana_cidrs_allow_list      = concat(var.office_cidrs_list, var.concourse_cidrs_list)
 }
