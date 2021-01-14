@@ -15,7 +15,7 @@ resources:
     icon: github
     name: govuk-infrastructure
     source:
-      branch: main
+      branch: refactor-app-deployment-concourse
       uri: https://github.com/alphagov/govuk-infrastructure
     type: git
 
