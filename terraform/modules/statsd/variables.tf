@@ -6,11 +6,6 @@ variable "execution_role_arn" {
   type = string
 }
 
-variable "govuk_management_access_sg_id" {
-  type        = string
-  description = "Gives access to Graphite in EC2"
-}
-
 variable "internal_domain_name" {
   description = "Domain in which to create DNS records for private resources. For example, test.govuk-internal.digital"
   type        = string
