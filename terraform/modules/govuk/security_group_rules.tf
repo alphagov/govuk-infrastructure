@@ -506,7 +506,7 @@ resource "aws_security_group_rule" "signon_to_any_any" {
 
 resource "aws_security_group_rule" "statsd_from_apps_tcp" {
   description              = "Allow services in the App Mesh to send metrics to the mesh Statsd via TCP"
-  type                     = "egress"
+  type                     = "ingress"
   from_port                = "8125"
   to_port                  = "8125"
   protocol                 = "tcp"
