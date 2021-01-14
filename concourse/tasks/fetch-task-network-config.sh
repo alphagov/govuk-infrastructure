@@ -30,4 +30,4 @@ private_subnets=$(terraform output -json private_subnets)
 security_groups=$(terraform output -json $APPLICATION'_security_groups')
 network_config='awsvpcConfiguration={subnets='$private_subnets',securityGroups='$security_groups',assignPublicIp=DISABLED}'
 
-echo $network_config > "$root_dir/terraform-outputs/task_network_config"
+echo "$network_config" > "$root_dir/task-network-config/task_network_config"
