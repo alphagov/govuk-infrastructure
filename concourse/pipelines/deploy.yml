@@ -6,15 +6,21 @@ resource_types:
     type: docker-image
     source:
       repository: cfcommunity/slack-notification-resource
-      tag: latest
+      tag: latest # TODO - don't use latest (once we've worked out a policy for third party images)
       username: ((docker_hub_username))
       password: ((docker_hub_authtoken))
+
+  - name: s3
+    type: docker-image
+    source:
+      repository: governmentpaas/s3-resource
+      tag: latest # TODO - don't use latest (once we've worked out a policy for third party images)
 
 resources:
   - &git-repo
     icon: github
     name: govuk-infrastructure
-    source:
+    source: &govuk-infrastructure-source
       branch: main
       uri: https://github.com/alphagov/govuk-infrastructure
     type: git
@@ -27,11 +33,33 @@ resources:
       tag_filter: release_*
 
   - <<: *git-repo
+    name: govuk-infrastructure-frontend
+    source:
+      <<: *govuk-infrastructure-source
+      paths:
+        - concourse/tasks/**/*
+        - terraform/deployments/apps/*frontend/**/*
+        # TODO replace these once frontend is refactored to use the new modules
+        - terraform/modules/task-definition/**/*
+        - terraform/modules/task-definitions/frontend/**/*
+
+  - <<: *git-repo
     name: publisher
     source:
       branch: master
       uri: https://github.com/alphagov/publisher
       tag_filter: release_*
+
+  - <<: *git-repo
+    name: govuk-infrastructure-publisher
+    source:
+      <<: *govuk-infrastructure-source
+      paths:
+        - concourse/tasks/**/*
+        - terraform/deployments/apps/publisher*/**/*
+        # TODO replace these once publisher is refactored to use the new modules
+        - terraform/modules/task-definition/**/*
+        - terraform/modules/task-definitions/publisher/**/*
 
   - <<: *git-repo
     name: publishing-api
@@ -41,11 +69,32 @@ resources:
       tag_filter: release_*
 
   - <<: *git-repo
+    name: govuk-infrastructure-publishing-api
+    source:
+      <<: *govuk-infrastructure-source
+      paths:
+        - concourse/tasks/**/*
+        - terraform/deployments/apps/publishing-api/**/*
+        # TODO replace these once publishing-api is refactored to use the new modules
+        - terraform/modules/task-definition/**/*
+        - terraform/modules/task-definitions/publishing-api/**/*
+
+  - <<: *git-repo
     name: content-store
     source:
       branch: master
       uri: https://github.com/alphagov/content-store
       tag_filter: release_*
+
+  - <<: *git-repo
+    name: govuk-infrastructure-content-store
+    source:
+      <<: *govuk-infrastructure-source
+      paths:
+        - concourse/tasks/**/*
+        - terraform/deployments/apps/content-store/**/*
+        - terraform/modules/app-container-definition/**/*
+        - terraform/modules/envoy-configuration/**/*
 
   - <<: *git-repo
     name: router
@@ -55,11 +104,33 @@ resources:
       tag_filter: release_*
 
   - <<: *git-repo
+    name: govuk-infrastructure-router
+    source:
+      <<: *govuk-infrastructure-source
+      paths:
+        - concourse/tasks/**/*
+        - terraform/deployments/apps/*router/**/*
+        # TODO replace these once router is refactored to use the new modules
+        - terraform/modules/task-definition/**/*
+        - terraform/modules/task-definitions/router/**/*
+
+  - <<: *git-repo
     name: router-api
     source:
       branch: master
       uri: https://github.com/alphagov/router-api
       tag_filter: release_*
+
+  - <<: *git-repo
+    name: govuk-infrastructure-router-api
+    source:
+      <<: *govuk-infrastructure-source
+      paths:
+        - concourse/tasks/**/*
+        - terraform/deployments/apps/*router-api/**/*
+        # TODO replace these once router-api is refactored to use the new modules
+        - terraform/modules/task-definition/**/*
+        - terraform/modules/task-definitions/router-api/**/*
 
   - <<: *git-repo
     name: signon
@@ -69,16 +140,48 @@ resources:
       tag_filter: release_*
 
   - <<: *git-repo
+    name: govuk-infrastructure-signon
+    source:
+      <<: *govuk-infrastructure-source
+      paths:
+        - concourse/tasks/**/*
+        - terraform/deployments/apps/signon/**/*
+        # TODO replace these once signon is refactored to use the new modules
+        - terraform/modules/task-definition/**/*
+        - terraform/modules/task-definitions/signon/**/*
+
+  - <<: *git-repo
     name: static
     source:
       branch: master
       uri: https://github.com/alphagov/static
       tag_filter: release_*
 
+  - <<: *git-repo
+    name: govuk-infrastructure-static
+    source:
+      <<: *govuk-infrastructure-source
+      paths:
+        - concourse/tasks/**/*
+        - terraform/deployments/apps/static/**/*
+        # TODO replace these once static is refactored to use the new modules
+        - terraform/modules/task-definition/**/*
+        - terraform/modules/task-definitions/static/**/*
+
   - name: deploy-slack-channel
     type: slack-notification
     source:
       url: https://hooks.slack.com/services/((slack_webhook))
+
+  - name: govuk-terraform-outputs
+    type: s3
+    # NOTE: this bucket is created for us by Big Concourse
+    # https://reliability-engineering.cloudapps.digital/continuous-deployment.html#services
+    # It's in AWS' London region (eu-west-2)
+    source:
+      bucket: ((readonly_private_bucket_name))
+      region_name: eu-west-2
+      versioned_file: govuk-terraform-outputs.json
 
 groups:
   - name: all
@@ -156,6 +259,8 @@ jobs:
       config:
         inputs:
         - name: govuk-infrastructure
+        outputs:
+        - name: govuk-terraform-outputs
         params:
           AWS_REGION: eu-west-1
           ASSUME_ROLE_ARN: 'arn:aws:iam::430354129336:role/govuk-concourse-deployer'
@@ -168,12 +273,15 @@ jobs:
             username: ((docker_hub_username))
             password: ((docker_hub_authtoken))
         run:
-          dir: govuk-infrastructure/terraform/deployments/govuk-test
           path: sh
           args:
           - '-c'
           - |
             set -eu
+
+            root_dir=$(pwd)
+
+            cd govuk-infrastructure/terraform/deployments/govuk-test
 
             terraform init -backend-config "role_arn=$ASSUME_ROLE_ARN"
             terraform apply \
@@ -182,10 +290,17 @@ jobs:
               -var-file ../variables/test/infrastructure.tfvars \
               -auto-approve
 
+            terraform output -json > "$root_dir/govuk-terraform-outputs/govuk-terraform-outputs.json"
+    - put: govuk-terraform-outputs
+      params:
+        file: govuk-terraform-outputs/govuk-terraform-outputs.json
+
   - name: deploy-frontend
     plan:
     - in_parallel:
-      - get: govuk-infrastructure
+      - get: govuk-infrastructure-frontend
+        trigger: true
+      - get: govuk-terraform-outputs
         passed:
         - run-terraform
         trigger: true
@@ -216,6 +331,7 @@ jobs:
   - name: smoke-test-frontend
     plan:
     - get: govuk-infrastructure
+      resource: govuk-infrastructure-frontend
       passed:
       - deploy-frontend
       trigger: true
@@ -228,7 +344,9 @@ jobs:
   - name: deploy-draft-frontend
     plan:
     - in_parallel:
-      - get: govuk-infrastructure
+      - get: govuk-infrastructure-frontend
+        trigger: true
+      - get: govuk-terraform-outputs
         passed:
         - run-terraform
         trigger: true
@@ -260,7 +378,9 @@ jobs:
   - name: deploy-publisher
     plan:
     - in_parallel:
-      - get: govuk-infrastructure
+      - get: govuk-infrastructure-publisher
+        trigger: true
+      - get: govuk-terraform-outputs
         passed:
         - run-terraform
         trigger: true
@@ -309,7 +429,9 @@ jobs:
   - name: deploy-publishing-api
     plan:
     - in_parallel:
-      - get: govuk-infrastructure
+      - get: govuk-infrastructure-publishing-api
+        trigger: true
+      - get: govuk-terraform-outputs
         passed:
         - run-terraform
         trigger: true
@@ -346,7 +468,9 @@ jobs:
   - name: deploy-content-store
     plan:
     - in_parallel:
-      - get: govuk-infrastructure
+      - get: govuk-infrastructure-content-store
+        trigger: true
+      - get: govuk-terraform-outputs
         passed:
         - run-terraform
         trigger: true
@@ -382,7 +506,9 @@ jobs:
   - name: deploy-router
     plan:
     - in_parallel:
-      - get: govuk-infrastructure
+      - get: govuk-infrastructure-router
+        trigger: true
+      - get: govuk-terraform-outputs
         passed:
         - run-terraform
         trigger: true
@@ -406,7 +532,9 @@ jobs:
   - name: deploy-draft-router
     plan:
     - in_parallel:
-      - get: govuk-infrastructure
+      - get: govuk-infrastructure-router
+        trigger: true
+      - get: govuk-terraform-outputs
         passed:
         - run-terraform
         trigger: true
@@ -430,7 +558,9 @@ jobs:
   - name: deploy-router-api
     plan:
     - in_parallel:
-      - get: govuk-infrastructure
+      - get: govuk-infrastructure-router-api
+        trigger: true
+      - get: govuk-terraform-outputs
         passed:
         - run-terraform
         trigger: true
@@ -454,7 +584,9 @@ jobs:
   - name: deploy-draft-router-api
     plan:
     - in_parallel:
-      - get: govuk-infrastructure
+      - get: govuk-infrastructure-router-api
+        trigger: true
+      - get: govuk-terraform-outputs
         passed:
         - run-terraform
         trigger: true
@@ -478,7 +610,9 @@ jobs:
   - name: deploy-signon
     plan:
     - in_parallel:
-      - get: govuk-infrastructure
+      - get: govuk-infrastructure-signon
+        trigger: true
+      - get: govuk-terraform-outputs
         passed:
         - run-terraform
         trigger: true
@@ -502,7 +636,9 @@ jobs:
   - name: deploy-static
     plan:
     - in_parallel:
-      - get: govuk-infrastructure
+      - get: govuk-infrastructure-static
+        trigger: true
+      - get: govuk-terraform-outputs
         passed:
         - run-terraform
         trigger: true
@@ -526,7 +662,9 @@ jobs:
   - name: deploy-draft-static
     plan:
     - in_parallel:
-      - get: govuk-infrastructure
+      - get: govuk-infrastructure-static
+        trigger: true
+      - get: govuk-terraform-outputs
         passed:
         - run-terraform
         trigger: true
