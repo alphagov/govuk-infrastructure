@@ -3,23 +3,23 @@ output "private_subnets" {
 }
 
 output "publisher-web_security_groups" {
-  value = module.govuk.publisher_security_groups
+  value = module.publisher_service.security_groups
 }
 
 output "frontend_security_groups" {
-  value = module.govuk.frontend_security_groups
+  value = module.frontend_service.security_groups
 }
 
 output "signon_security_groups" {
-  value = module.govuk.signon_security_groups
+  value = module.signon_service.security_groups
 }
 
 output "content-store_security_groups" {
-  value = module.govuk.content_store_security_groups
+  value = module.content_store_service.security_groups
 }
 
 output "draft-content-store_security_groups" {
-  value = module.govuk.draft_content_store_security_groups
+  value = module.draft_content_store_service.security_groups
 }
 
 output "log_group" {
@@ -47,17 +47,17 @@ output "govuk_website_root" {
 }
 
 output "fargate_execution_iam_role_arn" {
-  value = module.govuk.fargate_execution_iam_role_arn
+  value = aws_iam_role.execution.arn
 }
 
 output "fargate_task_iam_role_arn" {
-  value = module.govuk.fargate_task_iam_role_arn
+  value = aws_iam_role.task.arn
 }
 
 output "redis_host" {
-  value = module.govuk.redis_host
+  value = module.shared_redis_cluster.redis_host
 }
 
 output "redis_port" {
-  value = module.govuk.redis_port
+  value = module.shared_redis_cluster.redis_port
 }
