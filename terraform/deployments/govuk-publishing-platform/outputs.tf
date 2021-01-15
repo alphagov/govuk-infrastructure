@@ -3,23 +3,23 @@ output "private_subnets" {
 }
 
 output "publisher-web_security_groups" {
-  value = module.publisher_service.security_groups
+  value = module.publisher.security_groups
 }
 
 output "frontend_security_groups" {
-  value = module.frontend_service.security_groups
+  value = module.frontend.security_groups
 }
 
 output "signon_security_groups" {
-  value = module.signon_service.security_groups
+  value = module.signon.security_groups
 }
 
 output "content-store_security_groups" {
-  value = module.content_store_service.security_groups
+  value = module.content_store.security_groups
 }
 
 output "draft-content-store_security_groups" {
-  value = module.draft_content_store_service.security_groups
+  value = module.draft_content_store.security_groups
 }
 
 output "log_group" {

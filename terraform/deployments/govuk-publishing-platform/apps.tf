@@ -1,6 +1,4 @@
-# TODO: remove the redundant `_service` suffixes; they make it tedious to refer
-# to outputs e.g. in security_group_rules.tf.
-module "frontend_service" {
+module "frontend" {
   mesh_name                        = aws_appmesh_mesh.govuk.id
   mesh_service_sg_id               = aws_security_group.mesh_ecs_service.id
   service_discovery_namespace_id   = aws_service_discovery_private_dns_namespace.govuk_publishing_platform.id
@@ -14,7 +12,7 @@ module "frontend_service" {
   public_lb_domain_name            = var.public_lb_domain_name
 }
 
-module "draft_frontend_service" {
+module "draft_frontend" {
   service_name                     = "draft-frontend"
   mesh_name                        = aws_appmesh_mesh.govuk.id
   mesh_service_sg_id               = aws_security_group.mesh_ecs_service.id
@@ -29,7 +27,7 @@ module "draft_frontend_service" {
   public_lb_domain_name            = var.public_lb_domain_name
 }
 
-module "publisher_service" {
+module "publisher" {
   cluster_id                       = aws_ecs_cluster.cluster.id
   govuk_management_access_sg_id    = local.govuk_management_access_sg_id
   mesh_name                        = aws_appmesh_mesh.govuk.id
@@ -45,7 +43,7 @@ module "publisher_service" {
   desired_count                    = var.publisher_desired_count
 }
 
-module "content_store_service" {
+module "content_store" {
   mesh_name                        = aws_appmesh_mesh.govuk.id
   mesh_service_sg_id               = aws_security_group.mesh_ecs_service.id
   service_discovery_namespace_id   = aws_service_discovery_private_dns_namespace.govuk_publishing_platform.id
@@ -58,7 +56,7 @@ module "content_store_service" {
   desired_count                    = var.content_store_desired_count
 }
 
-module "draft_content_store_service" {
+module "draft_content_store" {
   service_name                     = "draft-content-store"
   mesh_name                        = aws_appmesh_mesh.govuk.id
   mesh_service_sg_id               = aws_security_group.mesh_ecs_service.id
@@ -72,7 +70,7 @@ module "draft_content_store_service" {
   desired_count                    = var.draft_content_store_desired_count
 }
 
-module "publishing_api_service" {
+module "publishing_api" {
   mesh_name                        = aws_appmesh_mesh.govuk.id
   mesh_service_sg_id               = aws_security_group.mesh_ecs_service.id
   service_discovery_namespace_id   = aws_service_discovery_private_dns_namespace.govuk_publishing_platform.id
@@ -84,7 +82,7 @@ module "publishing_api_service" {
   desired_count                    = var.publishing_api_desired_count
 }
 
-module "router_service" {
+module "router" {
   mesh_name                        = aws_appmesh_mesh.govuk.id
   mesh_service_sg_id               = aws_security_group.mesh_ecs_service.id
   service_discovery_namespace_id   = aws_service_discovery_private_dns_namespace.govuk_publishing_platform.id
@@ -97,7 +95,7 @@ module "router_service" {
   desired_count                    = var.router_desired_count
 }
 
-module "draft_router_service" {
+module "draft_router" {
   service_name                     = "draft-router"
   mesh_name                        = aws_appmesh_mesh.govuk.id
   mesh_service_sg_id               = aws_security_group.mesh_ecs_service.id
@@ -111,7 +109,7 @@ module "draft_router_service" {
   desired_count                    = var.draft_router_desired_count
 }
 
-module "router_api_service" {
+module "router_api" {
   mesh_name                        = aws_appmesh_mesh.govuk.id
   mesh_service_sg_id               = aws_security_group.mesh_ecs_service.id
   service_discovery_namespace_id   = aws_service_discovery_private_dns_namespace.govuk_publishing_platform.id
@@ -124,7 +122,7 @@ module "router_api_service" {
   desired_count                    = var.router_api_desired_count
 }
 
-module "draft_router_api_service" {
+module "draft_router_api" {
   service_name                     = "draft-router-api"
   mesh_name                        = aws_appmesh_mesh.govuk.id
   mesh_service_sg_id               = aws_security_group.mesh_ecs_service.id
@@ -138,7 +136,7 @@ module "draft_router_api_service" {
   desired_count                    = var.draft_router_api_desired_count
 }
 
-module "static_service" {
+module "static" {
   mesh_name                        = aws_appmesh_mesh.govuk.id
   mesh_service_sg_id               = aws_security_group.mesh_ecs_service.id
   service_discovery_namespace_id   = aws_service_discovery_private_dns_namespace.govuk_publishing_platform.id
@@ -153,7 +151,7 @@ module "static_service" {
   public_lb_domain_name            = var.public_lb_domain_name
 }
 
-module "draft_static_service" {
+module "draft_static" {
   service_name                     = "draft-static"
   mesh_name                        = aws_appmesh_mesh.govuk.id
   mesh_service_sg_id               = aws_security_group.mesh_ecs_service.id
@@ -169,7 +167,7 @@ module "draft_static_service" {
   public_lb_domain_name            = var.public_lb_domain_name
 }
 
-module "signon_service" {
+module "signon" {
   mesh_name                        = aws_appmesh_mesh.govuk.id
   mesh_service_sg_id               = aws_security_group.mesh_ecs_service.id
   service_discovery_namespace_id   = aws_service_discovery_private_dns_namespace.govuk_publishing_platform.id

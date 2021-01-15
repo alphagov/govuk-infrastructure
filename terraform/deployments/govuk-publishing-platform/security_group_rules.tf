@@ -23,8 +23,8 @@ resource "aws_security_group_rule" "content_store_from_publishing_api_http" {
   from_port                = 80
   to_port                  = 80
   protocol                 = "tcp"
-  security_group_id        = module.content_store_service.app_security_group_id
-  source_security_group_id = module.publishing_api_service.app_security_group_id
+  security_group_id        = module.content_store.app_security_group_id
+  source_security_group_id = module.publishing_api.app_security_group_id
 }
 
 resource "aws_security_group_rule" "draft_content_store_from_publishing_api_http" {
@@ -33,8 +33,8 @@ resource "aws_security_group_rule" "draft_content_store_from_publishing_api_http
   from_port                = 80
   to_port                  = 80
   protocol                 = "tcp"
-  security_group_id        = module.draft_content_store_service.app_security_group_id
-  source_security_group_id = module.publishing_api_service.app_security_group_id
+  security_group_id        = module.draft_content_store.app_security_group_id
+  source_security_group_id = module.publishing_api.app_security_group_id
 }
 
 resource "aws_security_group_rule" "content_store_from_frontend_http" {
@@ -43,8 +43,8 @@ resource "aws_security_group_rule" "content_store_from_frontend_http" {
   from_port                = 80
   to_port                  = 80
   protocol                 = "tcp"
-  security_group_id        = module.content_store_service.app_security_group_id
-  source_security_group_id = module.frontend_service.app_security_group_id
+  security_group_id        = module.content_store.app_security_group_id
+  source_security_group_id = module.frontend.app_security_group_id
 }
 
 resource "aws_security_group_rule" "draft_content_store_from_frontend_http" {
@@ -53,8 +53,8 @@ resource "aws_security_group_rule" "draft_content_store_from_frontend_http" {
   from_port                = 80
   to_port                  = 80
   protocol                 = "tcp"
-  security_group_id        = module.draft_content_store_service.app_security_group_id
-  source_security_group_id = module.draft_frontend_service.app_security_group_id
+  security_group_id        = module.draft_content_store.app_security_group_id
+  source_security_group_id = module.draft_frontend.app_security_group_id
 }
 
 # TODO: fix overly broad egress rules
@@ -65,7 +65,7 @@ resource "aws_security_group_rule" "content_store_to_any_any" {
   to_port           = 0
   protocol          = -1
   cidr_blocks       = ["0.0.0.0/0"]
-  security_group_id = module.content_store_service.app_security_group_id
+  security_group_id = module.content_store.app_security_group_id
 }
 
 resource "aws_security_group_rule" "publisher_to_any_any" {
@@ -75,7 +75,7 @@ resource "aws_security_group_rule" "publisher_to_any_any" {
   to_port           = 0
   protocol          = -1
   cidr_blocks       = ["0.0.0.0/0"]
-  security_group_id = module.publisher_service.app_security_group_id
+  security_group_id = module.publisher.app_security_group_id
 }
 
 resource "aws_security_group_rule" "publisher_from_alb_http" {
@@ -84,8 +84,8 @@ resource "aws_security_group_rule" "publisher_from_alb_http" {
   from_port                = 80
   to_port                  = 80
   protocol                 = "tcp"
-  security_group_id        = module.publisher_service.app_security_group_id
-  source_security_group_id = module.publisher_service.alb_security_group_id
+  security_group_id        = module.publisher.app_security_group_id
+  source_security_group_id = module.publisher.alb_security_group_id
 }
 
 resource "aws_security_group_rule" "publisher_alb_to_publisher_http" {
@@ -94,8 +94,8 @@ resource "aws_security_group_rule" "publisher_alb_to_publisher_http" {
   from_port                = 80
   to_port                  = 80
   protocol                 = "tcp"
-  security_group_id        = module.publisher_service.alb_security_group_id
-  source_security_group_id = module.publisher_service.app_security_group_id
+  security_group_id        = module.publisher.alb_security_group_id
+  source_security_group_id = module.publisher.app_security_group_id
 }
 
 resource "aws_security_group_rule" "publisher_alb_from_any_https" {
@@ -105,7 +105,7 @@ resource "aws_security_group_rule" "publisher_alb_from_any_https" {
   to_port           = 443
   protocol          = "tcp"
   cidr_blocks       = ["0.0.0.0/0"]
-  security_group_id = module.publisher_service.alb_security_group_id
+  security_group_id = module.publisher.alb_security_group_id
 }
 
 resource "aws_security_group_rule" "redis_from_publisher_resp" {
@@ -114,7 +114,7 @@ resource "aws_security_group_rule" "redis_from_publisher_resp" {
   to_port                  = 6379
   protocol                 = "tcp"
   security_group_id        = module.shared_redis_cluster.security_group_id
-  source_security_group_id = module.publisher_service.app_security_group_id
+  source_security_group_id = module.publisher.app_security_group_id
 }
 
 resource "aws_security_group_rule" "postgres_from_publishing_api_5432" {
@@ -125,7 +125,7 @@ resource "aws_security_group_rule" "postgres_from_publishing_api_5432" {
   protocol    = "tcp"
 
   security_group_id        = local.postgresql_security_group_id
-  source_security_group_id = module.publishing_api_service.app_security_group_id
+  source_security_group_id = module.publishing_api.app_security_group_id
 }
 
 resource "aws_security_group_rule" "redis_from_publishing_api_resp" {
@@ -134,7 +134,7 @@ resource "aws_security_group_rule" "redis_from_publishing_api_resp" {
   to_port                  = 6379
   protocol                 = "tcp"
   security_group_id        = module.shared_redis_cluster.security_group_id
-  source_security_group_id = module.publishing_api_service.app_security_group_id
+  source_security_group_id = module.publishing_api.app_security_group_id
 }
 
 resource "aws_security_group_rule" "documentdb_from_publisher_mongodb" {
@@ -143,7 +143,7 @@ resource "aws_security_group_rule" "documentdb_from_publisher_mongodb" {
   to_port                  = 27017
   protocol                 = "tcp"
   security_group_id        = local.documentdb_security_group_id
-  source_security_group_id = module.publisher_service.app_security_group_id
+  source_security_group_id = module.publisher.app_security_group_id
 }
 
 resource "aws_security_group_rule" "publishing_api_from_publisher_http" {
@@ -153,8 +153,8 @@ resource "aws_security_group_rule" "publishing_api_from_publisher_http" {
   to_port     = 80
   protocol    = "tcp"
 
-  security_group_id        = module.publishing_api_service.app_security_group_id
-  source_security_group_id = module.publisher_service.app_security_group_id
+  security_group_id        = module.publishing_api.app_security_group_id
+  source_security_group_id = module.publisher.app_security_group_id
 }
 
 resource "aws_security_group_rule" "publishing_api_from_frontend_http" {
@@ -164,8 +164,8 @@ resource "aws_security_group_rule" "publishing_api_from_frontend_http" {
   to_port     = 80
   protocol    = "tcp"
 
-  security_group_id        = module.publishing_api_service.app_security_group_id
-  source_security_group_id = module.frontend_service.app_security_group_id
+  security_group_id        = module.publishing_api.app_security_group_id
+  source_security_group_id = module.frontend.app_security_group_id
 }
 
 resource "aws_security_group_rule" "frontend_to_any_any" {
@@ -175,7 +175,7 @@ resource "aws_security_group_rule" "frontend_to_any_any" {
   to_port           = 0
   protocol          = -1
   cidr_blocks       = ["0.0.0.0/0"]
-  security_group_id = module.frontend_service.app_security_group_id
+  security_group_id = module.frontend.app_security_group_id
 }
 
 resource "aws_security_group_rule" "frontend_from_alb_http" {
@@ -184,8 +184,8 @@ resource "aws_security_group_rule" "frontend_from_alb_http" {
   from_port                = 80
   to_port                  = 80
   protocol                 = "tcp"
-  security_group_id        = module.frontend_service.app_security_group_id
-  source_security_group_id = module.frontend_service.alb_security_group_id
+  security_group_id        = module.frontend.app_security_group_id
+  source_security_group_id = module.frontend.alb_security_group_id
 }
 
 resource "aws_security_group_rule" "frontend_alb_from_office_https" {
@@ -194,7 +194,7 @@ resource "aws_security_group_rule" "frontend_alb_from_office_https" {
   to_port   = 443
   protocol  = "tcp"
 
-  security_group_id = module.frontend_service.alb_security_group_id
+  security_group_id = module.frontend.alb_security_group_id
   cidr_blocks       = var.office_cidrs_list
 }
 
@@ -204,7 +204,7 @@ resource "aws_security_group_rule" "frontend_alb_to_any_any" {
   from_port = 0
   to_port   = 0
 
-  security_group_id = module.frontend_service.alb_security_group_id
+  security_group_id = module.frontend.alb_security_group_id
   cidr_blocks       = ["0.0.0.0/0"]
 }
 
@@ -215,7 +215,7 @@ resource "aws_security_group_rule" "draft_frontend_to_any_any" {
   to_port           = 0
   protocol          = -1
   cidr_blocks       = ["0.0.0.0/0"]
-  security_group_id = module.draft_frontend_service.app_security_group_id
+  security_group_id = module.draft_frontend.app_security_group_id
 }
 
 resource "aws_security_group_rule" "draft_frontend_from_alb_http" {
@@ -224,8 +224,8 @@ resource "aws_security_group_rule" "draft_frontend_from_alb_http" {
   from_port                = 80
   to_port                  = 80
   protocol                 = "tcp"
-  security_group_id        = module.draft_frontend_service.app_security_group_id
-  source_security_group_id = module.draft_frontend_service.alb_security_group_id
+  security_group_id        = module.draft_frontend.app_security_group_id
+  source_security_group_id = module.draft_frontend.alb_security_group_id
 }
 
 resource "aws_security_group_rule" "draft_frontend_alb_from_office_https" {
@@ -234,7 +234,7 @@ resource "aws_security_group_rule" "draft_frontend_alb_from_office_https" {
   to_port   = 443
   protocol  = "tcp"
 
-  security_group_id = module.draft_frontend_service.alb_security_group_id
+  security_group_id = module.draft_frontend.alb_security_group_id
   cidr_blocks       = var.office_cidrs_list
 }
 
@@ -244,7 +244,7 @@ resource "aws_security_group_rule" "draft_frontend_alb_to_any_any" {
   from_port = 0
   to_port   = 0
 
-  security_group_id = module.draft_frontend_service.alb_security_group_id
+  security_group_id = module.draft_frontend.alb_security_group_id
   cidr_blocks       = ["0.0.0.0/0"]
 }
 
@@ -261,7 +261,7 @@ resource "aws_security_group_rule" "frontend_alb_from_test_nat_gateways_https" {
   to_port     = 443
   protocol    = "tcp"
 
-  security_group_id = module.frontend_service.alb_security_group_id
+  security_group_id = module.frontend.alb_security_group_id
   cidr_blocks = [
     for nat_gateway in data.aws_nat_gateway.govuk :
     "${nat_gateway.public_ip}/32"
@@ -275,7 +275,7 @@ resource "aws_security_group_rule" "static_to_any_any" {
   to_port           = 0
   protocol          = -1
   cidr_blocks       = ["0.0.0.0/0"]
-  security_group_id = module.static_service.app_security_group_id
+  security_group_id = module.static.app_security_group_id
 }
 
 resource "aws_security_group_rule" "static_from_alb_http" {
@@ -284,8 +284,8 @@ resource "aws_security_group_rule" "static_from_alb_http" {
   from_port                = 80
   to_port                  = 80
   protocol                 = "tcp"
-  security_group_id        = module.static_service.app_security_group_id
-  source_security_group_id = module.static_service.alb_security_group_id
+  security_group_id        = module.static.app_security_group_id
+  source_security_group_id = module.static.alb_security_group_id
 }
 
 resource "aws_security_group_rule" "static_alb_from_office_https" {
@@ -294,7 +294,7 @@ resource "aws_security_group_rule" "static_alb_from_office_https" {
   to_port   = 443
   protocol  = "tcp"
 
-  security_group_id = module.static_service.alb_security_group_id
+  security_group_id = module.static.alb_security_group_id
   cidr_blocks       = var.office_cidrs_list
 }
 
@@ -304,8 +304,8 @@ resource "aws_security_group_rule" "static_from_frontend_http" {
   from_port                = 80
   to_port                  = 80
   protocol                 = "tcp"
-  security_group_id        = module.static_service.app_security_group_id
-  source_security_group_id = module.frontend_service.app_security_group_id
+  security_group_id        = module.static.app_security_group_id
+  source_security_group_id = module.frontend.app_security_group_id
 }
 
 resource "aws_security_group_rule" "static_alb_to_any_any" {
@@ -314,7 +314,7 @@ resource "aws_security_group_rule" "static_alb_to_any_any" {
   from_port = 0
   to_port   = 0
 
-  security_group_id = module.static_service.alb_security_group_id
+  security_group_id = module.static.alb_security_group_id
   cidr_blocks       = ["0.0.0.0/0"]
 }
 
@@ -325,7 +325,7 @@ resource "aws_security_group_rule" "draft_static_to_any_any" {
   to_port           = 0
   protocol          = -1
   cidr_blocks       = ["0.0.0.0/0"]
-  security_group_id = module.draft_static_service.app_security_group_id
+  security_group_id = module.draft_static.app_security_group_id
 }
 
 resource "aws_security_group_rule" "draft_static_from_alb_http" {
@@ -334,8 +334,8 @@ resource "aws_security_group_rule" "draft_static_from_alb_http" {
   from_port                = 80
   to_port                  = 80
   protocol                 = "tcp"
-  security_group_id        = module.draft_static_service.app_security_group_id
-  source_security_group_id = module.draft_static_service.alb_security_group_id
+  security_group_id        = module.draft_static.app_security_group_id
+  source_security_group_id = module.draft_static.alb_security_group_id
 }
 
 resource "aws_security_group_rule" "draft_static_alb_from_office_https" {
@@ -344,7 +344,7 @@ resource "aws_security_group_rule" "draft_static_alb_from_office_https" {
   to_port   = 443
   protocol  = "tcp"
 
-  security_group_id = module.draft_static_service.alb_security_group_id
+  security_group_id = module.draft_static.alb_security_group_id
   cidr_blocks       = var.office_cidrs_list
 }
 
@@ -354,8 +354,8 @@ resource "aws_security_group_rule" "draft_static_from_frontend_http" {
   from_port                = 80
   to_port                  = 80
   protocol                 = "tcp"
-  security_group_id        = module.draft_static_service.app_security_group_id
-  source_security_group_id = module.draft_frontend_service.app_security_group_id
+  security_group_id        = module.draft_static.app_security_group_id
+  source_security_group_id = module.draft_frontend.app_security_group_id
 }
 
 resource "aws_security_group_rule" "draft_static_alb_to_any_any" {
@@ -364,7 +364,7 @@ resource "aws_security_group_rule" "draft_static_alb_to_any_any" {
   from_port = 0
   to_port   = 0
 
-  security_group_id = module.draft_static_service.alb_security_group_id
+  security_group_id = module.draft_static.alb_security_group_id
   cidr_blocks       = ["0.0.0.0/0"]
 }
 
@@ -374,7 +374,7 @@ resource "aws_security_group_rule" "mongodb_from_content_store_mongodb" {
   to_port                  = 27017
   protocol                 = "tcp"
   security_group_id        = local.mongodb_security_group_id
-  source_security_group_id = module.content_store_service.app_security_group_id
+  source_security_group_id = module.content_store.app_security_group_id
 }
 
 resource "aws_security_group_rule" "mongodb_from_draft_content_store_mongodb" {
@@ -383,7 +383,7 @@ resource "aws_security_group_rule" "mongodb_from_draft_content_store_mongodb" {
   to_port                  = 27017
   protocol                 = "tcp"
   security_group_id        = local.mongodb_security_group_id
-  source_security_group_id = module.draft_content_store_service.app_security_group_id
+  source_security_group_id = module.draft_content_store.app_security_group_id
 }
 
 resource "aws_security_group_rule" "router_api_from_content_store_http" {
@@ -393,8 +393,8 @@ resource "aws_security_group_rule" "router_api_from_content_store_http" {
   to_port     = 80
   protocol    = "tcp"
 
-  security_group_id        = module.router_api_service.app_security_group_id
-  source_security_group_id = module.content_store_service.app_security_group_id
+  security_group_id        = module.router_api.app_security_group_id
+  source_security_group_id = module.content_store.app_security_group_id
 }
 
 resource "aws_security_group_rule" "routerdb_from_router_api_mongodb" {
@@ -403,7 +403,7 @@ resource "aws_security_group_rule" "routerdb_from_router_api_mongodb" {
   to_port                  = 27017
   protocol                 = "tcp"
   security_group_id        = local.routerdb_security_group_id
-  source_security_group_id = module.router_api_service.app_security_group_id
+  source_security_group_id = module.router_api.app_security_group_id
 }
 
 resource "aws_security_group_rule" "routerdb_from_draft_router_api_mongodb" {
@@ -412,7 +412,7 @@ resource "aws_security_group_rule" "routerdb_from_draft_router_api_mongodb" {
   to_port                  = 27017
   protocol                 = "tcp"
   security_group_id        = local.routerdb_security_group_id
-  source_security_group_id = module.draft_router_api_service.app_security_group_id
+  source_security_group_id = module.draft_router_api.app_security_group_id
 }
 
 resource "aws_security_group_rule" "draft_router_api_from_draft_content_store_http" {
@@ -422,8 +422,8 @@ resource "aws_security_group_rule" "draft_router_api_from_draft_content_store_ht
   to_port     = 80
   protocol    = "tcp"
 
-  security_group_id        = module.draft_router_api_service.app_security_group_id
-  source_security_group_id = module.draft_content_store_service.app_security_group_id
+  security_group_id        = module.draft_router_api.app_security_group_id
+  source_security_group_id = module.draft_content_store.app_security_group_id
 }
 
 resource "aws_security_group_rule" "routerdb_from_router_mongodb" {
@@ -432,7 +432,7 @@ resource "aws_security_group_rule" "routerdb_from_router_mongodb" {
   to_port                  = 27017
   protocol                 = "tcp"
   security_group_id        = local.routerdb_security_group_id
-  source_security_group_id = module.router_service.app_security_group_id
+  source_security_group_id = module.router.app_security_group_id
 }
 
 resource "aws_security_group_rule" "router_from_router_api_tcp" {
@@ -442,8 +442,8 @@ resource "aws_security_group_rule" "router_from_router_api_tcp" {
   to_port     = 3055
   protocol    = "tcp"
 
-  security_group_id        = module.router_service.app_security_group_id
-  source_security_group_id = module.router_api_service.app_security_group_id
+  security_group_id        = module.router.app_security_group_id
+  source_security_group_id = module.router_api.app_security_group_id
 }
 
 resource "aws_security_group_rule" "routerdb_from_draft_router_mongodb" {
@@ -452,7 +452,7 @@ resource "aws_security_group_rule" "routerdb_from_draft_router_mongodb" {
   to_port                  = 27017
   protocol                 = "tcp"
   security_group_id        = local.routerdb_security_group_id
-  source_security_group_id = module.draft_router_service.app_security_group_id
+  source_security_group_id = module.draft_router.app_security_group_id
 }
 
 resource "aws_security_group_rule" "draft_router_from_draft_router_api_tcp" {
@@ -462,8 +462,8 @@ resource "aws_security_group_rule" "draft_router_from_draft_router_api_tcp" {
   to_port     = 3055
   protocol    = "tcp"
 
-  security_group_id        = module.draft_router_service.app_security_group_id
-  source_security_group_id = module.draft_router_api_service.app_security_group_id
+  security_group_id        = module.draft_router.app_security_group_id
+  source_security_group_id = module.draft_router_api.app_security_group_id
 }
 
 resource "aws_security_group_rule" "redis_to_any_any" {
@@ -482,7 +482,7 @@ resource "aws_security_group_rule" "redis_from_signon_resp" {
   to_port                  = 6379
   protocol                 = "tcp"
   security_group_id        = module.shared_redis_cluster.security_group_id
-  source_security_group_id = module.signon_service.app_security_group_id
+  source_security_group_id = module.signon.app_security_group_id
 }
 
 resource "aws_security_group_rule" "mysql_from_signon_mysql" {
@@ -491,7 +491,7 @@ resource "aws_security_group_rule" "mysql_from_signon_mysql" {
   to_port                  = 3306
   protocol                 = "tcp"
   security_group_id        = local.mysql_security_group_id
-  source_security_group_id = module.signon_service.app_security_group_id
+  source_security_group_id = module.signon.app_security_group_id
 }
 
 resource "aws_security_group_rule" "signon_to_any_any" {
@@ -501,7 +501,7 @@ resource "aws_security_group_rule" "signon_to_any_any" {
   to_port           = 0
   protocol          = -1
   cidr_blocks       = ["0.0.0.0/0"]
-  security_group_id = module.signon_service.app_security_group_id
+  security_group_id = module.signon.app_security_group_id
 }
 
 resource "aws_security_group_rule" "statsd_from_apps_tcp" {
