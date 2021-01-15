@@ -25,7 +25,7 @@ resource "aws_appmesh_mesh" "govuk" {
 
 resource "aws_service_discovery_private_dns_namespace" "govuk_publishing_platform" {
   name = var.mesh_domain
-  vpc  = var.vpc_id
+  vpc  = local.vpc_id
 }
 
 resource "aws_iam_role" "execution" {
