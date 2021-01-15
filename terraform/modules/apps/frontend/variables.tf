@@ -41,9 +41,12 @@ variable "mesh_service_sg_id" {
   type = string
 }
 
+variable "task_role_arn" {
+  type = string
+}
+
 variable "execution_role_arn" {
-  description = "For use during bootstrapping"
-  type        = string
+  type = string
 }
 
 variable "desired_count" {
@@ -60,4 +63,41 @@ variable "public_subnets" {
 variable "public_lb_domain_name" {
   description = "Domain in which to create DNS records for the app's Internet-facing load balancer. For example, staging.govuk.digital"
   type        = string
+}
+
+variable "log_group" {
+  description = "Name of the CloudWatch log group for the app to write its logs to"
+  type        = string
+  default     = "govuk" # TODO - don't default this, pass it in and make it workspace aware.
+}
+
+variable "assets_url" {
+  type        = string
+  description = "URL of the Assets service"
+}
+
+variable "govuk_website_root" {
+  type = string
+}
+
+variable "sentry_environment" {
+  type = string
+}
+
+variable "statsd_host" {
+  type = string
+}
+
+variable "content_store_url" {
+  type        = string
+  description = "URL of the Content Store service"
+}
+
+variable "static_url" {
+  type        = string
+  description = "URL of the Static service"
+}
+
+variable "govuk_app_domain_external" {
+  type = string
 }

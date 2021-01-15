@@ -12,3 +12,17 @@ output "security_groups" {
   value       = module.app.security_groups
   description = "The security groups applied to the ECS Service."
 }
+
+output "task_definition_cli_input_json" {
+  value       = module.task_definition_cli_input_json.cli_input_json
+  description = <<DESCRIPTION
+  Task definition JSON ready to be provided to
+  
+  ```
+  aws ecs register-task-definition --cli-input-json ...
+  ```
+
+  The image in the first container definition is left blank, and should be
+  overridden.
+  DESCRIPTION
+}

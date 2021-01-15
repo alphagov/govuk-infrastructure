@@ -8,10 +8,18 @@ module "frontend_service" {
   vpc_id                           = local.vpc_id
   cluster_id                       = aws_ecs_cluster.cluster.id
   source                           = "../../modules/apps/frontend"
+  task_role_arn                    = aws_iam_role.task.arn
   execution_role_arn               = aws_iam_role.execution.arn
   desired_count                    = var.frontend_desired_count
   public_subnets                   = local.public_subnets
   public_lb_domain_name            = var.public_lb_domain_name
+  sentry_environment               = var.sentry_environment
+  assets_url                       = "assets.${var.internal_domain_name}"
+  static_url                       = "static.${var.internal_domain_name}"
+  statsd_host                      = "statsd.${var.internal_domain_name}"
+  content_store_url                = "content-store.${var.internal_domain_name}"
+  govuk_website_root               = "TODO"
+  govuk_app_domain_external        = "TODO"
 }
 
 module "draft_frontend_service" {
@@ -23,10 +31,18 @@ module "draft_frontend_service" {
   vpc_id                           = local.vpc_id
   cluster_id                       = aws_ecs_cluster.cluster.id
   source                           = "../../modules/apps/frontend"
+  task_role_arn                    = aws_iam_role.task.arn
   execution_role_arn               = aws_iam_role.execution.arn
   desired_count                    = var.draft_frontend_desired_count
   public_subnets                   = local.public_subnets
   public_lb_domain_name            = var.public_lb_domain_name
+  sentry_environment               = var.sentry_environment
+  assets_url                       = "assets.${var.internal_domain_name}"
+  static_url                       = "static.${var.internal_domain_name}"
+  statsd_host                      = "statsd.${var.internal_domain_name}"
+  content_store_url                = "content-store.${var.internal_domain_name}"
+  govuk_website_root               = "TODO"
+  govuk_app_domain_external        = "TODO"
 }
 
 module "publisher_service" {

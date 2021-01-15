@@ -41,3 +41,31 @@ output "redis_host" {
 output "redis_port" {
   value = module.shared_redis_cluster.redis_port
 }
+
+output "frontend_task_definition_cli_input_json" {
+  value       = module.frontend_service.task_definition_cli_input_json
+  description = <<DESCRIPTION
+  Task definition JSON ready to be provided to
+  
+  ```
+  aws ecs register-task-definition --cli-input-json ...
+  ```
+
+  The image in the first container definition is left blank, and should be
+  overridden.
+  DESCRIPTION
+}
+
+output "draft_frontend_task_definition_cli_input_json" {
+  value       = module.draft_frontend_service.task_definition_cli_input_json
+  description = <<DESCRIPTION
+  Task definition JSON ready to be provided to
+  
+  ```
+  aws ecs register-task-definition --cli-input-json ...
+  ```
+
+  The image in the first container definition is left blank, and should be
+  overridden.
+  DESCRIPTION
+}

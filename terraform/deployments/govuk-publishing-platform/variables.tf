@@ -102,3 +102,8 @@ variable "assume_role_arn" {
   description = "(optional) AWS IAM role to assume. Uses the role from the environment by default."
   default     = null
 }
+
+variable "sentry_environment" {
+  type        = string
+  description = "Usually will match the govuk_environment, e.g. test, staging"
+}

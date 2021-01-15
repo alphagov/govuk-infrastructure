@@ -1,9 +1,6 @@
-variable "name" {
+variable "service_name" {
   type        = string
   description = "The name of the service, for example: content-store, draft-content-store, publisher-web or publisher-worker"
-}
-variable "image" {
-  type = string
 }
 variable "mesh_name" {
   type = string
@@ -53,8 +50,7 @@ locals {
   user_id = "1337"
 
   app_container_definition = {
-    "name" : var.name,
-    "image" : var.image,
+    "name" : var.service_name,
     "essential" : true,
     "environment" : [for key, value in var.environment_variables : { name : key, value : tostring(value) }],
     "dependsOn" : [for key, value in var.depends_on_containers : { containerName : key, condition : value }],
@@ -64,7 +60,7 @@ locals {
         "awslogs-create-group" : "true", # TODO create the log group in terraform so we can configure the retention policy
         "awslogs-group" : var.log_group,
         "awslogs-region" : var.aws_region,
-        "awslogs-stream-prefix" : var.name,
+        "awslogs-stream-prefix" : var.service_name,
       }
     },
     "mountPoints" : [],
@@ -88,7 +84,7 @@ locals {
     "image" : "840364872350.dkr.ecr.${var.aws_region}.amazonaws.com/aws-appmesh-envoy:v1.15.1.0-prod",
     "user" : local.user_id,
     "environment" : [
-      { "name" : "APPMESH_RESOURCE_ARN", "value" : "mesh/${var.mesh_name}/virtualNode/${var.name}" },
+      { "name" : "APPMESH_RESOURCE_ARN", "value" : "mesh/${var.mesh_name}/virtualNode/${var.service_name}" },
     ],
     "essential" : true,
     "logConfiguration" : {
@@ -97,7 +93,7 @@ locals {
         "awslogs-create-group" : "true",
         "awslogs-group" : var.log_group,
         "awslogs-region" : var.aws_region,
-        "awslogs-stream-prefix" : "awslogs-${var.name}-envoy"
+        "awslogs-stream-prefix" : "awslogs-${var.service_name}-envoy"
       }
     }
   }
@@ -133,7 +129,7 @@ locals {
 output "cli_input_json" {
   # Generated with: aws ecs register-task-definition --generate-cli-skeleton
   value = {
-    family           = var.name,
+    family           = var.service_name,
     taskRoleArn      = "",
     executionRoleArn = "",
     networkMode      = "none",
