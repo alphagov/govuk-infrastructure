@@ -281,7 +281,7 @@ jobs:
 
             root_dir=$(pwd)
 
-            cd govuk-infrastructure/terraform/deployments/govuk-test
+            cd govuk-infrastructure/terraform/deployments/govuk-publishing-platform
 
             terraform init -backend-config "role_arn=$ASSUME_ROLE_ARN"
             terraform apply \

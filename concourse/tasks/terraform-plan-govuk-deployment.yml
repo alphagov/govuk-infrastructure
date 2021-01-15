@@ -13,7 +13,7 @@ params:
   AWS_REGION: eu-west-1
   TF_IN_AUTOMATION: true
 run:
-  dir: govuk-infrastructure-commit/repo/terraform/deployments/govuk-test
+  dir: govuk-infrastructure-commit/repo/terraform/deployments/govuk-publishing-platform
   path: sh
   args:
   - '-c'

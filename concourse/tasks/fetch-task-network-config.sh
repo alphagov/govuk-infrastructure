@@ -19,8 +19,7 @@ role_arn = $ASSUME_ROLE_ARN
 credential_source = Ec2InstanceMetadata
 EOF
 
-# TODO: Change this to point at govuk module once govuk-test is gone
-cd "src/terraform/deployments/govuk-$GOVUK_ENVIRONMENT"
+cd "src/terraform/deployments/govuk-publishing-platform"
 
 terraform init
 

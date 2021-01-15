@@ -124,7 +124,7 @@ resource "aws_security_group_rule" "postgres_from_publishing_api_5432" {
   to_port     = 5432
   protocol    = "tcp"
 
-  security_group_id        = var.postgresql_security_group_id
+  security_group_id        = local.postgresql_security_group_id
   source_security_group_id = module.publishing_api_service.app_security_group_id
 }
 
@@ -142,7 +142,7 @@ resource "aws_security_group_rule" "documentdb_from_publisher_mongodb" {
   from_port                = 27017
   to_port                  = 27017
   protocol                 = "tcp"
-  security_group_id        = var.documentdb_security_group_id
+  security_group_id        = local.documentdb_security_group_id
   source_security_group_id = module.publisher_service.app_security_group_id
 }
 
@@ -250,8 +250,8 @@ resource "aws_security_group_rule" "draft_frontend_alb_to_any_any" {
 
 
 data "aws_nat_gateway" "govuk" {
-  count     = length(var.public_subnets)
-  subnet_id = var.public_subnets[count.index]
+  count     = length(local.public_subnets)
+  subnet_id = local.public_subnets[count.index]
 }
 
 resource "aws_security_group_rule" "frontend_alb_from_test_nat_gateways_https" {
@@ -373,7 +373,7 @@ resource "aws_security_group_rule" "mongodb_from_content_store_mongodb" {
   from_port                = 27017
   to_port                  = 27017
   protocol                 = "tcp"
-  security_group_id        = var.mongodb_security_group_id
+  security_group_id        = local.mongodb_security_group_id
   source_security_group_id = module.content_store_service.app_security_group_id
 }
 
@@ -382,7 +382,7 @@ resource "aws_security_group_rule" "mongodb_from_draft_content_store_mongodb" {
   from_port                = 27017
   to_port                  = 27017
   protocol                 = "tcp"
-  security_group_id        = var.mongodb_security_group_id
+  security_group_id        = local.mongodb_security_group_id
   source_security_group_id = module.draft_content_store_service.app_security_group_id
 }
 
@@ -402,7 +402,7 @@ resource "aws_security_group_rule" "routerdb_from_router_api_mongodb" {
   from_port                = 27017
   to_port                  = 27017
   protocol                 = "tcp"
-  security_group_id        = var.routerdb_security_group_id
+  security_group_id        = local.routerdb_security_group_id
   source_security_group_id = module.router_api_service.app_security_group_id
 }
 
@@ -411,7 +411,7 @@ resource "aws_security_group_rule" "routerdb_from_draft_router_api_mongodb" {
   from_port                = 27017
   to_port                  = 27017
   protocol                 = "tcp"
-  security_group_id        = var.routerdb_security_group_id
+  security_group_id        = local.routerdb_security_group_id
   source_security_group_id = module.draft_router_api_service.app_security_group_id
 }
 
@@ -431,7 +431,7 @@ resource "aws_security_group_rule" "routerdb_from_router_mongodb" {
   from_port                = 27017
   to_port                  = 27017
   protocol                 = "tcp"
-  security_group_id        = var.routerdb_security_group_id
+  security_group_id        = local.routerdb_security_group_id
   source_security_group_id = module.router_service.app_security_group_id
 }
 
@@ -451,7 +451,7 @@ resource "aws_security_group_rule" "routerdb_from_draft_router_mongodb" {
   from_port                = 27017
   to_port                  = 27017
   protocol                 = "tcp"
-  security_group_id        = var.routerdb_security_group_id
+  security_group_id        = local.routerdb_security_group_id
   source_security_group_id = module.draft_router_service.app_security_group_id
 }
 
@@ -490,7 +490,7 @@ resource "aws_security_group_rule" "mysql_from_signon_mysql" {
   from_port                = 3306
   to_port                  = 3306
   protocol                 = "tcp"
-  security_group_id        = var.mysql_security_group_id
+  security_group_id        = local.mysql_security_group_id
   source_security_group_id = module.signon_service.app_security_group_id
 }
 
