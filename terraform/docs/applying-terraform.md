@@ -28,7 +28,7 @@ You can update the base infrastructure from your machine to test things.
 For example, run the following commands to update the test environment:
 
 ```sh
-cd terraform/deployments/govuk-test
+cd terraform/deployments/govuk-publishing-platform
 terraform apply -var-file=../variables/test/common.tfvars \
    -var-file=../variables/test/infrastructure.tfvars
 ```

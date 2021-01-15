@@ -27,7 +27,7 @@ are still accurate (please correct this doc if you find the steps are inaccurate
    for other app-specific infrastructure such as databases, Route53 records,
    load balancers, and so on.
 
-4. Add the new `app` module to the [terraform/modules/govuk](../terraform/modules/govuk) module
+4. Add the new `app` module to the [terraform/deployments/govuk-publishing-platform](../terraform/deployments/govuk-publishing-platform) module
 
    This is required to bring up the app's infrastructure, including the
    ECS Service and accompanying infrastructure.
@@ -47,7 +47,7 @@ are still accurate (please correct this doc if you find the steps are inaccurate
   Example:
 
    ```sh
-   $ cd terraform/deployments/govuk-test
+   $ cd terraform/deployments/govuk-publishing-platform
    $ terraform apply -var-file=../variables/test/common.tfvars \
       -var-file=../variables/test/infrastructure.tfvars
    ```

@@ -8,7 +8,7 @@
 ## Directory structure
 
 * `deployments`: root modules, from where you can run Terraform commands.
-    * `govuk-test`: calls the `govuk` composition module to bring up the
+    * `govuk-publishing-platform`: creates all resources needed to bring up the
       infrastructure (apart from updating ECS Service task definitions)
     * `apps`: called by the Concourse CD pipeline to create new task definition
       revisions during a deploy.
@@ -18,7 +18,6 @@
             an `image_tag` variable.
           * ...
 * `modules`: non-root modules
-    * `govuk`: composition module for an entire GOV.UK Publishing environment
     * `app`: reusable module for an app; contains the essential resources which all the apps need.
     * `apps`: composition modules for each app; calls the app module plus any
       app-specific resources.
