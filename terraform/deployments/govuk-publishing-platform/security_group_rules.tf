@@ -393,7 +393,7 @@ resource "aws_security_group_rule" "router_api_from_content_store_http" {
   to_port     = 80
   protocol    = "tcp"
 
-  security_group_id        = module.router_api.app_security_group_id
+  security_group_id        = module.router_api.security_group_id
   source_security_group_id = module.content_store.security_group_id
 }
 
@@ -403,7 +403,7 @@ resource "aws_security_group_rule" "routerdb_from_router_api_mongodb" {
   to_port                  = 27017
   protocol                 = "tcp"
   security_group_id        = local.routerdb_security_group_id
-  source_security_group_id = module.router_api.app_security_group_id
+  source_security_group_id = module.router_api.security_group_id
 }
 
 resource "aws_security_group_rule" "routerdb_from_draft_router_api_mongodb" {
@@ -412,7 +412,7 @@ resource "aws_security_group_rule" "routerdb_from_draft_router_api_mongodb" {
   to_port                  = 27017
   protocol                 = "tcp"
   security_group_id        = local.routerdb_security_group_id
-  source_security_group_id = module.draft_router_api.app_security_group_id
+  source_security_group_id = module.draft_router_api.security_group_id
 }
 
 resource "aws_security_group_rule" "draft_router_api_from_draft_content_store_http" {
@@ -422,7 +422,7 @@ resource "aws_security_group_rule" "draft_router_api_from_draft_content_store_ht
   to_port     = 80
   protocol    = "tcp"
 
-  security_group_id        = module.draft_router_api.app_security_group_id
+  security_group_id        = module.draft_router_api.security_group_id
   source_security_group_id = module.draft_content_store.security_group_id
 }
 
@@ -443,7 +443,7 @@ resource "aws_security_group_rule" "router_from_router_api_tcp" {
   protocol    = "tcp"
 
   security_group_id        = module.router.security_group_id
-  source_security_group_id = module.router_api.app_security_group_id
+  source_security_group_id = module.router_api.security_group_id
 }
 
 resource "aws_security_group_rule" "routerdb_from_draft_router_mongodb" {
@@ -463,7 +463,7 @@ resource "aws_security_group_rule" "draft_router_from_draft_router_api_tcp" {
   protocol    = "tcp"
 
   security_group_id        = module.draft_router.security_group_id
-  source_security_group_id = module.draft_router_api.app_security_group_id
+  source_security_group_id = module.draft_router_api.security_group_id
 }
 
 resource "aws_security_group_rule" "redis_to_any_any" {
