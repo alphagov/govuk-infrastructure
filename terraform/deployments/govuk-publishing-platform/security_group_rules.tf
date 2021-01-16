@@ -24,7 +24,7 @@ resource "aws_security_group_rule" "content_store_from_publishing_api_http" {
   to_port                  = 80
   protocol                 = "tcp"
   security_group_id        = module.content_store.security_group_id
-  source_security_group_id = module.publishing_api.app_security_group_id
+  source_security_group_id = module.publishing_api_web.security_group_id
 }
 
 resource "aws_security_group_rule" "draft_content_store_from_publishing_api_http" {
@@ -34,7 +34,7 @@ resource "aws_security_group_rule" "draft_content_store_from_publishing_api_http
   to_port                  = 80
   protocol                 = "tcp"
   security_group_id        = module.draft_content_store.security_group_id
-  source_security_group_id = module.publishing_api.app_security_group_id
+  source_security_group_id = module.publishing_api_web.security_group_id
 }
 
 resource "aws_security_group_rule" "content_store_from_frontend_http" {
@@ -125,7 +125,7 @@ resource "aws_security_group_rule" "postgres_from_publishing_api_5432" {
   protocol    = "tcp"
 
   security_group_id        = local.postgresql_security_group_id
-  source_security_group_id = module.publishing_api.app_security_group_id
+  source_security_group_id = module.publishing_api_web.security_group_id
 }
 
 resource "aws_security_group_rule" "redis_from_publishing_api_resp" {
@@ -134,7 +134,7 @@ resource "aws_security_group_rule" "redis_from_publishing_api_resp" {
   to_port                  = 6379
   protocol                 = "tcp"
   security_group_id        = module.shared_redis_cluster.security_group_id
-  source_security_group_id = module.publishing_api.app_security_group_id
+  source_security_group_id = module.publishing_api_web.security_group_id
 }
 
 resource "aws_security_group_rule" "documentdb_from_publisher_mongodb" {
@@ -153,7 +153,7 @@ resource "aws_security_group_rule" "publishing_api_from_publisher_http" {
   to_port     = 80
   protocol    = "tcp"
 
-  security_group_id        = module.publishing_api.app_security_group_id
+  security_group_id        = module.publishing_api_web.security_group_id
   source_security_group_id = module.publisher.app_security_group_id
 }
 
@@ -164,7 +164,7 @@ resource "aws_security_group_rule" "publishing_api_from_frontend_http" {
   to_port     = 80
   protocol    = "tcp"
 
-  security_group_id        = module.publishing_api.app_security_group_id
+  security_group_id        = module.publishing_api_web.security_group_id
   source_security_group_id = module.frontend.app_security_group_id
 }
 
