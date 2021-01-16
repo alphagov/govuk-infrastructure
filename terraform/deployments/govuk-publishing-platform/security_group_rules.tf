@@ -23,7 +23,7 @@ resource "aws_security_group_rule" "content_store_from_publishing_api_http" {
   from_port                = 80
   to_port                  = 80
   protocol                 = "tcp"
-  security_group_id        = module.content_store.app_security_group_id
+  security_group_id        = module.content_store.security_group_id
   source_security_group_id = module.publishing_api.app_security_group_id
 }
 
@@ -33,7 +33,7 @@ resource "aws_security_group_rule" "draft_content_store_from_publishing_api_http
   from_port                = 80
   to_port                  = 80
   protocol                 = "tcp"
-  security_group_id        = module.draft_content_store.app_security_group_id
+  security_group_id        = module.draft_content_store.security_group_id
   source_security_group_id = module.publishing_api.app_security_group_id
 }
 
@@ -43,7 +43,7 @@ resource "aws_security_group_rule" "content_store_from_frontend_http" {
   from_port                = 80
   to_port                  = 80
   protocol                 = "tcp"
-  security_group_id        = module.content_store.app_security_group_id
+  security_group_id        = module.content_store.security_group_id
   source_security_group_id = module.frontend.app_security_group_id
 }
 
@@ -53,7 +53,7 @@ resource "aws_security_group_rule" "draft_content_store_from_frontend_http" {
   from_port                = 80
   to_port                  = 80
   protocol                 = "tcp"
-  security_group_id        = module.draft_content_store.app_security_group_id
+  security_group_id        = module.draft_content_store.security_group_id
   source_security_group_id = module.draft_frontend.app_security_group_id
 }
 
@@ -65,7 +65,7 @@ resource "aws_security_group_rule" "content_store_to_any_any" {
   to_port           = 0
   protocol          = -1
   cidr_blocks       = ["0.0.0.0/0"]
-  security_group_id = module.content_store.app_security_group_id
+  security_group_id = module.content_store.security_group_id
 }
 
 resource "aws_security_group_rule" "publisher_to_any_any" {
@@ -374,7 +374,7 @@ resource "aws_security_group_rule" "mongodb_from_content_store_mongodb" {
   to_port                  = 27017
   protocol                 = "tcp"
   security_group_id        = local.mongodb_security_group_id
-  source_security_group_id = module.content_store.app_security_group_id
+  source_security_group_id = module.content_store.security_group_id
 }
 
 resource "aws_security_group_rule" "mongodb_from_draft_content_store_mongodb" {
@@ -383,7 +383,7 @@ resource "aws_security_group_rule" "mongodb_from_draft_content_store_mongodb" {
   to_port                  = 27017
   protocol                 = "tcp"
   security_group_id        = local.mongodb_security_group_id
-  source_security_group_id = module.draft_content_store.app_security_group_id
+  source_security_group_id = module.draft_content_store.security_group_id
 }
 
 resource "aws_security_group_rule" "router_api_from_content_store_http" {
@@ -394,7 +394,7 @@ resource "aws_security_group_rule" "router_api_from_content_store_http" {
   protocol    = "tcp"
 
   security_group_id        = module.router_api.app_security_group_id
-  source_security_group_id = module.content_store.app_security_group_id
+  source_security_group_id = module.content_store.security_group_id
 }
 
 resource "aws_security_group_rule" "routerdb_from_router_api_mongodb" {
@@ -423,7 +423,7 @@ resource "aws_security_group_rule" "draft_router_api_from_draft_content_store_ht
   protocol    = "tcp"
 
   security_group_id        = module.draft_router_api.app_security_group_id
-  source_security_group_id = module.draft_content_store.app_security_group_id
+  source_security_group_id = module.draft_content_store.security_group_id
 }
 
 resource "aws_security_group_rule" "routerdb_from_router_mongodb" {
