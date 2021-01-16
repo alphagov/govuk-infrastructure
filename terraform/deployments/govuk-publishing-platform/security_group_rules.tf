@@ -482,7 +482,7 @@ resource "aws_security_group_rule" "redis_from_signon_resp" {
   to_port                  = 6379
   protocol                 = "tcp"
   security_group_id        = module.shared_redis_cluster.security_group_id
-  source_security_group_id = module.signon.app_security_group_id
+  source_security_group_id = module.signon.security_group_id
 }
 
 resource "aws_security_group_rule" "mysql_from_signon_mysql" {
@@ -491,7 +491,7 @@ resource "aws_security_group_rule" "mysql_from_signon_mysql" {
   to_port                  = 3306
   protocol                 = "tcp"
   security_group_id        = local.mysql_security_group_id
-  source_security_group_id = module.signon.app_security_group_id
+  source_security_group_id = module.signon.security_group_id
 }
 
 resource "aws_security_group_rule" "signon_to_any_any" {
@@ -501,7 +501,7 @@ resource "aws_security_group_rule" "signon_to_any_any" {
   to_port           = 0
   protocol          = -1
   cidr_blocks       = ["0.0.0.0/0"]
-  security_group_id = module.signon.app_security_group_id
+  security_group_id = module.signon.security_group_id
 }
 
 resource "aws_security_group_rule" "statsd_from_apps_tcp" {
