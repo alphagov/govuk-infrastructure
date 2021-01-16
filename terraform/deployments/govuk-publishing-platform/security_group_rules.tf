@@ -432,7 +432,7 @@ resource "aws_security_group_rule" "routerdb_from_router_mongodb" {
   to_port                  = 27017
   protocol                 = "tcp"
   security_group_id        = local.routerdb_security_group_id
-  source_security_group_id = module.router.app_security_group_id
+  source_security_group_id = module.router.security_group_id
 }
 
 resource "aws_security_group_rule" "router_from_router_api_tcp" {
@@ -442,7 +442,7 @@ resource "aws_security_group_rule" "router_from_router_api_tcp" {
   to_port     = 3055
   protocol    = "tcp"
 
-  security_group_id        = module.router.app_security_group_id
+  security_group_id        = module.router.security_group_id
   source_security_group_id = module.router_api.app_security_group_id
 }
 
@@ -452,7 +452,7 @@ resource "aws_security_group_rule" "routerdb_from_draft_router_mongodb" {
   to_port                  = 27017
   protocol                 = "tcp"
   security_group_id        = local.routerdb_security_group_id
-  source_security_group_id = module.draft_router.app_security_group_id
+  source_security_group_id = module.draft_router.security_group_id
 }
 
 resource "aws_security_group_rule" "draft_router_from_draft_router_api_tcp" {
@@ -462,7 +462,7 @@ resource "aws_security_group_rule" "draft_router_from_draft_router_api_tcp" {
   to_port     = 3055
   protocol    = "tcp"
 
-  security_group_id        = module.draft_router.app_security_group_id
+  security_group_id        = module.draft_router.security_group_id
   source_security_group_id = module.draft_router_api.app_security_group_id
 }
 
