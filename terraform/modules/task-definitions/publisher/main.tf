@@ -95,7 +95,7 @@ module "task_definition" {
         { "name" : "GOVUK_APP_ROOT", "value" : "/app" },
         { "name" : "GOVUK_APP_TYPE", "value" : "rack" },
         { "name" : "GOVUK_STATSD_HOST", "value" : var.statsd_host },
-        { "name" : "GOVUK_STATSD_PREFIX", "value" : "govuk.app.${local.app_name}.ecs" },
+        { "name" : "GOVUK_STATSD_PREFIX", "value" : "govuk-ecs.app.${local.app_name}" },
         { "name" : "GOVUK_STATSD_PROTOCOL", "value" : "tcp" },
         # TODO: how does GOVUK_ASSET_ROOT relate to ASSET_HOST? Is one a function of the other? Are they both really in use? Is GOVUK_ASSET_ROOT always just "https://${ASSET_HOST}"?
         { "name" : "GOVUK_ASSET_ROOT", "value" : "https://assets.test.publishing.service.gov.uk" },

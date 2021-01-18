@@ -56,7 +56,7 @@ module "task_definition" {
         { "name" : "GOVUK_APP_NAME", "value" : var.service_name },
         { "name" : "GOVUK_APP_ROOT", "value" : "/var/apps/${var.service_name}" },
         { "name" : "GOVUK_STATSD_HOST", "value" : var.statsd_host },
-        { "name" : "GOVUK_STATSD_PREFIX", "value" : "govuk.app.${local.app_name}.ecs" },
+        { "name" : "GOVUK_STATSD_PREFIX", "value" : "govuk-ecs.app.${local.app_name}" },
         { "name" : "GOVUK_STATSD_PROTOCOL", "value" : "tcp" },
         { "name" : "RAILS_ENV", "value" : "production" },
         { "name" : "PLEK_SERVICE_SIGNON_URI", "value" : "https://signon-ecs.${var.govuk_app_domain_external}" },

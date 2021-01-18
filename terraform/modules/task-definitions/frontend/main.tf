@@ -50,7 +50,7 @@ module "task_definition" {
         { "name" : "GOVUK_APP_DOMAIN", "value" : var.service_discovery_namespace_name },
         { "name" : "GOVUK_APP_DOMAIN_EXTERNAL", "value" : var.govuk_app_domain_external },
         { "name" : "GOVUK_STATSD_HOST", "value" : var.statsd_host },
-        { "name" : "GOVUK_STATSD_PREFIX", "value" : "govuk.app.${local.app_name}.ecs" },
+        { "name" : "GOVUK_STATSD_PREFIX", "value" : "govuk-ecs.app.${local.app_name}" },
         { "name" : "GOVUK_STATSD_PROTOCOL", "value" : "tcp" },
         { "name" : "GOVUK_WEBSITE_ROOT", "value" : var.govuk_website_root },
         { "name" : "WEBSITE_ROOT", "value" : var.govuk_website_root },
