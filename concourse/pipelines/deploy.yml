@@ -37,11 +37,11 @@ resources:
     source:
       <<: *govuk-infrastructure-source
       paths:
-        - concourse/tasks/**/*
-        - terraform/deployments/apps/*frontend/**/*
+        - concourse/tasks
+        - terraform/deployments/apps/*frontend
         # TODO replace these once frontend is refactored to use the new modules
-        - terraform/modules/task-definition/**/*
-        - terraform/modules/task-definitions/frontend/**/*
+        - terraform/modules/task-definition
+        - terraform/modules/task-definitions/frontend
 
   - <<: *git-repo
     name: publisher
@@ -55,11 +55,11 @@ resources:
     source:
       <<: *govuk-infrastructure-source
       paths:
-        - concourse/tasks/**/*
-        - terraform/deployments/apps/publisher*/**/*
+        - concourse/tasks
+        - terraform/deployments/apps/publisher*
         # TODO replace these once publisher is refactored to use the new modules
-        - terraform/modules/task-definition/**/*
-        - terraform/modules/task-definitions/publisher/**/*
+        - terraform/modules/task-definition
+        - terraform/modules/task-definitions/publisher
 
   - <<: *git-repo
     name: publishing-api
@@ -73,11 +73,11 @@ resources:
     source:
       <<: *govuk-infrastructure-source
       paths:
-        - concourse/tasks/**/*
-        - terraform/deployments/apps/publishing-api/**/*
+        - concourse/tasks
+        - terraform/deployments/apps/publishing-api
         # TODO replace these once publishing-api is refactored to use the new modules
-        - terraform/modules/task-definition/**/*
-        - terraform/modules/task-definitions/publishing-api/**/*
+        - terraform/modules/task-definition
+        - terraform/modules/task-definitions/publishing-api
 
   - <<: *git-repo
     name: content-store
@@ -91,10 +91,10 @@ resources:
     source:
       <<: *govuk-infrastructure-source
       paths:
-        - concourse/tasks/**/*
-        - terraform/deployments/apps/content-store/**/*
-        - terraform/modules/app-container-definition/**/*
-        - terraform/modules/envoy-configuration/**/*
+        - concourse/tasks
+        - terraform/deployments/apps/content-store
+        - terraform/modules/app-container-definition
+        - terraform/modules/envoy-configuration
 
   - <<: *git-repo
     name: router
@@ -108,11 +108,11 @@ resources:
     source:
       <<: *govuk-infrastructure-source
       paths:
-        - concourse/tasks/**/*
-        - terraform/deployments/apps/*router/**/*
+        - concourse/tasks
+        - terraform/deployments/apps/*router
         # TODO replace these once router is refactored to use the new modules
-        - terraform/modules/task-definition/**/*
-        - terraform/modules/task-definitions/router/**/*
+        - terraform/modules/task-definition
+        - terraform/modules/task-definitions/router
 
   - <<: *git-repo
     name: router-api
@@ -126,11 +126,11 @@ resources:
     source:
       <<: *govuk-infrastructure-source
       paths:
-        - concourse/tasks/**/*
-        - terraform/deployments/apps/*router-api/**/*
+        - concourse/tasks
+        - terraform/deployments/apps/*router-api
         # TODO replace these once router-api is refactored to use the new modules
-        - terraform/modules/task-definition/**/*
-        - terraform/modules/task-definitions/router-api/**/*
+        - terraform/modules/task-definition
+        - terraform/modules/task-definitions/router-api
 
   - <<: *git-repo
     name: signon
@@ -144,11 +144,11 @@ resources:
     source:
       <<: *govuk-infrastructure-source
       paths:
-        - concourse/tasks/**/*
-        - terraform/deployments/apps/signon/**/*
+        - concourse/tasks
+        - terraform/deployments/apps/signon
         # TODO replace these once signon is refactored to use the new modules
-        - terraform/modules/task-definition/**/*
-        - terraform/modules/task-definitions/signon/**/*
+        - terraform/modules/task-definition
+        - terraform/modules/task-definitions/signon
 
   - <<: *git-repo
     name: static
@@ -162,11 +162,11 @@ resources:
     source:
       <<: *govuk-infrastructure-source
       paths:
-        - concourse/tasks/**/*
-        - terraform/deployments/apps/static/**/*
+        - concourse/tasks
+        - terraform/deployments/apps/static
         # TODO replace these once static is refactored to use the new modules
-        - terraform/modules/task-definition/**/*
-        - terraform/modules/task-definitions/static/**/*
+        - terraform/modules/task-definition
+        - terraform/modules/task-definitions/static
 
   - name: deploy-slack-channel
     type: slack-notification
@@ -298,7 +298,8 @@ jobs:
   - name: deploy-frontend
     plan:
     - in_parallel:
-      - get: govuk-infrastructure-frontend
+      - get: govuk-infrastructure
+        resource: govuk-infrastructure-frontend
         trigger: true
       - get: govuk-terraform-outputs
         passed:
@@ -344,7 +345,8 @@ jobs:
   - name: deploy-draft-frontend
     plan:
     - in_parallel:
-      - get: govuk-infrastructure-frontend
+      - get: govuk-infrastructure
+        resource: govuk-infrastructure-frontend
         trigger: true
       - get: govuk-terraform-outputs
         passed:
@@ -378,7 +380,8 @@ jobs:
   - name: deploy-publisher
     plan:
     - in_parallel:
-      - get: govuk-infrastructure-publisher
+      - get: govuk-infrastructure
+        resource: govuk-infrastructure-publisher
         trigger: true
       - get: govuk-terraform-outputs
         passed:
@@ -429,7 +432,8 @@ jobs:
   - name: deploy-publishing-api
     plan:
     - in_parallel:
-      - get: govuk-infrastructure-publishing-api
+      - get: govuk-infrastructure
+        resource: govuk-infrastructure-publishing-api
         trigger: true
       - get: govuk-terraform-outputs
         passed:
@@ -468,7 +472,8 @@ jobs:
   - name: deploy-content-store
     plan:
     - in_parallel:
-      - get: govuk-infrastructure-content-store
+      - get: govuk-infrastructure
+        resource: govuk-infrastructure-content-store
         trigger: true
       - get: govuk-terraform-outputs
         passed:
@@ -506,7 +511,8 @@ jobs:
   - name: deploy-router
     plan:
     - in_parallel:
-      - get: govuk-infrastructure-router
+      - get: govuk-infrastructure
+        resource: govuk-infrastructure-router
         trigger: true
       - get: govuk-terraform-outputs
         passed:
@@ -532,7 +538,8 @@ jobs:
   - name: deploy-draft-router
     plan:
     - in_parallel:
-      - get: govuk-infrastructure-router
+      - get: govuk-infrastructure
+        resource: govuk-infrastructure-router
         trigger: true
       - get: govuk-terraform-outputs
         passed:
@@ -558,7 +565,8 @@ jobs:
   - name: deploy-router-api
     plan:
     - in_parallel:
-      - get: govuk-infrastructure-router-api
+      - get: govuk-infrastructure
+        resource: govuk-infrastructure-router-api
         trigger: true
       - get: govuk-terraform-outputs
         passed:
@@ -584,7 +592,8 @@ jobs:
   - name: deploy-draft-router-api
     plan:
     - in_parallel:
-      - get: govuk-infrastructure-router-api
+      - get: govuk-infrastructure
+        resource: govuk-infrastructure-router-api
         trigger: true
       - get: govuk-terraform-outputs
         passed:
@@ -610,7 +619,8 @@ jobs:
   - name: deploy-signon
     plan:
     - in_parallel:
-      - get: govuk-infrastructure-signon
+      - get: govuk-infrastructure
+        resource: govuk-infrastructure-signon
         trigger: true
       - get: govuk-terraform-outputs
         passed:
@@ -636,7 +646,8 @@ jobs:
   - name: deploy-static
     plan:
     - in_parallel:
-      - get: govuk-infrastructure-static
+      - get: govuk-infrastructure
+        resource: govuk-infrastructure-static
         trigger: true
       - get: govuk-terraform-outputs
         passed:
@@ -662,7 +673,8 @@ jobs:
   - name: deploy-draft-static
     plan:
     - in_parallel:
-      - get: govuk-infrastructure-static
+      - get: govuk-infrastructure
+        resource: govuk-infrastructure-static
         trigger: true
       - get: govuk-terraform-outputs
         passed:
