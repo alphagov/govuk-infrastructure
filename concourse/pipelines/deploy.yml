@@ -298,7 +298,8 @@ jobs:
   - name: deploy-frontend
     plan:
     - in_parallel:
-      - get: govuk-infrastructure-frontend
+      - get: govuk-infrastructure
+        resource: govuk-infrastructure-frontend
         trigger: true
       - get: govuk-terraform-outputs
         passed:
@@ -344,7 +345,8 @@ jobs:
   - name: deploy-draft-frontend
     plan:
     - in_parallel:
-      - get: govuk-infrastructure-frontend
+      - get: govuk-infrastructure
+        resource: govuk-infrastructure-frontend
         trigger: true
       - get: govuk-terraform-outputs
         passed:
@@ -378,7 +380,8 @@ jobs:
   - name: deploy-publisher
     plan:
     - in_parallel:
-      - get: govuk-infrastructure-publisher
+      - get: govuk-infrastructure
+        resource: govuk-infrastructure-publisher
         trigger: true
       - get: govuk-terraform-outputs
         passed:
@@ -429,7 +432,8 @@ jobs:
   - name: deploy-publishing-api
     plan:
     - in_parallel:
-      - get: govuk-infrastructure-publishing-api
+      - get: govuk-infrastructure
+        resource: govuk-infrastructure-publishing-api
         trigger: true
       - get: govuk-terraform-outputs
         passed:
@@ -468,7 +472,8 @@ jobs:
   - name: deploy-content-store
     plan:
     - in_parallel:
-      - get: govuk-infrastructure-content-store
+      - get: govuk-infrastructure
+        resource: govuk-infrastructure-content-store
         trigger: true
       - get: govuk-terraform-outputs
         passed:
@@ -506,7 +511,8 @@ jobs:
   - name: deploy-router
     plan:
     - in_parallel:
-      - get: govuk-infrastructure-router
+      - get: govuk-infrastructure
+        resource: govuk-infrastructure-router
         trigger: true
       - get: govuk-terraform-outputs
         passed:
@@ -532,7 +538,8 @@ jobs:
   - name: deploy-draft-router
     plan:
     - in_parallel:
-      - get: govuk-infrastructure-router
+      - get: govuk-infrastructure
+        resource: govuk-infrastructure-router
         trigger: true
       - get: govuk-terraform-outputs
         passed:
@@ -558,7 +565,8 @@ jobs:
   - name: deploy-router-api
     plan:
     - in_parallel:
-      - get: govuk-infrastructure-router-api
+      - get: govuk-infrastructure
+        resource: govuk-infrastructure-router-api
         trigger: true
       - get: govuk-terraform-outputs
         passed:
@@ -584,7 +592,8 @@ jobs:
   - name: deploy-draft-router-api
     plan:
     - in_parallel:
-      - get: govuk-infrastructure-router-api
+      - get: govuk-infrastructure
+        resource: govuk-infrastructure-router-api
         trigger: true
       - get: govuk-terraform-outputs
         passed:
@@ -610,7 +619,8 @@ jobs:
   - name: deploy-signon
     plan:
     - in_parallel:
-      - get: govuk-infrastructure-signon
+      - get: govuk-infrastructure
+        resource: govuk-infrastructure-signon
         trigger: true
       - get: govuk-terraform-outputs
         passed:
@@ -636,7 +646,8 @@ jobs:
   - name: deploy-static
     plan:
     - in_parallel:
-      - get: govuk-infrastructure-static
+      - get: govuk-infrastructure
+        resource: govuk-infrastructure-static
         trigger: true
       - get: govuk-terraform-outputs
         passed:
@@ -662,7 +673,8 @@ jobs:
   - name: deploy-draft-static
     plan:
     - in_parallel:
-      - get: govuk-infrastructure-static
+      - get: govuk-infrastructure
+        resource: govuk-infrastructure-static
         trigger: true
       - get: govuk-terraform-outputs
         passed:
