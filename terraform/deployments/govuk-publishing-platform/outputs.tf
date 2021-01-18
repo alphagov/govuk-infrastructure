@@ -3,23 +3,28 @@ output "private_subnets" {
 }
 
 output "publisher-web_security_groups" {
-  value = module.publisher.security_groups
+  value       = module.publisher.security_groups
+  description = "Used by ECS RunTask to run short-lived tasks with the same SG permissions as the publisher ECS Service."
 }
 
 output "frontend_security_groups" {
-  value = module.frontend.security_groups
+  value       = module.frontend.security_groups
+  description = "Used by ECS RunTask to run short-lived tasks with the same SG permissions as the frontend ECS Service."
 }
 
 output "signon_security_groups" {
-  value = module.signon.security_groups
+  value       = module.signon.security_groups
+  description = "Used by ECS RunTask to run short-lived tasks with the same SG permissions as the signon ECS Service."
 }
 
 output "content-store_security_groups" {
-  value = module.content_store.security_groups
+  value       = module.content_store.security_groups
+  description = "Used by ECS RunTask to run short-lived tasks with the same SG permissions as the content-store ECS Service."
 }
 
 output "draft-content-store_security_groups" {
-  value = module.draft_content_store.security_groups
+  value       = module.draft_content_store.security_groups
+  description = "Used by ECS RunTask to run short-lived tasks with the same SG permissions as the draft-content-store ECS Service."
 }
 
 output "log_group" {
