@@ -43,4 +43,5 @@ module "public_alb" {
   workspace_suffix          = "govuk" # TODO: Changeme
   service_security_group_id = module.app.security_group_id
   external_cidrs_list       = var.office_cidrs_list
+  health_check_path         = "/templates/wrapper.html.erb" # TODO: create a proper healthcheck endpoint in static
 }
