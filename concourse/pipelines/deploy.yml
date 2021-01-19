@@ -410,7 +410,7 @@ jobs:
       file: govuk-infrastructure/concourse/tasks/run-task.yml
       params:
         APPLICATION: publisher-web
-        COMMAND: "rails db:migrate"
+        COMMAND: "bundle exec rails db:migrate"
         TASK_DEFINITION: web_task_definition
     - in_parallel:
       - task: update-web-ecs-service
