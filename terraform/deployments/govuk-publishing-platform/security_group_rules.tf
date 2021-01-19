@@ -78,36 +78,6 @@ resource "aws_security_group_rule" "publisher_to_any_any" {
   security_group_id = module.publisher.app_security_group_id
 }
 
-resource "aws_security_group_rule" "publisher_from_alb_http" {
-  description              = "Publisher receives requests from its public ALB over HTTP"
-  type                     = "ingress"
-  from_port                = 80
-  to_port                  = 80
-  protocol                 = "tcp"
-  security_group_id        = module.publisher.app_security_group_id
-  source_security_group_id = module.publisher.alb_security_group_id
-}
-
-resource "aws_security_group_rule" "publisher_alb_to_publisher_http" {
-  description              = "Publisher ALB sends requests to Publisher over HTTP"
-  type                     = "egress"
-  from_port                = 80
-  to_port                  = 80
-  protocol                 = "tcp"
-  security_group_id        = module.publisher.alb_security_group_id
-  source_security_group_id = module.publisher.app_security_group_id
-}
-
-resource "aws_security_group_rule" "publisher_alb_from_any_https" {
-  description       = "Publisher ALB receives requests from anywhere over HTTPS"
-  type              = "ingress"
-  from_port         = 443
-  to_port           = 443
-  protocol          = "tcp"
-  cidr_blocks       = ["0.0.0.0/0"]
-  security_group_id = module.publisher.alb_security_group_id
-}
-
 resource "aws_security_group_rule" "redis_from_publisher_resp" {
   type                     = "ingress"
   from_port                = 6379

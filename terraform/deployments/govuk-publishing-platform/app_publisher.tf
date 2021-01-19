@@ -12,5 +12,6 @@ module "publisher" {
   execution_role_arn               = aws_iam_role.execution.arn
   vpc_id                           = local.vpc_id
   desired_count                    = var.publisher_desired_count
+  office_cidrs_list                = var.office_cidrs_list
 }
 
