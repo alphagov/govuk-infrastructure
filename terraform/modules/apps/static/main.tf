@@ -36,7 +36,7 @@ module "public_alb" {
 
   app_name                  = var.service_name
   vpc_id                    = var.vpc_id
-  dns_a_record_name         = var.service_name
+  dns_a_record_name         = "${var.service_name}-ecs"
   public_subnets            = var.public_subnets
   app_domain                = var.public_lb_domain_name # TODO: Change to app_domain
   public_lb_domain_name     = var.public_lb_domain_name
