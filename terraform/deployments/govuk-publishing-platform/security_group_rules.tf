@@ -78,36 +78,6 @@ resource "aws_security_group_rule" "publisher_to_any_any" {
   security_group_id = module.publisher.app_security_group_id
 }
 
-resource "aws_security_group_rule" "publisher_from_alb_http" {
-  description              = "Publisher receives requests from its public ALB over HTTP"
-  type                     = "ingress"
-  from_port                = 80
-  to_port                  = 80
-  protocol                 = "tcp"
-  security_group_id        = module.publisher.app_security_group_id
-  source_security_group_id = module.publisher.alb_security_group_id
-}
-
-resource "aws_security_group_rule" "publisher_alb_to_publisher_http" {
-  description              = "Publisher ALB sends requests to Publisher over HTTP"
-  type                     = "egress"
-  from_port                = 80
-  to_port                  = 80
-  protocol                 = "tcp"
-  security_group_id        = module.publisher.alb_security_group_id
-  source_security_group_id = module.publisher.app_security_group_id
-}
-
-resource "aws_security_group_rule" "publisher_alb_from_any_https" {
-  description       = "Publisher ALB receives requests from anywhere over HTTPS"
-  type              = "ingress"
-  from_port         = 443
-  to_port           = 443
-  protocol          = "tcp"
-  cidr_blocks       = ["0.0.0.0/0"]
-  security_group_id = module.publisher.alb_security_group_id
-}
-
 resource "aws_security_group_rule" "redis_from_publisher_resp" {
   type                     = "ingress"
   from_port                = 6379
@@ -217,26 +187,6 @@ resource "aws_security_group_rule" "static_to_any_any" {
   security_group_id = module.static.app_security_group_id
 }
 
-resource "aws_security_group_rule" "static_from_alb_http" {
-  description              = "Static receives requests from its public ALB over HTTP"
-  type                     = "ingress"
-  from_port                = 80
-  to_port                  = 80
-  protocol                 = "tcp"
-  security_group_id        = module.static.app_security_group_id
-  source_security_group_id = module.static.alb_security_group_id
-}
-
-resource "aws_security_group_rule" "static_alb_from_office_https" {
-  type      = "ingress"
-  from_port = 443
-  to_port   = 443
-  protocol  = "tcp"
-
-  security_group_id = module.static.alb_security_group_id
-  cidr_blocks       = var.office_cidrs_list
-}
-
 resource "aws_security_group_rule" "static_from_frontend_http" {
   description              = "Static receives requests from Frontend over HTTP"
   type                     = "ingress"
@@ -245,16 +195,6 @@ resource "aws_security_group_rule" "static_from_frontend_http" {
   protocol                 = "tcp"
   security_group_id        = module.static.app_security_group_id
   source_security_group_id = module.frontend.app_security_group_id
-}
-
-resource "aws_security_group_rule" "static_alb_to_any_any" {
-  type      = "egress"
-  protocol  = "-1"
-  from_port = 0
-  to_port   = 0
-
-  security_group_id = module.static.alb_security_group_id
-  cidr_blocks       = ["0.0.0.0/0"]
 }
 
 resource "aws_security_group_rule" "draft_static_to_any_any" {
@@ -267,26 +207,6 @@ resource "aws_security_group_rule" "draft_static_to_any_any" {
   security_group_id = module.draft_static.app_security_group_id
 }
 
-resource "aws_security_group_rule" "draft_static_from_alb_http" {
-  description              = "Draft Static receives requests from its public ALB over HTTP"
-  type                     = "ingress"
-  from_port                = 80
-  to_port                  = 80
-  protocol                 = "tcp"
-  security_group_id        = module.draft_static.app_security_group_id
-  source_security_group_id = module.draft_static.alb_security_group_id
-}
-
-resource "aws_security_group_rule" "draft_static_alb_from_office_https" {
-  type      = "ingress"
-  from_port = 443
-  to_port   = 443
-  protocol  = "tcp"
-
-  security_group_id = module.draft_static.alb_security_group_id
-  cidr_blocks       = var.office_cidrs_list
-}
-
 resource "aws_security_group_rule" "draft_static_from_frontend_http" {
   description              = "Draft Static receives requests from Draft Frontend over HTTP"
   type                     = "ingress"
@@ -295,16 +215,6 @@ resource "aws_security_group_rule" "draft_static_from_frontend_http" {
   protocol                 = "tcp"
   security_group_id        = module.draft_static.app_security_group_id
   source_security_group_id = module.draft_frontend.app_security_group_id
-}
-
-resource "aws_security_group_rule" "draft_static_alb_to_any_any" {
-  type      = "egress"
-  protocol  = "-1"
-  from_port = 0
-  to_port   = 0
-
-  security_group_id = module.draft_static.alb_security_group_id
-  cidr_blocks       = ["0.0.0.0/0"]
 }
 
 resource "aws_security_group_rule" "mongodb_from_content_store_mongodb" {

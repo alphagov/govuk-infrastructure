@@ -61,3 +61,8 @@ variable "public_lb_domain_name" {
   description = "Domain in which to create DNS records for the app's Internet-facing load balancer. For example, staging.govuk.digital"
   type        = string
 }
+
+variable "office_cidrs_list" {
+  description = "List of GDS office CIDRs"
+  type        = list
+}

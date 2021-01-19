@@ -60,3 +60,8 @@ variable "desired_count" {
   type        = number
   default     = 1
 }
+
+variable "office_cidrs_list" {
+  description = "List of GDS office CIDRs"
+  type        = list
+}

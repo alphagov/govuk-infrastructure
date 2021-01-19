@@ -11,6 +11,7 @@ module "static" {
   desired_count                    = var.static_desired_count
   public_subnets                   = local.public_subnets
   public_lb_domain_name            = var.public_lb_domain_name
+  office_cidrs_list                = var.office_cidrs_list
 }
 
 module "draft_static" {
@@ -27,5 +28,6 @@ module "draft_static" {
   desired_count                    = var.draft_static_desired_count
   public_subnets                   = local.public_subnets
   public_lb_domain_name            = var.public_lb_domain_name
+  office_cidrs_list                = var.office_cidrs_list
 }
 
