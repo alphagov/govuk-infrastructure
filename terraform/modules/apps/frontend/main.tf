@@ -42,4 +42,5 @@ module "public_alb" {
   public_lb_domain_name     = var.public_lb_domain_name
   workspace_suffix          = "govuk" # TODO: Changeme
   service_security_group_id = module.app.security_group_id
+  external_cidrs_list       = var.office_cidrs_list
 }
