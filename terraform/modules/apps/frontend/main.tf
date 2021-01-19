@@ -21,7 +21,7 @@ module "app" {
   desired_count                    = var.desired_count
 
   load_balancers = [{
-    target_group_arn = aws_lb_target_group.public.arn
+    target_group_arn = module.public_alb.target_group_arn
     container_name   = var.service_name
     container_port   = 80
   }]
@@ -31,76 +31,15 @@ module "app" {
 # Internet-facing load balancer
 #
 
-# TODO: use a single, ACM-managed cert with both domains on. There is already
-# such a cert in integration/staging/prod (but it needs defining in Terraform).
-data "aws_acm_certificate" "public_lb_default" {
-  domain   = "*.test.govuk.digital"
-  statuses = ["ISSUED"]
-}
+module "public_alb" {
+  source = "../../public-load-balancer"
 
-data "aws_acm_certificate" "public_lb_alternate" {
-  domain   = "*.test.publishing.service.gov.uk"
-  statuses = ["ISSUED"]
-}
-
-resource "aws_lb" "public" {
-  name               = "fargate-public-${var.service_name}"
-  internal           = false
-  load_balancer_type = "application"
-  security_groups    = [aws_security_group.public_alb.id]
-  subnets            = var.public_subnets
-}
-
-resource "aws_lb_target_group" "public" {
-  name        = "${var.service_name}-public"
-  port        = 80
-  protocol    = "HTTP"
-  vpc_id      = var.vpc_id
-  target_type = "ip"
-
-  health_check {
-    path = "/"
-  }
-
-  depends_on = [aws_lb.public]
-}
-
-resource "aws_lb_listener" "public" {
-  load_balancer_arn = aws_lb.public.arn
-  port              = 443
-  protocol          = "HTTPS"
-  ssl_policy        = "ELBSecurityPolicy-2016-08"
-  certificate_arn   = data.aws_acm_certificate.public_lb_default.arn
-
-  default_action {
-    type             = "forward"
-    target_group_arn = aws_lb_target_group.public.arn
-  }
-}
-
-resource "aws_lb_listener_certificate" "publishing_service" {
-  listener_arn    = aws_lb_listener.public.arn
-  certificate_arn = data.aws_acm_certificate.public_lb_alternate.arn
-}
-
-resource "aws_security_group" "public_alb" {
-  name        = "fargate_${var.service_name}_public_alb"
-  vpc_id      = var.vpc_id
-  description = "${var.service_name} Internet-facing ALB"
-}
-
-data "aws_route53_zone" "public" {
-  name = var.public_lb_domain_name
-}
-
-resource "aws_route53_record" "public_alb" {
-  zone_id = data.aws_route53_zone.public.zone_id
-  name    = var.service_name
-  type    = "A"
-
-  alias {
-    name                   = aws_lb.public.dns_name
-    zone_id                = aws_lb.public.zone_id
-    evaluate_target_health = true
-  }
+  app_name                  = var.service_name
+  vpc_id                    = var.vpc_id
+  dns_a_record_name         = var.service_name
+  public_subnets            = var.public_subnets
+  app_domain                = var.public_lb_domain_name # TODO: Change to app_domain
+  public_lb_domain_name     = var.public_lb_domain_name
+  workspace_suffix          = "govuk" # TODO: Changeme
+  service_security_group_id = module.app.security_group_id
 }
