@@ -178,36 +178,6 @@ resource "aws_security_group_rule" "frontend_to_any_any" {
   security_group_id = module.frontend.app_security_group_id
 }
 
-resource "aws_security_group_rule" "frontend_from_alb_http" {
-  description              = "Frontend receives requests from its public ALB over HTTP"
-  type                     = "ingress"
-  from_port                = 80
-  to_port                  = 80
-  protocol                 = "tcp"
-  security_group_id        = module.frontend.app_security_group_id
-  source_security_group_id = module.frontend.alb_security_group_id
-}
-
-resource "aws_security_group_rule" "frontend_alb_from_office_https" {
-  type      = "ingress"
-  from_port = 443
-  to_port   = 443
-  protocol  = "tcp"
-
-  security_group_id = module.frontend.alb_security_group_id
-  cidr_blocks       = var.office_cidrs_list
-}
-
-resource "aws_security_group_rule" "frontend_alb_to_any_any" {
-  type      = "egress"
-  protocol  = "-1"
-  from_port = 0
-  to_port   = 0
-
-  security_group_id = module.frontend.alb_security_group_id
-  cidr_blocks       = ["0.0.0.0/0"]
-}
-
 resource "aws_security_group_rule" "draft_frontend_to_any_any" {
   description       = "Draft Frontend sends requests to anywhere over any protocol"
   type              = "egress"
@@ -217,37 +187,6 @@ resource "aws_security_group_rule" "draft_frontend_to_any_any" {
   cidr_blocks       = ["0.0.0.0/0"]
   security_group_id = module.draft_frontend.app_security_group_id
 }
-
-resource "aws_security_group_rule" "draft_frontend_from_alb_http" {
-  description              = "Draft Frontend receives requests from its public ALB over HTTP"
-  type                     = "ingress"
-  from_port                = 80
-  to_port                  = 80
-  protocol                 = "tcp"
-  security_group_id        = module.draft_frontend.app_security_group_id
-  source_security_group_id = module.draft_frontend.alb_security_group_id
-}
-
-resource "aws_security_group_rule" "draft_frontend_alb_from_office_https" {
-  type      = "ingress"
-  from_port = 443
-  to_port   = 443
-  protocol  = "tcp"
-
-  security_group_id = module.draft_frontend.alb_security_group_id
-  cidr_blocks       = var.office_cidrs_list
-}
-
-resource "aws_security_group_rule" "draft_frontend_alb_to_any_any" {
-  type      = "egress"
-  protocol  = "-1"
-  from_port = 0
-  to_port   = 0
-
-  security_group_id = module.draft_frontend.alb_security_group_id
-  cidr_blocks       = ["0.0.0.0/0"]
-}
-
 
 data "aws_nat_gateway" "govuk" {
   count     = length(local.public_subnets)

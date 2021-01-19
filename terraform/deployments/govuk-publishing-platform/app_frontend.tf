@@ -10,6 +10,7 @@ module "frontend" {
   desired_count                    = var.frontend_desired_count
   public_subnets                   = local.public_subnets
   public_lb_domain_name            = var.public_lb_domain_name
+  office_cidrs_list                = var.office_cidrs_list
 }
 
 module "draft_frontend" {
@@ -25,5 +26,6 @@ module "draft_frontend" {
   desired_count                    = var.draft_frontend_desired_count
   public_subnets                   = local.public_subnets
   public_lb_domain_name            = var.public_lb_domain_name
+  office_cidrs_list                = var.office_cidrs_list
 }
 
