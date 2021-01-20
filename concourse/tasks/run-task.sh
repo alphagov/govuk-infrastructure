@@ -24,7 +24,7 @@ region = $AWS_REGION
 EOF
 
 task_definition_arn=$(jq -r ".${TASK_DEFINITION}.value" terraform-outputs/${APPLICATION}-terraform-outputs.json)
-network_config=$(cat task-network-config/task_network_config)
+network_config=$(jq -r ".task_network_config.value" terraform-outputs/${APPLICATION}-terraform-outputs.json)
 
 echo "Starting task..."
 

@@ -400,12 +400,6 @@ jobs:
       params:
         APPLICATION: publisher-worker
         GOVUK_ENVIRONMENT: test
-    - task: fetch-db-migrations-config
-      file: govuk-infrastructure/concourse/tasks/fetch-task-network-config.yml
-      params:
-        APPLICATION: publisher-web
-        GOVUK_ENVIRONMENT: test
-        TASK_DEFINITION: web_task_definition
     - task: run-db-migrations
       file: govuk-infrastructure/concourse/tasks/run-task.yml
       params:
