@@ -336,11 +336,16 @@ jobs:
       passed:
       - deploy-frontend
       trigger: true
-    - file: govuk-infrastructure/concourse/tasks/basic-smoke-test.yml
+    - task: fetch-smoke-tests
+      file: govuk-infrastructure/concourse/tasks/fetch-task-definition.yml
       params:
-        MESSAGE: Checking the app is not serving HTTP error codes.
-        URL: https://www.gov.uk/
-      task: smoke-test
+        APPLICATION: smokey
+        GOVUK_ENVIRONMENT: test
+    - task: run-smoke-tests
+      file: govuk-infrastructure/concourse/tasks/run-task.yml
+      params:
+        APPLICATION: smokey
+        COMMAND: bundle exec cucumber --profile test --strict-undefined -t @replatforming -t \"not @notreplatforming\"
 
   - name: deploy-draft-frontend
     plan:
@@ -400,12 +405,6 @@ jobs:
       params:
         APPLICATION: publisher-worker
         GOVUK_ENVIRONMENT: test
-    - task: fetch-db-migrations-config
-      file: govuk-infrastructure/concourse/tasks/fetch-task-network-config.yml
-      params:
-        APPLICATION: publisher-web
-        GOVUK_ENVIRONMENT: test
-        TASK_DEFINITION: web_task_definition
     - task: run-db-migrations
       file: govuk-infrastructure/concourse/tasks/run-task.yml
       params:

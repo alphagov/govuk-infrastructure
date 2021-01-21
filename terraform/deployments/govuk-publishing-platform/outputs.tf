@@ -27,6 +27,11 @@ output "draft-content-store_security_groups" {
   description = "Used by ECS RunTask to run short-lived tasks with the same SG permissions as the draft-content-store ECS Service."
 }
 
+output "smokey_security_groups" {
+  value       = [aws_security_group.smokey.id]
+  description = "Used by ECS RunTask to run smokey"
+}
+
 output "log_group" {
   value = "govuk" # TODO make this workspace aware
 }

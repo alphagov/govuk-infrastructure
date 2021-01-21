@@ -22,6 +22,25 @@ provider "aws" {
   }
 }
 
+data "aws_region" "current" {}
+
+data "terraform_remote_state" "govuk" {
+  backend   = "s3"
+  workspace = terraform.workspace
+  config = {
+    bucket   = "govuk-terraform-${var.govuk_environment}"
+    key      = "projects/govuk.tfstate"
+    region   = data.aws_region.current.name
+    role_arn = var.assume_role_arn
+  }
+}
+
+module "network_config" {
+  source          = "../../../modules/task-network-config"
+  subnets         = data.terraform_remote_state.govuk.outputs.private_subnets
+  security_groups = data.terraform_remote_state.govuk.outputs.publisher-web_security_groups
+}
+
 module "task_definition" {
   source                           = "../../../modules/task-definitions/publisher"
   govuk_app_domain_external        = var.app_domain

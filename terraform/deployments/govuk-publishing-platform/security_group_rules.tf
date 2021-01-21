@@ -403,5 +403,25 @@ resource "aws_security_group_rule" "mesh_service_to_mesh_service_http" {
   security_group_id        = aws_security_group.mesh_ecs_service.id
 }
 
+resource "aws_security_group_rule" "smoke_test_to_any_https" {
+  description       = "Smoke tests can make HTTPS requests anywhere"
+  type              = "egress"
+  from_port         = 443
+  to_port           = 443
+  protocol          = "tcp"
+  cidr_blocks       = ["0.0.0.0/0"]
+  security_group_id = aws_security_group.smokey.id
+}
+
+resource "aws_security_group_rule" "smoke_test_to_any_http" {
+  description       = "Smoke tests can make HTTP requests anywhere"
+  type              = "egress"
+  from_port         = 80
+  to_port           = 80
+  protocol          = "tcp"
+  cidr_blocks       = ["0.0.0.0/0"]
+  security_group_id = aws_security_group.smokey.id
+}
+
 # TODO: move the rest of the rules into this file unless there's a good reason
 #       for them to stay in other files.

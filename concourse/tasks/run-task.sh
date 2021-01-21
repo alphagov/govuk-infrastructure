@@ -24,13 +24,14 @@ region = $AWS_REGION
 EOF
 
 task_definition_arn=$(jq -r ".${TASK_DEFINITION}.value" terraform-outputs/${APPLICATION}-terraform-outputs.json)
-network_config=$(cat task-network-config/task_network_config)
+network_config=$(jq -r ".task_network_config.value" terraform-outputs/${APPLICATION}-terraform-outputs.json)
 
 echo "Starting task..."
 
 task=$(aws ecs run-task --cluster $CLUSTER \
 --task-definition $task_definition_arn --launch-type FARGATE --count 1 \
 --network-configuration $network_config \
+--started-by "Concourse" \
 --overrides '{
   "containerOverrides": [{
     "name": "'"$APPLICATION"'",
@@ -38,19 +39,13 @@ task=$(aws ecs run-task --cluster $CLUSTER \
   }]
 }')
 
-task_arn=$(echo $task | jq .tasks[0].taskArn)
-
+task_arn=$(echo $task | jq .tasks[0].taskArn -r)
+task_id=$(basename $task_arn)
 echo "waiting for task $task_arn to finish..."
-
-aws ecs wait tasks-stopped --tasks=[$task_arn] --cluster $CLUSTER
-
+aws ecs wait tasks-stopped --tasks $task_id --cluster $CLUSTER
 echo "task finished."
-
-task_results=$(aws ecs describe-tasks --tasks=[$task_arn] --cluster $CLUSTER)
-echo $task_results
-
+task_results=$(aws ecs describe-tasks --tasks $task_id --cluster $CLUSTER)
+ecs-cli logs --cluster $CLUSTER --task-id $task_id --since "60"
 exit_code=$(echo $task_results | jq [.tasks[0].containers[].exitCode] | jq add)
-
 echo "Exiting with code $exit_code"
-
 exit $exit_code
