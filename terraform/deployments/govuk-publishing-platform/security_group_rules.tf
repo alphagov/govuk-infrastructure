@@ -44,7 +44,7 @@ resource "aws_security_group_rule" "content_store_from_frontend_http" {
   to_port                  = 80
   protocol                 = "tcp"
   security_group_id        = module.content_store.security_group_id
-  source_security_group_id = module.frontend.app_security_group_id
+  source_security_group_id = module.frontend.security_group_id
 }
 
 resource "aws_security_group_rule" "draft_content_store_from_frontend_http" {
@@ -54,7 +54,7 @@ resource "aws_security_group_rule" "draft_content_store_from_frontend_http" {
   to_port                  = 80
   protocol                 = "tcp"
   security_group_id        = module.draft_content_store.security_group_id
-  source_security_group_id = module.draft_frontend.app_security_group_id
+  source_security_group_id = module.draft_frontend.security_group_id
 }
 
 # TODO: fix overly broad egress rules
@@ -135,7 +135,7 @@ resource "aws_security_group_rule" "publishing_api_from_frontend_http" {
   protocol    = "tcp"
 
   security_group_id        = module.publishing_api_web.security_group_id
-  source_security_group_id = module.frontend.app_security_group_id
+  source_security_group_id = module.frontend.security_group_id
 }
 
 resource "aws_security_group_rule" "frontend_to_any_any" {
@@ -145,7 +145,7 @@ resource "aws_security_group_rule" "frontend_to_any_any" {
   to_port           = 0
   protocol          = -1
   cidr_blocks       = ["0.0.0.0/0"]
-  security_group_id = module.frontend.app_security_group_id
+  security_group_id = module.frontend.security_group_id
 }
 
 resource "aws_security_group_rule" "draft_frontend_to_any_any" {
@@ -155,7 +155,7 @@ resource "aws_security_group_rule" "draft_frontend_to_any_any" {
   to_port           = 0
   protocol          = -1
   cidr_blocks       = ["0.0.0.0/0"]
-  security_group_id = module.draft_frontend.app_security_group_id
+  security_group_id = module.draft_frontend.security_group_id
 }
 
 data "aws_nat_gateway" "govuk" {
@@ -170,7 +170,7 @@ resource "aws_security_group_rule" "frontend_alb_from_test_nat_gateways_https" {
   to_port     = 443
   protocol    = "tcp"
 
-  security_group_id = module.frontend.alb_security_group_id
+  security_group_id = module.frontend_public_alb.security_group_id
   cidr_blocks = [
     for nat_gateway in data.aws_nat_gateway.govuk :
     "${nat_gateway.public_ip}/32"
@@ -194,7 +194,7 @@ resource "aws_security_group_rule" "static_from_frontend_http" {
   to_port                  = 80
   protocol                 = "tcp"
   security_group_id        = module.static.app_security_group_id
-  source_security_group_id = module.frontend.app_security_group_id
+  source_security_group_id = module.frontend.security_group_id
 }
 
 resource "aws_security_group_rule" "draft_static_to_any_any" {
@@ -214,7 +214,7 @@ resource "aws_security_group_rule" "draft_static_from_frontend_http" {
   to_port                  = 80
   protocol                 = "tcp"
   security_group_id        = module.draft_static.app_security_group_id
-  source_security_group_id = module.draft_frontend.app_security_group_id
+  source_security_group_id = module.draft_frontend.security_group_id
 }
 
 resource "aws_security_group_rule" "mongodb_from_content_store_mongodb" {
