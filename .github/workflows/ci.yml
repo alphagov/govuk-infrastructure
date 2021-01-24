@@ -63,10 +63,15 @@ jobs:
       - name: run tflint
         env:
           TFLINT_VERSION: v0.24.1
+          TFLINT_RULESET_WORKSPACES_VERSION: 0.2.0
         run: |
           TEMP_PATH="$(mktemp -d)"
           PATH="${TEMP_PATH}:$PATH"
           curl --silent --fail -L "https://github.com/terraform-linters/tflint/releases/download/${TFLINT_VERSION}/tflint_linux_amd64.zip" -o tflint.zip && unzip tflint.zip -d "${TEMP_PATH}" && rm tflint.zip
+          curl --silent --fail -L "https://github.com/richardTowers/tflint-ruleset-workspaces/releases/download/${TFLINT_RULESET_WORKSPACES_VERSION}/tflint-ruleset-workspaces-linux" -o tflint-ruleset-workspaces
+          chmod +x tflint-ruleset-workspaces
+          mkdir -p ~/.tflint.d/plugins
+          mv tflint-ruleset-workspaces ~/.tflint.d/plugins
 
           for f in terraform/deployments/*/.tflint.hcl; do
             d=$(dirname "$f")
@@ -74,7 +79,7 @@ jobs:
               echo "$d"
               cd "$d"
               terraform init -backend=false
-              tflint --module .
+              TF_WORKSPACE=example_workspace tflint --module .
               echo -e '\n-------------------------\n'
             )
           done
