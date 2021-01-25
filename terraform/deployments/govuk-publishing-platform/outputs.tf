@@ -3,7 +3,7 @@ output "private_subnets" {
 }
 
 output "publisher-web_security_groups" {
-  value       = module.publisher.security_groups
+  value       = module.publisher_web.security_groups
   description = "Used by ECS RunTask to run short-lived tasks with the same SG permissions as the publisher ECS Service."
 }
 
