@@ -184,7 +184,7 @@ resource "aws_security_group_rule" "static_to_any_any" {
   to_port           = 0
   protocol          = -1
   cidr_blocks       = ["0.0.0.0/0"]
-  security_group_id = module.static.app_security_group_id
+  security_group_id = module.static.security_group_id
 }
 
 resource "aws_security_group_rule" "static_from_frontend_http" {
@@ -193,7 +193,7 @@ resource "aws_security_group_rule" "static_from_frontend_http" {
   from_port                = 80
   to_port                  = 80
   protocol                 = "tcp"
-  security_group_id        = module.static.app_security_group_id
+  security_group_id        = module.static.security_group_id
   source_security_group_id = module.frontend.security_group_id
 }
 
@@ -204,7 +204,7 @@ resource "aws_security_group_rule" "draft_static_to_any_any" {
   to_port           = 0
   protocol          = -1
   cidr_blocks       = ["0.0.0.0/0"]
-  security_group_id = module.draft_static.app_security_group_id
+  security_group_id = module.draft_static.security_group_id
 }
 
 resource "aws_security_group_rule" "draft_static_from_frontend_http" {
@@ -213,7 +213,7 @@ resource "aws_security_group_rule" "draft_static_from_frontend_http" {
   from_port                = 80
   to_port                  = 80
   protocol                 = "tcp"
-  security_group_id        = module.draft_static.app_security_group_id
+  security_group_id        = module.draft_static.security_group_id
   source_security_group_id = module.draft_frontend.security_group_id
 }
 
