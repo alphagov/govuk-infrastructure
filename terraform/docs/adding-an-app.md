@@ -20,26 +20,19 @@ are still accurate (please correct this doc if you find the steps are inaccurate
    The task definition should output an `arn` and it will probably
    accept similar variables to other apps such as `sentry_environment`.
 
-3. Create a new module in [terraform/modules/apps](../terraform/modules/apps)
-
-   See the `apps` directory for examples. You'll probably just want to call the
-   `app` module to create an ECS service for your task, but this is the place
-   for other app-specific infrastructure such as databases, Route53 records,
-   load balancers, and so on.
-
-4. Add the new `app` module to the [terraform/deployments/govuk-publishing-platform](../terraform/deployments/govuk-publishing-platform) module
+3. Call the `app` module for your new app in the [terraform/deployments/govuk-publishing-platform](../terraform/deployments/govuk-publishing-platform) deployment
 
    This is required to bring up the app's infrastructure, including the
    ECS Service and accompanying infrastructure.
 
-5. Create a deployment module in [terraform/deployments/apps](../terraform/deployments/apps)
+4. Create a deployment module in [terraform/deployments/apps](../terraform/deployments/apps)
 
    See the other apps for examples on how to proceed. This directory
    is responsible for creating a new task definition, it calls the task
    definition module you created in step 2. This module will be called in
    the final step.
 
-6. Apply the `govuk` module in your environment
+5. Apply the `govuk` module in your environment
 
    This will bring up the app's infrastructure, defined in step 3.
    This part may be performed by a Concourse pipeline in future
@@ -52,7 +45,7 @@ are still accurate (please correct this doc if you find the steps are inaccurate
       -var-file=../variables/test/infrastructure.tfvars
    ```
 
-7. Apply the app deployment module in your environment
+6. Apply the app deployment module in your environment
 
    This will bring up the app's task, defined in step 2.
 
