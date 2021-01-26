@@ -19,10 +19,6 @@
           * ...
 * `modules`: non-root modules
     * `app`: reusable module for an app; contains the essential resources which all the apps need.
-    * `apps`: composition modules for each app; calls the app module plus any
-      app-specific resources.
-        * `publisher`: module which creates the Publisher app
-        * ...
     * `task-definition`: reusable module for creating a task definition
     * `task-definitions`: task definitions for each app
         * `publisher`: module which creates a task definition for the Publisher app
