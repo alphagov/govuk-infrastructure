@@ -4,7 +4,6 @@ locals {
 
 module "grafana_app" {
   source                    = "../app"
-  execution_role_arn        = aws_iam_role.monitoring_execution.arn
   vpc_id                    = var.vpc_id
   cluster_id                = aws_ecs_cluster.cluster.id
   service_name              = local.service_name
@@ -19,6 +18,14 @@ module "grafana_app" {
     container_name   = local.service_name
     container_port   = 3000
   }]
+  environment_variables = {} # TODO
+  secrets_from_arns     = {} # TODO
+  log_group             = "monitoring"
+  aws_region            = data.aws_region.current.name
+  cpu                   = 512
+  memory                = 1024
+  task_role_arn         = aws_iam_role.monitoring_execution.arn # TODO - use a separate role for this?
+  execution_role_arn    = aws_iam_role.monitoring_execution.arn
 }
 
 module "grafana_public_alb" {

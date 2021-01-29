@@ -22,26 +22,6 @@ provider "aws" {
   }
 }
 
-data "terraform_remote_state" "infra_networking" {
-  backend = "s3"
-  config = {
-    bucket   = var.govuk_aws_state_bucket
-    key      = "govuk/infra-networking.tfstate"
-    region   = "eu-west-1"
-    role_arn = var.assume_role_arn
-  }
-}
-
-data "terraform_remote_state" "infra_security_groups" {
-  backend = "s3"
-  config = {
-    bucket   = var.govuk_aws_state_bucket
-    key      = "govuk/infra-security-groups.tfstate"
-    region   = "eu-west-1"
-    role_arn = var.assume_role_arn
-  }
-}
-
 locals {
   vpc_id                        = data.terraform_remote_state.infra_networking.outputs.vpc_id
   private_subnets               = data.terraform_remote_state.infra_networking.outputs.private_subnet_ids
@@ -53,4 +33,5 @@ locals {
   mongodb_security_group_id     = data.terraform_remote_state.infra_security_groups.outputs.sg_mongo_id
   mysql_security_group_id       = data.terraform_remote_state.infra_security_groups.outputs.sg_mysql-primary_id
   routerdb_security_group_id    = data.terraform_remote_state.infra_security_groups.outputs.sg_router-backend_id
+  log_group                     = "govuk" # TODO make this workspace aware
 }

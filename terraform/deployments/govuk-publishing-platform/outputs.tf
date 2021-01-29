@@ -17,6 +17,19 @@ output "signon_security_groups" {
   description = "Used by ECS RunTask to run short-lived tasks with the same SG permissions as the signon ECS Service."
 }
 
+output "content-store" {
+  value = {
+    draft = {
+      task_definition_cli_input_json = module.draft_content_store.cli_input_json,
+      security_groups                = module.draft_content_store.security_groups,
+    },
+    live = {
+      task_definition_cli_input_json = module.content_store.cli_input_json,
+      security_groups                = module.content_store.security_groups,
+    },
+  }
+}
+
 output "content-store_security_groups" {
   value       = module.content_store.security_groups
   description = "Used by ECS RunTask to run short-lived tasks with the same SG permissions as the content-store ECS Service."
@@ -33,7 +46,7 @@ output "smokey_security_groups" {
 }
 
 output "log_group" {
-  value = "govuk" # TODO make this workspace aware
+  value = local.log_group
 }
 
 output "mesh_name" {

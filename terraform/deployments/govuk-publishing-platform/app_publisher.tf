@@ -6,7 +6,6 @@ module "publisher_web" {
   service_discovery_namespace_id   = aws_service_discovery_private_dns_namespace.govuk_publishing_platform.id
   service_discovery_namespace_name = aws_service_discovery_private_dns_namespace.govuk_publishing_platform.name
   source                           = "../../modules/app"
-  execution_role_arn               = aws_iam_role.execution.arn
   vpc_id                           = local.vpc_id
   desired_count                    = var.publisher_desired_count
   extra_security_groups            = [local.govuk_management_access_sg_id, aws_security_group.mesh_ecs_service.id]
@@ -15,6 +14,14 @@ module "publisher_web" {
     container_name   = "publisher-web"
     container_port   = 80
   }]
+  environment_variables = {} # TODO
+  secrets_from_arns     = {} # TODO
+  log_group             = local.log_group
+  aws_region            = data.aws_region.current.name
+  cpu                   = 512
+  memory                = 1024
+  task_role_arn         = aws_iam_role.task.arn
+  execution_role_arn    = aws_iam_role.execution.arn
 }
 
 #
@@ -46,7 +53,14 @@ module "publisher_worker" {
   service_discovery_namespace_id   = aws_service_discovery_private_dns_namespace.govuk_publishing_platform.id
   service_discovery_namespace_name = aws_service_discovery_private_dns_namespace.govuk_publishing_platform.name
   source                           = "../../modules/app"
-  execution_role_arn               = aws_iam_role.execution.arn
   vpc_id                           = local.vpc_id
   extra_security_groups            = [module.publisher_web.security_group_id, local.govuk_management_access_sg_id, aws_security_group.mesh_ecs_service.id]
+  environment_variables            = {} # TODO
+  secrets_from_arns                = {} # TODO
+  log_group                        = local.log_group
+  aws_region                       = data.aws_region.current.name
+  cpu                              = 512
+  memory                           = 1024
+  task_role_arn                    = aws_iam_role.task.arn
+  execution_role_arn               = aws_iam_role.execution.arn
 }

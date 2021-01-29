@@ -27,6 +27,11 @@ variable "govuk_aws_state_bucket" {
   description = "The name of the S3 bucket used for govuk-aws's terraform state files"
 }
 
+variable "govuk_environment" {
+  type        = string
+  description = "The name of the environment (for example test, integration, staging or production)"
+}
+
 variable "office_cidrs_list" {
   description = "List of GDS office CIDRs"
   type        = list

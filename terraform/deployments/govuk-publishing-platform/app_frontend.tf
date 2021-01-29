@@ -6,7 +6,6 @@ module "frontend" {
   vpc_id                           = local.vpc_id
   cluster_id                       = aws_ecs_cluster.cluster.id
   source                           = "../../modules/app"
-  execution_role_arn               = aws_iam_role.execution.arn
   desired_count                    = var.frontend_desired_count
   subnets                          = local.private_subnets
   extra_security_groups            = [local.govuk_management_access_security_group, aws_security_group.mesh_ecs_service.id]
@@ -15,6 +14,14 @@ module "frontend" {
     container_name   = "frontend"
     container_port   = 80
   }]
+  environment_variables = {} # TODO
+  secrets_from_arns     = {} # TODO
+  log_group             = local.log_group
+  aws_region            = data.aws_region.current.name
+  cpu                   = 512
+  memory                = 1024
+  task_role_arn         = aws_iam_role.task.arn
+  execution_role_arn    = aws_iam_role.execution.arn
 }
 
 module "frontend_public_alb" {
@@ -40,7 +47,6 @@ module "draft_frontend" {
   vpc_id                           = local.vpc_id
   cluster_id                       = aws_ecs_cluster.cluster.id
   source                           = "../../modules/app"
-  execution_role_arn               = aws_iam_role.execution.arn
   desired_count                    = var.draft_frontend_desired_count
   subnets                          = local.private_subnets
   extra_security_groups            = [local.govuk_management_access_security_group, aws_security_group.mesh_ecs_service.id]
@@ -49,6 +55,14 @@ module "draft_frontend" {
     container_name   = "draft-frontend"
     container_port   = 80
   }]
+  environment_variables = {} # TODO
+  secrets_from_arns     = {} # TODO
+  log_group             = local.log_group
+  aws_region            = data.aws_region.current.name
+  cpu                   = 512
+  memory                = 1024
+  task_role_arn         = aws_iam_role.task.arn
+  execution_role_arn    = aws_iam_role.execution.arn
 }
 
 module "draft_frontend_public_alb" {

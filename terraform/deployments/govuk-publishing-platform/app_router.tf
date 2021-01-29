@@ -6,7 +6,6 @@ module "router" {
   subnets                          = local.private_subnets
   vpc_id                           = local.vpc_id
   cluster_id                       = aws_ecs_cluster.cluster.id
-  execution_role_arn               = aws_iam_role.execution.arn
   source                           = "../../modules/app"
   desired_count                    = var.router_desired_count
   extra_security_groups            = [local.govuk_management_access_security_group, aws_security_group.mesh_ecs_service.id]
@@ -14,6 +13,14 @@ module "router" {
     { container_service = "router", port = 80, protocol = "tcp" },
     { container_service = "router-reload", port = 3055, protocol = "tcp" },
   ]
+  environment_variables = {} # TODO
+  secrets_from_arns     = {} # TODO
+  log_group             = local.log_group
+  aws_region            = data.aws_region.current.name
+  cpu                   = 512
+  memory                = 1024
+  task_role_arn         = aws_iam_role.task.arn
+  execution_role_arn    = aws_iam_role.execution.arn
 }
 
 module "draft_router" {
@@ -24,7 +31,6 @@ module "draft_router" {
   subnets                          = local.private_subnets
   vpc_id                           = local.vpc_id
   cluster_id                       = aws_ecs_cluster.cluster.id
-  execution_role_arn               = aws_iam_role.execution.arn
   source                           = "../../modules/app"
   desired_count                    = var.draft_router_desired_count
   extra_security_groups            = [local.govuk_management_access_security_group, aws_security_group.mesh_ecs_service.id]
@@ -32,4 +38,12 @@ module "draft_router" {
     { container_service = "draft-router", port = 80, protocol = "tcp" },
     { container_service = "draft-router-reload", port = 3055, protocol = "tcp" },
   ]
+  environment_variables = {} # TODO
+  secrets_from_arns     = {} # TODO
+  log_group             = local.log_group
+  aws_region            = data.aws_region.current.name
+  cpu                   = 512
+  memory                = 1024
+  task_role_arn         = aws_iam_role.task.arn
+  execution_role_arn    = aws_iam_role.execution.arn
 }

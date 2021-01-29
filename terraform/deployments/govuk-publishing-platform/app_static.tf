@@ -6,7 +6,6 @@ module "static" {
   subnets                          = local.private_subnets
   vpc_id                           = local.vpc_id
   cluster_id                       = aws_ecs_cluster.cluster.id
-  execution_role_arn               = aws_iam_role.execution.arn
   source                           = "../../modules/app"
   desired_count                    = var.static_desired_count
   extra_security_groups            = [local.govuk_management_access_security_group, aws_security_group.mesh_ecs_service.id]
@@ -15,6 +14,14 @@ module "static" {
     container_name   = "static"
     container_port   = 80
   }]
+  environment_variables = {} # TODO
+  secrets_from_arns     = {} # TODO
+  log_group             = local.log_group
+  aws_region            = data.aws_region.current.name
+  cpu                   = 512
+  memory                = 1024
+  task_role_arn         = aws_iam_role.task.arn
+  execution_role_arn    = aws_iam_role.execution.arn
 }
 
 module "draft_static" {
@@ -25,7 +32,6 @@ module "draft_static" {
   subnets                          = local.private_subnets
   vpc_id                           = local.vpc_id
   cluster_id                       = aws_ecs_cluster.cluster.id
-  execution_role_arn               = aws_iam_role.execution.arn
   source                           = "../../modules/app"
   desired_count                    = var.draft_static_desired_count
   extra_security_groups            = [local.govuk_management_access_security_group, aws_security_group.mesh_ecs_service.id]
@@ -34,6 +40,14 @@ module "draft_static" {
     container_name   = "draft-static"
     container_port   = 80
   }]
+  environment_variables = {} # TODO
+  secrets_from_arns     = {} # TODO
+  log_group             = local.log_group
+  aws_region            = data.aws_region.current.name
+  cpu                   = 512
+  memory                = 1024
+  task_role_arn         = aws_iam_role.task.arn
+  execution_role_arn    = aws_iam_role.execution.arn
 }
 
 #

@@ -3,7 +3,6 @@ module "signon" {
   mesh_name                        = aws_appmesh_mesh.govuk.id
   service_discovery_namespace_id   = aws_service_discovery_private_dns_namespace.govuk_publishing_platform.id
   service_discovery_namespace_name = aws_service_discovery_private_dns_namespace.govuk_publishing_platform.name
-  execution_role_arn               = aws_iam_role.execution.arn
   subnets                          = local.private_subnets
   vpc_id                           = local.vpc_id
   cluster_id                       = aws_ecs_cluster.cluster.id
@@ -15,6 +14,14 @@ module "signon" {
     container_name   = "signon"
     container_port   = 80
   }]
+  environment_variables = {} # TODO
+  secrets_from_arns     = {} # TODO
+  log_group             = local.log_group
+  aws_region            = data.aws_region.current.name
+  cpu                   = 512
+  memory                = 1024
+  task_role_arn         = aws_iam_role.task.arn
+  execution_role_arn    = aws_iam_role.execution.arn
 }
 
 module "signon_public_alb" {
