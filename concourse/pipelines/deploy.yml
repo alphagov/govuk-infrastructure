@@ -87,14 +87,11 @@ resources:
       tag_filter: release_*
 
   - <<: *git-repo
-    name: govuk-infrastructure-content-store
+    name: govuk-infrastructure-concourse-tasks
+    icon: concourse-ci
     source:
       <<: *govuk-infrastructure-source
-      paths:
-        - concourse/tasks
-        - terraform/deployments/apps/content-store
-        - terraform/modules/app-container-definition
-        - terraform/modules/envoy-configuration
+      paths: [ concourse/tasks ]
 
   - <<: *git-repo
     name: router
@@ -170,11 +167,13 @@ resources:
 
   - name: deploy-slack-channel
     type: slack-notification
+    icon: bell-ring
     source:
       url: https://hooks.slack.com/services/((slack_webhook))
 
   - name: govuk-terraform-outputs
     type: s3
+    icon: file
     # NOTE: this bucket is created for us by Big Concourse
     # https://reliability-engineering.cloudapps.digital/continuous-deployment.html#services
     # It's in AWS' London region (eu-west-2)
@@ -182,6 +181,18 @@ resources:
       bucket: ((readonly_private_bucket_name))
       region_name: eu-west-2
       versioned_file: govuk-terraform-outputs.json
+
+  - name: content-store-terraform-outputs
+    type: s3
+    icon: file
+    # NOTE: this bucket is created for us by Big Concourse
+    # https://reliability-engineering.cloudapps.digital/continuous-deployment.html#services
+    # It's in AWS' London region (eu-west-2)
+    source:
+      bucket: ((readonly_private_bucket_name))
+      region_name: eu-west-2
+      versioned_file: content-store.json
+      initial_version: "0"
 
 groups:
   - name: all
@@ -252,15 +263,22 @@ jobs:
       set_pipeline: deploy-apps-test
 
   - name: run-terraform
+    serial: true
     plan:
     - get: govuk-infrastructure
       trigger: true
+    - get: content-store-terraform-outputs
     - task: terraform-apply
       config:
         inputs:
         - name: govuk-infrastructure
+        - name: content-store-terraform-outputs
+          path: original-content-store-terraform-outputs
+          optional: true
         outputs:
         - name: govuk-terraform-outputs
+        - name: content-store-terraform-outputs
+          path: updated-content-store-terraform-outputs
         params:
           AWS_REGION: eu-west-1
           ASSUME_ROLE_ARN: 'arn:aws:iam::430354129336:role/govuk-concourse-deployer'
@@ -291,9 +309,27 @@ jobs:
               -auto-approve
 
             terraform output -json > "$root_dir/govuk-terraform-outputs/govuk-terraform-outputs.json"
+
+            for app in content-store; do
+              terraform output -json "${app}" > "$root_dir/updated-${app}-terraform-outputs/${app}.json"
+
+              if cmp \
+                "$root_dir/original-${app}-terraform-outputs/${app}.json" \
+                "$root_dir/updated-${app}-terraform-outputs/${app}.json"
+              then
+                # If the updated terraform outputs are the same as the originals
+                # delete them to avoid unnecessarily creating a new resource version
+                rm "$root_dir/updated-${app}-terraform-outputs/${app}.json"
+              fi
+            done
+
     - put: govuk-terraform-outputs
       params:
         file: govuk-terraform-outputs/govuk-terraform-outputs.json
+    - try:
+        put: content-store-terraform-outputs
+        params:
+          file: content-store-terraform-outputs/content-store.json
 
   - name: deploy-frontend
     plan:
@@ -472,37 +508,46 @@ jobs:
     plan:
     - in_parallel:
       - get: govuk-infrastructure
-        resource: govuk-infrastructure-content-store
+        resource: govuk-infrastructure-concourse-tasks
         trigger: true
-      - get: govuk-terraform-outputs
+      - get: app-terraform-outputs
+        resource: content-store-terraform-outputs
         passed:
         - run-terraform
         trigger: true
       - get: release
         resource: content-store
         trigger: true
-    - task: update-task-definition
-      file: govuk-infrastructure/concourse/tasks/update-task-definition.yml
-      params:
-        APPLICATION: content-store
-        GOVUK_ENVIRONMENT: test
+    - in_parallel:
+      - task: update-draft-task-definition
+        file: govuk-infrastructure/concourse/tasks/update-task-definition-v2.yml
+        output_mapping:
+          task-definition-arn: draft-task-definition-arn
+        params:
+          APPLICATION: content-store
+          VARIANT: draft
+          PIN_IMAGE_TAG: bill-content-schemas # TODO - remove this once content-store supports content-schemas
+      - task: update-live-task-definition
+        file: govuk-infrastructure/concourse/tasks/update-task-definition-v2.yml
+        output_mapping:
+          task-definition-arn: live-task-definition-arn
+        params:
+          APPLICATION: content-store
+          VARIANT: live
+          PIN_IMAGE_TAG: bill-content-schemas # TODO - remove this once content-store supports content-schemas
     - in_parallel:
       - task: update-live-ecs-service
-        file: govuk-infrastructure/concourse/tasks/update-ecs-service.yml
+        file: govuk-infrastructure/concourse/tasks/update-ecs-service-v2.yml
+        input_mapping:
+          task-definition-arn: live-task-definition-arn
         params:
-          # TODO: remove this APPLICATION variable once it's no longer needed by update-ecs-service
-          APPLICATION: content-store
           ECS_SERVICE: content-store
-          GOVUK_ENVIRONMENT: test
-          TASK_DEFINITION: live_task_definition
       - task: update-draft-ecs-service
-        file: govuk-infrastructure/concourse/tasks/update-ecs-service.yml
+        file: govuk-infrastructure/concourse/tasks/update-ecs-service-v2.yml
+        input_mapping:
+          task-definition-arn: draft-task-definition-arn
         params:
-          # TODO: remove this APPLICATION variable once it's no longer needed by update-ecs-service
-          APPLICATION: content-store
           ECS_SERVICE: draft-content-store
-          GOVUK_ENVIRONMENT: test
-          TASK_DEFINITION: draft_task_definition
     serial: true
     on_failure:
       <<: *notify-slack-failure

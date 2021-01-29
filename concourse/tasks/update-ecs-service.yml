@@ -1,3 +1,4 @@
+# TODO: remove this once all the applications use update-ecs-service-v2.yml
 platform: linux
 image_resource:
   type: docker-image
