@@ -151,6 +151,23 @@ resources:
         - terraform/modules/task-definitions/signon
 
   - <<: *git-repo
+    name: smokey
+    source:
+      branch: main
+      uri: https://github.com/alphagov/smokey
+      tag_filter: "*-release"
+
+  - <<: *git-repo
+    name: govuk-infrastructure-smokey
+    source:
+      <<: *govuk-infrastructure-source
+      paths:
+        - concourse/tasks
+        - terraform/deployments/apps/smokey
+        - terraform/modules/app-container-definition
+        - terraform/modules/envoy-configuration
+
+  - <<: *git-repo
     name: static
     source:
       branch: master
@@ -199,6 +216,7 @@ groups:
       - deploy-router-api
       - deploy-draft-router-api
       - deploy-signon
+      - deploy-smokey
       - deploy-static
       - deploy-draft-static
 
@@ -237,6 +255,10 @@ groups:
   - name: signon
     jobs:
       - deploy-signon
+
+  - name: smokey
+    jobs:
+      - deploy-smokey
 
   - name: static
     jobs:
@@ -637,6 +659,28 @@ jobs:
       file: govuk-infrastructure/concourse/tasks/update-ecs-service.yml
       params:
         ECS_SERVICE: signon
+        GOVUK_ENVIRONMENT: test
+    serial: true
+    on_failure:
+      <<: *notify-slack-failure
+
+  - name: deploy-smokey
+    plan:
+    - in_parallel:
+      - get: govuk-infrastructure
+        resource: govuk-infrastructure-smokey
+        trigger: true
+      - get: govuk-terraform-outputs
+        passed:
+        - run-terraform
+        trigger: true
+      - get: release
+        resource: smokey
+        trigger: true
+    - task: update-task-definition
+      file: govuk-infrastructure/concourse/tasks/update-task-definition.yml
+      params:
+        APPLICATION: smokey
         GOVUK_ENVIRONMENT: test
     serial: true
     on_failure:
