@@ -21,3 +21,8 @@ variable "office_cidrs_list" {
   description = "List of GDS office CIDRs"
   type        = list
 }
+
+variable "concourse_cidrs_list" {
+  description = "List of GDS Concourse CIDRs"
+  type        = list
+}

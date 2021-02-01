@@ -34,7 +34,7 @@ variable "desired_count" {
   default     = 1
 }
 
-variable "office_cidrs_list" {
-  description = "List of GDS office CIDRs"
+variable "grafana_cidrs_allow_list" {
+  description = "List of CIDRs that can access Grafana"
   type        = list
 }
