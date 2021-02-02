@@ -3,7 +3,7 @@ image_resource:
   type: docker-image
   source:
     repository: governmentpaas/awscli
-    tag: latest
+    tag: latest # TODO - manage image versions ourselves instead of using latest
     username: ((docker_hub_username))
     password: ((docker_hub_authtoken))
 inputs:
