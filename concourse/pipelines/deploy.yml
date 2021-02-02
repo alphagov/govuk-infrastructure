@@ -273,12 +273,12 @@ jobs:
         inputs:
         - name: govuk-infrastructure
         - name: content-store-terraform-outputs
-          path: original-content-store-terraform-outputs
+          path: old-content-store-terraform-outputs
           optional: true
         outputs:
         - name: govuk-terraform-outputs
         - name: content-store-terraform-outputs
-          path: updated-content-store-terraform-outputs
+          path: new-content-store-terraform-outputs
         params:
           AWS_REGION: eu-west-1
           ASSUME_ROLE_ARN: 'arn:aws:iam::430354129336:role/govuk-concourse-deployer'
@@ -312,15 +312,15 @@ jobs:
 
             update_terraform_outputs() {
               app="$1"
-              terraform output -json "${app}" > "$root_dir/updated-${app}-terraform-outputs/${app}.json"
+              terraform output -json "${app}" > "$root_dir/new-${app}-terraform-outputs/${app}.json"
 
               if cmp \
-                "$root_dir/original-${app}-terraform-outputs/${app}.json" \
-                "$root_dir/updated-${app}-terraform-outputs/${app}.json"
+                "$root_dir/old-${app}-terraform-outputs/${app}.json" \
+                "$root_dir/new-${app}-terraform-outputs/${app}.json"
               then
-                # If the updated terraform outputs are the same as the originals
+                # If the new terraform outputs are the same as the old ones
                 # delete them to avoid unnecessarily creating a new resource version
-                rm "$root_dir/updated-${app}-terraform-outputs/${app}.json"
+                rm "$root_dir/new-${app}-terraform-outputs/${app}.json"
               fi
             }
 
