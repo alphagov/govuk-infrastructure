@@ -1,3 +1,4 @@
+# TODO: remove this once all the applications use update-task-definition-v2.yml
 platform: linux
 image_resource:
   type: docker-image

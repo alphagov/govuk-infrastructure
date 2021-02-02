@@ -20,8 +20,9 @@ variable "service_mesh" {
 }
 
 variable "mesh_name" {
-  type    = string
-  default = null
+  type        = string
+  default     = null
+  description = "The name of the AWS AppMesh mesh, for example: govuk or govuk-dev-1"
 }
 
 variable "service_discovery_namespace_id" {
@@ -63,13 +64,49 @@ variable "health_check_grace_period_seconds" {
   default     = 60
 }
 
-variable "execution_role_arn" {
-  description = "For use during bootstrapping"
-  type        = string
-}
-
 variable "desired_count" {
   description = "Desired count of Application instances"
   type        = number
   default     = 1
+}
+
+variable "ports" {
+  type        = list
+  default     = [80]
+  description = "The ports the application listens on. For most apps this can be left as the default (port 80)."
+}
+
+variable "environment_variables" {
+  type        = map
+  default     = {}
+  description = <<DESC
+  A map of environment variables. For example { RAILS_ENV = "PRODUCTION", ... }
+  Do not use this for secret values. Use secrets_from_arns to refer to secrets in SecretsManager instead.
+  DESC
+}
+
+variable "secrets_from_arns" {
+  type        = map
+  default     = {}
+  description = <<DESC
+  A map of secrets to AWS SecretsManager ARNs. For example { OAUTH_SECRET = "arn:aws:secretsmanager:eu-west-1:..." } # pragma: allowlist secret
+  DESC
+}
+variable "log_group" {
+  type = string
+}
+variable "aws_region" {
+  type = string
+}
+variable "cpu" {
+  type = string
+}
+variable "memory" {
+  type = string
+}
+variable "task_role_arn" {
+  type = string
+}
+variable "execution_role_arn" {
+  type = string
 }
