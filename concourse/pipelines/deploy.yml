@@ -310,7 +310,8 @@ jobs:
 
             terraform output -json > "$root_dir/govuk-terraform-outputs/govuk-terraform-outputs.json"
 
-            for app in content-store; do
+            update_terraform_outputs() {
+              app="$1"
               terraform output -json "${app}" > "$root_dir/updated-${app}-terraform-outputs/${app}.json"
 
               if cmp \
@@ -321,7 +322,9 @@ jobs:
                 # delete them to avoid unnecessarily creating a new resource version
                 rm "$root_dir/updated-${app}-terraform-outputs/${app}.json"
               fi
-            done
+            }
+
+            update_terraform_outputs content-store
 
     - put: govuk-terraform-outputs
       params:
