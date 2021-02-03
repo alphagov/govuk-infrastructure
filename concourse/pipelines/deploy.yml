@@ -149,17 +149,6 @@ resources:
       uri: https://github.com/alphagov/static
       tag_filter: release_*
 
-  - <<: *git-repo
-    name: govuk-infrastructure-static
-    source:
-      <<: *govuk-infrastructure-source
-      paths:
-        - concourse/tasks
-        - terraform/deployments/apps/static
-        # TODO replace these once static is refactored to use the new modules
-        - terraform/modules/task-definition
-        - terraform/modules/task-definitions/static
-
   - name: deploy-slack-channel
     type: slack-notification
     icon: bell-ring
@@ -207,6 +196,15 @@ resources:
       versioned_file: signon.json
       initial_version: "0"
 
+  - name: static-terraform-outputs
+    type: s3
+    icon: file
+    source:
+      bucket: ((readonly_private_bucket_name))
+      region_name: eu-west-2
+      versioned_file: static.json
+      initial_version: "0"
+
 groups:
   - name: all
     jobs:
@@ -225,7 +223,6 @@ groups:
       - deploy-signon
       - deploy-smokey
       - deploy-static
-      - deploy-draft-static
 
   - name: terraform
     jobs:
@@ -270,7 +267,6 @@ groups:
   - name: static
     jobs:
       - deploy-static
-      - deploy-draft-static
 
 jobs:
   - name: update-pipeline
@@ -289,6 +285,7 @@ jobs:
       - get: content-store-terraform-outputs
       - get: publisher-terraform-outputs
       - get: signon-terraform-outputs
+      - get: static-terraform-outputs
     - task: terraform-apply
       config:
         inputs:
@@ -302,6 +299,9 @@ jobs:
         - name: signon-terraform-outputs
           path: old-signon-terraform-outputs
           optional: true
+        - name: static-terraform-outputs
+          path: old-static-terraform-outputs
+          optional: true
         outputs:
         - name: govuk-terraform-outputs
         - name: content-store-terraform-outputs
@@ -310,6 +310,8 @@ jobs:
           path: new-publisher-terraform-outputs
         - name: signon-terraform-outputs
           path: new-signon-terraform-outputs
+        - name: static-terraform-outputs
+          path: new-static-terraform-outputs
         params:
           AWS_REGION: eu-west-1
           ASSUME_ROLE_ARN: 'arn:aws:iam::430354129336:role/govuk-concourse-deployer'
@@ -358,6 +360,7 @@ jobs:
             update_terraform_outputs content-store
             update_terraform_outputs publisher
             update_terraform_outputs signon
+            update_terraform_outputs static
 
     - put: govuk-terraform-outputs
       params:
@@ -375,6 +378,10 @@ jobs:
           put: signon-terraform-outputs
           params:
             file: signon-terraform-outputs/signon.json
+      - try:
+          put: static-terraform-outputs
+          params:
+            file: static-terraform-outputs/static.json
 
   - name: deploy-frontend
     plan:
@@ -774,52 +781,44 @@ jobs:
     plan:
     - in_parallel:
       - get: govuk-infrastructure
-        resource: govuk-infrastructure-static
+        resource: govuk-infrastructure-concourse-tasks
         trigger: true
-      - get: govuk-terraform-outputs
+      - get: app-terraform-outputs
+        resource: static-terraform-outputs
         passed:
         - run-terraform
         trigger: true
       - get: release
         resource: static
         trigger: true
-    - task: update-task-definition
-      file: govuk-infrastructure/concourse/tasks/update-task-definition.yml
-      params:
-        APPLICATION: static
-        GOVUK_ENVIRONMENT: test
-    - task: update-ecs-service
-      file: govuk-infrastructure/concourse/tasks/update-ecs-service.yml
-      params:
-        ECS_SERVICE: static
-        GOVUK_ENVIRONMENT: test
-    serial: true
-    on_failure:
-      <<: *notify-slack-failure
-
-  - name: deploy-draft-static
-    plan:
     - in_parallel:
-      - get: govuk-infrastructure
-        resource: govuk-infrastructure-static
-        trigger: true
-      - get: govuk-terraform-outputs
-        passed:
-        - run-terraform
-        trigger: true
-      - get: release
-        resource: static
-        trigger: true
-    - task: update-task-definition
-      file: govuk-infrastructure/concourse/tasks/update-task-definition.yml
-      params:
-        APPLICATION: draft-static
-        GOVUK_ENVIRONMENT: test
-    - task: update-ecs-service
-      file: govuk-infrastructure/concourse/tasks/update-ecs-service.yml
-      params:
-        ECS_SERVICE: draft-static
-        GOVUK_ENVIRONMENT: test
+      - task: update-draft-task-definition
+        file: govuk-infrastructure/concourse/tasks/update-task-definition-v2.yml
+        output_mapping:
+          task-definition-arn: draft-task-definition-arn
+        params:
+          APPLICATION: static
+          VARIANT: draft
+      - task: update-live-task-definition
+        file: govuk-infrastructure/concourse/tasks/update-task-definition-v2.yml
+        output_mapping:
+          task-definition-arn: live-task-definition-arn
+        params:
+          APPLICATION: static
+          VARIANT: live
+    - in_parallel:
+      - task: update-draft-ecs-service
+        file: govuk-infrastructure/concourse/tasks/update-ecs-service-v2.yml
+        input_mapping:
+          task-definition-arn: draft-task-definition-arn
+        params:
+          ECS_SERVICE: draft-static
+      - task: update-live-ecs-service
+        file: govuk-infrastructure/concourse/tasks/update-ecs-service-v2.yml
+        input_mapping:
+          task-definition-arn: live-task-definition-arn
+        params:
+          ECS_SERVICE: static
     serial: true
     on_failure:
       <<: *notify-slack-failure

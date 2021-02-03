@@ -86,3 +86,16 @@ output "signon" {
     }
   }
 }
+
+output "static" {
+  value = {
+    draft = {
+      task_definition_cli_input_json = module.draft_static.cli_input_json,
+      network_config                 = module.draft_static.network_config
+    },
+    live = {
+      task_definition_cli_input_json = module.static.cli_input_json,
+      network_config                 = module.static.network_config
+    },
+  }
+}
