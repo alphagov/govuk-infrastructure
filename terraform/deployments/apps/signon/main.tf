@@ -26,7 +26,7 @@ module "task_definition" {
   source                           = "../../../modules/task-definitions/signon"
   image_tag                        = var.image_tag
   execution_role_arn               = data.aws_iam_role.execution.arn
-  govuk_app_domain_external        = var.app_domain
+  govuk_app_domain_external        = var.external_app_domain
   govuk_website_root               = local.website_root
   mesh_name                        = var.mesh_name
   redis_host                       = var.redis_host

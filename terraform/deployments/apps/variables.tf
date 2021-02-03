@@ -23,12 +23,12 @@ variable "mesh_domain" {
 # Environment
 #--------------------------------------------------------------
 
-variable "app_domain" {
+variable "external_app_domain" {
   type        = string
-  description = "Example: staging.publishing.service.gov.uk"
+  description = "Example: staging.govuk.digital"
 }
 
-variable "app_domain_internal" {
+variable "internal_app_domain" {
   type        = string
   description = "Example: integration.govuk-internal.digital"
 }

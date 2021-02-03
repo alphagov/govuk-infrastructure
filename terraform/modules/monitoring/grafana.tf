@@ -15,8 +15,7 @@ module "grafana_app" {
 
   load_balancers = [{
     target_group_arn = module.grafana_public_alb.target_group_arn
-    container_name   = local.service_name
-    container_port   = 3000
+    container_port = 3000
   }]
   environment_variables = {} # TODO
   secrets_from_arns     = {} # TODO
@@ -35,8 +34,8 @@ module "grafana_public_alb" {
   vpc_id                    = var.vpc_id
   dns_a_record_name         = "${local.service_name}-ecs"
   public_subnets            = var.public_subnets
-  app_domain                = var.public_lb_domain_name # TODO: Change to app_domain
-  public_lb_domain_name     = var.public_lb_domain_name
+  external_app_domain       = var.external_app_domain
+  publishing_service_domain = var.publishing_service_domain
   workspace_suffix          = "govuk" # TODO: Changeme
   service_security_group_id = module.grafana_app.security_group_id
   health_check_path         = "/api/health"

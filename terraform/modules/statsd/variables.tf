@@ -6,7 +6,7 @@ variable "execution_role_arn" {
   type = string
 }
 
-variable "internal_domain_name" {
+variable "internal_app_domain" {
   description = "Domain in which to create DNS records for private resources. For example, test.govuk-internal.digital"
   type        = string
 }

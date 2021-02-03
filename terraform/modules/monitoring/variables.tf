@@ -1,3 +1,8 @@
+variable "external_app_domain" {
+  description = "Domain in which to create DNS records for the app's Internet-facing load balancer. For example, staging.govuk.digital"
+  type        = string
+}
+
 variable "ecs_default_capacity_provider" {
   description = "Set this to FARGATE_SPOT to use spot instances in the ECS cluster by default. If unset, the cluster will use on-demand (regular) instances by default. Tasks can still override the default capacity provider in either case."
   type        = string
@@ -18,9 +23,9 @@ variable "public_subnets" {
   type        = list
 }
 
-variable "public_lb_domain_name" {
-  description = "Domain in which to create DNS records for the app's Internet-facing load balancer. For example, staging.govuk.digital"
+variable "publishing_service_domain" {
   type        = string
+  description = "e.g. test.publishing.service.gov.uk"
 }
 
 variable "govuk_management_access_sg_id" {

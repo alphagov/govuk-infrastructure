@@ -30,7 +30,7 @@ module "task_definition" {
   execution_role_arn               = data.aws_iam_role.execution.arn
   mongodb_url                      = var.router_mongodb_url
   service_discovery_namespace_name = local.service_discovery_namespace_name
-  govuk_app_domain_external        = var.app_domain
+  govuk_app_domain_external        = var.external_app_domain
   router_urls                      = local.router_urls
   task_role_arn                    = data.aws_iam_role.task.arn
   sentry_environment               = var.sentry_environment

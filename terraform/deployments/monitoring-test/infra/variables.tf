@@ -2,7 +2,7 @@ variable "mesh_name" {
   type = string
 }
 
-variable "public_lb_domain_name" {
+variable "external_app_domain" {
   type = string
 }
 
@@ -25,4 +25,9 @@ variable "office_cidrs_list" {
 variable "concourse_cidrs_list" {
   description = "List of GDS Concourse CIDRs"
   type        = list
+}
+
+variable "publishing_service_domain" {
+  type        = string
+  description = "e.g. test.publishing.service.gov.uk"
 }
