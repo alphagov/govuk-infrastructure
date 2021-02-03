@@ -12,6 +12,7 @@ terraform {
 }
 
 locals {
+  container_name          = "app"
   subdomain               = var.service_name
   container_services      = var.custom_container_services == null ? [{ container_service = "${local.subdomain}", port = 80, protocol = "http" }] : var.custom_container_services
   service_security_groups = concat([aws_security_group.service.id], var.extra_security_groups)
@@ -31,7 +32,7 @@ resource "aws_ecs_service" "service" {
     iterator = lb
     content {
       target_group_arn = lb.value["target_group_arn"]
-      container_name   = lb.value["container_name"]
+      container_name   = local.container_name
       container_port   = lb.value["container_port"]
     }
   }
@@ -45,7 +46,7 @@ resource "aws_ecs_service" "service" {
     for_each = var.service_mesh ? [1] : []
     content {
       registry_arn   = module.service_mesh_node[0].discovery_service_arn
-      container_name = var.service_name
+      container_name = local.container_name
     }
   }
 

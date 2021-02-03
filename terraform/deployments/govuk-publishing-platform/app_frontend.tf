@@ -11,7 +11,6 @@ module "frontend" {
   extra_security_groups            = [local.govuk_management_access_security_group, aws_security_group.mesh_ecs_service.id]
   load_balancers = [{
     target_group_arn = module.frontend_public_alb.target_group_arn
-    container_name   = "frontend"
     container_port   = 80
   }]
   environment_variables = {} # TODO
@@ -52,7 +51,6 @@ module "draft_frontend" {
   extra_security_groups            = [local.govuk_management_access_security_group, aws_security_group.mesh_ecs_service.id]
   load_balancers = [{
     target_group_arn = module.draft_frontend_public_alb.target_group_arn
-    container_name   = "draft-frontend"
     container_port   = 80
   }]
   environment_variables = {} # TODO

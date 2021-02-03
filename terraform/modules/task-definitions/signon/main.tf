@@ -50,7 +50,7 @@ module "task_definition" {
 
   container_definitions = [
     {
-      "name" : "signon",
+      "name" : "app",
       "image" : "govuk/signon:${var.image_tag}",
       "essential" : true,
       "environment" : [

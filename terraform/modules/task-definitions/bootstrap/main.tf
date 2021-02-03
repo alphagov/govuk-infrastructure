@@ -12,7 +12,7 @@ resource "aws_ecs_task_definition" "bootstrap" {
   execution_role_arn       = var.execution_role_arn
   container_definitions = jsonencode([
     {
-      "name" : var.service_name,
+      "name" : "app",
       "image" : "840364872350.dkr.ecr.eu-west-1.amazonaws.com/aws-appmesh-envoy:v1.15.0.0-prod",
       "user" : "1337",
       "essential" : true,

@@ -3,7 +3,7 @@ locals {
   user_id = "1337"
 
   app_container_definition = {
-    name        = var.service_name,
+    name        = "app",
     essential   = true,
     environment = [for key, value in var.environment_variables : { name : key, value : tostring(value) }],
     dependsOn   = [{ containerName : "envoy", condition : "START" }],

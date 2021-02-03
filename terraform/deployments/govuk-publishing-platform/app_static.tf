@@ -11,7 +11,6 @@ module "static" {
   extra_security_groups            = [local.govuk_management_access_security_group, aws_security_group.mesh_ecs_service.id]
   load_balancers = [{
     target_group_arn = module.static_public_alb.target_group_arn
-    container_name   = "static"
     container_port   = 80
   }]
   environment_variables = {} # TODO
@@ -37,7 +36,6 @@ module "draft_static" {
   extra_security_groups            = [local.govuk_management_access_security_group, aws_security_group.mesh_ecs_service.id]
   load_balancers = [{
     target_group_arn = module.draft_static_public_alb.target_group_arn
-    container_name   = "draft-static"
     container_port   = 80
   }]
   environment_variables = {} # TODO
