@@ -35,7 +35,7 @@ module "task_definition" {
 
   container_definitions = [
     {
-      "name" : var.service_name,
+      "name" : "app",
       "image" : "govuk/router:${var.image_tag}",
       "essential" : true,
       "environment" : [

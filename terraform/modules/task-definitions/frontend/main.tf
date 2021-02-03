@@ -41,7 +41,7 @@ module "task_definition" {
   task_role_arn      = var.task_role_arn
   container_definitions = [
     {
-      "name" : var.service_name,
+      "name" : "app",
       "image" : "govuk/frontend:${var.image_tag}",
       "essential" : true,
       "environment" : [

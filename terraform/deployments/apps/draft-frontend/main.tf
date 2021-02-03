@@ -37,5 +37,5 @@ module "task_definition" {
   statsd_host                      = local.statsd_host
   task_role_arn                    = data.aws_iam_role.task.arn
   assume_role_arn                  = var.assume_role_arn
-  govuk_app_domain_external        = var.app_domain
+  govuk_app_domain_external        = var.external_app_domain
 }

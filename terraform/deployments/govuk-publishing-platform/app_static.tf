@@ -11,7 +11,6 @@ module "static" {
   extra_security_groups            = [local.govuk_management_access_security_group, aws_security_group.mesh_ecs_service.id]
   load_balancers = [{
     target_group_arn = module.static_public_alb.target_group_arn
-    container_name   = "static"
     container_port   = 80
   }]
   environment_variables = {} # TODO
@@ -37,7 +36,6 @@ module "draft_static" {
   extra_security_groups            = [local.govuk_management_access_security_group, aws_security_group.mesh_ecs_service.id]
   load_balancers = [{
     target_group_arn = module.draft_static_public_alb.target_group_arn
-    container_name   = "draft-static"
     container_port   = 80
   }]
   environment_variables = {} # TODO
@@ -61,8 +59,8 @@ module "static_public_alb" {
   vpc_id                    = local.vpc_id
   dns_a_record_name         = "static-ecs"
   public_subnets            = local.public_subnets
-  app_domain                = var.public_lb_domain_name # TODO: Change to app_domain
-  public_lb_domain_name     = var.public_lb_domain_name
+  external_app_domain       = var.external_app_domain
+  publishing_service_domain = var.publishing_service_domain
   workspace_suffix          = "govuk" # TODO: Changeme
   service_security_group_id = module.static.security_group_id
   external_cidrs_list       = var.office_cidrs_list
@@ -76,8 +74,8 @@ module "draft_static_public_alb" {
   vpc_id                    = local.vpc_id
   dns_a_record_name         = "draft-static-ecs"
   public_subnets            = local.public_subnets
-  app_domain                = var.public_lb_domain_name # TODO: Change to app_domain
-  public_lb_domain_name     = var.public_lb_domain_name
+  external_app_domain       = var.external_app_domain
+  publishing_service_domain = var.publishing_service_domain
   workspace_suffix          = "govuk" # TODO: Changeme
   service_security_group_id = module.draft_static.security_group_id
   external_cidrs_list       = var.office_cidrs_list

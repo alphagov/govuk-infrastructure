@@ -31,7 +31,7 @@ module "task_definition" {
   db_name                          = "draft_router"
   mongodb_url                      = var.draft_router_mongodb_url
   service_discovery_namespace_name = local.service_discovery_namespace_name
-  govuk_app_domain_external        = var.app_domain
+  govuk_app_domain_external        = var.external_app_domain
   task_role_arn                    = data.aws_iam_role.task.arn
   sentry_environment               = var.sentry_environment
   assume_role_arn                  = var.assume_role_arn

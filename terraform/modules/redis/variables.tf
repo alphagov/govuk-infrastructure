@@ -3,7 +3,7 @@ variable "cluster_name" {
   default = "shared"
 }
 
-variable "internal_domain_name" {
+variable "internal_app_domain" {
   description = "Domain in which to create DNS records for private resources. For example, test.govuk-internal.digital"
   type        = string
   default     = "test.govuk-internal.digital"

@@ -53,8 +53,9 @@ data "terraform_remote_state" "govuk" {
 }
 
 module "monitoring" {
-  source                = "../../../modules/monitoring"
-  public_lb_domain_name = var.public_lb_domain_name
+  source                    = "../../../modules/monitoring"
+  external_app_domain       = var.external_app_domain
+  publishing_service_domain = var.publishing_service_domain
 
   vpc_id                        = data.terraform_remote_state.infra_networking.outputs.vpc_id
   private_subnets               = data.terraform_remote_state.infra_networking.outputs.private_subnet_ids

@@ -7,6 +7,12 @@ variable "cluster_id" {
   type        = string
 }
 
+variable "command" {
+  type        = list
+  description = "The command to pass to the application container"
+  default     = ["foreman", "run", "web"]
+}
+
 variable "subnets" {
   description = "IDs of the subnets where the ECS task will run."
   type        = list

@@ -1,25 +1,39 @@
-#--------------------------------------------------------------
-# Network
-#--------------------------------------------------------------
+variable "external_app_domain" {
+  type        = string
+  description = "e.g. test.govuk.digital"
+}
 
 variable "mesh_name" {
   type = string
 }
 
 variable "mesh_domain" {
-  type = string
+  type        = string
+  description = "e.g. mesh.govuk-internal.digital"
+}
+
+variable "redis_host" {
+  type        = string
+  description = "Shared Redis FQDN"
+}
+
+variable "redis_port" {
+  type    = string
+  default = 6379
 }
 
 variable "ecs_default_capacity_provider" {
   type = string
 }
 
-variable "public_lb_domain_name" {
-  type = string
+variable "publishing_service_domain" {
+  type        = string
+  description = "e.g. test.publishing.service.gov.uk"
 }
 
-variable "internal_domain_name" {
-  type = string
+variable "internal_app_domain" {
+  type        = string
+  description = "e.g. test.govuk-internal.digital"
 }
 
 variable "govuk_aws_state_bucket" {

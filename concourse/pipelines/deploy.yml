@@ -51,17 +51,6 @@ resources:
       tag_filter: release_*
 
   - <<: *git-repo
-    name: govuk-infrastructure-publisher
-    source:
-      <<: *govuk-infrastructure-source
-      paths:
-        - concourse/tasks
-        - terraform/deployments/apps/publisher*
-        # TODO replace these once publisher is refactored to use the new modules
-        - terraform/modules/task-definition
-        - terraform/modules/task-definitions/publisher
-
-  - <<: *git-repo
     name: publishing-api
     source:
       branch: master
@@ -211,6 +200,15 @@ resources:
       versioned_file: content-store.json
       initial_version: "0"
 
+  - name: publisher-terraform-outputs
+    type: s3
+    icon: file
+    source:
+      bucket: ((readonly_private_bucket_name))
+      region_name: eu-west-2
+      versioned_file: publisher.json
+      initial_version: "0"
+
 groups:
   - name: all
     jobs:
@@ -287,9 +285,11 @@ jobs:
   - name: run-terraform
     serial: true
     plan:
-    - get: govuk-infrastructure
-      trigger: true
-    - get: content-store-terraform-outputs
+    - in_parallel:
+      - get: govuk-infrastructure
+        trigger: true
+      - get: content-store-terraform-outputs
+      - get: publisher-terraform-outputs
     - task: terraform-apply
       config:
         inputs:
@@ -297,10 +297,15 @@ jobs:
         - name: content-store-terraform-outputs
           path: old-content-store-terraform-outputs
           optional: true
+        - name: publisher-terraform-outputs
+          path: old-publisher-terraform-outputs
+          optional: true
         outputs:
         - name: govuk-terraform-outputs
         - name: content-store-terraform-outputs
           path: new-content-store-terraform-outputs
+        - name: publisher-terraform-outputs
+          path: new-publisher-terraform-outputs
         params:
           AWS_REGION: eu-west-1
           ASSUME_ROLE_ARN: 'arn:aws:iam::430354129336:role/govuk-concourse-deployer'
@@ -347,14 +352,20 @@ jobs:
             }
 
             update_terraform_outputs content-store
+            update_terraform_outputs publisher
 
     - put: govuk-terraform-outputs
       params:
         file: govuk-terraform-outputs/govuk-terraform-outputs.json
-    - try:
-        put: content-store-terraform-outputs
-        params:
-          file: content-store-terraform-outputs/content-store.json
+    - in_parallel:
+      - try:
+          put: content-store-terraform-outputs
+          params:
+            file: content-store-terraform-outputs/content-store.json
+      - try:
+          put: publisher-terraform-outputs
+          params:
+            file: publisher-terraform-outputs/publisher.json
 
   - name: deploy-frontend
     plan:
@@ -447,44 +458,54 @@ jobs:
     plan:
     - in_parallel:
       - get: govuk-infrastructure
-        resource: govuk-infrastructure-publisher
+        resource: govuk-infrastructure-concourse-tasks
         trigger: true
-      - get: govuk-terraform-outputs
+      - get: app-terraform-outputs
+        resource: publisher-terraform-outputs
         passed:
         - run-terraform
         trigger: true
       - get: release
         resource: publisher
         trigger: true
-    - task: update-web-task-definition
-      file: govuk-infrastructure/concourse/tasks/update-task-definition.yml
-      params:
-        APPLICATION: publisher-web
-        GOVUK_ENVIRONMENT: test
-    - task: update-worker-task-definition
-      file: govuk-infrastructure/concourse/tasks/update-task-definition.yml
-      params:
-        APPLICATION: publisher-worker
-        GOVUK_ENVIRONMENT: test
+    - in_parallel:
+      - task: update-web-task-definition
+        file: govuk-infrastructure/concourse/tasks/update-task-definition-v2.yml
+        output_mapping:
+          task-definition-arn: web-task-definition-arn
+        params:
+          APPLICATION: publisher
+          VARIANT: web
+          GOVUK_ENVIRONMENT: test
+      - task: update-worker-task-definition
+        file: govuk-infrastructure/concourse/tasks/update-task-definition-v2.yml
+        output_mapping:
+          task-definition-arn: worker-task-definition-arn
+        params:
+          APPLICATION: publisher
+          VARIANT: worker
+          GOVUK_ENVIRONMENT: test
     - task: run-db-migrations
       file: govuk-infrastructure/concourse/tasks/run-task.yml
+      input_mapping:
+        task-definition-arn: web-task-definition-arn
       params:
-        APPLICATION: publisher-web
+        APPLICATION: publisher
         COMMAND: "bundle exec rails db:migrate"
-        TASK_DEFINITION: web_task_definition
+        VARIANT: web
     - in_parallel:
       - task: update-web-ecs-service
-        file: govuk-infrastructure/concourse/tasks/update-ecs-service.yml
+        file: govuk-infrastructure/concourse/tasks/update-ecs-service-v2.yml
+        input_mapping:
+          task-definition-arn: web-task-definition-arn
         params:
           ECS_SERVICE: publisher-web
-          GOVUK_ENVIRONMENT: test
-          TASK_DEFINITION: web_task_definition
       - task: update-worker-ecs-service
-        file: govuk-infrastructure/concourse/tasks/update-ecs-service.yml
+        file: govuk-infrastructure/concourse/tasks/update-ecs-service-v2.yml
+        input_mapping:
+          task-definition-arn: worker-task-definition-arn
         params:
           ECS_SERVICE: publisher-worker
-          GOVUK_ENVIRONMENT: test
-          TASK_DEFINITION: worker_task_definition
     serial: true
     on_failure:
       <<: *notify-slack-failure

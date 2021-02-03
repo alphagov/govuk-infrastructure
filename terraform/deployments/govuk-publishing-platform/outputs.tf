@@ -2,11 +2,6 @@ output "private_subnets" {
   value = data.terraform_remote_state.infra_networking.outputs.private_subnet_ids
 }
 
-output "publisher-web_security_groups" {
-  value       = module.publisher_web.security_groups
-  description = "Used by ECS RunTask to run short-lived tasks with the same SG permissions as the publisher ECS Service."
-}
-
 output "frontend_security_groups" {
   value       = module.frontend.security_groups
   description = "Used by ECS RunTask to run short-lived tasks with the same SG permissions as the frontend ECS Service."
@@ -21,23 +16,26 @@ output "content-store" {
   value = {
     draft = {
       task_definition_cli_input_json = module.draft_content_store.cli_input_json,
-      security_groups                = module.draft_content_store.security_groups,
+      network_config                 = module.draft_content_store.network_config
     },
     live = {
       task_definition_cli_input_json = module.content_store.cli_input_json,
-      security_groups                = module.content_store.security_groups,
+      network_config                 = module.content_store.network_config
     },
   }
 }
 
-output "content-store_security_groups" {
-  value       = module.content_store.security_groups
-  description = "Used by ECS RunTask to run short-lived tasks with the same SG permissions as the content-store ECS Service."
-}
-
-output "draft-content-store_security_groups" {
-  value       = module.draft_content_store.security_groups
-  description = "Used by ECS RunTask to run short-lived tasks with the same SG permissions as the draft-content-store ECS Service."
+output "publisher" {
+  value = {
+    web = {
+      task_definition_cli_input_json = module.publisher_web.cli_input_json,
+      network_config                 = module.publisher_web.network_config
+    },
+    worker = {
+      task_definition_cli_input_json = module.publisher_worker.cli_input_json,
+      network_config                 = module.publisher_worker.network_config
+    },
+  }
 }
 
 output "smokey_security_groups" {
@@ -57,16 +55,16 @@ output "mesh_domain" {
   value = var.mesh_domain
 }
 
-output "app_domain" {
-  value = var.public_lb_domain_name
+output "external_app_domain" {
+  value = var.external_app_domain
 }
 
-output "app_domain_internal" {
-  value = var.internal_domain_name
+output "internal_app_domain" {
+  value = var.internal_app_domain
 }
 
 output "govuk_website_root" {
-  value = "https://frontend.${var.public_lb_domain_name}" # TODO: Change back to www once router is up
+  value = "https://frontend.${var.external_app_domain}" # TODO: Change back to www once router is up
 }
 
 output "fargate_execution_iam_role_arn" {

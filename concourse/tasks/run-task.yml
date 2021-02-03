@@ -9,13 +9,14 @@ image_resource:
 inputs:
   - name: govuk-infrastructure
     path: src
-  - name: terraform-outputs
+  - name: app-terraform-outputs
+  - name: task-definition-arn
 params:
   AWS_REGION: eu-west-1
   ASSUME_ROLE_ARN: 'arn:aws:iam::430354129336:role/govuk-concourse-deployer'
   APPLICATION:
   CLUSTER: task_runner
   COMMAND:
-  TASK_DEFINITION: task_definition_arn
+  VARIANT:
 run:
   path: ./src/concourse/tasks/run-task.sh

@@ -7,5 +7,5 @@ output "security_group_id" {
 }
 
 output "fqdn" {
-  value = "${aws_route53_record.public_alb.name}.${var.public_lb_domain_name}"
+  value = "${aws_route53_record.public_alb.name}.${var.publishing_service_domain}"
 }

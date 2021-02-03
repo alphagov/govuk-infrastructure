@@ -71,7 +71,7 @@ module "task_definition" {
   container_definitions = [
     {
       "command" : var.command,
-      "name" : var.service_name,
+      "name" : "app",
       "image" : "govuk/${local.app_name}:${var.image_tag}",
       "essential" : true,
       "environment" : [

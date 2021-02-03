@@ -1,12 +1,12 @@
 # TODO: use a single, ACM-managed cert with both domains on. There is already
 # such a cert in integration/staging/prod (but it needs defining in Terraform).
 data "aws_acm_certificate" "public_lb_default" {
-  domain   = "*.${var.public_lb_domain_name}"
+  domain   = "*.${var.publishing_service_domain}"
   statuses = ["ISSUED"]
 }
 
 data "aws_acm_certificate" "public_lb_alternate" {
-  domain   = "*.${var.app_domain}"
+  domain   = "*.${var.external_app_domain}"
   statuses = ["ISSUED"]
 }
 
@@ -49,7 +49,7 @@ resource "aws_lb_listener" "public" {
 }
 
 data "aws_route53_zone" "public" {
-  name = var.public_lb_domain_name
+  name = var.external_app_domain
 }
 
 resource "aws_route53_record" "public_alb" {

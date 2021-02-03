@@ -25,8 +25,8 @@ provider "aws" {
 module "task_definition" {
   source                           = "../../../modules/task-definitions/publishing-api"
   command                          = ["foreman", "run", "worker"]
-  govuk_app_domain_external        = var.app_domain
-  govuk_app_domain_internal        = var.app_domain_internal
+  govuk_app_domain_external        = var.external_app_domain
+  govuk_app_domain_internal        = var.internal_app_domain
   govuk_website_root               = local.website_root
   image_tag                        = "bilbof_dockerfile-fix" # TODO: Pinned due to content-schemas issue
   mesh_name                        = var.mesh_name
