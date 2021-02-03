@@ -66,3 +66,21 @@ data "aws_secretsmanager_secret" "publisher_publishing_api_bearer_token" {
 data "aws_secretsmanager_secret" "publisher_secret_key_base" {
   name = "publisher_app-SECRET_KEY_BASE" # pragma: allowlist secret
 }
+
+# Signon app
+
+data "aws_secretsmanager_secret" "signon_devise_pepper" {
+  name = "signon_app-DEVISE_PEPPER"
+}
+
+data "aws_secretsmanager_secret" "signon_devise_secret_key" {
+  name = "signon_app-DEVISE_SECRET_KEY" # pragma: allowlist secret
+}
+
+data "aws_secretsmanager_secret" "signon_secret_key_base" {
+  name = "signon_app-SECRET_KEY_BASE" # pragma: allowlist secret
+}
+
+data "aws_secretsmanager_secret" "signon_database_url" {
+  name = "signon_app-DATABASE_URL"
+}

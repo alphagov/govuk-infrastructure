@@ -7,11 +7,6 @@ output "frontend_security_groups" {
   description = "Used by ECS RunTask to run short-lived tasks with the same SG permissions as the frontend ECS Service."
 }
 
-output "signon_security_groups" {
-  value       = module.signon.security_groups
-  description = "Used by ECS RunTask to run short-lived tasks with the same SG permissions as the signon ECS Service."
-}
-
 output "content-store" {
   value = {
     draft = {
@@ -81,4 +76,13 @@ output "redis_host" {
 
 output "redis_port" {
   value = module.shared_redis_cluster.redis_port
+}
+
+output "signon" {
+  value = {
+    web = {
+      task_definition_cli_input_json = module.signon.cli_input_json,
+      network_config                 = module.signon.network_config
+    }
+  }
 }
