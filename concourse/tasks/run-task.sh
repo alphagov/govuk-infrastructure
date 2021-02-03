@@ -1,6 +1,15 @@
 #!/usr/bin/env sh
 # This script runs an arbitrary task using an existing task defintion in a
 # new container, using ECS RunTask.
+# This script expects the task-definition-arn/task-definition-arn file to
+# contain the Task Definition ARN to use for the task (acquired e.g. via a
+# terraform apply, or an ECS DescribeService API call).
+# The script also requires a directory app-terraform-outputs as an input.
+# app-terraform-outputs contains the JSON file such as publisher.json output
+# from running TF apply against govuk-publishing-platform. It provides the
+# network config used by the task.
+# Finally, as a *third* input, the environment variables provide a) extra
+# configuration for the task and b) configuration for the network config.
 
 set -eu
 
@@ -12,7 +21,7 @@ root_dir=$(pwd)
 : "${APPLICATION:?APPLICATION not set}"
 : "${COMMAND:?COMMAND not set}"
 : "${CLUSTER:?COMMAND not set}"
-: "${TASK_DEFINITION:?TASK_DEFINITION not set}"
+: "${VARIANT:?COMMAND not set}"
 
 mkdir -p ~/.aws
 
@@ -23,8 +32,8 @@ credential_source = Ec2InstanceMetadata
 region = $AWS_REGION
 EOF
 
-task_definition_arn=$(jq -r ".${TASK_DEFINITION}.value" terraform-outputs/${APPLICATION}-terraform-outputs.json)
-network_config=$(jq -r ".task_network_config.value" terraform-outputs/${APPLICATION}-terraform-outputs.json)
+task_definition_arn="$(cat "task-definition-arn/task-definition-arn")"
+network_config=$(jq -r ".${VARIANT}.network_config" "app-terraform-outputs/${APPLICATION}.json")
 
 echo "Starting task..."
 
@@ -34,7 +43,7 @@ task=$(aws ecs run-task --cluster $CLUSTER \
 --started-by "Concourse" \
 --overrides '{
   "containerOverrides": [{
-    "name": "'"$APPLICATION"'",
+    "name": "app",
     "command": ["/bin/bash", "-c", "'"$COMMAND"'"]
   }]
 }')
