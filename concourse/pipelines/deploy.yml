@@ -126,17 +126,6 @@ resources:
       tag_filter: release_*
 
   - <<: *git-repo
-    name: govuk-infrastructure-signon
-    source:
-      <<: *govuk-infrastructure-source
-      paths:
-        - concourse/tasks
-        - terraform/deployments/apps/signon
-        # TODO replace these once signon is refactored to use the new modules
-        - terraform/modules/task-definition
-        - terraform/modules/task-definitions/signon
-
-  - <<: *git-repo
     name: smokey
     source:
       branch: main
@@ -207,6 +196,15 @@ resources:
       bucket: ((readonly_private_bucket_name))
       region_name: eu-west-2
       versioned_file: publisher.json
+      initial_version: "0"
+
+  - name: signon-terraform-outputs
+    type: s3
+    icon: file
+    source:
+      bucket: ((readonly_private_bucket_name))
+      region_name: eu-west-2
+      versioned_file: signon.json
       initial_version: "0"
 
 groups:
@@ -290,6 +288,7 @@ jobs:
         trigger: true
       - get: content-store-terraform-outputs
       - get: publisher-terraform-outputs
+      - get: signon-terraform-outputs
     - task: terraform-apply
       config:
         inputs:
@@ -300,12 +299,17 @@ jobs:
         - name: publisher-terraform-outputs
           path: old-publisher-terraform-outputs
           optional: true
+        - name: signon-terraform-outputs
+          path: old-signon-terraform-outputs
+          optional: true
         outputs:
         - name: govuk-terraform-outputs
         - name: content-store-terraform-outputs
           path: new-content-store-terraform-outputs
         - name: publisher-terraform-outputs
           path: new-publisher-terraform-outputs
+        - name: signon-terraform-outputs
+          path: new-signon-terraform-outputs
         params:
           AWS_REGION: eu-west-1
           ASSUME_ROLE_ARN: 'arn:aws:iam::430354129336:role/govuk-concourse-deployer'
@@ -353,6 +357,7 @@ jobs:
 
             update_terraform_outputs content-store
             update_terraform_outputs publisher
+            update_terraform_outputs signon
 
     - put: govuk-terraform-outputs
       params:
@@ -366,6 +371,10 @@ jobs:
           put: publisher-terraform-outputs
           params:
             file: publisher-terraform-outputs/publisher.json
+      - try:
+          put: signon-terraform-outputs
+          params:
+            file: signon-terraform-outputs/signon.json
 
   - name: deploy-frontend
     plan:
@@ -710,9 +719,10 @@ jobs:
     plan:
     - in_parallel:
       - get: govuk-infrastructure
-        resource: govuk-infrastructure-signon
+        resource: govuk-infrastructure-concourse-tasks
         trigger: true
-      - get: govuk-terraform-outputs
+      - get: app-terraform-outputs
+        resource: signon-terraform-outputs
         passed:
         - run-terraform
         trigger: true
@@ -720,12 +730,17 @@ jobs:
         resource: signon
         trigger: true
     - task: update-task-definition
-      file: govuk-infrastructure/concourse/tasks/update-task-definition.yml
+      file: govuk-infrastructure/concourse/tasks/update-task-definition-v2.yml
       params:
         APPLICATION: signon
         GOVUK_ENVIRONMENT: test
+        VARIANT: web
+      output_mapping:
+        task-definition-arn: task-definition-arn
     - task: update-ecs-service
-      file: govuk-infrastructure/concourse/tasks/update-ecs-service.yml
+      file: govuk-infrastructure/concourse/tasks/update-ecs-service-v2.yml
+      input_mapping:
+        task-definition-arn: task-definition-arn
       params:
         ECS_SERVICE: signon
         GOVUK_ENVIRONMENT: test
