@@ -4,6 +4,7 @@ locals {
 
   app_container_definition = {
     name        = "app",
+    command     = var.command,
     essential   = true,
     environment = [for key, value in var.environment_variables : { name : key, value : tostring(value) }],
     dependsOn   = [{ containerName : "envoy", condition : "START" }],
