@@ -16,11 +16,15 @@ locals {
       SENTRY_DSN = data.aws_secretsmanager_secret.sentry_dsn.arn,
     }
     asset_host           = "https://frontend.${var.external_app_domain}",
+    asset_root_url       = "https://assets.${var.publishing_service_domain}",
+    content_store_uri    = "http://content-store.${var.mesh_domain}",
     draft_origin_uri     = "https://draft-frontend.${var.external_app_domain}",
     publishing_api_uri   = "http://publishing-api-web.${var.mesh_domain}",
+    redis_url            = "redis://${var.redis_host}:${var.redis_port}"
     router_api_uri       = "http://router-api.${var.mesh_domain}",
     draft_router_api_uri = "http://draft-router-api.${var.mesh_domain}",
     signon_uri           = "https://signon-ecs.${var.external_app_domain}",
+    static_uri           = "https://static.${var.mesh_domain}"
     website_root         = "https://frontend.${var.external_app_domain}",
   }
 }
