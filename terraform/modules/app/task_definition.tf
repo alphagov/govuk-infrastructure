@@ -2,50 +2,6 @@ locals {
   # 1337 is an arbitrary choice copied from the examples in the envoy user guide.
   user_id = "1337"
 
-  app_container_definition = {
-    name        = "app",
-    command     = var.command,
-    essential   = true,
-    environment = [for key, value in var.environment_variables : { name : key, value : tostring(value) }],
-    dependsOn   = [{ containerName : "envoy", condition : "START" }],
-    logConfiguration = {
-      logDriver = "awslogs",
-      options = {
-        awslogs-create-group  = "true", # TODO create the log group in terraform so we can configure the retention policy
-        awslogs-group         = var.log_group,
-        awslogs-region        = var.aws_region,
-        awslogs-stream-prefix = var.service_name,
-      }
-    },
-    mountPoints  = [],
-    portMappings = [for port in var.ports : { containerPort = port, hostPort = port, protocol = "tcp" }],
-    secrets      = [for key, value in var.secrets_from_arns : { name = key, valueFrom = value }]
-  }
-
-  # See the user guide at
-  # https://docs.aws.amazon.com/app-mesh/latest/userguide/app-mesh-ug.pdf
-  # for more details on configuring Envoy in AppMesh
-  envoy_container_definition = {
-    name = "envoy",
-    # TODO: don't hardcode the version; track stable Envoy
-    # TODO: control when Envoy updates happen (but still needs to be automatic)
-    image = "840364872350.dkr.ecr.${var.aws_region}.amazonaws.com/aws-appmesh-envoy:v1.15.1.0-prod",
-    user  = local.user_id,
-    environment = [
-      { name = "APPMESH_RESOURCE_ARN", value = "mesh/${var.mesh_name}/virtualNode/${var.service_name}" },
-    ],
-    essential = true,
-    logConfiguration = {
-      logDriver = "awslogs",
-      options = {
-        awslogs-create-group  = "true",
-        awslogs-group         = var.log_group,
-        awslogs-region        = var.aws_region,
-        awslogs-stream-prefix = "awslogs-${var.service_name}-envoy"
-      }
-    }
-  }
-
   envoy_proxy_properties = {
     AppPorts = join(",", var.ports)
 
@@ -74,24 +30,58 @@ locals {
   }
 }
 
+module "app_container_definition" {
+  source                = "../../modules/container-definition"
+  aws_region            = var.aws_region
+  command               = var.command
+  environment_variables = var.environment_variables
+  dependsOn             = [{ containerName : "envoy", condition : "START" }]
+  log_group             = var.log_group
+  log_stream_prefix     = var.service_name
+  name                  = "app"
+  ports                 = var.ports
+  secrets_from_arns     = var.secrets_from_arns
+}
+
+# See the user guide at
+# https://docs.aws.amazon.com/app-mesh/latest/userguide/app-mesh-ug.pdf
+# for more details on configuring Envoy in AppMesh
+module "envoy_container_definition" {
+  source     = "../../modules/container-definition"
+  aws_region = var.aws_region
+  environment_variables = {
+    APPMESH_RESOURCE_ARN = "mesh/${var.mesh_name}/virtualNode/${var.service_name}"
+  }
+  # TODO: don't hardcode the version; track stable Envoy
+  # TODO: control when Envoy updates happen (but still needs to be automatic)
+  image             = "840364872350.dkr.ecr.${var.aws_region}.amazonaws.com/aws-appmesh-envoy:v1.15.1.0-prod"
+  log_group         = var.log_group
+  log_stream_prefix = "awslogs-${var.service_name}-envoy"
+  name              = "envoy"
+  secrets_from_arns = var.secrets_from_arns
+  ports             = []
+  user              = local.user_id
+}
+
+module "task_definition" {
+  source = "../../modules/task-definition-v2"
+  container_definitions = [
+    module.app_container_definition.json_format,
+    module.envoy_container_definition.json_format,
+  ]
+  cpu                = var.cpu
+  execution_role_arn = var.execution_role_arn
+  family             = var.service_name
+  memory             = var.memory
+  proxy_configuration = {
+    type          = "APPMESH",
+    containerName = "envoy",
+    properties    = [for key, value in local.envoy_proxy_properties : { name : key, value : tostring(value) }]
+  }
+  task_role_arn = var.task_role_arn
+}
+
 output "cli_input_json" {
   # Generated with: aws ecs register-task-definition --generate-cli-skeleton
-  value = {
-    family           = var.service_name,
-    taskRoleArn      = var.task_role_arn,
-    executionRoleArn = var.execution_role_arn,
-    networkMode      = "awsvpc",
-    containerDefinitions = [
-      local.app_container_definition,
-      local.envoy_container_definition,
-    ],
-    requiresCompatibilities = ["FARGATE"],
-    cpu                     = var.cpu,
-    memory                  = var.memory,
-    proxyConfiguration = {
-      type          = "APPMESH",
-      containerName = "envoy",
-      properties    = [for key, value in local.envoy_proxy_properties : { name : key, value : tostring(value) }]
-    }
-  }
+  value = module.task_definition.cli_input_json
 }
