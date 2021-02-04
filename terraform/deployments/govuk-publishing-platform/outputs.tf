@@ -33,9 +33,13 @@ output "publisher" {
   }
 }
 
-output "smokey_security_groups" {
-  value       = [aws_security_group.smokey.id]
-  description = "Used by ECS RunTask to run smokey"
+output "smokey" {
+  value = {
+    default = {
+      task_definition_cli_input_json = module.smokey_task_definition.cli_input_json,
+      network_config                 = module.smokey_network_config.network_config
+    }
+  }
 }
 
 output "log_group" {
