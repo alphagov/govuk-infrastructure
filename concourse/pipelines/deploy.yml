@@ -132,15 +132,14 @@ resources:
       uri: https://github.com/alphagov/smokey
       tag_filter: "*-release"
 
-  - <<: *git-repo
-    name: govuk-infrastructure-smokey
+  - name: smokey-terraform-outputs
+    type: s3
+    icon: file
     source:
-      <<: *govuk-infrastructure-source
-      paths:
-        - concourse/tasks
-        - terraform/deployments/apps/smokey
-        - terraform/modules/app-container-definition
-        - terraform/modules/envoy-configuration
+      bucket: ((readonly_private_bucket_name))
+      region_name: eu-west-2
+      versioned_file: smokey.json
+      initial_version: "0"
 
   - <<: *git-repo
     name: static
@@ -285,6 +284,7 @@ jobs:
       - get: content-store-terraform-outputs
       - get: publisher-terraform-outputs
       - get: signon-terraform-outputs
+      - get: smokey-terraform-outputs
       - get: static-terraform-outputs
     - task: terraform-apply
       config:
@@ -299,6 +299,9 @@ jobs:
         - name: signon-terraform-outputs
           path: old-signon-terraform-outputs
           optional: true
+        - name: smokey-terraform-outputs
+          path: old-smokey-terraform-outputs
+          optional: true
         - name: static-terraform-outputs
           path: old-static-terraform-outputs
           optional: true
@@ -310,6 +313,8 @@ jobs:
           path: new-publisher-terraform-outputs
         - name: signon-terraform-outputs
           path: new-signon-terraform-outputs
+        - name: smokey-terraform-outputs
+          path: new-smokey-terraform-outputs
         - name: static-terraform-outputs
           path: new-static-terraform-outputs
         params:
@@ -360,6 +365,7 @@ jobs:
             update_terraform_outputs content-store
             update_terraform_outputs publisher
             update_terraform_outputs signon
+            update_terraform_outputs smokey
             update_terraform_outputs static
 
     - put: govuk-terraform-outputs
@@ -378,6 +384,10 @@ jobs:
           put: signon-terraform-outputs
           params:
             file: signon-terraform-outputs/signon.json
+      - try:
+          put: smokey-terraform-outputs
+          params:
+            file: smokey-terraform-outputs/smokey.json
       - try:
           put: static-terraform-outputs
           params:
@@ -429,6 +439,7 @@ jobs:
       params:
         APPLICATION: smokey
         GOVUK_ENVIRONMENT: test
+        VARIANT: default
     - task: run-smoke-tests
       file: govuk-infrastructure/concourse/tasks/run-task.yml
       params:
@@ -759,9 +770,10 @@ jobs:
     plan:
     - in_parallel:
       - get: govuk-infrastructure
-        resource: govuk-infrastructure-smokey
+        resource: govuk-infrastructure-concourse-tasks
         trigger: true
-      - get: govuk-terraform-outputs
+      - get: app-terraform-outputs
+        resource: smokey-terraform-outputs
         passed:
         - run-terraform
         trigger: true
@@ -769,10 +781,11 @@ jobs:
         resource: smokey
         trigger: true
     - task: update-task-definition
-      file: govuk-infrastructure/concourse/tasks/update-task-definition.yml
+      file: govuk-infrastructure/concourse/tasks/update-task-definition-v2.yml
       params:
         APPLICATION: smokey
         GOVUK_ENVIRONMENT: test
+        VARIANT: default
     serial: true
     on_failure:
       <<: *notify-slack-failure
