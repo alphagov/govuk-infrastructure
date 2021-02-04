@@ -3,21 +3,21 @@ locals {
     environment_variables = merge(
       local.defaults.environment_variables,
       {
-        GOVUK_APP_NAME = "signon"
-        GOVUK_APP_ROOT = "/app"
-        GOVUK_STATSD_PREFIX = "govuk-ecs.app.signon"
+        GOVUK_APP_NAME           = "signon"
+        GOVUK_APP_ROOT           = "/app"
+        GOVUK_STATSD_PREFIX      = "govuk-ecs.app.signon"
         RAILS_SERVE_STATIC_FILES = "true"
-        REDIS_URL = "redis://${var.redis_host}:${var.redis_port}"
+        REDIS_URL                = "redis://${var.redis_host}:${var.redis_port}"
       }
     )
 
     secrets_from_arns = merge(
       local.defaults.secrets_from_arns,
       {
-        SECRET_KEY_BASE = data.aws_secretsmanager_secret.signon_secret_key_base.arn
-        SENTRY_DSN = data.aws_secretsmanager_secret.sentry_dsn.arn
-        DATABASE_URL = data.aws_secretsmanager_secret.signon_database_url.arn
-        DEVISE_PEPPER = data.aws_secretsmanager_secret.signon_devise_pepper.arn
+        SECRET_KEY_BASE   = data.aws_secretsmanager_secret.signon_secret_key_base.arn
+        SENTRY_DSN        = data.aws_secretsmanager_secret.sentry_dsn.arn
+        DATABASE_URL      = data.aws_secretsmanager_secret.signon_database_url.arn
+        DEVISE_PEPPER     = data.aws_secretsmanager_secret.signon_devise_pepper.arn
         DEVISE_SECRET_KEY = data.aws_secretsmanager_secret.signon_devise_secret_key.arn
       }
     )

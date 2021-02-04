@@ -3,6 +3,9 @@
 data "aws_secretsmanager_secret" "sentry_dsn" {
   name = "SENTRY_DSN"
 }
+data "aws_secretsmanager_secret" "ga_universal_id" {
+  name = "GA_UNIVERSAL_ID"
+}
 
 # Content store app secrets
 
@@ -83,4 +86,19 @@ data "aws_secretsmanager_secret" "signon_secret_key_base" {
 
 data "aws_secretsmanager_secret" "signon_database_url" {
   name = "signon_app-DATABASE_URL"
+}
+
+# Static app
+
+data "aws_secretsmanager_secret" "static_publishing_api_bearer_token" {
+  name = "static_PUBLISHING_API_BEARER_TOKEN" # pragma: allowlist secret
+}
+data "aws_secretsmanager_secret" "static_secret_key_base" {
+  name = "static_SECRET_KEY_BASE" # pragma: allowlist secret
+}
+data "aws_secretsmanager_secret" "draft_static_publishing_api_bearer_token" {
+  name = "draft-static_PUBLISHING_API_BEARER_TOKEN" # pragma: allowlist secret
+}
+data "aws_secretsmanager_secret" "draft_static_secret_key_base" {
+  name = "draft-static_SECRET_KEY_BASE" # pragma: allowlist secret
 }

@@ -13,7 +13,8 @@ locals {
       SENTRY_ENVIRONMENT        = "${var.govuk_environment}-ecs",
     }
     secrets_from_arns = {
-      SENTRY_DSN = data.aws_secretsmanager_secret.sentry_dsn.arn,
+      SENTRY_DSN      = data.aws_secretsmanager_secret.sentry_dsn.arn,
+      GA_UNIVERSAL_ID = data.aws_secretsmanager_secret.ga_universal_id.arn,
     }
     asset_host           = "https://frontend.${var.external_app_domain}",
     asset_root_url       = "https://assets.${var.publishing_service_domain}",

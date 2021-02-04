@@ -15,7 +15,7 @@ module "grafana_app" {
 
   load_balancers = [{
     target_group_arn = module.grafana_public_alb.target_group_arn
-    container_port = 3000
+    container_port   = 3000
   }]
   environment_variables = {} # TODO
   secrets_from_arns     = {} # TODO
