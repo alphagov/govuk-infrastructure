@@ -102,3 +102,24 @@ data "aws_secretsmanager_secret" "draft_static_publishing_api_bearer_token" {
 data "aws_secretsmanager_secret" "draft_static_secret_key_base" {
   name = "draft-static_SECRET_KEY_BASE" # pragma: allowlist secret
 }
+
+# Router-api app
+
+data "aws_secretsmanager_secret" "router_api_oauth_id" {
+  name = "router-api_OAUTH_ID"
+}
+data "aws_secretsmanager_secret" "router_api_oauth_secret" {
+  name = "router-api_OAUTH_SECRET"
+}
+data "aws_secretsmanager_secret" "router_api_secret_key_base" {
+  name = "router-api_SECRET_KEY_BASE"
+}
+data "aws_secretsmanager_secret" "draft_router_api_oauth_id" {
+  name = "draft-router-api_OAUTH_ID"
+}
+data "aws_secretsmanager_secret" "draft_router_api_oauth_secret" {
+  name = "draft-router-api_OAUTH_SECRET"
+}
+data "aws_secretsmanager_secret" "draft_router_api_secret_key_base" {
+  name = "draft-router-api_SECRET_KEY_BASE"
+}
