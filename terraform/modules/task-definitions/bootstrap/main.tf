@@ -27,8 +27,8 @@ resource "aws_ecs_task_definition" "bootstrap" {
       },
       "portMappings" : [
         for port in var.ports :
-        { "ContainerPort" = "${port}",
-          "hostPort"      = "${port}",
+        { "ContainerPort" = port,
+          "hostPort"      = port,
           "Protocol"      = "tcp",
         }
       ]

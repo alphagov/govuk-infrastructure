@@ -153,16 +153,16 @@ data "aws_iam_policy_document" "push_image_to_ecr_policy_document" {
     ]
 
     resources = [
-      "${aws_ecr_repository.content-store.arn}",
-      "${aws_ecr_repository.frontend.arn}",
-      "${aws_ecr_repository.publisher.arn}",
-      "${aws_ecr_repository.publishing-api.arn}",
-      "${aws_ecr_repository.router.arn}",
-      "${aws_ecr_repository.router-api.arn}",
-      "${aws_ecr_repository.signon.arn}",
-      "${aws_ecr_repository.smokey.arn}",
-      "${aws_ecr_repository.static.arn}",
-      "${aws_ecr_repository.statsd.arn}",
+      aws_ecr_repository.content-store.arn,
+      aws_ecr_repository.frontend.arn,
+      aws_ecr_repository.publisher.arn,
+      aws_ecr_repository.publishing-api.arn,
+      aws_ecr_repository.router.arn,
+      aws_ecr_repository.router-api.arn,
+      aws_ecr_repository.signon.arn,
+      aws_ecr_repository.smokey.arn,
+      aws_ecr_repository.static.arn,
+      aws_ecr_repository.statsd.arn,
     ]
   }
 }
