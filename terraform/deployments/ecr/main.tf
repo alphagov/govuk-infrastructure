@@ -20,7 +20,6 @@ provider "aws" {
   region = "eu-west-1"
 }
 
-
 resource "aws_ecr_repository" "content-store" {
   name                 = "content-store"
   image_tag_mutability = "MUTABLE"
@@ -109,4 +108,71 @@ resource "aws_ecr_repository" "statsd" {
   image_scanning_configuration {
     scan_on_push = true
   }
+}
+
+resource "aws_iam_user" "concourse_ecr_user" {
+  name = "concourse_ecr_user"
+}
+
+resource "aws_iam_role" "push_image_to_ecr_role" {
+  name               = "push_image_to_ecr_role"
+  assume_role_policy = <<EOF
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Action": "sts:AssumeRole",
+            "Principal": {
+              "AWS": "${aws_iam_user.concourse_ecr_user.arn}"
+            }
+        }
+    ]
+}
+EOF
+}
+
+data "aws_iam_policy_document" "push_image_to_ecr_policy_document" {
+  statement {
+    actions = [
+      "ecr:GetAuthorizationToken",
+    ]
+
+    resources = ["*"]
+  }
+
+  statement {
+    actions = [
+      "ecr:BatchCheckLayerAvailability",
+      "ecr:BatchGetImage",
+      "ecr:CompleteLayerUpload",
+      "ecr:GetDownloadUrlForLayer",
+      "ecr:InitiateLayerUpload",
+      "ecr:PutImage",
+      "ecr:UploadLayerPart",
+    ]
+
+    resources = [
+      "${aws_ecr_repository.content-store.arn}",
+      "${aws_ecr_repository.frontend.arn}",
+      "${aws_ecr_repository.publisher.arn}",
+      "${aws_ecr_repository.publishing-api.arn}",
+      "${aws_ecr_repository.router.arn}",
+      "${aws_ecr_repository.router-api.arn}",
+      "${aws_ecr_repository.signon.arn}",
+      "${aws_ecr_repository.smokey.arn}",
+      "${aws_ecr_repository.static.arn}",
+      "${aws_ecr_repository.statsd.arn}",
+    ]
+  }
+}
+
+resource "aws_iam_policy" "push_image_to_ecr_policy" {
+  name   = "push_image_to_ecr_policy"
+  policy = "${data.aws_iam_policy_document.push_image_to_ecr_policy_document.json}"
+}
+
+resource "aws_iam_role_policy_attachment" "push_to_ecr_role_attachment" {
+  role       = "${aws_iam_role.push_image_to_ecr_role.name}"
+  policy_arn = "${aws_iam_policy.push_image_to_ecr_policy.arn}"
 }
