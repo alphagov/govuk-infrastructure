@@ -31,6 +31,7 @@ jobs:
           if ! terraform fmt -write=false -diff=true -list=true -recursive -check .
           then
             >&2 echo "Some terraform files weren't formatted correctly. Run 'terraform fmt' to fix them."
+            exit 1
           fi
 
       - name: rspec
