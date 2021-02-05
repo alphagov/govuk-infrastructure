@@ -31,6 +31,28 @@ output "publisher" {
       network_config                 = module.publisher_worker.network_config
     },
   }
+
+output "frontend" {
+  value = {
+    draft = {
+      task_definition_cli_input_json = module.draft_frontend.cli_input_json,
+      security_groups                = module.draft_frontend.security_groups
+    },
+    live = {
+      task_definition_cli_input_json = module.frontend.cli_input_json,
+      security_groups                = module.frontend.security_groups,
+    },
+  }
+}
+
+output "content-store_security_groups" {
+  value       = module.content_store.security_groups
+  description = "Used by ECS RunTask to run short-lived tasks with the same SG permissions as the content-store ECS Service."
+}
+
+output "draft-content-store_security_groups" {
+  value       = module.draft_content_store.security_groups
+  description = "Used by ECS RunTask to run short-lived tasks with the same SG permissions as the draft-content-store ECS Service."
 }
 
 output "publishing-api" {

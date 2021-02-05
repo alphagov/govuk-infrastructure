@@ -33,15 +33,14 @@ resources:
       tag_filter: release_*
 
   - <<: *git-repo
-    name: govuk-infrastructure-frontend
+    name: frontend-terraform-outputs
+      type: s3
+      icon: file
     source:
-      <<: *govuk-infrastructure-source
-      paths:
-        - concourse/tasks
-        - terraform/deployments/apps/*frontend
-        # TODO replace these once frontend is refactored to use the new modules
-        - terraform/modules/task-definition
-        - terraform/modules/task-definitions/frontend
+      bucket: ((readonly_private_bucket_name))
+      region_name: eu-west-2
+      versioned_file: frontend.json
+      initial_version: "0"
 
   - <<: *git-repo
     name: publisher
