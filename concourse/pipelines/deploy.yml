@@ -588,6 +588,14 @@ jobs:
           VARIANT: worker
           GOVUK_ENVIRONMENT: test
           PIN_IMAGE_TAG: bilbof_dockerfile-fix # TODO - remove this once content-store supports content-schemas
+    - task: run-db-migrations
+      file: govuk-infrastructure/concourse/tasks/run-task.yml
+      input_mapping:
+        task-definition-arn: web-task-definition-arn
+      params:
+        APPLICATION: publishing-api
+        COMMAND: "bundle exec rails db:migrate"
+        VARIANT: web
     - in_parallel:
       - task: update-web-ecs-service
         file: govuk-infrastructure/concourse/tasks/update-ecs-service-v2.yml
