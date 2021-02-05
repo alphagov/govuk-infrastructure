@@ -16,18 +16,21 @@ locals {
       SENTRY_DSN      = data.aws_secretsmanager_secret.sentry_dsn.arn,
       GA_UNIVERSAL_ID = data.aws_secretsmanager_secret.ga_universal_id.arn,
     }
-    asset_host           = "https://frontend.${var.external_app_domain}",
-    asset_root_url       = "https://assets.${var.publishing_service_domain}",
-    content_store_uri    = "http://content-store.${var.mesh_domain}",
-    draft_origin_uri     = "https://draft-frontend.${var.external_app_domain}",
-    publishing_api_uri   = "http://publishing-api-web.${var.mesh_domain}",
-    redis_url            = "redis://${var.redis_host}:${var.redis_port}"
-    router_api_uri       = "http://router-api.${var.mesh_domain}",
-    draft_router_api_uri = "http://draft-router-api.${var.mesh_domain}",
-    signon_uri           = "https://signon-ecs.${var.external_app_domain}",
-    static_uri           = "https://static.${var.mesh_domain}"
-    website_root         = "https://frontend.${var.external_app_domain}",
-    router_urls          = "router.${var.mesh_domain}:3055"       # TODO(https://trello.com/c/gmzObCBG/95): router-api expects a list of individual instances, so this won't work as-is.
-    draft_router_urls    = "draft-router.${var.mesh_domain}:3055" # TODO(https://trello.com/c/gmzObCBG/95): router-api expects a list of individual instances, so this won't work as-is.
+
+    asset_host              = "https://frontend.${var.external_app_domain}",
+    asset_root_url          = "https://assets.${var.publishing_service_domain}",
+    content_store_uri       = "http://content-store.${var.mesh_domain}",
+    draft_content_store_uri = "http://draft-content-store.${var.mesh_domain}",
+    draft_origin_uri        = "https://draft-frontend.${var.external_app_domain}",
+    publishing_api_uri      = "http://publishing-api-web.${var.mesh_domain}",
+    rabbitmq_hosts          = "rabbitmq.${var.internal_app_domain}"
+    redis_url               = "redis://${var.redis_host}:${var.redis_port}"
+    router_api_uri          = "http://router-api.${var.mesh_domain}",
+    draft_router_api_uri    = "http://draft-router-api.${var.mesh_domain}",
+    router_urls             = "router.${var.mesh_domain}:3055"       # TODO(https://trello.com/c/gmzObCBG/95): router-api expects a list of individual instances, so this won't work as-is.
+    draft_router_urls       = "draft-router.${var.mesh_domain}:3055" # TODO(https://trello.com/c/gmzObCBG/95): router-api expects a list of individual instances, so this won't work as-is.
+    signon_uri              = "https://signon-ecs.${var.external_app_domain}",
+    static_uri              = "https://static.${var.mesh_domain}"
+    website_root            = "https://frontend.${var.external_app_domain}",
   }
 }

@@ -1,3 +1,50 @@
+locals {
+  publishing_api_defaults = {
+    cpu    = 512  # TODO parameterize this
+    memory = 1024 # TODO parameterize this
+
+    environment_variables = merge(
+      local.defaults.environment_variables,
+      {
+        # TODO: factor our hardcoded stuff
+        CONTENT_API_PROTOTYPE    = "yes"
+        CONTENT_STORE            = local.defaults.content_store_uri
+        DRAFT_CONTENT_STORE      = local.defaults.draft_content_store_uri
+        EVENT_LOG_AWS_ACCESS_ID  = "AKIAJE6VSW25CYBUMQJA" # TODO: hardcoded
+        EVENT_LOG_AWS_BUCKETNAME = "govuk-publishing-api-event-log-test"
+        EVENT_LOG_AWS_USERNAME   = "govuk-publishing-api-event-log_user"
+        GOVUK_APP_NAME           = "publishing-api"
+        # TODO: Remove once content-schemas issue is fixed
+        GOVUK_CONTENT_SCHEMAS_PATH           = "/govuk-content-schemas"
+        GOVUK_STATSD_PREFIX                  = "govuk-ecs.app.publishing-api"
+        PLEK_SERVICE_CONTENT_STORE_URI       = local.defaults.content_store_uri
+        PLEK_SERVICE_DRAFT_CONTENT_STORE_URI = local.defaults.draft_content_store_uri
+        PLEK_SERVICE_SIGNON_URI              = local.defaults.signon_uri
+        RABBITMQ_HOSTS                       = local.defaults.rabbitmq_hosts
+        RABBITMQ_USER                        = "publishing_api"
+        RABBITMQ_VHOST                       = "/"
+        REDIS_URL                            = local.defaults.redis_url
+        UNICORN_WORKER_PROCESSES             = "8"
+      }
+    )
+
+    secrets_from_arns = merge(
+      local.defaults.secrets_from_arns,
+      {
+        CONTENT_STORE_BEARER_TOKEN       = data.aws_secretsmanager_secret.publishing_api_content_store_bearer_token.arn
+        DATABASE_URL                     = data.aws_secretsmanager_secret.publishing_api_database_url.arn
+        DRAFT_CONTENT_STORE_BEARER_TOKEN = data.aws_secretsmanager_secret.publishing_api_draft_content_store_bearer_token.arn
+        EVENT_LOG_AWS_SECRET_KEY         = data.aws_secretsmanager_secret.publishing_api_event_log_aws_secret_key.arn
+        GDS_SSO_OAUTH_ID                 = data.aws_secretsmanager_secret.publishing_api_oauth_id.arn
+        GDS_SSO_OAUTH_SECRET             = data.aws_secretsmanager_secret.publishing_api_oauth_secret.arn
+        RABBITMQ_PASSWORD                = data.aws_secretsmanager_secret.publishing_api_rabbitmq_password.arn
+        ROUTER_API_BEARER_TOKEN          = data.aws_secretsmanager_secret.publishing_api_router_api_bearer_token.arn
+        SECRET_KEY_BASE                  = data.aws_secretsmanager_secret.publishing_api_secret_key_base.arn
+      }
+    )
+  }
+}
+
 module "publishing_api_web" {
   service_name                     = "publishing-api-web"
   mesh_name                        = aws_appmesh_mesh.govuk.id
@@ -9,12 +56,12 @@ module "publishing_api_web" {
   desired_count                    = var.publishing_api_desired_count
   extra_security_groups            = [local.govuk_management_access_security_group, aws_security_group.mesh_ecs_service.id]
   subnets                          = local.private_subnets
-  environment_variables            = {} # TODO
-  secrets_from_arns                = {} # TODO
+  environment_variables            = local.publishing_api_defaults.environment_variables
+  secrets_from_arns                = local.publishing_api_defaults.secrets_from_arns
   log_group                        = local.log_group
   aws_region                       = data.aws_region.current.name
-  cpu                              = 512
-  memory                           = 1024
+  cpu                              = local.publishing_api_defaults.cpu
+  memory                           = local.publishing_api_defaults.memory
   task_role_arn                    = aws_iam_role.task.arn
   execution_role_arn               = aws_iam_role.execution.arn
 }
@@ -30,12 +77,12 @@ module "publishing_api_worker" {
   desired_count                    = var.publishing_api_desired_count
   extra_security_groups            = [module.publishing_api_web.security_group_id, local.govuk_management_access_security_group, aws_security_group.mesh_ecs_service.id]
   subnets                          = local.private_subnets
-  environment_variables            = {} # TODO
-  secrets_from_arns                = {} # TODO
+  environment_variables            = local.publishing_api_defaults.environment_variables
+  secrets_from_arns                = local.publishing_api_defaults.secrets_from_arns
   log_group                        = local.log_group
   aws_region                       = data.aws_region.current.name
-  cpu                              = 512
-  memory                           = 1024
+  cpu                              = local.publishing_api_defaults.cpu
+  memory                           = local.publishing_api_defaults.memory
   task_role_arn                    = aws_iam_role.task.arn
   execution_role_arn               = aws_iam_role.execution.arn
 }

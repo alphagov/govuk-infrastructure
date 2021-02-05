@@ -33,6 +33,19 @@ output "publisher" {
   }
 }
 
+output "publishing-api" {
+  value = {
+    web = {
+      task_definition_cli_input_json = module.publishing_api_web.cli_input_json,
+      network_config                 = module.publishing_api_web.network_config
+    },
+    worker = {
+      task_definition_cli_input_json = module.publishing_api_worker.cli_input_json,
+      network_config                 = module.publishing_api_worker.network_config
+    },
+  }
+}
+
 output "smokey" {
   value = {
     default = {

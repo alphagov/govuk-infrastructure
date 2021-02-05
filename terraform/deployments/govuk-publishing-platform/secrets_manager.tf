@@ -70,6 +70,44 @@ data "aws_secretsmanager_secret" "publisher_secret_key_base" {
   name = "publisher_app-SECRET_KEY_BASE" # pragma: allowlist secret
 }
 
+# Publishing API app
+
+data "aws_secretsmanager_secret" "publishing_api_content_store_bearer_token" {
+  name = "publishing_api_app-CONTENT_STORE_BEARER_TOKEN"
+}
+
+data "aws_secretsmanager_secret" "publishing_api_database_url" {
+  name = "publishing_api_app-DATABASE_URL"
+}
+
+data "aws_secretsmanager_secret" "publishing_api_draft_content_store_bearer_token" {
+  name = "publishing_api_app-DRAFT_CONTENT_STORE_BEARER_TOKEN"
+}
+
+data "aws_secretsmanager_secret" "publishing_api_event_log_aws_secret_key" {
+  name = "publishing_api_app-EVENT_LOG_AWS_SECRET_KEY"
+}
+
+data "aws_secretsmanager_secret" "publishing_api_oauth_id" {
+  name = "publishing_api_app-OAUTH_ID"
+}
+
+data "aws_secretsmanager_secret" "publishing_api_oauth_secret" {
+  name = "publishing_api_app-OAUTH_SECRET"
+}
+
+data "aws_secretsmanager_secret" "publishing_api_rabbitmq_password" {
+  name = "publishing_api_app-RABBITMQ_PASSWORD"
+}
+
+data "aws_secretsmanager_secret" "publishing_api_router_api_bearer_token" {
+  name = "publishing_api_app-ROUTER_API_BEARER_TOKEN"
+}
+
+data "aws_secretsmanager_secret" "publishing_api_secret_key_base" {
+  name = "publishing_api_app-SECRET_KEY_BASE"
+}
+
 # Signon app
 
 data "aws_secretsmanager_secret" "signon_devise_pepper" {
