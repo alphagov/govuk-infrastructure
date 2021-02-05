@@ -90,17 +90,6 @@ resources:
       tag_filter: release_*
 
   - <<: *git-repo
-    name: govuk-infrastructure-router
-    source:
-      <<: *govuk-infrastructure-source
-      paths:
-        - concourse/tasks
-        - terraform/deployments/apps/*router
-        # TODO replace these once router is refactored to use the new modules
-        - terraform/modules/task-definition
-        - terraform/modules/task-definitions/router
-
-  - <<: *git-repo
     name: router-api
     source:
       branch: master
@@ -202,6 +191,15 @@ resources:
       versioned_file: router-api.json
       initial_version: "0"
 
+  - name: router-terraform-outputs
+    type: s3
+    icon: file
+    source:
+      bucket: ((readonly_private_bucket_name))
+      region_name: eu-west-2
+      versioned_file: router.json
+      initial_version: "0"
+
 groups:
   - name: all
     jobs:
@@ -214,7 +212,6 @@ groups:
       - deploy-publisher
       - deploy-publishing-api
       - deploy-router
-      - deploy-draft-router
       - deploy-router-api
       - deploy-signon
       - deploy-smokey
@@ -245,7 +242,6 @@ groups:
   - name: router
     jobs:
       - deploy-router
-      - deploy-draft-router
 
   - name: router-api
     jobs:
@@ -283,6 +279,7 @@ jobs:
       - get: smokey-terraform-outputs
       - get: static-terraform-outputs
       - get: router-api-terraform-outputs
+      - get: router-terraform-outputs
     - task: terraform-apply
       config:
         inputs:
@@ -305,6 +302,9 @@ jobs:
         - name: router-api-terraform-outputs
           path: old-router-api-terraform-outputs
           optional: true
+        - name: router-terraform-outputs
+          path: old-router-terraform-outputs
+          optional: true
         outputs:
         - name: govuk-terraform-outputs
         - name: content-store-terraform-outputs
@@ -319,6 +319,8 @@ jobs:
           path: new-static-terraform-outputs
         - name: router-api-terraform-outputs
           path: new-router-api-terraform-outputs
+        - name: router-terraform-outputs
+          path: new-router-terraform-outputs
         params:
           AWS_REGION: eu-west-1
           ASSUME_ROLE_ARN: 'arn:aws:iam::430354129336:role/govuk-concourse-deployer'
@@ -370,6 +372,7 @@ jobs:
             update_terraform_outputs smokey
             update_terraform_outputs static
             update_terraform_outputs router-api
+            update_terraform_outputs router
 
     - put: govuk-terraform-outputs
       params:
@@ -399,6 +402,10 @@ jobs:
           put: router-api-terraform-outputs
           params:
             file: router-api-terraform-outputs/router-api.json
+      - try:
+          put: router-terraform-outputs
+          params:
+            file: router-terraform-outputs/router.json
 
   - name: deploy-frontend
     plan:
@@ -638,52 +645,44 @@ jobs:
     plan:
     - in_parallel:
       - get: govuk-infrastructure
-        resource: govuk-infrastructure-router
+        resource: govuk-infrastructure-concourse-tasks
         trigger: true
-      - get: govuk-terraform-outputs
+      - get: app-terraform-outputs
+        resource: router-terraform-outputs
         passed:
         - run-terraform
         trigger: true
       - get: release
         resource: router
         trigger: true
-    - task: update-task-definition
-      file: govuk-infrastructure/concourse/tasks/update-task-definition.yml
-      params:
-        APPLICATION: router
-        GOVUK_ENVIRONMENT: test
-    - task: update-ecs-service
-      file: govuk-infrastructure/concourse/tasks/update-ecs-service.yml
-      params:
-        ECS_SERVICE: router
-        GOVUK_ENVIRONMENT: test
-    serial: true
-    on_failure:
-      <<: *notify-slack-failure
-
-  - name: deploy-draft-router
-    plan:
     - in_parallel:
-      - get: govuk-infrastructure
-        resource: govuk-infrastructure-router
-        trigger: true
-      - get: govuk-terraform-outputs
-        passed:
-        - run-terraform
-        trigger: true
-      - get: release
-        resource: router
-        trigger: true
-    - task: update-task-definition
-      file: govuk-infrastructure/concourse/tasks/update-task-definition.yml
-      params:
-        APPLICATION: draft-router
-        GOVUK_ENVIRONMENT: test
-    - task: update-ecs-service
-      file: govuk-infrastructure/concourse/tasks/update-ecs-service.yml
-      params:
-        ECS_SERVICE: draft-router
-        GOVUK_ENVIRONMENT: test
+      - task: update-draft-task-definition
+        file: govuk-infrastructure/concourse/tasks/update-task-definition-v2.yml
+        output_mapping:
+          task-definition-arn: draft-task-definition-arn
+        params:
+          APPLICATION: router
+          VARIANT: draft
+      - task: update-live-task-definition
+        file: govuk-infrastructure/concourse/tasks/update-task-definition-v2.yml
+        output_mapping:
+          task-definition-arn: live-task-definition-arn
+        params:
+          APPLICATION: router
+          VARIANT: live
+    - in_parallel:
+      - task: update-draft-ecs-service
+        file: govuk-infrastructure/concourse/tasks/update-ecs-service-v2.yml
+        input_mapping:
+          task-definition-arn: draft-task-definition-arn
+        params:
+          ECS_SERVICE: draft-router
+      - task: update-live-ecs-service
+        file: govuk-infrastructure/concourse/tasks/update-ecs-service-v2.yml
+        input_mapping:
+          task-definition-arn: live-task-definition-arn
+        params:
+          ECS_SERVICE: router
     serial: true
     on_failure:
       <<: *notify-slack-failure

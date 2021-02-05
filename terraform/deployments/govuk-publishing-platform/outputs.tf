@@ -116,3 +116,16 @@ output "router-api" {
     },
   }
 }
+
+output "router" {
+  value = {
+    draft = {
+      task_definition_cli_input_json = module.draft_router.cli_input_json,
+      network_config                 = module.draft_router.network_config
+    },
+    live = {
+      task_definition_cli_input_json = module.router.cli_input_json,
+      network_config                 = module.router.network_config
+    },
+  }
+}
