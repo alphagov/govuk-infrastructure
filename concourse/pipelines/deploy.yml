@@ -211,7 +211,7 @@ groups:
       - run-terraform
       - deploy-content-store
       - deploy-frontend
-      - smoke-test-frontend
+      - smoke-test-content-store
       - deploy-draft-frontend
       - deploy-publisher
       - deploy-publishing-api
@@ -235,7 +235,7 @@ groups:
     jobs:
       - deploy-frontend
       - deploy-draft-frontend
-      - smoke-test-frontend
+      - smoke-test-content-store
 
   - name: publisher
     jobs:
@@ -427,23 +427,25 @@ jobs:
         text: |
           :red_circle: Failed build: http://cd.gds-reliability.engineering/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME
 
-  - name: smoke-test-frontend
+  - name: smoke-test-content-store
     plan:
-    - get: govuk-infrastructure
-      resource: govuk-infrastructure-frontend
-      passed:
-      - deploy-frontend
-      trigger: true
-    - task: fetch-smoke-tests
+    - in_parallel:
+      - get: govuk-infrastructure
+        resource: govuk-infrastructure-concourse-tasks
+        passed:
+        - deploy-content-store
+        trigger: true
+      - get: app-terraform-outputs
+        resource: smokey-terraform-outputs
+    - task: fetch-smokey-task-definition
       file: govuk-infrastructure/concourse/tasks/fetch-task-definition.yml
       params:
         APPLICATION: smokey
-        GOVUK_ENVIRONMENT: test
-        VARIANT: default
     - task: run-smoke-tests
       file: govuk-infrastructure/concourse/tasks/run-task.yml
       params:
         APPLICATION: smokey
+        VARIANT: default
         COMMAND: bundle exec cucumber --profile test --strict-undefined -t @replatforming -t \"not @notreplatforming\"
 
   - name: deploy-draft-frontend

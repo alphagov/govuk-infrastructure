@@ -21,7 +21,7 @@ root_dir=$(pwd)
 : "${APPLICATION:?APPLICATION not set}"
 : "${COMMAND:?COMMAND not set}"
 : "${CLUSTER:?COMMAND not set}"
-: "${VARIANT:?COMMAND not set}"
+: "${VARIANT:?VARIANT not set}"
 
 mkdir -p ~/.aws
 
