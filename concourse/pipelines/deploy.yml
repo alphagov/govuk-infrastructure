@@ -57,16 +57,14 @@ resources:
       uri: https://github.com/alphagov/publishing-api
       tag_filter: release_*
 
-  - <<: *git-repo
-    name: govuk-infrastructure-publishing-api
+  - name: publishing-api-terraform-outputs
+    type: s3
+    icon: file
     source:
-      <<: *govuk-infrastructure-source
-      paths:
-        - concourse/tasks
-        - terraform/deployments/apps/publishing-api
-        # TODO replace these once publishing-api is refactored to use the new modules
-        - terraform/modules/task-definition
-        - terraform/modules/task-definitions/publishing-api
+      bucket: ((readonly_private_bucket_name))
+      region_name: eu-west-2
+      versioned_file: publishing-api.json
+      initial_version: "0"
 
   - <<: *git-repo
     name: content-store
@@ -275,6 +273,7 @@ jobs:
         trigger: true
       - get: content-store-terraform-outputs
       - get: publisher-terraform-outputs
+      - get: publishing-api-terraform-outputs
       - get: signon-terraform-outputs
       - get: smokey-terraform-outputs
       - get: static-terraform-outputs
@@ -289,6 +288,9 @@ jobs:
           optional: true
         - name: publisher-terraform-outputs
           path: old-publisher-terraform-outputs
+          optional: true
+        - name: publishing-api-terraform-outputs
+          path: old-publishing-api-terraform-outputs
           optional: true
         - name: signon-terraform-outputs
           path: old-signon-terraform-outputs
@@ -311,6 +313,8 @@ jobs:
           path: new-content-store-terraform-outputs
         - name: publisher-terraform-outputs
           path: new-publisher-terraform-outputs
+        - name: publishing-api-terraform-outputs
+          path: new-publishing-api-terraform-outputs
         - name: signon-terraform-outputs
           path: new-signon-terraform-outputs
         - name: smokey-terraform-outputs
@@ -368,6 +372,7 @@ jobs:
 
             update_terraform_outputs content-store
             update_terraform_outputs publisher
+            update_terraform_outputs publishing-api
             update_terraform_outputs signon
             update_terraform_outputs smokey
             update_terraform_outputs static
@@ -386,6 +391,10 @@ jobs:
           put: publisher-terraform-outputs
           params:
             file: publisher-terraform-outputs/publisher.json
+      - try:
+          put: publishing-api-terraform-outputs
+          params:
+            file: publishing-api-terraform-outputs/publishing-api.json
       - try:
           put: signon-terraform-outputs
           params:
@@ -557,38 +566,56 @@ jobs:
     plan:
     - in_parallel:
       - get: govuk-infrastructure
-        resource: govuk-infrastructure-publishing-api
+        resource: govuk-infrastructure-concourse-tasks
         trigger: true
-      - get: govuk-terraform-outputs
+      - get: app-terraform-outputs
+        resource: publishing-api-terraform-outputs
         passed:
         - run-terraform
         trigger: true
       - get: release
         resource: publishing-api
         trigger: true
-    - task: update-web-task-definition
-      file: govuk-infrastructure/concourse/tasks/update-task-definition.yml
+    - in_parallel:
+      - task: update-web-task-definition
+        file: govuk-infrastructure/concourse/tasks/update-task-definition-v2.yml
+        output_mapping:
+          task-definition-arn: web-task-definition-arn
+        params:
+          APPLICATION: publishing-api
+          VARIANT: web
+          GOVUK_ENVIRONMENT: test
+          PIN_IMAGE_TAG: bilbof_dockerfile-fix # TODO - remove this once content-store supports content-schemas
+      - task: update-worker-task-definition
+        file: govuk-infrastructure/concourse/tasks/update-task-definition-v2.yml
+        output_mapping:
+          task-definition-arn: worker-task-definition-arn
+        params:
+          APPLICATION: publishing-api
+          VARIANT: worker
+          GOVUK_ENVIRONMENT: test
+          PIN_IMAGE_TAG: bilbof_dockerfile-fix # TODO - remove this once content-store supports content-schemas
+    - task: run-db-migrations
+      file: govuk-infrastructure/concourse/tasks/run-task.yml
+      input_mapping:
+        task-definition-arn: web-task-definition-arn
       params:
-        APPLICATION: publishing-api-web
-        GOVUK_ENVIRONMENT: test
-    - task: update-worker-task-definition
-      file: govuk-infrastructure/concourse/tasks/update-task-definition.yml
-      params:
-        APPLICATION: publishing-api-worker
-        GOVUK_ENVIRONMENT: test
+        APPLICATION: publishing-api
+        COMMAND: "bundle exec rails db:migrate"
+        VARIANT: web
     - in_parallel:
       - task: update-web-ecs-service
-        file: govuk-infrastructure/concourse/tasks/update-ecs-service.yml
+        file: govuk-infrastructure/concourse/tasks/update-ecs-service-v2.yml
         params:
           ECS_SERVICE: publishing-api-web
-          GOVUK_ENVIRONMENT: test
-          TASK_DEFINITION: web_task_definition
+        input_mapping:
+          task-definition-arn: web-task-definition-arn
       - task: update-worker-ecs-service
-        file: govuk-infrastructure/concourse/tasks/update-ecs-service.yml
+        file: govuk-infrastructure/concourse/tasks/update-ecs-service-v2.yml
         params:
           ECS_SERVICE: publishing-api-worker
-          GOVUK_ENVIRONMENT: test
-          TASK_DEFINITION: worker_task_definition
+          input_mapping:
+            task-definition-arn: worker-task-definition-arn
     serial: true
     on_failure:
       <<: *notify-slack-failure
