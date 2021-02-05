@@ -10,7 +10,7 @@ variable "cluster_id" {
 variable "command" {
   type        = list
   description = "The command to pass to the application container"
-  default     = ["foreman", "run", "web"]
+  default     = null
 }
 
 variable "subnets" {

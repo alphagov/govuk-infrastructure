@@ -1,38 +1,21 @@
-# Unlike update-task-definition, this merely fetches the most recently applied
-# task definition.
+# This merely places the provided `family` of the task definition into the
+# outputs.
 platform: linux
 image_resource:
   type: docker-image
   source:
-    repository: governmentpaas/terraform
-    tag: terraform-0.13.3
+    repository: govuk/ecs-cli
+    tag: latest
     username: ((docker_hub_username))
     password: ((docker_hub_authtoken))
-inputs:
-  - name: govuk-infrastructure
-    path: src
-  - name: terraform-outputs
-    optional: true
 outputs:
-  - name: terraform-outputs
+  - name: task-definition-arn
 params:
-  AWS_REGION: eu-west-1
-  ASSUME_ROLE_ARN: 'arn:aws:iam::430354129336:role/govuk-concourse-deployer'
   APPLICATION:
-  GOVUK_ENVIRONMENT:
 run:
   path: sh
   args:
     - '-c'
     - |
       set -eu
-
-      root_dir=$(pwd)
-
-      APP_DIR="src/terraform/deployments/apps/$APPLICATION"
-      cd "${APP_DIR}"
-
-      terraform init -backend-config="bucket=govuk-terraform-$GOVUK_ENVIRONMENT" -backend-config="role_arn=$ASSUME_ROLE_ARN"
-
-      # TODO - remove the ${APPLICATION} interpolation from this once publisher only has one terraform apply
-      terraform output -json > "$root_dir/terraform-outputs/${APPLICATION}-terraform-outputs.json"
+      echo $APPLICATION > "task-definition-arn/task-definition-arn"
