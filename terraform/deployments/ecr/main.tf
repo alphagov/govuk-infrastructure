@@ -169,10 +169,10 @@ data "aws_iam_policy_document" "push_image_to_ecr_policy_document" {
 
 resource "aws_iam_policy" "push_image_to_ecr_policy" {
   name   = "push_image_to_ecr_policy"
-  policy = "${data.aws_iam_policy_document.push_image_to_ecr_policy_document.json}"
+  policy = data.aws_iam_policy_document.push_image_to_ecr_policy_document.json
 }
 
 resource "aws_iam_role_policy_attachment" "push_to_ecr_role_attachment" {
-  role       = "${aws_iam_role.push_image_to_ecr_role.name}"
-  policy_arn = "${aws_iam_policy.push_image_to_ecr_policy.arn}"
+  role       = aws_iam_role.push_image_to_ecr_role.name
+  policy_arn = aws_iam_policy.push_image_to_ecr_policy.arn
 }

@@ -2,36 +2,151 @@
 definitions:
 
 resources:
-  - name: smokey
+  - &git-repo
+    name: smokey-repo
     icon: github
     type: git
-    source:
+    source: &git-repo-source
       uri: git@github.com:alphagov/smokey.git
       branch: main
-      private_key: |
+      private_key: | # pragma: allowlist secret
         ((govukci_private_key))
 
-  - name: govuk-infrastructure
-    icon: github
-    type: git
+  - <<: *git-repo
+    name: content-store-repo
     source:
+      <<: *git-repo-source
+      uri: git@github.com:alphagov/content-store.git
+      branch: master
+
+  - <<: *git-repo
+    name: frontend-repo
+    source:
+      <<: *git-repo-source
+      uri: git@github.com:alphagov/frontend.git
+      branch: master
+
+  - <<: *git-repo
+    name: publisher-repo
+    source:
+      <<: *git-repo-source
+      uri: git@github.com:alphagov/publisher.git
+      branch: master
+
+  - <<: *git-repo
+    name: publishing-api-repo
+    source:
+      <<: *git-repo-source
+      uri: git@github.com:alphagov/publishing-api.git
+      branch: master
+
+  - <<: *git-repo
+    name: router-repo
+    source:
+      <<: *git-repo-source
+      uri: git@github.com:alphagov/router.git
+      branch: master
+
+  - <<: *git-repo
+    name: router-api-repo
+    source:
+      <<: *git-repo-source
+      uri: git@github.com:alphagov/router-api.git
+      branch: master
+
+  - <<: *git-repo
+    name: signon-repo
+    source:
+      <<: *git-repo-source
+      uri: git@github.com:alphagov/signon.git
+      branch: master
+
+  - <<: *git-repo
+    name: static-repo
+    source:
+      <<: *git-repo-source
+      uri: git@github.com:alphagov/static.git
+      branch: master
+
+  - <<: *git-repo
+    name: govuk-infrastructure
+    source:
+      <<: *git-repo-source
       uri: git@github.com:alphagov/govuk-infrastructure.git
       branch: main
-      private_key: |
-        ((govukci_private_key))
 
-  - name: smokey-image
+  - &docker-image
+    name: smokey-image
     type: registry-image
     icon: docker
-    source:
-      repository: govuk/smokey
+    source: &docker-image-source
+      repository: smokey
       tag: latest
-      username: ((docker_hub_username))
-      password: ((docker_hub_authtoken))
+      aws_region: ((concourse-ecr-user_aws-region))
+      aws_access_key_id: ((concourse-ecr-user_aws-access-key))
+      aws_secret_access_key: ((concourse-ecr-user_aws-secret-access-key))
+      aws_role_arn: arn:aws:iam::((aws_production_account_id)):role/push_image_to_ecr_role
 
-  - name: smokey-version
-    type: semver
+  - <<: *docker-image
+    name: content-store-image
     source:
+      <<: *docker-image-source
+      repository: content-store
+      tag: latest
+
+  - <<: *docker-image
+    name: frontend-image
+    source:
+      <<: *docker-image-source
+      repository: frontend
+      tag: latest
+
+  - <<: *docker-image
+    name: publisher-image
+    source:
+      <<: *docker-image-source
+      repository: publisher
+      tag: latest
+
+  - <<: *docker-image
+    name: publishing-api-image
+    source:
+      <<: *docker-image-source
+      repository: publishing-api
+      tag: latest
+
+  - <<: *docker-image
+    name: router-image
+    source:
+      <<: *docker-image-source
+      repository: router
+      tag: latest
+
+  - <<: *docker-image
+    name: router-api-image
+    source:
+      <<: *docker-image-source
+      repository: router-api
+      tag: latest
+
+  - <<: *docker-image
+    name: signon-image
+    source:
+      <<: *docker-image-source
+      repository: signon
+      tag: latest
+
+  - <<: *docker-image
+    name: static-image
+    source:
+      <<: *docker-image-source
+      repository: static
+      tag: latest
+
+  - &semver-version
+    name: smokey-version
+    type: semver
+    source: &semver-version-source
       driver: s3
       access_key_id: ((readonly_access_key_id))
       secret_access_key: ((readonly_secret_access_key))
@@ -40,6 +155,54 @@ resources:
       key: smokey-version
       region_name: eu-west-2
       initial_version: '1.0.0'
+
+  - <<: *semver-version
+    name: content-store-version
+    source:
+      <<: *semver-version-source
+      key: content-store-version
+
+  - <<: *semver-version
+    name: frontend-version
+    source:
+      <<: *semver-version-source
+      key: frontend-version
+
+  - <<: *semver-version
+    name: publisher-version
+    source:
+      <<: *semver-version-source
+      key: publisher-version
+
+  - <<: *semver-version
+    name: publishing-api-version
+    source:
+      <<: *semver-version-source
+      key: publishing-api-version
+
+  - <<: *semver-version
+    name: router-version
+    source:
+      <<: *semver-version-source
+      key: router-version
+
+  - <<: *semver-version
+    name: router-api-version
+    source:
+      <<: *semver-version-source
+      key: router-api-version
+
+  - <<: *semver-version
+    name: signon-version
+    source:
+      <<: *semver-version-source
+      key: signon-version
+
+  - <<: *semver-version
+    name: static-version
+    source:
+      <<: *semver-version-source
+      key: static-version
 
 jobs:
   - name: update-pipeline
@@ -52,39 +215,269 @@ jobs:
   - name: smokey
     plan:
     - in_parallel:
-      - get: smokey
+      - get: smokey-repo
         trigger: true
       - get: smokey-version
         params:
           bump: minor
           pre_without_version: true
           pre: release
+      - get: govuk-infrastructure
     - task: build-image
       privileged: true
-      params:
-        CONTEXT: smokey
-      config:
-        platform: linux
-        image_resource:
-          type: registry-image
-          source:
-            repository: vito/oci-build-task
-        inputs:
-        - name: smokey
-        outputs:
-        - name: image
-        run:
-          path: build
+      file: govuk-infrastructure/concourse/tasks/build-image-definition.yml
+      input_mapping:
+        git-repo: smokey-repo
     - put: smokey-image
       params:
         image: image/image.tar
         additional_tags: smokey-version/version
     - in_parallel:
-      - put: smokey
+      - put: smokey-repo
         params:
           only_tag: true
           tag: smokey-version/version
-          repository: smokey
+          repository: smokey-repo
       - put: smokey-version
         params:
           file: smokey-version/version
+
+  - name: content-store
+    plan: 
+    - in_parallel:
+      - get: content-store-repo
+        trigger: true
+      - get: content-store-version
+        params:
+          bump: minor
+          pre_without_version: true
+          pre: release
+      - get: govuk-infrastructure
+    - task: build-image
+      privileged: true
+      file: govuk-infrastructure/concourse/tasks/build-image-definition.yml
+      input_mapping:
+        git-repo: content-store-repo
+    - put: content-store-image
+      params:
+        image: image/image.tar
+        additional_tags: content-store-version/version
+    - in_parallel:
+      - put: content-store-repo
+        params:
+          only_tag: true
+          tag: content-store-version/version
+          repository: content-store-repo
+      - put: content-store-version
+        params:
+          file: content-store-version/version
+
+  - name: frontend
+    plan: 
+    - in_parallel:
+      - get: frontend-repo
+        trigger: true
+      - get: frontend-version
+        params:
+          bump: minor
+          pre_without_version: true
+          pre: release
+      - get: govuk-infrastructure
+    - task: build-image
+      privileged: true
+      file: govuk-infrastructure/concourse/tasks/build-image-definition.yml
+      input_mapping:
+        git-repo: frontend-repo
+    - put: frontend-image
+      params:
+        image: image/image.tar
+        additional_tags: frontend-version/version
+    - in_parallel:
+      - put: frontend-repo
+        params:
+          only_tag: true
+          tag: frontend-version/version
+          repository: frontend-repo
+      - put: frontend-version
+        params:
+          file: frontend-version/version
+
+  - name: publisher
+    plan: 
+    - in_parallel:
+      - get: publisher-repo
+        trigger: true
+      - get: publisher-version
+        params:
+          bump: minor
+          pre_without_version: true
+          pre: release
+      - get: govuk-infrastructure
+    - task: build-image
+      privileged: true
+      file: govuk-infrastructure/concourse/tasks/build-image-definition.yml
+      input_mapping:
+        git-repo: publisher-repo
+    - put: publisher-image
+      params:
+        image: image/image.tar
+        additional_tags: publisher-version/version
+    - in_parallel:
+      - put: publisher-repo
+        params:
+          only_tag: true
+          tag: publisher-version/version
+          repository: publisher-repo
+      - put: publisher-version
+        params:
+          file: publisher-version/version
+
+  - name: publishing-api
+    plan: 
+    - in_parallel:
+      - get: publishing-api-repo
+        trigger: true
+      - get: publishing-api-version
+        params:
+          bump: minor
+          pre_without_version: true
+          pre: release
+      - get: govuk-infrastructure
+    - task: build-image
+      privileged: true
+      file: govuk-infrastructure/concourse/tasks/build-image-definition.yml
+      input_mapping:
+        git-repo: publishing-api-repo
+    - put: publishing-api-image
+      params:
+        image: image/image.tar
+        additional_tags: publishing-api-version/version
+    - in_parallel:
+      - put: publishing-api-repo
+        params:
+          only_tag: true
+          tag: publishing-api-version/version
+          repository: publishing-api-repo
+      - put: publishing-api-version
+        params:
+          file: publishing-api-version/version
+
+  - name: router
+    plan: 
+    - in_parallel:
+      - get: router-repo
+        trigger: true
+      - get: router-version
+        params:
+          bump: minor
+          pre_without_version: true
+          pre: release
+      - get: govuk-infrastructure
+    - task: build-image
+      privileged: true
+      file: govuk-infrastructure/concourse/tasks/build-image-definition.yml
+      input_mapping:
+        git-repo: router-repo
+    - put: router-image
+      params:
+        image: image/image.tar
+        additional_tags: router-version/version
+    - in_parallel:
+      - put: router-repo
+        params:
+          only_tag: true
+          tag: router-version/version
+          repository: router-repo
+      - put: router-version
+        params:
+          file: router-version/version
+
+  - name: router-api
+    plan: 
+    - in_parallel:
+      - get: router-api-repo
+        trigger: true
+      - get: router-api-version
+        params:
+          bump: minor
+          pre_without_version: true
+          pre: release
+      - get: govuk-infrastructure
+    - task: build-image
+      privileged: true
+      file: govuk-infrastructure/concourse/tasks/build-image-definition.yml
+      input_mapping:
+        git-repo: router-api-repo
+    - put: router-api-image
+      params:
+        image: image/image.tar
+        additional_tags: router-api-version/version
+    - in_parallel:
+      - put: router-api-repo
+        params:
+          only_tag: true
+          tag: router-api-version/version
+          repository: router-api-repo
+      - put: router-api-version
+        params:
+          file: router-api-version/version
+
+  - name: signon
+    plan: 
+    - in_parallel:
+      - get: signon-repo
+        trigger: true
+      - get: signon-version
+        params:
+          bump: minor
+          pre_without_version: true
+          pre: release
+      - get: govuk-infrastructure
+    - task: build-image
+      privileged: true
+      file: govuk-infrastructure/concourse/tasks/build-image-definition.yml
+      input_mapping:
+        git-repo: signon-repo
+    - put: signon-image
+      params:
+        image: image/image.tar
+        additional_tags: signon-version/version
+    - in_parallel:
+      - put: signon-repo
+        params:
+          only_tag: true
+          tag: signon-version/version
+          repository: signon-repo
+      - put: signon-version
+        params:
+          file: signon-version/version
+
+  - name: static
+    plan: 
+    - in_parallel:
+      - get: static-repo
+        trigger: true
+      - get: static-version
+        params:
+          bump: minor
+          pre_without_version: true
+          pre: release
+      - get: govuk-infrastructure
+    - task: build-image
+      privileged: true
+      file: govuk-infrastructure/concourse/tasks/build-image-definition.yml
+      input_mapping:
+        git-repo: static-repo
+    - put: static-image
+      params:
+        image: image/image.tar
+        additional_tags: static-version/version
+    - in_parallel:
+      - put: static-repo
+        params:
+          only_tag: true
+          tag: static-version/version
+          repository: static-repo
+      - put: static-version
+        params:
+          file: static-version/version
