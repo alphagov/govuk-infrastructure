@@ -8,14 +8,14 @@ variable "cluster_id" {
 }
 
 variable "command" {
-  type        = list
+  type        = list(any)
   description = "The command to pass to the application container"
   default     = null
 }
 
 variable "subnets" {
   description = "IDs of the subnets where the ECS task will run."
-  type        = list
+  type        = list(any)
 }
 
 
@@ -48,19 +48,19 @@ variable "service_name" {
 
 variable "custom_container_services" {
   description = "list of services in map format {container_service, port, protocol} that an app container exposes."
-  type        = list
+  type        = list(any)
   default     = null
 }
 
 variable "extra_security_groups" {
   description = "Additional security groups to attach to the app's ECS service/tasks."
-  type        = list
+  type        = list(any)
   default     = []
 }
 
 variable "load_balancers" {
   description = "Optional list of maps {target_group_arn, container_name, container_port} for attaching ALB/NLB target groups to the app's ECS service. See https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/ecs_service#load_balancer"
-  type        = list
+  type        = list(any)
   default     = []
 }
 
@@ -77,13 +77,13 @@ variable "desired_count" {
 }
 
 variable "ports" {
-  type        = list
+  type        = list(any)
   default     = [80]
   description = "The ports the application listens on. For most apps this can be left as the default (port 80)."
 }
 
 variable "environment_variables" {
-  type        = map
+  type        = map(any)
   default     = {}
   description = <<DESC
   A map of environment variables. For example { RAILS_ENV = "PRODUCTION", ... }
@@ -92,7 +92,7 @@ variable "environment_variables" {
 }
 
 variable "secrets_from_arns" {
-  type        = map
+  type        = map(any)
   default     = {}
   description = <<DESC
   A map of secrets to AWS SecretsManager ARNs. For example { OAUTH_SECRET = "arn:aws:secretsmanager:eu-west-1:..." } # pragma: allowlist secret

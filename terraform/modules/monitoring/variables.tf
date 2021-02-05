@@ -15,12 +15,12 @@ variable "vpc_id" {
 
 variable "private_subnets" {
   description = "Subnet IDs to use for non-Internet-facing resources."
-  type        = list
+  type        = list(any)
 }
 
 variable "public_subnets" {
   description = "Subnet IDs to use for Internet-facing resources."
-  type        = list
+  type        = list(any)
 }
 
 variable "publishing_service_domain" {
@@ -41,5 +41,5 @@ variable "desired_count" {
 
 variable "grafana_cidrs_allow_list" {
   description = "List of CIDRs that can access Grafana"
-  type        = list
+  type        = list(any)
 }

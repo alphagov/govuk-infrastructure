@@ -9,7 +9,7 @@ variable "service_name" {
 
 variable "container_definitions" {
   description = "List of ECS ContainerDefinitions for the app, as maps in HCL/JSON syntax (not strings). The module adds the Envoy sidecar to this list."
-  type        = list
+  type        = list(any)
 }
 
 variable "cpu" {

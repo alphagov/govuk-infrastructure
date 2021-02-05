@@ -48,7 +48,7 @@ variable "govuk_environment" {
 
 variable "office_cidrs_list" {
   description = "List of GDS office CIDRs"
-  type        = list
+  type        = list(any)
 }
 
 variable "frontend_desired_count" {

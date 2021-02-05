@@ -7,5 +7,5 @@ variable "execution_role_arn" {
 }
 
 variable "ports" {
-  type = list
+  type = list(any)
 }

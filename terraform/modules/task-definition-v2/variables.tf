@@ -1,5 +1,5 @@
 variable "container_definitions" {
-  type = list
+  type = list(any)
 }
 
 variable "cpu" {
