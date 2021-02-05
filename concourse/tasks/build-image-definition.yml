@@ -1,0 +1,13 @@
+platform: linux
+image_resource:
+  type: registry-image
+  source:
+    repository: vito/oci-build-task
+inputs:
+- name: git-repo
+outputs:
+- name: image
+params:
+  CONTEXT: git-repo
+run:
+  path: build
