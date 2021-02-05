@@ -8,7 +8,7 @@ jobs:
       - uses: ruby/setup-ruby@v1
       - uses: hashicorp/setup-terraform@v1
         with:
-          terraform_version: 0.13.3
+          terraform_version: 0.14.6
           terraform_wrapper: false
 
       - name: get date
@@ -23,7 +23,7 @@ jobs:
         with:
           path: ~/.terraform/plugin-cache
           key:
-            ${{ env.cache-name }}-${{ steps.get-date.outputs.date }}-${{ hashFiles('terraform/deployments/**/main.tf', 'terraform/deployments/**/versions.tf') }}
+            ${{ env.cache-name }}-${{ steps.get-date.outputs.date }}-${{ hashFiles('terraform/deployments/**/main.tf', 'terraform/deployments/**/.terraform.lock.hcl', 'terraform/deployments/**/versions.tf') }}
 
       - name: terraform fmt
         working-directory: terraform
@@ -59,4 +59,3 @@ jobs:
               echo -e '\n-------------------------\n'
             )
           done
-
