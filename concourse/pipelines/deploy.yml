@@ -34,8 +34,8 @@ resources:
 
   - <<: *git-repo
     name: frontend-terraform-outputs
-      type: s3
-      icon: file
+    type: s3
+    icon: file
     source:
       bucket: ((readonly_private_bucket_name))
       region_name: eu-west-2
@@ -278,12 +278,16 @@ jobs:
       - get: static-terraform-outputs
       - get: router-api-terraform-outputs
       - get: router-terraform-outputs
+      - get: frontend-terraform-outputs
     - task: terraform-apply
       config:
         inputs:
         - name: govuk-infrastructure
         - name: content-store-terraform-outputs
           path: old-content-store-terraform-outputs
+          optional: true
+        - name: frontend-terraform-outputs
+          path: old-frontend-terraform-outputs
           optional: true
         - name: publisher-terraform-outputs
           path: old-publisher-terraform-outputs
@@ -310,6 +314,8 @@ jobs:
         - name: govuk-terraform-outputs
         - name: content-store-terraform-outputs
           path: new-content-store-terraform-outputs
+        - name: frontend-terraform-outputs
+          path: new-frontend-terraform-outputs
         - name: publisher-terraform-outputs
           path: new-publisher-terraform-outputs
         - name: publishing-api-terraform-outputs
@@ -370,6 +376,7 @@ jobs:
             }
 
             update_terraform_outputs content-store
+            update_terraform_outputs frontend
             update_terraform_outputs publisher
             update_terraform_outputs publishing-api
             update_terraform_outputs signon
@@ -386,6 +393,10 @@ jobs:
           put: content-store-terraform-outputs
           params:
             file: content-store-terraform-outputs/content-store.json
+      - try:
+          put: frontend-terraform-outputs
+          params:
+            file: frontend-terraform-outputs/frontend.json
       - try:
           put: publisher-terraform-outputs
           params:
@@ -419,25 +430,43 @@ jobs:
     plan:
     - in_parallel:
       - get: govuk-infrastructure
-        resource: govuk-infrastructure-frontend
+        resource: govuk-infrastructure-concourse-tasks
         trigger: true
-      - get: govuk-terraform-outputs
+      - get: app-terraform-outputs
+        resource: frontend-terraform-outputs
         passed:
         - run-terraform
         trigger: true
       - get: release
         resource: frontend
         trigger: true
-    - task: update-task-definition
-      file: govuk-infrastructure/concourse/tasks/update-task-definition.yml
+      - task: update-draft-task-definition
+        file: govuk-infrastructure/concourse/tasks/update-task-definition-v2.yml
+        output_mapping:
+         task-definition-arn: draft-task-definition-arn
+        params:
+         APPLICATION: frontend
+         VARIANT: draft
+    - task: update-live-task-definition
+      file: govuk-infrastructure/concourse/tasks/update-task-definition-v2.yml
+      output_mapping:
+       task-definition-arn: live-task-definition-arn
       params:
-        APPLICATION: frontend
-        GOVUK_ENVIRONMENT: test
-    - task: update-ecs-service
-      file: govuk-infrastructure/concourse/tasks/update-ecs-service.yml
-      params:
-        ECS_SERVICE: frontend
-        GOVUK_ENVIRONMENT: test
+       APPLICATION: frontend
+       VARIANT: live
+    - in_parallel:
+      - task: update-draft-ecs-service
+        file: govuk-infrastructure/concourse/tasks/update-ecs-service-v2.yml
+        input_mapping:
+         task-definition-arn: draft-task-definition-arn
+        params:
+         ECS_SERVICE: draft-frontend
+      - task: update-live-ecs-service
+        file: govuk-infrastructure/concourse/tasks/update-ecs-service-v2.yml
+        input_mapping:
+         task-definition-arn: live-task-definition-arn
+        params:
+         ECS_SERVICE: frontend
     serial: true
     on_failure: &notify-slack-failure
       put: deploy-slack-channel
@@ -469,41 +498,6 @@ jobs:
         APPLICATION: smokey
         VARIANT: default
         COMMAND: bundle exec cucumber --profile test --strict-undefined -t @replatforming -t \"not @notreplatforming\"
-
-  - name: deploy-draft-frontend
-    plan:
-    - in_parallel:
-      - get: govuk-infrastructure
-        resource: govuk-infrastructure-frontend
-        trigger: true
-      - get: govuk-terraform-outputs
-        passed:
-        - run-terraform
-        trigger: true
-      - get: release
-        resource: frontend
-        trigger: true
-    - task: update-task-definition
-      file: govuk-infrastructure/concourse/tasks/update-task-definition.yml
-      params:
-        APPLICATION: draft-frontend
-        GOVUK_ENVIRONMENT: test
-    - task: update-ecs-service
-      file: govuk-infrastructure/concourse/tasks/update-ecs-service.yml
-      params:
-        ECS_SERVICE: draft-frontend
-        GOVUK_ENVIRONMENT: test
-    serial: true
-    on_failure: &notify-slack-failure
-      put: deploy-slack-channel
-      params:
-        channel: "#govuk-deploy-alerts"
-        username: 'Concourse deploy pipeline'
-        icon_emoji: ':concourse:'
-        silent: true
-        text: |
-          :red_circle: Failed build: http://cd.gds-reliability.engineering/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME
-
 
   - name: deploy-publisher
     plan:

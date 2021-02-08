@@ -12,11 +12,11 @@ locals {
       PLEK_SERVICE_SIGNON_URI         = local.defaults.signon_uri
       UNICORN_WORKER_PROCESSES        = 12,
       ASSET_HOST                      = local.defaults.environment_variables.GOVUK_WEBSITE_ROOT,
-      PLEK_SERVICE_CONTENT_STORE_URI  = local.defaults.content_store_url
-      PLEK_SERVICE_STATIC_URI         = local.defaults.static_url
+      PLEK_SERVICE_CONTENT_STORE_URI  = local.defaults.content_store_uri
+      PLEK_SERVICE_STATIC_URI         = local.defaults.static_uri
       PLEK_SERVICE_PUBLISHING_API_URI = local.defaults.publishing_api_uri
       PLEK_SERVICE_SIGNON_URI         = local.defaults.signon_uri
-      GOVUK_ASSET_ROOT                = local.defaults.asset_url
+      GOVUK_ASSET_ROOT                = local.defaults.asset_root_url
       RAILS_SERVE_STATIC_FILES        = "yes"
       RAILS_SERVE_STATIC_ASSETS       = "yes"
       HEROKU_APP_NAME                 = "frontend"
