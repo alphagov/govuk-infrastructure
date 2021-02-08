@@ -17,12 +17,12 @@ variable "mesh_name" {
 
 variable "private_subnets" {
   description = "Subnet IDs where the statsd ECS service will run."
-  type        = list
+  type        = list(any)
 }
 
 variable "security_groups" {
   description = "Additional security groups to attach to the Statsd ECS Service."
-  type        = list
+  type        = list(any)
 }
 
 variable "service_discovery_namespace_id" {

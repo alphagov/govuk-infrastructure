@@ -15,5 +15,5 @@ locals {
 }
 
 output "cli_input_json" {
-  value = { for key, value in local.definition : "${key}" => value if value != null }
+  value = { for key, value in local.definition : key => value if value != null }
 }

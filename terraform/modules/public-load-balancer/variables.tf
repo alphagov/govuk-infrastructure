@@ -14,7 +14,7 @@ variable "dns_a_record_name" {
 }
 
 variable "external_cidrs_list" {
-  type    = list
+  type    = list(any)
   default = ["0.0.0.0/0"]
 }
 
@@ -24,7 +24,7 @@ variable "publishing_service_domain" {
 }
 
 variable "public_subnets" {
-  type = list
+  type = list(any)
 }
 
 variable "service_security_group_id" {

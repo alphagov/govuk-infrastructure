@@ -19,12 +19,12 @@ variable "assume_role_arn" {
 
 variable "office_cidrs_list" {
   description = "List of GDS office CIDRs"
-  type        = list
+  type        = list(any)
 }
 
 variable "concourse_cidrs_list" {
   description = "List of GDS Concourse CIDRs"
-  type        = list
+  type        = list(any)
 }
 
 variable "publishing_service_domain" {

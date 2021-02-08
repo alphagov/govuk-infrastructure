@@ -4,13 +4,13 @@ variable "aws_region" {
 }
 
 variable "command" {
-  type        = list
+  type        = list(any)
   description = "The command to pass to the container"
   default     = null
 }
 
 variable "environment_variables" {
-  type        = map
+  type        = map(any)
   default     = {}
   description = <<DESC
   A map of environment variables. For example { RAILS_ENV = "PRODUCTION", ... }
@@ -19,7 +19,7 @@ DESC
 }
 
 variable "dependsOn" {
-  type        = list
+  type        = list(any)
   default     = []
   description = "See ECS Task Definition spec for dependsOn"
 }
@@ -45,13 +45,13 @@ variable "name" {
 }
 
 variable "ports" {
-  type        = list
+  type        = list(any)
   default     = [80]
   description = "The ports the application listens on. For most apps this can be left as the default (port 80)."
 }
 
 variable "secrets_from_arns" {
-  type        = map
+  type        = map(any)
   default     = {}
   description = <<DESC
   A map of secrets to AWS SecretsManager ARNs. For example { OAUTH_SECRET = "arn:aws:secretsmanager:eu-west-1:..." } # pragma: allowlist secret

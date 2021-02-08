@@ -1,9 +1,9 @@
 variable "security_groups" {
-  type        = list
+  type        = list(any)
   description = "Security groups to attach to the task"
 }
 
 variable "subnets" {
-  type        = list
+  type        = list(any)
   description = "Private subnets for the task"
 }

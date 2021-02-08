@@ -10,7 +10,7 @@ variable "internal_app_domain" {
 }
 
 variable "subnet_ids" {
-  type        = list
+  type        = list(any)
   description = "Subnet IDs to assign to the aws_elasticache_subnet_group"
 }
 

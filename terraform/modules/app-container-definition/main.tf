@@ -5,27 +5,27 @@ variable "image" {
   type = string
 }
 variable "environment_variables" {
-  type    = map
+  type    = map(any)
   default = {}
 }
 variable "log_group" {
   type = string
 }
 variable "secrets_from_arns" {
-  type    = map
+  type    = map(any)
   default = {}
 }
 variable "aws_region" {
   type = string
 }
 variable "depends_on_containers" {
-  type        = map
+  type        = map(any)
   default     = {}
   description = "Other containers which this depends on (e.g. for envoy, set this to {envoy: \"START\"})"
 }
 
 variable "ports" {
-  type    = list
+  type    = list(any)
   default = [80]
 }
 
@@ -48,8 +48,8 @@ output "value" {
     "mountPoints" : [],
     "portMappings" : [
       for port in var.ports :
-      { "ContainerPort" = "${port}",
-        "hostPort"      = "${port}",
+      { "ContainerPort" = port,
+        "hostPort"      = port,
         "Protocol"      = "tcp",
       }
     ],
