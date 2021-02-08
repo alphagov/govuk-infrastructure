@@ -4,34 +4,34 @@ locals {
     memory = 1024 # TODO parameterize this
 
     environment_variables = merge(
-    local.defaults.environment_variables,
-    {
-      GOVUK_APP_NAME                  = "frontend",
-      GOVUK_CONTENT_SCHEMAS_PATH      = "/govuk-content-schemas",
-      PLEK_SERVICE_PUBLISHING_API_URI = local.defaults.publishing_api_uri
-      PLEK_SERVICE_SIGNON_URI         = local.defaults.signon_uri
-      UNICORN_WORKER_PROCESSES        = 12,
-      ASSET_HOST                      = local.defaults.environment_variables.GOVUK_WEBSITE_ROOT,
-      PLEK_SERVICE_CONTENT_STORE_URI  = local.defaults.content_store_uri
-      PLEK_SERVICE_STATIC_URI         = local.defaults.static_uri
-      PLEK_SERVICE_PUBLISHING_API_URI = local.defaults.publishing_api_uri
-      PLEK_SERVICE_SIGNON_URI         = local.defaults.signon_uri
-      GOVUK_ASSET_ROOT                = local.defaults.asset_root_url
-      RAILS_SERVE_STATIC_FILES        = "yes"
-      RAILS_SERVE_STATIC_ASSETS       = "yes"
-      HEROKU_APP_NAME                 = "frontend"
-    }
+      local.defaults.environment_variables,
+      {
+        GOVUK_APP_NAME                  = "frontend",
+        GOVUK_CONTENT_SCHEMAS_PATH      = "/govuk-content-schemas",
+        PLEK_SERVICE_PUBLISHING_API_URI = local.defaults.publishing_api_uri
+        PLEK_SERVICE_SIGNON_URI         = local.defaults.signon_uri
+        UNICORN_WORKER_PROCESSES        = 12,
+        ASSET_HOST                      = local.defaults.environment_variables.GOVUK_WEBSITE_ROOT,
+        PLEK_SERVICE_CONTENT_STORE_URI  = local.defaults.content_store_uri
+        PLEK_SERVICE_STATIC_URI         = local.defaults.static_uri
+        PLEK_SERVICE_PUBLISHING_API_URI = local.defaults.publishing_api_uri
+        PLEK_SERVICE_SIGNON_URI         = local.defaults.signon_uri
+        GOVUK_ASSET_ROOT                = local.defaults.asset_root_url
+        RAILS_SERVE_STATIC_FILES        = "yes"
+        RAILS_SERVE_STATIC_ASSETS       = "yes"
+        HEROKU_APP_NAME                 = "frontend"
+      }
     )
 
     secrets_from_arns = merge(
-    local.defaults.secrets_from_arns,
-    {
-      GDS_SSO_OAUTH_ID            = data.aws_secretsmanager_secret.content_store_oauth_id.arn,
-      GDS_SSO_OAUTH_SECRET        = data.aws_secretsmanager_secret.content_store_oauth_secret.arn,
-      PUBLISHING_API_BEARER_TOKEN = data.aws_secretsmanager_secret.content_store_publishing_api_bearer_token.arn,
-      ROUTER_API_BEARER_TOKEN     = data.aws_secretsmanager_secret.content_store_router_api_bearer_token.arn,
-      SECRET_KEY_BASE             = data.aws_secretsmanager_secret.content_store_secret_key_base.arn,
-    }
+      local.defaults.secrets_from_arns,
+      {
+        GDS_SSO_OAUTH_ID            = data.aws_secretsmanager_secret.content_store_oauth_id.arn,
+        GDS_SSO_OAUTH_SECRET        = data.aws_secretsmanager_secret.content_store_oauth_secret.arn,
+        PUBLISHING_API_BEARER_TOKEN = data.aws_secretsmanager_secret.content_store_publishing_api_bearer_token.arn,
+        ROUTER_API_BEARER_TOKEN     = data.aws_secretsmanager_secret.content_store_router_api_bearer_token.arn,
+        SECRET_KEY_BASE             = data.aws_secretsmanager_secret.content_store_secret_key_base.arn,
+      }
     )
 
     mongodb_host = join(",", [
