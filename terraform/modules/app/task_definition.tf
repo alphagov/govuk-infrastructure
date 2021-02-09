@@ -54,7 +54,7 @@ module "envoy_container_definition" {
   }
   # TODO: don't hardcode the version; track stable Envoy
   # TODO: control when Envoy updates happen (but still needs to be automatic)
-  image             = "840364872350.dkr.ecr.${var.aws_region}.amazonaws.com/aws-appmesh-envoy:v1.15.1.0-prod"
+  image             = "840364872350.dkr.ecr.${var.aws_region}.amazonaws.com/aws-appmesh-envoy:v1.16.1.0-prod"
   log_group         = var.log_group
   log_stream_prefix = "awslogs-${var.service_name}-envoy"
   name              = "envoy"

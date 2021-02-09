@@ -16,7 +16,7 @@ locals {
       # TODO: don't hardcode the version; track stable Envoy
       # TODO: control when Envoy updates happen (but still needs to be automatic)
       # TODO: don't hardcode the region
-      "image" : "840364872350.dkr.ecr.eu-west-1.amazonaws.com/aws-appmesh-envoy:v1.15.1.0-prod",
+      "image" : "840364872350.dkr.ecr.eu-west-1.amazonaws.com/aws-appmesh-envoy:v1.16.1.0-prod",
       "user" : "1337",
       "environment" : [
         { "name" : "APPMESH_RESOURCE_ARN", "value" : "mesh/${var.mesh_name}/virtualNode/${local.virtual_node_name}" },
