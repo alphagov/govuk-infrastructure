@@ -11,11 +11,9 @@ locals {
         PLEK_SERVICE_PUBLISHING_API_URI = local.defaults.publishing_api_uri
         PLEK_SERVICE_SIGNON_URI         = local.defaults.signon_uri
         UNICORN_WORKER_PROCESSES        = 12,
-        ASSET_HOST                      = local.defaults.environment_variables.GOVUK_WEBSITE_ROOT,
+        ASSET_HOST                      = local.defaults.asset_host,
         PLEK_SERVICE_CONTENT_STORE_URI  = local.defaults.content_store_uri
         PLEK_SERVICE_STATIC_URI         = local.defaults.static_uri
-        PLEK_SERVICE_PUBLISHING_API_URI = local.defaults.publishing_api_uri
-        PLEK_SERVICE_SIGNON_URI         = local.defaults.signon_uri
         GOVUK_ASSET_ROOT                = local.defaults.asset_root_url
         RAILS_SERVE_STATIC_FILES        = "yes"
         RAILS_SERVE_STATIC_ASSETS       = "yes"
@@ -97,14 +95,21 @@ module "draft_frontend" {
     target_group_arn = module.draft_frontend_public_alb.target_group_arn
     container_port   = 80
   }]
-  environment_variables = local.frontend_defaults.environment_variables
-  secrets_from_arns     = local.frontend_defaults.secrets_from_arns
-  log_group             = local.log_group
-  aws_region            = data.aws_region.current.name
-  cpu                   = local.frontend_defaults.cpu
-  memory                = local.frontend_defaults.memory
-  task_role_arn         = aws_iam_role.task.arn
-  execution_role_arn    = aws_iam_role.execution.arn
+  environment_variables = merge(
+    local.frontend_defaults.environment_variables,
+    {
+      DRAFT_STATIC_URI               = local.defaults.draft_static_uri
+      PLEK_SERVICE_CONTENT_STORE_URI = local.defaults.draft_content_store_uri,
+      PLEK_SERVICE_STATIC_URI        = local.defaults.static_uri
+    }
+  )
+  secrets_from_arns  = local.frontend_defaults.secrets_from_arns
+  log_group          = local.log_group
+  aws_region         = data.aws_region.current.name
+  cpu                = local.frontend_defaults.cpu
+  memory             = local.frontend_defaults.memory
+  task_role_arn      = aws_iam_role.task.arn
+  execution_role_arn = aws_iam_role.execution.arn
 }
 
 module "draft_frontend_public_alb" {

@@ -33,16 +33,6 @@ resources:
       tag_filter: release_*
 
   - <<: *git-repo
-    name: frontend-terraform-outputs
-    type: s3
-    icon: file
-    source:
-      bucket: ((readonly_private_bucket_name))
-      region_name: eu-west-2
-      versioned_file: frontend.json
-      initial_version: "0"
-
-  - <<: *git-repo
     name: publisher
     source:
       branch: master
@@ -150,6 +140,15 @@ resources:
       bucket: ((readonly_private_bucket_name))
       region_name: eu-west-2
       versioned_file: content-store.json
+      initial_version: "0"
+
+  - name: frontend-terraform-outputs
+    type: s3
+    icon: file
+    source:
+      bucket: ((readonly_private_bucket_name))
+      region_name: eu-west-2
+      versioned_file: frontend.json
       initial_version: "0"
 
   - name: publisher-terraform-outputs
@@ -447,13 +446,13 @@ jobs:
         params:
          APPLICATION: frontend
          VARIANT: draft
-    - task: update-live-task-definition
-      file: govuk-infrastructure/concourse/tasks/update-task-definition-v2.yml
-      output_mapping:
-       task-definition-arn: live-task-definition-arn
-      params:
-       APPLICATION: frontend
-       VARIANT: live
+      - task: update-live-task-definition
+        file: govuk-infrastructure/concourse/tasks/update-task-definition-v2.yml
+        output_mapping:
+         task-definition-arn: live-task-definition-arn
+        params:
+         APPLICATION: frontend
+         VARIANT: live
     - in_parallel:
       - task: update-draft-ecs-service
         file: govuk-infrastructure/concourse/tasks/update-ecs-service-v2.yml

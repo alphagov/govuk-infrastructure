@@ -21,6 +21,7 @@ locals {
     content_store_uri       = "http://content-store.${var.mesh_domain}",
     draft_content_store_uri = "http://draft-content-store.${var.mesh_domain}",
     draft_origin_uri        = "https://draft-frontend.${var.external_app_domain}",
+    draft_static_uri        = "http://draft-static.${var.mesh_domain}"
     publishing_api_uri      = "http://publishing-api-web.${var.mesh_domain}",
     rabbitmq_hosts          = "rabbitmq.${var.internal_app_domain}"
     redis_url               = "redis://${var.redis_host}:${var.redis_port}"
