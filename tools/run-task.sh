@@ -11,15 +11,18 @@ cluster="task_runner"
 govuk_env="test"
 
 function show_help {
-  echo "Usage: cd govuk-infrastructure && gds aws govuk-tools-internal-admin ./tools/run-rake-task -a frontend rake db:migrate"
+  echo "Usage: cd govuk-infrastructure && gds aws govuk-test-poweruser ./tools/run-rake-task -a frontend -v live rake db:migrate"
   exit 64
 }
 
-while getopts :a:c:e:h opt; do
+while getopts :a:c:e:v:h opt; do
     case $opt in
       h) show_help;;
       a)
         application=${OPTARG}
+        ;;
+      v)
+        variant=${OPTARG:-default}
         ;;
       e)
         govuk_env=${OPTARG:-$govuk_env}
@@ -36,26 +39,22 @@ shift $((OPTIND-1))
 command=$@
 
 if [ -z "${application}" ]; then echo "[Error] You must set the application arg e.g. publisher" && show_help && exit 1; fi
+if [ -z "${variant}" ]; then echo "[Error] You must set the variant arg e.g. web, worker, draft or live" && show_help && exit 1; fi
 if [ -z "${command}" ]; then echo "[Error] You must provide a command" && show_help && exit 1; fi
 
 echo "[Warning] This is a temporary tool for use by the replatforming team."
 
 root_dir="${PWD}"
 
-app_dir="$root_dir/terraform/deployments/apps/$application-web"
-env_dir="$root_dir/terraform/deployments/govuk-test"
+env_dir="$root_dir/terraform/deployments/govuk-publishing-platform"
 
-echo "Fetching task_definition_arn from Terraform statefile in $app_dir"
-cd ${app_dir}
-terraform init >/dev/null
-task_definition_arn=$(terraform output task_definition_arn)
+echo "Fetching task_definition_arn from the govuk ECS cluster"
+task_definition_arn=$(aws --region eu-west-1 ecs describe-services --cluster govuk --service "${application}-${variant}" | jq -r '.services[0].taskDefinition')
 
 echo "Fetching network_config from Terraform statefile in $env_dir"
 cd ${env_dir}
 terraform init >/dev/null
-private_subnets=$(terraform output -json private_subnets)
-security_groups=$(terraform output -json $application'_security_groups')
-network_config="awsvpcConfiguration={subnets=$private_subnets,securityGroups=$security_groups,assignPublicIp=DISABLED}"
+network_config=$(terraform output -json "$application" | jq -r ".$variant.network_config")
 
 echo "Starting task:
   cluster: $cluster
@@ -71,19 +70,21 @@ task=$(aws ecs run-task --cluster $cluster \
 --started-by $(whoami) \
 --overrides '{
   "containerOverrides": [{
-    "name": "'"$application-web"'",
+    "name": "app",
     "command": ["/bin/bash", "-c", "'"$command"'"]
   }]
 }')
 
-task_arn=$(echo $task | jq .tasks[0].taskArn)
+task_arn=$(echo $task | jq -r .tasks[0].taskArn)
+task_id=${task_arn##*/}
 
 echo "Waiting for task $task_arn to finish..."
 echo "View task: https://eu-west-1.console.aws.amazon.com/ecs/home?region=eu-west-1#/clusters/$cluster/tasks"
+echo 'View logs: https://eu-west-1.console.aws.amazon.com/cloudwatch/home?region=eu-west-1#logsV2:log-groups/log-group/govuk$3FlogStreamNameFilter$3D'"$task_id"
 
-aws ecs wait tasks-stopped --tasks=[$task_arn] --cluster $cluster
+aws ecs wait tasks-stopped --tasks=["\"$task_arn\""] --cluster $cluster
 
-task_results=$(aws ecs describe-tasks --tasks=[$task_arn] --cluster $cluster)
+task_results=$(aws ecs describe-tasks --tasks=["\"$task_arn\""] --cluster $cluster)
 exit_code=$(echo $task_results | jq [.tasks[0].containers[].exitCode] | jq add)
 
 echo "Task finished. Exit code: $exit_code"
