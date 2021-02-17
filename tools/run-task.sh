@@ -5,6 +5,9 @@
 
 set -eu
 
+trap "exit" INT TERM
+trap "kill -- -$$" EXIT
+
 OPTIND=1 # Reset in case getopts has been used previously in the shell.
 
 cluster="task_runner"
@@ -80,13 +83,20 @@ task_id=${task_arn##*/}
 
 echo "Waiting for task $task_arn to finish..."
 echo "View task: https://eu-west-1.console.aws.amazon.com/ecs/home?region=eu-west-1#/clusters/$cluster/tasks"
-echo 'View logs: https://eu-west-1.console.aws.amazon.com/cloudwatch/home?region=eu-west-1#logsV2:log-groups/log-group/govuk$3FlogStreamNameFilter$3D'"$task_id"
+echo "Tailing logs..."
+echo ""
 
-aws ecs wait tasks-stopped --tasks=["\"$task_arn\""] --cluster $cluster
+(aws --region eu-west-1 logs tail govuk --follow | grep "${application}-${variant}/app/${task_id}")&
 
-task_results=$(aws ecs describe-tasks --tasks=["\"$task_arn\""] --cluster $cluster)
+aws ecs wait tasks-stopped --tasks="[\"$task_arn\"]" --cluster $cluster
+
+task_results=$(aws ecs describe-tasks --tasks="[\"$task_arn\"]" --cluster $cluster)
 exit_code=$(echo $task_results | jq [.tasks[0].containers[].exitCode] | jq add)
 
+echo ""
 echo "Task finished. Exit code: $exit_code"
+
+# Sleep for a few seconds to let the logs catch up...
+sleep 5
 
 exit $exit_code
