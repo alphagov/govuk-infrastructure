@@ -8,3 +8,8 @@ output "security_groups" {
   value       = local.service_security_groups
   description = "The security groups applied to the ECS Service."
 }
+
+output "virtual_service_names" {
+  value       = module.service_mesh_node[*].virtual_service_name
+  description = "App Mesh virtual services for this app"
+}

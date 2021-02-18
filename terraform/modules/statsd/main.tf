@@ -33,6 +33,7 @@ resource "aws_ecs_service" "statsd" {
 
 module "service_mesh_node" {
   mesh_name                        = var.mesh_name
+  backend_virtual_service_names    = [] # TODO: Nice to have Graphite as a virtual node (for retries etc)
   port                             = local.ingress_port
   protocol                         = "tcp"
   service_discovery_namespace_id   = var.service_discovery_namespace_id

@@ -71,6 +71,7 @@ module "service_mesh_node" {
   count = var.service_mesh ? length(local.container_services) : 0
 
   source                           = "../service-mesh-node"
+  backend_virtual_service_names    = var.backend_virtual_service_names
   mesh_name                        = var.mesh_name
   port                             = local.container_services[count.index].port
   protocol                         = local.container_services[count.index].protocol

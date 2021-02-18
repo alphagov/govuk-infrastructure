@@ -1,3 +1,8 @@
+variable "backend_virtual_service_names" {
+  type        = list(any)
+  description = "aws_appmesh_virtual_service names called by this app"
+}
+
 variable "vpc_id" {
   type = string
 }
