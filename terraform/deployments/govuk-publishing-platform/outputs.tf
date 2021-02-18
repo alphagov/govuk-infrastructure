@@ -33,6 +33,19 @@ output "publisher" {
   }
 }
 
+output "frontend" {
+  value = {
+    draft = {
+      task_definition_cli_input_json = module.draft_frontend.cli_input_json,
+      security_groups                = module.draft_frontend.security_groups
+    },
+    live = {
+      task_definition_cli_input_json = module.frontend.cli_input_json,
+      security_groups                = module.frontend.security_groups,
+    },
+  }
+}
+
 output "publishing-api" {
   value = {
     web = {
