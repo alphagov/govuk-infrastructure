@@ -98,9 +98,8 @@ module "draft_frontend" {
   environment_variables = merge(
     local.frontend_defaults.environment_variables,
     {
-      DRAFT_STATIC_URI               = local.defaults.draft_static_uri
       PLEK_SERVICE_CONTENT_STORE_URI = local.defaults.draft_content_store_uri,
-      PLEK_SERVICE_STATIC_URI        = local.defaults.static_uri
+      PLEK_SERVICE_STATIC_URI        = local.defaults.draft_static_uri
     }
   )
   secrets_from_arns  = local.frontend_defaults.secrets_from_arns
