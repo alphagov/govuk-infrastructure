@@ -28,6 +28,7 @@ module "router" {
   source = "../../modules/app"
 
   service_name                     = "router"
+  backend_virtual_service_names    = module.frontend.virtual_service_names
   mesh_name                        = aws_appmesh_mesh.govuk.id
   service_discovery_namespace_id   = aws_service_discovery_private_dns_namespace.govuk_publishing_platform.id
   service_discovery_namespace_name = aws_service_discovery_private_dns_namespace.govuk_publishing_platform.name
@@ -60,6 +61,7 @@ module "draft_router" {
   source = "../../modules/app"
 
   service_name                     = "draft-router"
+  backend_virtual_service_names    = module.draft_frontend.virtual_service_names
   mesh_name                        = aws_appmesh_mesh.govuk.id
   service_discovery_namespace_id   = aws_service_discovery_private_dns_namespace.govuk_publishing_platform.id
   service_discovery_namespace_name = aws_service_discovery_private_dns_namespace.govuk_publishing_platform.name

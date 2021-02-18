@@ -3,6 +3,11 @@ locals {
     cpu    = 512  # TODO parameterize this
     memory = 1024 # TODO parameterize this
 
+    backend_services = flatten([
+      local.defaults.virtual_service_backends,
+      module.signon.virtual_service_names
+    ])
+
     environment_variables = merge(
       local.defaults.environment_variables,
       {
@@ -35,7 +40,10 @@ locals {
 
 module "content_store" {
   source = "../../modules/app"
-
+  backend_virtual_service_names = flatten([
+    local.content_store_defaults.backend_services,
+    module.router_api.virtual_service_names,
+  ])
   service_name                     = "content-store"
   mesh_name                        = aws_appmesh_mesh.govuk.id
   service_discovery_namespace_id   = aws_service_discovery_private_dns_namespace.govuk_publishing_platform.id
@@ -68,7 +76,11 @@ module "content_store" {
 module "draft_content_store" {
   source = "../../modules/app"
 
-  service_name                     = "draft-content-store"
+  service_name = "draft-content-store"
+  backend_virtual_service_names = flatten([
+    local.content_store_defaults.backend_services,
+    module.draft_router_api.virtual_service_names,
+  ])
   mesh_name                        = aws_appmesh_mesh.govuk.id
   service_discovery_namespace_id   = aws_service_discovery_private_dns_namespace.govuk_publishing_platform.id
   service_discovery_namespace_name = aws_service_discovery_private_dns_namespace.govuk_publishing_platform.name

@@ -3,6 +3,12 @@ locals {
     cpu    = 512  # TODO parameterize this
     memory = 1024 # TODO parameterize this
 
+    backend_services = flatten([
+      local.defaults.virtual_service_backends,
+      module.static.virtual_service_names,
+      module.signon.virtual_service_names,
+    ])
+
     environment_variables = merge(
       local.defaults.environment_variables,
       {
@@ -41,8 +47,12 @@ locals {
 }
 
 module "frontend" {
-  service_name                     = "frontend"
-  mesh_name                        = aws_appmesh_mesh.govuk.id
+  service_name = "frontend"
+  mesh_name    = aws_appmesh_mesh.govuk.id
+  backend_virtual_service_names = flatten([
+    local.frontend_defaults.backend_services,
+    module.content_store.virtual_service_names,
+  ])
   service_discovery_namespace_id   = aws_service_discovery_private_dns_namespace.govuk_publishing_platform.id
   service_discovery_namespace_name = aws_service_discovery_private_dns_namespace.govuk_publishing_platform.name
   vpc_id                           = local.vpc_id
@@ -81,8 +91,12 @@ module "frontend_public_alb" {
 }
 
 module "draft_frontend" {
-  service_name                     = "draft-frontend"
-  mesh_name                        = aws_appmesh_mesh.govuk.id
+  service_name = "draft-frontend"
+  mesh_name    = aws_appmesh_mesh.govuk.id
+  backend_virtual_service_names = flatten([
+    local.frontend_defaults.backend_services,
+    module.draft_content_store.virtual_service_names,
+  ])
   service_discovery_namespace_id   = aws_service_discovery_private_dns_namespace.govuk_publishing_platform.id
   service_discovery_namespace_name = aws_service_discovery_private_dns_namespace.govuk_publishing_platform.name
   vpc_id                           = local.vpc_id

@@ -3,15 +3,16 @@ locals {
 }
 
 module "grafana_app" {
-  source                    = "../app"
-  vpc_id                    = var.vpc_id
-  cluster_id                = aws_ecs_cluster.cluster.id
-  service_name              = local.service_name
-  subnets                   = var.private_subnets
-  extra_security_groups     = [var.govuk_management_access_sg_id]
-  service_mesh              = false
-  desired_count             = var.desired_count
-  custom_container_services = [{ container_service = local.service_name, port = 3000, protocol = "http" }]
+  source                        = "../app"
+  vpc_id                        = var.vpc_id
+  backend_virtual_service_names = []
+  cluster_id                    = aws_ecs_cluster.cluster.id
+  service_name                  = local.service_name
+  subnets                       = var.private_subnets
+  extra_security_groups         = [var.govuk_management_access_sg_id]
+  service_mesh                  = false
+  desired_count                 = var.desired_count
+  custom_container_services     = [{ container_service = local.service_name, port = 3000, protocol = "http" }]
 
   load_balancers = [{
     target_group_arn = module.grafana_public_alb.target_group_arn

@@ -1,5 +1,10 @@
 locals {
   signon_defaults = {
+    backend_services = flatten([
+      # TODO: Add remaining services
+      local.defaults.virtual_service_backends,
+    ])
+
     environment_variables = merge(
       local.defaults.environment_variables,
       {
@@ -26,6 +31,7 @@ locals {
 
 module "signon" {
   service_name                     = "signon"
+  backend_virtual_service_names    = local.signon_defaults.backend_services
   mesh_name                        = aws_appmesh_mesh.govuk.id
   service_discovery_namespace_id   = aws_service_discovery_private_dns_namespace.govuk_publishing_platform.id
   service_discovery_namespace_name = aws_service_discovery_private_dns_namespace.govuk_publishing_platform.name
