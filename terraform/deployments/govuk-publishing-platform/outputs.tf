@@ -37,11 +37,11 @@ output "frontend" {
   value = {
     draft = {
       task_definition_cli_input_json = module.draft_frontend.cli_input_json,
-      security_groups                = module.draft_frontend.security_groups
+      network_config                 = module.draft_frontend.network_config
     },
     live = {
       task_definition_cli_input_json = module.frontend.cli_input_json,
-      security_groups                = module.frontend.security_groups,
+      network_config                 = module.frontend.network_config
     },
   }
 }
