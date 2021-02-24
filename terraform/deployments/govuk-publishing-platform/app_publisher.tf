@@ -5,6 +5,12 @@ locals {
     cpu    = 512  # TODO parameterize this
     memory = 1024 # TODO parameterize this
 
+    backend_services = flatten([
+      local.defaults.virtual_service_backends,
+      module.signon.virtual_service_names,
+      module.publishing_api_web.virtual_service_names,
+    ])
+
     environment_variables = merge(
       local.defaults.environment_variables,
       {
@@ -63,6 +69,7 @@ locals {
 
 module "publisher_web" {
   service_name                     = "publisher-web"
+  backend_virtual_service_names    = local.publishing_api_defaults.backend_services
   cluster_id                       = aws_ecs_cluster.cluster.id
   mesh_name                        = aws_appmesh_mesh.govuk.id
   subnets                          = local.private_subnets
@@ -112,9 +119,10 @@ module "publisher_public_alb" {
 # Sidekiq Worker Service
 #
 module "publisher_worker" {
-  service_name = "publisher-worker"
-  command      = ["foreman", "run", "worker"]
-  cluster_id   = aws_ecs_cluster.cluster.id
+  service_name                  = "publisher-worker"
+  backend_virtual_service_names = local.publishing_api_defaults.backend_services
+  command                       = ["foreman", "run", "worker"]
+  cluster_id                    = aws_ecs_cluster.cluster.id
   extra_security_groups = [
     module.publisher_web.security_group_id,
     local.govuk_management_access_security_group,

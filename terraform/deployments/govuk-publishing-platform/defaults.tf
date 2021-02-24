@@ -32,5 +32,9 @@ locals {
     signon_uri              = "https://signon-ecs.${var.external_app_domain}",
     static_uri              = "https://static.${var.mesh_domain}"
     website_root            = "https://frontend.${var.external_app_domain}",
+
+    virtual_service_backends = [
+      module.statsd.virtual_service_name
+    ]
   }
 }

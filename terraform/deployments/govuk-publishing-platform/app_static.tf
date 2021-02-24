@@ -23,6 +23,7 @@ module "static" {
   source = "../../modules/app"
 
   service_name                     = "static"
+  backend_virtual_service_names    = [] # Static doesn't use any other services
   mesh_name                        = aws_appmesh_mesh.govuk.id
   service_discovery_namespace_id   = aws_service_discovery_private_dns_namespace.govuk_publishing_platform.id
   service_discovery_namespace_name = aws_service_discovery_private_dns_namespace.govuk_publishing_platform.name
@@ -61,6 +62,7 @@ module "draft_static" {
   source = "../../modules/app"
 
   service_name                     = "draft-static"
+  backend_virtual_service_names    = [] # Static doesn't use any other services
   mesh_name                        = aws_appmesh_mesh.govuk.id
   service_discovery_namespace_id   = aws_service_discovery_private_dns_namespace.govuk_publishing_platform.id
   service_discovery_namespace_name = aws_service_discovery_private_dns_namespace.govuk_publishing_platform.name

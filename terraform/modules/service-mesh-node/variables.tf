@@ -1,3 +1,8 @@
+variable "backend_virtual_service_names" {
+  type        = list(any)
+  description = "Enables the service to communicate with its dependencies (other virtual services) through the service mesh"
+}
+
 variable "mesh_name" {
   type = string
 }

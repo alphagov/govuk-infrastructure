@@ -28,9 +28,12 @@ resource "aws_appmesh_virtual_node" "service" {
   mesh_name = var.mesh_name
 
   spec {
-    backend {
-      virtual_service {
-        virtual_service_name = "${var.service_name}.${var.service_discovery_namespace_name}"
+    dynamic "backend" {
+      for_each = var.backend_virtual_service_names
+      content {
+        virtual_service {
+          virtual_service_name = backend.value
+        }
       }
     }
 
