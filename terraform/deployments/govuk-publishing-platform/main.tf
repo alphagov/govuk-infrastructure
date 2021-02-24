@@ -11,6 +11,11 @@ terraform {
       source  = "hashicorp/aws"
       version = "~> 3.13"
     }
+
+    fastly = {
+      source  = "fastly/fastly"
+      version = "0.24.0"
+    }
   }
 }
 
@@ -20,6 +25,11 @@ provider "aws" {
   assume_role {
     role_arn = var.assume_role_arn
   }
+}
+
+provider "fastly" {
+  # We only want to use fastly's data API
+  api_key = "test"
 }
 
 locals {

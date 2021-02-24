@@ -37,3 +37,5 @@ data "terraform_remote_state" "infra_security_groups" {
     role_arn = var.assume_role_arn
   }
 }
+
+data "fastly_ip_ranges" "fastly" {}
