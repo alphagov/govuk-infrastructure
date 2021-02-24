@@ -86,7 +86,7 @@ module "frontend_public_alb" {
   publishing_service_domain = var.publishing_service_domain
   workspace_suffix          = "govuk" # TODO: Changeme
   service_security_group_id = module.frontend.security_group_id
-  external_cidrs_list       = var.office_cidrs_list
+  external_cidrs_list       = concat(var.office_cidrs_list, data.fastly_ip_ranges.fastly.cidr_blocks)
   health_check_path         = "/"
 }
 
