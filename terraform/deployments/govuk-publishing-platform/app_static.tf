@@ -113,7 +113,7 @@ module "static_public_alb" {
   workspace_suffix          = "govuk" # TODO: Changeme
   service_security_group_id = module.static.security_group_id
   external_cidrs_list       = var.office_cidrs_list
-  health_check_path         = "/templates/wrapper.html.erb" # TODO: create a proper healthcheck endpoint in static
+  health_check_path         = "/templates/core_layout.html.erb" # TODO: create a proper healthcheck endpoint in static
 }
 
 module "draft_static_public_alb" {
@@ -128,5 +128,5 @@ module "draft_static_public_alb" {
   workspace_suffix          = "govuk" # TODO: Changeme
   service_security_group_id = module.draft_static.security_group_id
   external_cidrs_list       = var.office_cidrs_list
-  health_check_path         = "/templates/wrapper.html.erb" # TODO: create a proper healthcheck endpoint in static
+  health_check_path         = "/templates/core_layout.html.erb" # TODO: create a proper healthcheck endpoint in static
 }

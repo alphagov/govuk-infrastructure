@@ -7,6 +7,15 @@ data "aws_secretsmanager_secret" "ga_universal_id" {
   name = "GA_UNIVERSAL_ID"
 }
 
+# Frontend app secrets
+
+data "aws_secretsmanager_secret" "frontend_publishing_api_bearer_token" {
+  name = "frontend_app_PUBLISHING_API_BEARER_TOKEN" # pragma: allowlist secret
+}
+data "aws_secretsmanager_secret" "frontend_secret_key_base" {
+  name = "frontend_app-SECRET_KEY_BASE" # pragma: allowlist secret
+}
+
 # Content store app secrets
 
 data "aws_secretsmanager_secret" "content_store_oauth_id" {

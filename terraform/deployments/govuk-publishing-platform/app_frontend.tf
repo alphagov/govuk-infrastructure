@@ -1,7 +1,7 @@
 locals {
   frontend_defaults = {
-    cpu    = 512  # TODO parameterize this
-    memory = 1024 # TODO parameterize this
+    cpu    = 1024 # TODO parameterize this
+    memory = 2048 # TODO parameterize this
 
     backend_services = flatten([
       local.defaults.virtual_service_backends,
@@ -30,11 +30,9 @@ locals {
     secrets_from_arns = merge(
       local.defaults.secrets_from_arns,
       {
-        GDS_SSO_OAUTH_ID            = data.aws_secretsmanager_secret.content_store_oauth_id.arn,
-        GDS_SSO_OAUTH_SECRET        = data.aws_secretsmanager_secret.content_store_oauth_secret.arn,
-        PUBLISHING_API_BEARER_TOKEN = data.aws_secretsmanager_secret.content_store_publishing_api_bearer_token.arn,
-        ROUTER_API_BEARER_TOKEN     = data.aws_secretsmanager_secret.content_store_router_api_bearer_token.arn,
-        SECRET_KEY_BASE             = data.aws_secretsmanager_secret.content_store_secret_key_base.arn,
+        PUBLISHING_API_BEARER_TOKEN = data.aws_secretsmanager_secret.frontend_publishing_api_bearer_token.arn,
+        SECRET_KEY_BASE             = data.aws_secretsmanager_secret.frontend_secret_key_base.arn,
+        SENTRY_DSN                  = data.aws_secretsmanager_secret.sentry_dsn.arn,
       }
     )
 

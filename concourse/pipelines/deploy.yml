@@ -204,7 +204,6 @@ groups:
       - deploy-content-store
       - deploy-frontend
       - smoke-test-content-store
-      - deploy-draft-frontend
       - deploy-publisher
       - deploy-publishing-api
       - deploy-router
@@ -224,7 +223,6 @@ groups:
   - name: frontend
     jobs:
       - deploy-frontend
-      - deploy-draft-frontend
       - smoke-test-content-store
 
   - name: publisher
@@ -439,6 +437,7 @@ jobs:
       - get: release
         resource: frontend
         trigger: true
+    - in_parallel:
       - task: update-draft-task-definition
         file: govuk-infrastructure/concourse/tasks/update-task-definition-v2.yml
         output_mapping:
@@ -606,7 +605,7 @@ jobs:
         file: govuk-infrastructure/concourse/tasks/update-ecs-service-v2.yml
         params:
           ECS_SERVICE: publishing-api-worker
-          input_mapping:
+        input_mapping:
             task-definition-arn: worker-task-definition-arn
     serial: true
     on_failure:
