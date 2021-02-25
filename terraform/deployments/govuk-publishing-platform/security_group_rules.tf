@@ -163,14 +163,28 @@ data "aws_nat_gateway" "govuk" {
   subnet_id = local.public_subnets[count.index]
 }
 
-resource "aws_security_group_rule" "frontend_alb_from_test_nat_gateways_https" {
-  description = "Frontend ALB receives HTTPS requests from apps in ECS"
+resource "aws_security_group_rule" "www_origin_alb_from_test_nat_gateways_https" {
+  description = "www-origin ALB receives HTTPS requests from apps in ECS"
   type        = "ingress"
   from_port   = 443
   to_port     = 443
   protocol    = "tcp"
 
-  security_group_id = module.frontend_public_alb.security_group_id
+  security_group_id = module.www_origin.security_group_id
+  cidr_blocks = [
+    for nat_gateway in data.aws_nat_gateway.govuk :
+    "${nat_gateway.public_ip}/32"
+  ]
+}
+
+resource "aws_security_group_rule" "draft_origin_alb_from_test_nat_gateways_https" {
+  description = "draft-origin ALB receives HTTPS requests from apps in ECS"
+  type        = "ingress"
+  from_port   = 443
+  to_port     = 443
+  protocol    = "tcp"
+
+  security_group_id = module.draft_origin.security_group_id
   cidr_blocks = [
     for nat_gateway in data.aws_nat_gateway.govuk :
     "${nat_gateway.public_ip}/32"
