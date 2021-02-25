@@ -30,7 +30,7 @@ locals {
     router_urls             = "router.${var.mesh_domain}:3055"       # TODO(https://trello.com/c/gmzObCBG/95): router-api expects a list of individual instances, so this won't work as-is.
     draft_router_urls       = "draft-router.${var.mesh_domain}:3055" # TODO(https://trello.com/c/gmzObCBG/95): router-api expects a list of individual instances, so this won't work as-is.
     signon_uri              = "https://signon-ecs.${var.external_app_domain}",
-    static_uri              = "https://static.${var.mesh_domain}"
+    static_uri              = "http://static.${var.mesh_domain}"
     website_root            = "https://frontend.${var.external_app_domain}",
 
     virtual_service_backends = [
