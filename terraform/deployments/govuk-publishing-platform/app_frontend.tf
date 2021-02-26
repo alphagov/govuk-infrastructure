@@ -17,7 +17,7 @@ locals {
         PLEK_SERVICE_PUBLISHING_API_URI = local.defaults.publishing_api_uri
         PLEK_SERVICE_SIGNON_URI         = local.defaults.signon_uri
         UNICORN_WORKER_PROCESSES        = 12,
-        ASSET_HOST                      = local.defaults.asset_host,
+        ASSET_HOST                      = local.defaults.assets_www_origin,
         PLEK_SERVICE_CONTENT_STORE_URI  = local.defaults.content_store_uri
         PLEK_SERVICE_STATIC_URI         = local.defaults.static_uri
         GOVUK_ASSET_ROOT                = local.defaults.asset_root_url
@@ -60,7 +60,7 @@ module "frontend" {
   subnets                          = local.private_subnets
   extra_security_groups            = [local.govuk_management_access_security_group, aws_security_group.mesh_ecs_service.id]
   load_balancers = [{
-    target_group_arn = module.frontend_public_alb.target_group_arn
+    target_group_arn = module.www_origin.frontend_target_group_arn
     container_port   = 80
   }]
   environment_variables = local.frontend_defaults.environment_variables
@@ -71,21 +71,6 @@ module "frontend" {
   memory                = local.frontend_defaults.memory
   task_role_arn         = aws_iam_role.task.arn
   execution_role_arn    = aws_iam_role.execution.arn
-}
-
-module "frontend_public_alb" {
-  source = "../../modules/public-load-balancer"
-
-  app_name                  = "frontend"
-  vpc_id                    = local.vpc_id
-  dns_a_record_name         = "frontend"
-  public_subnets            = local.public_subnets
-  external_app_domain       = var.external_app_domain
-  publishing_service_domain = var.publishing_service_domain
-  workspace_suffix          = "govuk" # TODO: Changeme
-  service_security_group_id = module.frontend.security_group_id
-  external_cidrs_list       = concat(var.office_cidrs_list, data.fastly_ip_ranges.fastly.cidr_blocks)
-  health_check_path         = "/"
 }
 
 module "draft_frontend" {
@@ -104,12 +89,13 @@ module "draft_frontend" {
   subnets                          = local.private_subnets
   extra_security_groups            = [local.govuk_management_access_security_group, aws_security_group.mesh_ecs_service.id]
   load_balancers = [{
-    target_group_arn = module.draft_frontend_public_alb.target_group_arn
+    target_group_arn = module.draft_origin.frontend_target_group_arn
     container_port   = 80
   }]
   environment_variables = merge(
     local.frontend_defaults.environment_variables,
     {
+      ASSET_HOST                     = local.defaults.assets_draft_origin,
       PLEK_SERVICE_CONTENT_STORE_URI = local.defaults.draft_content_store_uri,
       PLEK_SERVICE_STATIC_URI        = local.defaults.draft_static_uri
     }
@@ -121,19 +107,4 @@ module "draft_frontend" {
   memory             = local.frontend_defaults.memory
   task_role_arn      = aws_iam_role.task.arn
   execution_role_arn = aws_iam_role.execution.arn
-}
-
-module "draft_frontend_public_alb" {
-  source = "../../modules/public-load-balancer"
-
-  app_name                  = "draft-frontend"
-  vpc_id                    = local.vpc_id
-  dns_a_record_name         = "draft-frontend"
-  public_subnets            = local.public_subnets
-  external_app_domain       = var.external_app_domain
-  publishing_service_domain = var.publishing_service_domain
-  workspace_suffix          = "govuk" # TODO: Changeme
-  service_security_group_id = module.draft_frontend.security_group_id
-  external_cidrs_list       = var.office_cidrs_list
-  health_check_path         = "/"
 }

@@ -35,7 +35,7 @@ module "static" {
   environment_variables = merge(
     local.static_defaults.environment_variables,
     {
-      ASSET_HOST          = "https://static-ecs.${var.external_app_domain}", #TODO: fix when router is fully functional
+      ASSET_HOST          = local.defaults.assets_www_origin,
       GOVUK_STATSD_PREFIX = "govuk-ecs.app.static"
     },
   )
@@ -53,7 +53,7 @@ module "static" {
   task_role_arn      = aws_iam_role.task.arn
   execution_role_arn = aws_iam_role.execution.arn
   load_balancers = [{
-    target_group_arn = module.static_public_alb.target_group_arn
+    target_group_arn = module.www_origin.static_target_group_arn
     container_port   = 80
   }]
 }
@@ -74,7 +74,7 @@ module "draft_static" {
   environment_variables = merge(
     local.static_defaults.environment_variables,
     {
-      ASSET_HOST          = "https://draft-static-ecs.${var.external_app_domain}", #TODO: fix when router is fully functional
+      ASSET_HOST          = local.defaults.assets_draft_origin,
       GOVUK_STATSD_PREFIX = "govuk-ecs.app.draft-static"
     },
   )
@@ -92,41 +92,7 @@ module "draft_static" {
   task_role_arn      = aws_iam_role.task.arn
   execution_role_arn = aws_iam_role.execution.arn
   load_balancers = [{
-    target_group_arn = module.draft_static_public_alb.target_group_arn
+    target_group_arn = module.draft_origin.static_target_group_arn
     container_port   = 80
   }]
-}
-
-#
-# Internet-facing load balancer
-#
-
-module "static_public_alb" {
-  source = "../../modules/public-load-balancer"
-
-  app_name                  = "static"
-  vpc_id                    = local.vpc_id
-  dns_a_record_name         = "static-ecs"
-  public_subnets            = local.public_subnets
-  external_app_domain       = var.external_app_domain
-  publishing_service_domain = var.publishing_service_domain
-  workspace_suffix          = "govuk" # TODO: Changeme
-  service_security_group_id = module.static.security_group_id
-  external_cidrs_list       = var.office_cidrs_list
-  health_check_path         = "/templates/core_layout.html.erb" # TODO: create a proper healthcheck endpoint in static
-}
-
-module "draft_static_public_alb" {
-  source = "../../modules/public-load-balancer"
-
-  app_name                  = "draft-static"
-  vpc_id                    = local.vpc_id
-  dns_a_record_name         = "draft-static-ecs"
-  public_subnets            = local.public_subnets
-  external_app_domain       = var.external_app_domain
-  publishing_service_domain = var.publishing_service_domain
-  workspace_suffix          = "govuk" # TODO: Changeme
-  service_security_group_id = module.draft_static.security_group_id
-  external_cidrs_list       = var.office_cidrs_list
-  health_check_path         = "/templates/core_layout.html.erb" # TODO: create a proper healthcheck endpoint in static
 }
