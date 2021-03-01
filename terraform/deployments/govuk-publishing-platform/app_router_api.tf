@@ -29,8 +29,8 @@ locals {
 
 
 module "router_api" {
-  source = "../../modules/app"
-
+  source                           = "../../modules/app"
+  image_name                       = "router-api"
   service_name                     = "router-api"
   backend_virtual_service_names    = local.router_api_defaults.backend_services
   mesh_name                        = aws_appmesh_mesh.govuk.id
@@ -67,6 +67,7 @@ module "router_api" {
 module "draft_router_api" {
   source = "../../modules/app"
 
+  image_name                       = "router-api"
   service_name                     = "draft-router-api"
   backend_virtual_service_names    = local.router_api_defaults.backend_services
   mesh_name                        = aws_appmesh_mesh.govuk.id

@@ -45,6 +45,7 @@ locals {
 }
 
 module "frontend" {
+  image_name   = "frontend"
   service_name = "frontend"
   mesh_name    = aws_appmesh_mesh.govuk.id
   backend_virtual_service_names = flatten([
@@ -74,6 +75,7 @@ module "frontend" {
 }
 
 module "draft_frontend" {
+  image_name   = "frontend"
   service_name = "draft-frontend"
   mesh_name    = aws_appmesh_mesh.govuk.id
   backend_virtual_service_names = flatten([

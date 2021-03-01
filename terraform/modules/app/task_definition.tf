@@ -32,6 +32,7 @@ locals {
 
 module "app_container_definition" {
   source                = "../../modules/container-definition"
+  image                 = "govuk/${var.image_name}:deployed-to-production"
   aws_region            = var.aws_region
   command               = var.command
   environment_variables = var.environment_variables
@@ -79,6 +80,29 @@ module "task_definition" {
     properties    = [for key, value in local.envoy_proxy_properties : { name : key, value : tostring(value) }]
   }
   task_role_arn = var.task_role_arn
+}
+
+resource "aws_ecs_task_definition" "bootstrap" {
+  family                   = var.service_name
+  network_mode             = "awsvpc"
+  cpu                      = var.cpu
+  memory                   = var.memory
+  requires_compatibilities = ["FARGATE"]
+  execution_role_arn       = var.execution_role_arn
+  container_definitions = jsonencode([
+    module.app_container_definition.json_format,
+    module.envoy_container_definition.json_format,
+  ])
+
+  proxy_configuration {
+    type           = "APPMESH"
+    container_name = "envoy"
+    properties     = local.envoy_proxy_properties
+  }
+
+  lifecycle {
+    ignore_changes = all
+  }
 }
 
 output "cli_input_json" {

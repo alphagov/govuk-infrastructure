@@ -27,6 +27,7 @@ locals {
 module "router" {
   source = "../../modules/app"
 
+  image_name                       = "router"
   service_name                     = "router"
   backend_virtual_service_names    = module.frontend.virtual_service_names
   mesh_name                        = aws_appmesh_mesh.govuk.id
@@ -58,8 +59,8 @@ module "router" {
 }
 
 module "draft_router" {
-  source = "../../modules/app"
-
+  source                           = "../../modules/app"
+  image_name                       = "router"
   service_name                     = "draft-router"
   backend_virtual_service_names    = module.draft_frontend.virtual_service_names
   mesh_name                        = aws_appmesh_mesh.govuk.id

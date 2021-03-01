@@ -53,6 +53,7 @@ locals {
 }
 
 module "publishing_api_web" {
+  image_name                       = "publishing-api"
   service_name                     = "publishing-api-web"
   backend_virtual_service_names    = local.publishing_api_defaults.backend_services
   mesh_name                        = aws_appmesh_mesh.govuk.id
@@ -75,6 +76,7 @@ module "publishing_api_web" {
 }
 
 module "publishing_api_worker" {
+  image_name                       = "publishing-api"
   service_name                     = "publishing-api-worker"
   backend_virtual_service_names    = local.publishing_api_defaults.backend_services
   mesh_name                        = aws_appmesh_mesh.govuk.id

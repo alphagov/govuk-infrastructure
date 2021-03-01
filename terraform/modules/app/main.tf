@@ -51,20 +51,13 @@ resource "aws_ecs_service" "service" {
   }
 
   # For bootstrapping
-  task_definition = module.bootstrap_task_definition.arn
+  task_definition = aws_ecs_task_definition.bootstrap.arn
 
   lifecycle {
     # It is essential that we ignore changes to task_definition.
     # If this is removed, the bootstrapping image will be deployed.
     ignore_changes = [task_definition]
   }
-}
-
-module "bootstrap_task_definition" {
-  service_name       = var.service_name
-  execution_role_arn = var.execution_role_arn
-  source             = "../task-definitions/bootstrap"
-  ports              = [for x in local.container_services : x.port]
 }
 
 module "service_mesh_node" {
