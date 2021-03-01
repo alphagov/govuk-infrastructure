@@ -22,6 +22,7 @@ locals {
 module "static" {
   source = "../../modules/app"
 
+  image_name                       = "static"
   service_name                     = "static"
   backend_virtual_service_names    = [] # Static doesn't use any other services
   mesh_name                        = aws_appmesh_mesh.govuk.id
@@ -61,6 +62,7 @@ module "static" {
 module "draft_static" {
   source = "../../modules/app"
 
+  image_name                       = "static"
   service_name                     = "draft-static"
   backend_virtual_service_names    = [] # Static doesn't use any other services
   mesh_name                        = aws_appmesh_mesh.govuk.id

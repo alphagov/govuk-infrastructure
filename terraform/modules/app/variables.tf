@@ -18,6 +18,11 @@ variable "command" {
   default     = null
 }
 
+variable "image_name" {
+  type        = string
+  description = "Used only for bootstrapping. Provide only the image name, not the tag."
+}
+
 variable "subnets" {
   description = "IDs of the subnets where the ECS task will run."
   type        = list(any)

@@ -68,6 +68,7 @@ locals {
 }
 
 module "publisher_web" {
+  image_name                       = "publisher"
   service_name                     = "publisher-web"
   backend_virtual_service_names    = local.publishing_api_defaults.backend_services
   cluster_id                       = aws_ecs_cluster.cluster.id
@@ -119,6 +120,7 @@ module "publisher_public_alb" {
 # Sidekiq Worker Service
 #
 module "publisher_worker" {
+  image_name                    = "publisher"
   service_name                  = "publisher-worker"
   backend_virtual_service_names = local.publishing_api_defaults.backend_services
   command                       = ["foreman", "run", "worker"]
