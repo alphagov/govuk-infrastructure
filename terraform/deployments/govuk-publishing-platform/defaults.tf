@@ -1,8 +1,9 @@
 locals {
+    mesh_domain = "${terraform.workspace == "default" ? var.mesh_domain : "mesh-${terraform.workspace}.govuk-internal.digital"}"   
   defaults = {
     environment_variables = {
       DEFAULT_TTL               = 1800,
-      GOVUK_APP_DOMAIN          = var.mesh_domain,
+      GOVUK_APP_DOMAIN          = local.mesh_domain,
       GOVUK_APP_DOMAIN_EXTERNAL = var.external_app_domain,
       GOVUK_APP_TYPE            = "rack",
       GOVUK_STATSD_HOST         = "statsd.${var.mesh_domain}"

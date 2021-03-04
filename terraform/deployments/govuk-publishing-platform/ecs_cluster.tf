@@ -1,3 +1,10 @@
+locals {
+  mesh_name             = "${terraform.workspace == "default" ? var.mesh_name : "mesh-${terraform.workspace}"}"
+}
+
+
+
+
 # All services running on GOV.UK run in this single cluster.
 resource "aws_ecs_cluster" "cluster" {
   name               = "govuk"
@@ -14,7 +21,7 @@ resource "aws_ecs_cluster" "cluster" {
 }
 
 resource "aws_appmesh_mesh" "govuk" {
-  name = var.mesh_name
+  name = local.mesh_name
 
   spec {
     egress_filter {
@@ -24,7 +31,7 @@ resource "aws_appmesh_mesh" "govuk" {
 }
 
 resource "aws_service_discovery_private_dns_namespace" "govuk_publishing_platform" {
-  name = var.mesh_domain
+  name = local.mesh_domain
   vpc  = local.vpc_id
 }
 
