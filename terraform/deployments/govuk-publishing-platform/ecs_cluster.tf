@@ -36,7 +36,7 @@ resource "aws_service_discovery_private_dns_namespace" "govuk_publishing_platfor
 }
 
 resource "aws_iam_role" "execution" {
-  name        = "fargate_execution_role"
+  name        = "fargate_execution_role-${terraform.workspace}"
   description = "Role for the ECS container agent and Docker daemon to manage the app container."
 
   assume_role_policy = <<EOF
@@ -122,7 +122,7 @@ resource "aws_iam_role_policy_attachment" "access_secrets_attachment_policy" {
 # Proxy authorization for ECS tasks
 # https://docs.aws.amazon.com/app-mesh/latest/userguide/proxy-authorization.html
 resource "aws_iam_role" "task" {
-  name        = "fargate_task_role"
+  name        = "fargate_task_role-${terraform.workspace}"
   description = "Role for GOV.UK Publishing app containers (ECS tasks) to talk to other AWS services."
 
   assume_role_policy = <<EOF
