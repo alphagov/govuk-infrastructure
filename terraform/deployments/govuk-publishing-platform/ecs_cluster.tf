@@ -58,7 +58,7 @@ EOF
 # TODO don't let tasks create their own log groups -
 # create the log group in terraform
 resource "aws_iam_policy" "create_log_group_policy" {
-  name        = "create_log_group_policy"
+  name        = "create_log_group_policy-${terraform.workspace}"
   path        = "/createLogsGroupPolicy/"
   description = "Create Logs group"
 
@@ -92,7 +92,7 @@ resource "aws_iam_role_policy_attachment" "task_exec_policy" {
 # TODO: This allows *all* apps to access *any* secret. We should create a task execution
 # role and policy for each app to permit apps to only access required secrets.
 resource "aws_iam_policy" "access_secrets" {
-  name        = "access_secrets"
+  name        = "access_secrets-${terraform.workspace}"
   path        = "/accessSecretsPolicy/"
   description = "Allow apps in ECS to access secrets"
 
