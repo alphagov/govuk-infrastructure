@@ -53,7 +53,7 @@ data "aws_route53_zone" "public" {
 }
 
 resource "aws_route53_record" "public_alb" {
-  zone_id = data.aws_route53_zone.public.zone_id
+  zone_id = var.public_zone_id
   name    = var.dns_a_record_name
   type    = "A"
 

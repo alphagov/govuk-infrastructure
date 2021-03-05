@@ -107,6 +107,7 @@ module "publisher_public_alb" {
 
   app_name                  = local.publisher_app_name
   vpc_id                    = local.vpc_id
+  public_zone_id            = aws_route53_zone.workspace_public.zone_id
   dns_a_record_name         = "publisher"
   public_subnets            = local.public_subnets
   external_app_domain       = var.external_app_domain

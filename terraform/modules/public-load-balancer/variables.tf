@@ -36,6 +36,10 @@ variable "vpc_id" {
   type = string
 }
 
+variable "public_zone_id" {
+  type = string
+}
+
 variable "health_check_path" {
   type    = string
   default = "/healthcheck"
