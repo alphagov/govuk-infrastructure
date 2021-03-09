@@ -288,6 +288,8 @@ jobs:
     plan:
     - get: everyday-at-11pm
       trigger: true
+    - get: govuk-infrastructure
+      trigger: false
     - task: destroy-terraform
       config:
         inputs:
