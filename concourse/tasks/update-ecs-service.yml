@@ -1,71 +1,18 @@
-# TODO: remove this once all the applications use update-ecs-service-v2.yml
 platform: linux
 image_resource:
   type: docker-image
   source:
     repository: governmentpaas/awscli
-    tag: latest
+    tag: latest # TODO - manage image versions ourselves instead of using latest
     username: ((docker_hub_username))
     password: ((docker_hub_authtoken))
 inputs:
-  - name: terraform-outputs
+  - name: govuk-infrastructure
+    path: src
+  - name: task-definition-arn
 params:
   AWS_REGION: eu-west-1
   ASSUME_ROLE_ARN: 'arn:aws:iam::430354129336:role/govuk-concourse-deployer'
-  APPLICATION:
   ECS_SERVICE:
-  TASK_DEFINITION: task_definition_arn
 run:
-  path: sh
-  # TODO: Move this script into a .sh file for portability, linting, and testing
-  args:
-    - '-c'
-    - |
-      set -eu
-
-      mkdir -p ~/.aws
-
-      cat <<EOF > ~/.aws/config
-      [profile default]
-      role_arn = $ASSUME_ROLE_ARN
-      credential_source = Ec2InstanceMetadata
-      EOF
-
-      current_task_definition_arn="$(aws ecs describe-services --services "$ECS_SERVICE" --cluster govuk --region "$AWS_REGION" | jq -r '.services[0].taskDefinition')"
-      if [ -z "${current_task_definition_arn}" ]; then
-        echo "failed to retrieve current task definition for ${ECS_SERVICE}, exiting..."
-        exit 1
-      fi
-
-      # TODO: Remove this once the publisher is refactored and the prefix is no longer needed
-      terraform_output_prefix=${APPLICATION:-${ECS_SERVICE}}
-
-      new_task_definition_arn="$(jq -r ".${TASK_DEFINITION}.value" terraform-outputs/${terraform_output_prefix}-terraform-outputs.json)"
-      if [ -z "${new_task_definition_arn}" ]; then
-        echo "failed to retrieve new task definition for ${TASK_DEFINITION}, exiting..."
-        exit 1
-      fi
-
-      # This conditional is used to skip `aws ecs update-service` below since its outputs may confuse readers and
-      # lead them to believe that `aws ecs update-service` is not idempotent
-      if [ "${current_task_definition_arn}" = "${new_task_definition_arn}" ]; then
-        echo "No need to update ${ECS_SERVICE} service since its task definition was not updated"
-        exit 0
-      fi
-
-      echo "Updating $ECS_SERVICE service..."
-
-      aws ecs update-service \
-        --cluster govuk \
-        --service "$ECS_SERVICE" \
-        --task-definition "$new_task_definition_arn" \
-        --region "$AWS_REGION"
-
-      echo "Waiting for $ECS_SERVICE ECS service to reach steady state..."
-
-      aws ecs wait services-stable \
-        --cluster govuk \
-        --services "$ECS_SERVICE" \
-        --region "$AWS_REGION"
-
-      echo "Finished updating $ECS_SERVICE to task definition $new_task_definition_arn."
+  path: ./src/concourse/tasks/update-ecs-service.sh

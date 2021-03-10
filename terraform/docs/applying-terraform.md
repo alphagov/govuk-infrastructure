@@ -29,7 +29,6 @@ For example, run the following commands to update the test environment:
 
 ```sh
 cd terraform/deployments/govuk-publishing-platform
-terraform apply -var-file=../variables/test/common.tfvars \
    -var-file=../variables/test/infrastructure.tfvars
 ```
 
@@ -92,7 +91,6 @@ cd terraform/deployments/monitoring-test/infra
 gds aws govuk-test-admin -- terraform init
 
 gds aws govuk-test-admin -- terraform apply \
- -var-file=../../variables/test/common.tfvars \
  -var-file=../../variables/test/infrastructure.tfvars
 ```
 

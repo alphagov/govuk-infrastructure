@@ -1,9 +1,8 @@
-# TODO: remove this once all the applications use update-task-definition-v2.yml
 platform: linux
 image_resource:
   type: docker-image
   source:
-    repository: hashicorp/terraform
+    repository: governmentpaas/awscli
     tag: 0.14.6
     username: ((docker_hub_username))
     password: ((docker_hub_authtoken))
@@ -11,41 +10,14 @@ inputs:
   - name: govuk-infrastructure
     path: src
   - name: release
-  - name: terraform-outputs
-    optional: true
+  - name: app-terraform-outputs
 outputs:
-  - name: terraform-outputs
+  - name: task-definition-arn
 params:
   AWS_REGION: eu-west-1
   ASSUME_ROLE_ARN: 'arn:aws:iam::430354129336:role/govuk-concourse-deployer'
   APPLICATION:
-  GOVUK_ENVIRONMENT:
+  VARIANT:
+  PIN_IMAGE_TAG:
 run:
-  path: sh
-  # TODO: Move this script into a .sh file for portability, linting, and testing
-  args:
-    - '-c'
-    - |
-      set -eu
-
-      root_dir=$(pwd)
-
-      BUILD_TAG=$(cat release/.git/ref)
-      echo "Creating a new task definition for $APPLICATION:$BUILD_TAG in ECS"
-      echo "================================================="
-
-      APP_DIR="src/terraform/deployments/apps/$APPLICATION"
-      cd "${APP_DIR}"
-
-      terraform init -backend-config="bucket=govuk-terraform-$GOVUK_ENVIRONMENT" -backend-config="role_arn=$ASSUME_ROLE_ARN"
-
-      # TODO: These var-files won't be necessary once refactoring is complete
-      terraform apply -var-file=../../variables/$GOVUK_ENVIRONMENT/common.tfvars \
-      -var-file=../../variables/$GOVUK_ENVIRONMENT/apps.tfvars \
-      -var=image_tag=$BUILD_TAG \
-      -var="govuk_environment=$GOVUK_ENVIRONMENT" \
-      -var="assume_role_arn=$ASSUME_ROLE_ARN" \
-      -auto-approve
-
-      # TODO - remove the ${APPLICATION} interpolation from this once publisher only has one terraform apply
-      terraform output -json > "$root_dir/terraform-outputs/${APPLICATION}-terraform-outputs.json"
+  path: ./src/concourse/tasks/update-task-definition.sh
