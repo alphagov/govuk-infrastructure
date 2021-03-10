@@ -34,3 +34,36 @@ resource "aws_route53_zone" "internal_private" {
   }
 
 }
+
+
+
+resource "aws_acm_certificate" "workspace_public" {
+  domain_name       = "*.${local.workspace_external_domain}"
+  validation_method = "DNS"
+
+  lifecycle {
+    create_before_destroy = true
+  }
+}
+
+resource "aws_route53_record" "workspace_public" {
+  for_each = {
+    for dvo in aws_acm_certificate.workspace_public.domain_validation_options : dvo.domain_name => {
+      name    = dvo.resource_record_name
+      record  = dvo.resource_record_value
+      type    = dvo.resource_record_type
+    }
+  }
+
+  allow_overwrite = true
+  name            = each.value.name
+  records         = [each.value.record]
+  ttl             = 60
+  type            = each.value.type
+  zone_id         = aws_route53_zone.workspace_public.zone_id 
+}
+
+resource "aws_acm_certificate_validation" "workspace_public" {
+  certificate_arn         =  aws_acm_certificate.workspace_public.arn
+  validation_record_fqdns = [for record in aws_route53_record.workspace_public : record.fqdn]
+}
