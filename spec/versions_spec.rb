@@ -14,12 +14,6 @@ RSpec.describe "Versions" do
 
         expect(terraform_image_tag).to eql canonical_terraform_version
       end
-
-      it "concourse/tasks/update-task-definition.yml should use the canonical terraform version (#{canonical_terraform_version})" do
-        task = YAML.load_file("concourse/tasks/update-task-definition.yml")
-        terraform_image_tag = task.dig("image_resource", "source", "tag")
-        expect(terraform_image_tag).to eql canonical_terraform_version
-      end
     end
 
     describe "GitHub Actions" do
