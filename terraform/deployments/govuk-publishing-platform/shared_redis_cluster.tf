@@ -1,7 +1,7 @@
 # TODO - inline this module
 
 locals {
-  cluster_name      = "${terraform.workspace == "default" ? "shared" : "${terraform.workspace}"}"
+  cluster_name = terraform.workspace == "default" ? "shared" : "${terraform.workspace}"
 }
 
 module "shared_redis_cluster" {

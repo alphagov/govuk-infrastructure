@@ -1,5 +1,5 @@
 locals {
-  mesh_name             = "${terraform.workspace == "default" ? var.mesh_name : "mesh-${terraform.workspace}"}"
+  mesh_name = terraform.workspace == "default" ? var.mesh_name : "mesh-${terraform.workspace}"
 }
 
 

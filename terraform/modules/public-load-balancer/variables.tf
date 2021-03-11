@@ -4,7 +4,7 @@ variable "external_app_domain" {
 }
 
 variable "certificate" {
-  type        = string
+  type = string
 }
 
 variable "app_name" {

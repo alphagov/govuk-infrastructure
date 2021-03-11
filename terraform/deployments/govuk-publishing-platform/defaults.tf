@@ -1,5 +1,5 @@
 locals {
-    mesh_domain = "${terraform.workspace == "default" ? var.mesh_domain : "mesh-${terraform.workspace}.govuk-internal.digital"}"   
+  mesh_domain = terraform.workspace == "default" ? var.mesh_domain : "mesh-${terraform.workspace}.govuk-internal.digital"
   defaults = {
     environment_variables = {
       DEFAULT_TTL               = 1800,
