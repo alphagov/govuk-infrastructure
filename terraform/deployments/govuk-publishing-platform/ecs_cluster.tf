@@ -1,6 +1,13 @@
+locals {
+  mesh_name = terraform.workspace == "default" ? var.mesh_name : "mesh-${terraform.workspace}"
+}
+
+
+
+
 # All services running on GOV.UK run in this single cluster.
 resource "aws_ecs_cluster" "cluster" {
-  name               = "govuk"
+  name               = local.mesh_name
   capacity_providers = ["FARGATE", "FARGATE_SPOT"]
 
   default_capacity_provider_strategy {
@@ -14,7 +21,7 @@ resource "aws_ecs_cluster" "cluster" {
 }
 
 resource "aws_appmesh_mesh" "govuk" {
-  name = var.mesh_name
+  name = local.mesh_name
 
   spec {
     egress_filter {
@@ -24,12 +31,12 @@ resource "aws_appmesh_mesh" "govuk" {
 }
 
 resource "aws_service_discovery_private_dns_namespace" "govuk_publishing_platform" {
-  name = var.mesh_domain
+  name = local.mesh_domain
   vpc  = local.vpc_id
 }
 
 resource "aws_iam_role" "execution" {
-  name        = "fargate_execution_role"
+  name        = "fargate_execution_role-${terraform.workspace}"
   description = "Role for the ECS container agent and Docker daemon to manage the app container."
 
   assume_role_policy = <<EOF
@@ -51,7 +58,7 @@ EOF
 # TODO don't let tasks create their own log groups -
 # create the log group in terraform
 resource "aws_iam_policy" "create_log_group_policy" {
-  name        = "create_log_group_policy"
+  name        = "create_log_group_policy-${terraform.workspace}"
   path        = "/createLogsGroupPolicy/"
   description = "Create Logs group"
 
@@ -85,7 +92,7 @@ resource "aws_iam_role_policy_attachment" "task_exec_policy" {
 # TODO: This allows *all* apps to access *any* secret. We should create a task execution
 # role and policy for each app to permit apps to only access required secrets.
 resource "aws_iam_policy" "access_secrets" {
-  name        = "access_secrets"
+  name        = "access_secrets-${terraform.workspace}"
   path        = "/accessSecretsPolicy/"
   description = "Allow apps in ECS to access secrets"
 
@@ -115,7 +122,7 @@ resource "aws_iam_role_policy_attachment" "access_secrets_attachment_policy" {
 # Proxy authorization for ECS tasks
 # https://docs.aws.amazon.com/app-mesh/latest/userguide/proxy-authorization.html
 resource "aws_iam_role" "task" {
-  name        = "fargate_task_role"
+  name        = "fargate_task_role-${terraform.workspace}"
   description = "Role for GOV.UK Publishing app containers (ECS tasks) to talk to other AWS services."
 
   assume_role_policy = <<EOF

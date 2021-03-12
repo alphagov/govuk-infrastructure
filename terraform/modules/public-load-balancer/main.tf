@@ -12,7 +12,7 @@ data "aws_acm_certificate" "public_lb_alternate" {
 
 resource "aws_lb_listener_certificate" "service" {
   listener_arn    = aws_lb_listener.public.arn
-  certificate_arn = data.aws_acm_certificate.public_lb_alternate.arn
+  certificate_arn = var.certificate
 }
 
 resource "aws_lb" "public" {
@@ -53,7 +53,7 @@ data "aws_route53_zone" "public" {
 }
 
 resource "aws_route53_record" "public_alb" {
-  zone_id = data.aws_route53_zone.public.zone_id
+  zone_id = var.public_zone_id
   name    = var.dns_a_record_name
   type    = "A"
 

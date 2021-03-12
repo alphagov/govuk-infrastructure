@@ -83,7 +83,7 @@ module "task_definition" {
 }
 
 resource "aws_security_group" "service" {
-  name        = "fargate_${local.service_name}"
+  name        = "fargate_${local.service_name}-${terraform.workspace}"
   vpc_id      = var.vpc_id
   description = "${local.service_name} ECS Service"
 }

@@ -73,11 +73,11 @@ output "log_group" {
 }
 
 output "mesh_name" {
-  value = var.mesh_name
+  value = local.mesh_name
 }
 
 output "mesh_domain" {
-  value = var.mesh_domain
+  value = local.mesh_domain
 }
 
 output "external_app_domain" {

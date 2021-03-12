@@ -44,7 +44,7 @@ data "aws_route53_zone" "internal" {
 }
 
 resource "aws_route53_record" "internal_service_record" {
-  zone_id = data.aws_route53_zone.internal.zone_id
+  zone_id = var.internal_private_zone_id
   name    = "${var.cluster_name}-redis.${var.internal_app_domain}"
   type    = "CNAME"
   ttl     = 300

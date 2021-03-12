@@ -32,6 +32,10 @@ variable "vpc_id" {
   type = string
 }
 
+variable "public_zone_id" {
+  type = string
+}
+
 variable "workspace_suffix" {
   type    = string
   default = "govuk" # TODO: Is this the default value?

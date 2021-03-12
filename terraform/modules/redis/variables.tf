@@ -24,3 +24,7 @@ variable "node_type" {
 variable "vpc_id" {
   type = string
 }
+
+variable "internal_private_zone_id" {
+  type = string
+}

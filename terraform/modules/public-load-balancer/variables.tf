@@ -3,6 +3,10 @@ variable "external_app_domain" {
   description = "e.g. test.govuk.digital. Domain in which to create DNS records for the app's Internet-facing load balancer."
 }
 
+variable "certificate" {
+  type = string
+}
+
 variable "app_name" {
   type        = string
   description = "A GOV.UK application name. E.g. publisher, content-publisher"
@@ -33,6 +37,10 @@ variable "service_security_group_id" {
 }
 
 variable "vpc_id" {
+  type = string
+}
+
+variable "public_zone_id" {
   type = string
 }
 
