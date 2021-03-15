@@ -47,7 +47,7 @@ resources:
     source:
       bucket: ((readonly_private_bucket_name))
       region_name: eu-west-2
-      versioned_file: publishing-api.json
+      versioned_file: ((workspace))/publishing-api.json
       initial_version: "0"
 
   - <<: *git-repo
@@ -63,7 +63,7 @@ resources:
     source:
       bucket: ((readonly_private_bucket_name))
       region_name: eu-west-2
-      versioned_file: smokey.json
+      versioned_file: ((workspace))/smokey.json
       initial_version: "0"
 
   - name: deploy-slack-channel
@@ -81,7 +81,7 @@ resources:
     source:
       bucket: ((readonly_private_bucket_name))
       region_name: eu-west-2
-      versioned_file: govuk-terraform-outputs.json
+      versioned_file: ((workspace))/govuk-terraform-outputs.json
 
   - name: content-store-terraform-outputs
     type: s3
@@ -92,7 +92,7 @@ resources:
     source:
       bucket: ((readonly_private_bucket_name))
       region_name: eu-west-2
-      versioned_file: content-store.json
+      versioned_file: ((workspace))/content-store.json
       initial_version: "0"
 
   - name: frontend-terraform-outputs
@@ -101,7 +101,7 @@ resources:
     source:
       bucket: ((readonly_private_bucket_name))
       region_name: eu-west-2
-      versioned_file: frontend.json
+      versioned_file: ((workspace))/frontend.json
       initial_version: "0"
 
   - name: publisher-terraform-outputs
@@ -110,7 +110,7 @@ resources:
     source:
       bucket: ((readonly_private_bucket_name))
       region_name: eu-west-2
-      versioned_file: publisher.json
+      versioned_file: ((workspace))/publisher.json
       initial_version: "0"
 
   - name: signon-terraform-outputs
@@ -119,7 +119,7 @@ resources:
     source:
       bucket: ((readonly_private_bucket_name))
       region_name: eu-west-2
-      versioned_file: signon.json
+      versioned_file: ((workspace))/signon.json
       initial_version: "0"
 
   - name: static-terraform-outputs
@@ -128,7 +128,7 @@ resources:
     source:
       bucket: ((readonly_private_bucket_name))
       region_name: eu-west-2
-      versioned_file: static.json
+      versioned_file: ((workspace))/static.json
       initial_version: "0"
 
   - name: router-api-terraform-outputs
@@ -137,7 +137,7 @@ resources:
     source:
       bucket: ((readonly_private_bucket_name))
       region_name: eu-west-2
-      versioned_file: router-api.json
+      versioned_file: ((workspace))/router-api.json
       initial_version: "0"
 
   - name: router-terraform-outputs
@@ -146,7 +146,7 @@ resources:
     source:
       bucket: ((readonly_private_bucket_name))
       region_name: eu-west-2
-      versioned_file: router.json
+      versioned_file: ((workspace))/router.json
       initial_version: "0"
 
   - &registry-image
@@ -328,7 +328,10 @@ jobs:
     - get: govuk-infrastructure
       trigger: true
     - file: govuk-infrastructure/concourse/pipelines/deploy.yml
-      set_pipeline: deploy-apps-test
+      set_pipeline: ((pipeline_name))
+      vars:
+        workspace: ((workspace))
+        pipeline_name: ((pipeline_name))
 
   - name: run-terraform
     serial: true
@@ -403,6 +406,7 @@ jobs:
         params:
           AWS_REGION: eu-west-1
           ASSUME_ROLE_ARN: 'arn:aws:iam::430354129336:role/govuk-concourse-deployer'
+          WORKSPACE: ((workspace))
         platform: linux
         image_resource:
           type: docker-image
@@ -423,6 +427,9 @@ jobs:
             cd govuk-infrastructure/terraform/deployments/govuk-publishing-platform
 
             terraform init -backend-config "role_arn=$ASSUME_ROLE_ARN"
+
+            terraform workspace select "$WORKSPACE"
+
             terraform apply \
               -var "assume_role_arn=$ASSUME_ROLE_ARN" \
               -var-file ../variables/test/infrastructure.tfvars \
@@ -541,12 +548,14 @@ jobs:
          task-definition-arn: draft-task-definition-arn
         params:
          ECS_SERVICE: draft-frontend
+         WORKSPACE: ((workspace))
       - task: update-live-ecs-service
         file: govuk-infrastructure/concourse/tasks/update-ecs-service.yml
         input_mapping:
          task-definition-arn: live-task-definition-arn
         params:
          ECS_SERVICE: frontend
+         WORKSPACE: ((workspace))
     serial: true
     on_failure: &notify-slack-failure
       put: deploy-slack-channel
@@ -628,12 +637,14 @@ jobs:
           task-definition-arn: web-task-definition-arn
         params:
           ECS_SERVICE: publisher-web
+          WORKSPACE: ((workspace))
       - task: update-worker-ecs-service
         file: govuk-infrastructure/concourse/tasks/update-ecs-service.yml
         input_mapping:
           task-definition-arn: worker-task-definition-arn
         params:
           ECS_SERVICE: publisher-worker
+          WORKSPACE: ((workspace))
     serial: true
     on_failure:
       <<: *notify-slack-failure
@@ -685,12 +696,14 @@ jobs:
         file: govuk-infrastructure/concourse/tasks/update-ecs-service.yml
         params:
           ECS_SERVICE: publishing-api-web
+          WORKSPACE: ((workspace))
         input_mapping:
           task-definition-arn: web-task-definition-arn
       - task: update-worker-ecs-service
         file: govuk-infrastructure/concourse/tasks/update-ecs-service.yml
         params:
           ECS_SERVICE: publishing-api-worker
+          WORKSPACE: ((workspace))
         input_mapping:
             task-definition-arn: worker-task-definition-arn
     serial: true
@@ -736,12 +749,14 @@ jobs:
           task-definition-arn: live-task-definition-arn
         params:
           ECS_SERVICE: content-store
+          WORKSPACE: ((workspace))
       - task: update-draft-ecs-service
         file: govuk-infrastructure/concourse/tasks/update-ecs-service.yml
         input_mapping:
           task-definition-arn: draft-task-definition-arn
         params:
           ECS_SERVICE: draft-content-store
+          WORKSPACE: ((workspace))
     serial: true
     on_failure:
       <<: *notify-slack-failure
@@ -785,12 +800,14 @@ jobs:
           task-definition-arn: draft-task-definition-arn
         params:
           ECS_SERVICE: draft-router
+          WORKSPACE: ((workspace))
       - task: update-live-ecs-service
         file: govuk-infrastructure/concourse/tasks/update-ecs-service.yml
         input_mapping:
           task-definition-arn: live-task-definition-arn
         params:
           ECS_SERVICE: router
+          WORKSPACE: ((workspace))
     serial: true
     on_failure:
       <<: *notify-slack-failure
@@ -834,12 +851,14 @@ jobs:
           task-definition-arn: draft-task-definition-arn
         params:
           ECS_SERVICE: draft-router-api
+          WORKSPACE: ((workspace))
       - task: update-live-ecs-service
         file: govuk-infrastructure/concourse/tasks/update-ecs-service.yml
         input_mapping:
           task-definition-arn: live-task-definition-arn
         params:
           ECS_SERVICE: router-api
+          WORKSPACE: ((workspace))
     serial: true
     on_failure:
       <<: *notify-slack-failure
@@ -874,6 +893,7 @@ jobs:
       params:
         ECS_SERVICE: signon
         GOVUK_ENVIRONMENT: test
+        WORKSPACE: ((workspace))
     serial: true
     on_failure:
       <<: *notify-slack-failure
@@ -949,12 +969,14 @@ jobs:
           task-definition-arn: draft-task-definition-arn
         params:
           ECS_SERVICE: draft-static
+          WORKSPACE: ((workspace))
       - task: update-live-ecs-service
         file: govuk-infrastructure/concourse/tasks/update-ecs-service.yml
         input_mapping:
           task-definition-arn: live-task-definition-arn
         params:
           ECS_SERVICE: static
+          WORKSPACE: ((workspace))
     serial: true
     on_failure:
       <<: *notify-slack-failure

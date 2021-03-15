@@ -2,6 +2,12 @@
 
 set -eu
 
+if [ "${WORKSPACE}" == "default" ]; then
+  CLUSTER=govuk-ecs
+else
+  CLUSTER="govuk-$WORKSPACE"
+fi
+
 mkdir -p ~/.aws
 
 cat <<EOF > ~/.aws/config
