@@ -12,7 +12,7 @@ data "aws_acm_certificate" "public_lb_default" {
 
 resource "aws_lb_listener_certificate" "service" {
   listener_arn    = aws_lb_listener.origin.arn
-  certificate_arn = var.certificate
+  certificate_arn = var.certificate_arn
 }
 
 resource "aws_lb" "origin" {

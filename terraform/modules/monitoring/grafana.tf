@@ -47,7 +47,7 @@ module "grafana_public_alb" {
   dns_a_record_name         = "${local.service_name}-ecs"
   public_subnets            = var.public_subnets
   external_app_domain       = var.external_app_domain
-  certificate               = data.aws_acm_certificate.public_lb_alternate
+  certificate_arn           = data.aws_acm_certificate.public_lb_alternate
   publishing_service_domain = var.publishing_service_domain
   workspace_suffix          = "govuk" # TODO: Changeme
   service_security_group_id = module.grafana_app.security_group_id

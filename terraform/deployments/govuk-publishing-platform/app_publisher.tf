@@ -111,7 +111,7 @@ module "publisher_public_alb" {
   dns_a_record_name         = "publisher"
   public_subnets            = local.public_subnets
   external_app_domain       = var.external_app_domain
-  certificate               = aws_acm_certificate.workspace_public.arn
+  certificate_arn           = aws_acm_certificate.workspace_public.arn
   publishing_service_domain = var.publishing_service_domain
   workspace_suffix          = terraform.workspace == "default" ? "govuk" : terraform.workspace
   service_security_group_id = module.publisher_web.security_group_id
