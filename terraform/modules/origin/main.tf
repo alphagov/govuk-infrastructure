@@ -10,14 +10,9 @@ data "aws_acm_certificate" "public_lb_default" {
   statuses = ["ISSUED"]
 }
 
-data "aws_acm_certificate" "public_lb_alternate" {
-  domain   = "*.${var.external_app_domain}"
-  statuses = ["ISSUED"]
-}
-
 resource "aws_lb_listener_certificate" "service" {
   listener_arn    = aws_lb_listener.origin.arn
-  certificate_arn = data.aws_acm_certificate.public_lb_alternate.arn
+  certificate_arn = var.certificate
 }
 
 resource "aws_lb" "origin" {

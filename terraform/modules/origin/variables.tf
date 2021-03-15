@@ -3,6 +3,10 @@ variable "external_app_domain" {
   description = "e.g. test.govuk.digital. Domain in which to create DNS records for the app's Internet-facing load balancer."
 }
 
+variable "certificate" {
+  type = string
+}
+
 variable "live" {
   description = "Determines whether the origin is a live or a draft one"
   type        = bool
