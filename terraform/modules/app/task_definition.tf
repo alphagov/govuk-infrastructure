@@ -89,6 +89,7 @@ resource "aws_ecs_task_definition" "bootstrap" {
   memory                   = var.memory
   requires_compatibilities = ["FARGATE"]
   execution_role_arn       = var.execution_role_arn
+  task_role_arn            = var.task_role_arn
   container_definitions = jsonencode([
     module.app_container_definition.json_format,
     module.envoy_container_definition.json_format,
