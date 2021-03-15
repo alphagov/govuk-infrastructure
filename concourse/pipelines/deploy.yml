@@ -1,4 +1,7 @@
 ---
+display:
+  background_image: ((background_image))
+
 definitions:
 
 resource_types:
