@@ -59,3 +59,23 @@ jobs:
               echo -e '\n-------------------------\n'
             )
           done
+
+      - name: run tflint
+        env:
+          TFLINT_VERSION: v0.24.1
+        run: |
+          TEMP_PATH="$(mktemp -d)"
+          PATH="${TEMP_PATH}:$PATH"
+          curl --silent --fail -L "https://github.com/terraform-linters/tflint/releases/download/${TFLINT_VERSION}/tflint_linux_amd64.zip" -o tflint.zip && unzip tflint.zip -d "${TEMP_PATH}" && rm tflint.zip
+
+          for f in terraform/deployments/*/.tflint.hcl; do
+            d=$(dirname "$f")
+            (
+              echo "$d"
+              cd "$d"
+              terraform init -backend=false
+              tflint --module .
+              echo -e '\n-------------------------\n'
+            )
+          done
+
