@@ -26,13 +26,6 @@ resources:
     type: git
 
   - <<: *git-repo
-    name: frontend
-    source:
-      branch: master
-      uri: https://github.com/alphagov/frontend
-      tag_filter: release_*
-
-  - <<: *git-repo
     name: publisher
     source:
       branch: master
@@ -105,13 +98,6 @@ resources:
       region_name: eu-west-2
       versioned_file: smokey.json
       initial_version: "0"
-
-  - <<: *git-repo
-    name: static
-    source:
-      branch: master
-      uri: https://github.com/alphagov/static
-      tag_filter: release_*
 
   - name: deploy-slack-channel
     type: slack-notification
@@ -195,6 +181,25 @@ resources:
       region_name: eu-west-2
       versioned_file: router.json
       initial_version: "0"
+
+
+  - name: frontend-image
+    type: registry-image
+    icon: docker
+    source:
+      repository: govuk/frontend
+      tag: release
+      username: ((docker_hub_username))
+      password: ((docker_hub_authtoken))
+
+  - name: static-image
+    type: registry-image
+    icon: docker
+    source:
+      repository: govuk/static
+      tag: release
+      username: ((docker_hub_username))
+      password: ((docker_hub_authtoken))
 
 groups:
   - name: all
@@ -433,12 +438,20 @@ jobs:
         passed:
         - run-terraform
         trigger: true
-      - get: release
-        resource: frontend
+      - get: frontend-image
         trigger: true
     - in_parallel:
+      - task: upload-rails-assets
+        file: govuk-infrastructure/concourse/tasks/upload-rails-assets.yml
+        input_mapping:
+          app-image: frontend-image
+        params:
+          IMAGE_ASSETS_PATH: app-image/rootfs/app/public/assets/frontend
+          S3_BUCKET_PATH: s3://govuk-test-ecs-rails-assets/assets/frontend/
       - task: update-draft-task-definition
         file: govuk-infrastructure/concourse/tasks/update-task-definition.yml
+        input_mapping:
+          app-image: frontend-image
         output_mapping:
          task-definition-arn: draft-task-definition-arn
         params:
@@ -446,6 +459,8 @@ jobs:
          VARIANT: draft
       - task: update-live-task-definition
         file: govuk-infrastructure/concourse/tasks/update-task-definition.yml
+        input_mapping:
+          app-image: frontend-image
         output_mapping:
          task-definition-arn: live-task-definition-arn
         params:
@@ -624,6 +639,7 @@ jobs:
       - get: release
         resource: content-store
         trigger: true
+
     - in_parallel:
       - task: update-draft-task-definition
         file: govuk-infrastructure/concourse/tasks/update-task-definition.yml
@@ -818,12 +834,20 @@ jobs:
         passed:
         - run-terraform
         trigger: true
-      - get: release
-        resource: static
+      - get: static-image
         trigger: true
     - in_parallel:
+      - task: upload-rails-assets
+        file: govuk-infrastructure/concourse/tasks/upload-rails-assets.yml
+        input_mapping:
+          app-image: static-image
+        params:
+          IMAGE_ASSETS_PATH: app-image/rootfs/app/public/assets/static
+          S3_BUCKET_PATH: s3://govuk-test-ecs-rails-assets/assets/static/
       - task: update-draft-task-definition
         file: govuk-infrastructure/concourse/tasks/update-task-definition.yml
+        input_mapping:
+          app-image: static-image
         output_mapping:
           task-definition-arn: draft-task-definition-arn
         params:
@@ -831,6 +855,8 @@ jobs:
           VARIANT: draft
       - task: update-live-task-definition
         file: govuk-infrastructure/concourse/tasks/update-task-definition.yml
+        input_mapping:
+          app-image: static-image
         output_mapping:
           task-definition-arn: live-task-definition-arn
         params:
