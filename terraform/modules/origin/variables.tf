@@ -3,8 +3,9 @@ variable "external_app_domain" {
   description = "e.g. test.govuk.digital. Domain in which to create DNS records for the app's Internet-facing load balancer."
 }
 
-variable "certificate" {
-  type = string
+variable "certificate_arn" {
+  type        = string
+  description = "workspace aware certificate. e.g. *.plouf.test.govuk.digital"
 }
 
 variable "live" {
