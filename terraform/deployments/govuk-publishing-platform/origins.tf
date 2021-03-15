@@ -6,7 +6,7 @@ module "www_origin" {
   public_zone_id            = aws_route53_zone.workspace_public.zone_id
   external_app_domain       = var.external_app_domain
   publishing_service_domain = var.publishing_service_domain
-  workspace_suffix          = terraform.workspace == "default" ? "govuk" : "${terraform.workspace}"
+  workspace_suffix          = terraform.workspace == "default" ? "govuk" : terraform.workspace
   external_cidrs_list       = concat(var.office_cidrs_list, data.fastly_ip_ranges.fastly.cidr_blocks)
 
   apps_security_config_list = {
@@ -23,7 +23,7 @@ module "draft_origin" {
   public_zone_id            = aws_route53_zone.workspace_public.zone_id
   external_app_domain       = var.external_app_domain
   publishing_service_domain = var.publishing_service_domain
-  workspace_suffix          = terraform.workspace == "default" ? "govuk" : "${terraform.workspace}"
+  workspace_suffix          = terraform.workspace == "default" ? "govuk" : terraform.workspace
   external_cidrs_list       = concat(var.office_cidrs_list, data.fastly_ip_ranges.fastly.cidr_blocks)
   live                      = false
 
