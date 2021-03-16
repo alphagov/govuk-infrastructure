@@ -36,11 +36,8 @@ locals {
         PLEK_SERVICE_DRAFT_ORIGIN_URI = local.defaults.draft_origin_uri
         # TODO: temporary hack
         RAILS_SERVE_STATIC_FILES = "true"
-        # TODO: we shouldn't be specifying both REDIS_{HOST,PORT} *and* REDIS_URL.
-        REDIS_HOST   = var.redis_host
-        REDIS_PORT   = tostring(var.redis_port)
-        REDIS_URL    = local.defaults.redis_url
-        WEBSITE_ROOT = local.defaults.website_root
+        REDIS_URL                = module.shared_redis_cluster.uri
+        WEBSITE_ROOT             = local.defaults.website_root
       }
     )
 

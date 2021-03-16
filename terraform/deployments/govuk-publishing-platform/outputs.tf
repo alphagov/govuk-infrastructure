@@ -100,14 +100,6 @@ output "fargate_task_iam_role_arn" {
   value = aws_iam_role.task.arn
 }
 
-output "redis_host" {
-  value = module.shared_redis_cluster.redis_host
-}
-
-output "redis_port" {
-  value = module.shared_redis_cluster.redis_port
-}
-
 output "signon" {
   value = {
     web = {

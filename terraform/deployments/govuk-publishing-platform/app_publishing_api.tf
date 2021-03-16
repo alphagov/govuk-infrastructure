@@ -30,7 +30,7 @@ locals {
         RABBITMQ_HOSTS                       = local.defaults.rabbitmq_hosts
         RABBITMQ_USER                        = "publishing_api"
         RABBITMQ_VHOST                       = "/"
-        REDIS_URL                            = local.defaults.redis_url
+        REDIS_URL                            = module.shared_redis_cluster.uri
         UNICORN_WORKER_PROCESSES             = "8"
       }
     )

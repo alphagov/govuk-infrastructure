@@ -12,16 +12,6 @@ variable "mesh_domain" {
   description = "e.g. mesh.govuk-internal.digital"
 }
 
-variable "redis_host" {
-  type        = string
-  description = "Shared Redis FQDN"
-}
-
-variable "redis_port" {
-  type    = string
-  default = 6379
-}
-
 variable "ecs_default_capacity_provider" {
   type = string
 }

@@ -35,17 +35,9 @@ resource "aws_elasticache_replication_group" "redis_cluster" {
   security_group_ids            = [aws_security_group.redis.id]
 }
 
-
-/// internal route53 record
-
-data "aws_route53_zone" "internal" {
-  name         = var.internal_app_domain
-  private_zone = true
-}
-
 resource "aws_route53_record" "internal_service_record" {
   zone_id = var.internal_private_zone_id
-  name    = "${var.cluster_name}-redis.${var.internal_app_domain}"
+  name    = "redis"
   type    = "CNAME"
   ttl     = 300
   records = [aws_elasticache_replication_group.redis_cluster.primary_endpoint_address]
