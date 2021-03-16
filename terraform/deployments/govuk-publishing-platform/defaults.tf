@@ -19,8 +19,8 @@ locals {
     }
     asset_host              = "https://frontend.${local.workspace_external_domain}",
     asset_root_url          = "https://assets.${var.publishing_service_domain}",
-    assets_www_origin       = "https://www.ecs.${var.publishing_service_domain}"
-    assets_draft_origin     = "https://draft-origin-ecs.${local.workspace_external_domain}"
+    assets_www_origin       = "https://www.ecs.${var.publishing_service_domain}" # TODO: Make workspace-aware
+    assets_draft_origin     = "https://draft-origin.${local.workspace_external_domain}"
     content_store_uri       = "http://content-store.${local.mesh_domain}",
     draft_content_store_uri = "http://draft-content-store.${local.mesh_domain}",
     draft_origin_uri        = "https://draft-frontend.${local.workspace_external_domain}",
