@@ -43,5 +43,5 @@ locals {
   mongodb_security_group_id     = data.terraform_remote_state.infra_security_groups.outputs.sg_mongo_id
   mysql_security_group_id       = data.terraform_remote_state.infra_security_groups.outputs.sg_mysql-primary_id
   routerdb_security_group_id    = data.terraform_remote_state.infra_security_groups.outputs.sg_router-backend_id
-  log_group                     = "govuk" # TODO make this workspace aware
+  log_group                     = terraform.workspace == "default" ? "govuk" : "govuk-${terraform.workspace}"
 }
