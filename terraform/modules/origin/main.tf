@@ -99,7 +99,7 @@ data "aws_route53_zone" "public" {
 
 resource "aws_route53_record" "origin_alb" {
   zone_id = var.public_zone_id
-  name    = "${local.mode}-origin-ecs"
+  name    = "${local.mode}-origin"
   type    = "A"
 
   alias {

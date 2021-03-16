@@ -13,3 +13,7 @@ output "security_group_id" {
 output "fqdn" {
   value = "${aws_route53_record.origin_alb.name}.${var.publishing_service_domain}"
 }
+
+output "origin_app_fqdn" {
+  value = aws_route53_record.origin_alb.fqdn
+}
