@@ -21,9 +21,6 @@ locals {
         PLEK_SERVICE_CONTENT_STORE_URI  = local.defaults.content_store_uri
         PLEK_SERVICE_STATIC_URI         = local.defaults.static_uri
         GOVUK_ASSET_ROOT                = local.defaults.asset_root_url
-        RAILS_SERVE_STATIC_FILES        = "yes"
-        RAILS_SERVE_STATIC_ASSETS       = "yes"
-        HEROKU_APP_NAME                 = "frontend"
       }
     )
 

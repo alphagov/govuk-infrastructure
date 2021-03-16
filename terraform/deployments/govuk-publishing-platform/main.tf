@@ -9,12 +9,17 @@ terraform {
   required_providers {
     aws = {
       source  = "hashicorp/aws"
-      version = "~> 3.13"
+      version = "~> 3.33"
     }
 
     fastly = {
       source  = "fastly/fastly"
       version = "0.24.0"
+    }
+
+    random = {
+      source  = "hashicorp/random"
+      version = "3.0.0"
     }
   }
 }
@@ -27,10 +32,21 @@ provider "aws" {
   }
 }
 
+provider "aws" {
+  region = "us-east-1"
+  alias  = "us_east_1"
+
+  assume_role {
+    role_arn = var.assume_role_arn
+  }
+}
+
 provider "fastly" {
   # We only want to use fastly's data API
   api_key = "test"
 }
+
+provider "random" {}
 
 locals {
   vpc_id                        = data.terraform_remote_state.infra_networking.outputs.vpc_id

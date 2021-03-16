@@ -1,97 +1,154 @@
 locals {
-  mode = var.live ? "www" : "draft"
+  live_or_draft_prefix = var.is_live ? "www" : "draft"
+  origin_alb_id        = "${local.live_or_draft_prefix}_origin_alb"
+  origin_s3_id         = "origin_s3"
 }
 
-resource "aws_lb" "origin" {
-  name               = "${local.mode}-origin-ecs-${var.workspace}"
-  internal           = false
-  load_balancer_type = "application"
-  security_groups    = [aws_security_group.origin_alb.id]
-  subnets            = var.public_subnets
-}
+terraform {
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 3.33"
+    }
 
-
-resource "aws_lb_target_group" "origin-frontend" {
-  name        = "${local.mode}-origin-frontend-${var.workspace}"
-  port        = 80
-  protocol    = "HTTP"
-  vpc_id      = var.vpc_id
-  target_type = "ip"
-
-  health_check {
-    path = "/"
-  }
-}
-
-resource "aws_lb_listener_rule" "origin-frontend" {
-  listener_arn = aws_lb_listener.origin.arn
-  priority     = 100
-
-  action {
-    type             = "forward"
-    target_group_arn = aws_lb_target_group.origin-frontend.arn
-  }
-
-  condition {
-    path_pattern {
-      values = ["/assets/frontend/*"]
+    random = {
+      source  = "hashicorp/random"
+      version = "3.0.0"
     }
   }
 }
 
-resource "aws_lb_target_group" "origin-static" {
-  name        = "${local.mode}-origin-static-${var.workspace}"
-  port        = 80
-  protocol    = "HTTP"
-  vpc_id      = var.vpc_id
-  target_type = "ip"
+provider "aws" {
+  region = var.aws_region
 
-  health_check {
-    path = "/templates/core_layout.html.erb"
+  assume_role {
+    role_arn = var.assume_role_arn
   }
 }
 
-resource "aws_lb_listener_rule" "origin-static" {
-  listener_arn = aws_lb_listener.origin.arn
-  priority     = 99
+provider "aws" {
+  region = "us-east-1"
+  alias  = "us_east_1"
 
-  action {
-    type             = "forward"
-    target_group_arn = aws_lb_target_group.origin-static.arn
+  assume_role {
+    role_arn = var.assume_role_arn
+  }
+}
+
+resource "aws_cloudfront_origin_access_identity" "cloudfront_s3_access" {
+  comment = "${local.live_or_draft_prefix}-origin ${var.workspace} cloudfront accessing the Rails assets s3 bucket"
+}
+
+resource "random_password" "origin_alb_x_custom_header_secret" {
+  length  = 32
+  special = false
+}
+
+resource "aws_cloudfront_distribution" "origin" {
+  origin {
+    domain_name = aws_lb.origin.dns_name
+    origin_id   = local.origin_alb_id
+
+    custom_origin_config {
+      http_port              = 80
+      https_port             = 443
+      origin_protocol_policy = "https-only"
+      origin_ssl_protocols   = ["TLSv1.2"]
+    }
+
+    #TODO: frequent rototation for additional security: https://trello.com/c/gOCvdwRd/255-rotate-x-cloudfront-token
+    custom_header {
+      name  = "X-Cloudfront-Token"
+      value = random_password.origin_alb_x_custom_header_secret.result
+    }
+
   }
 
-  condition {
-    path_pattern {
-      values = ["/assets/static/*"]
+  origin {
+    domain_name = var.rails_assets_s3_regional_domain_name
+    origin_id   = local.origin_s3_id
+
+    s3_origin_config {
+      origin_access_identity = aws_cloudfront_origin_access_identity.cloudfront_s3_access.cloudfront_access_identity_path
     }
   }
-}
 
-resource "aws_lb_listener" "origin" {
-  load_balancer_arn = aws_lb.origin.arn
-  port              = 443
-  protocol          = "HTTPS"
-  ssl_policy        = "ELBSecurityPolicy-2016-08"
-  certificate_arn   = var.certificate
+  enabled         = true
+  is_ipv6_enabled = false
+  comment         = "${local.live_or_draft_prefix}-origin ${var.workspace} CDN in front of origin ALB and s3 rails assets bucket"
+  web_acl_id      = aws_wafv2_web_acl.origin_cloudfront_web_acl.arn
 
-  default_action {
-    type             = "forward"
-    target_group_arn = aws_lb_target_group.origin-frontend.arn
+  aliases = compact([
+    var.is_default_workspace && var.is_live ? "www.ecs.${var.publishing_service_domain}" : null,
+    "${local.live_or_draft_prefix}-origin.${var.external_app_domain}"
+  ])
+
+  default_cache_behavior {
+    allowed_methods  = ["DELETE", "GET", "HEAD", "OPTIONS", "PATCH", "POST", "PUT"]
+    cached_methods   = ["GET", "HEAD"]
+    target_origin_id = local.origin_alb_id
+
+    forwarded_values {
+      query_string = true
+
+      cookies {
+        forward = "all"
+      }
+
+      headers = ["*"]
+    }
+
+    viewer_protocol_policy = "https-only"
+    min_ttl                = 0
+    default_ttl            = 3600
+    max_ttl                = 86400
+  }
+
+  ordered_cache_behavior {
+    path_pattern     = "/assets/*"
+    allowed_methods  = ["GET", "HEAD", "OPTIONS"]
+    cached_methods   = ["GET", "HEAD", "OPTIONS"]
+    target_origin_id = local.origin_s3_id
+
+    forwarded_values {
+      query_string = false
+      headers      = ["Origin"]
+
+      cookies {
+        forward = "none"
+      }
+    }
+
+    min_ttl                = 0
+    default_ttl            = 86400
+    max_ttl                = 31536000
+    compress               = true
+    viewer_protocol_policy = "redirect-to-https"
+  }
+
+  price_class = "PriceClass_All"
+
+  restrictions {
+    geo_restriction {
+      restriction_type = "none"
+    }
+  }
+
+  viewer_certificate {
+    acm_certificate_arn      = var.cloudfront_certificate_arn
+    ssl_support_method       = "sni-only"
+    minimum_protocol_version = "TLSv1.2_2019"
   }
 }
 
-data "aws_route53_zone" "public" {
-  name = var.external_app_domain
-}
-
-resource "aws_route53_record" "origin_alb" {
+resource "aws_route53_record" "origin_cloudfront" {
   zone_id = var.public_zone_id
-  name    = "${local.mode}-origin"
+  name    = "${local.live_or_draft_prefix}-origin"
   type    = "A"
 
   alias {
-    name                   = aws_lb.origin.dns_name
-    zone_id                = aws_lb.origin.zone_id
-    evaluate_target_health = true
+    name                   = aws_cloudfront_distribution.origin.domain_name
+    zone_id                = aws_cloudfront_distribution.origin.hosted_zone_id
+    evaluate_target_health = false
   }
 }
