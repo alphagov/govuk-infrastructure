@@ -6,32 +6,33 @@ data "aws_acm_certificate" "public_lb_default" {
 }
 
 resource "aws_lb_listener_certificate" "service" {
-  listener_arn    = aws_lb_listener.public.arn
+  listener_arn    = aws_lb_listener.origin.arn
   certificate_arn = var.certificate
 }
 
-resource "aws_lb" "public" {
-  name               = "public-${var.app_name}-${var.workspace_suffix}"
+resource "aws_lb" "origin" {
+  name               = "${local.mode}-origin-ecs-${var.workspace_suffix}"
   internal           = false
   load_balancer_type = "application"
-  security_groups    = [aws_security_group.public_alb.id]
+  security_groups    = [aws_security_group.origin_alb.id]
   subnets            = var.public_subnets
 }
 
-resource "aws_lb_target_group" "public" {
-  name        = "${var.app_name}-${var.workspace_suffix}-public"
-  port        = var.target_port
+
+resource "aws_lb_target_group" "origin-frontend" {
+  name        = "${local.mode}-origin-frontend-${var.workspace_suffix}"
+  port        = 80
   protocol    = "HTTP"
   vpc_id      = var.vpc_id
   target_type = "ip"
 
   health_check {
-    path = var.health_check_path
+    path = "/"
   }
 }
 
-resource "aws_lb_listener" "public" {
-  load_balancer_arn = aws_lb.public.arn
+resource "aws_lb_listener" "origin" {
+  load_balancer_arn = aws_lb.origin.arn
   port              = 443
   protocol          = "HTTPS"
   ssl_policy        = "ELBSecurityPolicy-2016-08"
@@ -39,7 +40,7 @@ resource "aws_lb_listener" "public" {
 
   default_action {
     type             = "forward"
-    target_group_arn = aws_lb_target_group.public.arn
+    target_group_arn = aws_lb_target_group.origin-frontend.arn
   }
 }
 
@@ -47,14 +48,14 @@ data "aws_route53_zone" "public" {
   name = var.external_app_domain
 }
 
-resource "aws_route53_record" "public_alb" {
+resource "aws_route53_record" "origin_alb" {
   zone_id = var.public_zone_id
-  name    = var.dns_a_record_name
+  name    = "${local.mode}-origin-alb"
   type    = "A"
 
   alias {
-    name                   = aws_lb.public.dns_name
-    zone_id                = aws_lb.public.zone_id
+    name                   = aws_lb.origin.dns_name
+    zone_id                = aws_lb.origin.zone_id
     evaluate_target_health = true
   }
 }

@@ -53,10 +53,6 @@ module "static" {
   memory             = local.static_defaults.memory
   task_role_arn      = aws_iam_role.task.arn
   execution_role_arn = aws_iam_role.execution.arn
-  load_balancers = [{
-    target_group_arn = module.www_origin.static_target_group_arn
-    container_port   = 80
-  }]
 }
 
 module "draft_static" {
@@ -93,8 +89,4 @@ module "draft_static" {
   memory             = local.static_defaults.memory
   task_role_arn      = aws_iam_role.task.arn
   execution_role_arn = aws_iam_role.execution.arn
-  load_balancers = [{
-    target_group_arn = module.draft_origin.static_target_group_arn
-    container_port   = 80
-  }]
 }

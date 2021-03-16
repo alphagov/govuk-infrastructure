@@ -44,3 +44,11 @@ variable "workspace_suffix" {
   type    = string
   default = "govuk" # TODO: Is this the default value?
 }
+
+variable "rails_assets_s3_regional_domain_name" {
+  type = string
+}
+
+variable "aws_region" {
+  type = string
+}

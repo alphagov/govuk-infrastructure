@@ -16,6 +16,11 @@ terraform {
       source  = "fastly/fastly"
       version = "0.24.0"
     }
+
+    archive = {
+      source  = "hashicorp/archive"
+      version = "2.1.0"
+    }
   }
 }
 
@@ -27,10 +32,21 @@ provider "aws" {
   }
 }
 
+provider "aws" {
+  region = "us-east-1"
+  alias  = "use1"
+
+  assume_role {
+    role_arn = var.assume_role_arn
+  }
+}
+
 provider "fastly" {
   # We only want to use fastly's data API
   api_key = "test"
 }
+
+provider "archive" {}
 
 locals {
   vpc_id                        = data.terraform_remote_state.infra_networking.outputs.vpc_id
