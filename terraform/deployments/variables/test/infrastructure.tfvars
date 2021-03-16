@@ -8,8 +8,6 @@ publishing_service_domain = "test.publishing.service.gov.uk"
 internal_app_domain       = "test.govuk-internal.digital"
 external_app_domain       = "test.govuk.digital"
 
-redis_host = "shared-redis.test.govuk-internal.digital"
-
 #--------------------------------------------------------------
 # Network
 #--------------------------------------------------------------

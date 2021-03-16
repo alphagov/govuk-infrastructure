@@ -12,7 +12,7 @@ locals {
         GOVUK_APP_ROOT           = "/app"
         GOVUK_STATSD_PREFIX      = "govuk-ecs.app.signon"
         RAILS_SERVE_STATIC_FILES = "true"
-        REDIS_URL                = "redis://${var.redis_host}:${var.redis_port}"
+        REDIS_URL                = module.shared_redis_cluster.uri
       }
     )
 

@@ -3,12 +3,6 @@ variable "cluster_name" {
   default = "shared"
 }
 
-variable "internal_app_domain" {
-  description = "Domain in which to create DNS records for private resources. For example, test.govuk-internal.digital"
-  type        = string
-  default     = "test.govuk-internal.digital"
-}
-
 variable "subnet_ids" {
   type        = list(any)
   description = "Subnet IDs to assign to the aws_elasticache_subnet_group"

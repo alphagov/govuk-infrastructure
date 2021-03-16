@@ -27,7 +27,6 @@ locals {
     draft_static_uri        = "http://draft-static.${local.mesh_domain}"
     publishing_api_uri      = "http://publishing-api-web.${local.mesh_domain}",
     rabbitmq_hosts          = "rabbitmq.${var.internal_app_domain}"
-    redis_url               = "redis://${var.redis_host}:${var.redis_port}"
     router_api_uri          = "http://router-api.${local.mesh_domain}",
     draft_router_api_uri    = "http://draft-router-api.${local.mesh_domain}",
     router_urls             = "router.${local.mesh_domain}:3055"       # TODO(https://trello.com/c/gmzObCBG/95): router-api expects a list of individual instances, so this won't work as-is.

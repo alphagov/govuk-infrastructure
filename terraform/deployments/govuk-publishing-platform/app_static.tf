@@ -9,7 +9,7 @@ locals {
         GOVUK_APP_NAME                   = "static",
         GOVUK_APP_ROOT                   = "/var/apps/static",
         PLEK_SERVICE_ACCOUNT_MANAGER_URI = "",
-        REDIS_URL                        = local.defaults.redis_url,
+        REDIS_URL                        = module.shared_redis_cluster.uri,
         RAILS_SERVE_STATIC_FILES         = "enabled",
         RAILS_SERVE_STATIC_ASSETS        = "yes",
       }
