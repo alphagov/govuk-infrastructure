@@ -81,7 +81,7 @@ output "mesh_domain" {
 }
 
 output "external_app_domain" {
-  value = var.external_app_domain
+  value = local.workspace_external_domain
 }
 
 output "internal_app_domain" {
@@ -89,7 +89,7 @@ output "internal_app_domain" {
 }
 
 output "govuk_website_root" {
-  value = "https://frontend.${var.external_app_domain}" # TODO: Change back to www once router is up
+  value = "https://frontend.${local.workspace_external_domain}" # TODO: Change back to www once router is up
 }
 
 output "fargate_execution_iam_role_arn" {
