@@ -3,6 +3,7 @@ module "www_origin" {
 
   vpc_id                               = local.vpc_id
   aws_region                           = data.aws_region.current.name
+  assume_role_arn                      = var.assume_role_arn
   public_subnets                       = local.public_subnets
   public_zone_id                       = aws_route53_zone.workspace_public.zone_id
   external_app_domain                  = local.workspace_external_domain
@@ -22,6 +23,7 @@ module "draft_origin" {
 
   vpc_id                               = local.vpc_id
   aws_region                           = data.aws_region.current.name
+  assume_role_arn                      = var.assume_role_arn
   public_subnets                       = local.public_subnets
   public_zone_id                       = aws_route53_zone.workspace_public.zone_id
   external_app_domain                  = local.workspace_external_domain

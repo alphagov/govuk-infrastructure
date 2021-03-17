@@ -32,15 +32,6 @@ provider "aws" {
   }
 }
 
-provider "aws" {
-  region = "us-east-1"
-  alias  = "use1"
-
-  assume_role {
-    role_arn = var.assume_role_arn
-  }
-}
-
 provider "fastly" {
   # We only want to use fastly's data API
   api_key = "test"

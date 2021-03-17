@@ -7,11 +7,19 @@ locals {
 
 provider "aws" {
   region = var.aws_region
+
+  assume_role {
+    role_arn = var.assume_role_arn
+  }
 }
 
 provider "aws" {
   region = "us-east-1"
   alias  = "use1"
+
+  assume_role {
+    role_arn = var.assume_role_arn
+  }
 }
 
 resource "aws_cloudfront_origin_access_identity" "cloudfront_s3_access" {
