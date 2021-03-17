@@ -43,10 +43,6 @@ resource "aws_lb_listener" "public" {
   }
 }
 
-data "aws_route53_zone" "public" {
-  name = var.external_app_domain
-}
-
 resource "aws_route53_record" "public_alb" {
   zone_id = var.public_zone_id
   name    = var.dns_a_record_name
