@@ -16,11 +16,11 @@ locals {
 
     secrets_from_arns = local.defaults.secrets_from_arns
 
-    mongodb_hosts = "mongodb://${join(",", [
+    mongodb_hosts = join(",", [
       data.terraform_remote_state.govuk_aws_router_mongo.outputs.router_backend_1_service_dns_name,
       data.terraform_remote_state.govuk_aws_router_mongo.outputs.router_backend_2_service_dns_name,
       data.terraform_remote_state.govuk_aws_router_mongo.outputs.router_backend_3_service_dns_name,
-    ])}"
+    ])
   }
 }
 
