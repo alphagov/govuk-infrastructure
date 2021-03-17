@@ -44,10 +44,6 @@ resource "aws_lb_listener" "origin" {
   }
 }
 
-data "aws_route53_zone" "public" {
-  name = var.external_app_domain
-}
-
 resource "aws_route53_record" "origin_alb" {
   zone_id = var.public_zone_id
   name    = "${local.mode}-origin-alb"

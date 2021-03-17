@@ -6,7 +6,7 @@ module "www_origin" {
   assume_role_arn                      = var.assume_role_arn
   public_subnets                       = local.public_subnets
   public_zone_id                       = aws_route53_zone.workspace_public.zone_id
-  external_app_domain                  = local.workspace_external_domain
+  external_app_domain                  = aws_route53_zone.workspace_public.name
   certificate                          = aws_acm_certificate.workspace_public.arn
   publishing_service_domain            = var.publishing_service_domain
   workspace_suffix                     = terraform.workspace == "default" ? "govuk" : terraform.workspace
@@ -26,7 +26,7 @@ module "draft_origin" {
   assume_role_arn                      = var.assume_role_arn
   public_subnets                       = local.public_subnets
   public_zone_id                       = aws_route53_zone.workspace_public.zone_id
-  external_app_domain                  = local.workspace_external_domain
+  external_app_domain                  = aws_route53_zone.workspace_public.name
   certificate                          = aws_acm_certificate.workspace_public.arn
   publishing_service_domain            = var.publishing_service_domain
   workspace_suffix                     = terraform.workspace == "default" ? "govuk" : terraform.workspace
