@@ -30,11 +30,12 @@ locals {
       }
     )
 
-    mongodb_host = join(",", [
+    mongodb_url = format(
+      "mongodb://%s,%s,%s",
       data.terraform_remote_state.govuk_aws_mongo.outputs.mongo_1_service_dns_name,
       data.terraform_remote_state.govuk_aws_mongo.outputs.mongo_2_service_dns_name,
       data.terraform_remote_state.govuk_aws_mongo.outputs.mongo_3_service_dns_name,
-    ])
+    )
   }
 }
 
@@ -62,7 +63,7 @@ module "content_store" {
     {
       GOVUK_STATSD_PREFIX         = "govuk-ecs.app.content-store"
       PLEK_SERVICE_ROUTER_API_URI = local.defaults.router_api_uri
-      MONGODB_URI                 = "mongodb://${local.content_store_defaults.mongodb_host}/live_content_store_production"
+      MONGODB_URI                 = "${local.content_store_defaults.mongodb_url}/live_content_store_production"
     },
   )
   secrets_from_arns  = local.content_store_defaults.secrets_from_arns
@@ -100,7 +101,7 @@ module "draft_content_store" {
       GOVUK_APP_NAME              = "draft-content-store",
       GOVUK_STATSD_PREFIX         = "govuk-ecs.app.draft-content-store"
       PLEK_SERVICE_ROUTER_API_URI = local.defaults.draft_router_api_uri
-      MONGODB_URI                 = "mongodb://${local.content_store_defaults.mongodb_host}/draft_content_store_production"
+      MONGODB_URI                 = "${local.content_store_defaults.mongodb_url}/draft_content_store_production"
     }
   )
   secrets_from_arns  = local.content_store_defaults.secrets_from_arns
