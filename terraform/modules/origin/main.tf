@@ -80,7 +80,7 @@ resource "aws_cloudfront_distribution" "origin" {
       headers = ["*"]
     }
 
-    viewer_protocol_policy = "https"
+    viewer_protocol_policy = "https-only"
     min_ttl                = 0
     default_ttl            = 3600
     max_ttl                = 86400

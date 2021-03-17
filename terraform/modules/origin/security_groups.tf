@@ -38,9 +38,31 @@ resource "aws_security_group_rule" "origin_alb_to_any_any" {
 /// Cloudfront access to S3
 
 resource "aws_iam_role" "cloudfront_security_groups_lambda_operator" {
-  name               = "cloudfront_security_groups_lambda"
+  name               = "${var.workspace_suffix}_${local.mode}_cloudfront_security_groups_lambda"
   assume_role_policy = <<-EOF
   {
+    "Version": "2012-10-17",
+    "Statement": [
+      {
+        "Effect": "Allow",
+        "Principal": {
+          "Service": [
+            "lambda.amazonaws.com",
+            "edgelambda.amazonaws.com"
+          ]
+        },
+        "Action": "sts:AssumeRole"
+      }
+    ]
+  }
+  EOF
+}
+
+
+resource "aws_iam_policy" "cloudfront_security_groups_lambda_policy" {
+  name        = "${var.workspace_suffix}_${local.mode}_cloudfront_security_groups_lambda_policy"
+
+  policy = jsonencode({
     "Version": "2012-10-17",
     "Statement": [
       {
@@ -70,8 +92,12 @@ resource "aws_iam_role" "cloudfront_security_groups_lambda_operator" {
         "Resource": "*"
       }
     ]
-  }
-  EOF
+  })
+}
+
+resource "aws_iam_role_policy_attachment" "cloudfront_security_groups_lambda_role_attachment" {
+  role       = aws_iam_role.cloudfront_security_groups_lambda_operator.name
+  policy_arn = aws_iam_policy.cloudfront_security_groups_lambda_policy.arn
 }
 
 data "archive_file" "cloudfront_security_groups_updater" {
@@ -83,18 +109,18 @@ data "archive_file" "cloudfront_security_groups_updater" {
 resource "aws_lambda_function" "cloudfront_security_groups_updater" {
   filename         = data.archive_file.cloudfront_security_groups_updater.output_path
   source_code_hash = data.archive_file.cloudfront_security_groups_updater.output_base64sha256
-  function_name    = "cloudfront_security_groups_updater"
+  function_name    = "${var.workspace_suffix}_${local.mode}_cloudfront_security_groups_updater"
   role             = aws_iam_role.cloudfront_security_groups_lambda_operator.arn
   runtime          = "python3.8"
-  handler          = "lambda_handler"
+  handler          = "cloudfront_security_groups_updater.lambda_handler"
 
   environment {
     variables = {
-      vpc-id   = var.vpc_id,
-      PORTS    = "443",
-      REGION   = var.aws_region,
-      ALB_NAME = aws_lb.origin.name,
-      AD_SG    = aws_security_group.origin_alb.name,
+      VPC_ID   = var.vpc_id
+      PORTS    = "443"
+      REGION   = var.aws_region
+      ALB_NAME = aws_lb.origin.name
+      AD_SG    = aws_security_group.origin_alb.name
     }
   }
 }
