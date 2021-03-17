@@ -16,11 +16,12 @@ locals {
 
     secrets_from_arns = local.defaults.secrets_from_arns
 
-    mongodb_hosts = join(",", [
+    mongodb_url = format(
+      "mongodb://%s,%s,%s",
       data.terraform_remote_state.govuk_aws_router_mongo.outputs.router_backend_1_service_dns_name,
       data.terraform_remote_state.govuk_aws_router_mongo.outputs.router_backend_2_service_dns_name,
       data.terraform_remote_state.govuk_aws_router_mongo.outputs.router_backend_3_service_dns_name,
-    ])
+    )
   }
 }
 
@@ -46,7 +47,7 @@ module "router" {
     local.router_defaults.environment_variables,
     {
       ROUTER_MONGO_DB  = "router"
-      ROUTER_MONGO_URL = "mongodb://${local.router_defaults.mongodb_hosts}/router",
+      ROUTER_MONGO_URL = "${local.router_defaults.mongodb_url}/router",
     },
   )
   secrets_from_arns  = local.router_defaults.secrets_from_arns
@@ -79,7 +80,7 @@ module "draft_router" {
     local.router_defaults.environment_variables,
     {
       ROUTER_MONGO_DB  = "draft_router"
-      ROUTER_MONGO_URL = "mongodb://${local.router_defaults.mongodb_hosts}/draft_router",
+      ROUTER_MONGO_URL = "${local.router_defaults.mongodb_url}/draft_router",
     },
   )
   secrets_from_arns  = local.router_defaults.secrets_from_arns
