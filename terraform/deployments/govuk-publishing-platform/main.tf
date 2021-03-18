@@ -21,6 +21,16 @@ terraform {
       source  = "hashicorp/archive"
       version = "2.1.0"
     }
+
+    http = {
+          source = "hashicorp/http"
+          version = "2.1.0"
+    }
+
+    local = {
+      source = "hashicorp/local"
+      version = "2.1.0"
+    }
   }
 }
 
@@ -38,6 +48,10 @@ provider "fastly" {
 }
 
 provider "archive" {}
+
+provider "http" {}
+
+provider "local" {}
 
 locals {
   vpc_id                        = data.terraform_remote_state.infra_networking.outputs.vpc_id

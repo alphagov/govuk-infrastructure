@@ -58,10 +58,9 @@ resource "aws_cloudfront_distribution" "origin" {
     }
   }
 
-  enabled             = true
-  is_ipv6_enabled     = false
-  comment             = "origin CDN in front of origin ALB and s3 rails assets bucket"
-  default_root_object = "index.html"
+  enabled         = true
+  is_ipv6_enabled = false
+  comment         = "${local.mode}-origin CDN in front of origin ALB and s3 rails assets bucket"
 
   aliases = ["${local.mode}-origin.${var.external_app_domain}"]
 

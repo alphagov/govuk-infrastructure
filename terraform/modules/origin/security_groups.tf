@@ -60,36 +60,36 @@ resource "aws_iam_role" "cloudfront_security_groups_lambda_operator" {
 
 
 resource "aws_iam_policy" "cloudfront_security_groups_lambda_policy" {
-  name        = "${var.workspace_suffix}_${local.mode}_cloudfront_security_groups_lambda_policy"
+  name = "${var.workspace_suffix}_${local.mode}_cloudfront_security_groups_lambda_policy"
 
   policy = jsonencode({
-    "Version": "2012-10-17",
-    "Statement": [
+    "Version" : "2012-10-17",
+    "Statement" : [
       {
-        "Sid": "CloudWatchPermissions",
-        "Effect": "Allow",
-        "Action": [
+        "Sid" : "CloudWatchPermissions",
+        "Effect" : "Allow",
+        "Action" : [
           "logs:CreateLogGroup",
           "logs:CreateLogStream",
           "logs:PutLogEvents"
         ],
-        "Resource": "arn:aws:logs:*:*:*"
+        "Resource" : "arn:aws:logs:*:*:*"
       },
       {
-        "Sid": "EC2Permissions",
-        "Effect": "Allow",
-        "Action": [
+        "Sid" : "EC2Permissions",
+        "Effect" : "Allow",
+        "Action" : [
           "ec2:DescribeSecurityGroups",
           "ec2:AuthorizeSecurityGroupIngress",
           "ec2:RevokeSecurityGroupIngress",
           "ec2:CreateSecurityGroup",
           "ec2:DescribeVpcs",
-  		"ec2:CreateTags",
+          "ec2:CreateTags",
           "ec2:ModifyNetworkInterfaceAttribute",
           "ec2:DescribeNetworkInterfaces"
 
         ],
-        "Resource": "*"
+        "Resource" : "*"
       }
     ]
   })
@@ -123,4 +123,13 @@ resource "aws_lambda_function" "cloudfront_security_groups_updater" {
       AD_SG    = aws_security_group.origin_alb.name
     }
   }
+}
+
+data "http" "aws_cloudfront_ip_ranges" {
+  url = "https://ip-ranges.amazonaws.com/ip-ranges.json"
+}
+
+resource "local_file" "aws_ip_ranges" {
+    content     = data.http.aws_cloudfront_ip_ranges.body
+    filename = "${path.module}/aws-ip-ranges.json"
 }
