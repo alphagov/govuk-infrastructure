@@ -86,8 +86,9 @@ resource "aws_iam_policy" "cloudfront_security_groups_lambda_policy" {
           "ec2:DescribeVpcs",
           "ec2:CreateTags",
           "ec2:ModifyNetworkInterfaceAttribute",
-          "ec2:DescribeNetworkInterfaces"
-
+          "ec2:DescribeNetworkInterfaces",
+          "elasticloadbalancing:DescribeLoadBalancers",
+          "elasticloadbalancing:SetSecurityGroups"
         ],
         "Resource" : "*"
       }
@@ -111,6 +112,7 @@ resource "aws_lambda_function" "cloudfront_security_groups_updater" {
   source_code_hash = data.archive_file.cloudfront_security_groups_updater.output_base64sha256
   function_name    = "${var.workspace_suffix}_${local.mode}_cloudfront_security_groups_updater"
   role             = aws_iam_role.cloudfront_security_groups_lambda_operator.arn
+  timeout          = 300
   runtime          = "python3.8"
   handler          = "cloudfront_security_groups_updater.lambda_handler"
 
@@ -119,17 +121,8 @@ resource "aws_lambda_function" "cloudfront_security_groups_updater" {
       VPC_ID   = var.vpc_id
       PORTS    = "443"
       REGION   = var.aws_region
-      ALB_NAME = aws_lb.origin.name
-      AD_SG    = aws_security_group.origin_alb.name
+      ALB_ARN  = aws_lb.origin.arn
+      AD_SG    = aws_security_group.origin_alb.id
     }
   }
-}
-
-data "http" "aws_cloudfront_ip_ranges" {
-  url = "https://ip-ranges.amazonaws.com/ip-ranges.json"
-}
-
-resource "local_file" "aws_ip_ranges" {
-    content     = data.http.aws_cloudfront_ip_ranges.body
-    filename = "${path.module}/aws-ip-ranges.json"
 }

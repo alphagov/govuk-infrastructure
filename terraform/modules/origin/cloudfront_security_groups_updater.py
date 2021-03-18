@@ -12,7 +12,7 @@ SERVICE = os.getenv( 'SERVICE', "CLOUDFRONT")
 NAME = os.getenv( 'PREFIX_NAME', "AUTOUPDATE_CF")
 VPC_ID= os.getenv( 'VPC_ID',"")
 REGION= os.getenv( 'REGION',"us-east-1")
-ALB_NAME = os.getenv( 'ALB_NAME',"")
+ALB_ARN = os.getenv( 'ALB_ARN',"")
 AD_SG= os.getenv( 'AD_SG',"")
 NRANGES=0
 NRULES=60
@@ -276,17 +276,17 @@ def apply_security_groups_alb():
     ec2_client = boto3.client('ec2',region_name=REGION)
 
     response=get_security_groups_for_update(ec2_client, False)
-    new_security_groups=[sg['GroupName'] for sg in response['SecurityGroups']]
+    new_security_groups=[sg['GroupId'] for sg in response['SecurityGroups']]
     new_security_groups.extend(AD_SG.split(","))
 
     #Creating elbv2 boto3 client
     elbv2_client = boto3.client('elbv2',region_name=REGION)
 
-    response = elbv2_client.describe_load_balancers(Names=[ ALB_NAME,],)
+    response = elbv2_client.describe_load_balancers(LoadBalancerArns=[ ALB_ARN,],)
     existing_security_groups = [sg for lb in response['LoadBalancers'] for sg in lb['SecurityGroups']]
 
     if set(new_security_groups) != set (existing_security_groups):
-        response = elbv2_client.apply_security_groups_to_load_balancer(
-            LoadBalancerName=ALB_NAME,
+        response = elbv2_client.set_security_groups(
+            LoadBalancerArn=ALB_ARN,
             SecurityGroups=new_security_groups,
         )

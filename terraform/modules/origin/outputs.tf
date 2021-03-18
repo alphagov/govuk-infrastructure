@@ -17,3 +17,7 @@ output "origin_app_fqdn" {
 output "cloudfront_access_identity_iam_arn" {
   value = aws_cloudfront_origin_access_identity.cloudfront_s3_access.iam_arn
 }
+
+output "cloudfront_security_groups_updater_lambda_name" {
+  value = aws_lambda_function.cloudfront_security_groups_updater.function_name
+}
