@@ -23,12 +23,12 @@ terraform {
     }
 
     http = {
-          source = "hashicorp/http"
-          version = "2.1.0"
+      source  = "hashicorp/http"
+      version = "2.1.0"
     }
 
     local = {
-      source = "hashicorp/local"
+      source  = "hashicorp/local"
       version = "2.1.0"
     }
   }

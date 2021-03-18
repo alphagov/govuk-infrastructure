@@ -44,14 +44,14 @@ data "http" "aws_cloudfront_ip_ranges" {
 }
 
 resource "local_file" "aws_ip_ranges" {
-    content     = data.http.aws_cloudfront_ip_ranges.body
-    filename = "/tmp/aws-ip-ranges.json"
+  content  = data.http.aws_cloudfront_ip_ranges.body
+  filename = "/tmp/aws-ip-ranges.json"
 }
 
 data "aws_lambda_invocation" "trigger_cloudfront_security_groups_updater" {
   function_name = module.www_origin.cloudfront_security_groups_updater_lambda_name
 
-  input = <<JSON
+  input      = <<JSON
 {
     "Records": [
         {
@@ -74,7 +74,7 @@ data "aws_lambda_invocation" "trigger_cloudfront_security_groups_updater" {
     ]
 }
 JSON
-   depends_on = [module.www_origin]
+  depends_on = [module.www_origin]
 }
 
 output "result_entry" {

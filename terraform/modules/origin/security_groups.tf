@@ -118,11 +118,11 @@ resource "aws_lambda_function" "cloudfront_security_groups_updater" {
 
   environment {
     variables = {
-      VPC_ID   = var.vpc_id
-      PORTS    = "443"
-      REGION   = var.aws_region
-      ALB_ARN  = aws_lb.origin.arn
-      AD_SG    = aws_security_group.origin_alb.id
+      VPC_ID  = var.vpc_id
+      PORTS   = "443"
+      REGION  = var.aws_region
+      ALB_ARN = aws_lb.origin.arn
+      AD_SG   = aws_security_group.origin_alb.id
     }
   }
 }
