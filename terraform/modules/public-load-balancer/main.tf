@@ -1,15 +1,3 @@
-# TODO: use a single, ACM-managed cert with both domains on. There is already
-# such a cert in integration/staging/prod (but it needs defining in Terraform).
-data "aws_acm_certificate" "public_lb_default" {
-  domain   = "*.${var.publishing_service_domain}"
-  statuses = ["ISSUED"]
-}
-
-resource "aws_lb_listener_certificate" "service" {
-  listener_arn    = aws_lb_listener.public.arn
-  certificate_arn = var.certificate
-}
-
 resource "aws_lb" "public" {
   name               = "public-${var.app_name}-${var.workspace}"
   internal           = false
@@ -35,7 +23,7 @@ resource "aws_lb_listener" "public" {
   port              = 443
   protocol          = "HTTPS"
   ssl_policy        = "ELBSecurityPolicy-2016-08"
-  certificate_arn   = data.aws_acm_certificate.public_lb_default.arn
+  certificate_arn   = var.certificate
 
   default_action {
     type             = "forward"

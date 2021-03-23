@@ -31,6 +31,8 @@ resource "aws_route53_zone" "internal_private" {
 resource "aws_acm_certificate" "workspace_public" {
   domain_name = "*.${local.workspace_external_domain}"
 
+  subject_alternative_names = local.is_default_workspace ? ["*.${local.workspace}.${var.publishing_service_domain}"] : null
+
   validation_method = "DNS"
 
   lifecycle {
@@ -57,5 +59,5 @@ resource "aws_route53_record" "workspace_public" {
 
 resource "aws_acm_certificate_validation" "workspace_public" {
   certificate_arn         = aws_acm_certificate.workspace_public.arn
-  validation_record_fqdns = [for record in aws_route53_record.workspace_public : record.fqdn]
+  validation_record_fqdns = [for record in aws_route53_record.workspace_public : record.name]
 }

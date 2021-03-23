@@ -1,5 +1,6 @@
 locals {
   workspace                 = terraform.workspace == "default" ? "ecs" : terraform.workspace #default terraform workspace mapped to ecs
+  is_default_workspace      = terraform.workspace == "default" ? true : false
   workspace_external_domain = "${local.workspace}.${var.external_app_domain}"
   workspace_internal_domain = "${local.workspace}.${var.internal_app_domain}"
   mesh_domain               = "mesh.${local.workspace_internal_domain}"
