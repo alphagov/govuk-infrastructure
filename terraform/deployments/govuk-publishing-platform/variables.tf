@@ -3,15 +3,6 @@ variable "external_app_domain" {
   description = "e.g. test.govuk.digital"
 }
 
-variable "mesh_name" {
-  type = string
-}
-
-variable "mesh_domain" {
-  type        = string
-  description = "e.g. mesh.govuk-internal.digital"
-}
-
 variable "ecs_default_capacity_provider" {
   type = string
 }

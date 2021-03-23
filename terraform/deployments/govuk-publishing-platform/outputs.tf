@@ -73,7 +73,7 @@ output "log_group" {
 }
 
 output "mesh_name" {
-  value = local.mesh_name
+  value = aws_appmesh_mesh.govuk.name
 }
 
 output "mesh_domain" {

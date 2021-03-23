@@ -18,8 +18,6 @@ fi
 
 echo "Updating $ECS_SERVICE service..."
 
-CLUSTER=govuk
-
 aws ecs update-service \
   --cluster "$CLUSTER" \
   --service "$ECS_SERVICE" \

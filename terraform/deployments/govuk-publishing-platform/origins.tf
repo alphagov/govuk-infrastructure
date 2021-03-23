@@ -7,7 +7,7 @@ module "www_origin" {
   external_app_domain       = var.external_app_domain
   certificate               = aws_acm_certificate.workspace_public.arn
   publishing_service_domain = var.publishing_service_domain
-  workspace_suffix          = terraform.workspace == "default" ? "govuk" : terraform.workspace
+  workspace                 = local.workspace
   external_cidrs_list       = concat(var.office_cidrs_list, data.fastly_ip_ranges.fastly.cidr_blocks)
 
   apps_security_config_list = {
@@ -25,7 +25,7 @@ module "draft_origin" {
   external_app_domain       = var.external_app_domain
   certificate               = aws_acm_certificate.workspace_public.arn
   publishing_service_domain = var.publishing_service_domain
-  workspace_suffix          = terraform.workspace == "default" ? "govuk" : terraform.workspace
+  workspace                 = local.workspace
   external_cidrs_list       = concat(var.office_cidrs_list, data.fastly_ip_ranges.fastly.cidr_blocks)
   live                      = false
 

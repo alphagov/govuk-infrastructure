@@ -1,13 +1,6 @@
-locals {
-  mesh_name = terraform.workspace == "default" ? var.mesh_name : "mesh-${terraform.workspace}"
-}
-
-
-
-
 # All services running on GOV.UK run in this single cluster.
 resource "aws_ecs_cluster" "cluster" {
-  name               = local.mesh_name
+  name               = "govuk-${local.workspace}"
   capacity_providers = ["FARGATE", "FARGATE_SPOT"]
 
   default_capacity_provider_strategy {
@@ -21,7 +14,7 @@ resource "aws_ecs_cluster" "cluster" {
 }
 
 resource "aws_appmesh_mesh" "govuk" {
-  name = local.mesh_name
+  name = "govuk-${local.workspace}"
 
   spec {
     egress_filter {

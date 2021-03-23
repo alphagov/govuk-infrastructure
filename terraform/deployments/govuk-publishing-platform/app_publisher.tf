@@ -14,7 +14,6 @@ locals {
     environment_variables = merge(
       local.defaults.environment_variables,
       {
-        ASSET_HOST                       = local.defaults.asset_host
         BASIC_AUTH_USERNAME              = "gds"
         EMAIL_GROUP_BUSINESS             = "test-address@digital.cabinet-office.gov.uk"
         EMAIL_GROUP_CITIZEN              = "test-address@digital.cabinet-office.gov.uk"
@@ -110,7 +109,7 @@ module "publisher_public_alb" {
   external_app_domain       = local.workspace_external_domain
   certificate               = aws_acm_certificate.workspace_public.arn
   publishing_service_domain = var.publishing_service_domain
-  workspace_suffix          = terraform.workspace == "default" ? "govuk" : terraform.workspace
+  workspace                 = local.workspace
   service_security_group_id = module.publisher_web.security_group_id
   external_cidrs_list       = var.office_cidrs_list
 }
