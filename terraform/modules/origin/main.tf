@@ -16,7 +16,7 @@ resource "aws_lb_listener_certificate" "service" {
 }
 
 resource "aws_lb" "origin" {
-  name               = "${local.mode}-origin-ecs-${var.workspace_suffix}"
+  name               = "${local.mode}-origin-ecs-${var.workspace}"
   internal           = false
   load_balancer_type = "application"
   security_groups    = [aws_security_group.origin_alb.id]
@@ -25,7 +25,7 @@ resource "aws_lb" "origin" {
 
 
 resource "aws_lb_target_group" "origin-frontend" {
-  name        = "${local.mode}-origin-frontend-${var.workspace_suffix}"
+  name        = "${local.mode}-origin-frontend-${var.workspace}"
   port        = 80
   protocol    = "HTTP"
   vpc_id      = var.vpc_id
@@ -53,7 +53,7 @@ resource "aws_lb_listener_rule" "origin-frontend" {
 }
 
 resource "aws_lb_target_group" "origin-static" {
-  name        = "${local.mode}-origin-static-${var.workspace_suffix}"
+  name        = "${local.mode}-origin-static-${var.workspace}"
   port        = 80
   protocol    = "HTTP"
   vpc_id      = var.vpc_id

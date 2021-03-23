@@ -14,5 +14,6 @@ params:
   AWS_REGION: eu-west-1
   ASSUME_ROLE_ARN: 'arn:aws:iam::430354129336:role/govuk-concourse-deployer'
   ECS_SERVICE:
+  CLUSTER: govuk-ecs
 run:
   path: ./src/concourse/tasks/update-ecs-service.sh

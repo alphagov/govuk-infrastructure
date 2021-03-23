@@ -49,7 +49,7 @@ module "grafana_public_alb" {
   external_app_domain       = var.external_app_domain
   certificate               = data.aws_acm_certificate.public_lb_alternate
   publishing_service_domain = var.publishing_service_domain
-  workspace_suffix          = "govuk" # TODO: Changeme
+  workspace                 = "govuk" # TODO: Changeme
   service_security_group_id = module.grafana_app.security_group_id
   health_check_path         = "/api/health"
   target_port               = 3000

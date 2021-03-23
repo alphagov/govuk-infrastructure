@@ -1,10 +1,3 @@
-locals {
-  workspace_external_domain = terraform.workspace == "default" ? "ecs.${var.external_app_domain}" : "${terraform.workspace}.${var.external_app_domain}"
-  workspace_internal_domain = terraform.workspace == "default" ? "ecs.${var.internal_app_domain}" : "${terraform.workspace}.${var.internal_app_domain}"
-}
-
-
-
 data "aws_route53_zone" "public" {
   name = var.external_app_domain
 }
@@ -35,10 +28,9 @@ resource "aws_route53_zone" "internal_private" {
 
 }
 
-
-
 resource "aws_acm_certificate" "workspace_public" {
-  domain_name       = "*.${local.workspace_external_domain}"
+  domain_name = "*.${local.workspace_external_domain}"
+
   validation_method = "DNS"
 
   lifecycle {

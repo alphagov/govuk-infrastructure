@@ -1,7 +1,7 @@
 resource "aws_security_group" "public_alb" {
-  name        = "fargate_${var.app_name}_${var.workspace_suffix}_public_alb"
+  name        = "fargate_${var.app_name}_${var.workspace}_public_alb"
   vpc_id      = var.vpc_id
-  description = "${var.app_name} Internet-facing ALB in ${var.workspace_suffix} cluster"
+  description = "${var.app_name} Internet-facing ALB in govuk-${var.workspace} cluster"
 }
 
 resource "aws_security_group_rule" "service_from_alb_http" {

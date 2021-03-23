@@ -1,7 +1,7 @@
 resource "aws_security_group" "origin_alb" {
-  name        = "fargate_${local.mode}_origin_${var.workspace_suffix}_alb"
+  name        = "fargate_${local.mode}_origin_${var.workspace}_alb"
   vpc_id      = var.vpc_id
-  description = "${local.mode}-origin Internet-facing ALB in ${var.workspace_suffix} cluster"
+  description = "${local.mode}-origin Internet-facing ALB in ${var.workspace} cluster"
 }
 
 resource "aws_security_group_rule" "service_from_origin_alb_http" {
