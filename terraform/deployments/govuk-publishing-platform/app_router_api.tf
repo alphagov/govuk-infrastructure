@@ -45,8 +45,7 @@ module "router_api" {
   environment_variables = merge(
     local.router_api_defaults.environment_variables,
     {
-      ROUTER_NODES = local.defaults.router_urls,
-      MONGODB_URI  = "${local.router_api_defaults.mongodb_url}/router",
+      MONGODB_URI = "${local.router_api_defaults.mongodb_url}/router",
     },
   )
   secrets_from_arns = merge(
@@ -82,8 +81,7 @@ module "draft_router_api" {
   environment_variables = merge(
     local.router_api_defaults.environment_variables,
     {
-      ROUTER_NODES = local.defaults.draft_router_urls,
-      MONGODB_URI  = "${local.router_api_defaults.mongodb_url}/draft_router",
+      MONGODB_URI = "${local.router_api_defaults.mongodb_url}/draft_router",
     },
   )
   secrets_from_arns = merge(
