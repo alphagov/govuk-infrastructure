@@ -37,7 +37,7 @@ resources:
     icon: github
     name: govuk-infrastructure
     source: &govuk-infrastructure-source
-      branch: main
+      branch: ((govuk_infrastructure_branch))
       uri: https://github.com/alphagov/govuk-infrastructure
     type: git
 
@@ -329,9 +329,8 @@ jobs:
       trigger: true
     - file: govuk-infrastructure/concourse/pipelines/deploy.yml
       set_pipeline: self
-      vars:
-        workspace: ((workspace))
-        pipeline_name: ((pipeline_name))
+      var_files:
+        - govuk-infrastructure/concourse/pipelines/deploy-parameters.yml
 
   - name: run-terraform
     serial: true
@@ -522,7 +521,8 @@ jobs:
           app-image: frontend-image
         params:
           IMAGE_ASSETS_PATH: app-image/rootfs/app/public/assets/frontend
-          S3_BUCKET_PATH: s3://govuk-test-ecs-rails-assets/assets/frontend/
+          S3_BUCKET_PATH_PATTERN: s3://govuk-test-%s-rails-assets/assets/frontend/ # %s will be replaced by interpolated workspace in upload-rails-assets.yml
+          WORKSPACE: ((workspace))
       - task: update-draft-task-definition
         file: govuk-infrastructure/concourse/tasks/update-task-definition.yml
         input_mapping:
@@ -943,7 +943,8 @@ jobs:
           app-image: static-image
         params:
           IMAGE_ASSETS_PATH: app-image/rootfs/app/public/assets/static
-          S3_BUCKET_PATH: s3://govuk-test-ecs-rails-assets/assets/static/
+          S3_BUCKET_PATH_PATTERN: s3://govuk-test-%s-rails-assets/assets/static/ # %s will be replaced by interpolated workspace in upload-rails-assets.yml
+          WORKSPACE: ((workspace))
       - task: update-draft-task-definition
         file: govuk-infrastructure/concourse/tasks/update-task-definition.yml
         input_mapping:
