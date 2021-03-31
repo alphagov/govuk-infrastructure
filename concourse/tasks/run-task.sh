@@ -54,7 +54,17 @@ echo "waiting for task $task_arn to finish..."
 aws ecs wait tasks-stopped --tasks $task_id --cluster $CLUSTER
 echo "task finished."
 task_results=$(aws ecs describe-tasks --tasks $task_id --cluster $CLUSTER)
-ecs-cli logs --cluster $CLUSTER --task-id $task_id --since "60"
+
+# TODO - for some reason, this no longer works.
+#
+# ```
+# Error executing 'logs': ResourceNotFoundException: The specified log stream does not exist.
+# ```
+#
+# Commenting it out to make the tests green while we investigate:
+
+# ecs-cli logs --cluster $CLUSTER --task-id $task_id --since "60"
+
 exit_code=$(echo $task_results | jq [.tasks[0].containers[].exitCode] | jq add)
 echo "Exiting with code $exit_code"
 exit $exit_code
