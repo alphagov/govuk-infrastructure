@@ -5,7 +5,10 @@ output "json_format" {
     essential   = true,
     environment = [for key, value in var.environment_variables : { name : key, value : tostring(value) }],
     dependsOn   = var.dependsOn
-    image       = var.image
+    healthCheck = {
+      command = ["/bin/bash", "-c", var.health_check]
+    }
+    image = var.image
     logConfiguration = {
       logDriver = "awslogs",
       options = {
