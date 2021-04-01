@@ -36,7 +36,7 @@ module "app_container_definition" {
   aws_region            = var.aws_region
   command               = var.command
   environment_variables = var.environment_variables
-  dependsOn             = [{ containerName : "envoy", condition : "START" }]
+  dependsOn             = [{ containerName : "envoy", condition : "HEALTHY" }]
   log_group             = var.log_group
   log_stream_prefix     = var.service_name
   name                  = "app"
@@ -53,6 +53,7 @@ module "envoy_container_definition" {
   environment_variables = {
     APPMESH_RESOURCE_ARN = "mesh/${var.mesh_name}/virtualNode/${var.service_name}"
   }
+  health_check = "curl -f http://localhost:9901 || exit 1"
   # TODO: don't hardcode the version; track stable Envoy
   # TODO: control when Envoy updates happen (but still needs to be automatic)
   image             = "840364872350.dkr.ecr.${var.aws_region}.amazonaws.com/aws-appmesh-envoy:v1.16.1.0-prod"

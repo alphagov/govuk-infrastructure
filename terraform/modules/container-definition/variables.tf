@@ -24,6 +24,12 @@ variable "dependsOn" {
   description = "See ECS Task Definition spec for dependsOn"
 }
 
+variable "health_check" {
+  type        = string
+  default     = "exit 0"
+  description = "Command checks the container is ready to receive requests."
+}
+
 variable "image" {
   type    = string
   default = null
