@@ -9,6 +9,9 @@ output "json_format" {
       command = ["/bin/bash", "-c", var.health_check]
     }
     image = var.image
+    linuxParameters = {
+      initProcessEnabled = true
+    }
     logConfiguration = {
       logDriver = "awslogs",
       options = {

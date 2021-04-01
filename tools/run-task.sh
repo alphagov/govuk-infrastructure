@@ -70,6 +70,7 @@ echo "Starting task:
 task=$(aws ecs run-task --cluster $cluster \
 --task-definition $task_definition_arn --launch-type FARGATE --count 1 \
 --network-configuration $network_config \
+--enable-execute-command \
 --started-by $(whoami) \
 --overrides '{
   "containerOverrides": [{
