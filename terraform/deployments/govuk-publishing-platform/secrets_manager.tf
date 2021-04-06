@@ -72,9 +72,6 @@ data "aws_secretsmanager_secret" "publisher_oauth_id" {
 data "aws_secretsmanager_secret" "publisher_oauth_secret" {
   name = "publisher_app-OAUTH_SECRET"
 }
-data "aws_secretsmanager_secret" "publisher_publishing_api_bearer_token" {
-  name = "publisher_app-PUBLISHING_API_BEARER_TOKEN" # pragma: allowlist secret
-}
 data "aws_secretsmanager_secret" "publisher_secret_key_base" {
   name = "publisher_app-SECRET_KEY_BASE" # pragma: allowlist secret
 }

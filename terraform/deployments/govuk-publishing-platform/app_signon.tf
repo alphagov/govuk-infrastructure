@@ -19,19 +19,21 @@ locals {
     secrets_from_arns = merge(
       local.defaults.secrets_from_arns,
       {
-        SECRET_KEY_BASE   = data.aws_secretsmanager_secret.signon_secret_key_base.arn
-        SENTRY_DSN        = data.aws_secretsmanager_secret.sentry_dsn.arn
-        DATABASE_URL      = data.aws_secretsmanager_secret.signon_database_url.arn
-        DEVISE_PEPPER     = data.aws_secretsmanager_secret.signon_devise_pepper.arn
-        DEVISE_SECRET_KEY = data.aws_secretsmanager_secret.signon_devise_secret_key.arn
+        SECRET_KEY_BASE       = data.aws_secretsmanager_secret.signon_secret_key_base.arn
+        SENTRY_DSN            = data.aws_secretsmanager_secret.sentry_dsn.arn
+        DATABASE_URL          = data.aws_secretsmanager_secret.signon_database_url.arn
+        DEVISE_PEPPER         = data.aws_secretsmanager_secret.signon_devise_pepper.arn
+        DEVISE_SECRET_KEY     = data.aws_secretsmanager_secret.signon_devise_secret_key.arn
+        SIGNON_ADMIN_PASSWORD = aws_secretsmanager_secret.signon_admin_password.arn
       }
     )
   }
 }
 
 module "signon" {
-  registry                         = var.registry
+  registry                         = "govuk"
   image_name                       = "signon"
+  image_tag                        = "bilbof_boostrapping" # TODO: Remove once Signon PR #1617 is merged
   service_name                     = "signon"
   backend_virtual_service_names    = local.signon_defaults.backend_services
   mesh_name                        = aws_appmesh_mesh.govuk.id
