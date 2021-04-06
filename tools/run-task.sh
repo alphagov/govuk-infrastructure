@@ -88,7 +88,7 @@ echo "View task: https://eu-west-1.console.aws.amazon.com/ecs/home?region=eu-wes
 echo "Tailing logs..."
 echo ""
 
-(aws --region eu-west-1 logs tail govuk --follow | grep "${application}-${variant}/app/${task_id}")&
+(aws --region eu-west-1 logs tail $cluster --follow | grep "${application}-${variant}/app/${task_id}")&
 
 aws ecs wait tasks-stopped --tasks="[\"$task_arn\"]" --cluster $cluster
 
