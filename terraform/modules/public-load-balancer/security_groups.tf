@@ -20,7 +20,7 @@ resource "aws_security_group_rule" "alb_from_any_https" {
   from_port         = 443
   to_port           = 443
   protocol          = "tcp"
-  cidr_blocks       = var.external_cidrs_list
+  cidr_blocks       = var.allowlist_cidrs
   security_group_id = aws_security_group.public_alb.id
 }
 

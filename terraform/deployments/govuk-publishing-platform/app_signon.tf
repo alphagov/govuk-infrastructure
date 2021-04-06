@@ -71,3 +71,11 @@ module "signon_public_alb" {
   workspace                 = local.workspace
   service_security_group_id = module.signon.security_group_id
 }
+
+module "signon_alb_ip_restriction_rules" {
+  source                   = "../../modules/alb-listener-ip-restriction-rules"
+  restricted_path_patterns = ["/healthcheck", "/api/*"]
+  fully_trusted_source_ips = concat(var.office_cidrs_list, local.vpc_public_cidr_blocks)
+  aws_lb_listener_arn      = module.signon_public_alb.aws_lb_listener_arn
+  aws_lb_target_group_arn  = module.signon_public_alb.aws_lb_target_group_arn
+}

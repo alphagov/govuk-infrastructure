@@ -22,7 +22,7 @@ variable "apps_security_config_list" {
   description = "map in the format {<app_name> = { security_group_id=<security_group_id>, target_port=<target_port>}}"
 }
 
-variable "external_cidrs_list" {
+variable "allowlist_cidrs" {
   type    = list(any)
   default = ["0.0.0.0/0"]
 }

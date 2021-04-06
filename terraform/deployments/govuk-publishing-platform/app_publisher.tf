@@ -112,7 +112,15 @@ module "publisher_public_alb" {
   publishing_service_domain = var.publishing_service_domain
   workspace                 = local.workspace
   service_security_group_id = module.publisher_web.security_group_id
-  external_cidrs_list       = var.office_cidrs_list
+  allowlist_cidrs           = var.office_cidrs_list
+}
+
+module "publisher_alb_ip_restriction_rules" {
+  source                   = "../../modules/alb-listener-ip-restriction-rules"
+  restricted_path_patterns = ["/healthcheck"]
+  fully_trusted_source_ips = concat(var.office_cidrs_list, local.vpc_public_cidr_blocks)
+  aws_lb_listener_arn      = module.publisher_public_alb.aws_lb_listener_arn
+  aws_lb_target_group_arn  = module.publisher_public_alb.aws_lb_target_group_arn
 }
 
 #

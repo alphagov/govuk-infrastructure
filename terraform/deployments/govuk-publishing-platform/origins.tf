@@ -39,19 +39,19 @@ resource "aws_acm_certificate_validation" "public_north_virginia" {
 module "www_origin" {
   source = "../../modules/origin"
 
-  vpc_id                               = local.vpc_id
   aws_region                           = data.aws_region.current.name
   assume_role_arn                      = var.assume_role_arn
+  allowlist_cidrs                      = concat(var.office_cidrs_list, data.fastly_ip_ranges.fastly.cidr_blocks)
   public_subnets                       = local.public_subnets
   public_zone_id                       = aws_route53_zone.workspace_public.zone_id
   external_app_domain                  = aws_route53_zone.workspace_public.name
   load_balancer_certificate_arn        = aws_acm_certificate_validation.workspace_public.certificate_arn
   cloudfront_certificate_arn           = aws_acm_certificate_validation.public_north_virginia.certificate_arn
   publishing_service_domain            = var.publishing_service_domain
-  workspace                            = local.workspace
   is_default_workspace                 = local.is_default_workspace
-  external_cidrs_list                  = concat(var.office_cidrs_list, data.fastly_ip_ranges.fastly.cidr_blocks)
   rails_assets_s3_regional_domain_name = aws_s3_bucket.rails_assets.bucket_regional_domain_name
+  workspace                            = local.workspace
+  vpc_id                               = local.vpc_id
 
   apps_security_config_list = {
     "router" = { security_group_id = module.router.security_group_id, target_port = 80 },
@@ -72,7 +72,7 @@ module "draft_origin" {
   publishing_service_domain            = var.publishing_service_domain
   workspace                            = local.workspace
   is_default_workspace                 = local.is_default_workspace
-  external_cidrs_list                  = concat(var.office_cidrs_list, data.fastly_ip_ranges.fastly.cidr_blocks)
+  allowlist_cidrs                      = concat(var.office_cidrs_list, data.fastly_ip_ranges.fastly.cidr_blocks)
   rails_assets_s3_regional_domain_name = aws_s3_bucket.rails_assets.bucket_regional_domain_name
   is_live                              = false
 
