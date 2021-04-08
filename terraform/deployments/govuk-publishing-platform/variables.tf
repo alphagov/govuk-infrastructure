@@ -102,3 +102,9 @@ variable "assume_role_arn" {
   description = "(optional) AWS IAM role to assume. Uses the role from the environment by default."
   default     = null
 }
+
+variable "cdn_cache_default_ttl" {
+  type        = number
+  description = "Maxmimum amount of time for which the object will be considered fresh in the cache"
+  default     = 900
+}

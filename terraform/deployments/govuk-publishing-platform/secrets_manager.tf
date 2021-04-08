@@ -170,3 +170,15 @@ data "aws_secretsmanager_secret" "draft_router_api_oauth_secret" {
 data "aws_secretsmanager_secret" "draft_router_api_secret_key_base" {
   name = "draft-router-api_SECRET_KEY_BASE"
 }
+
+# CDN
+
+data "aws_secretsmanager_secret" "cdn_basic_authentication_encoded_secret" {
+  count = contains(["staging", "production"], var.govuk_environment) ? 0 : 1
+  name  = "CDN_basic_authentication_encoded_secret"
+}
+
+data "aws_secretsmanager_secret_version" "cdn_basic_authentication_encoded_secret" {
+  count     = contains(["staging", "production"], var.govuk_environment) ? 0 : 1
+  secret_id = data.aws_secretsmanager_secret.cdn_basic_authentication_encoded_secret[0].id
+}
