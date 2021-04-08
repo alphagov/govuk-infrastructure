@@ -27,10 +27,7 @@ provider "aws" {
   }
 }
 
-provider "fastly" {
-  # We only want to use fastly's data API
-  api_key = "test"
-}
+provider "fastly" {}
 
 locals {
   vpc_id                        = data.terraform_remote_state.infra_networking.outputs.vpc_id

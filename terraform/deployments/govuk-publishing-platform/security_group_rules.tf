@@ -158,11 +158,6 @@ resource "aws_security_group_rule" "draft_frontend_to_any_any" {
   security_group_id = module.draft_frontend.security_group_id
 }
 
-data "aws_nat_gateway" "govuk" {
-  count     = length(local.public_subnets)
-  subnet_id = local.public_subnets[count.index]
-}
-
 resource "aws_security_group_rule" "www_origin_alb_from_test_nat_gateways_https" {
   description = "www-origin ALB receives HTTPS requests from apps in ECS"
   type        = "ingress"
@@ -171,10 +166,7 @@ resource "aws_security_group_rule" "www_origin_alb_from_test_nat_gateways_https"
   protocol    = "tcp"
 
   security_group_id = module.www_origin.security_group_id
-  cidr_blocks = [
-    for nat_gateway in data.aws_nat_gateway.govuk :
-    "${nat_gateway.public_ip}/32"
-  ]
+  cidr_blocks       = local.nat_gateway_public_cidrs_list
 }
 
 resource "aws_security_group_rule" "draft_origin_alb_from_test_nat_gateways_https" {
@@ -185,10 +177,7 @@ resource "aws_security_group_rule" "draft_origin_alb_from_test_nat_gateways_http
   protocol    = "tcp"
 
   security_group_id = module.draft_origin.security_group_id
-  cidr_blocks = [
-    for nat_gateway in data.aws_nat_gateway.govuk :
-    "${nat_gateway.public_ip}/32"
-  ]
+  cidr_blocks       = local.nat_gateway_public_cidrs_list
 }
 
 resource "aws_security_group_rule" "static_to_any_any" {
