@@ -33,8 +33,6 @@ locals {
     rabbitmq_hosts          = "rabbitmq.${var.internal_app_domain}" # TODO: Make workspace-aware
     router_api_uri          = "http://router-api.${local.mesh_domain}",
     draft_router_api_uri    = "http://draft-router-api.${local.mesh_domain}",
-    router_urls             = "router.${local.mesh_domain}:3055",       # TODO(https://trello.com/c/gmzObCBG/95): router-api expects a list of individual instances, so this won't work as-is.
-    draft_router_urls       = "draft-router.${local.mesh_domain}:3055", # TODO(https://trello.com/c/gmzObCBG/95): router-api expects a list of individual instances, so this won't work as-is.
     signon_uri              = "https://signon.${local.workspace_external_domain}",
     static_uri              = "http://static.${local.mesh_domain}",
     website_root            = local.public_entry_url,
