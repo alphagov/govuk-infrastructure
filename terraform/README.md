@@ -5,6 +5,10 @@
 * [Applying Terraform](docs/applying-terraform.md)
 * [Adding an app](docs/adding-an-app.md)
 
+## Applying Terraform
+
+See [Applying Terraform](docs/applying-terraform.md).
+
 ## Directory structure
 
 * `deployments`: root modules, from where you can run Terraform commands.
