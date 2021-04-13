@@ -34,7 +34,7 @@ variable "office_cidrs_list" {
 
 variable "frontend_desired_count" {
   type    = number
-  default = 1
+  default = 2
 }
 
 variable "draft_frontend_desired_count" {

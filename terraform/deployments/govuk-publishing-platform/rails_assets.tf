@@ -13,3 +13,23 @@ resource "aws_s3_bucket" "rails_assets" {
     aws_environment = var.govuk_environment
   }
 }
+
+data "aws_iam_policy_document" "cloudfront_access_s3_policy" {
+  statement {
+    actions   = ["s3:GetObject"]
+    resources = ["${aws_s3_bucket.rails_assets.arn}/*"]
+
+    principals {
+      type = "AWS"
+      identifiers = [
+        module.www_origin.cloudfront_access_identity_iam_arn,
+        module.draft_origin.cloudfront_access_identity_iam_arn
+      ]
+    }
+  }
+}
+
+resource "aws_s3_bucket_policy" "cloudfront_access_s3_policy" {
+  bucket = aws_s3_bucket.rails_assets.id
+  policy = data.aws_iam_policy_document.cloudfront_access_s3_policy.json
+}
