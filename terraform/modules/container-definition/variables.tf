@@ -35,6 +35,12 @@ variable "image" {
   default = null
 }
 
+variable "registry_creds" {
+  type        = string
+  default     = null
+  description = "ARN of Secrets Manager secret for container registry login, if authentication is needed to pull the image."
+}
+
 variable "log_group" {
   type = string
 }

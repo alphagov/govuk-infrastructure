@@ -33,6 +33,7 @@ locals {
 module "app_container_definition" {
   source                = "../../modules/container-definition"
   image                 = "govuk/${var.image_name}:deployed-to-production"
+  registry_creds        = "arn:aws:secretsmanager:eu-west-1:430354129336:secret:dockerhub-SlzTmx" # TODO: remove once images are on ECR.
   aws_region            = var.aws_region
   command               = var.command
   environment_variables = var.environment_variables

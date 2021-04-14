@@ -12,6 +12,8 @@ output "json_format" {
     linuxParameters = {
       initProcessEnabled = true
     }
+    # TODO: remove this hack once images are on ECR.
+    repositoryCredentials = var.registry_creds == null ? null : { "credentialsParameter" : var.registry_creds }
     logConfiguration = {
       logDriver = "awslogs",
       options = {
