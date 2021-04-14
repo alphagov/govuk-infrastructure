@@ -138,3 +138,31 @@ resource "aws_iam_role_policy_attachment" "appmesh_envoy_access" {
   role       = aws_iam_role.task.id
   policy_arn = "arn:aws:iam::aws:policy/AWSAppMeshEnvoyAccess"
 }
+
+resource "aws_iam_role_policy_attachment" "ecs_exec_access" {
+  role       = aws_iam_role.task.id
+  policy_arn = aws_iam_policy.ecs_exec_access.arn
+}
+
+resource "aws_iam_policy" "ecs_exec_access" {
+  name        = "ecs_exec_access-${local.workspace}"
+  path        = "/ecsExecAccessPolicy/"
+  description = "Permits developers to access a running container"
+  policy      = <<EOF
+{
+   "Version": "2012-10-17",
+   "Statement": [
+       {
+       "Effect": "Allow",
+       "Action": [
+            "ssmmessages:CreateControlChannel",
+            "ssmmessages:CreateDataChannel",
+            "ssmmessages:OpenControlChannel",
+            "ssmmessages:OpenDataChannel"
+       ],
+      "Resource": "*"
+      }
+   ]
+}
+EOF
+}
