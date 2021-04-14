@@ -31,6 +31,7 @@ locals {
 
 module "router_api" {
   source                           = "../../modules/app"
+  registry                         = var.registry
   image_name                       = "router-api"
   service_name                     = "router-api"
   backend_virtual_service_names    = local.router_api_defaults.backend_services
@@ -67,6 +68,7 @@ module "router_api" {
 module "draft_router_api" {
   source = "../../modules/app"
 
+  registry                         = var.registry
   image_name                       = "router-api"
   service_name                     = "draft-router-api"
   backend_virtual_service_names    = local.router_api_defaults.backend_services

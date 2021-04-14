@@ -64,6 +64,7 @@ locals {
 }
 
 module "publisher_web" {
+  registry                         = var.registry
   image_name                       = "publisher"
   service_name                     = "publisher-web"
   backend_virtual_service_names    = local.publishing_api_defaults.backend_services
@@ -118,6 +119,7 @@ module "publisher_public_alb" {
 # Sidekiq Worker Service
 #
 module "publisher_worker" {
+  registry                      = var.registry
   image_name                    = "publisher"
   service_name                  = "publisher-worker"
   backend_virtual_service_names = local.publishing_api_defaults.backend_services

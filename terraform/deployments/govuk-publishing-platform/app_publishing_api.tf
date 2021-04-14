@@ -53,6 +53,7 @@ locals {
 }
 
 module "publishing_api_web" {
+  registry                         = var.registry
   image_name                       = "publishing-api"
   service_name                     = "publishing-api-web"
   backend_virtual_service_names    = local.publishing_api_defaults.backend_services
@@ -76,6 +77,7 @@ module "publishing_api_web" {
 }
 
 module "publishing_api_worker" {
+  registry                         = var.registry
   image_name                       = "publishing-api"
   service_name                     = "publishing-api-worker"
   backend_virtual_service_names    = local.publishing_api_defaults.backend_services

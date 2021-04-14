@@ -20,6 +20,7 @@ locals {
 module "static" {
   source = "../../modules/app"
 
+  registry                         = var.registry
   image_name                       = "static"
   service_name                     = "static"
   backend_virtual_service_names    = [] # Static doesn't use any other services
@@ -56,6 +57,7 @@ module "static" {
 module "draft_static" {
   source = "../../modules/app"
 
+  registry                         = var.registry
   image_name                       = "static"
   service_name                     = "draft-static"
   backend_virtual_service_names    = [] # Static doesn't use any other services

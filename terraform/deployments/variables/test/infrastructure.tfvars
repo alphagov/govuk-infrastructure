@@ -8,6 +8,8 @@ publishing_service_domain = "test.publishing.service.gov.uk"
 internal_app_domain       = "test.govuk-internal.digital"
 external_app_domain       = "test.govuk.digital"
 
+registry = "172025368201.dkr.ecr.eu-west-1.amazonaws.com"
+
 #--------------------------------------------------------------
 # Network
 #--------------------------------------------------------------

@@ -102,3 +102,8 @@ variable "assume_role_arn" {
   description = "(optional) AWS IAM role to assume. Uses the role from the environment by default."
   default     = null
 }
+
+variable "registry" {
+  type        = string
+  description = "registry from which to pull container images"
+}
