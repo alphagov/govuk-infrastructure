@@ -42,8 +42,7 @@ module "static" {
   secrets_from_arns = merge(
     local.static_defaults.secrets_from_arns,
     {
-      PUBLISHING_API_BEARER = data.aws_secretsmanager_secret.static_publishing_api_bearer_token.arn,
-      SECRET_KEY_BASE       = data.aws_secretsmanager_secret.static_secret_key_base.arn,
+      SECRET_KEY_BASE = data.aws_secretsmanager_secret.static_secret_key_base.arn,
     },
   )
   log_group          = local.log_group
@@ -79,8 +78,7 @@ module "draft_static" {
   secrets_from_arns = merge(
     local.static_defaults.secrets_from_arns,
     {
-      PUBLISHING_API_BEARER = data.aws_secretsmanager_secret.draft_static_publishing_api_bearer_token.arn,
-      SECRET_KEY_BASE       = data.aws_secretsmanager_secret.draft_static_secret_key_base.arn,
+      SECRET_KEY_BASE = data.aws_secretsmanager_secret.draft_static_secret_key_base.arn,
     },
   )
   log_group          = local.log_group

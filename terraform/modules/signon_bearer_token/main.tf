@@ -8,7 +8,7 @@ terraform {
 }
 
 locals {
-  secret_name = "${var.from_app}_to_${var.to_app}_bearer_token_${var.workspace}"
+  secret_name = "${var.name}_bearer_token_${var.workspace}"
 }
 
 resource "aws_secretsmanager_secret" "bearer_token" {

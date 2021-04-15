@@ -11,7 +11,7 @@ variable "app_name" {
   description = "Workspace-aware name for a Signon OAuth application resource, e.g. Publishing API"
 }
 
-variable "from_app" {
+variable "name" {
   type = string
 }
 
@@ -23,10 +23,6 @@ variable "signon_admin_password_arn" {
 variable "signon_host" {
   type        = string
   description = "Workspace-aware public hostname for signon app e.g. signon.ecs.test.govuk.digital"
-}
-
-variable "to_app" {
-  type = string
 }
 
 variable "workspace" {
