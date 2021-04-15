@@ -16,7 +16,7 @@ resource "aws_ecs_service" "statsd" {
   name          = local.service_name
   cluster       = var.cluster_id
   launch_type   = "FARGATE"
-  desired_count = 1
+  desired_count = var.desired_count
 
   network_configuration {
     security_groups = concat([aws_security_group.service.id], var.security_groups)
