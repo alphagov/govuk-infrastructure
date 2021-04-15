@@ -28,6 +28,7 @@ locals {
 module "router" {
   source = "../../modules/app"
 
+  registry                         = var.registry
   image_name                       = "router"
   service_name                     = "router"
   backend_virtual_service_names    = module.frontend.virtual_service_names
@@ -61,6 +62,7 @@ module "router" {
 
 module "draft_router" {
   source                           = "../../modules/app"
+  registry                         = var.registry
   image_name                       = "router"
   service_name                     = "draft-router"
   backend_virtual_service_names    = module.draft_frontend.virtual_service_names

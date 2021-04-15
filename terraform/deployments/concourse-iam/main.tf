@@ -30,20 +30,18 @@ resource "aws_iam_role" "govuk_concourse_deployer" {
   name        = "govuk-concourse-deployer"
   description = "Deploys applications to ECS from Concourse"
 
-  assume_role_policy = <<EOF
-{
-    "Version": "2012-10-17",
-    "Statement": [
-        {
-            "Effect": "Allow",
-            "Action": "sts:AssumeRole",
-            "Principal": {
-              "AWS": "arn:aws:iam::047969882937:role/cd-govuk-tools-concourse-worker"
-            }
+  assume_role_policy = jsonencode({
+    "Version" : "2012-10-17",
+    "Statement" : [
+      {
+        "Effect" : "Allow",
+        "Action" : "sts:AssumeRole",
+        "Principal" : {
+          "AWS" : "arn:aws:iam::047969882937:role/cd-govuk-tools-concourse-worker"
         }
+      }
     ]
-}
-EOF
+  })
 }
 
 # TODO - this policy is overly permissive - concourse doesn't need to be able
@@ -58,23 +56,41 @@ resource "aws_iam_role" "govuk_concourse_terraform_planner" {
   name        = "govuk-ci-concourse"
   description = "Runs Terraform plan from Concourse"
 
-  assume_role_policy = <<EOF
-{
-    "Version": "2012-10-17",
-    "Statement": [
-        {
-            "Effect": "Allow",
-            "Action": "sts:AssumeRole",
-            "Principal": {
-              "AWS": "arn:aws:iam::047969882937:role/cd-govuk-ci-concourse-worker"
-            }
+  assume_role_policy = jsonencode({
+    "Version" : "2012-10-17",
+    "Statement" : [
+      {
+        "Effect" : "Allow",
+        "Action" : "sts:AssumeRole",
+        "Principal" : {
+          "AWS" : "arn:aws:iam::047969882937:role/cd-govuk-ci-concourse-worker"
         }
+      }
     ]
-}
-EOF
+  })
 }
 
 resource "aws_iam_role_policy_attachment" "concourse_readonly" {
   role       = aws_iam_role.govuk_concourse_terraform_planner.id
   policy_arn = "arn:aws:iam::aws:policy/ReadOnlyAccess"
+}
+
+resource "aws_iam_user" "concourse_ecr_readonly_user" {
+  name = "concourse_ecr_readonly_user"
+}
+
+resource "aws_iam_user_policy" "concourse_ecr_readonly_user_policy" {
+  name = "concourse_ecr_readonly_user_policy"
+  user = aws_iam_user.concourse_ecr_readonly_user.name
+
+  policy = jsonencode({
+    "Version" : "2012-10-17",
+    "Statement" : [
+      {
+        "Effect" : "Allow",
+        "Action" : "sts:AssumeRole",
+        "Resource" : "arn:aws:iam::172025368201:role/pull_images_from_ecr_role"
+      }
+    ]
+  })
 }

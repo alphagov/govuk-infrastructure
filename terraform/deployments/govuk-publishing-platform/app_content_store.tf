@@ -45,6 +45,7 @@ module "content_store" {
     local.content_store_defaults.backend_services,
     module.router_api.virtual_service_names,
   ])
+  registry                         = var.registry
   image_name                       = "content-store"
   service_name                     = "content-store"
   mesh_name                        = aws_appmesh_mesh.govuk.id
@@ -83,6 +84,7 @@ module "draft_content_store" {
     local.content_store_defaults.backend_services,
     module.draft_router_api.virtual_service_names,
   ])
+  registry                         = var.registry
   image_name                       = "content-store"
   mesh_name                        = aws_appmesh_mesh.govuk.id
   service_discovery_namespace_id   = aws_service_discovery_private_dns_namespace.govuk_publishing_platform.id

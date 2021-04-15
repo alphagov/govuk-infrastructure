@@ -32,7 +32,7 @@ locals {
 
 module "app_container_definition" {
   source                = "../../modules/container-definition"
-  image                 = "govuk/${var.image_name}:deployed-to-production"
+  image                 = "${var.registry}/${var.image_name}:latest"
   aws_region            = var.aws_region
   command               = var.command
   environment_variables = var.environment_variables

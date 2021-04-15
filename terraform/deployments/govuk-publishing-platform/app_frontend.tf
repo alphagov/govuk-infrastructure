@@ -42,6 +42,7 @@ locals {
 }
 
 module "frontend" {
+  registry     = var.registry
   image_name   = "frontend"
   service_name = "frontend"
   mesh_name    = aws_appmesh_mesh.govuk.id
@@ -72,6 +73,7 @@ module "frontend" {
 }
 
 module "draft_frontend" {
+  registry     = var.registry
   image_name   = "frontend"
   service_name = "draft-frontend"
   mesh_name    = aws_appmesh_mesh.govuk.id

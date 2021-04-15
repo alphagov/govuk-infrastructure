@@ -10,12 +10,7 @@ role_arn = $ASSUME_ROLE_ARN
 credential_source = Ec2InstanceMetadata
 EOF
 
-if [ -f "app-image/digest" ]; then
-  IMAGE="govuk/${APPLICATION}@$(cat app-image/digest)"
-else
-  BUILD_TAG=${PIN_IMAGE_TAG:-$(cat release/.git/ref)}
-  IMAGE="govuk/${APPLICATION}:${BUILD_TAG}"
-fi
+IMAGE="${REGISTRY}/${APPLICATION}@$(cat app-image/digest)"
 
 echo "Creating a new task definition for ${IMAGE} in ECS"
 echo "================================================="

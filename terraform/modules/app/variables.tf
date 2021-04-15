@@ -23,6 +23,11 @@ variable "image_name" {
   description = "Used only for bootstrapping. Provide only the image name, not the tag."
 }
 
+variable "registry" {
+  type        = string
+  description = "registry from which to pull container images"
+}
+
 variable "subnets" {
   description = "IDs of the subnets where the ECS task will run."
   type        = list(any)

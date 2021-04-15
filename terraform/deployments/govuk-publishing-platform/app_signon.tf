@@ -30,6 +30,7 @@ locals {
 }
 
 module "signon" {
+  registry                         = var.registry
   image_name                       = "signon"
   service_name                     = "signon"
   backend_virtual_service_names    = local.signon_defaults.backend_services

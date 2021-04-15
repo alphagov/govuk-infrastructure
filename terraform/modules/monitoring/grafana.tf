@@ -4,7 +4,8 @@ locals {
 
 module "grafana_app" {
   source                        = "../app"
-  image_name                    = "grafana/grafana"
+  image_name                    = "grafana"
+  registry                      = "grafana"
   vpc_id                        = var.vpc_id
   backend_virtual_service_names = []
   cluster_id                    = aws_ecs_cluster.cluster.id

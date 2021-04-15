@@ -16,6 +16,14 @@ resource_types:
       repository: governmentpaas/s3-resource
       tag: latest # TODO - don't use latest (once we've worked out a policy for third party images)
 
+  - name: registry-image
+    type: docker-image
+    source:
+      repository: concourse/registry-image-resource
+      tag: 1.2.1
+      username: ((docker_hub_username))
+      password: ((docker_hub_authtoken))
+
 resources:
   - &git-repo
     icon: github
@@ -24,20 +32,6 @@ resources:
       branch: main
       uri: https://github.com/alphagov/govuk-infrastructure
     type: git
-
-  - <<: *git-repo
-    name: publisher
-    source:
-      branch: master
-      uri: https://github.com/alphagov/publisher
-      tag_filter: release_*
-
-  - <<: *git-repo
-    name: publishing-api
-    source:
-      branch: master
-      uri: https://github.com/alphagov/publishing-api
-      tag_filter: release_*
 
   - name: publishing-api-terraform-outputs
     type: s3
@@ -49,46 +43,11 @@ resources:
       initial_version: "0"
 
   - <<: *git-repo
-    name: content-store
-    source:
-      branch: master
-      uri: https://github.com/alphagov/content-store
-      tag_filter: release_*
-
-  - <<: *git-repo
     name: govuk-infrastructure-concourse-tasks
     icon: concourse-ci
     source:
       <<: *govuk-infrastructure-source
       paths: [ concourse/tasks ]
-
-  - <<: *git-repo
-    name: router
-    source:
-      branch: master
-      uri: https://github.com/alphagov/router
-      tag_filter: release_*
-
-  - <<: *git-repo
-    name: router-api
-    source:
-      branch: master
-      uri: https://github.com/alphagov/router-api
-      tag_filter: release_*
-
-  - <<: *git-repo
-    name: signon
-    source:
-      branch: master
-      uri: https://github.com/alphagov/signon
-      tag_filter: release_*
-
-  - <<: *git-repo
-    name: smokey
-    source:
-      branch: main
-      uri: https://github.com/alphagov/smokey
-      tag_filter: "*-release"
 
   - name: smokey-terraform-outputs
     type: s3
@@ -183,23 +142,68 @@ resources:
       initial_version: "0"
 
 
-  - name: frontend-image
+  - &registry-image
+    name: frontend-image
     type: registry-image
     icon: docker
-    source:
-      repository: govuk/frontend
-      tag: release
-      username: ((docker_hub_username))
-      password: ((docker_hub_authtoken))
+    source: &registry-source
+      repository: frontend
+      aws_role_arn: arn:aws:iam::172025368201:role/pull_images_from_ecr_role
+      aws_region: eu-west-1
+      aws_access_key_id: ((concourse-ecr-readonly-user_aws-access-key))
+      aws_secret_access_key: ((concourse-ecr-readonly-user_aws-secret-access-key))
+      aws_ecr_registry_id: "172025368201"
+      variant: release
 
-  - name: static-image
-    type: registry-image
-    icon: docker
+  - <<: *registry-image
+    name: static-image
     source:
-      repository: govuk/static
-      tag: release
-      username: ((docker_hub_username))
-      password: ((docker_hub_authtoken))
+      <<: *registry-source
+      repository: static
+
+  - <<: *registry-image
+    name: publisher-image
+    source:
+      <<: *registry-source
+      repository: publisher
+
+  - <<: *registry-image
+    name: publishing-api-image
+    source:
+      <<: *registry-source
+      repository: publishing-api
+      tag: bilbof_dockerfile-fix # TODO - remove this once content-store supports content-schemas
+
+  - <<: *registry-image
+    name: content-store-image
+    source:
+      <<: *registry-source
+      repository: content-store
+      tag: bill-content-schemas # TODO - remove this once content-store supports content-schemas
+
+  - <<: *registry-image
+    name: router-image
+    source:
+      <<: *registry-source
+      repository: router
+
+  - <<: *registry-image
+    name: router-api-image
+    source:
+      <<: *registry-source
+      repository: router-api
+
+  - <<: *registry-image
+    name: signon-image
+    source:
+      <<: *registry-source
+      repository: signon
+
+  - <<: *registry-image
+    name: smokey-image
+    source:
+      <<: *registry-source
+      repository: smokey
 
 groups:
   - name: all
@@ -524,12 +528,13 @@ jobs:
         passed:
         - run-terraform
         trigger: true
-      - get: release
-        resource: publisher
+      - get: publisher-image
         trigger: true
     - in_parallel:
       - task: update-web-task-definition
         file: govuk-infrastructure/concourse/tasks/update-task-definition.yml
+        input_mapping:
+          app-image: publisher-image
         output_mapping:
           task-definition-arn: web-task-definition-arn
         params:
@@ -538,6 +543,8 @@ jobs:
           GOVUK_ENVIRONMENT: test
       - task: update-worker-task-definition
         file: govuk-infrastructure/concourse/tasks/update-task-definition.yml
+        input_mapping:
+          app-image: publisher-image
         output_mapping:
           task-definition-arn: worker-task-definition-arn
         params:
@@ -580,28 +587,29 @@ jobs:
         passed:
         - run-terraform
         trigger: true
-      - get: release
-        resource: publishing-api
+      - get: publishing-api-image
         trigger: true
     - in_parallel:
       - task: update-web-task-definition
         file: govuk-infrastructure/concourse/tasks/update-task-definition.yml
+        input_mapping:
+          app-image: publishing-api-image
         output_mapping:
           task-definition-arn: web-task-definition-arn
         params:
           APPLICATION: publishing-api
           VARIANT: web
           GOVUK_ENVIRONMENT: test
-          PIN_IMAGE_TAG: bilbof_dockerfile-fix # TODO - remove this once content-store supports content-schemas
       - task: update-worker-task-definition
         file: govuk-infrastructure/concourse/tasks/update-task-definition.yml
+        input_mapping:
+          app-image: publishing-api-image
         output_mapping:
           task-definition-arn: worker-task-definition-arn
         params:
           APPLICATION: publishing-api
           VARIANT: worker
           GOVUK_ENVIRONMENT: test
-          PIN_IMAGE_TAG: bilbof_dockerfile-fix # TODO - remove this once content-store supports content-schemas
     - task: run-db-migrations
       file: govuk-infrastructure/concourse/tasks/run-task.yml
       input_mapping:
@@ -638,27 +646,27 @@ jobs:
         passed:
         - run-terraform
         trigger: true
-      - get: release
-        resource: content-store
+      - get: content-store-image
         trigger: true
-
     - in_parallel:
       - task: update-draft-task-definition
         file: govuk-infrastructure/concourse/tasks/update-task-definition.yml
+        input_mapping:
+          app-image: content-store-image
         output_mapping:
           task-definition-arn: draft-task-definition-arn
         params:
           APPLICATION: content-store
           VARIANT: draft
-          PIN_IMAGE_TAG: bill-content-schemas # TODO - remove this once content-store supports content-schemas
       - task: update-live-task-definition
         file: govuk-infrastructure/concourse/tasks/update-task-definition.yml
+        input_mapping:
+          app-image: content-store-image
         output_mapping:
           task-definition-arn: live-task-definition-arn
         params:
           APPLICATION: content-store
           VARIANT: live
-          PIN_IMAGE_TAG: bill-content-schemas # TODO - remove this once content-store supports content-schemas
     - in_parallel:
       - task: update-live-ecs-service
         file: govuk-infrastructure/concourse/tasks/update-ecs-service.yml
@@ -687,12 +695,13 @@ jobs:
         passed:
         - run-terraform
         trigger: true
-      - get: release
-        resource: router
+      - get: router-image
         trigger: true
     - in_parallel:
       - task: update-draft-task-definition
         file: govuk-infrastructure/concourse/tasks/update-task-definition.yml
+        input_mapping:
+          app-image: router-image
         output_mapping:
           task-definition-arn: draft-task-definition-arn
         params:
@@ -700,6 +709,8 @@ jobs:
           VARIANT: draft
       - task: update-live-task-definition
         file: govuk-infrastructure/concourse/tasks/update-task-definition.yml
+        input_mapping:
+          app-image: router-image
         output_mapping:
           task-definition-arn: live-task-definition-arn
         params:
@@ -733,12 +744,13 @@ jobs:
         passed:
         - run-terraform
         trigger: true
-      - get: release
-        resource: router-api
+      - get: router-api-image
         trigger: true
     - in_parallel:
       - task: update-draft-task-definition
         file: govuk-infrastructure/concourse/tasks/update-task-definition.yml
+        input_mapping:
+          app-image: router-api-image
         output_mapping:
           task-definition-arn: draft-task-definition-arn
         params:
@@ -746,6 +758,8 @@ jobs:
           VARIANT: draft
       - task: update-live-task-definition
         file: govuk-infrastructure/concourse/tasks/update-task-definition.yml
+        input_mapping:
+          app-image: router-api-image
         output_mapping:
           task-definition-arn: live-task-definition-arn
         params:
@@ -779,8 +793,7 @@ jobs:
         passed:
         - run-terraform
         trigger: true
-      - get: release
-        resource: signon
+      - get: signon-image
         trigger: true
     - task: update-task-definition
       file: govuk-infrastructure/concourse/tasks/update-task-definition.yml
@@ -788,6 +801,8 @@ jobs:
         APPLICATION: signon
         GOVUK_ENVIRONMENT: test
         VARIANT: web
+      input_mapping:
+        app-image: signon-image
       output_mapping:
         task-definition-arn: task-definition-arn
     - task: update-ecs-service
@@ -812,11 +827,12 @@ jobs:
         passed:
         - run-terraform
         trigger: true
-      - get: release
-        resource: smokey
+      - get: smokey-image
         trigger: true
     - task: update-task-definition
       file: govuk-infrastructure/concourse/tasks/update-task-definition.yml
+      input_mapping:
+        app-image: smokey-image
       params:
         APPLICATION: smokey
         GOVUK_ENVIRONMENT: test
