@@ -62,7 +62,10 @@ module "frontend" {
   extra_security_groups            = [local.govuk_management_access_security_group, aws_security_group.mesh_ecs_service.id]
   environment_variables            = local.frontend_defaults.environment_variables
   secrets_from_arns                = local.frontend_defaults.secrets_from_arns
-  log_group                        = local.log_group
+  splunk_url_secret_arn            = local.defaults.splunk_url_secret_arn
+  splunk_token_secret_arn          = local.defaults.splunk_token_secret_arn
+  splunk_index                     = local.defaults.splunk_index
+  splunk_sourcetype                = local.defaults.splunk_sourcetype
   aws_region                       = data.aws_region.current.name
   cpu                              = local.frontend_defaults.cpu
   memory                           = local.frontend_defaults.memory
@@ -95,11 +98,14 @@ module "draft_frontend" {
       PLEK_SERVICE_STATIC_URI        = local.defaults.draft_static_uri
     }
   )
-  secrets_from_arns  = local.frontend_defaults.secrets_from_arns
-  log_group          = local.log_group
-  aws_region         = data.aws_region.current.name
-  cpu                = local.frontend_defaults.cpu
-  memory             = local.frontend_defaults.memory
-  task_role_arn      = aws_iam_role.task.arn
-  execution_role_arn = aws_iam_role.execution.arn
+  secrets_from_arns       = local.frontend_defaults.secrets_from_arns
+  splunk_url_secret_arn   = local.defaults.splunk_url_secret_arn
+  splunk_token_secret_arn = local.defaults.splunk_token_secret_arn
+  splunk_index            = local.defaults.splunk_index
+  splunk_sourcetype       = local.defaults.splunk_sourcetype
+  aws_region              = data.aws_region.current.name
+  cpu                     = local.frontend_defaults.cpu
+  memory                  = local.frontend_defaults.memory
+  task_role_arn           = aws_iam_role.task.arn
+  execution_role_arn      = aws_iam_role.execution.arn
 }

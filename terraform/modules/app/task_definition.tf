@@ -33,18 +33,20 @@ locals {
 }
 
 module "app_container_definition" {
-  source                = "../../modules/container-definition"
-  image                 = "${var.registry}/${var.image_name}:${var.image_tag}"
-  aws_region            = var.aws_region
-  command               = var.command
-  healthcheck_command   = var.container_healthcheck_command
-  environment_variables = var.environment_variables
-  dependsOn             = [{ containerName : "envoy", condition : "HEALTHY" }]
-  log_group             = var.log_group
-  log_stream_prefix     = var.service_name
-  name                  = "app"
-  ports                 = [var.port]
-  secrets_from_arns     = var.secrets_from_arns
+  source                  = "../../modules/container-definition"
+  image                   = "${var.registry}/${var.image_name}:${var.image_tag}"
+  aws_region              = var.aws_region
+  command                 = var.command
+  healthcheck_command     = var.container_healthcheck_command
+  environment_variables   = var.environment_variables
+  dependsOn               = [{ containerName : "envoy", condition : "HEALTHY" }]
+  splunk_url_secret_arn   = var.splunk_url_secret_arn
+  splunk_token_secret_arn = var.splunk_token_secret_arn
+  splunk_sourcetype       = var.splunk_sourcetype
+  splunk_index            = var.splunk_index
+  name                    = "app"
+  ports                   = [var.port]
+  secrets_from_arns       = var.secrets_from_arns
 }
 
 # See the user guide at
@@ -59,13 +61,15 @@ module "envoy_container_definition" {
   healthcheck_command = ["/bin/bash", "-c", "curl -f http://localhost:9901 || exit 1"]
   # TODO: don't hardcode the version; track stable Envoy
   # TODO: control when Envoy updates happen (but still needs to be automatic)
-  image             = "840364872350.dkr.ecr.${var.aws_region}.amazonaws.com/aws-appmesh-envoy:v1.16.1.0-prod"
-  log_group         = var.log_group
-  log_stream_prefix = "awslogs-${var.service_name}-envoy"
-  name              = "envoy"
-  secrets_from_arns = {}
-  ports             = []
-  user              = local.user_id
+  image                   = "840364872350.dkr.ecr.${var.aws_region}.amazonaws.com/aws-appmesh-envoy:v1.16.1.0-prod"
+  splunk_url_secret_arn   = var.splunk_url_secret_arn
+  splunk_token_secret_arn = var.splunk_token_secret_arn
+  splunk_sourcetype       = var.splunk_sourcetype
+  splunk_index            = var.splunk_index
+  name                    = "envoy"
+  secrets_from_arns       = {}
+  ports                   = []
+  user                    = local.user_id
 }
 
 # TODO: Can we remove the v2?

@@ -48,14 +48,17 @@ module "signon" {
     target_group_arn = module.signon_public_alb.target_group_arn
     container_port   = 80
   }]
-  environment_variables = local.signon_defaults.environment_variables
-  secrets_from_arns     = local.signon_defaults.secrets_from_arns
-  log_group             = local.log_group
-  aws_region            = data.aws_region.current.name
-  cpu                   = 512
-  memory                = 1024
-  task_role_arn         = aws_iam_role.task.arn
-  execution_role_arn    = aws_iam_role.execution.arn
+  environment_variables   = local.signon_defaults.environment_variables
+  secrets_from_arns       = local.signon_defaults.secrets_from_arns
+  splunk_url_secret_arn   = local.defaults.splunk_url_secret_arn
+  splunk_token_secret_arn = local.defaults.splunk_token_secret_arn
+  splunk_index            = local.defaults.splunk_index
+  splunk_sourcetype       = local.defaults.splunk_sourcetype
+  aws_region              = data.aws_region.current.name
+  cpu                     = 512
+  memory                  = 1024
+  task_role_arn           = aws_iam_role.task.arn
+  execution_role_arn      = aws_iam_role.execution.arn
 }
 
 module "signon_public_alb" {

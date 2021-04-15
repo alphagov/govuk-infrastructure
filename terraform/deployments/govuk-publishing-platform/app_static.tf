@@ -45,12 +45,15 @@ module "static" {
       SECRET_KEY_BASE = data.aws_secretsmanager_secret.static_secret_key_base.arn,
     },
   )
-  log_group          = local.log_group
-  aws_region         = data.aws_region.current.name
-  cpu                = local.static_defaults.cpu
-  memory             = local.static_defaults.memory
-  task_role_arn      = aws_iam_role.task.arn
-  execution_role_arn = aws_iam_role.execution.arn
+  splunk_url_secret_arn   = local.defaults.splunk_url_secret_arn
+  splunk_token_secret_arn = local.defaults.splunk_token_secret_arn
+  splunk_index            = local.defaults.splunk_index
+  splunk_sourcetype       = local.defaults.splunk_sourcetype
+  aws_region              = data.aws_region.current.name
+  cpu                     = local.static_defaults.cpu
+  memory                  = local.static_defaults.memory
+  task_role_arn           = aws_iam_role.task.arn
+  execution_role_arn      = aws_iam_role.execution.arn
 }
 
 module "draft_static" {
@@ -81,10 +84,13 @@ module "draft_static" {
       SECRET_KEY_BASE = data.aws_secretsmanager_secret.draft_static_secret_key_base.arn,
     },
   )
-  log_group          = local.log_group
-  aws_region         = data.aws_region.current.name
-  cpu                = local.static_defaults.cpu
-  memory             = local.static_defaults.memory
-  task_role_arn      = aws_iam_role.task.arn
-  execution_role_arn = aws_iam_role.execution.arn
+  splunk_url_secret_arn   = local.defaults.splunk_url_secret_arn
+  splunk_token_secret_arn = local.defaults.splunk_token_secret_arn
+  splunk_index            = local.defaults.splunk_index
+  splunk_sourcetype       = local.defaults.splunk_sourcetype
+  aws_region              = data.aws_region.current.name
+  cpu                     = local.static_defaults.cpu
+  memory                  = local.static_defaults.memory
+  task_role_arn           = aws_iam_role.task.arn
+  execution_role_arn      = aws_iam_role.execution.arn
 }

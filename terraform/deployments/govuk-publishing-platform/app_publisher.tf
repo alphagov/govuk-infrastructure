@@ -87,15 +87,18 @@ module "publisher_web" {
     target_group_arn = module.publisher_public_alb.target_group_arn
     container_port   = 80
   }]
-  command               = ["foreman", "run", "web"]
-  environment_variables = local.publisher_defaults.environment_variables
-  secrets_from_arns     = local.publisher_defaults.secrets_from_arns
-  log_group             = local.log_group
-  aws_region            = data.aws_region.current.name
-  cpu                   = local.publisher_defaults.cpu
-  memory                = local.publisher_defaults.memory
-  task_role_arn         = aws_iam_role.task.arn
-  execution_role_arn    = aws_iam_role.execution.arn
+  command                 = ["foreman", "run", "web"]
+  environment_variables   = local.publisher_defaults.environment_variables
+  secrets_from_arns       = local.publisher_defaults.secrets_from_arns
+  splunk_url_secret_arn   = local.defaults.splunk_url_secret_arn
+  splunk_token_secret_arn = local.defaults.splunk_token_secret_arn
+  splunk_index            = local.defaults.splunk_index
+  splunk_sourcetype       = local.defaults.splunk_sourcetype
+  aws_region              = data.aws_region.current.name
+  cpu                     = local.publisher_defaults.cpu
+  memory                  = local.publisher_defaults.memory
+  task_role_arn           = aws_iam_role.task.arn
+  execution_role_arn      = aws_iam_role.execution.arn
 }
 
 #
@@ -148,7 +151,10 @@ module "publisher_worker" {
   service_discovery_namespace_name = aws_service_discovery_private_dns_namespace.govuk_publishing_platform.name
   source                           = "../../modules/app"
   secrets_from_arns                = local.publisher_defaults.secrets_from_arns
-  log_group                        = local.log_group
+  splunk_url_secret_arn            = local.defaults.splunk_url_secret_arn
+  splunk_token_secret_arn          = local.defaults.splunk_token_secret_arn
+  splunk_index                     = local.defaults.splunk_index
+  splunk_sourcetype                = local.defaults.splunk_sourcetype
   aws_region                       = data.aws_region.current.name
   cpu                              = local.publisher_defaults.cpu
   memory                           = local.publisher_defaults.memory

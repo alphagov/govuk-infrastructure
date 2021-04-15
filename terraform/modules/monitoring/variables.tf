@@ -43,3 +43,25 @@ variable "grafana_cidrs_allow_list" {
   description = "List of CIDRs that can access Grafana"
   type        = list(any)
 }
+
+variable "splunk_url_secret_arn" {
+  type        = string
+  description = "ARN to the secret containing the URL for the Splunk instance (of the form `https://http-inputs-XXXXXXXX.splunkcloud.com:PORT`)."
+}
+
+variable "splunk_token_secret_arn" {
+  type        = string
+  description = "ARN to the secret containing the HTTP Event Collector (HEC) token."
+}
+
+variable "splunk_index" {
+  type        = string
+  description = "Splunk index to log events to (which HEC token must have access to write to)."
+}
+
+variable "splunk_sourcetype" {
+  type        = string
+  default     = null
+  description = "The source type of the logs being sent to Splunk i.e. `log4j`."
+}
+

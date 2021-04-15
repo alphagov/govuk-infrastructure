@@ -6,6 +6,12 @@ data "aws_secretsmanager_secret" "sentry_dsn" {
 data "aws_secretsmanager_secret" "ga_universal_id" {
   name = "GA_UNIVERSAL_ID"
 }
+data "aws_secretsmanager_secret" "splunk_url" {
+  name = "SPLUNK_HEC_URL"
+}
+data "aws_secretsmanager_secret" "splunk_token" {
+  name = "SPLUNK_TOKEN"
+}
 
 # Frontend app secrets
 

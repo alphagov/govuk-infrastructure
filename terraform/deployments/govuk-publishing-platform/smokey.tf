@@ -18,8 +18,10 @@ module "smokey_container_definition" {
   environment_variables = {
     ENVIRONMENT = var.govuk_environment
   }
-  log_group         = local.log_group
-  log_stream_prefix = "smokey"
+  splunk_url_secret_arn   = local.defaults.splunk_url_secret_arn
+  splunk_token_secret_arn = local.defaults.splunk_token_secret_arn
+  splunk_index            = local.defaults.splunk_index
+  splunk_sourcetype       = local.defaults.splunk_sourcetype
   secrets_from_arns = {
     AUTH_USERNAME = data.aws_secretsmanager_secret.smokey_auth_username.arn
     AUTH_PASSWORD = data.aws_secretsmanager_secret.smokey_auth_password.arn
