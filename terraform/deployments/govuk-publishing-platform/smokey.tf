@@ -27,6 +27,7 @@ module "smokey_container_definition" {
   ports = []
 }
 
+# TODO: can we remove the v2?
 module "smokey_task_definition" {
   source                = "../../modules/task-definition-v2"
   container_definitions = [module.smokey_container_definition.json_format]

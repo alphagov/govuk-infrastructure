@@ -12,8 +12,9 @@ terraform {
 }
 
 locals {
-  container_name          = "app"
-  subdomain               = var.service_name
+  container_name = "app"
+  subdomain      = var.service_name
+  # TODO: Do we need container services?
   container_services      = var.custom_container_services == null ? [{ container_service = local.subdomain, port = 80, protocol = "http" }] : var.custom_container_services
   service_security_groups = concat([aws_security_group.service.id], var.extra_security_groups)
 }

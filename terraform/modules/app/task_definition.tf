@@ -65,6 +65,7 @@ module "envoy_container_definition" {
   user              = local.user_id
 }
 
+# TODO: Can we remove the v2?
 module "task_definition" {
   source = "../../modules/task-definition-v2"
   container_definitions = [
@@ -100,10 +101,6 @@ resource "aws_ecs_task_definition" "bootstrap" {
     type           = "APPMESH"
     container_name = "envoy"
     properties     = local.envoy_proxy_properties
-  }
-
-  lifecycle {
-    ignore_changes = all
   }
 }
 

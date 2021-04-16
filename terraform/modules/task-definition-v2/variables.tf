@@ -1,9 +1,11 @@
 variable "container_definitions" {
-  type = list(any)
+  description = "List of ECS ContainerDefinitions for the task, as maps in HCL/JSON syntax (not strings)."
+  type        = list(any)
 }
 
 variable "cpu" {
-  type = string
+  description = "CPU hard limit for the ECS task (total for all containers). 1024 units = 1 vCPU. Only certain pairs of CPU/memory values are valid on Fargate. See https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task_definition_parameters.html"
+  type        = string
 }
 
 variable "execution_role_arn" {
@@ -16,7 +18,8 @@ variable "family" {
 }
 
 variable "memory" {
-  type = string
+  description = "RAM hard limit for the ECS task (total for all containers) in MiB. Only certain pairs of CPU/memory values are valid on Fargate. See https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task_definition_parameters.html"
+  type        = string
 }
 
 variable "proxy_configuration" {

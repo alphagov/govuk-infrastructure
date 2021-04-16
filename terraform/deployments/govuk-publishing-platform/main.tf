@@ -53,7 +53,6 @@ locals {
   private_subnets               = data.terraform_remote_state.infra_networking.outputs.private_subnet_ids
   public_subnets                = data.terraform_remote_state.infra_networking.outputs.public_subnet_ids
   redis_subnets                 = data.terraform_remote_state.infra_networking.outputs.private_subnet_elasticache_ids
-  govuk_management_access_sg_id = data.terraform_remote_state.infra_security_groups.outputs.sg_management_id
   documentdb_security_group_id  = data.terraform_remote_state.infra_security_groups.outputs.sg_shared_documentdb_id
   postgresql_security_group_id  = data.terraform_remote_state.infra_security_groups.outputs.sg_postgresql-primary_id
   mongodb_security_group_id     = data.terraform_remote_state.infra_security_groups.outputs.sg_mongo_id
