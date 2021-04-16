@@ -3,7 +3,7 @@
 # in a new container, using ECS RunTask. This script will be replaced by
 # features built into the GDS CLI.
 
-set -eu
+set -euf -o pipefail
 
 trap "exit" INT TERM
 trap "kill -- -$$" EXIT
@@ -51,13 +51,14 @@ root_dir="${PWD}"
 
 env_dir="$root_dir/terraform/deployments/govuk-publishing-platform"
 
-echo "Fetching task_definition_arn from the govuk ECS cluster"
-task_definition_arn=$(aws --region eu-west-1 ecs describe-services --cluster govuk --service "${application}-${variant}" | jq -r '.services[0].taskDefinition')
-
 echo "Fetching network_config from Terraform statefile in $env_dir"
 cd ${env_dir}
 terraform init >/dev/null
 network_config=$(terraform output -json "$application" | jq -r ".$variant.network_config")
+
+echo "Fetching task_definition_arn from the govuk ECS cluster"
+cluster_name=$(terraform output -json "cluster_name" | jq -r)
+task_definition_arn=$(aws --region eu-west-1 ecs describe-services --cluster "${cluster_name}" --service "${application}-${variant}" | jq -r '.services[0].taskDefinition')
 
 echo "Starting task:
   cluster: $cluster
