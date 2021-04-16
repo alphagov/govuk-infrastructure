@@ -66,7 +66,7 @@ module "signon_public_alb" {
   dns_a_record_name         = "signon"
   public_subnets            = local.public_subnets
   external_app_domain       = local.workspace_external_domain
-  certificate               = aws_acm_certificate.workspace_public.arn
+  certificate               = aws_acm_certificate_validation.workspace_public.certificate_arn
   publishing_service_domain = var.publishing_service_domain
   workspace                 = local.workspace
   service_security_group_id = module.signon.security_group_id

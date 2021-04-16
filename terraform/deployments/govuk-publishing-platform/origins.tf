@@ -45,8 +45,8 @@ module "www_origin" {
   public_subnets                       = local.public_subnets
   public_zone_id                       = aws_route53_zone.workspace_public.zone_id
   external_app_domain                  = aws_route53_zone.workspace_public.name
-  load_balancer_certificate_arn        = aws_acm_certificate.workspace_public.arn
-  cloudfront_certificate_arn           = aws_acm_certificate.public_north_virginia.arn
+  load_balancer_certificate_arn        = aws_acm_certificate_validation.workspace_public.certificate_arn
+  cloudfront_certificate_arn           = aws_acm_certificate_validation.public_north_virginia.certificate_arn
   publishing_service_domain            = var.publishing_service_domain
   workspace                            = local.workspace
   is_default_workspace                 = local.is_default_workspace
@@ -67,8 +67,8 @@ module "draft_origin" {
   public_subnets                       = local.public_subnets
   public_zone_id                       = aws_route53_zone.workspace_public.zone_id
   external_app_domain                  = aws_route53_zone.workspace_public.name
-  load_balancer_certificate_arn        = aws_acm_certificate.workspace_public.arn
-  cloudfront_certificate_arn           = aws_acm_certificate.public_north_virginia.arn
+  load_balancer_certificate_arn        = aws_acm_certificate_validation.workspace_public.certificate_arn
+  cloudfront_certificate_arn           = aws_acm_certificate_validation.public_north_virginia.certificate_arn
   publishing_service_domain            = var.publishing_service_domain
   workspace                            = local.workspace
   is_default_workspace                 = local.is_default_workspace
