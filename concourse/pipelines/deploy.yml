@@ -70,7 +70,7 @@ resources:
     type: slack-notification
     icon: bell-ring
     source:
-      url: https://hooks.slack.com/services/((slack_webhook))
+      url: https://hooks.slack.com/services/((deploy_apps_slack_webhook))
 
   - name: govuk-terraform-outputs
     type: s3
