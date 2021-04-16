@@ -24,6 +24,14 @@ resource_types:
       username: ((docker_hub_username))
       password: ((docker_hub_authtoken))
 
+  - name: cron-resource
+    type: docker-image
+    source:
+      repository: cftoolsmiths/cron-resource
+      tag: latest
+      username: ((docker_hub_username))
+      password: ((docker_hub_authtoken))
+
 resources:
   - &git-repo
     icon: github
@@ -141,7 +149,6 @@ resources:
       versioned_file: router.json
       initial_version: "0"
 
-
   - &registry-image
     name: frontend-image
     type: registry-image
@@ -205,6 +212,18 @@ resources:
       <<: *registry-source
       repository: smokey
 
+  - name: everyday-at-11pm
+    type: cron-resource
+    source:
+      expression: "0 23 * * 1-5"
+      location: "Europe/London"
+
+  - name: everyday-at-6am
+    type: cron-resource
+    source:
+      expression: "0 06 * * 1-5"
+      location: "Europe/London"
+
 groups:
   - name: all
     jobs:
@@ -212,6 +231,7 @@ groups:
       - run-terraform
       - deploy-content-store
       - deploy-frontend
+      - destroy-infrastructure
       - smoke-test-content-store
       - deploy-publisher
       - deploy-publishing-api
@@ -223,6 +243,7 @@ groups:
 
   - name: terraform
     jobs:
+      - destroy-infrastructure
       - run-terraform
 
   - name: admin
@@ -263,6 +284,44 @@ groups:
       - deploy-static
 
 jobs:
+  - name: destroy-infrastructure
+    plan:
+    - get: everyday-at-11pm
+      trigger: true
+    - get: govuk-infrastructure
+      trigger: false
+    - task: destroy-terraform
+      config:
+        inputs:
+        - name: govuk-infrastructure
+        params:
+          AWS_REGION: eu-west-1
+          ASSUME_ROLE_ARN: 'arn:aws:iam::430354129336:role/govuk-concourse-deployer'
+        platform: linux
+        image_resource:
+          type: docker-image
+          source:
+            repository: hashicorp/terraform
+            tag: 0.14.6
+            username: ((docker_hub_username))
+            password: ((docker_hub_authtoken))
+        run:
+          path: sh
+          args:
+            - '-c'
+            - |
+              set -eu
+
+              root_dir=$(pwd)
+
+              cd govuk-infrastructure/terraform/deployments/govuk-publishing-platform
+
+              terraform init -backend-config "role_arn=$ASSUME_ROLE_ARN"
+              terraform destroy  \
+              -var "assume_role_arn=$ASSUME_ROLE_ARN" \
+              -var-file ../variables/test/infrastructure.tfvars \
+              -auto-approve
+
   - name: update-pipeline
     plan:
     - get: govuk-infrastructure
@@ -277,6 +336,8 @@ jobs:
       - get: govuk-infrastructure
         passed:
         - update-pipeline
+        trigger: true
+      - get: everyday-at-6am
         trigger: true
       - get: content-store-terraform-outputs
       - get: publisher-terraform-outputs
