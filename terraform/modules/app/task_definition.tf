@@ -2,6 +2,8 @@ locals {
   # 1337 is an arbitrary choice copied from the examples in the envoy user guide.
   user_id = "1337"
 
+  family = "${var.service_name}-${terraform.workspace}"
+
   envoy_proxy_properties = {
     AppPorts = join(",", var.ports)
 
@@ -73,7 +75,7 @@ module "task_definition" {
   ]
   cpu                = var.cpu
   execution_role_arn = var.execution_role_arn
-  family             = var.service_name
+  family             = local.family
   memory             = var.memory
   proxy_configuration = {
     type          = "APPMESH",
@@ -84,7 +86,7 @@ module "task_definition" {
 }
 
 resource "aws_ecs_task_definition" "bootstrap" {
-  family                   = var.service_name
+  family                   = local.family
   network_mode             = "awsvpc"
   cpu                      = var.cpu
   memory                   = var.memory
