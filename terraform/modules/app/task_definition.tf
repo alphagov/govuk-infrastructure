@@ -67,7 +67,7 @@ module "envoy_container_definition" {
 
 # TODO: Can we remove the v2?
 module "task_definition" {
-  source = "../../modules/task-definition-v2"
+  source = "../../modules/task-definition"
   container_definitions = [
     module.app_container_definition.json_format,
     module.envoy_container_definition.json_format,

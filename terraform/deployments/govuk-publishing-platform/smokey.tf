@@ -29,7 +29,7 @@ module "smokey_container_definition" {
 
 # TODO: can we remove the v2?
 module "smokey_task_definition" {
-  source                = "../../modules/task-definition-v2"
+  source                = "../../modules/task-definition"
   container_definitions = [module.smokey_container_definition.json_format]
   cpu                   = 512
   execution_role_arn    = aws_iam_role.execution.arn
