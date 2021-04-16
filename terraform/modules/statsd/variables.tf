@@ -40,3 +40,9 @@ variable "task_role_arn" {
 variable "vpc_id" {
   type = string
 }
+
+variable "desired_count" {
+  description = "Desired count of Application instances"
+  type        = number
+  default     = 1
+}

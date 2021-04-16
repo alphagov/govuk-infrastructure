@@ -52,6 +52,11 @@ variable "publishing_api_desired_count" {
   default = 1
 }
 
+variable "publisher_worker_desired_count" {
+  type    = number
+  default = 1
+}
+
 variable "content_store_desired_count" {
   type    = number
   default = 1
@@ -93,6 +98,11 @@ variable "draft_static_desired_count" {
 }
 
 variable "signon_desired_count" {
+  type    = number
+  default = 1
+}
+
+variable "statsd_desired_count" {
   type    = number
   default = 1
 }

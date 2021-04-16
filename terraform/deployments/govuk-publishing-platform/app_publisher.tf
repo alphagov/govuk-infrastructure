@@ -144,4 +144,5 @@ module "publisher_worker" {
   task_role_arn                    = aws_iam_role.task.arn
   execution_role_arn               = aws_iam_role.execution.arn
   vpc_id                           = local.vpc_id
+  desired_count                    = var.publisher_worker_desired_count
 }

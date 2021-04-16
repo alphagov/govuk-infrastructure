@@ -10,5 +10,6 @@ module "statsd" {
   source                           = "../../modules/statsd"
   task_role_arn                    = aws_iam_role.task.arn
   vpc_id                           = local.vpc_id
+  desired_count                    = var.statsd_desired_count
 }
 
