@@ -223,6 +223,7 @@ resources:
     source:
       expression: "0 06 * * 1-5"
       location: "Europe/London"
+      fire_immediately: true
 
 groups:
   - name: all
