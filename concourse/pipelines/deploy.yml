@@ -298,6 +298,7 @@ jobs:
         params:
           AWS_REGION: eu-west-1
           ASSUME_ROLE_ARN: 'arn:aws:iam::430354129336:role/govuk-concourse-deployer'
+          WORKSPACE: ((workspace))
         platform: linux
         image_resource:
           type: docker-image
