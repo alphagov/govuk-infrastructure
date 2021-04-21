@@ -35,7 +35,7 @@ module "static" {
   environment_variables = merge(
     local.static_defaults.environment_variables,
     {
-      ASSET_HOST          = local.defaults.assets_www_origin,
+      ASSET_HOST          = local.defaults.assets_www_frontends_origin,
       GOVUK_STATSD_PREFIX = "govuk-ecs.app.static"
     },
   )
@@ -74,7 +74,7 @@ module "draft_static" {
   environment_variables = merge(
     local.static_defaults.environment_variables,
     {
-      ASSET_HOST          = local.defaults.assets_draft_origin,
+      ASSET_HOST          = local.defaults.assets_draft_frontends_origin,
       GOVUK_STATSD_PREFIX = "govuk-ecs.app.draft-static"
     },
   )

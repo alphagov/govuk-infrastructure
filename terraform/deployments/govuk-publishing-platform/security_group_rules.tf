@@ -231,35 +231,6 @@ resource "aws_security_group_rule" "mysql_from_signon_mysql" {
   source_security_group_id = module.signon.security_group_id
 }
 
-#
-# Origin
-#
-
-resource "aws_security_group_rule" "www_origin_alb_from_test_nat_gateways_https" {
-  description = "www-origin ALB receives HTTPS requests from apps in ECS"
-  type        = "ingress"
-  from_port   = 443
-  to_port     = 443
-  protocol    = "tcp"
-
-  security_group_id = module.www_origin.security_group_id
-  cidr_blocks       = local.vpc_public_cidr_blocks
-}
-
-#
-# Origin (Draft)
-#
-
-resource "aws_security_group_rule" "draft_origin_alb_from_test_nat_gateways_https" {
-  description = "draft-origin ALB receives HTTPS requests from apps in ECS"
-  type        = "ingress"
-  from_port   = 443
-  to_port     = 443
-  protocol    = "tcp"
-
-  security_group_id = module.draft_origin.security_group_id
-  cidr_blocks       = local.vpc_public_cidr_blocks
-}
 
 #
 # Postgres

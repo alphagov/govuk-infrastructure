@@ -1,23 +1,23 @@
 resource "aws_security_group" "origin_alb" {
-  name        = "fargate_${local.live_or_draft_prefix}_origin_${var.workspace}_alb"
+  name        = "fargate_${var.name}_origin_${var.workspace}_alb"
   vpc_id      = var.vpc_id
-  description = "${local.live_or_draft_prefix}-origin Internet-facing ALB in govuk-${var.workspace} cluster"
+  description = "${var.name}-origin Internet-facing ALB in govuk-${var.workspace} cluster"
 }
 
 # TODO: Move rules to deployments/govuk-publishing-platform/security_group_rules
 resource "aws_security_group_rule" "service_from_origin_alb_http" {
-  for_each                 = var.apps_security_config_list
-  description              = "${each.key} receives requests from the ${local.live_or_draft_prefix}-origin-${var.workspace} ALB over HTTP"
+  for_each                 = var.fronted_apps
+  description              = "${each.key} receives requests from the ${var.name}-origin-${var.workspace} ALB over HTTP"
   type                     = "ingress"
-  from_port                = each.value.target_port
-  to_port                  = each.value.target_port
+  from_port                = 80
+  to_port                  = 80
   protocol                 = "tcp"
   security_group_id        = each.value.security_group_id
   source_security_group_id = aws_security_group.origin_alb.id
 }
 
 resource "aws_security_group_rule" "origin_alb_from_cidrs_https" {
-  description = "${local.live_or_draft_prefix}-origin-${var.workspace} ALB allows requests from CIDRs list over HTTPS"
+  description = "${var.name}-origin-${var.workspace} ALB allows requests from CIDRs list over HTTPS"
   type        = "ingress"
   from_port   = 443
   to_port     = 443

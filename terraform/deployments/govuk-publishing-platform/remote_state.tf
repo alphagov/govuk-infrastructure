@@ -39,3 +39,10 @@ data "terraform_remote_state" "infra_security_groups" {
 }
 
 data "fastly_ip_ranges" "fastly" {}
+
+locals {
+  aws_nat_gateways_cidrs = [
+    for public_ip in data.terraform_remote_state.infra_networking.outputs.nat_gateway_elastic_ips_list :
+    "${public_ip}/32"
+  ]
+}

@@ -525,7 +525,7 @@ jobs:
           app-image: frontend-image
         params:
           IMAGE_ASSETS_PATH: app-image/rootfs/app/public/assets/frontend
-          S3_BUCKET_PATH_PATTERN: s3://govuk-test-%s-rails-assets/assets/frontend/ # %s will be replaced by interpolated workspace in upload-rails-assets.yml
+          S3_BUCKET_PATH_PATTERN: s3://govuk-test-%s-frontends-rails-assets/assets/frontend/ # %s will be replaced by interpolated workspace in upload-rails-assets.yml
           WORKSPACE: ((workspace))
       - task: update-draft-task-definition
         file: govuk-infrastructure/concourse/tasks/update-task-definition.yml
@@ -606,6 +606,14 @@ jobs:
       - get: publisher-image
         trigger: true
     - in_parallel:
+      - task: upload-rails-assets
+        file: govuk-infrastructure/concourse/tasks/upload-rails-assets.yml
+        input_mapping:
+          app-image: publisher-image
+        params:
+          IMAGE_ASSETS_PATH: app-image/rootfs/app/public/assets/publisher
+          S3_BUCKET_PATH_PATTERN: s3://govuk-test-%s-backends-rails-assets/assets/publisher/ # %s will be replaced by interpolated workspace in upload-rails-assets.yml
+          WORKSPACE: ((workspace))
       - task: update-web-task-definition
         file: govuk-infrastructure/concourse/tasks/update-task-definition.yml
         input_mapping:
@@ -880,16 +888,25 @@ jobs:
         trigger: true
       - get: signon-image
         trigger: true
-    - task: update-task-definition
-      file: govuk-infrastructure/concourse/tasks/update-task-definition.yml
-      params:
-        APPLICATION: signon
-        GOVUK_ENVIRONMENT: test
-        VARIANT: web
-      input_mapping:
-        app-image: signon-image
-      output_mapping:
-        task-definition-arn: task-definition-arn
+    - in_parallel:
+      - task: upload-rails-assets
+        file: govuk-infrastructure/concourse/tasks/upload-rails-assets.yml
+        input_mapping:
+          app-image: signon-image
+        params:
+          IMAGE_ASSETS_PATH: app-image/rootfs/app/public/assets/signon
+          S3_BUCKET_PATH_PATTERN: s3://govuk-test-%s-backends-rails-assets/assets/signon/ # %s will be replaced by interpolated workspace in upload-rails-assets.yml
+          WORKSPACE: ((workspace))
+      - task: update-task-definition
+        file: govuk-infrastructure/concourse/tasks/update-task-definition.yml
+        params:
+          APPLICATION: signon
+          GOVUK_ENVIRONMENT: test
+          VARIANT: web
+        input_mapping:
+          app-image: signon-image
+        output_mapping:
+          task-definition-arn: task-definition-arn
     - task: update-ecs-service
       file: govuk-infrastructure/concourse/tasks/update-ecs-service.yml
       input_mapping:
@@ -947,7 +964,7 @@ jobs:
           app-image: static-image
         params:
           IMAGE_ASSETS_PATH: app-image/rootfs/app/public/assets/static
-          S3_BUCKET_PATH_PATTERN: s3://govuk-test-%s-rails-assets/assets/static/ # %s will be replaced by interpolated workspace in upload-rails-assets.yml
+          S3_BUCKET_PATH_PATTERN: s3://govuk-test-%s-frontends-rails-assets/assets/static/ # %s will be replaced by interpolated workspace in upload-rails-assets.yml
           WORKSPACE: ((workspace))
       - task: update-draft-task-definition
         file: govuk-infrastructure/concourse/tasks/update-task-definition.yml
