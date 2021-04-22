@@ -336,6 +336,16 @@ resource "aws_security_group_rule" "redis_from_signon_resp" {
 # Router
 #
 
+resource "aws_security_group_rule" "router_to_any_tcp" {
+  description       = "Router send requests to anywhere over TCP"
+  type              = "egress"
+  from_port         = 0
+  to_port           = 0
+  protocol          = -1
+  cidr_blocks       = ["0.0.0.0/0"]
+  security_group_id = module.router.security_group_id
+}
+
 resource "aws_security_group_rule" "router_from_router_api_tcp" {
   description = "Router accepts requests from Router API over TCP"
   type        = "ingress"
@@ -350,6 +360,16 @@ resource "aws_security_group_rule" "router_from_router_api_tcp" {
 #
 # Router (Draft)
 #
+
+resource "aws_security_group_rule" "draft_router_to_any_tcp" {
+  description       = "Draft Router send requests to anywhere over TCP"
+  type              = "egress"
+  from_port         = 0
+  to_port           = 0
+  protocol          = -1
+  cidr_blocks       = ["0.0.0.0/0"]
+  security_group_id = module.draft_router.security_group_id
+}
 
 resource "aws_security_group_rule" "draft_router_from_draft_router_api_tcp" {
   description = "Draft Router accepts requests from Draft Router API over TCP"
