@@ -52,6 +52,15 @@ resource "aws_security_group_rule" "content_store_from_frontend_http" {
   source_security_group_id = module.frontend.security_group_id
 }
 
+resource "aws_security_group_rule" "content_store_from_router_tcp" {
+  type                     = "ingress"
+  from_port                = 80
+  to_port                  = 80
+  protocol                 = "tcp"
+  security_group_id        = module.content_store.security_group_id
+  source_security_group_id = module.router.security_group_id
+}
+
 #
 # Content Store (Draft)
 #
@@ -74,6 +83,15 @@ resource "aws_security_group_rule" "draft_content_store_from_frontend_http" {
   protocol                 = "tcp"
   security_group_id        = module.draft_content_store.security_group_id
   source_security_group_id = module.draft_frontend.security_group_id
+}
+
+resource "aws_security_group_rule" "draft_content_store_from_draft_router_tcp" {
+  type                     = "ingress"
+  from_port                = 80
+  to_port                  = 80
+  protocol                 = "tcp"
+  security_group_id        = module.draft_content_store.security_group_id
+  source_security_group_id = module.draft_router.security_group_id
 }
 
 #
@@ -103,6 +121,15 @@ resource "aws_security_group_rule" "frontend_to_any_any" {
   security_group_id = module.frontend.security_group_id
 }
 
+resource "aws_security_group_rule" "frontend_from_router_tcp" {
+  type                     = "ingress"
+  from_port                = 80
+  to_port                  = 80
+  protocol                 = "tcp"
+  security_group_id        = module.frontend.security_group_id
+  source_security_group_id = module.router.security_group_id
+}
+
 #
 # Frontend (Draft)
 #
@@ -115,6 +142,15 @@ resource "aws_security_group_rule" "draft_frontend_to_any_any" {
   protocol          = -1
   cidr_blocks       = ["0.0.0.0/0"]
   security_group_id = module.draft_frontend.security_group_id
+}
+
+resource "aws_security_group_rule" "draft_frontend_from_draft_router_tcp" {
+  type                     = "ingress"
+  from_port                = 80
+  to_port                  = 80
+  protocol                 = "tcp"
+  security_group_id        = module.draft_frontend.security_group_id
+  source_security_group_id = module.draft_router.security_group_id
 }
 
 #
