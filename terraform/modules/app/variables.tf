@@ -39,13 +39,6 @@ variable "subnets" {
   type        = list(any)
 }
 
-
-variable "service_mesh" {
-  description = "Determines if app will be added to service mesh"
-  type        = bool
-  default     = true
-}
-
 variable "mesh_name" {
   type        = string
   default     = null

@@ -40,12 +40,9 @@ resource "aws_ecs_service" "service" {
     subnets         = var.subnets
   }
 
-  dynamic "service_registries" {
-    for_each = var.service_mesh ? [1] : []
-    content {
-      registry_arn   = module.service_mesh_node[0].discovery_service_arn
-      container_name = local.container_name
-    }
+  service_registries {
+    registry_arn   = module.service_mesh_node.discovery_service_arn
+    container_name = local.container_name
   }
 
   # For bootstrapping
@@ -59,9 +56,6 @@ resource "aws_ecs_service" "service" {
 }
 
 module "service_mesh_node" {
-  # TODO: It looks like service_mesh (bool) is just a snowflake for grafana.
-  count = var.service_mesh ? 1 : 0
-
   source                           = "../service-mesh-node"
   backend_virtual_service_names    = var.backend_virtual_service_names
   mesh_name                        = var.mesh_name

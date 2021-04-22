@@ -5,7 +5,7 @@ locals {
 
     backend_services = flatten([
       local.defaults.virtual_service_backends,
-      module.signon.virtual_service_names
+      module.signon.virtual_service_name
     ])
 
     environment_variables = merge(
@@ -43,7 +43,7 @@ module "content_store" {
   source = "../../modules/app"
   backend_virtual_service_names = flatten([
     local.content_store_defaults.backend_services,
-    module.router_api.virtual_service_names,
+    module.router_api.virtual_service_name,
   ])
   registry                         = var.registry
   image_name                       = "content-store"
@@ -82,7 +82,7 @@ module "draft_content_store" {
   service_name = "draft-content-store"
   backend_virtual_service_names = flatten([
     local.content_store_defaults.backend_services,
-    module.draft_router_api.virtual_service_names,
+    module.draft_router_api.virtual_service_name,
   ])
   registry                         = var.registry
   image_name                       = "content-store"

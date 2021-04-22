@@ -38,7 +38,7 @@ locals {
     website_root            = local.public_entry_url,
 
     virtual_service_backends = [
-      module.statsd.virtual_service_names[0]
+      module.statsd.virtual_service_name
     ]
   }
 }

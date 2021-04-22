@@ -12,7 +12,6 @@ module "grafana_app" {
   service_name                  = local.service_name
   subnets                       = var.private_subnets
   extra_security_groups         = [var.govuk_management_access_sg_id]
-  service_mesh                  = false
   desired_count                 = var.desired_count
   load_balancers = [{
     target_group_arn = module.grafana_public_alb.target_group_arn

@@ -9,8 +9,7 @@ output "security_groups" {
   description = "The security groups applied to the ECS Service."
 }
 
-# TODO: Return a single virtual service name
-output "virtual_service_names" {
-  value       = module.service_mesh_node[*].virtual_service_name
-  description = "App Mesh virtual services for this app"
+output "virtual_service_name" {
+  value       = module.service_mesh_node.virtual_service_name
+  description = "App Mesh virtual service for this app"
 }
