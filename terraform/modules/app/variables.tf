@@ -72,6 +72,12 @@ variable "load_balancers" {
   default     = []
 }
 
+variable "container_healthcheck_command" {
+  type        = list(string)
+  description = "App container liveness healthcheck"
+  default     = ["/bin/bash", "-c", "exit 0"]
+}
+
 variable "health_check_grace_period_seconds" {
   description = "Meaningful only if load_balancers is non-empty. See healthCheckGracePeriodSeconds in https://docs.aws.amazon.com/AmazonECS/latest/developerguide/service_definition_parameters.html"
   type        = number

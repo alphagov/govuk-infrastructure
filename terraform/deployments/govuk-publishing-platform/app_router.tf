@@ -47,6 +47,7 @@ module "router" {
   subnets                          = local.private_subnets
   desired_count                    = var.router_desired_count
   extra_security_groups            = [local.govuk_management_access_security_group, aws_security_group.mesh_ecs_service.id]
+  container_healthcheck_command    = ["/bin/sh", "-c", "exit 0"]
   environment_variables = merge(
     local.router_defaults.environment_variables,
     {
@@ -112,6 +113,7 @@ module "draft_router" {
   subnets                          = local.private_subnets
   desired_count                    = var.draft_router_desired_count
   extra_security_groups            = [local.govuk_management_access_security_group, aws_security_group.mesh_ecs_service.id]
+  container_healthcheck_command    = ["/bin/sh", "-c", "exit 0"]
   environment_variables = merge(
     local.router_defaults.environment_variables,
     {
