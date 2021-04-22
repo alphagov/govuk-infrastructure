@@ -34,7 +34,7 @@ locals {
 
 module "app_container_definition" {
   source                = "../../modules/container-definition"
-  image                 = "${var.registry}/${var.image_name}:latest"
+  image                 = "${var.registry}/${var.image_name}:${var.image_tag}"
   aws_region            = var.aws_region
   command               = var.command
   environment_variables = var.environment_variables

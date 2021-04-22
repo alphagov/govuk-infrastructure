@@ -23,6 +23,12 @@ variable "image_name" {
   description = "Used only for bootstrapping. Provide only the image name, not the tag."
 }
 
+variable "image_tag" {
+  type        = string
+  default     = "latest"
+  description = "Used only for bootstrapping. Override default tag latest."
+}
+
 variable "registry" {
   type        = string
   description = "registry from which to pull container images"
