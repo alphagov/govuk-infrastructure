@@ -17,11 +17,11 @@ module "statsd" {
   environment_variables            = local.statsd_defaults.environment_variables
   execution_role_arn               = aws_iam_role.execution.arn
   extra_security_groups            = [local.govuk_management_access_security_group, aws_security_group.mesh_ecs_service.id]
-  image_name                       = "statsd:test-0.1.3" # TODO: hardcoded image tag
+  image_name                       = "statsd:test-0.1.3" # TODO: https://trello.com/c/nju3j7Ph/38-modify-statsd-so-that-we-can-run-it-in-ecs
   log_group                        = local.log_group
   memory                           = local.statsd_defaults.memory
   mesh_name                        = aws_appmesh_mesh.govuk.id
-  registry                         = "govuk"
+  registry                         = var.registry
   secrets_from_arns                = local.statsd_defaults.secrets_from_arns
   service_discovery_namespace_id   = aws_service_discovery_private_dns_namespace.govuk_publishing_platform.id
   service_discovery_namespace_name = aws_service_discovery_private_dns_namespace.govuk_publishing_platform.name
