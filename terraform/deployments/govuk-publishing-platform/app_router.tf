@@ -80,7 +80,11 @@ module "router" {
       ROUTER_MONGO_URL = "${local.router_defaults.mongodb_url}/router",
     },
   )
-  secrets_from_arns  = local.router_defaults.secrets_from_arns
+  secrets_from_arns = local.router_defaults.secrets_from_arns
+  load_balancers = [{
+    target_group_arn = module.www_origin.origin_target_group_arn
+    container_port   = 80
+  }]
   log_group          = local.log_group
   aws_region         = data.aws_region.current.name
   cpu                = local.router_defaults.cpu
@@ -141,7 +145,11 @@ module "draft_router" {
       ROUTER_MONGO_URL = "${local.router_defaults.mongodb_url}/draft_router",
     },
   )
-  secrets_from_arns  = local.router_defaults.secrets_from_arns
+  secrets_from_arns = local.router_defaults.secrets_from_arns
+  load_balancers = [{
+    target_group_arn = module.draft_origin.origin_target_group_arn
+    container_port   = 80
+  }]
   log_group          = local.log_group
   aws_region         = data.aws_region.current.name
   cpu                = local.router_defaults.cpu

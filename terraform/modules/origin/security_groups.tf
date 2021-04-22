@@ -4,6 +4,7 @@ resource "aws_security_group" "origin_alb" {
   description = "${local.live_or_draft_prefix}-origin Internet-facing ALB in govuk-${var.workspace} cluster"
 }
 
+# TODO: Move rules to deployments/govuk-publishing-platform/security_group_rules
 resource "aws_security_group_rule" "service_from_origin_alb_http" {
   for_each                 = var.apps_security_config_list
   description              = "${each.key} receives requests from the ${local.live_or_draft_prefix}-origin-${var.workspace} ALB over HTTP"

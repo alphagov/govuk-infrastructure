@@ -1,5 +1,5 @@
-output "frontend_target_group_arn" {
-  value = aws_lb_target_group.origin-frontend.arn
+output "origin_target_group_arn" {
+  value = aws_lb_target_group.origin.arn
 }
 
 output "security_group_id" {

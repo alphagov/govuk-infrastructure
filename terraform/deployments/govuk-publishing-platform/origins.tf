@@ -54,7 +54,7 @@ module "www_origin" {
   rails_assets_s3_regional_domain_name = aws_s3_bucket.rails_assets.bucket_regional_domain_name
 
   apps_security_config_list = {
-    "frontend" = { security_group_id = module.frontend.security_group_id, target_port = 80 },
+    "router" = { security_group_id = module.router.security_group_id, target_port = 80 },
   }
 }
 
@@ -77,6 +77,6 @@ module "draft_origin" {
   is_live                              = false
 
   apps_security_config_list = {
-    "draft-frontend" = { security_group_id = module.draft_frontend.security_group_id, target_port = 80 },
+    "draft-router" = { security_group_id = module.draft_router.security_group_id, target_port = 80 },
   }
 }
