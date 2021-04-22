@@ -47,10 +47,6 @@ module "router" {
   subnets                          = local.private_subnets
   desired_count                    = var.router_desired_count
   extra_security_groups            = [local.govuk_management_access_security_group, aws_security_group.mesh_ecs_service.id]
-  custom_container_services = [
-    { container_service = "router", port = 80, protocol = "tcp" },
-    { container_service = "router-reload", port = 3055, protocol = "tcp" },
-  ]
   environment_variables = merge(
     local.router_defaults.environment_variables,
     {
@@ -112,10 +108,6 @@ module "draft_router" {
   subnets                          = local.private_subnets
   desired_count                    = var.draft_router_desired_count
   extra_security_groups            = [local.govuk_management_access_security_group, aws_security_group.mesh_ecs_service.id]
-  custom_container_services = [
-    { container_service = "draft-router", port = 80, protocol = "tcp" },
-    { container_service = "draft-router-reload", port = 3055, protocol = "tcp" },
-  ]
   environment_variables = merge(
     local.router_defaults.environment_variables,
     {

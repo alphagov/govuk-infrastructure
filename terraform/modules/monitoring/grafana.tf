@@ -14,8 +14,6 @@ module "grafana_app" {
   extra_security_groups         = [var.govuk_management_access_sg_id]
   service_mesh                  = false
   desired_count                 = var.desired_count
-  custom_container_services     = [{ container_service = local.service_name, port = 3000, protocol = "http" }]
-
   load_balancers = [{
     target_group_arn = module.grafana_public_alb.target_group_arn
     container_port   = 3000
@@ -26,6 +24,7 @@ module "grafana_app" {
   aws_region            = data.aws_region.current.name
   cpu                   = 512
   memory                = 1024
+  port                  = 3000
   task_role_arn         = aws_iam_role.monitoring_execution.arn # TODO - use a separate role for this?
   execution_role_arn    = aws_iam_role.monitoring_execution.arn
 }
