@@ -464,10 +464,10 @@ jobs:
             update_terraform_outputs router-api
             update_terraform_outputs router
 
-    - put: govuk-terraform-outputs
-      params:
-        file: govuk-terraform-outputs/govuk-terraform-outputs.json
     - in_parallel:
+      - put: govuk-terraform-outputs
+        params:
+          file: govuk-terraform-outputs/govuk-terraform-outputs.json
       - try:
           put: content-store-terraform-outputs
           params:
