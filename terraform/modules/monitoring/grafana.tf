@@ -52,5 +52,5 @@ module "grafana_public_alb" {
   service_security_group_id = module.grafana_app.security_group_id
   health_check_path         = "/api/health"
   target_port               = 3000
-  external_cidrs_list       = var.grafana_cidrs_allow_list
+  allowlist_cidrs           = var.grafana_cidrs_allow_list
 }

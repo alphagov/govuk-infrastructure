@@ -19,19 +19,21 @@ locals {
     secrets_from_arns = merge(
       local.defaults.secrets_from_arns,
       {
-        SECRET_KEY_BASE   = data.aws_secretsmanager_secret.signon_secret_key_base.arn
-        SENTRY_DSN        = data.aws_secretsmanager_secret.sentry_dsn.arn
-        DATABASE_URL      = data.aws_secretsmanager_secret.signon_database_url.arn
-        DEVISE_PEPPER     = data.aws_secretsmanager_secret.signon_devise_pepper.arn
-        DEVISE_SECRET_KEY = data.aws_secretsmanager_secret.signon_devise_secret_key.arn
+        SECRET_KEY_BASE       = data.aws_secretsmanager_secret.signon_secret_key_base.arn
+        SENTRY_DSN            = data.aws_secretsmanager_secret.sentry_dsn.arn
+        DATABASE_URL          = data.aws_secretsmanager_secret.signon_database_url.arn
+        DEVISE_PEPPER         = data.aws_secretsmanager_secret.signon_devise_pepper.arn
+        DEVISE_SECRET_KEY     = data.aws_secretsmanager_secret.signon_devise_secret_key.arn
+        SIGNON_ADMIN_PASSWORD = aws_secretsmanager_secret.signon_admin_password.arn
       }
     )
   }
 }
 
 module "signon" {
-  registry                         = var.registry
+  registry                         = "govuk"
   image_name                       = "signon"
+  image_tag                        = "bilbof_boostrapping" # TODO: Remove once Signon PR #1617 is merged
   service_name                     = "signon"
   backend_virtual_service_names    = local.signon_defaults.backend_services
   mesh_name                        = aws_appmesh_mesh.govuk.id
@@ -70,4 +72,12 @@ module "signon_public_alb" {
   publishing_service_domain = var.publishing_service_domain
   workspace                 = local.workspace
   service_security_group_id = module.signon.security_group_id
+}
+
+module "signon_alb_ip_restriction_rules" {
+  source                   = "../../modules/alb-listener-ip-restriction-rules"
+  restricted_path_patterns = ["/healthcheck", "/api/*"]
+  fully_trusted_source_ips = concat(var.office_cidrs_list, local.vpc_public_cidr_blocks)
+  aws_lb_listener_arn      = module.signon_public_alb.aws_lb_listener_arn
+  aws_lb_target_group_arn  = module.signon_public_alb.aws_lb_target_group_arn
 }

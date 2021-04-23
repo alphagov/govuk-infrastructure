@@ -1,3 +1,5 @@
+require 'webmock/rspec'
+
 # See http://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
 RSpec.configure do |config|
   config.expect_with :rspec do |expectations|
@@ -18,3 +20,5 @@ RSpec.configure do |config|
 
   config.default_formatter = "doc"
 end
+
+WebMock.disable_net_connect!(allow_localhost: false)

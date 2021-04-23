@@ -27,7 +27,8 @@ locals {
     secrets_from_arns = merge(
       local.defaults.secrets_from_arns,
       {
-        PUBLISHING_API_BEARER_TOKEN = data.aws_secretsmanager_secret.frontend_publishing_api_bearer_token.arn,
+        # TODO Should frontend and draft frontend share a bearer token for publishing api?
+        PUBLISHING_API_BEARER_TOKEN = module.frontend_to_publishing_api_bearer_token.secret_arn
         SECRET_KEY_BASE             = data.aws_secretsmanager_secret.frontend_secret_key_base.arn,
         SENTRY_DSN                  = data.aws_secretsmanager_secret.sentry_dsn.arn,
       }

@@ -43,20 +43,22 @@ locals {
     secrets_from_arns = merge(
       local.defaults.secrets_from_arns,
       {
-        ASSET_MANAGER_BEARER_TOKEN    = data.aws_secretsmanager_secret.publisher_asset_manager_bearer_token.arn,
-        FACT_CHECK_PASSWORD           = data.aws_secretsmanager_secret.publisher_fact_check_password.arn,
-        FACT_CHECK_REPLY_TO_ADDRESS   = data.aws_secretsmanager_secret.publisher_fact_check_reply_to_address.arn,
-        FACT_CHECK_REPLY_TO_ID        = data.aws_secretsmanager_secret.publisher_fact_check_reply_to_id.arn,
-        GOVUK_NOTIFY_API_KEY          = data.aws_secretsmanager_secret.publisher_govuk_notify_api_key.arn,
-        GOVUK_NOTIFY_TEMPLATE_ID      = data.aws_secretsmanager_secret.publisher_govuk_notify_template_id.arn,
-        JWT_AUTH_SECRET               = data.aws_secretsmanager_secret.publisher_jwt_auth_secret.arn,
+        # TODO: Replace this once Asset Manager is up in ECS
+        ASSET_MANAGER_BEARER_TOKEN  = data.aws_secretsmanager_secret.publisher_asset_manager_bearer_token.arn,
+        FACT_CHECK_PASSWORD         = data.aws_secretsmanager_secret.publisher_fact_check_password.arn,
+        FACT_CHECK_REPLY_TO_ADDRESS = data.aws_secretsmanager_secret.publisher_fact_check_reply_to_address.arn,
+        FACT_CHECK_REPLY_TO_ID      = data.aws_secretsmanager_secret.publisher_fact_check_reply_to_id.arn,
+        GOVUK_NOTIFY_API_KEY        = data.aws_secretsmanager_secret.publisher_govuk_notify_api_key.arn,
+        GOVUK_NOTIFY_TEMPLATE_ID    = data.aws_secretsmanager_secret.publisher_govuk_notify_template_id.arn,
+        JWT_AUTH_SECRET             = data.aws_secretsmanager_secret.publisher_jwt_auth_secret.arn,
+        # TODO: Replace these once Link checker API is up in ECS
         LINK_CHECKER_API_BEARER_TOKEN = data.aws_secretsmanager_secret.publisher_link_checker_api_bearer_token.arn,
         LINK_CHECKER_API_SECRET_TOKEN = data.aws_secretsmanager_secret.publisher_link_checker_api_secret_token.arn,
         # TODO: Only the password should be a secret in the MONGODB_URI.
         MONGODB_URI                 = data.aws_secretsmanager_secret.publisher_mongodb_uri.arn,
         GDS_SSO_OAUTH_ID            = data.aws_secretsmanager_secret.publisher_oauth_id.arn,
         GDS_SSO_OAUTH_SECRET        = data.aws_secretsmanager_secret.publisher_oauth_secret.arn,
-        PUBLISHING_API_BEARER_TOKEN = data.aws_secretsmanager_secret.publisher_publishing_api_bearer_token.arn,
+        PUBLISHING_API_BEARER_TOKEN = module.publisher_to_publishing_api_bearer_token.secret_arn,
         SECRET_KEY_BASE             = data.aws_secretsmanager_secret.publisher_secret_key_base.arn,
       }
     )
@@ -112,7 +114,15 @@ module "publisher_public_alb" {
   publishing_service_domain = var.publishing_service_domain
   workspace                 = local.workspace
   service_security_group_id = module.publisher_web.security_group_id
-  external_cidrs_list       = var.office_cidrs_list
+  allowlist_cidrs           = var.office_cidrs_list
+}
+
+module "publisher_alb_ip_restriction_rules" {
+  source                   = "../../modules/alb-listener-ip-restriction-rules"
+  restricted_path_patterns = ["/healthcheck"]
+  fully_trusted_source_ips = concat(var.office_cidrs_list, local.vpc_public_cidr_blocks)
+  aws_lb_listener_arn      = module.publisher_public_alb.aws_lb_listener_arn
+  aws_lb_target_group_arn  = module.publisher_public_alb.aws_lb_target_group_arn
 }
 
 #

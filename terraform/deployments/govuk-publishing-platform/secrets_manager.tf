@@ -9,9 +9,6 @@ data "aws_secretsmanager_secret" "ga_universal_id" {
 
 # Frontend app secrets
 
-data "aws_secretsmanager_secret" "frontend_publishing_api_bearer_token" {
-  name = "frontend_app_PUBLISHING_API_BEARER_TOKEN" # pragma: allowlist secret
-}
 data "aws_secretsmanager_secret" "frontend_secret_key_base" {
   name = "frontend_app-SECRET_KEY_BASE" # pragma: allowlist secret
 }
@@ -23,12 +20,6 @@ data "aws_secretsmanager_secret" "content_store_oauth_id" {
 }
 data "aws_secretsmanager_secret" "content_store_oauth_secret" {
   name = "content-store_OAUTH_SECRET"
-}
-data "aws_secretsmanager_secret" "content_store_publishing_api_bearer_token" {
-  name = "content-store_PUBLISHING_API_BEARER_TOKEN" # pragma: allowlist secret
-}
-data "aws_secretsmanager_secret" "content_store_router_api_bearer_token" {
-  name = "content-store_ROUTER_API_BEARER_TOKEN" # pragma: allowlist secret
 }
 data "aws_secretsmanager_secret" "content_store_secret_key_base" {
   name = "content-store_SECRET_KEY_BASE" # pragma: allowlist secret
@@ -72,25 +63,14 @@ data "aws_secretsmanager_secret" "publisher_oauth_id" {
 data "aws_secretsmanager_secret" "publisher_oauth_secret" {
   name = "publisher_app-OAUTH_SECRET"
 }
-data "aws_secretsmanager_secret" "publisher_publishing_api_bearer_token" {
-  name = "publisher_app-PUBLISHING_API_BEARER_TOKEN" # pragma: allowlist secret
-}
 data "aws_secretsmanager_secret" "publisher_secret_key_base" {
   name = "publisher_app-SECRET_KEY_BASE" # pragma: allowlist secret
 }
 
 # Publishing API app
 
-data "aws_secretsmanager_secret" "publishing_api_content_store_bearer_token" {
-  name = "publishing_api_app-CONTENT_STORE_BEARER_TOKEN"
-}
-
 data "aws_secretsmanager_secret" "publishing_api_database_url" {
   name = "publishing_api_app-DATABASE_URL"
-}
-
-data "aws_secretsmanager_secret" "publishing_api_draft_content_store_bearer_token" {
-  name = "publishing_api_app-DRAFT_CONTENT_STORE_BEARER_TOKEN"
 }
 
 data "aws_secretsmanager_secret" "publishing_api_event_log_aws_secret_key" {
@@ -107,10 +87,6 @@ data "aws_secretsmanager_secret" "publishing_api_oauth_secret" {
 
 data "aws_secretsmanager_secret" "publishing_api_rabbitmq_password" {
   name = "publishing_api_app-RABBITMQ_PASSWORD"
-}
-
-data "aws_secretsmanager_secret" "publishing_api_router_api_bearer_token" {
-  name = "publishing_api_app-ROUTER_API_BEARER_TOKEN"
 }
 
 data "aws_secretsmanager_secret" "publishing_api_secret_key_base" {
@@ -137,14 +113,8 @@ data "aws_secretsmanager_secret" "signon_database_url" {
 
 # Static app
 
-data "aws_secretsmanager_secret" "static_publishing_api_bearer_token" {
-  name = "static_PUBLISHING_API_BEARER_TOKEN" # pragma: allowlist secret
-}
 data "aws_secretsmanager_secret" "static_secret_key_base" {
   name = "static_SECRET_KEY_BASE" # pragma: allowlist secret
-}
-data "aws_secretsmanager_secret" "draft_static_publishing_api_bearer_token" {
-  name = "draft-static_PUBLISHING_API_BEARER_TOKEN" # pragma: allowlist secret
 }
 data "aws_secretsmanager_secret" "draft_static_secret_key_base" {
   name = "draft-static_SECRET_KEY_BASE" # pragma: allowlist secret

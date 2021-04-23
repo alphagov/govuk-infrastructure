@@ -22,11 +22,9 @@ locals {
     secrets_from_arns = merge(
       local.defaults.secrets_from_arns,
       {
-        GDS_SSO_OAUTH_ID            = data.aws_secretsmanager_secret.content_store_oauth_id.arn,
-        GDS_SSO_OAUTH_SECRET        = data.aws_secretsmanager_secret.content_store_oauth_secret.arn,
-        PUBLISHING_API_BEARER_TOKEN = data.aws_secretsmanager_secret.content_store_publishing_api_bearer_token.arn,
-        ROUTER_API_BEARER_TOKEN     = data.aws_secretsmanager_secret.content_store_router_api_bearer_token.arn,
-        SECRET_KEY_BASE             = data.aws_secretsmanager_secret.content_store_secret_key_base.arn,
+        GDS_SSO_OAUTH_ID     = data.aws_secretsmanager_secret.content_store_oauth_id.arn,
+        GDS_SSO_OAUTH_SECRET = data.aws_secretsmanager_secret.content_store_oauth_secret.arn,
+        SECRET_KEY_BASE      = data.aws_secretsmanager_secret.content_store_secret_key_base.arn,
       }
     )
 
@@ -67,7 +65,13 @@ module "content_store" {
       MONGODB_URI                 = "${local.content_store_defaults.mongodb_url}/live_content_store_production"
     },
   )
-  secrets_from_arns  = local.content_store_defaults.secrets_from_arns
+  secrets_from_arns = merge(
+    local.content_store_defaults.secrets_from_arns,
+    {
+      PUBLISHING_API_BEARER_TOKEN = module.content_store_to_publishing_api_bearer_token.secret_arn
+      ROUTER_API_BEARER_TOKEN     = module.content_store_to_router_api_bearer_token.secret_arn
+    }
+  )
   log_group          = local.log_group
   aws_region         = data.aws_region.current.name
   cpu                = local.content_store_defaults.cpu
@@ -106,7 +110,13 @@ module "draft_content_store" {
       MONGODB_URI                 = "${local.content_store_defaults.mongodb_url}/draft_content_store_production"
     }
   )
-  secrets_from_arns  = local.content_store_defaults.secrets_from_arns
+  secrets_from_arns = merge(
+    local.content_store_defaults.secrets_from_arns,
+    {
+      PUBLISHING_API_BEARER_TOKEN = module.draft_content_store_to_publishing_api_bearer_token.secret_arn
+      ROUTER_API_BEARER_TOKEN     = module.draft_content_store_to_router_api_bearer_token.secret_arn
+    }
+  )
   log_group          = local.log_group
   aws_region         = data.aws_region.current.name
   cpu                = local.content_store_defaults.cpu
