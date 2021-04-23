@@ -5,7 +5,7 @@ locals {
   family = "${var.service_name}-${terraform.workspace}"
 
   envoy_proxy_properties = {
-    AppPorts = join(",", var.ports)
+    AppPorts = var.port
 
     # From the user guide: "Envoy doesn't proxy traffic to these IP addresses.
     # Set this value to 169.254.170.2,169.254.169.254, which ignores the Amazon
@@ -42,7 +42,7 @@ module "app_container_definition" {
   log_group             = var.log_group
   log_stream_prefix     = var.service_name
   name                  = "app"
-  ports                 = var.ports
+  ports                 = [var.port]
   secrets_from_arns     = var.secrets_from_arns
 }
 

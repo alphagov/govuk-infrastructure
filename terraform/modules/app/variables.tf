@@ -39,13 +39,6 @@ variable "subnets" {
   type        = list(any)
 }
 
-
-variable "service_mesh" {
-  description = "Determines if app will be added to service mesh"
-  type        = bool
-  default     = true
-}
-
 variable "mesh_name" {
   type        = string
   default     = null
@@ -65,12 +58,6 @@ variable "service_discovery_namespace_name" {
 variable "service_name" {
   description = "Name to use for the ECS service, task and other resources. Should normally be the name of the app."
   type        = string
-}
-
-variable "custom_container_services" {
-  description = "list of services in map format {container_service, port, protocol} that an app container exposes."
-  type        = list(any)
-  default     = null
 }
 
 variable "extra_security_groups" {
@@ -97,10 +84,11 @@ variable "desired_count" {
   default     = 1
 }
 
-variable "ports" {
-  type        = list(any)
-  default     = [80]
-  description = "The ports the application listens on. For most apps this can be left as the default (port 80)."
+# TODO: Switch the other apps
+variable "port" {
+  type        = number
+  default     = 80
+  description = "The port the application listens on. For most apps this can be left as the default (port 80)."
 }
 
 variable "environment_variables" {

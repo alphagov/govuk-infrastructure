@@ -5,7 +5,7 @@ locals {
 
     backend_services = flatten([
       local.defaults.virtual_service_backends,
-      module.signon.virtual_service_names,
+      module.signon.virtual_service_name,
     ])
 
     environment_variables = merge(

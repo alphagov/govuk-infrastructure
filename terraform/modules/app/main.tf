@@ -12,10 +12,7 @@ terraform {
 }
 
 locals {
-  container_name = "app"
-  subdomain      = var.service_name
-  # TODO: Do we need container services?
-  container_services      = var.custom_container_services == null ? [{ container_service = local.subdomain, port = 80, protocol = "http" }] : var.custom_container_services
+  container_name          = "app"
   service_security_groups = concat([aws_security_group.service.id], var.extra_security_groups)
 }
 
@@ -43,12 +40,9 @@ resource "aws_ecs_service" "service" {
     subnets         = var.subnets
   }
 
-  dynamic "service_registries" {
-    for_each = var.service_mesh ? [1] : []
-    content {
-      registry_arn   = module.service_mesh_node[0].discovery_service_arn
-      container_name = local.container_name
-    }
+  service_registries {
+    registry_arn   = module.service_mesh_node.discovery_service_arn
+    container_name = local.container_name
   }
 
   # For bootstrapping
@@ -62,16 +56,14 @@ resource "aws_ecs_service" "service" {
 }
 
 module "service_mesh_node" {
-  count = var.service_mesh ? length(local.container_services) : 0
-
   source                           = "../service-mesh-node"
   backend_virtual_service_names    = var.backend_virtual_service_names
   mesh_name                        = var.mesh_name
-  port                             = local.container_services[count.index].port
-  protocol                         = local.container_services[count.index].protocol
+  port                             = var.port
+  protocol                         = "http"
   service_discovery_namespace_id   = var.service_discovery_namespace_id
   service_discovery_namespace_name = var.service_discovery_namespace_name
-  service_name                     = local.container_services[count.index].container_service
+  service_name                     = var.service_name
 }
 
 resource "aws_security_group" "service" {

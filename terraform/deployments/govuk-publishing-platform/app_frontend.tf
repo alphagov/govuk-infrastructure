@@ -5,8 +5,8 @@ locals {
 
     backend_services = flatten([
       local.defaults.virtual_service_backends,
-      module.static.virtual_service_names,
-      module.signon.virtual_service_names,
+      module.static.virtual_service_name,
+      module.signon.virtual_service_name,
     ])
 
     environment_variables = merge(
@@ -48,7 +48,7 @@ module "frontend" {
   mesh_name    = aws_appmesh_mesh.govuk.id
   backend_virtual_service_names = flatten([
     local.frontend_defaults.backend_services,
-    module.content_store.virtual_service_names,
+    module.content_store.virtual_service_name,
   ])
   service_discovery_namespace_id   = aws_service_discovery_private_dns_namespace.govuk_publishing_platform.id
   service_discovery_namespace_name = aws_service_discovery_private_dns_namespace.govuk_publishing_platform.name
@@ -79,7 +79,7 @@ module "draft_frontend" {
   mesh_name    = aws_appmesh_mesh.govuk.id
   backend_virtual_service_names = flatten([
     local.frontend_defaults.backend_services,
-    module.draft_content_store.virtual_service_names,
+    module.draft_content_store.virtual_service_name,
   ])
   service_discovery_namespace_id   = aws_service_discovery_private_dns_namespace.govuk_publishing_platform.id
   service_discovery_namespace_name = aws_service_discovery_private_dns_namespace.govuk_publishing_platform.name
