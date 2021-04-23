@@ -58,18 +58,14 @@ module "frontend" {
   desired_count                    = var.frontend_desired_count
   subnets                          = local.private_subnets
   extra_security_groups            = [local.govuk_management_access_security_group, aws_security_group.mesh_ecs_service.id]
-  load_balancers = [{
-    target_group_arn = module.www_origin.frontend_target_group_arn
-    container_port   = 80
-  }]
-  environment_variables = local.frontend_defaults.environment_variables
-  secrets_from_arns     = local.frontend_defaults.secrets_from_arns
-  log_group             = local.log_group
-  aws_region            = data.aws_region.current.name
-  cpu                   = local.frontend_defaults.cpu
-  memory                = local.frontend_defaults.memory
-  task_role_arn         = aws_iam_role.task.arn
-  execution_role_arn    = aws_iam_role.execution.arn
+  environment_variables            = local.frontend_defaults.environment_variables
+  secrets_from_arns                = local.frontend_defaults.secrets_from_arns
+  log_group                        = local.log_group
+  aws_region                       = data.aws_region.current.name
+  cpu                              = local.frontend_defaults.cpu
+  memory                           = local.frontend_defaults.memory
+  task_role_arn                    = aws_iam_role.task.arn
+  execution_role_arn               = aws_iam_role.execution.arn
 }
 
 module "draft_frontend" {
@@ -89,10 +85,6 @@ module "draft_frontend" {
   desired_count                    = var.draft_frontend_desired_count
   subnets                          = local.private_subnets
   extra_security_groups            = [local.govuk_management_access_security_group, aws_security_group.mesh_ecs_service.id]
-  load_balancers = [{
-    target_group_arn = module.draft_origin.frontend_target_group_arn
-    container_port   = 80
-  }]
   environment_variables = merge(
     local.frontend_defaults.environment_variables,
     {

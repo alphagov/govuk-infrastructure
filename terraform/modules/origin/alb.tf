@@ -6,8 +6,8 @@ resource "aws_lb" "origin" {
   subnets            = var.public_subnets
 }
 
-resource "aws_lb_target_group" "origin-frontend" {
-  name        = "${local.live_or_draft_prefix}-origin-frontend-${var.workspace}"
+resource "aws_lb_target_group" "origin" {
+  name        = "${local.live_or_draft_prefix}-origin-${var.workspace}"
   port        = 80
   protocol    = "HTTP"
   vpc_id      = var.vpc_id
@@ -42,7 +42,7 @@ resource "aws_lb_listener_rule" "authentication" {
 
   action {
     type             = "forward"
-    target_group_arn = aws_lb_target_group.origin-frontend.arn
+    target_group_arn = aws_lb_target_group.origin.arn
   }
 
   condition {

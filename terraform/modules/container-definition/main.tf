@@ -6,7 +6,7 @@ output "json_format" {
     environment = [for key, value in var.environment_variables : { name : key, value : tostring(value) }],
     dependsOn   = var.dependsOn
     healthCheck = {
-      command = ["/bin/bash", "-c", var.health_check]
+      command = var.healthcheck_command
     }
     image = var.image
     linuxParameters = {

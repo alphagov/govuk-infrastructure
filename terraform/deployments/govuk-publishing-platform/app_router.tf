@@ -47,6 +47,7 @@ module "router" {
   subnets                          = local.private_subnets
   desired_count                    = var.router_desired_count
   extra_security_groups            = [local.govuk_management_access_security_group, aws_security_group.mesh_ecs_service.id]
+  container_healthcheck_command    = ["/bin/sh", "-c", "exit 0"]
   environment_variables = merge(
     local.router_defaults.environment_variables,
     {
@@ -54,14 +55,14 @@ module "router" {
       # BACKEND_URL_canary-frontend         = module.canary-frontend.virtual_service_name
       # BACKEND_URL_collections             = module.collections.virtual_service_name
       # BACKEND_URL_contacts-frontend       = module.contacts-frontend.virtual_service_name
-      BACKEND_URL_content-store = module.content_store.virtual_service_name
+      BACKEND_URL_content-store = "http://${module.content_store.virtual_service_name}"
       # BACKEND_URL_designprinciples        = module.designprinciples.virtual_service_name
       # BACKEND_URL_email-alert-frontend    = module.email-alert-frontend.virtual_service_name
       # BACKEND_URL_email-campaign-frontend = module.email-campaign-frontend.virtual_service_name
       # BACKEND_URL_external-link-tracker   = module.external-link-tracker.virtual_service_name
       # BACKEND_URL_feedback                = module.feedback.virtual_service_name
       # BACKEND_URL_finder-frontend         = module.finder-frontend.virtual_service_name
-      BACKEND_URL_frontend = module.frontend.virtual_service_name
+      BACKEND_URL_frontend = "http://${module.frontend.virtual_service_name}"
       # BACKEND_URL_government-frontend     = module.government-frontend.virtual_service_name
       # BACKEND_URL_info-frontend           = module.info-frontend.virtual_service_name
       # BACKEND_URL_licencefinder           = module.licencefinder.virtual_service_name
@@ -73,14 +74,18 @@ module "router" {
       # BACKEND_URL_service-manual-frontend = module.service-manual-frontend.virtual_service_name
       # BACKEND_URL_smartanswers            = module.smartanswers.virtual_service_name
       # BACKEND_URL_spotlight               = module.spotlight.virtual_service_name
-      BACKEND_URL_static = module.static.virtual_service_name
+      BACKEND_URL_static = "http://${module.static.virtual_service_name}"
       # BACKEND_URL_tariff                  = module.tariff.virtual_service_name
       # BACKEND_URL_whitehall-frontend      = module.whitehall-frontend.virtual_service_name
       ROUTER_MONGO_DB  = "router"
       ROUTER_MONGO_URL = "${local.router_defaults.mongodb_url}/router",
     },
   )
-  secrets_from_arns  = local.router_defaults.secrets_from_arns
+  secrets_from_arns = local.router_defaults.secrets_from_arns
+  load_balancers = [{
+    target_group_arn = module.www_origin.origin_target_group_arn
+    container_port   = 80
+  }]
   log_group          = local.log_group
   aws_region         = data.aws_region.current.name
   cpu                = local.router_defaults.cpu
@@ -108,6 +113,7 @@ module "draft_router" {
   subnets                          = local.private_subnets
   desired_count                    = var.draft_router_desired_count
   extra_security_groups            = [local.govuk_management_access_security_group, aws_security_group.mesh_ecs_service.id]
+  container_healthcheck_command    = ["/bin/sh", "-c", "exit 0"]
   environment_variables = merge(
     local.router_defaults.environment_variables,
     {
@@ -115,14 +121,14 @@ module "draft_router" {
       # BACKEND_URL_canary-frontend         = module.draft_canary-frontend.virtual_service_name
       # BACKEND_URL_collections             = module.draft_collections.virtual_service_name
       # BACKEND_URL_contacts-frontend       = module.draft_contacts-frontend.virtual_service_name
-      BACKEND_URL_content-store = module.draft_content_store.virtual_service_name
+      BACKEND_URL_content-store = "http://${module.draft_content_store.virtual_service_name}"
       # BACKEND_URL_designprinciples        = module.draft_designprinciples.virtual_service_name
       # BACKEND_URL_email-alert-frontend    = module.draft_email-alert-frontend.virtual_service_name
       # BACKEND_URL_email-campaign-frontend = module.draft_email-campaign-frontend.virtual_service_name
       # BACKEND_URL_external-link-tracker   = module.draft_external-link-tracker.virtual_service_name
       # BACKEND_URL_feedback                = module.draft_feedback.virtual_service_name
       # BACKEND_URL_finder-frontend         = module.draft_finder-frontend.virtual_service_name
-      BACKEND_URL_frontend = module.draft_frontend.virtual_service_name
+      BACKEND_URL_frontend = "http://${module.draft_frontend.virtual_service_name}"
       # BACKEND_URL_government-frontend     = module.draft_government-frontend.virtual_service_name
       # BACKEND_URL_info-frontend           = module.draft_info-frontend.virtual_service_name
       # BACKEND_URL_licencefinder           = module.draft_licencefinder.virtual_service_name
@@ -134,14 +140,18 @@ module "draft_router" {
       # BACKEND_URL_service-manual-frontend = module.draft_service-manual-frontend.virtual_service_name
       # BACKEND_URL_smartanswers            = module.draft_smartanswers.virtual_service_name
       # BACKEND_URL_spotlight               = module.draft_spotlight.virtual_service_name
-      BACKEND_URL_static = module.draft_static.virtual_service_name
+      BACKEND_URL_static = "http://${module.draft_static.virtual_service_name}"
       # BACKEND_URL_tariff                  = module.tariff.virtual_service_name
       # BACKEND_URL_whitehall-frontend      = module.whitehall-frontend.virtual_service_name
       ROUTER_MONGO_DB  = "draft_router"
       ROUTER_MONGO_URL = "${local.router_defaults.mongodb_url}/draft_router",
     },
   )
-  secrets_from_arns  = local.router_defaults.secrets_from_arns
+  secrets_from_arns = local.router_defaults.secrets_from_arns
+  load_balancers = [{
+    target_group_arn = module.draft_origin.origin_target_group_arn
+    container_port   = 80
+  }]
   log_group          = local.log_group
   aws_region         = data.aws_region.current.name
   cpu                = local.router_defaults.cpu

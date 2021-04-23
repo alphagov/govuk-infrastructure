@@ -24,10 +24,10 @@ variable "dependsOn" {
   description = "See ECS Task Definition spec for dependsOn"
 }
 
-variable "health_check" {
-  type        = string
-  default     = "exit 0"
+variable "healthcheck_command" {
+  type        = list(string)
   description = "Command checks the container is ready to receive requests."
+  default     = ["/bin/bash", "-c", "exit 0"]
 }
 
 variable "image" {
