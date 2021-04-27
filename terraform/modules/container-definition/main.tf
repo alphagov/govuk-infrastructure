@@ -13,13 +13,24 @@ output "json_format" {
       initProcessEnabled = true
     }
     logConfiguration = {
-      logDriver = "awslogs",
+      logDriver = "splunk",
       options = {
-        awslogs-create-group  = "true", # TODO create the log group in terraform so we can configure the retention policy
-        awslogs-group         = var.log_group,
-        awslogs-region        = var.aws_region,
-        awslogs-stream-prefix = var.log_stream_prefix,
+        env               = "GOVUK_APP_NAME",
+        tag               = "image_name={{.ImageName}} container_name={{.Name}} container_id={{.FullID}}",
+        splunk-sourcetype = var.splunk_sourcetype,
+        splunk-index      = var.splunk_index,
+        splunk-format     = "raw"
       }
+      secretOptions = [
+        {
+          name      = "splunk-token",
+          valueFrom = var.splunk_token_secret_arn
+        },
+        {
+          name      = "splunk-url",
+          valueFrom = var.splunk_url_secret_arn
+        },
+      ],
     },
     mountPoints  = [],
     portMappings = [for port in var.ports : { containerPort = port, hostPort = port, protocol = "tcp" }],

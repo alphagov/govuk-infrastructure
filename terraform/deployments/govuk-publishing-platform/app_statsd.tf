@@ -19,7 +19,6 @@ module "statsd" {
   extra_security_groups            = [local.govuk_management_access_security_group, aws_security_group.mesh_ecs_service.id]
   image_name                       = "statsd"
   image_tag                        = "test-0.1.3" # TODO: https://trello.com/c/nju3j7Ph/38-modify-statsd-so-that-we-can-run-it-in-ecs
-  log_group                        = local.log_group
   memory                           = local.statsd_defaults.memory
   mesh_name                        = aws_appmesh_mesh.govuk.id
   registry                         = var.registry
@@ -31,4 +30,8 @@ module "statsd" {
   subnets                          = local.private_subnets
   task_role_arn                    = aws_iam_role.task.arn
   vpc_id                           = local.vpc_id
+  splunk_url_secret_arn            = local.defaults.splunk_url_secret_arn
+  splunk_token_secret_arn          = local.defaults.splunk_token_secret_arn
+  splunk_index                     = local.defaults.splunk_index
+  splunk_sourcetype                = local.defaults.splunk_sourcetype
 }

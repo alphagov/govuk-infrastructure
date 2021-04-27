@@ -41,14 +41,23 @@ output "container_definition" {
     ],
     "essential" : true,
     "logConfiguration" : {
-      "logDriver" : "awslogs",
+      "logDriver" : "splunk",
       "options" : {
-        "awslogs-create-group" : "true",
-        "awslogs-group" : var.log_group,
-        "awslogs-region" : var.aws_region,
-        "awslogs-stream-prefix" : "awslogs-${var.service_name}-envoy"
-      }
-    }
+        "tag" : "image_name={{.ImageName}} container_name={{.Name}} container_id={{.FullID}}",
+        "splunk-index" : local.defaults.splunk_index,
+        "splunk-format" : "raw"
+      },
+      "secretOptions" : [
+        {
+          "name"      = "splunk-token",
+          "valueFrom" = local.defaults.splunk_token_secret_arn
+        },
+        {
+          "name"      = "splunk-url",
+          "valueFrom" = local.defaults.splunk_url_secret_arn
+        },
+      ]
+    },
   }
 }
 

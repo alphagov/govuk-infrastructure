@@ -74,12 +74,15 @@ module "content_store" {
       ROUTER_API_BEARER_TOKEN     = data.aws_secretsmanager_secret.content_store_router_api_bearer_token.arn
     }
   )
-  log_group          = local.log_group
-  aws_region         = data.aws_region.current.name
-  cpu                = local.content_store_defaults.cpu
-  memory             = local.content_store_defaults.memory
-  task_role_arn      = aws_iam_role.task.arn
-  execution_role_arn = aws_iam_role.execution.arn
+  splunk_url_secret_arn   = local.defaults.splunk_url_secret_arn
+  splunk_token_secret_arn = local.defaults.splunk_token_secret_arn
+  splunk_index            = local.defaults.splunk_index
+  splunk_sourcetype       = local.defaults.splunk_sourcetype
+  aws_region              = data.aws_region.current.name
+  cpu                     = local.content_store_defaults.cpu
+  memory                  = local.content_store_defaults.memory
+  task_role_arn           = aws_iam_role.task.arn
+  execution_role_arn      = aws_iam_role.execution.arn
 }
 
 module "draft_content_store" {
@@ -121,10 +124,13 @@ module "draft_content_store" {
       ROUTER_API_BEARER_TOKEN     = data.aws_secretsmanager_secret.content_store_router_api_bearer_token.arn
     }
   )
-  log_group          = local.log_group
-  aws_region         = data.aws_region.current.name
-  cpu                = local.content_store_defaults.cpu
-  memory             = local.content_store_defaults.memory
-  task_role_arn      = aws_iam_role.task.arn
-  execution_role_arn = aws_iam_role.execution.arn
+  splunk_url_secret_arn   = local.defaults.splunk_url_secret_arn
+  splunk_token_secret_arn = local.defaults.splunk_token_secret_arn
+  splunk_index            = local.defaults.splunk_index
+  splunk_sourcetype       = local.defaults.splunk_sourcetype
+  aws_region              = data.aws_region.current.name
+  cpu                     = local.content_store_defaults.cpu
+  memory                  = local.content_store_defaults.memory
+  task_role_arn           = aws_iam_role.task.arn
+  execution_role_arn      = aws_iam_role.execution.arn
 }

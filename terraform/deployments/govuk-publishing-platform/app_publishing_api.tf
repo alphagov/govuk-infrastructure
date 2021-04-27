@@ -17,7 +17,7 @@ locals {
         CONTENT_API_PROTOTYPE    = "yes"
         CONTENT_STORE            = local.defaults.content_store_uri
         DRAFT_CONTENT_STORE      = local.defaults.draft_content_store_uri
-        EVENT_LOG_AWS_ACCESS_ID  = "AKIAJE6VSW25CYBUMQJA" # TODO: hardcoded
+        EVENT_LOG_AWS_ACCESS_ID  = "AKIAJE6VSW25CYBUMQJA" # pragma: allowlist secret
         EVENT_LOG_AWS_BUCKETNAME = "govuk-publishing-api-event-log-test"
         EVENT_LOG_AWS_USERNAME   = "govuk-publishing-api-event-log_user"
         GOVUK_APP_NAME           = "publishing-api"
@@ -71,7 +71,10 @@ module "publishing_api_web" {
   subnets                          = local.private_subnets
   environment_variables            = local.publishing_api_defaults.environment_variables
   secrets_from_arns                = local.publishing_api_defaults.secrets_from_arns
-  log_group                        = local.log_group
+  splunk_url_secret_arn            = local.defaults.splunk_url_secret_arn
+  splunk_token_secret_arn          = local.defaults.splunk_token_secret_arn
+  splunk_index                     = local.defaults.splunk_index
+  splunk_sourcetype                = local.defaults.splunk_sourcetype
   aws_region                       = data.aws_region.current.name
   cpu                              = local.publishing_api_defaults.cpu
   memory                           = local.publishing_api_defaults.memory
@@ -95,7 +98,10 @@ module "publishing_api_worker" {
   subnets                          = local.private_subnets
   environment_variables            = local.publishing_api_defaults.environment_variables
   secrets_from_arns                = local.publishing_api_defaults.secrets_from_arns
-  log_group                        = local.log_group
+  splunk_url_secret_arn            = local.defaults.splunk_url_secret_arn
+  splunk_token_secret_arn          = local.defaults.splunk_token_secret_arn
+  splunk_index                     = local.defaults.splunk_index
+  splunk_sourcetype                = local.defaults.splunk_sourcetype
   aws_region                       = data.aws_region.current.name
   cpu                              = local.publishing_api_defaults.cpu
   memory                           = local.publishing_api_defaults.memory

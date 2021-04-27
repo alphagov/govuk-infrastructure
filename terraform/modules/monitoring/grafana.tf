@@ -17,15 +17,18 @@ module "grafana_app" {
     target_group_arn = module.grafana_public_alb.target_group_arn
     container_port   = 3000
   }]
-  environment_variables = {} # TODO
-  secrets_from_arns     = {} # TODO
-  log_group             = "monitoring"
-  aws_region            = data.aws_region.current.name
-  cpu                   = 512
-  memory                = 1024
-  port                  = 3000
-  task_role_arn         = aws_iam_role.monitoring_execution.arn # TODO - use a separate role for this?
-  execution_role_arn    = aws_iam_role.monitoring_execution.arn
+  environment_variables   = {} # TODO
+  secrets_from_arns       = {} # TODO
+  splunk_url_secret_arn   = var.splunk_url_secret_arn
+  splunk_token_secret_arn = var.splunk_token_secret_arn
+  splunk_sourcetype       = var.splunk_sourcetype
+  splunk_index            = var.splunk_index
+  aws_region              = data.aws_region.current.name
+  cpu                     = 512
+  memory                  = 1024
+  port                    = 3000
+  task_role_arn           = aws_iam_role.monitoring_execution.arn # TODO - use a separate role for this?
+  execution_role_arn      = aws_iam_role.monitoring_execution.arn
 }
 
 data "aws_acm_certificate" "public_lb_alternate" {

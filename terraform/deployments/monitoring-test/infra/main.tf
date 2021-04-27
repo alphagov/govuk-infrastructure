@@ -57,6 +57,11 @@ module "monitoring" {
   external_app_domain       = var.external_app_domain
   publishing_service_domain = var.publishing_service_domain
 
+  splunk_url_secret_arn   = ""
+  splunk_token_secret_arn = ""
+  splunk_sourcetype       = "log"
+  splunk_index            = "govuk_replatforming"
+
   vpc_id                        = data.terraform_remote_state.infra_networking.outputs.vpc_id
   private_subnets               = data.terraform_remote_state.infra_networking.outputs.private_subnet_ids
   public_subnets                = data.terraform_remote_state.infra_networking.outputs.public_subnet_ids
