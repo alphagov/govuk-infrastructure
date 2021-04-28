@@ -91,16 +91,19 @@ resource "aws_wafv2_web_acl" "backends_origin_cloudfront_web_acl" {
 module "backends_origin" {
   source = "../../modules/origin"
 
-  providers                            = { aws = aws, random = random }
-  name                                 = "backends"
-  vpc_id                               = local.vpc_id
-  aws_region                           = data.aws_region.current.name
-  assume_role_arn                      = var.assume_role_arn
-  public_subnets                       = local.public_subnets
-  public_zone_id                       = aws_route53_zone.workspace_public.zone_id
-  external_app_domain                  = aws_route53_zone.workspace_public.name
-  subdomain                            = "backends"
-  extra_aliases                        = compact([local.is_default_workspace ? "publisher.${var.publishing_service_domain}" : null, "publisher.${aws_route53_zone.workspace_public.name}", "signon.${aws_route53_zone.workspace_public.name}"])
+  providers           = { aws = aws, random = random }
+  name                = "backends"
+  vpc_id              = local.vpc_id
+  aws_region          = data.aws_region.current.name
+  assume_role_arn     = var.assume_role_arn
+  public_subnets      = local.public_subnets
+  public_zone_id      = aws_route53_zone.workspace_public.zone_id
+  external_app_domain = aws_route53_zone.workspace_public.name
+  subdomain           = "backends"
+  extra_aliases = compact([local.is_default_workspace ? "publisher.${local.workspace}.${var.publishing_service_domain}" : null,
+    local.is_default_workspace ? "signon.${local.workspace}.${var.publishing_service_domain}" : null,
+    "publisher.${aws_route53_zone.workspace_public.name}",
+  "signon.${aws_route53_zone.workspace_public.name}"])
   load_balancer_certificate_arn        = aws_acm_certificate_validation.workspace_public.certificate_arn
   cloudfront_certificate_arn           = aws_acm_certificate_validation.public_north_virginia.certificate_arn
   publishing_service_domain            = var.publishing_service_domain
