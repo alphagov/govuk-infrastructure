@@ -26,8 +26,8 @@ variable "dependsOn" {
 
 variable "healthcheck_command" {
   type        = list(string)
-  description = "Command checks the container is ready to receive requests."
-  default     = ["/bin/bash", "-c", "exit 0"]
+  description = "App container liveness healthcheck"
+  default     = ["/bin/bash", "-c", "curl -f http://localhost:80/healthcheck/live || exit 1"]
 }
 
 variable "image" {

@@ -128,7 +128,7 @@ resource "aws_lb_target_group" "publisher" {
   target_type = "ip"
 
   health_check {
-    path = "/healthcheck"
+    path = "/healthcheck/ready"
   }
 }
 
