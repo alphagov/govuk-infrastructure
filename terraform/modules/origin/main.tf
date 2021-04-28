@@ -1,42 +1,10 @@
 locals {
-  live_or_draft_prefix = var.is_live ? "www" : "draft"
-  origin_alb_id        = "${local.live_or_draft_prefix}_origin_alb"
-  origin_s3_id         = "origin_s3"
-}
-
-terraform {
-  required_providers {
-    aws = {
-      source  = "hashicorp/aws"
-      version = "~> 3.36"
-    }
-
-    random = {
-      source  = "hashicorp/random"
-      version = "3.0.0"
-    }
-  }
-}
-
-provider "aws" {
-  region = var.aws_region
-
-  assume_role {
-    role_arn = var.assume_role_arn
-  }
-}
-
-provider "aws" {
-  region = "us-east-1"
-  alias  = "us_east_1"
-
-  assume_role {
-    role_arn = var.assume_role_arn
-  }
+  origin_alb_id = "${var.name}_origin_alb"
+  origin_s3_id  = "origin_s3"
 }
 
 resource "aws_cloudfront_origin_access_identity" "cloudfront_s3_access" {
-  comment = "${local.live_or_draft_prefix}-origin ${var.workspace} cloudfront accessing the Rails assets s3 bucket"
+  comment = "${var.name}-origin ${var.workspace} cloudfront accessing the Rails assets s3 bucket"
 }
 
 resource "random_password" "origin_alb_x_custom_header_secret" {
@@ -75,13 +43,10 @@ resource "aws_cloudfront_distribution" "origin" {
 
   enabled         = true
   is_ipv6_enabled = false
-  comment         = "${local.live_or_draft_prefix}-origin ${var.workspace} CDN in front of origin ALB and s3 rails assets bucket"
-  web_acl_id      = aws_wafv2_web_acl.origin_cloudfront_web_acl.arn
+  comment         = "${var.name}-origin ${var.workspace} CDN in front of origin ALB and s3 rails assets bucket"
+  web_acl_id      = var.waf_web_acl_arn
 
-  aliases = compact([
-    var.is_default_workspace && var.is_live ? "www.ecs.${var.publishing_service_domain}" : null,
-    "${local.live_or_draft_prefix}-origin.${var.external_app_domain}"
-  ])
+  aliases = concat(var.extra_aliases, ["${var.subdomain}.${var.external_app_domain}"])
 
   default_cache_behavior {
     allowed_methods  = ["DELETE", "GET", "HEAD", "OPTIONS", "PATCH", "POST", "PUT"]
@@ -143,7 +108,7 @@ resource "aws_cloudfront_distribution" "origin" {
 
 resource "aws_route53_record" "origin_cloudfront" {
   zone_id = var.public_zone_id
-  name    = "${local.live_or_draft_prefix}-origin"
+  name    = var.subdomain
   type    = "A"
 
   alias {

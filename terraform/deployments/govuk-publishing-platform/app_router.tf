@@ -87,7 +87,7 @@ module "router" {
   splunk_index            = local.defaults.splunk_index
   splunk_sourcetype       = local.defaults.splunk_sourcetype
   load_balancers = [{
-    target_group_arn = module.www_origin.origin_target_group_arn
+    target_group_arn = aws_lb_target_group.router.arn
     container_port   = 80
   }]
   aws_region         = data.aws_region.current.name
@@ -156,7 +156,7 @@ module "draft_router" {
   splunk_index            = local.defaults.splunk_index
   splunk_sourcetype       = local.defaults.splunk_sourcetype
   load_balancers = [{
-    target_group_arn = module.draft_origin.origin_target_group_arn
+    target_group_arn = aws_lb_target_group.draft_router.arn
     container_port   = 80
   }]
   aws_region         = data.aws_region.current.name

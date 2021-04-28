@@ -4,7 +4,7 @@ locals {
   workspace_external_domain = "${local.workspace}.${var.external_app_domain}"
   workspace_internal_domain = "${local.workspace}.${var.internal_app_domain}"
   mesh_domain               = "mesh.${local.workspace_internal_domain}"
-  public_entry_url          = terraform.workspace == "default" ? "https://www.ecs.${var.publishing_service_domain}" : "https://${module.www_origin.fqdn}"
+  public_entry_url          = terraform.workspace == "default" ? "https://www.ecs.${var.publishing_service_domain}" : "https://${module.www_frontends_origin.fqdn}"
   defaults = {
     environment_variables = {
       DEFAULT_TTL               = 1800,
@@ -22,20 +22,20 @@ locals {
       # SENTRY_DSN      = data.aws_secretsmanager_secret.sentry_dsn.arn,
       GA_UNIVERSAL_ID = data.aws_secretsmanager_secret.ga_universal_id.arn,
     }
-    asset_root_url          = "https://assets.${var.publishing_service_domain}",
-    assets_www_origin       = local.public_entry_url,
-    assets_draft_origin     = "https://${module.draft_origin.fqdn}"
-    content_store_uri       = "http://content-store.${local.mesh_domain}",
-    draft_content_store_uri = "http://draft-content-store.${local.mesh_domain}",
-    draft_origin_uri        = "https://draft-frontend.${local.workspace_external_domain}",
-    draft_static_uri        = "http://draft-static.${local.mesh_domain}"
-    publishing_api_uri      = "http://publishing-api-web.${local.mesh_domain}",
-    rabbitmq_hosts          = "rabbitmq.${var.internal_app_domain}" # TODO: Make workspace-aware
-    router_api_uri          = "http://router-api.${local.mesh_domain}",
-    draft_router_api_uri    = "http://draft-router-api.${local.mesh_domain}",
-    signon_uri              = "https://signon.${local.workspace_external_domain}",
-    static_uri              = "http://static.${local.mesh_domain}",
-    website_root            = local.public_entry_url,
+    asset_root_url                = "https://assets.${var.publishing_service_domain}",
+    assets_www_frontends_origin   = local.public_entry_url,
+    assets_draft_frontends_origin = "https://${module.draft_frontends_origin.fqdn}"
+    content_store_uri             = "http://content-store.${local.mesh_domain}",
+    draft_content_store_uri       = "http://draft-content-store.${local.mesh_domain}",
+    draft_frontends_origin_uri    = "https://draft-frontend.${local.workspace_external_domain}",
+    draft_static_uri              = "http://draft-static.${local.mesh_domain}"
+    publishing_api_uri            = "http://publishing-api-web.${local.mesh_domain}",
+    rabbitmq_hosts                = "rabbitmq.${var.internal_app_domain}" # TODO: Make workspace-aware
+    router_api_uri                = "http://router-api.${local.mesh_domain}",
+    draft_router_api_uri          = "http://draft-router-api.${local.mesh_domain}",
+    signon_uri                    = "https://signon.${local.workspace_external_domain}",
+    static_uri                    = "http://static.${local.mesh_domain}",
+    website_root                  = local.public_entry_url,
 
     virtual_service_backends = [
       module.statsd.virtual_service_name

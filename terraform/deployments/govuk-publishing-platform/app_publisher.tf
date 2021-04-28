@@ -32,11 +32,10 @@ locals {
         PLEK_SERVICE_SIGNON_URI         = local.defaults.signon_uri
         PLEK_SERVICE_STATIC_URI         = local.defaults.static_uri
         # TODO: remove PLEK_SERVICE_DRAFT_ORIGIN_URI once we have the draft origin properly set up with multiple frontends
-        PLEK_SERVICE_DRAFT_ORIGIN_URI = local.defaults.draft_origin_uri
-        # TODO: temporary hack
-        RAILS_SERVE_STATIC_FILES = "true"
-        REDIS_URL                = module.shared_redis_cluster.uri
-        WEBSITE_ROOT             = local.defaults.website_root
+        PLEK_SERVICE_DRAFT_ORIGIN_URI = local.defaults.draft_frontends_origin_uri
+        ASSETS_PREFIX                 = "/assets/publisher"
+        REDIS_URL                     = module.shared_redis_cluster.uri
+        WEBSITE_ROOT                  = local.defaults.website_root
       }
     )
 
@@ -84,7 +83,7 @@ module "publisher_web" {
     aws_security_group.mesh_ecs_service.id
   ]
   load_balancers = [{
-    target_group_arn = module.publisher_public_alb.target_group_arn
+    target_group_arn = aws_lb_target_group.publisher.arn
     container_port   = 80
   }]
   command                 = ["foreman", "run", "web"]
@@ -99,34 +98,6 @@ module "publisher_web" {
   memory                  = local.publisher_defaults.memory
   task_role_arn           = aws_iam_role.task.arn
   execution_role_arn      = aws_iam_role.execution.arn
-}
-
-#
-# Internet-facing load balancer
-#
-
-module "publisher_public_alb" {
-  source = "../../modules/public-load-balancer"
-
-  app_name                  = local.publisher_app_name
-  vpc_id                    = local.vpc_id
-  public_zone_id            = aws_route53_zone.workspace_public.zone_id
-  dns_a_record_name         = "publisher"
-  public_subnets            = local.public_subnets
-  external_app_domain       = local.workspace_external_domain
-  certificate               = aws_acm_certificate_validation.workspace_public.certificate_arn
-  publishing_service_domain = var.publishing_service_domain
-  workspace                 = local.workspace
-  service_security_group_id = module.publisher_web.security_group_id
-  allowlist_cidrs           = var.office_cidrs_list
-}
-
-module "publisher_alb_ip_restriction_rules" {
-  source                   = "../../modules/alb-listener-ip-restriction-rules"
-  restricted_path_patterns = ["/healthcheck"]
-  fully_trusted_source_ips = concat(var.office_cidrs_list, local.vpc_public_cidr_blocks)
-  aws_lb_listener_arn      = module.publisher_public_alb.aws_lb_listener_arn
-  aws_lb_target_group_arn  = module.publisher_public_alb.aws_lb_target_group_arn
 }
 
 #

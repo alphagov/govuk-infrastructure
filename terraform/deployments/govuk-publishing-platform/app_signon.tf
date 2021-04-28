@@ -8,11 +8,11 @@ locals {
     environment_variables = merge(
       local.defaults.environment_variables,
       {
-        GOVUK_APP_NAME           = "signon"
-        GOVUK_APP_ROOT           = "/app"
-        GOVUK_STATSD_PREFIX      = "govuk-ecs.app.signon"
-        RAILS_SERVE_STATIC_FILES = "true"
-        REDIS_URL                = module.shared_redis_cluster.uri
+        GOVUK_APP_NAME      = "signon"
+        GOVUK_APP_ROOT      = "/app"
+        GOVUK_STATSD_PREFIX = "govuk-ecs.app.signon"
+        ASSETS_PREFIX       = "/assets/signon"
+        REDIS_URL           = module.shared_redis_cluster.uri
       }
     )
 
@@ -45,7 +45,7 @@ module "signon" {
   desired_count                    = var.signon_desired_count
   extra_security_groups            = [local.govuk_management_access_security_group, aws_security_group.mesh_ecs_service.id]
   load_balancers = [{
-    target_group_arn = module.signon_public_alb.target_group_arn
+    target_group_arn = aws_lb_target_group.signon.arn
     container_port   = 80
   }]
   environment_variables   = local.signon_defaults.environment_variables
@@ -59,27 +59,4 @@ module "signon" {
   memory                  = 1024
   task_role_arn           = aws_iam_role.task.arn
   execution_role_arn      = aws_iam_role.execution.arn
-}
-
-module "signon_public_alb" {
-  source = "../../modules/public-load-balancer"
-
-  app_name                  = "signon"
-  vpc_id                    = local.vpc_id
-  public_zone_id            = aws_route53_zone.workspace_public.zone_id
-  dns_a_record_name         = "signon"
-  public_subnets            = local.public_subnets
-  external_app_domain       = local.workspace_external_domain
-  certificate               = aws_acm_certificate_validation.workspace_public.certificate_arn
-  publishing_service_domain = var.publishing_service_domain
-  workspace                 = local.workspace
-  service_security_group_id = module.signon.security_group_id
-}
-
-module "signon_alb_ip_restriction_rules" {
-  source                   = "../../modules/alb-listener-ip-restriction-rules"
-  restricted_path_patterns = ["/healthcheck", "/api/*"]
-  fully_trusted_source_ips = concat(var.office_cidrs_list, local.vpc_public_cidr_blocks)
-  aws_lb_listener_arn      = module.signon_public_alb.aws_lb_listener_arn
-  aws_lb_target_group_arn  = module.signon_public_alb.aws_lb_target_group_arn
 }
