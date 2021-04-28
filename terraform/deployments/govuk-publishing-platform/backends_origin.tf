@@ -122,7 +122,7 @@ module "backends_origin" {
 ## Publisher
 
 resource "aws_lb_target_group" "publisher" {
-  name        = "backends-origin-publisher-${local.workspace}"
+  name        = "publisher-${local.workspace}"
   port        = 80
   protocol    = "HTTP"
   vpc_id      = local.vpc_id
@@ -174,7 +174,7 @@ resource "aws_route53_record" "publisher" {
 ## Signon
 
 resource "aws_lb_target_group" "signon" {
-  name        = "backends-origin-signon-${local.workspace}"
+  name        = "signon-${local.workspace}"
   port        = 80
   protocol    = "HTTP"
   vpc_id      = local.vpc_id

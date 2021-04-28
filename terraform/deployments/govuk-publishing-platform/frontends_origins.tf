@@ -74,7 +74,7 @@ module "www_frontends_origin" {
 }
 
 resource "aws_lb_target_group" "router" {
-  name        = "www-f-origin-router-${local.workspace}"
+  name        = "router-${local.workspace}"
   port        = 80
   protocol    = "HTTP"
   vpc_id      = local.vpc_id
@@ -136,7 +136,7 @@ module "draft_frontends_origin" {
 }
 
 resource "aws_lb_target_group" "draft_router" {
-  name        = "draft-f-origin-d-frontend-${local.workspace}"
+  name        = "draft-router-${local.workspace}"
   port        = 80
   protocol    = "HTTP"
   vpc_id      = local.vpc_id
