@@ -4,11 +4,11 @@ resource "aws_lb" "public" {
   load_balancer_type = "application"
   security_groups    = [aws_security_group.public_alb.id]
   subnets            = var.public_subnets
-  
+
   tags = merge(
     var.additional_tags,
     {
-      name      = "${var.app_name}-lb"
+      name = "${var.app_name}-lb"
     },
   )
 }
@@ -23,11 +23,11 @@ resource "aws_lb_target_group" "public" {
   health_check {
     path = var.health_check_path
   }
-  
+
   tags = merge(
     var.additional_tags,
     {
-      name      = "${var.app_name}-tg"
+      name = "${var.app_name}-tg"
     },
   )
 }

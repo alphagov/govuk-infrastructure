@@ -4,11 +4,11 @@ resource "aws_lb" "origin" {
   load_balancer_type = "application"
   security_groups    = [aws_security_group.origin_alb.id]
   subnets            = var.public_subnets
-  
+
   tags = merge(
     var.additional_tags,
     {
-      name           = "${var.name}-lb"
+      name = "${var.name}-lb"
     },
   )
 }

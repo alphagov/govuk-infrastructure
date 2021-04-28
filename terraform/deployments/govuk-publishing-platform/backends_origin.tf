@@ -135,7 +135,7 @@ resource "aws_lb_target_group" "publisher" {
   tags = merge(
     local.additional_tags,
     {
-      name = "backend-origin-publisher-tg"
+      name = "publisher-tg"
     },
   )
 }
@@ -187,7 +187,7 @@ resource "aws_lb_target_group" "signon" {
   tags = merge(
     local.additional_tags,
     {
-      name = "backend-origin-signon-tg"
+      name = "signon-tg"
     },
   )
 

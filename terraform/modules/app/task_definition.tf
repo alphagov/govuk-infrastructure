@@ -109,11 +109,11 @@ resource "aws_ecs_task_definition" "bootstrap" {
     container_name = "envoy"
     properties     = local.envoy_proxy_properties
   }
-  
+
   tags = merge(
     var.additional_tags,
     {
-      name      = local.family
+      name = local.family
     },
   )
 

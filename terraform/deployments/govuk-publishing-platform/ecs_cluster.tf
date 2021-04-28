@@ -15,7 +15,7 @@ resource "aws_ecs_cluster" "cluster" {
   tags = merge(
     local.additional_tags,
     {
-      name = "${local.workspace}-workspace-ecs"
+      name = "${local.workspace}-workspace-cluster"
     },
   )
 

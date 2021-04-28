@@ -2,11 +2,11 @@ resource "aws_security_group" "public_alb" {
   name        = "fargate_${var.app_name}_${var.workspace}_public_alb"
   vpc_id      = var.vpc_id
   description = "${var.app_name} Internet-facing ALB in govuk-${var.workspace} cluster"
-  
+
   tags = merge(
     var.additional_tags,
     {
-      name      = "${var.app_name}-sg"
+      name = "${var.app_name}-sg"
     },
   )
 }

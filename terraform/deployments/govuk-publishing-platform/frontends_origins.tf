@@ -87,7 +87,7 @@ resource "aws_lb_target_group" "router" {
   tags = merge(
     local.additional_tags,
     {
-      name = "frontend-origin-router-tg"
+      name = "router-tg"
     },
   )
 }
@@ -149,7 +149,7 @@ resource "aws_lb_target_group" "draft_router" {
   tags = merge(
     local.additional_tags,
     {
-      name = "frontend-origin-draft-router-tg"
+      name = "draft-router-tg"
     },
   )
 }
