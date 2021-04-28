@@ -58,7 +58,7 @@ module "www_frontends_origin" {
   public_zone_id                       = aws_route53_zone.workspace_public.zone_id
   external_app_domain                  = aws_route53_zone.workspace_public.name
   subdomain                            = "www-origin"
-  extra_aliases                        = local.is_default_workspace ? ["www.ecs.${var.publishing_service_domain}"] : []
+  extra_aliases                        = local.is_default_workspace ? ["www.${local.workspace}.${var.publishing_service_domain}"] : []
   load_balancer_certificate_arn        = aws_acm_certificate_validation.workspace_public.certificate_arn
   cloudfront_certificate_arn           = aws_acm_certificate_validation.public_north_virginia.certificate_arn
   publishing_service_domain            = var.publishing_service_domain
