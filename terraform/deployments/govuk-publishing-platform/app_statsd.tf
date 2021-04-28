@@ -34,4 +34,5 @@ module "statsd" {
   splunk_token_secret_arn          = local.defaults.splunk_token_secret_arn
   splunk_index                     = local.defaults.splunk_index
   splunk_sourcetype                = local.defaults.splunk_sourcetype
+  additional_tags                  = local.additional_tags
 }

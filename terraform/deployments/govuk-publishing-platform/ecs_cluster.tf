@@ -11,6 +11,14 @@ resource "aws_ecs_cluster" "cluster" {
     name  = "containerInsights"
     value = "enabled"
   }
+
+  tags = merge(
+    local.additional_tags,
+    {
+      name = "${local.workspace}-workspace-ecs"
+    },
+  )
+
 }
 
 resource "aws_appmesh_mesh" "govuk" {
@@ -21,6 +29,14 @@ resource "aws_appmesh_mesh" "govuk" {
       type = "ALLOW_ALL"
     }
   }
+
+  tags = merge(
+    local.additional_tags,
+    {
+      name = "${local.workspace}-workspace-mesh"
+    },
+  )
+
 }
 
 resource "aws_service_discovery_private_dns_namespace" "govuk_publishing_platform" {

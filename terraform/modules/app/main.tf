@@ -53,6 +53,13 @@ resource "aws_ecs_service" "service" {
     # If this is removed, the bootstrapping image will be deployed.
     ignore_changes = [task_definition]
   }
+  
+  tags = merge(
+    var.additional_tags,
+    {
+      name      = var.service_name
+    },
+  )
 }
 
 module "service_mesh_node" {

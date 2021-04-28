@@ -22,3 +22,13 @@ variable "vpc_id" {
 variable "internal_private_zone_id" {
   type = string
 }
+
+variable "workspace" {
+  type = string
+}
+
+variable "additional_tags" {
+  default     = {}
+  description = "Additional resource tags"
+  type        = map(string)
+}

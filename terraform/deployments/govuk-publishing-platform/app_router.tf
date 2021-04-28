@@ -95,6 +95,7 @@ module "router" {
   memory             = local.router_defaults.memory
   task_role_arn      = aws_iam_role.task.arn
   execution_role_arn = aws_iam_role.execution.arn
+  additional_tags    = local.additional_tags
 }
 
 module "draft_router" {
@@ -164,4 +165,5 @@ module "draft_router" {
   memory             = local.router_defaults.memory
   task_role_arn      = aws_iam_role.task.arn
   execution_role_arn = aws_iam_role.execution.arn
+  additional_tags    = local.additional_tags
 }

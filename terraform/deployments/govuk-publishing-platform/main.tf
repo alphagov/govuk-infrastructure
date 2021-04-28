@@ -60,3 +60,16 @@ locals {
   routerdb_security_group_id   = data.terraform_remote_state.infra_security_groups.outputs.sg_router-backend_id
   log_group                    = terraform.workspace == "default" ? "govuk" : "govuk-${terraform.workspace}"
 }
+
+locals {
+  additional_tags = {
+    chargeable_entity    = "govuk-publishing-platform-${terraform.workspace}"
+    environment          = var.govuk_environment
+    managed_by           = "govuk-replatforming-team@digital.cabinet-office.gov.uk"
+    project              = "replatforming"
+    repository           = "govuk-infrastructure"
+    team                 = "govuk-replatforming"
+    terraform_deployment = "govuk-publishing-platform"
+    terraform_workspace  = terraform.workspace
+  }
+}

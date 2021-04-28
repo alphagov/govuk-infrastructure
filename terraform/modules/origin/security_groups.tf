@@ -2,6 +2,13 @@ resource "aws_security_group" "origin_alb" {
   name        = "fargate_${var.name}_origin_${var.workspace}_alb"
   vpc_id      = var.vpc_id
   description = "${var.name}-origin Internet-facing ALB in govuk-${var.workspace} cluster"
+  
+  tags = merge(
+    var.additional_tags,
+    {
+      name      = "${var.name}-sg"
+    },
+  )
 }
 
 # TODO: Move rules to deployments/govuk-publishing-platform/security_group_rules

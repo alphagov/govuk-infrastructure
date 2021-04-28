@@ -19,6 +19,14 @@ resource "aws_secretsmanager_secret" "bearer_token" {
   # deletion). Cannot delete and apply Terraform without this:
   # https://github.com/hashicorp/terraform-provider-aws/issues/5127
   recovery_window_in_days = 0
+  
+  tags = merge(
+    var.additional_tags,
+    {
+      name      = "${var.workspace}-workspace-bearer_token"
+    },
+  )
+
 }
 
 resource "aws_secretsmanager_secret_rotation" "bearer_token" {
@@ -28,4 +36,6 @@ resource "aws_secretsmanager_secret_rotation" "bearer_token" {
   rotation_rules {
     automatically_after_days = 30
   }
+ 
+  
 }

@@ -70,6 +70,7 @@ module "www_frontends_origin" {
   fronted_apps = {
     "router" = { security_group_id = module.router.security_group_id },
   }
+  additional_tags = local.additional_tags
 }
 
 resource "aws_lb_target_group" "router" {
@@ -82,6 +83,13 @@ resource "aws_lb_target_group" "router" {
   health_check {
     path = "/"
   }
+
+  tags = merge(
+    local.additional_tags,
+    {
+      name = "frontend-origin-router-tg"
+    },
+  )
 }
 
 resource "aws_lb_listener_rule" "router" {
@@ -124,6 +132,7 @@ module "draft_frontends_origin" {
   fronted_apps = {
     "draft-router" = { security_group_id = module.draft_router.security_group_id },
   }
+  additional_tags = local.additional_tags
 }
 
 resource "aws_lb_target_group" "draft_router" {
@@ -136,6 +145,13 @@ resource "aws_lb_target_group" "draft_router" {
   health_check {
     path = "/"
   }
+
+  tags = merge(
+    local.additional_tags,
+    {
+      name = "frontend-origin-draft-router-tg"
+    },
+  )
 }
 
 resource "aws_lb_listener_rule" "draft_router" {
