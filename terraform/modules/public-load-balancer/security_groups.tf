@@ -6,7 +6,7 @@ resource "aws_security_group" "public_alb" {
   tags = merge(
     var.additional_tags,
     {
-      name = "${var.app_name}-sg"
+      Name = "${var.app_name}-${var.environment}-sg"
     },
   )
 }

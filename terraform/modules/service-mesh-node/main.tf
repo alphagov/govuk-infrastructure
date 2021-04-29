@@ -25,7 +25,7 @@ resource "aws_appmesh_virtual_service" "service" {
   tags = merge(
     var.additional_tags,
     {
-      name = "${var.service_name}.${var.service_discovery_namespace_name}"
+      Name = "${var.service_name}-${var.environment}-${var.service_discovery_namespace_name}"
     },
   )
 
@@ -71,7 +71,7 @@ resource "aws_appmesh_virtual_node" "service" {
   tags = merge(
     var.additional_tags,
     {
-      name = var.service_name
+      Name = "${var.service_name}-${var.environment}"
     },
   )
 

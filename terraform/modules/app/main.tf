@@ -57,7 +57,7 @@ resource "aws_ecs_service" "service" {
   tags = merge(
     var.additional_tags,
     {
-      name = var.service_name
+      Name = "${var.service_name}-${var.environment}"
     },
   )
 }
@@ -71,10 +71,18 @@ module "service_mesh_node" {
   service_discovery_namespace_id   = var.service_discovery_namespace_id
   service_discovery_namespace_name = var.service_discovery_namespace_name
   service_name                     = var.service_name
+  environment                      = var.environment
 }
 
 resource "aws_security_group" "service" {
   name        = "fargate_${var.service_name}-${terraform.workspace}"
   vpc_id      = var.vpc_id
   description = "${var.service_name} app ECS tasks"
+
+  tags = merge(
+    var.additional_tags,
+    {
+      Name = "${var.service_name}-${var.environment}-sg"
+    },
+  )
 }

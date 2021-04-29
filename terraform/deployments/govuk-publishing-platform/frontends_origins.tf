@@ -71,6 +71,7 @@ module "www_frontends_origin" {
     "router" = { security_group_id = module.router.security_group_id },
   }
   additional_tags = local.additional_tags
+  environment     = var.govuk_environment
 }
 
 resource "aws_lb_target_group" "router" {
@@ -87,7 +88,7 @@ resource "aws_lb_target_group" "router" {
   tags = merge(
     local.additional_tags,
     {
-      name = "router-tg"
+      Name = "router-${var.govuk_environment}-tg"
     },
   )
 }
@@ -133,6 +134,7 @@ module "draft_frontends_origin" {
     "draft-router" = { security_group_id = module.draft_router.security_group_id },
   }
   additional_tags = local.additional_tags
+  environment     = var.govuk_environment
 }
 
 resource "aws_lb_target_group" "draft_router" {
@@ -149,7 +151,7 @@ resource "aws_lb_target_group" "draft_router" {
   tags = merge(
     local.additional_tags,
     {
-      name = "draft-router-tg"
+      Name = "draft-router-${var.govuk_environment}-tg"
     },
   )
 }

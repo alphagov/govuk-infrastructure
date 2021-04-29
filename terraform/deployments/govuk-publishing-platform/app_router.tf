@@ -96,6 +96,7 @@ module "router" {
   task_role_arn      = aws_iam_role.task.arn
   execution_role_arn = aws_iam_role.execution.arn
   additional_tags    = local.additional_tags
+  environment        = var.govuk_environment
 }
 
 module "draft_router" {
@@ -166,4 +167,5 @@ module "draft_router" {
   task_role_arn      = aws_iam_role.task.arn
   execution_role_arn = aws_iam_role.execution.arn
   additional_tags    = local.additional_tags
+  environment        = var.govuk_environment
 }

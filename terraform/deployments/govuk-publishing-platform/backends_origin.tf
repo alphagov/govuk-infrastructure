@@ -117,6 +117,7 @@ module "backends_origin" {
     "signon"    = { security_group_id = module.signon.security_group_id },
   }
   additional_tags = local.additional_tags
+  environment     = var.govuk_environment
 }
 
 ## Publisher
@@ -135,7 +136,7 @@ resource "aws_lb_target_group" "publisher" {
   tags = merge(
     local.additional_tags,
     {
-      name = "publisher-tg"
+      Name = "publisher-${var.govuk_environment}-tg"
     },
   )
 }
@@ -187,7 +188,7 @@ resource "aws_lb_target_group" "signon" {
   tags = merge(
     local.additional_tags,
     {
-      name = "signon-tg"
+      Name = "signon-${var.govuk_environment}-tg"
     },
   )
 

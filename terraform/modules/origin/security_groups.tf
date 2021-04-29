@@ -6,7 +6,7 @@ resource "aws_security_group" "origin_alb" {
   tags = merge(
     var.additional_tags,
     {
-      name = "${var.name}-sg"
+      Name = "${var.name}-${var.environment}-sg"
     },
   )
 }

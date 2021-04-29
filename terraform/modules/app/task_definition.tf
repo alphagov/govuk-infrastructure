@@ -113,7 +113,7 @@ resource "aws_ecs_task_definition" "bootstrap" {
   tags = merge(
     var.additional_tags,
     {
-      name = local.family
+      Name = "${local.family}-${var.environment}"
     },
   )
 

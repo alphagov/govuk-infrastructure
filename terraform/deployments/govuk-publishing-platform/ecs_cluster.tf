@@ -15,7 +15,7 @@ resource "aws_ecs_cluster" "cluster" {
   tags = merge(
     local.additional_tags,
     {
-      name = "${local.workspace}-workspace-cluster"
+      Name = "${local.workspace}-workspace-${var.govuk_environment}-cluster"
     },
   )
 
@@ -33,7 +33,7 @@ resource "aws_appmesh_mesh" "govuk" {
   tags = merge(
     local.additional_tags,
     {
-      name = "${local.workspace}-workspace-mesh"
+      Name = "${local.workspace}-workspace-${var.govuk_environment}-mesh"
     },
   )
 

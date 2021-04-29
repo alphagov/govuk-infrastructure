@@ -13,7 +13,7 @@ resource "aws_acm_certificate" "public_north_virginia" {
   tags = merge(
     local.additional_tags,
     {
-      Name = "${local.workspace}-workspace-acm"
+      Name = "${local.workspace_external_domain}-${var.govuk_environment}-acm"
     },
   )
 }

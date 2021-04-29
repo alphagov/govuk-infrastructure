@@ -23,7 +23,7 @@ resource "aws_secretsmanager_secret" "bearer_token" {
   tags = merge(
     var.additional_tags,
     {
-      name = "${var.workspace}-workspace-signon-bearer-token"
+      Name = "${var.workspace}-${var.environment}-workspace-signon-bearer-token"
     },
   )
 

@@ -8,7 +8,7 @@ resource "aws_lb" "public" {
   tags = merge(
     var.additional_tags,
     {
-      name = "${var.app_name}-lb"
+      Name = "${var.app_name}-${var.environment}-lb"
     },
   )
 }
@@ -27,7 +27,7 @@ resource "aws_lb_target_group" "public" {
   tags = merge(
     var.additional_tags,
     {
-      name = "${var.app_name}-tg"
+      Name = "${var.app_name}-${var.environment}-tg"
     },
   )
 }

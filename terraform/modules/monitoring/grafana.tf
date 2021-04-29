@@ -29,6 +29,7 @@ module "grafana_app" {
   port                    = 3000
   task_role_arn           = aws_iam_role.monitoring_execution.arn # TODO - use a separate role for this?
   execution_role_arn      = aws_iam_role.monitoring_execution.arn
+  environment             = var.environment
 }
 
 data "aws_acm_certificate" "public_lb_alternate" {
@@ -56,4 +57,5 @@ module "grafana_public_alb" {
   health_check_path         = "/api/health"
   target_port               = 3000
   allowlist_cidrs           = var.grafana_cidrs_allow_list
+  environment               = var.environment
 }

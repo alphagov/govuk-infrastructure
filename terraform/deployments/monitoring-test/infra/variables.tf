@@ -31,3 +31,8 @@ variable "publishing_service_domain" {
   type        = string
   description = "e.g. test.publishing.service.gov.uk"
 }
+
+variable "govuk_environment" {
+  type        = string
+  description = "The name of the environment (for example test, integration, staging or production)"
+}

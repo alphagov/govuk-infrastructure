@@ -8,7 +8,7 @@ resource "aws_security_group" "mesh_ecs_service" {
   tags = merge(
     local.additional_tags,
     {
-      name = "mesh-ecs-service-sg"
+      Name = "mesh-ecs-service-${var.govuk_environment}-sg"
     },
   )
 }
@@ -21,7 +21,7 @@ resource "aws_security_group" "smokey" {
   tags = merge(
     local.additional_tags,
     {
-      name = "ecs-fargate-smokey-sg"
+      Name = "ecs-fargate-smokey-${var.govuk_environment}-sg"
     },
   )
 }

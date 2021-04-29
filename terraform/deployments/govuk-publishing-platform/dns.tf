@@ -38,6 +38,12 @@ resource "aws_acm_certificate" "workspace_public" {
   lifecycle {
     create_before_destroy = true
   }
+  tags = merge(
+    local.additional_tags,
+    {
+      Name = "${local.workspace_external_domain}-${var.govuk_environment}-acm"
+    },
+  )
 }
 
 resource "aws_route53_record" "workspace_public" {

@@ -12,4 +12,5 @@ module "shared_redis_cluster" {
   subnet_ids               = local.redis_subnets
   workspace                = local.workspace
   additional_tags          = local.additional_tags
+  environment              = var.govuk_environment
 }

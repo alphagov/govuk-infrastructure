@@ -35,4 +35,5 @@ module "statsd" {
   splunk_index                     = local.defaults.splunk_index
   splunk_sourcetype                = local.defaults.splunk_sourcetype
   additional_tags                  = local.additional_tags
+  environment                      = var.govuk_environment
 }
