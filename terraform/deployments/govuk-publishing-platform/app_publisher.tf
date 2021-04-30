@@ -115,6 +115,7 @@ module "publisher_worker" {
     local.govuk_management_access_security_group,
     aws_security_group.mesh_ecs_service.id
   ]
+  container_healthcheck_command    = ["/bin/sh", "-c", "exit 0"]
   environment_variables            = local.publisher_defaults.environment_variables
   mesh_name                        = aws_appmesh_mesh.govuk.id
   subnets                          = local.private_subnets
