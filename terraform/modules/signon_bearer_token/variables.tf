@@ -1,7 +1,7 @@
 # TODO: Create user for each workspace, use unique ID
 variable "api_user_email" {
   type        = string
-  description = "Workspace-aware email address for a Signon OAuth application resourcee, e.g. publisher@digital.cabinet-office.gov.uk"
+  description = "Workspace-aware email address for a Signon OAuth application resourcee, e.g. publisher@test.govuk.digital"
 }
 
 # TODO: We should acquire the unique ID for an application when we create it

@@ -551,6 +551,8 @@ jobs:
     - in_parallel:
       - get: govuk-infrastructure
         resource: govuk-infrastructure-concourse-tasks
+        passed:
+        - deploy-signon
         trigger: true
       - get: app-terraform-outputs
         resource: frontend-terraform-outputs
@@ -645,6 +647,8 @@ jobs:
     - in_parallel:
       - get: govuk-infrastructure
         resource: govuk-infrastructure-concourse-tasks
+        passed:
+        - deploy-signon
         trigger: true
       - get: app-terraform-outputs
         resource: publisher-terraform-outputs
@@ -725,6 +729,8 @@ jobs:
     - in_parallel:
       - get: govuk-infrastructure
         resource: govuk-infrastructure-concourse-tasks
+        passed:
+        - deploy-signon
         trigger: true
       - get: app-terraform-outputs
         resource: publishing-api-terraform-outputs
@@ -776,7 +782,7 @@ jobs:
           ECS_SERVICE: publishing-api-worker
           WORKSPACE: ((workspace))
         input_mapping:
-            task-definition-arn: worker-task-definition-arn
+          task-definition-arn: worker-task-definition-arn
     - in_parallel:
       - <<: *await-deploy-complete
         task: await-deploy-complete-web
@@ -797,6 +803,8 @@ jobs:
     - in_parallel:
       - get: govuk-infrastructure
         resource: govuk-infrastructure-concourse-tasks
+        passed:
+        - deploy-signon
         trigger: true
       - get: app-terraform-outputs
         resource: content-store-terraform-outputs
@@ -921,6 +929,8 @@ jobs:
     - in_parallel:
       - get: govuk-infrastructure
         resource: govuk-infrastructure-concourse-tasks
+        passed:
+        - deploy-signon
         trigger: true
       - get: app-terraform-outputs
         resource: router-api-terraform-outputs
