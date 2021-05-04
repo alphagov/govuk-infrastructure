@@ -1,0 +1,31 @@
+platform: linux
+image_resource:
+  type: docker-image
+  source:
+    repository: hashicorp/terraform
+    tag: 0.14.6
+    username: ((docker_hub_username))
+    password: ((docker_hub_authtoken))
+inputs:
+  - name: govuk-infrastructure
+    path: src
+outputs:
+  - name: run-task-command
+params:
+  ASSUME_ROLE_ARN: 'arn:aws:iam::430354129336:role/govuk-concourse-deployer'
+  AWS_REGION: eu-west-1
+  WORKSPACE:
+run:
+  path: sh
+  args:
+    - '-c'
+    - |
+      set -eu
+
+      root_dir=$(pwd)
+      DEPLOY_DIR="src/terraform/deployments/govuk-publishing-platform"
+      cd ${DEPLOY_DIR}
+      terraform init -backend-config="role_arn=$ASSUME_ROLE_ARN"
+      terraform workspace select "$WORKSPACE"
+
+      terraform output -raw signon_bootstrap_command > "$root_dir/run-task-command/run-task-command"

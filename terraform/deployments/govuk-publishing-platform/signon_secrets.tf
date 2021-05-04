@@ -20,6 +20,8 @@ resource "random_password" "signon_admin_password" {
 #
 
 locals {
+  signon_api_url = "signon.${local.workspace}.${var.govuk_environment}.govuk.digital/api/v1"
+
   api_user_prefix = terraform.workspace == "default" ? null : local.workspace
   signon_app = {
     content_store       = "Content Store"
