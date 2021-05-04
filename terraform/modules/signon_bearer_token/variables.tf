@@ -1,7 +1,7 @@
 # TODO: Create user for each workspace, use unique ID
 variable "api_user_email" {
   type        = string
-  description = "Workspace-aware email address for a Signon OAuth application resourcee, e.g. publisher@alphagov.co.uk"
+  description = "Workspace-aware email address for a Signon OAuth application resourcee, e.g. publisher@digital.cabinet-office.gov.uk"
 }
 
 # TODO: We should acquire the unique ID for an application when we create it
@@ -15,6 +15,11 @@ variable "name" {
   type = string
 }
 
+variable "private_subnets" {
+  type        = list(string)
+  description = "Private subnets for VPC"
+}
+
 variable "signon_admin_password_arn" {
   type        = string
   description = "ARN of the SecretsManager Secret holding the Signon admin password for the cluster"
@@ -23,6 +28,10 @@ variable "signon_admin_password_arn" {
 variable "signon_host" {
   type        = string
   description = "Workspace-aware public hostname for signon app e.g. signon.ecs.test.govuk.digital"
+}
+
+variable "signon_lambda_security_group_id" {
+  type = string
 }
 
 variable "workspace" {

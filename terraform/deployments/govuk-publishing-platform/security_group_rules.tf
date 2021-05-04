@@ -530,6 +530,26 @@ resource "aws_security_group_rule" "signon_to_any_any" {
   security_group_id = module.signon.security_group_id
 }
 
+resource "aws_security_group_rule" "signon_from_rotation_lambda_http" {
+  description              = "Signon receives requests from Rotation Lambdas over HTTP"
+  type                     = "ingress"
+  from_port                = 80
+  to_port                  = 80
+  protocol                 = "tcp"
+  security_group_id        = module.signon.security_group_id
+  source_security_group_id = aws_security_group.signon_lambda.id
+}
+
+resource "aws_security_group_rule" "rotation_lambda_to_any_any" {
+  description       = "Signon rotation lambdas send requests to anywhere over any protocol"
+  type              = "egress"
+  from_port         = 0
+  to_port           = 0
+  protocol          = -1
+  cidr_blocks       = ["0.0.0.0/0"]
+  security_group_id = aws_security_group.signon_lambda.id
+}
+
 #
 # Smoke tests
 #
