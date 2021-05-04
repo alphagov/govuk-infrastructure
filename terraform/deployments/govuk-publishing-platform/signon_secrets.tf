@@ -32,11 +32,11 @@ locals {
     router_api          = "Router API"
   }
   signon_api_user = {
-    content_store       = join("-", compact([local.api_user_prefix, "content-store@alphagov.co.uk"]))
-    draft_content_store = join("-", compact([local.api_user_prefix, "draft-content-store@alphagov.co.uk"]))
-    frontend            = join("-", compact([local.api_user_prefix, "frontend@alphagov.co.uk"]))
-    publisher           = join("-", compact([local.api_user_prefix, "publisher@alphagov.co.uk"]))
-    publishing_api      = join("-", compact([local.api_user_prefix, "publishing-api@alphagov.co.uk"]))
+    content_store       = join("-", compact([local.api_user_prefix, "content-store@${var.publishing_service_domain}"]))
+    draft_content_store = join("-", compact([local.api_user_prefix, "draft-content-store@${var.publishing_service_domain}"]))
+    frontend            = join("-", compact([local.api_user_prefix, "frontend@${var.publishing_service_domain}"]))
+    publisher           = join("-", compact([local.api_user_prefix, "publisher@${var.publishing_service_domain}"]))
+    publishing_api      = join("-", compact([local.api_user_prefix, "publishing-api@${var.publishing_service_domain}"]))
   }
 }
 
