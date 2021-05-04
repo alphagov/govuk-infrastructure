@@ -251,8 +251,8 @@ resource "aws_security_group_rule" "postgres_from_publishing_api_5432" {
 # Publisher
 #
 
-resource "aws_security_group_rule" "publisher_to_any_any" {
-  description       = "Publisher sends requests to anywhere over any protocol"
+resource "aws_security_group_rule" "publisher_web_to_any_any" {
+  description       = "Publisher web sends requests to anywhere over any protocol"
   type              = "egress"
   from_port         = 0
   to_port           = 0
@@ -261,9 +261,39 @@ resource "aws_security_group_rule" "publisher_to_any_any" {
   security_group_id = module.publisher_web.security_group_id
 }
 
+resource "aws_security_group_rule" "publisher_worker_to_any_any" {
+  description       = "Publisher worker sends requests to anywhere over any protocol"
+  type              = "egress"
+  from_port         = 0
+  to_port           = 0
+  protocol          = -1
+  cidr_blocks       = ["0.0.0.0/0"]
+  security_group_id = module.publisher_worker.security_group_id
+}
+
 #
 # Publishing API
 #
+
+resource "aws_security_group_rule" "publishing_api_web_to_any_any" {
+  description       = "Publishing web sends requests to anywhere over any protocol"
+  type              = "egress"
+  from_port         = 0
+  to_port           = 0
+  protocol          = -1
+  cidr_blocks       = ["0.0.0.0/0"]
+  security_group_id = module.publishing_api_web.security_group_id
+}
+
+resource "aws_security_group_rule" "publishing_api_worker_to_any_any" {
+  description       = "Publishing worker sends requests to anywhere over any protocol"
+  type              = "egress"
+  from_port         = 0
+  to_port           = 0
+  protocol          = -1
+  cidr_blocks       = ["0.0.0.0/0"]
+  security_group_id = module.publishing_api_worker.security_group_id
+}
 
 resource "aws_security_group_rule" "publishing_api_from_publisher_http" {
   description = "Publishing API accepts requests from Publisher over HTTP"
@@ -291,7 +321,7 @@ resource "aws_security_group_rule" "publishing_api_from_frontend_http" {
 # Redis
 #
 
-resource "aws_security_group_rule" "redis_from_publisher_resp" {
+resource "aws_security_group_rule" "redis_from_publisher_web_resp" {
   type                     = "ingress"
   from_port                = 6379
   to_port                  = 6379
@@ -300,13 +330,40 @@ resource "aws_security_group_rule" "redis_from_publisher_resp" {
   source_security_group_id = module.publisher_web.security_group_id
 }
 
-resource "aws_security_group_rule" "redis_from_publishing_api_resp" {
+resource "aws_security_group_rule" "redis_from_publisher_worker_resp" {
+  type                     = "ingress"
+  from_port                = 6379
+  to_port                  = 6379
+  protocol                 = "tcp"
+  security_group_id        = module.shared_redis_cluster.security_group_id
+  source_security_group_id = module.publisher_worker.security_group_id
+}
+
+resource "aws_security_group_rule" "redis_from_publishing_api_web_resp" {
   type                     = "ingress"
   from_port                = 6379
   to_port                  = 6379
   protocol                 = "tcp"
   security_group_id        = module.shared_redis_cluster.security_group_id
   source_security_group_id = module.publishing_api_web.security_group_id
+}
+
+resource "aws_security_group_rule" "redis_from_publishing_api_worker_resp" {
+  type                     = "ingress"
+  from_port                = 6379
+  to_port                  = 6379
+  protocol                 = "tcp"
+  security_group_id        = module.shared_redis_cluster.security_group_id
+  source_security_group_id = module.publishing_api_worker.security_group_id
+}
+
+resource "aws_security_group_rule" "redis_from_signon_resp" {
+  type                     = "ingress"
+  from_port                = 6379
+  to_port                  = 6379
+  protocol                 = "tcp"
+  security_group_id        = module.shared_redis_cluster.security_group_id
+  source_security_group_id = module.signon.security_group_id
 }
 
 resource "aws_security_group_rule" "redis_to_any_any" {
@@ -317,15 +374,6 @@ resource "aws_security_group_rule" "redis_to_any_any" {
   protocol          = -1
   cidr_blocks       = ["0.0.0.0/0"]
   security_group_id = module.shared_redis_cluster.security_group_id
-}
-
-resource "aws_security_group_rule" "redis_from_signon_resp" {
-  type                     = "ingress"
-  from_port                = 6379
-  to_port                  = 6379
-  protocol                 = "tcp"
-  security_group_id        = module.shared_redis_cluster.security_group_id
-  source_security_group_id = module.signon.security_group_id
 }
 
 #
