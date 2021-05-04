@@ -16,40 +16,6 @@ resource "random_password" "signon_admin_password" {
 }
 
 #
-# Signon secrets
-#
-
-# TODO: Remove these once Signon PRs #1617 and #1623 are merged
-
-data "aws_secretsmanager_secret" "frontend_publishing_api_bearer_token" {
-  name = "frontend_app_PUBLISHING_API_BEARER_TOKEN" # pragma: allowlist secret
-}
-
-data "aws_secretsmanager_secret" "content_store_publishing_api_bearer_token" {
-  name = "content-store_PUBLISHING_API_BEARER_TOKEN" # pragma: allowlist secret
-}
-
-data "aws_secretsmanager_secret" "content_store_router_api_bearer_token" {
-  name = "content-store_ROUTER_API_BEARER_TOKEN" # pragma: allowlist secret
-}
-
-data "aws_secretsmanager_secret" "publisher_publishing_api_bearer_token" {
-  name = "publisher_app-PUBLISHING_API_BEARER_TOKEN" # pragma: allowlist secret
-}
-
-data "aws_secretsmanager_secret" "publishing_api_content_store_bearer_token" {
-  name = "publishing_api_app-CONTENT_STORE_BEARER_TOKEN" # pragma: allowlist secret
-}
-
-data "aws_secretsmanager_secret" "publishing_api_draft_content_store_bearer_token" {
-  name = "publishing_api_app-DRAFT_CONTENT_STORE_BEARER_TOKEN" # pragma: allowlist secret
-}
-
-data "aws_secretsmanager_secret" "publishing_api_router_api_bearer_token" {
-  name = "publishing_api_app-ROUTER_API_BEARER_TOKEN" # pragma: allowlist secret
-}
-
-#
 # Signon bearer tokens
 #
 
