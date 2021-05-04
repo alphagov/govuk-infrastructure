@@ -7,36 +7,42 @@ require "uri"
 class SignonClient
   ENDPOINT = ENV.fetch("SIGNON_API_URL")
 
-  def initialize(api_user:, auth_token:)
+  def initialize(api_user:, auth_token:, logger: Logger.new($stdout), max_retries: 9)
     @api_user = api_user
     @auth_token = auth_token
+    @max_retries = max_retries
+    @logger = logger
   end
 
   def create_bearer_token(application_name:, permissions:)
-    uri = URI("#{ENDPOINT}/authorisations")
-    req = Net::HTTP::Post.new(uri)
-    req.body = {
-      api_user_email: @api_user,
-      application_name: application_name,
-      permissions: permissions
-    }.to_json
-    res = do_request(req, uri)
-    raise TokenNotCreated, "Status: #{res.code}; #{res.message}; #{res.body}" unless %w[200 201].include?(res.code)
+    attempt do
+      uri = URI("#{ENDPOINT}/authorisations")
+      req = Net::HTTP::Post.new(uri)
+      req.body = {
+        api_user_email: @api_user,
+        application_name: application_name,
+        permissions: permissions,
+      }.to_json
+      res = do_request(req, uri)
+      raise TokenNotCreated, "Status: #{res.code}; #{res.message}; #{res.body}" unless %w[200 201].include?(res.code)
 
-    JSON.parse(res.body).fetch('token')
+      JSON.parse(res.body).fetch("token")
+    end
   end
 
   def test_bearer_token(token:, application_name:, permissions:)
-    uri = URI("#{ENDPOINT}/authorisations/test")
-    req = Net::HTTP::Post.new(uri)
-    req.body = {
-      token: token,
-      api_user_email: @api_user,
-      application_name: application_name,
-      permissions: permissions
-    }.to_json
-    res = do_request(req, uri)
-    raise TokenNotFound, "Status: #{res.code}; #{res.message}; #{res.body}" unless res.code == '200'
+    attempt do
+      uri = URI("#{ENDPOINT}/authorisations/test")
+      req = Net::HTTP::Post.new(uri)
+      req.body = {
+        token: token,
+        api_user_email: @api_user,
+        application_name: application_name,
+        permissions: permissions,
+      }.to_json
+      res = do_request(req, uri)
+      raise TokenNotFound, "Status: #{res.code}; #{res.message}; #{res.body}" unless res.code == "200"
+    end
   end
 
 private
@@ -44,6 +50,22 @@ private
   class TokenNotFound < StandardError; end
 
   class TokenNotCreated < StandardError; end
+
+  def attempt(&request)
+    retries ||= 0
+    begin
+      yield request
+    rescue TokenNotFound, TokenNotCreated
+      if (retries += 1) <= @max_retries
+        @logger.info "Rescued failed attempt. Attempts remaining: #{@max_retries - retries}."
+        sleep(2**retries)
+        retry
+      else
+        @logger.info "#{@max_retries} attempts failed. Bailing out."
+        raise
+      end
+    end
+  end
 
   def do_request(request, uri)
     request["Authorization"] = "Bearer #{@auth_token}"
