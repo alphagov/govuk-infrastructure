@@ -31,7 +31,6 @@ resources:
     source:
       <<: *git-repo-source
       uri: git@github.com:alphagov/publisher.git
-      branch: master
 
   - <<: *git-repo
     name: publishing-api-repo
@@ -52,21 +51,18 @@ resources:
     source:
       <<: *git-repo-source
       uri: git@github.com:alphagov/router-api.git
-      branch: master
 
   - <<: *git-repo
     name: signon-repo
     source:
       <<: *git-repo-source
       uri: git@github.com:alphagov/signon.git
-      branch: master
 
   - <<: *git-repo
     name: static-repo
     source:
       <<: *git-repo-source
       uri: git@github.com:alphagov/static.git
-      branch: master
 
   - <<: *git-repo
     name: authenticating-proxy-repo
