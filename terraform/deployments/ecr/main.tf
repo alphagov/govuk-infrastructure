@@ -32,6 +32,7 @@ locals {
     "smokey",
     "static",
     "statsd",
+    "authenticating-proxy",
   ]
 }
 

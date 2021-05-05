@@ -69,6 +69,12 @@ resources:
       branch: master
 
   - <<: *git-repo
+    name: authenticating-proxy-repo
+    source:
+      <<: *git-repo-source
+      uri: git@github.com:alphagov/authenticating-proxy.git
+
+  - <<: *git-repo
     name: govuk-infrastructure
     source:
       <<: *git-repo-source
@@ -143,6 +149,13 @@ resources:
       repository: static
       tag: latest
 
+  - <<: *docker-image
+    name: authenticating-proxy-image
+    source:
+      <<: *docker-image-source
+      repository: authenticating-proxy
+      tag: latest
+
   - &semver-version
     name: smokey-version
     type: semver
@@ -204,6 +217,12 @@ resources:
       <<: *semver-version-source
       key: static-version
 
+  - <<: *semver-version
+    name: authenticating-proxy-version
+    source:
+      <<: *semver-version-source
+      key: authenticating-proxy-version
+
 jobs:
   - name: update-pipeline
     plan:
@@ -243,7 +262,7 @@ jobs:
           file: smokey-version/version
 
   - name: content-store
-    plan: 
+    plan:
     - in_parallel:
       - get: content-store-repo
         trigger: true
@@ -273,7 +292,7 @@ jobs:
           file: content-store-version/version
 
   - name: frontend
-    plan: 
+    plan:
     - in_parallel:
       - get: frontend-repo
         trigger: true
@@ -303,7 +322,7 @@ jobs:
           file: frontend-version/version
 
   - name: publisher
-    plan: 
+    plan:
     - in_parallel:
       - get: publisher-repo
         trigger: true
@@ -333,7 +352,7 @@ jobs:
           file: publisher-version/version
 
   - name: publishing-api
-    plan: 
+    plan:
     - in_parallel:
       - get: publishing-api-repo
         trigger: true
@@ -363,7 +382,7 @@ jobs:
           file: publishing-api-version/version
 
   - name: router
-    plan: 
+    plan:
     - in_parallel:
       - get: router-repo
         trigger: true
@@ -393,7 +412,7 @@ jobs:
           file: router-version/version
 
   - name: router-api
-    plan: 
+    plan:
     - in_parallel:
       - get: router-api-repo
         trigger: true
@@ -423,7 +442,7 @@ jobs:
           file: router-api-version/version
 
   - name: signon
-    plan: 
+    plan:
     - in_parallel:
       - get: signon-repo
         trigger: true
@@ -453,7 +472,7 @@ jobs:
           file: signon-version/version
 
   - name: static
-    plan: 
+    plan:
     - in_parallel:
       - get: static-repo
         trigger: true
@@ -481,3 +500,33 @@ jobs:
       - put: static-version
         params:
           file: static-version/version
+
+  - name: authenticating-proxy
+    plan:
+    - in_parallel:
+      - get: authenticating-proxy-repo
+        trigger: true
+      - get: authenticating-proxy-version
+        params:
+          bump: minor
+          pre_without_version: true
+          pre: release
+      - get: govuk-infrastructure
+    - task: build-image
+      privileged: true
+      file: govuk-infrastructure/concourse/tasks/build-image-definition.yml
+      input_mapping:
+        git-repo: authenticating-proxy-repo
+    - put: authenticating-proxy-image
+      params:
+        image: image/image.tar
+        additional_tags: authenticating-proxy-version/version
+    - in_parallel:
+      - put: authenticating-proxy-repo
+        params:
+          only_tag: true
+          tag: authenticating-proxy-version/version
+          repository: authenticating-proxy-repo
+      - put: authenticating-proxy-version
+        params:
+          file: authenticating-proxy-version/version
