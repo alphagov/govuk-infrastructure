@@ -11,6 +11,14 @@ external_app_domain       = "test.govuk.digital"
 registry = "172025368201.dkr.ecr.eu-west-1.amazonaws.com"
 
 #--------------------------------------------------------------
+# App
+#--------------------------------------------------------------
+
+# Only specific config supported. See https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task_definition_parameters.html#task_size
+content_store_cpu    = 2048
+content_store_memory = 4096
+
+#--------------------------------------------------------------
 # Network
 #--------------------------------------------------------------
 

@@ -1,7 +1,7 @@
 locals {
   content_store_defaults = {
-    cpu    = 512  # TODO parameterize this
-    memory = 1024 # TODO parameterize this
+    cpu    = var.content_store_cpu
+    memory = var.content_store_memory
 
     backend_services = flatten([
       local.defaults.virtual_service_backends,
