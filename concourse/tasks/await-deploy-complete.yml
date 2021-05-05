@@ -6,10 +6,6 @@ image_resource:
     tag: latest # TODO - manage image versions ourselves instead of using latest
     username: ((docker_hub_username))
     password: ((docker_hub_authtoken))
-inputs:
-  - name: govuk-infrastructure
-    path: src
-  - name: task-definition-arn
 params:
   AWS_REGION: eu-west-1
   ASSUME_ROLE_ARN: 'arn:aws:iam::430354129336:role/govuk-concourse-deployer'
