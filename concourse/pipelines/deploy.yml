@@ -560,6 +560,20 @@ jobs:
         params:
          ECS_SERVICE: frontend
          WORKSPACE: ((workspace))
+    - in_parallel:
+      - &await-deploy-complete
+        task: await-deploy-complete-live
+        file: govuk-infrastructure/concourse/tasks/await-deploy-complete.yml
+        attempts: 4
+        timeout: 5m
+        params: &await-deploy-complete-params
+          ECS_SERVICE: frontend
+          WORKSPACE: ((workspace))
+      - <<: *await-deploy-complete
+        task: await-deploy-complete-draft
+        params:
+          <<: *await-deploy-complete-params
+          ECS_SERVICE: draft-frontend
     serial: true
     on_failure: &notify-slack-failure
       put: deploy-slack-channel
@@ -657,6 +671,17 @@ jobs:
         params:
           ECS_SERVICE: publisher-worker
           WORKSPACE: ((workspace))
+    - in_parallel:
+      - <<: *await-deploy-complete
+        task: await-deploy-complete-web
+        params:
+          <<: *await-deploy-complete-params
+          ECS_SERVICE: publisher-web
+      - <<: *await-deploy-complete
+        task: await-deploy-complete-worker
+        params:
+          <<: *await-deploy-complete-params
+          ECS_SERVICE: publisher-worker
     serial: true
     on_failure:
       <<: *notify-slack-failure
@@ -718,6 +743,17 @@ jobs:
           WORKSPACE: ((workspace))
         input_mapping:
             task-definition-arn: worker-task-definition-arn
+    - in_parallel:
+      - <<: *await-deploy-complete
+        task: await-deploy-complete-web
+        params:
+          <<: *await-deploy-complete-params
+          ECS_SERVICE: publishing-api-web
+      - <<: *await-deploy-complete
+        task: await-deploy-complete-worker
+        params:
+          <<: *await-deploy-complete-params
+          ECS_SERVICE: publishing-api-worker
     serial: true
     on_failure:
       <<: *notify-slack-failure
@@ -769,6 +805,17 @@ jobs:
         params:
           ECS_SERVICE: draft-content-store
           WORKSPACE: ((workspace))
+    - in_parallel:
+      - <<: *await-deploy-complete
+        task: await-deploy-complete-live
+        params:
+          <<: *await-deploy-complete-params
+          ECS_SERVICE: content-store
+      - <<: *await-deploy-complete
+        task: await-deploy-complete-draft
+        params:
+          <<: *await-deploy-complete-params
+          ECS_SERVICE: draft-content-store
     serial: true
     on_failure:
       <<: *notify-slack-failure
@@ -820,6 +867,17 @@ jobs:
         params:
           ECS_SERVICE: router
           WORKSPACE: ((workspace))
+    - in_parallel:
+      - <<: *await-deploy-complete
+        task: await-deploy-complete-draft
+        params:
+          <<: *await-deploy-complete-params
+          ECS_SERVICE: draft-router
+      - <<: *await-deploy-complete
+        task: await-deploy-complete-live
+        params:
+          <<: *await-deploy-complete-params
+          ECS_SERVICE: router
     serial: true
     on_failure:
       <<: *notify-slack-failure
@@ -871,6 +929,17 @@ jobs:
         params:
           ECS_SERVICE: router-api
           WORKSPACE: ((workspace))
+    - in_parallel:
+      - <<: *await-deploy-complete
+        task: await-deploy-complete-draft
+        params:
+          <<: *await-deploy-complete-params
+          ECS_SERVICE: draft-router-api
+      - <<: *await-deploy-complete
+        task: await-deploy-complete-live
+        params:
+          <<: *await-deploy-complete-params
+          ECS_SERVICE: router-api
     serial: true
     on_failure:
       <<: *notify-slack-failure
@@ -915,6 +984,11 @@ jobs:
         ECS_SERVICE: signon
         GOVUK_ENVIRONMENT: test
         WORKSPACE: ((workspace))
+    - <<: *await-deploy-complete
+      task: await-deploy-complete
+      params:
+        <<: *await-deploy-complete-params
+        ECS_SERVICE: signon
     serial: true
     on_failure:
       <<: *notify-slack-failure
@@ -999,6 +1073,17 @@ jobs:
         params:
           ECS_SERVICE: static
           WORKSPACE: ((workspace))
+    - in_parallel:
+      - <<: *await-deploy-complete
+        task: await-deploy-complete-live
+        params:
+          <<: *await-deploy-complete-params
+          ECS_SERVICE: static
+      - <<: *await-deploy-complete
+        task: await-deploy-complete-draft
+        params:
+          <<: *await-deploy-complete-params
+          ECS_SERVICE: draft-static
     serial: true
     on_failure:
       <<: *notify-slack-failure
