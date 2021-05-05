@@ -82,6 +82,7 @@ module "publishing_api_web" {
   execution_role_arn               = aws_iam_role.execution.arn
   additional_tags                  = local.additional_tags
   environment                      = var.govuk_environment
+  workspace                        = local.workspace
 }
 
 module "publishing_api_worker" {
@@ -97,6 +98,7 @@ module "publishing_api_worker" {
   source                           = "../../modules/app"
   desired_count                    = var.publishing_api_desired_count
   extra_security_groups            = [module.publishing_api_web.security_group_id, local.govuk_management_access_security_group, aws_security_group.mesh_ecs_service.id]
+  container_healthcheck_command    = ["/bin/sh", "-c", "exit 0"]
   subnets                          = local.private_subnets
   environment_variables            = local.publishing_api_defaults.environment_variables
   secrets_from_arns                = local.publishing_api_defaults.secrets_from_arns
@@ -111,4 +113,5 @@ module "publishing_api_worker" {
   execution_role_arn               = aws_iam_role.execution.arn
   additional_tags                  = local.additional_tags
   environment                      = var.govuk_environment
+  workspace                        = local.workspace
 }

@@ -1,7 +1,7 @@
 locals {
   content_store_defaults = {
-    cpu    = 512  # TODO parameterize this
-    memory = 1024 # TODO parameterize this
+    cpu    = var.content_store_cpu
+    memory = var.content_store_memory
 
     backend_services = flatten([
       local.defaults.virtual_service_backends,
@@ -85,6 +85,7 @@ module "content_store" {
   execution_role_arn      = aws_iam_role.execution.arn
   additional_tags         = local.additional_tags
   environment             = var.govuk_environment
+  workspace               = local.workspace
 }
 
 module "draft_content_store" {
@@ -137,4 +138,5 @@ module "draft_content_store" {
   execution_role_arn      = aws_iam_role.execution.arn
   additional_tags         = local.additional_tags
   environment             = var.govuk_environment
+  workspace               = local.workspace
 }

@@ -1,5 +1,5 @@
 resource "aws_lb" "public" {
-  name               = "public-${var.app_name}-${var.workspace}"
+  name               = "public-${var.app_name}-${var.environment}-${var.workspace}"
   internal           = false
   load_balancer_type = "application"
   security_groups    = [aws_security_group.public_alb.id]
@@ -8,7 +8,7 @@ resource "aws_lb" "public" {
   tags = merge(
     var.additional_tags,
     {
-      Name = "${var.app_name}-${var.environment}-lb"
+      Name = "public-${var.app_name}-${var.environment}-${var.workspace}"
     },
   )
 }
@@ -27,7 +27,7 @@ resource "aws_lb_target_group" "public" {
   tags = merge(
     var.additional_tags,
     {
-      Name = "${var.app_name}-${var.environment}-tg"
+      Name = "public-${var.app_name}-${var.environment}-${var.workspace}"
     },
   )
 }

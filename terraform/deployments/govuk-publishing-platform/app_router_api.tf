@@ -68,6 +68,7 @@ module "router_api" {
   execution_role_arn      = aws_iam_role.execution.arn
   additional_tags         = local.additional_tags
   environment             = var.govuk_environment
+  workspace               = local.workspace
 }
 
 module "draft_router_api" {
@@ -110,4 +111,5 @@ module "draft_router_api" {
   execution_role_arn      = aws_iam_role.execution.arn
   additional_tags         = local.additional_tags
   environment             = var.govuk_environment
+  workspace               = local.workspace
 }

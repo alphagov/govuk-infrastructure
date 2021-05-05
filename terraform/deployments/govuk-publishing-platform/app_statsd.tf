@@ -17,6 +17,7 @@ module "statsd" {
   environment_variables            = local.statsd_defaults.environment_variables
   execution_role_arn               = aws_iam_role.execution.arn
   extra_security_groups            = [local.govuk_management_access_security_group, aws_security_group.mesh_ecs_service.id]
+  container_healthcheck_command    = ["/bin/sh", "-c", "exit 0"]
   image_name                       = "statsd"
   image_tag                        = "test-0.1.3" # TODO: https://trello.com/c/nju3j7Ph/38-modify-statsd-so-that-we-can-run-it-in-ecs
   memory                           = local.statsd_defaults.memory
@@ -36,4 +37,5 @@ module "statsd" {
   splunk_sourcetype                = local.defaults.splunk_sourcetype
   additional_tags                  = local.additional_tags
   environment                      = var.govuk_environment
+  workspace                        = local.workspace
 }

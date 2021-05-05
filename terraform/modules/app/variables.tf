@@ -75,7 +75,7 @@ variable "load_balancers" {
 variable "container_healthcheck_command" {
   type        = list(string)
   description = "App container liveness healthcheck"
-  default     = ["/bin/bash", "-c", "exit 0"]
+  default     = ["/bin/bash", "-c", "curl -f http://localhost:80/healthcheck/live || exit 1"]
 }
 
 variable "health_check_grace_period_seconds" {
@@ -152,6 +152,10 @@ variable "execution_role_arn" {
 }
 
 variable "environment" {
+  type = string
+}
+
+variable "workspace" {
   type = string
 }
 

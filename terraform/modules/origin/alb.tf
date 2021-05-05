@@ -8,7 +8,7 @@ resource "aws_lb" "origin" {
   tags = merge(
     var.additional_tags,
     {
-      Name = "${var.name}-${var.environment}-lb"
+      Name = "${var.name}-${var.environment}-${var.workspace}"
     },
   )
 }

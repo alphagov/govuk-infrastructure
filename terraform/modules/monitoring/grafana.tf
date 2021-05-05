@@ -30,6 +30,7 @@ module "grafana_app" {
   task_role_arn           = aws_iam_role.monitoring_execution.arn # TODO - use a separate role for this?
   execution_role_arn      = aws_iam_role.monitoring_execution.arn
   environment             = var.environment
+  workspace               = "govuk" # TODO: Changeme
 }
 
 data "aws_acm_certificate" "public_lb_alternate" {

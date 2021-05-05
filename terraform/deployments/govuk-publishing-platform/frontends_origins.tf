@@ -88,7 +88,7 @@ resource "aws_lb_target_group" "router" {
   tags = merge(
     local.additional_tags,
     {
-      Name = "router-${var.govuk_environment}-tg"
+      Name = "router-${var.govuk_environment}-${local.workspace}"
     },
   )
 }
@@ -151,7 +151,7 @@ resource "aws_lb_target_group" "draft_router" {
   tags = merge(
     local.additional_tags,
     {
-      Name = "draft-router-${var.govuk_environment}-tg"
+      Name = "draft-router-${var.govuk_environment}-${local.workspace}"
     },
   )
 }

@@ -24,7 +24,7 @@ resource "aws_security_group" "redis" {
   tags = merge(
     var.additional_tags,
     {
-      Name = "${var.cluster_name}-${var.environment}-redis-sg"
+      Name = "${var.cluster_name}-${var.environment}-${var.workspace}"
     },
   )
 
@@ -45,7 +45,7 @@ resource "aws_elasticache_replication_group" "redis_cluster" {
   tags = merge(
     var.additional_tags,
     {
-      Name = "${var.workspace}-workspace-${var.environment}-redis-cluster"
+      Name = "${var.cluster_name}-${var.environment}-${var.workspace}"
     },
   )
 

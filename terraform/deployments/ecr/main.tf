@@ -32,92 +32,13 @@ locals {
     "smokey",
     "static",
     "statsd",
+    "authenticating-proxy",
   ]
 }
 
-resource "aws_ecr_repository" "content-store" {
-  name                 = "content-store"
-  image_tag_mutability = "MUTABLE"
-
-  image_scanning_configuration {
-    scan_on_push = true
-  }
-}
-
-resource "aws_ecr_repository" "frontend" {
-  name                 = "frontend"
-  image_tag_mutability = "MUTABLE"
-
-  image_scanning_configuration {
-    scan_on_push = true
-  }
-}
-
-resource "aws_ecr_repository" "publisher" {
-  name                 = "publisher"
-  image_tag_mutability = "MUTABLE"
-
-  image_scanning_configuration {
-    scan_on_push = true
-  }
-}
-
-resource "aws_ecr_repository" "publishing-api" {
-  name                 = "publishing-api"
-  image_tag_mutability = "MUTABLE"
-
-  image_scanning_configuration {
-    scan_on_push = true
-  }
-}
-
-resource "aws_ecr_repository" "router" {
-  name                 = "router"
-  image_tag_mutability = "MUTABLE"
-
-  image_scanning_configuration {
-    scan_on_push = true
-  }
-}
-
-resource "aws_ecr_repository" "router-api" {
-  name                 = "router-api"
-  image_tag_mutability = "MUTABLE"
-
-  image_scanning_configuration {
-    scan_on_push = true
-  }
-}
-
-resource "aws_ecr_repository" "signon" {
-  name                 = "signon"
-  image_tag_mutability = "MUTABLE"
-
-  image_scanning_configuration {
-    scan_on_push = true
-  }
-}
-
-resource "aws_ecr_repository" "smokey" {
-  name                 = "smokey"
-  image_tag_mutability = "MUTABLE"
-
-  image_scanning_configuration {
-    scan_on_push = true
-  }
-}
-
-resource "aws_ecr_repository" "static" {
-  name                 = "static"
-  image_tag_mutability = "MUTABLE"
-
-  image_scanning_configuration {
-    scan_on_push = true
-  }
-}
-
-resource "aws_ecr_repository" "statsd" {
-  name                 = "statsd"
+resource "aws_ecr_repository" "repositories" {
+  for_each             = toset(local.repositories)
+  name                 = each.key
   image_tag_mutability = "MUTABLE"
 
   image_scanning_configuration {
@@ -165,18 +86,7 @@ data "aws_iam_policy_document" "push_image_to_ecr_policy_document" {
       "ecr:UploadLayerPart",
     ]
 
-    resources = [
-      aws_ecr_repository.content-store.arn,
-      aws_ecr_repository.frontend.arn,
-      aws_ecr_repository.publisher.arn,
-      aws_ecr_repository.publishing-api.arn,
-      aws_ecr_repository.router.arn,
-      aws_ecr_repository.router-api.arn,
-      aws_ecr_repository.signon.arn,
-      aws_ecr_repository.smokey.arn,
-      aws_ecr_repository.static.arn,
-      aws_ecr_repository.statsd.arn,
-    ]
+    resources = [for repo in local.repositories : aws_ecr_repository.repositories[repo].arn]
   }
 }
 

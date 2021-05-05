@@ -31,7 +31,7 @@ resource "aws_lambda_function" "bearer_token" {
   tags = merge(
     var.additional_tags,
     {
-      Name = "${local.lambda_function_name}-${var.environment}"
+      Name = "${local.lambda_function_name}-${var.environment}-${var.workspace}"
     },
   )
 

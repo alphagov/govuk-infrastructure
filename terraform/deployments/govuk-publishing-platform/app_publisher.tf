@@ -100,6 +100,7 @@ module "publisher_web" {
   execution_role_arn      = aws_iam_role.execution.arn
   additional_tags         = local.additional_tags
   environment             = var.govuk_environment
+  workspace               = local.workspace
 }
 
 #
@@ -117,6 +118,7 @@ module "publisher_worker" {
     local.govuk_management_access_security_group,
     aws_security_group.mesh_ecs_service.id
   ]
+  container_healthcheck_command    = ["/bin/sh", "-c", "exit 0"]
   environment_variables            = local.publisher_defaults.environment_variables
   mesh_name                        = aws_appmesh_mesh.govuk.id
   subnets                          = local.private_subnets
@@ -137,4 +139,5 @@ module "publisher_worker" {
   desired_count                    = var.publisher_worker_desired_count
   additional_tags                  = local.additional_tags
   environment                      = var.govuk_environment
+  workspace                        = local.workspace
 }

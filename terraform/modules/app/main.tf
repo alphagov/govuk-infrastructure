@@ -57,7 +57,7 @@ resource "aws_ecs_service" "service" {
   tags = merge(
     var.additional_tags,
     {
-      Name = "${var.service_name}-${var.environment}"
+      Name = "${var.service_name}-${var.environment}-${var.workspace}"
     },
   )
 }
@@ -72,6 +72,7 @@ module "service_mesh_node" {
   service_discovery_namespace_name = var.service_discovery_namespace_name
   service_name                     = var.service_name
   environment                      = var.environment
+  workspace                        = var.workspace
 }
 
 resource "aws_security_group" "service" {
@@ -82,7 +83,7 @@ resource "aws_security_group" "service" {
   tags = merge(
     var.additional_tags,
     {
-      Name = "${var.service_name}-${var.environment}-sg"
+      Name = "${var.service_name}-${var.environment}-${var.workspace}"
     },
   )
 }

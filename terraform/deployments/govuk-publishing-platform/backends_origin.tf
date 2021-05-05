@@ -130,13 +130,13 @@ resource "aws_lb_target_group" "publisher" {
   target_type = "ip"
 
   health_check {
-    path = "/healthcheck"
+    path = "/healthcheck/ready"
   }
 
   tags = merge(
     local.additional_tags,
     {
-      Name = "publisher-${var.govuk_environment}-tg"
+      Name = "publisher-${var.govuk_environment}-${local.workspace}"
     },
   )
 }
@@ -188,7 +188,7 @@ resource "aws_lb_target_group" "signon" {
   tags = merge(
     local.additional_tags,
     {
-      Name = "signon-${var.govuk_environment}-tg"
+      Name = "signon-${var.govuk_environment}-${local.workspace}"
     },
   )
 
