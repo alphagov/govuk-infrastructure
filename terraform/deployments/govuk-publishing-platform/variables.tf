@@ -1,3 +1,11 @@
+variable "content_store_cpu" {
+  type = number
+}
+
+variable "content_store_memory" {
+  type = number
+}
+
 variable "external_app_domain" {
   type        = string
   description = "e.g. test.govuk.digital"
