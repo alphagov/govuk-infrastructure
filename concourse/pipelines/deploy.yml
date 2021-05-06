@@ -9,6 +9,7 @@ resource_types:
       tag: latest # TODO - don't use latest (once we've worked out a policy for third party images)
       username: ((docker_hub_username))
       password: ((docker_hub_authtoken))
+      disable: ((disable_slack_channel_alerts))
 
   - name: s3
     type: docker-image
@@ -504,6 +505,15 @@ jobs:
           put: router-terraform-outputs
           params:
             file: router-terraform-outputs/router.json
+    on_failure: &notify-slack-failure
+      put: deploy-slack-channel
+      params:
+        channel: "#govuk-deploy-alerts"
+        username: 'Concourse deploy pipeline'
+        icon_emoji: ':concourse:'
+        silent: true
+        text: |
+          :red_circle: Failed build: http://cd.gds-reliability.engineering/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME
 
   - name: deploy-frontend
     plan:
@@ -575,15 +585,8 @@ jobs:
           <<: *await-deploy-complete-params
           ECS_SERVICE: draft-frontend
     serial: true
-    on_failure: &notify-slack-failure
-      put: deploy-slack-channel
-      params:
-        channel: "#govuk-deploy-alerts"
-        username: 'Concourse deploy pipeline'
-        icon_emoji: ':concourse:'
-        silent: true
-        text: |
-          :red_circle: Failed build: http://cd.gds-reliability.engineering/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME
+    on_failure:
+      <<: *notify-slack-failure
 
   - name: smoke-test-content-store
     plan:
