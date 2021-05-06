@@ -20,5 +20,6 @@ params:
   CLUSTER: task_runner
   COMMAND: # Place command in run-task-command file or use COMMAND param
   VARIANT:
+  SKIP_DB_MIGRATIONS:
 run:
   path: ./src/concourse/tasks/run-task.sh
