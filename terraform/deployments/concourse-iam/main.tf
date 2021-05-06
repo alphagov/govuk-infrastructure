@@ -75,6 +75,27 @@ resource "aws_iam_role_policy_attachment" "concourse_readonly" {
   policy_arn = "arn:aws:iam::aws:policy/ReadOnlyAccess"
 }
 
+resource "aws_iam_role_policy" "concourse_terraform_planner_test" {
+  # HACK: In order to run terraform plan (as a pre-merge check), the read-only
+  # Concourse role needs to be able to read certain secrets in the test
+  # account. This is intended for the test account only.
+  # TODO: Consider whether we can run pre-merge checks with the deployer role,
+  # and what controls we should have in place re secrets in the test account.
+  name = "concourse_terraform_planner_test"
+  role = aws_iam_role.govuk_concourse_terraform_planner.id
+  policy = jsonencode({
+    "Version" : "2012-10-17",
+    "Statement" : [
+      {
+        "Sid" : "TerraformPlannerReadsNonSensitiveTestSecrets",
+        "Effect" : "Allow",
+        "Action" : "secretsmanager:GetSecretValue",
+        "Resource" : "arn:aws:secretsmanager:eu-west-1:430354129336:secret:signon_admin_password_ecs-*"
+      }
+    ]
+  })
+}
+
 resource "aws_iam_user" "concourse_ecr_readonly_user" {
   name = "concourse_ecr_readonly_user"
 }
