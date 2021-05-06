@@ -37,7 +37,7 @@ resource "aws_iam_role" "govuk_concourse_deployer" {
         "Effect" : "Allow",
         "Action" : "sts:AssumeRole",
         "Principal" : {
-          "AWS" : "arn:aws:iam::047969882937:role/cd-govuk-tools-concourse-worker"
+          "AWS" : "arn:aws:iam::047969882937:role/cd-govuk-${var.govuk_environment}-concourse-worker"
         }
       }
     ]
