@@ -22,6 +22,12 @@ root_dir=$(pwd)
 : "${COMMAND:?COMMAND not set}"
 : "${CLUSTER:?COMMAND not set}"
 : "${VARIANT:?VARIANT not set}"
+: "${SKIP_DB_MIGRATIONS:?SKIP_DB_MIGRATIONS not set}"
+
+if [[ "$SKIP_DB_MIGRATIONS" == "true" ]]; then
+  echo "Skipping DB Migrations"
+  exit 0
+fi
 
 mkdir -p ~/.aws
 
