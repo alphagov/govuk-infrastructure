@@ -148,6 +148,15 @@ output "router" {
   }
 }
 
+output "authenticating-proxy" {
+  value = {
+    web = {
+      task_definition_cli_input_json = module.authenticating_proxy.cli_input_json,
+      network_config                 = module.authenticating_proxy.network_config
+    }
+  }
+}
+
 output "cluster_name" {
   value = aws_ecs_cluster.cluster.name
 }

@@ -131,21 +131,21 @@ module "draft_frontends_origin" {
   waf_web_acl_arn                      = aws_wafv2_web_acl.all_frontends_origins_cloudfront_web_acl.arn
 
   fronted_apps = {
-    "draft-router" = { security_group_id = module.draft_router.security_group_id },
+    "authenticating-proxy" = { security_group_id = module.authenticating_proxy.security_group_id },
   }
   additional_tags = local.additional_tags
   environment     = var.govuk_environment
 }
 
-resource "aws_lb_target_group" "draft_router" {
-  name        = "draft-router-${local.workspace}"
+resource "aws_lb_target_group" "authenticating_proxy" {
+  name        = "authenticating-proxy-${local.workspace}"
   port        = 80
   protocol    = "HTTP"
   vpc_id      = local.vpc_id
   target_type = "ip"
 
   health_check {
-    path = "/"
+    path = "/healthcheck/live"
   }
 
   tags = merge(
@@ -156,13 +156,13 @@ resource "aws_lb_target_group" "draft_router" {
   )
 }
 
-resource "aws_lb_listener_rule" "draft_router" {
+resource "aws_lb_listener_rule" "authenticating_proxy" {
   listener_arn = module.draft_frontends_origin.origin_alb_listerner_arn
   priority     = 11
 
   action {
     type             = "forward"
-    target_group_arn = aws_lb_target_group.draft_router.arn
+    target_group_arn = aws_lb_target_group.authenticating_proxy.arn
   }
 
   condition {

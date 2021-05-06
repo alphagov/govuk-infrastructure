@@ -146,3 +146,18 @@ data "aws_secretsmanager_secret" "draft_router_api_oauth_secret" {
 data "aws_secretsmanager_secret" "draft_router_api_secret_key_base" {
   name = "draft-router-api_SECRET_KEY_BASE"
 }
+
+# Authenticating-proxy app
+
+data "aws_secretsmanager_secret" "authenticating_proxy_oauth_id" {
+  name = "authenticating-proxy_OAUTH_ID"
+}
+data "aws_secretsmanager_secret" "authenticating_proxy_oauth_secret" {
+  name = "authenticating-proxy_OAUTH_SECRET"
+}
+data "aws_secretsmanager_secret" "authenticating_proxy_secret_key_base" {
+  name = "authenticating-proxy_SECRET_KEY_BASE"
+}
+data "aws_secretsmanager_secret" "authenticating_proxy_jwt_auth_secret" {
+  name = "authenticating-proxy_JWT_AUTH_SECRET"
+}
