@@ -26,3 +26,17 @@ variable "service_discovery_namespace_name" {
 variable "service_name" {
   type = string
 }
+
+variable "environment" {
+  type = string
+}
+
+variable "workspace" {
+  type = string
+}
+
+variable "additional_tags" {
+  default     = {}
+  description = "Additional resource tags"
+  type        = map(string)
+}

@@ -65,3 +65,6 @@ variable "splunk_sourcetype" {
   description = "The source type of the logs being sent to Splunk i.e. `log4j`."
 }
 
+variable "environment" {
+  type = string
+}

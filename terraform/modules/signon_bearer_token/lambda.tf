@@ -27,6 +27,14 @@ resource "aws_lambda_function" "bearer_token" {
     aws_iam_role_policy_attachment.lambda_logs,
     aws_cloudwatch_log_group.bearer_token,
   ]
+
+  tags = merge(
+    var.additional_tags,
+    {
+      Name = "${local.lambda_function_name}-${var.environment}-${var.workspace}"
+    },
+  )
+
 }
 
 resource "aws_cloudwatch_log_group" "bearer_token" {

@@ -1,9 +1,16 @@
 resource "aws_lb" "public" {
-  name               = "public-${var.app_name}-${var.workspace}"
+  name               = "public-${var.app_name}-${var.environment}-${var.workspace}"
   internal           = false
   load_balancer_type = "application"
   security_groups    = [aws_security_group.public_alb.id]
   subnets            = var.public_subnets
+
+  tags = merge(
+    var.additional_tags,
+    {
+      Name = "public-${var.app_name}-${var.environment}-${var.workspace}"
+    },
+  )
 }
 
 resource "aws_lb_target_group" "public" {
@@ -16,6 +23,13 @@ resource "aws_lb_target_group" "public" {
   health_check {
     path = var.health_check_path
   }
+
+  tags = merge(
+    var.additional_tags,
+    {
+      Name = "public-${var.app_name}-${var.environment}-${var.workspace}"
+    },
+  )
 }
 
 resource "aws_lb_listener" "public" {

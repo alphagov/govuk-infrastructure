@@ -53,6 +53,13 @@ resource "aws_ecs_service" "service" {
     # If this is removed, the bootstrapping image will be deployed.
     ignore_changes = [task_definition]
   }
+
+  tags = merge(
+    var.additional_tags,
+    {
+      Name = "${var.service_name}-${var.environment}-${var.workspace}"
+    },
+  )
 }
 
 module "service_mesh_node" {
@@ -64,10 +71,19 @@ module "service_mesh_node" {
   service_discovery_namespace_id   = var.service_discovery_namespace_id
   service_discovery_namespace_name = var.service_discovery_namespace_name
   service_name                     = var.service_name
+  environment                      = var.environment
+  workspace                        = var.workspace
 }
 
 resource "aws_security_group" "service" {
   name        = "fargate_${var.service_name}-${terraform.workspace}"
   vpc_id      = var.vpc_id
   description = "${var.service_name} app ECS tasks"
+
+  tags = merge(
+    var.additional_tags,
+    {
+      Name = "${var.service_name}-${var.environment}-${var.workspace}"
+    },
+  )
 }

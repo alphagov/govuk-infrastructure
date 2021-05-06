@@ -83,6 +83,8 @@ module "publisher_to_publishing_api_bearer_token" {
   signon_admin_password_arn = aws_secretsmanager_secret.signon_admin_password.arn
   signon_host               = local.signon_host
   workspace                 = local.workspace
+  additional_tags           = local.additional_tags
+  environment               = var.govuk_environment
 }
 
 module "publishing_api_to_content_store_bearer_token" {
@@ -94,7 +96,10 @@ module "publishing_api_to_content_store_bearer_token" {
   signon_admin_password_arn = aws_secretsmanager_secret.signon_admin_password.arn
   signon_host               = local.signon_host
   workspace                 = local.workspace
+  additional_tags           = local.additional_tags
+  environment               = var.govuk_environment
 }
+
 
 module "publishing_api_to_draft_content_store_bearer_token" {
   source = "../../modules/signon_bearer_token"
@@ -105,7 +110,10 @@ module "publishing_api_to_draft_content_store_bearer_token" {
   signon_admin_password_arn = aws_secretsmanager_secret.signon_admin_password.arn
   signon_host               = local.signon_host
   workspace                 = local.workspace
+  additional_tags           = local.additional_tags
+  environment               = var.govuk_environment
 }
+
 
 module "publishing_api_to_router_api_bearer_token" {
   source = "../../modules/signon_bearer_token"
@@ -116,6 +124,8 @@ module "publishing_api_to_router_api_bearer_token" {
   signon_admin_password_arn = aws_secretsmanager_secret.signon_admin_password.arn
   signon_host               = local.signon_host
   workspace                 = local.workspace
+  additional_tags           = local.additional_tags
+  environment               = var.govuk_environment
 }
 
 module "frontend_to_publishing_api_bearer_token" {
@@ -127,6 +137,8 @@ module "frontend_to_publishing_api_bearer_token" {
   signon_admin_password_arn = aws_secretsmanager_secret.signon_admin_password.arn
   signon_host               = local.signon_host
   workspace                 = local.workspace
+  additional_tags           = local.additional_tags
+  environment               = var.govuk_environment
 }
 
 module "content_store_to_publishing_api_bearer_token" {
@@ -138,6 +150,8 @@ module "content_store_to_publishing_api_bearer_token" {
   signon_admin_password_arn = aws_secretsmanager_secret.signon_admin_password.arn
   signon_host               = local.signon_host
   workspace                 = local.workspace
+  additional_tags           = local.additional_tags
+  environment               = var.govuk_environment
 }
 
 module "draft_content_store_to_publishing_api_bearer_token" {
@@ -149,6 +163,8 @@ module "draft_content_store_to_publishing_api_bearer_token" {
   signon_admin_password_arn = aws_secretsmanager_secret.signon_admin_password.arn
   signon_host               = local.signon_host
   workspace                 = local.workspace
+  additional_tags           = local.additional_tags
+  environment               = var.govuk_environment
 }
 
 module "content_store_to_router_api_bearer_token" {
@@ -160,6 +176,8 @@ module "content_store_to_router_api_bearer_token" {
   signon_admin_password_arn = aws_secretsmanager_secret.signon_admin_password.arn
   signon_host               = local.signon_host
   workspace                 = local.workspace
+  additional_tags           = local.additional_tags
+  environment               = var.govuk_environment
 }
 
 module "draft_content_store_to_router_api_bearer_token" {
@@ -171,4 +189,6 @@ module "draft_content_store_to_router_api_bearer_token" {
   signon_admin_password_arn = aws_secretsmanager_secret.signon_admin_password.arn
   signon_host               = local.signon_host
   workspace                 = local.workspace
+  additional_tags           = local.additional_tags
+  environment               = var.govuk_environment
 }

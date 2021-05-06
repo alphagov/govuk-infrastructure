@@ -75,3 +75,13 @@ variable "waf_web_acl_arn" {
   type        = string
   description = "arn of the wafv2 web acl to be associated with the CloudFront distribution"
 }
+
+variable "environment" {
+  type = string
+}
+
+variable "additional_tags" {
+  default     = {}
+  description = "Additional resource tags"
+  type        = map(string)
+}

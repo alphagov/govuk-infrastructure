@@ -20,6 +20,14 @@ resource "aws_security_group" "redis" {
   name        = "${var.cluster_name}_elasticache"
   vpc_id      = var.vpc_id
   description = "Access to the ${var.cluster_name} Redis cluster"
+
+  tags = merge(
+    var.additional_tags,
+    {
+      Name = "${var.cluster_name}-${var.environment}-${var.workspace}"
+    },
+  )
+
 }
 
 resource "aws_elasticache_replication_group" "redis_cluster" {
@@ -33,6 +41,14 @@ resource "aws_elasticache_replication_group" "redis_cluster" {
   engine_version                = "3.2.10"
   subnet_group_name             = aws_elasticache_subnet_group.redis_cluster_subnet_group.name
   security_group_ids            = [aws_security_group.redis.id]
+
+  tags = merge(
+    var.additional_tags,
+    {
+      Name = "${var.cluster_name}-${var.environment}-${var.workspace}"
+    },
+  )
+
 }
 
 resource "aws_route53_record" "internal_service_record" {

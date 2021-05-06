@@ -116,6 +116,8 @@ module "backends_origin" {
     "publisher" = { security_group_id = module.publisher_web.security_group_id },
     "signon"    = { security_group_id = module.signon.security_group_id },
   }
+  additional_tags = local.additional_tags
+  environment     = var.govuk_environment
 }
 
 ## Publisher
@@ -130,6 +132,13 @@ resource "aws_lb_target_group" "publisher" {
   health_check {
     path = "/healthcheck/ready"
   }
+
+  tags = merge(
+    local.additional_tags,
+    {
+      Name = "publisher-${var.govuk_environment}-${local.workspace}"
+    },
+  )
 }
 
 resource "aws_lb_listener_rule" "publisher" {
@@ -175,6 +184,15 @@ resource "aws_lb_target_group" "signon" {
   health_check {
     path = "/healthcheck/ready"
   }
+
+  tags = merge(
+    local.additional_tags,
+    {
+      Name = "signon-${var.govuk_environment}-${local.workspace}"
+    },
+  )
+
+
 }
 
 resource "aws_lb_listener_rule" "signon" {

@@ -9,6 +9,13 @@ resource "aws_acm_certificate" "public_north_virginia" {
   lifecycle {
     create_before_destroy = true
   }
+
+  tags = merge(
+    local.additional_tags,
+    {
+      Name = "${local.workspace_external_domain}-${var.govuk_environment}-${local.workspace}"
+    },
+  )
 }
 
 resource "aws_route53_record" "public_north_virginia" {

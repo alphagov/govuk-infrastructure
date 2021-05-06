@@ -21,6 +21,14 @@ resource "aws_appmesh_virtual_service" "service" {
       }
     }
   }
+
+  tags = merge(
+    var.additional_tags,
+    {
+      Name = "${var.service_name}-${var.environment}-${var.workspace}"
+    },
+  )
+
 }
 
 resource "aws_appmesh_virtual_node" "service" {
@@ -59,6 +67,14 @@ resource "aws_appmesh_virtual_node" "service" {
       }
     }
   }
+
+  tags = merge(
+    var.additional_tags,
+    {
+      Name = "${var.service_name}-${var.environment}-${var.workspace}"
+    },
+  )
+
 }
 
 resource "aws_service_discovery_service" "service" {

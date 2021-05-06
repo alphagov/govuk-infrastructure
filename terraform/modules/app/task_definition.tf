@@ -109,6 +109,14 @@ resource "aws_ecs_task_definition" "bootstrap" {
     container_name = "envoy"
     properties     = local.envoy_proxy_properties
   }
+
+  tags = merge(
+    var.additional_tags,
+    {
+      Name = "${local.family}-${var.environment}-${var.workspace}"
+    },
+  )
+
 }
 
 output "cli_input_json" {
