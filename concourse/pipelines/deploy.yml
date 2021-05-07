@@ -241,6 +241,13 @@ resources:
       location: "Europe/London"
       fire_immediately: true
 
+  - name: every-5-minutes
+    type: cron-resource
+    source:
+      expression: "*/5 * * * 1-5"
+      location: "Europe/London"
+      fire_immediately: true
+
 groups:
   - name: all
     jobs:
@@ -249,7 +256,6 @@ groups:
       - deploy-content-store
       - deploy-frontend
       - destroy-infrastructure
-      - smoke-test-content-store
       - deploy-publisher
       - deploy-publishing-api
       - deploy-router
@@ -258,6 +264,10 @@ groups:
       - deploy-smokey
       - deploy-static
       - deploy-authenticating-proxy
+      - all-smoke-tests
+      - smoke-test-frontend
+      - smoke-test-publisher
+      - smoke-test-signon
 
   - name: terraform
     jobs:
@@ -271,11 +281,12 @@ groups:
   - name: frontend
     jobs:
       - deploy-frontend
-      - smoke-test-content-store
+      - smoke-test-frontend
 
   - name: publisher
     jobs:
       - deploy-publisher
+      - smoke-test-publisher
 
   - name: publishing-api
     jobs:
@@ -292,10 +303,15 @@ groups:
   - name: signon
     jobs:
       - deploy-signon
+      - smoke-test-signon
 
   - name: smokey
     jobs:
       - deploy-smokey
+      - all-smoke-tests
+      - smoke-test-frontend
+      - smoke-test-publisher
+      - smoke-test-signon
 
   - name: static
     jobs:
@@ -546,6 +562,32 @@ jobs:
         text: |
           :red_circle: Failed build: http://cd.gds-reliability.engineering/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME
 
+  - name: all-smoke-tests
+    plan:
+    - in_parallel:
+      - get: every-5-minutes
+        trigger: true
+      - &get-smokey-govuk-infrastructure
+        get: govuk-infrastructure
+        resource: govuk-infrastructure-concourse-tasks
+        trigger: true
+      - &get-smokey-app-tf-outputs
+        get: app-terraform-outputs
+        resource: smokey-terraform-outputs
+        passed: [deploy-smokey]
+    - &get-smokey-task-definition
+      task: fetch-smokey-task-definition
+      file: govuk-infrastructure/concourse/tasks/fetch-task-definition.yml
+      params:
+        APPLICATION: smokey
+    - &run-smoke-test
+      task: run-smoke-tests
+      file: govuk-infrastructure/concourse/tasks/run-task.yml
+      params: &smoke-tests-params
+        APPLICATION: smokey
+        VARIANT: default
+        COMMAND: bundle exec cucumber --profile test --strict-undefined -t @replatforming -t \"not @notreplatforming\"
+
   - name: deploy-frontend
     plan:
     - in_parallel:
@@ -619,26 +661,17 @@ jobs:
     on_failure:
       <<: *notify-slack-failure
 
-  - name: smoke-test-content-store
+  - name: smoke-test-frontend
     plan:
     - in_parallel:
-      - get: govuk-infrastructure
-        resource: govuk-infrastructure-concourse-tasks
-        passed:
-        - deploy-content-store
-        trigger: true
-      - get: app-terraform-outputs
-        resource: smokey-terraform-outputs
-    - task: fetch-smokey-task-definition
-      file: govuk-infrastructure/concourse/tasks/fetch-task-definition.yml
+        - <<: *get-smokey-govuk-infrastructure
+          passed: [deploy-frontend]
+        - <<: *get-smokey-app-tf-outputs
+    - <<: *get-smokey-task-definition
+    - <<: *run-smoke-test
       params:
-        APPLICATION: smokey
-    - task: run-smoke-tests
-      file: govuk-infrastructure/concourse/tasks/run-task.yml
-      params:
-        APPLICATION: smokey
-        VARIANT: default
-        COMMAND: bundle exec cucumber --profile test --strict-undefined -t @replatforming -t \"not @notreplatforming\"
+        <<: *smoke-tests-params
+        COMMAND: bundle exec cucumber --profile test --strict-undefined -t @app-frontend -t \"not @notreplatforming\"
 
   - name: deploy-publisher
     plan:
@@ -719,6 +752,18 @@ jobs:
     serial: true
     on_failure:
       <<: *notify-slack-failure
+
+  - name: smoke-test-publisher
+    plan:
+    - in_parallel:
+        - <<: *get-smokey-govuk-infrastructure
+          passed: [deploy-publisher]
+        - <<: *get-smokey-app-tf-outputs
+    - <<: *get-smokey-task-definition
+    - <<: *run-smoke-test
+      params:
+        <<: *smoke-tests-params
+        COMMAND: bundle exec cucumber --profile test --strict-undefined -t @app-publisher -t \"not @notreplatforming\"
 
   - name: deploy-publishing-api
     plan:
@@ -1026,6 +1071,18 @@ jobs:
     serial: true
     on_failure:
       <<: *notify-slack-failure
+
+  - name: smoke-test-signon
+    plan:
+    - in_parallel:
+        - <<: *get-smokey-govuk-infrastructure
+          passed: [deploy-signon]
+        - <<: *get-smokey-app-tf-outputs
+    - <<: *get-smokey-task-definition
+    - <<: *run-smoke-test
+      params:
+        <<: *smoke-tests-params
+        COMMAND: bundle exec cucumber --profile test --strict-undefined -t @app-signon -t \"not @notreplatforming\"
 
   - name: deploy-smokey
     plan:

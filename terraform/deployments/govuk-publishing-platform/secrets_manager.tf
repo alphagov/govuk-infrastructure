@@ -117,6 +117,20 @@ data "aws_secretsmanager_secret" "signon_database_url" {
   name = "signon_app-DATABASE_URL"
 }
 
+# Smokey
+
+data "aws_secretsmanager_secret" "smokey_auth_username" {
+  name = "smokey_AUTH_USERNAME"
+}
+
+data "aws_secretsmanager_secret" "smokey_auth_password" {
+  name = "smokey_AUTH_PASSWORD"
+}
+
+data "aws_secretsmanager_secret" "smokey_signon_password" {
+  name = "SMOKEY_SIGNON_PASSWORD"
+}
+
 # Static app
 
 data "aws_secretsmanager_secret" "static_secret_key_base" {
