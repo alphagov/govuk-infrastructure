@@ -150,6 +150,15 @@ resources:
       versioned_file: ((workspace))/router.json
       initial_version: "0"
 
+  - name: authenticating-proxy-terraform-outputs
+    type: s3
+    icon: file
+    source:
+      bucket: ((readonly_private_bucket_name))
+      region_name: eu-west-2
+      versioned_file: ((workspace))/authenticating-proxy.json
+      initial_version: "0"
+
   - &registry-image
     name: frontend-image
     type: registry-image
@@ -208,6 +217,12 @@ resources:
       repository: signon
 
   - <<: *registry-image
+    name: authenticating-proxy-image
+    source:
+      <<: *registry-source
+      repository: authenticating-proxy
+
+  - <<: *registry-image
     name: smokey-image
     source:
       <<: *registry-source
@@ -242,6 +257,7 @@ groups:
       - deploy-signon
       - deploy-smokey
       - deploy-static
+      - deploy-authenticating-proxy
 
   - name: terraform
     jobs:
@@ -284,6 +300,10 @@ groups:
   - name: static
     jobs:
       - deploy-static
+
+  - name: authenticating-proxy
+    jobs:
+      - deploy-authenticating-proxy
 
 jobs:
   - name: destroy-infrastructure
@@ -356,6 +376,7 @@ jobs:
       - get: router-api-terraform-outputs
       - get: router-terraform-outputs
       - get: frontend-terraform-outputs
+      - get: authenticating-proxy-terraform-outputs
     - task: terraform-apply
       config:
         inputs:
@@ -387,6 +408,8 @@ jobs:
         - name: router-terraform-outputs
           path: old-router-terraform-outputs
           optional: true
+        - name: authenticating-proxy-terraform-outputs
+          path: old-authenticating-proxy-terraform-outputs
         outputs:
         - name: govuk-terraform-outputs
         - name: content-store-terraform-outputs
@@ -407,6 +430,9 @@ jobs:
           path: new-router-api-terraform-outputs
         - name: router-terraform-outputs
           path: new-router-terraform-outputs
+        - name: authenticating-proxy-terraform-outputs
+          path: new-authenticating-proxy-terraform-outputs
+          optional: true
         params:
           AWS_REGION: eu-west-1
           ASSUME_ROLE_ARN: 'arn:aws:iam::430354129336:role/govuk-concourse-deployer'
@@ -464,6 +490,7 @@ jobs:
             update_terraform_outputs static
             update_terraform_outputs router-api
             update_terraform_outputs router
+            update_terraform_outputs authenticating-proxy
 
     - in_parallel:
       - put: govuk-terraform-outputs
@@ -505,6 +532,10 @@ jobs:
           put: router-terraform-outputs
           params:
             file: router-terraform-outputs/router.json
+      - try:
+          put: authenticating-proxy-terraform-outputs
+          params:
+            file: authenticating-proxy-terraform-outputs/authenticating-proxy.json
     on_failure: &notify-slack-failure
       put: deploy-slack-channel
       params:
@@ -1087,6 +1118,44 @@ jobs:
         params:
           <<: *await-deploy-complete-params
           ECS_SERVICE: draft-static
+    serial: true
+    on_failure:
+      <<: *notify-slack-failure
+
+  - name: deploy-authenticating-proxy
+    plan:
+    - in_parallel:
+      - get: govuk-infrastructure
+        resource: govuk-infrastructure-concourse-tasks
+        trigger: true
+      - get: app-terraform-outputs
+        resource: authenticating-proxy-terraform-outputs
+        passed:
+        - run-terraform
+        trigger: true
+      - get: authenticating-proxy-image
+        trigger: true
+    - task: update-task-definition
+      file: govuk-infrastructure/concourse/tasks/update-task-definition.yml
+      input_mapping:
+        app-image: authenticating-proxy-image
+      output_mapping:
+        task-definition-arn: task-definition-arn
+      params:
+        APPLICATION: authenticating-proxy
+        VARIANT: web
+    - task: update-ecs-service
+      file: govuk-infrastructure/concourse/tasks/update-ecs-service.yml
+      input_mapping:
+        task-definition-arn: task-definition-arn
+      params:
+        ECS_SERVICE: authenticating-proxy
+        WORKSPACE: ((workspace))
+    - <<: *await-deploy-complete
+      task: await-deploy-complete-live
+      params:
+        <<: *await-deploy-complete-params
+        ECS_SERVICE: authenticating-proxy
     serial: true
     on_failure:
       <<: *notify-slack-failure

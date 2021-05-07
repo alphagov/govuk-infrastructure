@@ -100,6 +100,8 @@ module "router" {
   workspace          = local.workspace
 }
 
+# draft_router does not have a load balancer since authenticating-proxy proxies
+# and authenticates requests to draft_router in the draft stack.
 module "draft_router" {
   source       = "../../modules/app"
   registry     = var.registry
@@ -158,16 +160,12 @@ module "draft_router" {
   splunk_token_secret_arn = local.defaults.splunk_token_secret_arn
   splunk_index            = local.defaults.splunk_index
   splunk_sourcetype       = local.defaults.splunk_sourcetype
-  load_balancers = [{
-    target_group_arn = aws_lb_target_group.draft_router.arn
-    container_port   = 80
-  }]
-  aws_region         = data.aws_region.current.name
-  cpu                = local.router_defaults.cpu
-  memory             = local.router_defaults.memory
-  task_role_arn      = aws_iam_role.task.arn
-  execution_role_arn = aws_iam_role.execution.arn
-  additional_tags    = local.additional_tags
-  environment        = var.govuk_environment
-  workspace          = local.workspace
+  aws_region              = data.aws_region.current.name
+  cpu                     = local.router_defaults.cpu
+  memory                  = local.router_defaults.memory
+  task_role_arn           = aws_iam_role.task.arn
+  execution_role_arn      = aws_iam_role.execution.arn
+  additional_tags         = local.additional_tags
+  environment             = var.govuk_environment
+  workspace               = local.workspace
 }

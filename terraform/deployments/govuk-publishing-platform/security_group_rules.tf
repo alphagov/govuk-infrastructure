@@ -426,6 +426,17 @@ resource "aws_security_group_rule" "draft_router_from_draft_router_api_tcp" {
   source_security_group_id = module.draft_router_api.security_group_id
 }
 
+resource "aws_security_group_rule" "draft_router_from_authenticating_proxy_http" {
+  description = "Draft Router accepts requests from Authenticating Proxy over HTTP"
+  type        = "ingress"
+  from_port   = 80
+  to_port     = 80
+  protocol    = "tcp"
+
+  security_group_id        = module.draft_router.security_group_id
+  source_security_group_id = module.authenticating_proxy.security_group_id
+}
+
 #
 # Router API
 #
@@ -494,6 +505,15 @@ resource "aws_security_group_rule" "routerdb_from_draft_router_mongodb" {
   protocol                 = "tcp"
   security_group_id        = local.routerdb_security_group_id
   source_security_group_id = module.draft_router.security_group_id
+}
+
+resource "aws_security_group_rule" "routerdb_from_authenticating_proxy_mongodb" {
+  type                     = "ingress"
+  from_port                = 27017
+  to_port                  = 27017
+  protocol                 = "tcp"
+  security_group_id        = local.routerdb_security_group_id
+  source_security_group_id = module.authenticating_proxy.security_group_id
 }
 
 #
@@ -594,6 +614,20 @@ resource "aws_security_group_rule" "statsd_from_apps_tcp" {
   protocol                 = "tcp"
   security_group_id        = module.statsd.security_group_id
   source_security_group_id = aws_security_group.mesh_ecs_service.id
+}
+
+#
+# Authenticating-proxy
+#
+
+resource "aws_security_group_rule" "authenticating-proxy_to_any_any" {
+  description       = "Authenticating-proxy send requests to anywhere"
+  type              = "egress"
+  from_port         = 0
+  to_port           = 0
+  protocol          = -1
+  cidr_blocks       = ["0.0.0.0/0"]
+  security_group_id = module.authenticating_proxy.security_group_id
 }
 
 # TODO: move the rest of the rules into this file unless there's a good reason
