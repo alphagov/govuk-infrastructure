@@ -265,6 +265,9 @@ groups:
       - deploy-static
       - deploy-authenticating-proxy
       - all-smoke-tests
+      - smoke-test-frontend
+      - smoke-test-publisher
+      - smoke-test-signon
 
   - name: terraform
     jobs:
@@ -278,10 +281,12 @@ groups:
   - name: frontend
     jobs:
       - deploy-frontend
+      - smoke-test-frontend
 
   - name: publisher
     jobs:
       - deploy-publisher
+      - smoke-test-publisher
 
   - name: publishing-api
     jobs:
@@ -298,10 +303,15 @@ groups:
   - name: signon
     jobs:
       - deploy-signon
+      - smoke-test-signon
 
   - name: smokey
     jobs:
       - deploy-smokey
+      - all-smoke-tests
+      - smoke-test-frontend
+      - smoke-test-publisher
+      - smoke-test-signon
 
   - name: static
     jobs:
@@ -651,6 +661,18 @@ jobs:
     on_failure:
       <<: *notify-slack-failure
 
+  - name: smoke-test-frontend
+    plan:
+    - in_parallel:
+        - <<: *get-smokey-govuk-infrastructure
+          passed: [deploy-frontend]
+        - <<: *get-smokey-app-tf-outputs
+    - <<: *get-smokey-task-definition
+    - <<: *run-smoke-test
+      params:
+        <<: *smoke-tests-params
+        COMMAND: bundle exec cucumber --profile test --strict-undefined -t @app-frontend -t \"not @notreplatforming\"
+
   - name: deploy-publisher
     plan:
     - in_parallel:
@@ -730,6 +752,18 @@ jobs:
     serial: true
     on_failure:
       <<: *notify-slack-failure
+
+  - name: smoke-test-publisher
+    plan:
+    - in_parallel:
+        - <<: *get-smokey-govuk-infrastructure
+          passed: [deploy-publisher]
+        - <<: *get-smokey-app-tf-outputs
+    - <<: *get-smokey-task-definition
+    - <<: *run-smoke-test
+      params:
+        <<: *smoke-tests-params
+        COMMAND: bundle exec cucumber --profile test --strict-undefined -t @app-publisher -t \"not @notreplatforming\"
 
   - name: deploy-publishing-api
     plan:
@@ -1037,6 +1071,18 @@ jobs:
     serial: true
     on_failure:
       <<: *notify-slack-failure
+
+  - name: smoke-test-signon
+    plan:
+    - in_parallel:
+        - <<: *get-smokey-govuk-infrastructure
+          passed: [deploy-signon]
+        - <<: *get-smokey-app-tf-outputs
+    - <<: *get-smokey-task-definition
+    - <<: *run-smoke-test
+      params:
+        <<: *smoke-tests-params
+        COMMAND: bundle exec cucumber --profile test --strict-undefined -t @app-signon -t \"not @notreplatforming\"
 
   - name: deploy-smokey
     plan:
