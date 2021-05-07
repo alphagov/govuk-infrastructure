@@ -1,5 +1,5 @@
 output "grafana_fqdn" {
-  value       = module.grafana_public_alb.fqdn
+  value       = "grafana.${local.workspace_external_domain}"
   description = "Public Fully Qualified Domain Name for Grafana"
 }
 

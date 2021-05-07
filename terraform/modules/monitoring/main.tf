@@ -1,10 +1,12 @@
-terraform {
-  required_providers {
-    aws = {
-      source  = "hashicorp/aws"
-      version = ">= 3.0"
-    }
+locals {
+  additional_tags = {
+    chargeable_entity    = "monitoring"
+    environment          = var.govuk_environment
+    project              = "replatforming"
+    repository           = "govuk-infrastructure"
+    terraform_deployment = "monitoring"
+    terraform_workspace  = var.workspace
   }
-}
 
-data "aws_region" "current" {}
+  workspace_external_domain = "${var.workspace}.${var.external_app_domain}"
+}
