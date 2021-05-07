@@ -6,7 +6,6 @@
 set -euf -o pipefail
 
 trap "exit" INT TERM
-trap "kill -- -$$" EXIT
 
 OPTIND=1 # Reset in case getopts has been used previously in the shell.
 
@@ -81,14 +80,12 @@ task=$(aws ecs run-task --cluster $cluster \
 }')
 
 task_arn=$(echo $task | jq -r .tasks[0].taskArn)
-task_id=${task_arn##*/}
 
 echo "Waiting for task $task_arn to finish..."
 echo "View task: https://eu-west-1.console.aws.amazon.com/ecs/home?region=eu-west-1#/clusters/$cluster/tasks"
-echo "Tailing logs..."
 echo ""
-
-(aws --region eu-west-1 logs tail $cluster --follow | grep "${application}-${variant}/app/${task_id}")&
+echo "Start a shell:"
+echo "aws ecs execute-command --cluster task_runner --task ${task_arn} --container app --command /bin/bash --interactive"
 
 aws ecs wait tasks-stopped --tasks="[\"$task_arn\"]" --cluster $cluster
 
@@ -97,8 +94,5 @@ exit_code=$(echo $task_results | jq [.tasks[0].containers[].exitCode] | jq add)
 
 echo ""
 echo "Task finished. Exit code: $exit_code"
-
-# Sleep for a few seconds to let the logs catch up...
-sleep 5
 
 exit $exit_code
