@@ -56,7 +56,7 @@ resources:
     icon: concourse-ci
     source:
       <<: *govuk-infrastructure-source
-      paths: [ concourse/tasks ]
+      paths: [ concourse/tasks, lib/signon, tasks/app_secrets.rake ]
 
   - name: smokey-terraform-outputs
     type: s3
