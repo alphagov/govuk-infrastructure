@@ -4,7 +4,7 @@ resource "aws_wafv2_ip_set" "waf_ipv4_set_signon_api" {
   description        = "access to backends origin ${local.workspace} cloudfront"
   scope              = "CLOUDFRONT"
   ip_address_version = "IPV4"
-  addresses          = concat(var.office_cidrs_list, local.aws_nat_gateways_cidrs)
+  addresses          = concat(var.concourse_cidrs_list, var.office_cidrs_list, local.aws_nat_gateways_cidrs)
 }
 
 resource "aws_wafv2_web_acl" "backends_origin_cloudfront_web_acl" {
