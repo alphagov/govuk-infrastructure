@@ -1,3 +1,7 @@
+variable "concourse_cidrs_list" {
+  type = list(string)
+}
+
 variable "content_store_cpu" {
   type = number
 }
