@@ -39,6 +39,11 @@ jobs:
           bundle install
           rspec
 
+      - name: rubocop
+        run: |
+          bundle install
+          rubocop
+
       - name: terraform validate
         working-directory: terraform
         env:
@@ -78,4 +83,3 @@ jobs:
               echo -e '\n-------------------------\n'
             )
           done
-

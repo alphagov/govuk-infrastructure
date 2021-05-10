@@ -1,4 +1,5 @@
-require 'webmock/rspec'
+require "webmock/rspec"
+$LOAD_PATH << File.expand_path("../lib", __dir__)
 
 # See http://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
 RSpec.configure do |config|

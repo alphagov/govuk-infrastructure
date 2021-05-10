@@ -25,3 +25,9 @@ resource "aws_security_group" "smokey" {
     },
   )
 }
+
+resource "aws_security_group" "signon_lambda" {
+  name        = "signon-lambda-${terraform.workspace}"
+  vpc_id      = local.vpc_id
+  description = "Signon Lambda"
+}

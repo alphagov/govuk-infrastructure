@@ -68,10 +68,8 @@ module "content_store" {
   secrets_from_arns = merge(
     local.content_store_defaults.secrets_from_arns,
     {
-      # PUBLISHING_API_BEARER_TOKEN = module.content_store_to_publishing_api_bearer_token.secret_arn
-      # ROUTER_API_BEARER_TOKEN     = module.content_store_to_router_api_bearer_token.secret_arn
-      PUBLISHING_API_BEARER_TOKEN = data.aws_secretsmanager_secret.content_store_publishing_api_bearer_token.arn
-      ROUTER_API_BEARER_TOKEN     = data.aws_secretsmanager_secret.content_store_router_api_bearer_token.arn
+      PUBLISHING_API_BEARER_TOKEN = module.content_store_to_publishing_api_bearer_token.secret_arn
+      ROUTER_API_BEARER_TOKEN     = module.content_store_to_router_api_bearer_token.secret_arn
     }
   )
   splunk_url_secret_arn   = local.defaults.splunk_url_secret_arn
@@ -121,10 +119,8 @@ module "draft_content_store" {
   secrets_from_arns = merge(
     local.content_store_defaults.secrets_from_arns,
     {
-      # PUBLISHING_API_BEARER_TOKEN = module.draft_content_store_to_publishing_api_bearer_token.secret_arn
-      # ROUTER_API_BEARER_TOKEN     = module.draft_content_store_to_router_api_bearer_token.secret_arn
-      PUBLISHING_API_BEARER_TOKEN = data.aws_secretsmanager_secret.content_store_publishing_api_bearer_token.arn
-      ROUTER_API_BEARER_TOKEN     = data.aws_secretsmanager_secret.content_store_router_api_bearer_token.arn
+      PUBLISHING_API_BEARER_TOKEN = module.draft_content_store_to_publishing_api_bearer_token.secret_arn
+      ROUTER_API_BEARER_TOKEN     = module.draft_content_store_to_router_api_bearer_token.secret_arn
     }
   )
   splunk_url_secret_arn   = local.defaults.splunk_url_secret_arn

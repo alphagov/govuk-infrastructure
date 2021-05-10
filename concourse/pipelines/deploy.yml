@@ -593,6 +593,8 @@ jobs:
     - in_parallel:
       - get: govuk-infrastructure
         resource: govuk-infrastructure-concourse-tasks
+        passed:
+        - deploy-signon
         trigger: true
       - get: app-terraform-outputs
         resource: frontend-terraform-outputs
@@ -602,6 +604,11 @@ jobs:
       - get: frontend-image
         trigger: true
     - in_parallel:
+      - task: bootstrap-secrets
+        file: govuk-infrastructure/concourse/tasks/bootstrap-app-secrets.yml
+        params:
+          APPLICATION: frontend
+          VARIANT: live
       - task: upload-rails-assets
         file: govuk-infrastructure/concourse/tasks/upload-rails-assets.yml
         input_mapping:
@@ -678,6 +685,8 @@ jobs:
     - in_parallel:
       - get: govuk-infrastructure
         resource: govuk-infrastructure-concourse-tasks
+        passed:
+        - deploy-signon
         trigger: true
       - get: app-terraform-outputs
         resource: publisher-terraform-outputs
@@ -687,6 +696,11 @@ jobs:
       - get: publisher-image
         trigger: true
     - in_parallel:
+      - task: bootstrap-secrets
+        file: govuk-infrastructure/concourse/tasks/bootstrap-app-secrets.yml
+        params:
+          APPLICATION: publisher
+          VARIANT: web
       - task: upload-rails-assets
         file: govuk-infrastructure/concourse/tasks/upload-rails-assets.yml
         input_mapping:
@@ -770,6 +784,8 @@ jobs:
     - in_parallel:
       - get: govuk-infrastructure
         resource: govuk-infrastructure-concourse-tasks
+        passed:
+        - deploy-signon
         trigger: true
       - get: app-terraform-outputs
         resource: publishing-api-terraform-outputs
@@ -779,6 +795,11 @@ jobs:
       - get: publishing-api-image
         trigger: true
     - in_parallel:
+      - task: bootstrap-secrets
+        file: govuk-infrastructure/concourse/tasks/bootstrap-app-secrets.yml
+        params:
+          APPLICATION: publishing-api
+          VARIANT: web
       - task: update-web-task-definition
         file: govuk-infrastructure/concourse/tasks/update-task-definition.yml
         input_mapping:
@@ -821,7 +842,7 @@ jobs:
           ECS_SERVICE: publishing-api-worker
           WORKSPACE: ((workspace))
         input_mapping:
-            task-definition-arn: worker-task-definition-arn
+          task-definition-arn: worker-task-definition-arn
     - in_parallel:
       - <<: *await-deploy-complete
         task: await-deploy-complete-web
@@ -842,6 +863,8 @@ jobs:
     - in_parallel:
       - get: govuk-infrastructure
         resource: govuk-infrastructure-concourse-tasks
+        passed:
+        - deploy-signon
         trigger: true
       - get: app-terraform-outputs
         resource: content-store-terraform-outputs
@@ -851,6 +874,16 @@ jobs:
       - get: content-store-image
         trigger: true
     - in_parallel:
+      - task: bootstrap-secrets
+        file: govuk-infrastructure/concourse/tasks/bootstrap-app-secrets.yml
+        params:
+          APPLICATION: content-store
+          VARIANT: draft
+      - task: bootstrap-secrets
+        file: govuk-infrastructure/concourse/tasks/bootstrap-app-secrets.yml
+        params:
+          APPLICATION: content-store
+          VARIANT: live
       - task: update-draft-task-definition
         file: govuk-infrastructure/concourse/tasks/update-task-definition.yml
         input_mapping:
@@ -966,6 +999,8 @@ jobs:
     - in_parallel:
       - get: govuk-infrastructure
         resource: govuk-infrastructure-concourse-tasks
+        passed:
+        - deploy-signon
         trigger: true
       - get: app-terraform-outputs
         resource: router-api-terraform-outputs
@@ -1055,6 +1090,18 @@ jobs:
           app-image: signon-image
         output_mapping:
           task-definition-arn: task-definition-arn
+    - task: make-bootstrap-command
+      file: govuk-infrastructure/concourse/tasks/make-signon-bootstrap-command.yml
+      params:
+        WORKSPACE: ((workspace))
+    - task: create-signon-resources
+      file: govuk-infrastructure/concourse/tasks/run-task.yml
+      input_mapping:
+        task-definition-arn: task-definition-arn
+        run-task-command: run-task-command
+      params:
+        APPLICATION: signon
+        VARIANT: web
     - task: update-ecs-service
       file: govuk-infrastructure/concourse/tasks/update-ecs-service.yml
       input_mapping:

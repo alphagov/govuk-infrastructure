@@ -8,19 +8,26 @@
 # app-terraform-outputs contains the JSON file such as publisher.json output
 # from running TF apply against govuk-publishing-platform. It provides the
 # network config used by the task.
-# Finally, as a *third* input, the environment variables provide a) extra
+# As a *third* input, the environment variables provide a) extra
 # configuration for the task and b) configuration for the network config.
+# To provide the COMMAND (e.g. `sleep 1 && echo "done"`) that you wish the task
+# to run, you can provide either a COMMAND param or a file containing the task
+# to run in run-task-command/run-task-command. Prefer the param approach where
+# possible, since it is clearer.
 
 set -eu
 
 root_dir=$(pwd)
 
+# Permits using input file or COMMAND param
+COMMAND=${COMMAND:-"$(cat "run-task-command/run-task-command")"}
+
 # Raise error if env vars not set
 : "${ASSUME_ROLE_ARN:?ASSUME_ROLE_ARN not set}"
 : "${AWS_REGION:?AWS_REGION not set}"
 : "${APPLICATION:?APPLICATION not set}"
-: "${COMMAND:?COMMAND not set}"
-: "${CLUSTER:?COMMAND not set}"
+: "${COMMAND:?COMMAND param is unset or run-task-command file is empty}"
+: "${CLUSTER:?CLUSTER not set}"
 : "${VARIANT:?VARIANT not set}"
 
 mkdir -p ~/.aws

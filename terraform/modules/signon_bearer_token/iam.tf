@@ -78,6 +78,30 @@ resource "aws_iam_policy" "secretsmanager_rotation" {
         }
       },
       {
+        Effect = "Allow",
+        Action = [
+          "secretsmanager:GetSecretValue"
+        ],
+        Resource = var.signon_admin_password_arn
+      }
+    ]
+  })
+}
+
+resource "aws_iam_role_policy_attachment" "vpc" {
+  role       = aws_iam_role.lambda_execution_role.name
+  policy_arn = aws_iam_policy.vpc.arn
+}
+
+resource "aws_iam_policy" "vpc" {
+  name        = "${local.secret_name}_vpc_policy"
+  path        = "/"
+  description = "Allow lambda to interact with VPC"
+
+  policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [
+      {
         Action = [
           "ec2:CreateNetworkInterface",
           "ec2:DeleteNetworkInterface",
@@ -85,13 +109,6 @@ resource "aws_iam_policy" "secretsmanager_rotation" {
         ],
         Resource = "*",
         Effect   = "Allow"
-      },
-      {
-        Effect = "Allow",
-        Action = [
-          "secretsmanager:GetSecretValue"
-        ],
-        Resource = var.signon_admin_password_arn
       }
     ]
   })

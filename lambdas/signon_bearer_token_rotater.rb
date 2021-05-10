@@ -1,54 +1,76 @@
-require 'aws-sdk-secretsmanager'
-require 'json'
-require 'logger'
-require 'net/http'
-require 'uri'
+require "aws-sdk-secretsmanager"
+require "json"
+require "logger"
+require "net/http"
+require "uri"
 
 class SignonClient
-  ENDPOINT = ENV.fetch('SIGNON_API_URL')
+  ENDPOINT = ENV.fetch("SIGNON_API_URL")
 
-  def initialize(api_user:, auth_token:)
+  def initialize(api_user:, auth_token:, logger: Logger.new($stdout), max_retries: 9)
     @api_user = api_user
     @auth_token = auth_token
+    @max_retries = max_retries
+    @logger = logger
   end
 
   def create_bearer_token(application_name:, permissions:)
-    uri = URI("#{ENDPOINT}/authorisations")
-    req = Net::HTTP::Post.new(uri)
-    req.body = {
-      api_user_email: @api_user,
-      application_name: application_name,
-      permissions: permissions
-    }.to_json
-    res = do_request(req, uri)
-    raise TokenNotCreated, "Status: #{res.code}; #{res.message}; #{res.body}" unless %w[200 201].include?(res.code)
+    attempt do
+      uri = URI("#{ENDPOINT}/authorisations")
+      req = Net::HTTP::Post.new(uri)
+      req.body = {
+        api_user_email: @api_user,
+        application_name: application_name,
+        permissions: permissions,
+      }.to_json
+      res = do_request(req, uri)
+      raise TokenNotCreated, "Status: #{res.code}; #{res.message}; #{res.body}" unless %w[200 201].include?(res.code)
 
-    JSON.parse(res.body).fetch('token')
+      JSON.parse(res.body).fetch("token")
+    end
   end
 
   def test_bearer_token(token:, application_name:, permissions:)
-    uri = URI("#{ENDPOINT}/authorisations/test")
-    req = Net::HTTP::Post.new(uri)
-    req.body = {
-      token: token,
-      api_user_email: @api_user,
-      application_name: application_name,
-      permissions: permissions
-    }.to_json
-    res = do_request(req, uri)
-    raise TokenNotFound, "Status: #{res.code}; #{res.message}; #{res.body}" unless res.code == '200'
+    attempt do
+      uri = URI("#{ENDPOINT}/authorisations/test")
+      req = Net::HTTP::Post.new(uri)
+      req.body = {
+        token: token,
+        api_user_email: @api_user,
+        application_name: application_name,
+        permissions: permissions,
+      }.to_json
+      res = do_request(req, uri)
+      raise TokenNotFound, "Status: #{res.code}; #{res.message}; #{res.body}" unless res.code == "200"
+    end
   end
 
-  private
+private
 
   class TokenNotFound < StandardError; end
 
   class TokenNotCreated < StandardError; end
 
+  def attempt(&request)
+    retries ||= 0
+    begin
+      yield request
+    rescue TokenNotFound, TokenNotCreated
+      if (retries += 1) <= @max_retries
+        @logger.info "Rescued failed attempt. Attempts remaining: #{@max_retries - retries}."
+        sleep(2**retries)
+        retry
+      else
+        @logger.info "#{@max_retries} attempts failed. Bailing out."
+        raise
+      end
+    end
+  end
+
   def do_request(request, uri)
-    request['Authorization'] = "Bearer #{@auth_token}"
-    request['Content-Type'] = 'application/json'
-    Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) do |http|
+    request["Authorization"] = "Bearer #{@auth_token}"
+    request["Content-Type"] = "application/json"
+    Net::HTTP.start(uri.hostname, uri.port) do |http|
       http.request(request)
     end
   end
@@ -71,11 +93,11 @@ class NotPendingVersion < InvalidVersion; end
 #   "Step" => "The rotation step (one of createSecret, setSecret, testSecret, or finishSecret)",
 # }
 # @context: https://docs.aws.amazon.com/lambda/latest/dg/ruby-context.html
-def handler(event:, context:)
+def handler(event:, context:) # rubocop:disable Lint/UnusedMethodArgument
   logger = Logger.new($stdout)
-  arn = event.fetch('SecretId')
-  token = event.fetch('ClientRequestToken')
-  step = event.fetch('Step')
+  arn = event.fetch("SecretId")
+  token = event.fetch("ClientRequestToken")
+  step = event.fetch("Step")
 
   # Setup the client
   service_client = Aws::SecretsManager::Client.new
@@ -97,33 +119,34 @@ def handler(event:, context:)
     raise UnknownVersion, error
   end
 
-  if versions[token].include?('AWSCURRENT')
+  if versions[token].include?("AWSCURRENT")
     logger.info("Secret version #{token} already set as AWSCURRENT for secret #{arn}.")
     return
   end
 
-  unless versions[token].include?('AWSPENDING')
+  unless versions[token].include?("AWSPENDING")
     error = "Secret version #{token} not set as AWSPENDING for rotation of secret #{arn}."
     logger.error(error)
     raise NotPendingVersion, error
   end
 
   signon_client = SignonClient.new(
-    api_user: ENV.fetch('API_USER_EMAIL'),
-    auth_token: get_admin_password(service_client, logger)
+    api_user: ENV.fetch("API_USER_EMAIL"),
+    auth_token: get_admin_password(service_client, logger),
+    logger: logger,
   )
 
   case step
-  when 'createSecret'
+  when "createSecret"
     create_secret(service_client, arn, token, logger, signon_client)
-  when 'setSecret'
+  when "setSecret"
     check_secret(service_client, arn, token, logger)
-  when 'testSecret'
+  when "testSecret"
     test_secret(service_client, arn, token, logger, signon_client)
-  when 'finishSecret'
+  when "finishSecret"
     finish_secret(service_client, arn, token, logger)
   else
-    raise ArgumentError, 'Invalid step parameter'
+    raise ArgumentError, "Invalid step parameter"
   end
 end
 
@@ -134,15 +157,15 @@ end
 def create_secret(service_client, arn, token, logger, signon_client)
   # Check if the current SecretsManager secret resource exists. If there's
   # no current secret we'll create a new one.
-  service_client.get_secret_value(secret_id: arn, version_stage: 'AWSCURRENT')
+  service_client.get_secret_value(secret_id: arn, version_stage: "AWSCURRENT")
 
   # Now try to get the secret version, if that fails, put a new secret
-  service_client.get_secret_value(secret_id: arn, version_id: token, version_stage: 'AWSPENDING')
+  service_client.get_secret_value(secret_id: arn, version_id: token, version_stage: "AWSPENDING")
   logger.info("createSecret: Successfully retrieved secret for #{arn}.")
 rescue Aws::SecretsManager::Errors::ResourceNotFoundException
   secret_string = signon_client.create_bearer_token(
-    application_name: ENV.fetch('APPLICATION_NAME'),
-    permissions: ENV.fetch('PERMISSIONS').split(',')
+    application_name: ENV.fetch("APPLICATION_NAME"),
+    permissions: ENV.fetch("PERMISSIONS").split(","),
   )
 
   # Put the secret
@@ -150,7 +173,7 @@ rescue Aws::SecretsManager::Errors::ResourceNotFoundException
     secret_id: arn,
     client_request_token: token,
     secret_string: secret_string,
-    version_stages: ['AWSPENDING']
+    version_stages: %w[AWSPENDING],
   )
 
   logger.info("createSecret: Successfully put secret for ARN #{arn} and version #{token}.")
@@ -163,23 +186,23 @@ end
 # (Signon). However, Signon creates the secret in the create step, so this step
 # is a bit redundant.
 def check_secret(service_client, arn, token, logger)
-  service_client.get_secret_value(secret_id: arn, version_id: token, version_stage: 'AWSPENDING')
+  service_client.get_secret_value(secret_id: arn, version_id: token, version_stage: "AWSPENDING")
   logger.info("setSecret: Successfully retrieved secret for #{arn}.")
-  logger.info('setSecret: The secret has already been set in signon')
+  logger.info("setSecret: The secret has already been set in signon")
 end
 
 # Test the secret
 # Validates signon has the token and the correct permissions are set.
 def test_secret(service_client, arn, token, logger, signon_client)
-  secret = service_client.get_secret_value(secret_id: arn, version_id: token, version_stage: 'AWSPENDING')
+  secret = service_client.get_secret_value(secret_id: arn, version_id: token, version_stage: "AWSPENDING")
 
   signon_client.test_bearer_token(
     token: secret.secret_string,
-    application_name: ENV.fetch('APPLICATION_NAME'),
-    permissions: ENV.fetch('PERMISSIONS')
+    application_name: ENV.fetch("APPLICATION_NAME"),
+    permissions: ENV.fetch("PERMISSIONS"),
   )
 
-  logger.info('[wip] testSecret SUCCESS! The secret is working!')
+  logger.info("[wip] testSecret SUCCESS! The secret is working!")
 end
 
 # Finish the secret
@@ -190,7 +213,7 @@ def finish_secret(service_client, arn, token, logger)
   metadata = service_client.describe_secret(secret_id: arn)
   versions = metadata.version_ids_to_stages
   current_version = versions.keys.find do |version|
-    versions[version].include?('AWSCURRENT')
+    versions[version].include?("AWSCURRENT")
   end
 
   if current_version == token
@@ -202,17 +225,17 @@ def finish_secret(service_client, arn, token, logger)
   # Finalize by staging the secret version current
   service_client.update_secret_version_stage(
     secret_id: arn,
-    version_stage: 'AWSCURRENT',
+    version_stage: "AWSCURRENT",
     move_to_version_id: token,
-    remove_from_version_id: current_version
+    remove_from_version_id: current_version,
   )
   logger.info("finishSecret: Successfully set AWSCURRENT stage to version #{token} for secret #{arn}.")
 end
 
 def get_admin_password(service_client, _logger)
   secret = service_client.get_secret_value(
-    secret_id: ENV.fetch('ADMIN_PASSWORD_KEY'),
-    version_stage: 'AWSCURRENT'
+    secret_id: ENV.fetch("ADMIN_PASSWORD_KEY"),
+    version_stage: "AWSCURRENT",
   )
   secret.secret_string
 end
