@@ -40,7 +40,8 @@ module Signon
       end
 
       versions = metadata.version_ids_to_stages
-      if versions.any?
+      has_current_version = versions.values.any? { |stages| stages.include?("AWSCURRENT") }
+      if has_current_version
         logger.info "Secret #{secret_arn} already bootstrapped."
         return
       end
