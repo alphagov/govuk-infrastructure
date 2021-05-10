@@ -21,12 +21,6 @@ data "aws_secretsmanager_secret" "frontend_secret_key_base" {
 
 # Content store app secrets
 
-data "aws_secretsmanager_secret" "content_store_oauth_id" {
-  name = "content-store_OAUTH_ID"
-}
-data "aws_secretsmanager_secret" "content_store_oauth_secret" {
-  name = "content-store_OAUTH_SECRET"
-}
 data "aws_secretsmanager_secret" "content_store_secret_key_base" {
   name = "content-store_SECRET_KEY_BASE" # pragma: allowlist secret
 }
@@ -63,12 +57,6 @@ data "aws_secretsmanager_secret" "publisher_link_checker_api_secret_token" {
 data "aws_secretsmanager_secret" "publisher_mongodb_uri" {
   name = "publisher_app-MONGODB_URI"
 }
-data "aws_secretsmanager_secret" "publisher_oauth_id" {
-  name = "publisher_app-OAUTH_ID"
-}
-data "aws_secretsmanager_secret" "publisher_oauth_secret" {
-  name = "publisher_app-OAUTH_SECRET"
-}
 data "aws_secretsmanager_secret" "publisher_secret_key_base" {
   name = "publisher_app-SECRET_KEY_BASE" # pragma: allowlist secret
 }
@@ -81,14 +69,6 @@ data "aws_secretsmanager_secret" "publishing_api_database_url" {
 
 data "aws_secretsmanager_secret" "publishing_api_event_log_aws_secret_key" {
   name = "publishing_api_app-EVENT_LOG_AWS_SECRET_KEY"
-}
-
-data "aws_secretsmanager_secret" "publishing_api_oauth_id" {
-  name = "publishing_api_app-OAUTH_ID"
-}
-
-data "aws_secretsmanager_secret" "publishing_api_oauth_secret" {
-  name = "publishing_api_app-OAUTH_SECRET"
 }
 
 data "aws_secretsmanager_secret" "publishing_api_rabbitmq_password" {
@@ -142,20 +122,8 @@ data "aws_secretsmanager_secret" "draft_static_secret_key_base" {
 
 # Router-api app
 
-data "aws_secretsmanager_secret" "router_api_oauth_id" {
-  name = "router-api_OAUTH_ID"
-}
-data "aws_secretsmanager_secret" "router_api_oauth_secret" {
-  name = "router-api_OAUTH_SECRET"
-}
 data "aws_secretsmanager_secret" "router_api_secret_key_base" {
   name = "router-api_SECRET_KEY_BASE"
-}
-data "aws_secretsmanager_secret" "draft_router_api_oauth_id" {
-  name = "draft-router-api_OAUTH_ID"
-}
-data "aws_secretsmanager_secret" "draft_router_api_oauth_secret" {
-  name = "draft-router-api_OAUTH_SECRET"
 }
 data "aws_secretsmanager_secret" "draft_router_api_secret_key_base" {
   name = "draft-router-api_SECRET_KEY_BASE"
@@ -163,12 +131,6 @@ data "aws_secretsmanager_secret" "draft_router_api_secret_key_base" {
 
 # Authenticating-proxy app
 
-data "aws_secretsmanager_secret" "authenticating_proxy_oauth_id" {
-  name = "authenticating-proxy_OAUTH_ID"
-}
-data "aws_secretsmanager_secret" "authenticating_proxy_oauth_secret" {
-  name = "authenticating-proxy_OAUTH_SECRET"
-}
 data "aws_secretsmanager_secret" "authenticating_proxy_secret_key_base" {
   name = "authenticating-proxy_SECRET_KEY_BASE"
 }

@@ -8,12 +8,15 @@ RSpec.describe Signon::Client do
   let(:permissions) { "signin,publish" }
 
   let(:client) do
-    described_class.new(api_url: api_url, api_user: api_user, auth_token: auth_token, max_retries: 0)
+    logger = Logger.new(STDOUT)
+    logger.level = Logger::WARN
+    described_class.new(api_url: api_url, auth_token: auth_token, max_retries: 0, logger: logger)
   end
 
   describe "#create_bearer_token" do
     subject(:response) do
       client.create_bearer_token(
+        api_user: api_user,
         application_name: application_name,
         permissions: permissions,
       )
@@ -51,6 +54,7 @@ RSpec.describe Signon::Client do
   describe "#test_bearer_token" do
     subject(:response) do
       client.test_bearer_token(
+        api_user: api_user,
         application_name: application_name,
         permissions: permissions,
         token: auth_token,
@@ -79,8 +83,80 @@ RSpec.describe Signon::Client do
     end
   end
 
-  def stub_req(endpoint)
-    stub_request(:post, endpoint)
+  describe "#create_application" do
+    subject(:response) do
+      client.create_application(
+        name: "app",
+        description: "app desc",
+        home_uri: "https://app.example.org",
+        permissions: %w[signin],
+        redirect_uri: "https://app.example.org/gds/auth/callback",
+      )
+    end
+
+    let(:endpoint) { "#{api_url}/applications" }
+
+    context "when signon request is successful" do
+      let(:res) { { "oauth_id" => "a", "oauth_secret" => "b" } }
+
+      it "does not raise an error" do
+        stub_req(endpoint).to_return(
+          status: 200, body: JSON.generate(res),
+        )
+        expect { response }.not_to raise_error
+        expect(response).to eq res
+      end
+    end
+
+    context "when application already exists" do
+      it "raises a custom error" do
+        stub_req(endpoint).to_return(
+          status: 400,
+          body: JSON.generate(error: "Record already exists"),
+        )
+        expect { response }.to raise_error(Signon::Client::ApplicationAlreadyCreated)
+      end
+    end
+
+    context "when signon request fails" do
+      it "raises a custom error" do
+        stub_req(endpoint).to_return(
+          status: 400,
+          body: JSON.generate(error: "Invalid request"),
+        )
+        expect { response }.to raise_error(Signon::Client::ApplicationNotCreated)
+      end
+    end
+  end
+
+  describe "#get_application" do
+    subject(:response) do
+      client.get_application(name: "[Workspace] Publishing API")
+    end
+
+    let(:endpoint) { "#{api_url}/applications?name=%5BWorkspace%5D+Publishing+API" }
+
+    context "when signon request is successful" do
+      let(:res) { { "oauth_id" => "a", "oauth_secret" => "b" } }
+
+      it "does not raise an error" do
+        stub_req(endpoint, method: :get)
+          .to_return(status: 200, body: JSON.generate(res))
+        expect { response }.not_to raise_error
+        expect(response).to eq res
+      end
+    end
+
+    context "when an application isn't found" do
+      it "raises a custom error" do
+        stub_req(endpoint, method: :get).to_return(status: 404)
+        expect { response }.to raise_error(Signon::Client::ApplicationNotFound)
+      end
+    end
+  end
+
+  def stub_req(endpoint, method: :post)
+    stub_request(method, endpoint)
       .with(headers: {
         "Authorization" => "Bearer #{auth_token}",
         "Content-Type" => "application/json",

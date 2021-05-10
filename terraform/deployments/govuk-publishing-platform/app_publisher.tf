@@ -54,8 +54,8 @@ locals {
         LINK_CHECKER_API_SECRET_TOKEN = data.aws_secretsmanager_secret.publisher_link_checker_api_secret_token.arn,
         # TODO: Only the password should be a secret in the MONGODB_URI.
         MONGODB_URI                 = data.aws_secretsmanager_secret.publisher_mongodb_uri.arn,
-        GDS_SSO_OAUTH_ID            = data.aws_secretsmanager_secret.publisher_oauth_id.arn,
-        GDS_SSO_OAUTH_SECRET        = data.aws_secretsmanager_secret.publisher_oauth_secret.arn,
+        GDS_SSO_OAUTH_ID            = module.oauth_applications["publisher"].id_arn
+        GDS_SSO_OAUTH_SECRET        = module.oauth_applications["publisher"].secret_arn
         PUBLISHING_API_BEARER_TOKEN = module.publisher_to_publishing_api_bearer_token.secret_arn,
         SECRET_KEY_BASE             = data.aws_secretsmanager_secret.publisher_secret_key_base.arn,
       }
