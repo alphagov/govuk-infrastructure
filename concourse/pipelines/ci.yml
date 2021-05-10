@@ -53,3 +53,24 @@ jobs:
       on_error:
         put: govuk-infrastructure-commit
         params: {status: error, context: terraform-plan-govuk-deployment}
+
+  - name: terraform-plan-monitoring
+    plan:
+    - get: govuk-infrastructure-commit
+      trigger: true
+    - put: govuk-infrastructure-commit
+      params: {status: pending, context: terraform-plan-govuk-deployment}
+    - task: terraform-plan
+      file: govuk-infrastructure-commit/repo/concourse/tasks/terraform-plan-monitoring.yml
+      on_success:
+        put: govuk-infrastructure-commit
+        params: {status: success, context: terraform-plan-monitoring}
+      on_failure:
+        put: govuk-infrastructure-commit
+        params: {status: failure, context: terraform-plan-monitoring}
+      on_abort:
+        put: govuk-infrastructure-commit
+        params: {status: error, context: terraform-plan-monitoring}
+      on_error:
+        put: govuk-infrastructure-commit
+        params: {status: error, context: terraform-plan-monitoring}
