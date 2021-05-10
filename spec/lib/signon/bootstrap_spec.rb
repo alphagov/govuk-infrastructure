@@ -64,6 +64,8 @@ RSpec.describe Signon::Bootstrap do
   end
 
   context "when secret has already been created" do
+    let(:versions) { { "version1" => %w[AWSCURRENT] } }
+
     it "does not create a new token" do
       signon_request = stub_request(:post, /signon.example.org/)
 
@@ -72,8 +74,8 @@ RSpec.describe Signon::Bootstrap do
     end
   end
 
-  context "when no secret versions exist yet" do
-    let(:versions) { {} }
+  context "when no AWSCURRENT secret version exist yet" do
+    let(:versions) { { "version1" => %w[AWSPENDING] } }
 
     it "creates a secret in signon" do
       stub = stub_request(:post, /signon.example.org/)
