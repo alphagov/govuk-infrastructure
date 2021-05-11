@@ -11,14 +11,13 @@ inputs:
     path: src
   - name: app-terraform-outputs
   - name: task-definition-arn
-  - name: run-task-command
-    optional: true
 params:
   AWS_REGION: eu-west-1
   ASSUME_ROLE_ARN: 'arn:aws:iam::430354129336:role/govuk-concourse-deployer'
   APPLICATION:
   CLUSTER: task_runner
-  COMMAND: # Place command in run-task-command file or use COMMAND param
+  COMMAND:
   VARIANT:
+  SKIP_DB_MIGRATIONS:
 run:
   path: ./src/concourse/tasks/run-task.sh

@@ -371,7 +371,8 @@ jobs:
     - file: govuk-infrastructure/concourse/pipelines/deploy.yml
       set_pipeline: self
       var_files:
-        - govuk-infrastructure/concourse/pipelines/((workspace))/deploy-parameters.yml
+        - govuk-infrastructure/concourse/pipelines/deploy-parameters.yml
+        - govuk-infrastructure/concourse/parameters/((govuk_environment))/parameters.yml
 
   - name: run-terraform
     serial: true
@@ -730,7 +731,7 @@ jobs:
           VARIANT: worker
           GOVUK_ENVIRONMENT: test
     - task: run-db-migrations
-      file: govuk-infrastructure/concourse/tasks/run-task.yml
+      file: govuk-infrastructure/concourse/tasks/run-db-migrations.yml
       input_mapping:
         task-definition-arn: web-task-definition-arn
       params:
