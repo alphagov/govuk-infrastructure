@@ -1,1 +1,1 @@
-skip_db_migrations: true
+skip_db_migrations: false
