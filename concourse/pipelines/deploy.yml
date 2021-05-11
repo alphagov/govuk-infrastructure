@@ -329,6 +329,7 @@ jobs:
     - get: govuk-infrastructure
       trigger: false
     - task: destroy-terraform
+      attempts: 3
       config:
         inputs:
         - name: govuk-infrastructure
