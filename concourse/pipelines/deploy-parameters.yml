@@ -1,3 +1,2 @@
 workspace: default
 govuk_infrastructure_branch: main
-skip_db_migrations: true

@@ -22,7 +22,7 @@ root_dir=$(pwd)
 : "${COMMAND:?COMMAND not set}"
 : "${CLUSTER:?COMMAND not set}"
 : "${VARIANT:?VARIANT not set}"
-: "${SKIP_DB_MIGRATIONS:?SKIP_DB_MIGRATIONS not set}"
+: "${SKIP_DB_MIGRATIONS:?false}"
 
 if [[ "$SKIP_DB_MIGRATIONS" == "true" ]]; then
   echo "Skipping DB Migrations"
