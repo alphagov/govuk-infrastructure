@@ -59,12 +59,17 @@ variable "publisher_desired_count" {
   default = 1
 }
 
+variable "publisher_worker_desired_count" {
+  type    = number
+  default = 1
+}
+
 variable "publishing_api_desired_count" {
   type    = number
   default = 1
 }
 
-variable "publisher_worker_desired_count" {
+variable "publishing_api_worker_desired_count" {
   type    = number
   default = 1
 }

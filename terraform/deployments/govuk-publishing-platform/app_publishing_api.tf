@@ -93,7 +93,7 @@ module "publishing_api_worker" {
   vpc_id                           = local.vpc_id
   cluster_id                       = aws_ecs_cluster.cluster.id
   source                           = "../../modules/app"
-  desired_count                    = var.publishing_api_desired_count
+  desired_count                    = var.publishing_api_worker_desired_count
   extra_security_groups            = [module.publishing_api_web.security_group_id, local.govuk_management_access_security_group, aws_security_group.mesh_ecs_service.id]
   container_healthcheck_command    = ["/bin/sh", "-c", "exit 0"]
   subnets                          = local.private_subnets
