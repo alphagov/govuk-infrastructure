@@ -4,7 +4,7 @@ locals {
     essential   = true,
     environment = [for key, value in local.grafana_environment_variables : { name : key, value : tostring(value) }],
     healthCheck = {
-      command     = ["/bin/bash", "-c", "curl -f http://localhost:${var.grafana_port} || exit 1"]
+      command     = ["/bin/bash", "-c", "wget -q -O - http://localhost:3000/api/health || exit 1"]
       startPeriod = 30
       retries     = 5
     }

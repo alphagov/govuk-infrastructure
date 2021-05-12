@@ -91,4 +91,5 @@ module "monitoring" {
   workspace                     = local.workspace
   additional_tags               = local.additional_tags
   capacity_provider             = var.ecs_default_capacity_provider
+  grafana_image_tag             = "7.5.6"
 }
