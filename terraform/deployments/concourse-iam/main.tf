@@ -90,7 +90,8 @@ resource "aws_iam_role_policy" "concourse_terraform_planner_test" {
         "Sid" : "TerraformPlannerReadsNonSensitiveTestSecrets",
         "Effect" : "Allow",
         "Action" : "secretsmanager:GetSecretValue",
-        "Resource" : "arn:aws:secretsmanager:eu-west-1:430354129336:secret:signon_admin_password_ecs-*"
+        "Resource" : ["arn:aws:secretsmanager:eu-west-1:430354129336:secret:signon_admin_password_ecs-*",
+        "arn:aws:secretsmanager:eu-west-1:430354129336:secret:grafana_password-*"]
       }
     ]
   })
