@@ -9,7 +9,7 @@ terraform {
   required_providers {
     aws = {
       source  = "hashicorp/aws"
-      version = "~> 3.13"
+      version = "~> 3.33"
     }
   }
 }
@@ -52,13 +52,33 @@ data "terraform_remote_state" "govuk" {
   }
 }
 
+data "aws_secretsmanager_secret" "splunk_url" {
+  name = "SPLUNK_HEC_URL"
+}
+
+data "aws_secretsmanager_secret" "splunk_token" {
+  name = "SPLUNK_TOKEN"
+}
+
+locals {
+  workspace = terraform.workspace == "default" ? "ecs" : terraform.workspace #default terraform workspace mapped to ecs
+  additional_tags = {
+    chargeable_entity    = "monitoring"
+    environment          = var.govuk_environment
+    project              = "replatforming"
+    repository           = "govuk-infrastructure"
+    terraform_deployment = "monitoring"
+    terraform_workspace  = local.workspace
+  }
+}
+
 module "monitoring" {
   source                    = "../../../modules/monitoring"
   external_app_domain       = var.external_app_domain
   publishing_service_domain = var.publishing_service_domain
 
-  splunk_url_secret_arn   = ""
-  splunk_token_secret_arn = ""
+  splunk_url_secret_arn   = data.aws_secretsmanager_secret.splunk_url.arn
+  splunk_token_secret_arn = data.aws_secretsmanager_secret.splunk_token.arn
   splunk_sourcetype       = "log"
   splunk_index            = "govuk_replatforming"
 
@@ -67,5 +87,10 @@ module "monitoring" {
   public_subnets                = data.terraform_remote_state.infra_networking.outputs.public_subnet_ids
   govuk_management_access_sg_id = data.terraform_remote_state.infra_security_groups.outputs.sg_management_id
   grafana_cidrs_allow_list      = concat(var.office_cidrs_list, var.concourse_cidrs_list)
-  environment                   = var.govuk_environment
+  govuk_environment             = var.govuk_environment
+  workspace                     = local.workspace
+  additional_tags               = local.additional_tags
+  dns_public_zone_id            = data.terraform_remote_state.govuk.outputs.dns_public_zone_id
+  certificate_arn               = data.terraform_remote_state.govuk.outputs.public_certificate_arn
+  capacity_provider             = var.ecs_default_capacity_provider
 }

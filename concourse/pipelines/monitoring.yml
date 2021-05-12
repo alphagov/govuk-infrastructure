@@ -5,7 +5,7 @@ resources:
   - icon: github
     name: govuk-infrastructure
     source:
-      branch: main
+      branch: fix_grafana
       uri: https://github.com/alphagov/govuk-infrastructure
     type: git
 
@@ -13,14 +13,12 @@ groups:
   - name: all
     jobs:
       - update-pipeline
-      - deploy-monitoring-infra
-      - deploy-grafana
+      - deploy-monitoring
       - configure-grafana
 
-  - name: monitoring-infra
+  - name: monitoring
     jobs:
-      - deploy-monitoring-infra
-      - deploy-grafana
+      - deploy-monitoring
       - configure-grafana
 
   - name: admin
@@ -35,9 +33,11 @@ jobs:
     - file: govuk-infrastructure/concourse/pipelines/monitoring.yml
       set_pipeline: monitoring
 
-  - name: deploy-monitoring-infra
+  - name: deploy-monitoring
     plan:
     - get: govuk-infrastructure
+      passed:
+      - update-pipeline
       trigger: true
     - task: terraform-apply
       config:
@@ -55,7 +55,7 @@ jobs:
             username: ((docker_hub_username))
             password: ((docker_hub_authtoken))
         run:
-          dir: govuk-infrastructure/terraform/deployments/monitoring-test/infra
+          dir: govuk-infrastructure/terraform/deployments/monitoring/infra
           path: sh
           args:
           - '-c'
@@ -65,128 +65,14 @@ jobs:
             terraform init -backend-config "role_arn=$ASSUME_ROLE_ARN"
             terraform apply \
               -var "assume_role_arn=$ASSUME_ROLE_ARN" \
-              -var-file ../../variables/test/infrastructure.tfvars \
+              -var-file ../../variables/test/monitoring.tfvars \
               -auto-approve
-
-  - name: deploy-grafana
-    plan:
-    - get: govuk-infrastructure
-      passed:
-      - deploy-monitoring-infra
-      trigger: true
-    - task: update-grafana-task-definition
-      config:
-        inputs:
-        - name: govuk-infrastructure
-          path: src
-        outputs:
-        - name: terraform-outputs
-        params:
-          AWS_REGION: eu-west-1
-          ASSUME_ROLE_ARN: 'arn:aws:iam::430354129336:role/govuk-concourse-deployer'
-          GOVUK_ENVIRONMENT: test
-        platform: linux
-        image_resource:
-          type: docker-image
-          source:
-            repository: hashicorp/terraform
-            tag: 0.14.6
-            username: ((docker_hub_username))
-            password: ((docker_hub_authtoken))
-        run:
-          path: sh
-          args:
-          - '-c'
-          - |
-            set -eu
-
-            root_dir=$(pwd)
-
-
-            APP_DIR="src/terraform/deployments/monitoring-test/grafana"
-            cd ${APP_DIR}
-
-            terraform init -backend-config="role_arn=$ASSUME_ROLE_ARN"
-
-            terraform apply \
-            -var "assume_role_arn=$ASSUME_ROLE_ARN" \
-            -auto-approve
-
-            terraform output task_definition_arn > "$root_dir/terraform-outputs/grafana_task_definition_arn"
-
-    - task: update-grafana-service
-      config:
-        inputs:
-        - name: terraform-outputs
-        params:
-          APPLICATION: grafana
-          AWS_REGION: eu-west-1
-          ASSUME_ROLE_ARN: 'arn:aws:iam::430354129336:role/govuk-concourse-deployer'
-        platform: linux
-        image_resource:
-          type: docker-image
-          source:
-            repository: governmentpaas/awscli
-            tag: latest
-            username: ((docker_hub_username))
-            password: ((docker_hub_authtoken))
-        run:
-          path: sh
-          args:
-          - '-c'
-          - |
-            set -eu
-
-            mkdir -p ~/.aws
-
-            cat <<EOF > ~/.aws/config
-            [profile default]
-            role_arn = $ASSUME_ROLE_ARN
-            credential_source = Ec2InstanceMetadata
-            EOF
-
-            current_task_definition_arn="$(aws ecs describe-services --services "$APPLICATION" --cluster monitoring --region "$AWS_REGION" | jq -r '.services[0].taskDefinition')"
-            if [ -z "${current_task_definition_arn}" ]; then
-              echo "failed to retrieve current task definition for ${APPLICATION}, exiting..."
-              exit 1
-            fi
-
-            new_task_definition_arn="$(cat "terraform-outputs/${APPLICATION}_task_definition_arn")"
-            if [ -z "${new_task_definition_arn}" ]; then
-              echo "failed to retrieve new task definition for ${APPLICATION}, exiting..."
-              exit 1
-            fi
-
-            # This conditional is used to skip `aws ecs update-service` below since its outputs may confuse readers and
-            # lead them to believe that `aws ecs update-service` is not idempotent
-            if [ "${current_task_definition_arn}" = "${new_task_definition_arn}" ]; then
-              echo "No need to update ${APPLICATION} service since its task definition was not updated"
-              exit 0
-            fi
-
-            echo "Updating $APPLICATION service..."
-
-
-            aws ecs update-service \
-              --cluster monitoring \
-              --service "$APPLICATION" \
-              --task-definition "$new_task_definition_arn" \
-              --region "$AWS_REGION"
-
-            echo "Waiting for $APPLICATION ECS service to reach steady state..."
-
-            aws ecs wait services-stable \
-              --cluster monitoring \
-              --services "$APPLICATION" \
-              --region "$AWS_REGION"
-
-            echo "Finished updating $APPLICATION to task definition $new_task_definition_arn."
 
   - name: configure-grafana
     plan:
     - get: govuk-infrastructure
       passed:
-      - deploy-grafana
+      - deploy-monitoring
       trigger: true
     - task: terraform-apply
       config:
@@ -213,7 +99,7 @@ jobs:
 
             root_dir=$(pwd)
 
-            APP_DIR="${root_dir}/src/terraform/deployments/monitoring-test/grafana/app-config"
+            APP_DIR="${root_dir}/src/terraform/deployments/monitoring/grafana"
             cd ${APP_DIR}
 
             terraform_apply() {

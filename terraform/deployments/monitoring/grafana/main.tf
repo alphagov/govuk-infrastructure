@@ -1,7 +1,7 @@
 terraform {
   backend "s3" {
     bucket  = "govuk-terraform-test"
-    key     = "projects/grafana-app-config.tfstate"
+    key     = "projects/grafana.tfstate"
     region  = "eu-west-1"
     encrypt = true
   }
@@ -41,7 +41,7 @@ data "aws_secretsmanager_secret_version" "grafana_password" {
 }
 
 module "grafana-app-config" {
-  source = "../../../../modules/monitoring-apps/grafana"
+  source = "../../../modules/monitoring-apps/grafana"
   url    = "https://${data.terraform_remote_state.monitoring.outputs.grafana_fqdn}"
   auth   = "admin:${data.aws_secretsmanager_secret_version.grafana_password.secret_string}"
 }

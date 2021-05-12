@@ -3,7 +3,7 @@ variable "external_app_domain" {
   type        = string
 }
 
-variable "ecs_default_capacity_provider" {
+variable "capacity_provider" {
   description = "Set this to FARGATE_SPOT to use spot instances in the ECS cluster by default. If unset, the cluster will use on-demand (regular) instances by default. Tasks can still override the default capacity provider in either case."
   type        = string
   default     = "FARGATE"
@@ -33,8 +33,8 @@ variable "govuk_management_access_sg_id" {
   type        = string
 }
 
-variable "desired_count" {
-  description = "Desired count of Application instances"
+variable "grafana_desired_count" {
+  description = "Desired count of Grafana instances"
   type        = number
   default     = 1
 }
@@ -65,6 +65,52 @@ variable "splunk_sourcetype" {
   description = "The source type of the logs being sent to Splunk i.e. `log4j`."
 }
 
-variable "environment" {
+variable "govuk_environment" {
+  type = string
+}
+
+variable "workspace" {
+  type = string
+}
+
+variable "additional_tags" {
+  type = map(any)
+}
+
+variable "grafana_cpu" {
+  type    = number
+  default = 512
+}
+
+variable "grafana_memory" {
+  type    = number
+  default = 1024
+}
+
+variable "grafana_port" {
+  type    = number
+  default = 3000 # If we set this number to 80, there is a binding permission error, see: https://grafana.com/docs/grafana/latest/administration/configuration/#http_port
+}
+
+variable "grafana_registry" {
+  type    = string
+  default = "grafana"
+}
+
+variable "grafana_image_name" {
+  type    = string
+  default = "grafana"
+}
+
+variable "grafana_image_tag" {
+  type    = string
+  default = "latest"
+}
+
+variable "dns_public_zone_id" {
+  type = string
+}
+
+variable "certificate_arn" {
   type = string
 }

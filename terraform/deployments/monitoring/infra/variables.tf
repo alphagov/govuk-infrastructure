@@ -1,7 +1,3 @@
-variable "mesh_name" {
-  type = string
-}
-
 variable "external_app_domain" {
   type = string
 }
@@ -35,4 +31,10 @@ variable "publishing_service_domain" {
 variable "govuk_environment" {
   type        = string
   description = "The name of the environment (for example test, integration, staging or production)"
+}
+
+variable "ecs_default_capacity_provider" {
+  description = "Set this to FARGATE_SPOT to use spot instances in the ECS cluster by default. If unset, the cluster will use on-demand (regular) instances by default. Tasks can still override the default capacity provider in either case."
+  type        = string
+  default     = "FARGATE"
 }
