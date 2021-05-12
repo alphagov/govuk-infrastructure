@@ -37,7 +37,7 @@ resources:
     source:
       <<: *git-repo-source
       uri: git@github.com:alphagov/publishing-api.git
-      branch: master
+      branch: main
 
   - <<: *git-repo
     name: router-repo
