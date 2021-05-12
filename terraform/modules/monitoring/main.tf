@@ -8,5 +8,5 @@ locals {
     terraform_workspace  = var.workspace
   }
 
-  workspace_external_domain = "${var.workspace}.${var.external_app_domain}"
+  monitoring_external_domain = "monitoring.${var.external_app_domain}"
 }

@@ -90,7 +90,6 @@ module "monitoring" {
   govuk_environment             = var.govuk_environment
   workspace                     = local.workspace
   additional_tags               = local.additional_tags
-  dns_public_zone_id            = data.terraform_remote_state.govuk.outputs.dns_public_zone_id
-  certificate_arn               = data.terraform_remote_state.govuk.outputs.public_certificate_arn
   capacity_provider             = var.ecs_default_capacity_provider
+  grafana_image_tag             = "7.5.6"
 }
