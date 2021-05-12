@@ -258,6 +258,7 @@ jobs:
           file: smokey-version/version
 
   - name: content-store
+    serial: true
     plan:
     - in_parallel:
       - get: content-store-repo
@@ -288,6 +289,7 @@ jobs:
           file: content-store-version/version
 
   - name: frontend
+    serial: true
     plan:
     - in_parallel:
       - get: frontend-repo
@@ -318,6 +320,7 @@ jobs:
           file: frontend-version/version
 
   - name: publisher
+    serial: true
     plan:
     - in_parallel:
       - get: publisher-repo
@@ -348,6 +351,7 @@ jobs:
           file: publisher-version/version
 
   - name: publishing-api
+    serial: true
     plan:
     - in_parallel:
       - get: publishing-api-repo
@@ -378,6 +382,7 @@ jobs:
           file: publishing-api-version/version
 
   - name: router
+    serial: true
     plan:
     - in_parallel:
       - get: router-repo
@@ -408,6 +413,7 @@ jobs:
           file: router-version/version
 
   - name: router-api
+    serial: true
     plan:
     - in_parallel:
       - get: router-api-repo
@@ -438,6 +444,7 @@ jobs:
           file: router-api-version/version
 
   - name: signon
+    serial: true
     plan:
     - in_parallel:
       - get: signon-repo
@@ -468,6 +475,7 @@ jobs:
           file: signon-version/version
 
   - name: static
+    serial: true
     plan:
     - in_parallel:
       - get: static-repo
@@ -498,6 +506,7 @@ jobs:
           file: static-version/version
 
   - name: authenticating-proxy
+    serial: true
     plan:
     - in_parallel:
       - get: authenticating-proxy-repo
