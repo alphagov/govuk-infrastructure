@@ -3,11 +3,11 @@ module "grafana_public_alb" {
 
   app_name                  = "grafana"
   vpc_id                    = var.vpc_id
-  public_zone_id            = var.dns_public_zone_id
+  public_zone_id            = aws_route53_zone.monitoring_public.zone_id
   dns_a_record_name         = local.grafana_service_name
   public_subnets            = var.public_subnets
-  external_app_domain       = var.external_app_domain
-  certificate               = aws_acm_certificate_validation.public.certificate_arn
+  external_app_domain       = local.monitoring_external_domain
+  certificate               = aws_acm_certificate_validation.monitoring_public.certificate_arn
   publishing_service_domain = var.publishing_service_domain
   workspace                 = var.workspace
   service_security_group_id = aws_security_group.grafana.id

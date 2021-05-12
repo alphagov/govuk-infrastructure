@@ -1,5 +1,5 @@
 output "grafana_fqdn" {
-  value       = "grafana.${local.workspace_external_domain}"
+  value       = "grafana.${local.monitoring_external_domain}"
   description = "Public Fully Qualified Domain Name for Grafana"
 }
 

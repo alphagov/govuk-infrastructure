@@ -5,7 +5,7 @@ resources:
   - icon: github
     name: govuk-infrastructure
     source:
-      branch: fix_grafana
+      branch: fix_grafana_zone_conflict
       uri: https://github.com/alphagov/govuk-infrastructure
     type: git
 

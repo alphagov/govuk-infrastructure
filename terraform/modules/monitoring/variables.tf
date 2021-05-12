@@ -106,11 +106,3 @@ variable "grafana_image_tag" {
   type    = string
   default = "latest"
 }
-
-variable "dns_public_zone_id" {
-  type = string
-}
-
-variable "certificate_arn" {
-  type = string
-}

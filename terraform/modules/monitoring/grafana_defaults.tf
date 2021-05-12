@@ -12,7 +12,7 @@ locals {
     GF_AUTH_GITHUB_ALLOW_SIGN_UP         = true,
     GF_AUTH_GITHUB_ALLOWED_ORGANIZATIONS = "alphagov",
     GF_AUTH_GITHUB_TEAM_IDS              = "3279243",
-    GF_SERVER_DOMAIN                     = "grafana.${local.workspace_external_domain}",
+    GF_SERVER_DOMAIN                     = "grafana.${local.monitoring_external_domain}",
     GF_SERVER_ROOT_URL                   = "https://%(domain)s",
     GF_SERVER_HTTP_PORT                  = var.grafana_port
   }
