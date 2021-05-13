@@ -1,6 +1,15 @@
 ---
 definitions:
 
+resource_types:
+  - name: slack-notification
+    type: docker-image
+    source:
+      repository: cfcommunity/slack-notification-resource
+      tag: latest # TODO - don't use latest (once we've worked out a policy for third party images)
+      username: ((docker_hub_username))
+      password: ((docker_hub_authtoken))
+
 resources:
   - &git-repo
     name: smokey-repo
@@ -219,6 +228,12 @@ resources:
       <<: *semver-version-source
       key: authenticating-proxy-version
 
+  - name: ci-slack-channel
+    type: slack-notification
+    icon: bell-ring
+    source:
+      url: https://hooks.slack.com/services/((govuk_ci_slack_webhook))
+
 jobs:
   - name: update-pipeline
     plan:
@@ -256,6 +271,15 @@ jobs:
       - put: smokey-version
         params:
           file: smokey-version/version
+    on_failure: &notify-slack-failure
+      put: ci-slack-channel
+      params:
+        channel: "#govuk-ci-alerts"
+        username: 'build-images pipeline'
+        icon_emoji: ':sad-docker:'
+        silent: true
+        text: |
+          :red_circle: Failed build: http://cd.gds-reliability.engineering/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME
 
   - name: content-store
     serial: true
@@ -287,6 +311,8 @@ jobs:
       - put: content-store-version
         params:
           file: content-store-version/version
+    on_failure:
+      <<: *notify-slack-failure
 
   - name: frontend
     serial: true
@@ -318,6 +344,8 @@ jobs:
       - put: frontend-version
         params:
           file: frontend-version/version
+    on_failure:
+      <<: *notify-slack-failure
 
   - name: publisher
     serial: true
@@ -349,6 +377,8 @@ jobs:
       - put: publisher-version
         params:
           file: publisher-version/version
+    on_failure:
+      <<: *notify-slack-failure
 
   - name: publishing-api
     serial: true
@@ -380,6 +410,8 @@ jobs:
       - put: publishing-api-version
         params:
           file: publishing-api-version/version
+    on_failure:
+      <<: *notify-slack-failure
 
   - name: router
     serial: true
@@ -411,6 +443,8 @@ jobs:
       - put: router-version
         params:
           file: router-version/version
+    on_failure:
+      <<: *notify-slack-failure
 
   - name: router-api
     serial: true
@@ -442,6 +476,8 @@ jobs:
       - put: router-api-version
         params:
           file: router-api-version/version
+    on_failure:
+      <<: *notify-slack-failure
 
   - name: signon
     serial: true
@@ -473,6 +509,8 @@ jobs:
       - put: signon-version
         params:
           file: signon-version/version
+    on_failure:
+      <<: *notify-slack-failure
 
   - name: static
     serial: true
@@ -504,6 +542,8 @@ jobs:
       - put: static-version
         params:
           file: static-version/version
+    on_failure:
+      <<: *notify-slack-failure
 
   - name: authenticating-proxy
     serial: true
@@ -535,3 +575,5 @@ jobs:
       - put: authenticating-proxy-version
         params:
           file: authenticating-proxy-version/version
+    on_failure:
+      <<: *notify-slack-failure
