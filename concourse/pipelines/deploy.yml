@@ -588,6 +588,8 @@ jobs:
         APPLICATION: smokey
         VARIANT: default
         COMMAND: bundle exec cucumber --profile test --strict-undefined -t @replatforming -t \"not @notreplatforming\"
+    on_failure:
+      <<: *notify-slack-failure
 
   - name: deploy-frontend
     plan:
@@ -680,6 +682,8 @@ jobs:
       params:
         <<: *smoke-tests-params
         COMMAND: bundle exec cucumber --profile test --strict-undefined -t @app-frontend -t \"not @notreplatforming\"
+    on_failure:
+      <<: *notify-slack-failure
 
   - name: deploy-publisher
     plan:
@@ -779,6 +783,8 @@ jobs:
       params:
         <<: *smoke-tests-params
         COMMAND: bundle exec cucumber --profile test --strict-undefined -t @app-publisher -t \"not @notreplatforming\"
+    on_failure:
+      <<: *notify-slack-failure
 
   - name: deploy-publishing-api
     plan:
@@ -1131,6 +1137,8 @@ jobs:
       params:
         <<: *smoke-tests-params
         COMMAND: bundle exec cucumber --profile test --strict-undefined -t @app-signon -t \"not @notreplatforming\"
+    on_failure:
+      <<: *notify-slack-failure
 
   - name: deploy-smokey
     plan:
