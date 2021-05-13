@@ -27,7 +27,6 @@ locals {
     assets_draft_frontends_origin = "https://${module.draft_frontends_origin.fqdn}"
     content_store_uri             = "http://content-store.${local.mesh_domain}",
     draft_content_store_uri       = "http://draft-content-store.${local.mesh_domain}",
-    draft_frontends_origin_uri    = "https://draft-frontend.${local.workspace_external_domain}",
     draft_static_uri              = "http://draft-static.${local.mesh_domain}"
     publishing_api_uri            = "http://publishing-api-web.${local.mesh_domain}",
     rabbitmq_hosts                = "rabbitmq.${var.internal_app_domain}" # TODO: Make workspace-aware
@@ -36,6 +35,7 @@ locals {
     signon_uri                    = "https://signon.${local.workspace_external_domain}",
     static_uri                    = "http://static.${local.mesh_domain}",
     website_root                  = local.public_entry_url,
+    draft_origin_uri              = "https://draft-origin.${local.workspace_external_domain}",
 
     virtual_service_backends = [
       module.statsd.virtual_service_name

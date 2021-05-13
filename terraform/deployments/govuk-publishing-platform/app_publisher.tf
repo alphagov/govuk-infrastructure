@@ -31,11 +31,10 @@ locals {
         PLEK_SERVICE_PUBLISHING_API_URI = local.defaults.publishing_api_uri
         PLEK_SERVICE_SIGNON_URI         = local.defaults.signon_uri
         PLEK_SERVICE_STATIC_URI         = local.defaults.static_uri
-        # TODO: remove PLEK_SERVICE_DRAFT_ORIGIN_URI once we have the draft origin properly set up with multiple frontends
-        PLEK_SERVICE_DRAFT_ORIGIN_URI = local.defaults.draft_frontends_origin_uri
-        ASSETS_PREFIX                 = "/assets/publisher"
-        REDIS_URL                     = module.shared_redis_cluster.uri
-        WEBSITE_ROOT                  = local.defaults.website_root
+        PLEK_SERVICE_DRAFT_ORIGIN_URI   = local.defaults.draft_origin_uri
+        ASSETS_PREFIX                   = "/assets/publisher"
+        REDIS_URL                       = module.shared_redis_cluster.uri
+        WEBSITE_ROOT                    = local.defaults.website_root
       }
     )
 
