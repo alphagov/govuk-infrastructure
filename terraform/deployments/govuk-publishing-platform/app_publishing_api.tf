@@ -80,6 +80,7 @@ module "publishing_api_web" {
   additional_tags                  = local.additional_tags
   environment                      = var.govuk_environment
   workspace                        = local.workspace
+  command                          = ["foreman", "run", "web"]
 }
 
 module "publishing_api_worker" {
@@ -111,4 +112,5 @@ module "publishing_api_worker" {
   additional_tags                  = local.additional_tags
   environment                      = var.govuk_environment
   workspace                        = local.workspace
+  command                          = ["foreman", "run", "worker"]
 }
