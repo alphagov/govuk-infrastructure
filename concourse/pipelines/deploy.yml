@@ -1097,6 +1097,7 @@ jobs:
           app-image: signon-image
         output_mapping:
           task-definition-arn: task-definition-arn
+    # TODO: Replace apiusers bootstrap task with api
     - task: make-bootstrap-command
       file: govuk-infrastructure/concourse/tasks/make-signon-bootstrap-command.yml
       params:
@@ -1122,6 +1123,14 @@ jobs:
       params:
         <<: *await-deploy-complete-params
         ECS_SERVICE: signon
+    # todo: add bootstrap-oauth-api-users
+    - task: bootstrap-oauth-apps
+      file: govuk-infrastructure/concourse/tasks/bootstrap-oauth-apps.yml
+      input_mapping:
+        app-terraform-outputs: app-terraform-outputs
+      params:
+        APPLICATION: signon
+        VARIANT: web
     serial: true
     on_failure:
       <<: *notify-slack-failure

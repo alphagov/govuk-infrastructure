@@ -146,6 +146,11 @@ output "fargate_task_iam_role_arn" {
 
 output "signon" {
   value = {
+    oauth_application_config = {
+      admin_password_arn = aws_secretsmanager_secret.signon_admin_password.arn,
+      applications       = local.oauth_applications,
+      signon_api_url     = local.signon_api_url,
+    },
     web = {
       task_definition_cli_input_json = module.signon.cli_input_json,
       network_config                 = module.signon.network_config

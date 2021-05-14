@@ -22,9 +22,7 @@ locals {
     secrets_from_arns = merge(
       local.defaults.secrets_from_arns,
       {
-        GDS_SSO_OAUTH_ID     = data.aws_secretsmanager_secret.content_store_oauth_id.arn,
-        GDS_SSO_OAUTH_SECRET = data.aws_secretsmanager_secret.content_store_oauth_secret.arn,
-        SECRET_KEY_BASE      = data.aws_secretsmanager_secret.content_store_secret_key_base.arn,
+        SECRET_KEY_BASE = data.aws_secretsmanager_secret.content_store_secret_key_base.arn,
       }
     )
 
@@ -68,6 +66,8 @@ module "content_store" {
   secrets_from_arns = merge(
     local.content_store_defaults.secrets_from_arns,
     {
+      GDS_SSO_OAUTH_ID            = module.oauth_applications["content_store"].id_arn,
+      GDS_SSO_OAUTH_SECRET        = module.oauth_applications["content_store"].secret_arn,
       PUBLISHING_API_BEARER_TOKEN = module.content_store_to_publishing_api_bearer_token.secret_arn
       ROUTER_API_BEARER_TOKEN     = module.content_store_to_router_api_bearer_token.secret_arn
     }
@@ -119,6 +119,8 @@ module "draft_content_store" {
   secrets_from_arns = merge(
     local.content_store_defaults.secrets_from_arns,
     {
+      GDS_SSO_OAUTH_ID            = module.oauth_applications["draft_content_store"].id_arn,
+      GDS_SSO_OAUTH_SECRET        = module.oauth_applications["draft_content_store"].secret_arn,
       PUBLISHING_API_BEARER_TOKEN = module.draft_content_store_to_publishing_api_bearer_token.secret_arn
       ROUTER_API_BEARER_TOKEN     = module.draft_content_store_to_router_api_bearer_token.secret_arn
     }

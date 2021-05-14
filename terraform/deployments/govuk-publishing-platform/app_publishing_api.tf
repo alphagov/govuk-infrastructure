@@ -42,8 +42,8 @@ locals {
         DATABASE_URL                     = data.aws_secretsmanager_secret.publishing_api_database_url.arn
         DRAFT_CONTENT_STORE_BEARER_TOKEN = module.publishing_api_to_draft_content_store_bearer_token.secret_arn
         EVENT_LOG_AWS_SECRET_KEY         = data.aws_secretsmanager_secret.publishing_api_event_log_aws_secret_key.arn
-        GDS_SSO_OAUTH_ID                 = data.aws_secretsmanager_secret.publishing_api_oauth_id.arn
-        GDS_SSO_OAUTH_SECRET             = data.aws_secretsmanager_secret.publishing_api_oauth_secret.arn
+        GDS_SSO_OAUTH_ID                 = module.oauth_applications["publishing_api"].id_arn
+        GDS_SSO_OAUTH_SECRET             = module.oauth_applications["publishing_api"].secret_arn
         RABBITMQ_PASSWORD                = data.aws_secretsmanager_secret.publishing_api_rabbitmq_password.arn
         ROUTER_API_BEARER_TOKEN          = module.publishing_api_to_router_api_bearer_token.secret_arn
         SECRET_KEY_BASE                  = data.aws_secretsmanager_secret.publishing_api_secret_key_base.arn

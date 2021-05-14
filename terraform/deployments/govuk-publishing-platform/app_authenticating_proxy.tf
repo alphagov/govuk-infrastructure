@@ -22,8 +22,8 @@ locals {
     secrets_from_arns = merge(
       local.defaults.secrets_from_arns,
       {
-        GDS_SSO_OAUTH_ID     = data.aws_secretsmanager_secret.authenticating_proxy_oauth_id.arn,
-        GDS_SSO_OAUTH_SECRET = data.aws_secretsmanager_secret.authenticating_proxy_oauth_secret.arn,
+        GDS_SSO_OAUTH_ID     = module.oauth_applications["authenticating_proxy"].id_arn,
+        GDS_SSO_OAUTH_SECRET = module.oauth_applications["authenticating_proxy"].secret_arn,
         JWT_AUTH_SECRET      = data.aws_secretsmanager_secret.authenticating_proxy_jwt_auth_secret.arn,
         SECRET_KEY_BASE      = data.aws_secretsmanager_secret.authenticating_proxy_secret_key_base.arn,
       }

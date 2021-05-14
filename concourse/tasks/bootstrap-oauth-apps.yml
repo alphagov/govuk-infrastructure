@@ -17,4 +17,4 @@ params:
 run:
   dir: govuk-infrastructure
   path: bundle
-  args: ["exec", "rake", "bootstrap:bearer_tokens"]
+  args: ["exec", "rake", "bootstrap:oauth_applications"]

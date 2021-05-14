@@ -20,17 +20,8 @@ resource "random_password" "signon_admin_password" {
 #
 
 locals {
-  signon_api_url = "https://signon.${local.workspace}.${var.govuk_environment}.govuk.digital/api/v1"
-
-  api_user_prefix = terraform.workspace == "default" ? null : local.workspace
-  signon_app = {
-    content_store       = "Content Store"
-    draft_content_store = "Draft Content Store"
-    frontend            = "Frontend"
-    publisher           = "Publisher"
-    publishing_api      = "Publishing API"
-    router_api          = "Router API"
-  }
+  signon_api_url  = "https://signon.${local.public_domain}/api/v1"
+  api_user_prefix = local.is_default_workspace ? null : local.workspace
   signon_api_user = {
     content_store       = join("-", compact([local.api_user_prefix, "content-store@${var.publishing_service_domain}"]))
     draft_content_store = join("-", compact([local.api_user_prefix, "draft-content-store@${var.publishing_service_domain}"]))
@@ -40,12 +31,13 @@ locals {
   }
 }
 
+# TODO: generate all these module instantiations with module for_each
 module "publisher_to_publishing_api_bearer_token" {
   source = "../../modules/signon_bearer_token"
 
   additional_tags                 = local.additional_tags
   api_user_email                  = local.signon_api_user.publisher
-  app_name                        = local.signon_app.publishing_api
+  app_name                        = local.signon_app.publishing_api.name
   environment                     = var.govuk_environment
   name                            = "pub_to_pub_api"
   private_subnets                 = local.private_subnets
@@ -60,7 +52,7 @@ module "publishing_api_to_content_store_bearer_token" {
 
   additional_tags                 = local.additional_tags
   api_user_email                  = local.signon_api_user.publishing_api
-  app_name                        = local.signon_app.content_store
+  app_name                        = local.signon_app.content_store.name
   environment                     = var.govuk_environment
   name                            = "pub_api_to_cs"
   private_subnets                 = local.private_subnets
@@ -76,7 +68,7 @@ module "publishing_api_to_draft_content_store_bearer_token" {
 
   additional_tags                 = local.additional_tags
   api_user_email                  = local.signon_api_user.publishing_api
-  app_name                        = local.signon_app.draft_content_store
+  app_name                        = local.signon_app.draft_content_store.name
   environment                     = var.govuk_environment
   name                            = "pub_api_to_dcs"
   private_subnets                 = local.private_subnets
@@ -92,7 +84,7 @@ module "publishing_api_to_router_api_bearer_token" {
 
   additional_tags                 = local.additional_tags
   api_user_email                  = local.signon_api_user.publishing_api
-  app_name                        = local.signon_app.router_api
+  app_name                        = local.signon_app.router_api.name
   environment                     = var.govuk_environment
   name                            = "pub_api_to_router_api"
   private_subnets                 = local.private_subnets
@@ -107,7 +99,7 @@ module "frontend_to_publishing_api_bearer_token" {
 
   additional_tags                 = local.additional_tags
   api_user_email                  = local.signon_api_user.frontend
-  app_name                        = local.signon_app.publishing_api
+  app_name                        = local.signon_app.publishing_api.name
   environment                     = var.govuk_environment
   name                            = "frontend_to_pub_api"
   private_subnets                 = local.private_subnets
@@ -122,7 +114,7 @@ module "content_store_to_publishing_api_bearer_token" {
 
   additional_tags                 = local.additional_tags
   api_user_email                  = local.signon_api_user.content_store
-  app_name                        = local.signon_app.publishing_api
+  app_name                        = local.signon_app.publishing_api.name
   environment                     = var.govuk_environment
   name                            = "cs_to_pub_api"
   private_subnets                 = local.private_subnets
@@ -137,7 +129,7 @@ module "draft_content_store_to_publishing_api_bearer_token" {
 
   additional_tags                 = local.additional_tags
   api_user_email                  = local.signon_api_user.draft_content_store
-  app_name                        = local.signon_app.publishing_api
+  app_name                        = local.signon_app.publishing_api.name
   environment                     = var.govuk_environment
   name                            = "dcs_to_pub_api"
   private_subnets                 = local.private_subnets
@@ -152,7 +144,7 @@ module "content_store_to_router_api_bearer_token" {
 
   additional_tags                 = local.additional_tags
   api_user_email                  = local.signon_api_user.content_store
-  app_name                        = local.signon_app.router_api
+  app_name                        = local.signon_app.router_api.name
   environment                     = var.govuk_environment
   name                            = "cs_to_router_api"
   private_subnets                 = local.private_subnets
@@ -167,7 +159,7 @@ module "draft_content_store_to_router_api_bearer_token" {
 
   additional_tags                 = local.additional_tags
   api_user_email                  = local.signon_api_user.draft_content_store
-  app_name                        = local.signon_app.router_api
+  app_name                        = local.signon_app.router_api.name
   environment                     = var.govuk_environment
   name                            = "dcs_to_router_api"
   private_subnets                 = local.private_subnets

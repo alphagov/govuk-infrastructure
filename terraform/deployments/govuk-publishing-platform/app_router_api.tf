@@ -52,8 +52,8 @@ module "router_api" {
   secrets_from_arns = merge(
     local.router_api_defaults.secrets_from_arns,
     {
-      GDS_SSO_OAUTH_ID     = data.aws_secretsmanager_secret.router_api_oauth_id.arn,
-      GDS_SSO_OAUTH_SECRET = data.aws_secretsmanager_secret.router_api_oauth_secret.arn,
+      GDS_SSO_OAUTH_ID     = module.oauth_applications["router_api"].id_arn,
+      GDS_SSO_OAUTH_SECRET = module.oauth_applications["router_api"].secret_arn,
       SECRET_KEY_BASE      = data.aws_secretsmanager_secret.router_api_secret_key_base.arn,
     },
   )
@@ -95,8 +95,8 @@ module "draft_router_api" {
   secrets_from_arns = merge(
     local.router_api_defaults.secrets_from_arns,
     {
-      GDS_SSO_OAUTH_ID     = data.aws_secretsmanager_secret.draft_router_api_oauth_id.arn,
-      GDS_SSO_OAUTH_SECRET = data.aws_secretsmanager_secret.draft_router_api_oauth_secret.arn,
+      GDS_SSO_OAUTH_ID     = module.oauth_applications["draft_router_api"].id_arn,
+      GDS_SSO_OAUTH_SECRET = module.oauth_applications["draft_router_api"].secret_arn,
       SECRET_KEY_BASE      = data.aws_secretsmanager_secret.draft_router_api_secret_key_base.arn,
     },
   )
