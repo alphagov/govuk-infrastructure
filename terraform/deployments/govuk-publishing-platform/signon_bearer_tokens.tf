@@ -20,7 +20,9 @@ resource "random_password" "signon_admin_password" {
 #
 
 locals {
-  signon_api_url  = "https://signon.${local.public_domain}/api/v1"
+  # TODO Change this to local.public_domain once publishing.service domains
+  # for backend apps are working.
+  signon_api_url  = "https://signon.${local.workspace_external_domain}/api/v1"
   api_user_prefix = local.is_default_workspace ? null : local.workspace
   signon_api_user = {
     content_store       = join("-", compact([local.api_user_prefix, "content-store@${var.publishing_service_domain}"]))
