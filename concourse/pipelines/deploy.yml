@@ -244,7 +244,7 @@ resources:
   - name: every-10-minutes-in-daytime
     type: cron-resource
     source:
-      expression: "*/10 8-22 * * 1-5"
+      expression: "*/10 8-20 * * 1-5"
       location: "Europe/London"
       fire_immediately: true
 
