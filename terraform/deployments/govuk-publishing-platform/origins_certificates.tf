@@ -2,7 +2,7 @@ resource "aws_acm_certificate" "public_north_virginia" {
   provider    = aws.us_east_1
   domain_name = "*.${local.workspace_external_domain}"
 
-  subject_alternative_names = local.is_default_workspace ? ["*.${local.workspace}.${var.publishing_service_domain}"] : null
+  subject_alternative_names = local.is_default_workspace ? ["*.${var.publishing_service_domain}"] : null
 
   validation_method = "DNS"
 
