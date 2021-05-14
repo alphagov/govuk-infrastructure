@@ -377,7 +377,7 @@ jobs:
     - file: govuk-infrastructure/concourse/pipelines/deploy.yml
       set_pipeline: self
       var_files:
-        - govuk-infrastructure/concourse/pipelines/deploy-parameters.yml
+        - govuk-infrastructure/concourse/parameters/((govuk_environment))/parameters.yml
 
   - name: run-terraform
     serial: true
@@ -772,6 +772,7 @@ jobs:
         APPLICATION: publisher
         COMMAND: "bundle exec rails db:migrate"
         VARIANT: web
+        DISABLE: ((skip_db_migrations))
     - in_parallel:
       - task: update-web-ecs-service
         file: govuk-infrastructure/concourse/tasks/update-ecs-service.yml
@@ -878,6 +879,7 @@ jobs:
         APPLICATION: publishing-api
         COMMAND: "bundle exec rails db:migrate"
         VARIANT: web
+        DISABLE: ((skip_db_migrations))
     - in_parallel:
       - task: update-web-ecs-service
         file: govuk-infrastructure/concourse/tasks/update-ecs-service.yml

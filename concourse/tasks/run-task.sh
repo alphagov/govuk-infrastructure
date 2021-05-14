@@ -30,6 +30,11 @@ COMMAND=${COMMAND:-"$(cat "run-task-command/run-task-command")"}
 : "${CLUSTER:?CLUSTER not set}"
 : "${VARIANT:?VARIANT not set}"
 
+if [[ "${DISABLE:-false}" == "true" ]]; then
+  echo "Skipping Task"
+  exit 0
+fi
+
 mkdir -p ~/.aws
 
 cat <<EOF > ~/.aws/config
