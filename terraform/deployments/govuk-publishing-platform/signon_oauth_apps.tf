@@ -77,9 +77,11 @@ module "oauth_applications" {
   app_name        = each.value.name
   description     = each.value.description
   environment     = var.govuk_environment
-  home_uri        = "https://${each.value.subdomain}.${local.public_domain}"
-  permissions     = each.value.permissions
-  app_shortname   = each.value.shortname
-  redirect_path   = each.value.redirect_path
-  workspace       = local.workspace
+  # TODO Change this to local.public_domain once publishing.service domains
+  # for backend apps are working.
+  home_uri      = "https://${each.value.subdomain}.${local.workspace_external_domain}"
+  permissions   = each.value.permissions
+  app_shortname = each.value.shortname
+  redirect_path = each.value.redirect_path
+  workspace     = local.workspace
 }
