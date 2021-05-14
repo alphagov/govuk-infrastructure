@@ -4,13 +4,21 @@ locals {
   permissions          = "signin"
 }
 
+provider "archive" {}
+
+data "archive_file" "bearer_token_rotater" {
+  type        = "zip"
+  source_file = "${path.module}/../../../lambdas/signon_bearer_token_rotater.rb"
+  output_path = "${path.module}/../../../lambdas/${local.lambda_file_name}.zip"
+}
+
 resource "aws_lambda_function" "bearer_token" {
-  filename      = "../../../lambdas/${local.lambda_file_name}.zip"
   function_name = local.lambda_function_name
   role          = aws_iam_role.lambda_execution_role.arn
   handler       = "${local.lambda_file_name}.handler"
 
-  source_code_hash = filebase64sha256("../../../lambdas/${local.lambda_file_name}.zip")
+  filename         = data.archive_file.bearer_token_rotater.output_path
+  source_code_hash = data.archive_file.bearer_token_rotater.output_base64sha256
 
   runtime = "ruby2.7"
 
