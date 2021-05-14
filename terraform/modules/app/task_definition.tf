@@ -117,6 +117,12 @@ resource "aws_ecs_task_definition" "bootstrap" {
     },
   )
 
+  lifecycle {
+    # Makes tf plan/apply diffs less verbose.
+    # This task definition is needed only for bootstrapping. We don't need
+    # to update it, so we can ignore all changes.
+    ignore_changes = all
+  }
 }
 
 output "cli_input_json" {
