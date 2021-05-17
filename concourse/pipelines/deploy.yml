@@ -356,7 +356,7 @@ jobs:
 
               cd govuk-infrastructure/terraform/deployments/govuk-publishing-platform
 
-              terraform init -backend-config "role_arn=$ASSUME_ROLE_ARN"
+              terraform init -backend-config=./test.backend -backend-config "role_arn=$ASSUME_ROLE_ARN"
 
               terraform workspace select "$WORKSPACE"
 
@@ -473,7 +473,7 @@ jobs:
 
             cd govuk-infrastructure/terraform/deployments/govuk-publishing-platform
 
-            terraform init -backend-config "role_arn=$ASSUME_ROLE_ARN"
+            terraform init -backend-config=./test.backend -backend-config "role_arn=$ASSUME_ROLE_ARN"
 
             terraform workspace select "$WORKSPACE" || terraform workspace new "$WORKSPACE"
 
