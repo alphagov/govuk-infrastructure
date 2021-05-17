@@ -12,6 +12,7 @@ output "content-store" {
     draft = {
       task_definition_cli_input_json = module.draft_content_store.cli_input_json,
       network_config                 = module.draft_content_store.network_config
+      required_secrets               = module.draft_content_store.required_secrets
       signon_secrets = {
         bearer_tokens = [
           module.content_store_to_publishing_api_bearer_token.token_data,
@@ -25,6 +26,7 @@ output "content-store" {
     live = {
       task_definition_cli_input_json = module.content_store.cli_input_json,
       network_config                 = module.content_store.network_config
+      required_secrets               = module.content_store.required_secrets
       signon_secrets = {
         bearer_tokens = [
           module.draft_content_store_to_publishing_api_bearer_token.token_data,
@@ -43,6 +45,7 @@ output "publisher" {
     web = {
       task_definition_cli_input_json = module.publisher_web.cli_input_json,
       network_config                 = module.publisher_web.network_config
+      required_secrets               = module.publisher_web.required_secrets
       signon_secrets = {
         bearer_tokens = [
           module.publisher_to_publishing_api_bearer_token.token_data,
@@ -53,6 +56,7 @@ output "publisher" {
       }
     },
     worker = {
+      required_secrets               = module.publisher_worker.required_secrets
       task_definition_cli_input_json = module.publisher_worker.cli_input_json,
       network_config                 = module.publisher_worker.network_config
     },
@@ -85,6 +89,7 @@ output "publishing-api" {
     web = {
       task_definition_cli_input_json = module.publishing_api_web.cli_input_json,
       network_config                 = module.publishing_api_web.network_config
+      required_secrets               = module.publishing_api_web.required_secrets
       signon_secrets = {
         bearer_tokens = [
           module.publishing_api_to_router_api_bearer_token.token_data,
@@ -97,6 +102,7 @@ output "publishing-api" {
       }
     },
     worker = {
+      required_secrets               = module.publishing_api_worker.required_secrets
       task_definition_cli_input_json = module.publishing_api_worker.cli_input_json,
       network_config                 = module.publishing_api_worker.network_config
     },
@@ -181,10 +187,12 @@ output "router-api" {
     draft = {
       task_definition_cli_input_json = module.draft_router_api.cli_input_json,
       network_config                 = module.draft_router_api.network_config
+      required_secrets               = module.draft_router_api.required_secrets
     },
     live = {
       task_definition_cli_input_json = module.router_api.cli_input_json,
       network_config                 = module.router_api.network_config
+      required_secrets               = module.router_api.required_secrets
     },
   }
 }
