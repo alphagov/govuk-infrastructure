@@ -100,8 +100,8 @@ module "backends_origin" {
   public_zone_id      = aws_route53_zone.workspace_public.zone_id
   external_app_domain = aws_route53_zone.workspace_public.name
   subdomain           = "backends"
-  extra_aliases = compact([local.is_default_workspace ? "publisher.${local.workspace}.${var.publishing_service_domain}" : null,
-    local.is_default_workspace ? "signon.${local.workspace}.${var.publishing_service_domain}" : null,
+  extra_aliases = compact([local.is_default_workspace ? "publisher.${var.publishing_service_domain}" : null,
+    local.is_default_workspace ? "signon.${var.publishing_service_domain}" : null,
     "publisher.${aws_route53_zone.workspace_public.name}",
   "signon.${aws_route53_zone.workspace_public.name}"])
   load_balancer_certificate_arn        = aws_acm_certificate_validation.workspace_public.certificate_arn

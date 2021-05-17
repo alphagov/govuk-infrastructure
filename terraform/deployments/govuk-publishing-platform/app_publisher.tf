@@ -77,7 +77,6 @@ module "publisher_web" {
   vpc_id                           = local.vpc_id
   desired_count                    = var.publisher_desired_count
   extra_security_groups = [
-    local.govuk_management_access_security_group,
     aws_security_group.mesh_ecs_service.id
   ]
   load_balancers = [{
@@ -113,7 +112,6 @@ module "publisher_worker" {
   cluster_id                    = aws_ecs_cluster.cluster.id
   extra_security_groups = [
     module.publisher_web.security_group_id,
-    local.govuk_management_access_security_group,
     aws_security_group.mesh_ecs_service.id
   ]
   container_healthcheck_command    = ["/bin/sh", "-c", "exit 0"]

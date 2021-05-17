@@ -44,7 +44,7 @@ module "authenticating_proxy" {
   source                           = "../../modules/app"
   desired_count                    = var.authenticating_proxy_desired_count
   subnets                          = local.private_subnets
-  extra_security_groups            = [local.govuk_management_access_security_group, aws_security_group.mesh_ecs_service.id]
+  extra_security_groups            = [aws_security_group.mesh_ecs_service.id]
   environment_variables            = local.authenticating_proxy_defaults.environment_variables
   secrets_from_arns                = local.authenticating_proxy_defaults.secrets_from_arns
   load_balancers = [{

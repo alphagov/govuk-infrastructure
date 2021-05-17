@@ -1,9 +1,5 @@
-data "aws_route53_zone" "public" {
-  name = var.external_app_domain
-}
-
 resource "aws_route53_record" "workspace_public_zone_ns" {
-  zone_id = data.aws_route53_zone.public.zone_id
+  zone_id = data.terraform_remote_state.infra_root_dns_zones.outputs.external_root_zone_id
   name    = local.workspace_external_domain
   type    = "NS"
   ttl     = "300"
@@ -31,7 +27,7 @@ resource "aws_route53_zone" "internal_private" {
 resource "aws_acm_certificate" "workspace_public" {
   domain_name = "*.${local.workspace_external_domain}"
 
-  subject_alternative_names = local.is_default_workspace ? ["*.${local.workspace}.${var.publishing_service_domain}"] : null
+  subject_alternative_names = local.is_default_workspace ? ["*.${var.publishing_service_domain}"] : null
 
   validation_method = "DNS"
 
