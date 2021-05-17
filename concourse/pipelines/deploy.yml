@@ -9,7 +9,6 @@ resource_types:
       tag: latest # TODO - don't use latest (once we've worked out a policy for third party images)
       username: ((docker_hub_username))
       password: ((docker_hub_authtoken))
-      disable: ((disable_slack_channel_alerts))
 
   - name: s3
     type: docker-image
@@ -72,6 +71,7 @@ resources:
     icon: bell-ring
     source:
       url: https://hooks.slack.com/services/((deploy_apps_slack_webhook))
+      disable: ((disable_slack_channel_alerts))
 
   - name: govuk-terraform-outputs
     type: s3
