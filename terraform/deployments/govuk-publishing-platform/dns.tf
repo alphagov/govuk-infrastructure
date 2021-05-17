@@ -31,7 +31,7 @@ resource "aws_route53_zone" "internal_private" {
 resource "aws_acm_certificate" "workspace_public" {
   domain_name = "*.${local.workspace_external_domain}"
 
-  subject_alternative_names = local.is_default_workspace ? ["*.${local.workspace}.${var.publishing_service_domain}"] : null
+  subject_alternative_names = local.is_default_workspace ? ["*.${var.publishing_service_domain}"] : null
 
   validation_method = "DNS"
 
@@ -66,4 +66,22 @@ resource "aws_route53_record" "workspace_public" {
 resource "aws_acm_certificate_validation" "workspace_public" {
   certificate_arn         = aws_acm_certificate.workspace_public.arn
   validation_record_fqdns = [for record in aws_route53_record.workspace_public : record.name]
+}
+
+resource "aws_route53_record" "cdn_certificate_validation" {
+  count   = var.enable_cdn && local.is_default_workspace ? 1 : 0
+  zone_id = aws_route53_zone.workspace_public.zone_id
+  name    = var.cdn_certificate_validation_cname.name
+  type    = "CNAME"
+  ttl     = 300
+  records = [var.cdn_certificate_validation_cname.record]
+}
+
+resource "aws_route53_record" "cdn" {
+  count   = var.enable_cdn && local.is_default_workspace ? 1 : 0
+  zone_id = aws_route53_zone.workspace_public.zone_id
+  name    = "www"
+  type    = "CNAME"
+  ttl     = 300
+  records = ["www-gov-uk.map.fastly.net."]
 }
