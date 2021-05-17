@@ -1,0 +1,34 @@
+groups:
+  - name: content-schemas
+    jobs:
+      - upload-to-s3
+
+resources:
+  - &git-repo
+    name: content-schemas-repo
+    type: git
+    icon: github
+    source:
+      uri: https://github.com/alphagov/govuk-content-schemas
+      branch: main
+
+  - <<: *git-repo
+    name: govuk-infrastructure
+    source:
+      uri: https://github.com/alphagov/govuk-infrastructure
+      branch: ((govuk_infrastructure_branch))
+
+jobs:
+- name: upload-to-s3
+  plan:
+    - get: content-schemas-repo
+      trigger: true
+    - get: govuk-infrastructure
+    - task: upload-rails-assets
+      file: govuk-infrastructure/concourse/tasks/upload-rails-assets.yml
+      input_mapping:
+        app-image: content-schemas-repo
+      params:
+        IMAGE_ASSETS_PATH: app-image
+        S3_BUCKET_PATH_PATTERN: s3://govuk-content-schemas-test
+        WORKSPACE: ((workspace))

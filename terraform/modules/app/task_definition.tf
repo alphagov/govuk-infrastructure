@@ -33,13 +33,16 @@ locals {
 }
 
 module "app_container_definition" {
-  source                  = "../../modules/container-definition"
-  image                   = "${var.registry}/${var.image_name}:${var.image_tag}"
-  aws_region              = var.aws_region
-  command                 = var.command
-  healthcheck_command     = var.container_healthcheck_command
-  environment_variables   = var.environment_variables
-  dependsOn               = [{ containerName : "envoy", condition : "HEALTHY" }]
+  source                = "../../modules/container-definition"
+  image                 = "${var.registry}/${var.image_name}:${var.image_tag}"
+  aws_region            = var.aws_region
+  command               = var.command
+  healthcheck_command   = var.container_healthcheck_command
+  environment_variables = var.environment_variables
+  dependsOn = [
+    { containerName : "envoy", condition : "HEALTHY" },
+    { containerName : "content_schemas_downloader", condition : "HEALTHY" }
+  ]
   splunk_url_secret_arn   = var.splunk_url_secret_arn
   splunk_token_secret_arn = var.splunk_token_secret_arn
   splunk_sourcetype       = var.splunk_sourcetype
@@ -72,12 +75,30 @@ module "envoy_container_definition" {
   user                    = local.user_id
 }
 
+module "content_schemas_container_definition" {
+  source              = "../../modules/container-definition"
+  image               = "430354129336.dkr.ecr.eu-west-1.amazonaws.com/govuk/ecs-cli:latest"
+  aws_region          = var.aws_region
+  command             = ["/bin/sh", "-c", "aws s3 cp s3://govuk-content-schemas-test /govuk-content-schemas --recursive"]
+  healthcheck_command = ["/bin/sh", "-c", "exit 0"]
+  environment_variables = {
+    GOVUK_CONTENT_SCHEMAS_PATH = "/govuk-content-schemas",
+  }
+  splunk_url_secret_arn   = var.splunk_url_secret_arn
+  splunk_token_secret_arn = var.splunk_token_secret_arn
+  splunk_sourcetype       = var.splunk_sourcetype
+  splunk_index            = var.splunk_index
+  name                    = "content_schemas_downloader"
+  ports                   = []
+}
+
 # TODO: Can we remove the v2?
 module "task_definition" {
   source = "../../modules/task-definition"
   container_definitions = [
     module.app_container_definition.json_format,
     module.envoy_container_definition.json_format,
+    module.content_schemas_container_definition.json_format,
   ]
   cpu                = var.cpu
   execution_role_arn = var.execution_role_arn
@@ -99,9 +120,11 @@ resource "aws_ecs_task_definition" "bootstrap" {
   requires_compatibilities = ["FARGATE"]
   execution_role_arn       = var.execution_role_arn
   task_role_arn            = var.task_role_arn
+  volume { name = "content_schemas" }
   container_definitions = jsonencode([
     module.app_container_definition.json_format,
     module.envoy_container_definition.json_format,
+    module.content_schemas_container_definition.json_format,
   ])
 
   proxy_configuration {

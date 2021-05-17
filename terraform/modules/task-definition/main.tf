@@ -11,6 +11,10 @@ locals {
     proxyConfiguration      = var.proxy_configuration
     requiresCompatibilities = ["FARGATE"],
     taskRoleArn             = var.task_role_arn,
+    enableExecuteCommand    = true,
+    volumes = [
+      { "name" : "content_schemas" }
+    ]
   }
 }
 

@@ -34,7 +34,13 @@ output "json_format" {
         },
       ],
     },
-    mountPoints  = [],
+    mountPoints = [
+      {
+        sourceVolume  = "content_schemas",
+        containerPath = lookup(var.environment_variables, "GOVUK_CONTENT_SCHEMAS_PATH", "/govuk-content-schemas"),
+        readOnly      = false
+      }
+    ],
     portMappings = [for port in var.ports : { containerPort = port, hostPort = port, protocol = "tcp" }],
     secrets      = [for key, value in var.secrets_from_arns : { name = key, valueFrom = value }]
     user         = var.user

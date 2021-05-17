@@ -1,0 +1,3 @@
+workspace: baker
+govuk_infrastructure_branch: pull-content-schemas
+disable_slack_channel_alerts: true
