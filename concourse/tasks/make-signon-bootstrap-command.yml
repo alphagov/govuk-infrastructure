@@ -14,6 +14,7 @@ outputs:
 params:
   ASSUME_ROLE_ARN: 'arn:aws:iam::430354129336:role/govuk-concourse-deployer'
   AWS_REGION: eu-west-1
+  GOVUK_ENVIRONMENT:
   WORKSPACE:
 run:
   path: sh
@@ -25,7 +26,7 @@ run:
       root_dir=$(pwd)
       DEPLOY_DIR="src/terraform/deployments/govuk-publishing-platform"
       cd ${DEPLOY_DIR}
-      terraform init -backend-config="role_arn=$ASSUME_ROLE_ARN"
+      terraform init -backend-config="./${GOVUK_ENVIRONMENT}.backend" -backend-config "role_arn=$ASSUME_ROLE_ARN"
       terraform workspace select "$WORKSPACE"
 
       terraform output -raw signon_bootstrap_command > "$root_dir/run-task-command/run-task-command"
