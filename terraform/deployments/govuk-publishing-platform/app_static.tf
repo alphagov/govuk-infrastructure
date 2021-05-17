@@ -31,7 +31,7 @@ module "static" {
   vpc_id                           = local.vpc_id
   subnets                          = local.private_subnets
   desired_count                    = var.static_desired_count
-  extra_security_groups            = [local.govuk_management_access_security_group, aws_security_group.mesh_ecs_service.id]
+  extra_security_groups            = [aws_security_group.mesh_ecs_service.id]
   environment_variables = merge(
     local.static_defaults.environment_variables,
     {
@@ -73,7 +73,7 @@ module "draft_static" {
   vpc_id                           = local.vpc_id
   subnets                          = local.private_subnets
   desired_count                    = var.draft_static_desired_count
-  extra_security_groups            = [local.govuk_management_access_security_group, aws_security_group.mesh_ecs_service.id]
+  extra_security_groups            = [aws_security_group.mesh_ecs_service.id]
   environment_variables = merge(
     local.static_defaults.environment_variables,
     {

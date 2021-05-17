@@ -43,7 +43,7 @@ module "signon" {
   cluster_id                       = aws_ecs_cluster.cluster.id
   source                           = "../../modules/app"
   desired_count                    = var.signon_desired_count
-  extra_security_groups            = [local.govuk_management_access_security_group, aws_security_group.mesh_ecs_service.id]
+  extra_security_groups            = [aws_security_group.mesh_ecs_service.id]
   load_balancers = [{
     target_group_arn = aws_lb_target_group.signon.arn
     container_port   = 80

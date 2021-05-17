@@ -52,7 +52,6 @@ module "content_store" {
   subnets                          = local.private_subnets
   desired_count                    = var.content_store_desired_count
   extra_security_groups = [
-    local.govuk_management_access_security_group,
     aws_security_group.mesh_ecs_service.id
   ]
   environment_variables = merge(
@@ -104,7 +103,6 @@ module "draft_content_store" {
   subnets                          = local.private_subnets
   desired_count                    = var.draft_content_store_desired_count
   extra_security_groups = [
-    local.govuk_management_access_security_group,
     aws_security_group.mesh_ecs_service.id
   ]
   environment_variables = merge(

@@ -58,7 +58,7 @@ module "frontend" {
   source                           = "../../modules/app"
   desired_count                    = var.frontend_desired_count
   subnets                          = local.private_subnets
-  extra_security_groups            = [local.govuk_management_access_security_group, aws_security_group.mesh_ecs_service.id]
+  extra_security_groups            = [aws_security_group.mesh_ecs_service.id]
   environment_variables            = local.frontend_defaults.environment_variables
   secrets_from_arns                = local.frontend_defaults.secrets_from_arns
   splunk_url_secret_arn            = local.defaults.splunk_url_secret_arn
@@ -91,7 +91,7 @@ module "draft_frontend" {
   source                           = "../../modules/app"
   desired_count                    = var.draft_frontend_desired_count
   subnets                          = local.private_subnets
-  extra_security_groups            = [local.govuk_management_access_security_group, aws_security_group.mesh_ecs_service.id]
+  extra_security_groups            = [aws_security_group.mesh_ecs_service.id]
   environment_variables = merge(
     local.frontend_defaults.environment_variables,
     {
