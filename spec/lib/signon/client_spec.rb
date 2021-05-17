@@ -111,8 +111,8 @@ RSpec.describe Signon::Client do
     context "when application already exists" do
       it "raises a custom error" do
         stub_req(endpoint).to_return(
-          status: 400,
-          body: JSON.generate(error: "Record already exists"),
+          status: 409,
+          body: JSON.generate(error: "ApplicationAlreadyCreated"),
         )
         expect { response }.to raise_error(Signon::Client::ApplicationAlreadyCreated)
       end

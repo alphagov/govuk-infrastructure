@@ -106,7 +106,10 @@ module Signon
     end
 
     def already_exists(res)
-      res.code == "400" && JSON.parse(res.body).dig("error") == "Record already exists"
+      # TODO: Remove deprecated check once
+      deprecated = res.code == "400" && JSON.parse(res.body).dig("error") == "Record already exists"
+      new = res.code == "409"
+      new || deprecated
     end
   end
 end
