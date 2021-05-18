@@ -30,7 +30,7 @@ output "content-store" {
       signon_secrets = {
         bearer_tokens = [
           module.draft_content_store_to_publishing_api_bearer_token.token_data,
-          module.draft_content_store_to_router_api_bearer_token.token_data,
+          module.draft_content_store_to_draft_router_api_bearer_token.token_data,
         ],
         admin_password_arn = aws_secretsmanager_secret.signon_admin_password.arn,
         api_user_email     = local.signon_api_user.content_store,
