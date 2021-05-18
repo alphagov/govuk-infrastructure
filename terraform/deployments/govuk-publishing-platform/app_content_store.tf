@@ -120,7 +120,7 @@ module "draft_content_store" {
       GDS_SSO_OAUTH_ID            = module.oauth_applications["draft_content_store"].id_arn,
       GDS_SSO_OAUTH_SECRET        = module.oauth_applications["draft_content_store"].secret_arn,
       PUBLISHING_API_BEARER_TOKEN = module.draft_content_store_to_publishing_api_bearer_token.secret_arn
-      ROUTER_API_BEARER_TOKEN     = module.draft_content_store_to_router_api_bearer_token.secret_arn
+      ROUTER_API_BEARER_TOKEN     = module.draft_content_store_to_draft_router_api_bearer_token.secret_arn
     }
   )
   splunk_url_secret_arn   = local.defaults.splunk_url_secret_arn

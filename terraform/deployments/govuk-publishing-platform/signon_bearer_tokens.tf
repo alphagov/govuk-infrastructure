@@ -156,14 +156,14 @@ module "content_store_to_router_api_bearer_token" {
   workspace                       = local.workspace
 }
 
-module "draft_content_store_to_router_api_bearer_token" {
+module "draft_content_store_to_draft_router_api_bearer_token" {
   source = "../../modules/signon_bearer_token"
 
   additional_tags                 = local.additional_tags
   api_user_email                  = local.signon_api_user.draft_content_store
-  app_name                        = local.signon_app.router_api.name
+  app_name                        = local.signon_app.draft_router_api.name
   environment                     = var.govuk_environment
-  name                            = "dcs_to_router_api"
+  name                            = "dcs_to_draft_router_api"
   private_subnets                 = local.private_subnets
   signon_admin_password_arn       = aws_secretsmanager_secret.signon_admin_password.arn
   signon_host                     = module.signon.virtual_service_name
