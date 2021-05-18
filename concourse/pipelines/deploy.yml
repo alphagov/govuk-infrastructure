@@ -1113,6 +1113,7 @@ jobs:
     - task: make-bootstrap-command
       file: govuk-infrastructure/concourse/tasks/make-signon-bootstrap-command.yml
       params:
+        GOVUK_ENVIRONMENT: test
         WORKSPACE: ((workspace))
     - task: create-signon-resources
       file: govuk-infrastructure/concourse/tasks/run-task.yml
