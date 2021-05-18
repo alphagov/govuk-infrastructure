@@ -676,6 +676,12 @@ jobs:
     - in_parallel:
         - <<: *get-smokey-govuk-infrastructure
           passed: [deploy-frontend]
+        - get: frontend-terraform-outputs
+          passed: [deploy-frontend]
+          trigger: true
+        - get: frontend-image
+          passed: [deploy-frontend]
+          trigger: true
         - <<: *get-smokey-app-tf-outputs
     - <<: *get-smokey-task-definition
     - <<: *run-smoke-test
@@ -777,6 +783,12 @@ jobs:
     - in_parallel:
         - <<: *get-smokey-govuk-infrastructure
           passed: [deploy-publisher]
+        - get: publisher-terraform-outputs
+          passed: [deploy-publisher]
+          trigger: true
+        - get: publisher-image
+          passed: [deploy-publisher]
+          trigger: true
         - <<: *get-smokey-app-tf-outputs
     - <<: *get-smokey-task-definition
     - <<: *run-smoke-test
@@ -1140,6 +1152,12 @@ jobs:
     - in_parallel:
         - <<: *get-smokey-govuk-infrastructure
           passed: [deploy-signon]
+        - get: signon-terraform-outputs
+          passed: [deploy-signon]
+          trigger: true
+        - get: signon-image
+          passed: [deploy-signon]
+          trigger: true
         - <<: *get-smokey-app-tf-outputs
     - <<: *get-smokey-task-definition
     - <<: *run-smoke-test
