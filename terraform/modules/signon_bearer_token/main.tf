@@ -1,16 +1,3 @@
-terraform {
-  required_providers {
-    aws = {
-      source  = "hashicorp/aws"
-      version = ">= 3.30"
-    }
-    archive = {
-      source  = "hashicorp/archive"
-      version = ">= 2.2"
-    }
-  }
-}
-
 locals {
   secret_name = "${var.name}_bearer_token_${var.workspace}"
 }

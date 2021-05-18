@@ -4,8 +4,6 @@ locals {
   permissions          = "signin"
 }
 
-provider "archive" {}
-
 data "archive_file" "bearer_token_rotater" {
   type        = "zip"
   source_file = "${path.module}/../../../lambdas/signon_bearer_token_rotater.rb"
