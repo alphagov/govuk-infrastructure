@@ -17,6 +17,11 @@ terraform {
       source  = "hashicorp/random"
       version = "3.0.0"
     }
+
+    archive = {
+      source  = "hashicorp/archive"
+      version = ">= 2.2"
+    }
   }
 }
 
@@ -43,6 +48,8 @@ provider "fastly" {
 }
 
 provider "random" {}
+
+provider "archive" {}
 
 locals {
   vpc_id                       = data.terraform_remote_state.infra_networking.outputs.vpc_id
