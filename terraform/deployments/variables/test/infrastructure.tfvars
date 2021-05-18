@@ -10,6 +10,9 @@ external_app_domain       = "test.govuk.digital"
 
 registry = "172025368201.dkr.ecr.eu-west-1.amazonaws.com"
 
+enable_cdn                       = true
+cdn_certificate_validation_cname = { name = "_acme-challenge.www.ecs.test.govuk.digital", record = "imu53najhaviy4ov80.fastly-validations.com" }
+
 #--------------------------------------------------------------
 # App
 #--------------------------------------------------------------

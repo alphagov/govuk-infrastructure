@@ -139,3 +139,15 @@ variable "registry" {
   type        = string
   description = "registry from which to pull container images"
 }
+
+variable "enable_cdn" {
+  type        = bool
+  description = "enable Fastly CDN for this govuk_environment on govuk.digital domain, this applies to the default workspace only"
+  default     = false
+}
+
+variable "cdn_certificate_validation_cname" {
+  type        = map(any)
+  description = "map of name and record pair for Fastly certificate validation"
+  default     = {}
+}

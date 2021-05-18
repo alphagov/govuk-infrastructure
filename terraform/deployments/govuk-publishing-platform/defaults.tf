@@ -5,7 +5,7 @@ locals {
   workspace_internal_domain = "${local.workspace}.${var.internal_app_domain}"
   mesh_domain               = "mesh.${local.workspace_internal_domain}"
   # public_domain             = local.is_default_workspace ? var.publishing_service_domain : local.workspace_external_domain
-  public_entry_url = local.is_default_workspace ? "https://www.ecs.${var.publishing_service_domain}" : "https://${module.www_frontends_origin.fqdn}"
+  public_entry_url = local.is_default_workspace && var.enable_cdn ? "https://www.${local.workspace_external_domain}" : "https://${module.www_frontends_origin.fqdn}"
   defaults = {
     environment_variables = {
       DEFAULT_TTL               = 1800,
