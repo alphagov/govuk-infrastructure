@@ -14,12 +14,9 @@ output "content-store" {
       network_config                 = module.draft_content_store.network_config
       required_secrets               = module.draft_content_store.required_secrets
       signon_secrets = {
-        bearer_tokens = [
-          module.content_store_to_publishing_api_bearer_token.token_data,
-          module.content_store_to_router_api_bearer_token.token_data,
-        ],
+        bearer_tokens      = local.generated_bearer_tokens.draft_content_store,
         admin_password_arn = aws_secretsmanager_secret.signon_admin_password.arn,
-        api_user_email     = local.signon_api_user.content_store,
+        api_user_email     = local.signon_api_user.draft_content_store,
         signon_api_url     = local.signon_api_url,
       }
     },
@@ -28,10 +25,7 @@ output "content-store" {
       network_config                 = module.content_store.network_config
       required_secrets               = module.content_store.required_secrets
       signon_secrets = {
-        bearer_tokens = [
-          module.draft_content_store_to_publishing_api_bearer_token.token_data,
-          module.draft_content_store_to_draft_router_api_bearer_token.token_data,
-        ],
+        bearer_tokens      = local.generated_bearer_tokens.content_store,
         admin_password_arn = aws_secretsmanager_secret.signon_admin_password.arn,
         api_user_email     = local.signon_api_user.content_store,
         signon_api_url     = local.signon_api_url,
@@ -47,9 +41,7 @@ output "publisher" {
       network_config                 = module.publisher_web.network_config
       required_secrets               = module.publisher_web.required_secrets
       signon_secrets = {
-        bearer_tokens = [
-          module.publisher_to_publishing_api_bearer_token.token_data,
-        ],
+        bearer_tokens      = local.generated_bearer_tokens.publisher,
         admin_password_arn = aws_secretsmanager_secret.signon_admin_password.arn,
         api_user_email     = local.signon_api_user.publisher,
         signon_api_url     = local.signon_api_url,
@@ -73,9 +65,7 @@ output "frontend" {
       task_definition_cli_input_json = module.frontend.cli_input_json,
       network_config                 = module.frontend.network_config
       signon_secrets = {
-        bearer_tokens = [
-          module.frontend_to_publishing_api_bearer_token.token_data
-        ],
+        bearer_tokens      = local.generated_bearer_tokens.frontend,
         admin_password_arn = aws_secretsmanager_secret.signon_admin_password.arn,
         api_user_email     = local.signon_api_user.frontend,
         signon_api_url     = local.signon_api_url,
@@ -91,11 +81,7 @@ output "publishing-api" {
       network_config                 = module.publishing_api_web.network_config
       required_secrets               = module.publishing_api_web.required_secrets
       signon_secrets = {
-        bearer_tokens = [
-          module.publishing_api_to_router_api_bearer_token.token_data,
-          module.publishing_api_to_draft_content_store_bearer_token.token_data,
-          module.publishing_api_to_content_store_bearer_token.token_data,
-        ],
+        bearer_tokens      = local.generated_bearer_tokens.publishing_api,
         admin_password_arn = aws_secretsmanager_secret.signon_admin_password.arn,
         api_user_email     = local.signon_api_user.publishing_api,
         signon_api_url     = local.signon_api_url,
