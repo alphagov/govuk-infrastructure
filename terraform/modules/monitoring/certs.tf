@@ -19,7 +19,7 @@ resource "aws_route53_zone" "monitoring_public" {
 resource "aws_acm_certificate" "monitoring_public" {
   domain_name = "*.${local.monitoring_external_domain}"
 
-  subject_alternative_names = ["*.${var.workspace}.${var.publishing_service_domain}"]
+  subject_alternative_names = ["*.${var.publishing_service_domain}"]
 
   validation_method = "DNS"
 
