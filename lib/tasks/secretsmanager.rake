@@ -18,7 +18,7 @@ namespace :secretsmanager do
     required_secrets = app_config.dig(variant, "required_secrets")
     secrets = required_secrets.to_h { |arn| [arn, false] }
     attempts = 0
-    max_attempts = 8
+    max_attempts = 10
 
     until secrets.values.all? || attempts == max_attempts
       attempts += 1
