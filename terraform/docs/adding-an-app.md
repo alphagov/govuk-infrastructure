@@ -37,7 +37,10 @@ are still accurate (please correct this doc if you find the steps are inaccurate
 
    ```sh
    $ cd terraform/deployments/govuk-publishing-platform
-   $ terraform apply -var-file=../variables/$ENVIRONMENT/infrastructure.tfvars
+   $ terraform apply \
+   $  -var-file ../variables/common.tfvars \
+   $  -var-file ../variables/$ENVIRONMENT/common.tfvars \
+   $  -var-file=../variables/$ENVIRONMENT/infrastructure.tfvars
    ```
 
 5. Set up automated deployments
