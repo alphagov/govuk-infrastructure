@@ -35,6 +35,7 @@ resource "aws_lambda_function" "bearer_token" {
     }
   }
 
+  # As recommended in Terraform docs
   depends_on = [
     aws_iam_role_policy_attachment.lambda_logs,
     aws_iam_role_policy_attachment.vpc,

@@ -28,4 +28,7 @@ resource "aws_secretsmanager_secret_rotation" "bearer_token" {
     automatically_after_days = 30
   }
 
+  # Secrets Manager cannot invoke the specified Lambda function
+  # without the lambda permission being created first.
+  depends_on = [aws_lambda_permission.allow_secretsmanager]
 }
