@@ -26,6 +26,8 @@ provider "aws" {
   region = "eu-west-1"
 }
 
+data "aws_caller_identity" "current" {}
+
 resource "aws_iam_role" "govuk_concourse_deployer" {
   name        = "govuk-concourse-deployer"
   description = "Deploys applications to ECS from Concourse"
@@ -37,7 +39,7 @@ resource "aws_iam_role" "govuk_concourse_deployer" {
         "Effect" : "Allow",
         "Action" : "sts:AssumeRole",
         "Principal" : {
-          "AWS" : "arn:aws:iam::047969882937:role/cd-govuk-${var.govuk_environment}-concourse-worker"
+          "AWS" : "arn:aws:iam::${var.concourse_aws_account_id}:role/cd-govuk-${var.govuk_environment}-concourse-worker"
         }
       }
     ]
@@ -52,7 +54,10 @@ resource "aws_iam_role_policy_attachment" "concourse_admin" {
   policy_arn = "arn:aws:iam::aws:policy/AdministratorAccess"
 }
 
+# This role is only used by Concourse for continuous integration checks.
+# Therefore, only need to be present in `test` environment.
 resource "aws_iam_role" "govuk_concourse_terraform_planner" {
+  count       = var.govuk_environment == "test" ? 1 : 0
   name        = "govuk-ci-concourse"
   description = "Runs Terraform plan from Concourse"
 
@@ -63,7 +68,7 @@ resource "aws_iam_role" "govuk_concourse_terraform_planner" {
         "Effect" : "Allow",
         "Action" : "sts:AssumeRole",
         "Principal" : {
-          "AWS" : "arn:aws:iam::047969882937:role/cd-govuk-ci-concourse-worker"
+          "AWS" : "arn:aws:iam::${var.concourse_aws_account_id}:role/cd-govuk-ci-concourse-worker"
         }
       }
     ]
@@ -71,7 +76,8 @@ resource "aws_iam_role" "govuk_concourse_terraform_planner" {
 }
 
 resource "aws_iam_role_policy_attachment" "concourse_readonly" {
-  role       = aws_iam_role.govuk_concourse_terraform_planner.id
+  count      = var.govuk_environment == "test" ? 1 : 0
+  role       = aws_iam_role.govuk_concourse_terraform_planner[0].id
   policy_arn = "arn:aws:iam::aws:policy/ReadOnlyAccess"
 }
 
@@ -81,8 +87,9 @@ resource "aws_iam_role_policy" "concourse_terraform_planner_test" {
   # account. This is intended for the test account only.
   # TODO: Consider whether we can run pre-merge checks with the deployer role,
   # and what controls we should have in place re secrets in the test account.
-  name = "concourse_terraform_planner_test"
-  role = aws_iam_role.govuk_concourse_terraform_planner.id
+  count = var.govuk_environment == "test" ? 1 : 0
+  name  = "concourse_terraform_planner_test"
+  role  = aws_iam_role.govuk_concourse_terraform_planner[0].id
   policy = jsonencode({
     "Version" : "2012-10-17",
     "Statement" : [
@@ -90,8 +97,8 @@ resource "aws_iam_role_policy" "concourse_terraform_planner_test" {
         "Sid" : "TerraformPlannerReadsNonSensitiveTestSecrets",
         "Effect" : "Allow",
         "Action" : "secretsmanager:GetSecretValue",
-        "Resource" : ["arn:aws:secretsmanager:eu-west-1:430354129336:secret:signon_admin_password_ecs-*",
-        "arn:aws:secretsmanager:eu-west-1:430354129336:secret:grafana_password-*"]
+        "Resource" : ["arn:aws:secretsmanager:eu-west-1:${data.aws_caller_identity.current.account_id}:secret:signon_admin_password_ecs-*",
+        "arn:aws:secretsmanager:eu-west-1:${data.aws_caller_identity.current.account_id}:secret:grafana_password-*"]
       }
     ]
   })
@@ -111,7 +118,7 @@ resource "aws_iam_user_policy" "concourse_ecr_readonly_user_policy" {
       {
         "Effect" : "Allow",
         "Action" : "sts:AssumeRole",
-        "Resource" : "arn:aws:iam::172025368201:role/pull_images_from_ecr_role"
+        "Resource" : "arn:aws:iam::${var.production_aws_account_id}:role/pull_images_from_ecr_role"
       }
     ]
   })
