@@ -612,18 +612,6 @@ jobs:
       - get: frontend-image
         trigger: true
     - in_parallel:
-      - &await-secretsmanager-creds
-        task: await-creds-in-secrets-manager
-        file: govuk-infrastructure/concourse/tasks/await-creds-in-secretsmanager.yml
-        attempts: 3
-        params:
-          APPLICATION: frontend
-          VARIANT: live
-      - <<: *await-secretsmanager-creds
-        params:
-          APPLICATION: frontend
-          VARIANT: draft
-    - in_parallel:
       - task: bootstrap-secrets
         file: govuk-infrastructure/concourse/tasks/bootstrap-app-secrets.yml
         params:
@@ -670,6 +658,18 @@ jobs:
         params:
          ECS_SERVICE: frontend
          WORKSPACE: ((workspace))
+    - in_parallel:
+      - &await-secretsmanager-creds
+        task: await-creds-in-secrets-manager
+        file: govuk-infrastructure/concourse/tasks/await-creds-in-secretsmanager.yml
+        attempts: 3
+        params:
+          APPLICATION: frontend
+          VARIANT: live
+      - <<: *await-secretsmanager-creds
+        params:
+          APPLICATION: frontend
+          VARIANT: draft
     - in_parallel:
       - &await-deploy-complete
         task: await-deploy-complete-live
@@ -722,15 +722,6 @@ jobs:
       - get: publisher-image
         trigger: true
     - in_parallel:
-      - <<: *await-secretsmanager-creds
-        params:
-          APPLICATION: publisher
-          VARIANT: web
-      - <<: *await-secretsmanager-creds
-        params:
-          APPLICATION: publisher
-          VARIANT: worker
-    - in_parallel:
       - task: bootstrap-secrets
         file: govuk-infrastructure/concourse/tasks/bootstrap-app-secrets.yml
         params:
@@ -764,6 +755,15 @@ jobs:
           APPLICATION: publisher
           VARIANT: worker
           GOVUK_ENVIRONMENT: test
+    - in_parallel:
+      - <<: *await-secretsmanager-creds
+        params:
+          APPLICATION: publisher
+          VARIANT: web
+      - <<: *await-secretsmanager-creds
+        params:
+          APPLICATION: publisher
+          VARIANT: worker
     - task: run-db-migrations
       file: govuk-infrastructure/concourse/tasks/run-task.yml
       input_mapping:
@@ -837,15 +837,6 @@ jobs:
       - get: publishing-api-image
         trigger: true
     - in_parallel:
-      - <<: *await-secretsmanager-creds
-        params:
-          APPLICATION: publishing-api
-          VARIANT: web
-      - <<: *await-secretsmanager-creds
-        params:
-          APPLICATION: publishing-api
-          VARIANT: worker
-    - in_parallel:
       - task: bootstrap-secrets
         file: govuk-infrastructure/concourse/tasks/bootstrap-app-secrets.yml
         params:
@@ -871,6 +862,15 @@ jobs:
           APPLICATION: publishing-api
           VARIANT: worker
           GOVUK_ENVIRONMENT: test
+    - in_parallel:
+      - <<: *await-secretsmanager-creds
+        params:
+          APPLICATION: publishing-api
+          VARIANT: web
+      - <<: *await-secretsmanager-creds
+        params:
+          APPLICATION: publishing-api
+          VARIANT: worker
     - task: run-db-migrations
       file: govuk-infrastructure/concourse/tasks/run-task.yml
       input_mapping:
@@ -924,16 +924,6 @@ jobs:
       - get: content-store-image
         trigger: true
     - in_parallel:
-      - <<: *await-secretsmanager-creds
-        params:
-          APPLICATION: content-store
-          VARIANT: live
-      - task: await-creds-in-secrets-manager
-        file: govuk-infrastructure/concourse/tasks/await-creds-in-secretsmanager.yml
-        params:
-          APPLICATION: content-store
-          VARIANT: draft
-    - in_parallel:
       - task: bootstrap-secrets
         file: govuk-infrastructure/concourse/tasks/bootstrap-app-secrets.yml
         params:
@@ -962,6 +952,16 @@ jobs:
         params:
           APPLICATION: content-store
           VARIANT: live
+    - in_parallel:
+      - <<: *await-secretsmanager-creds
+        params:
+          APPLICATION: content-store
+          VARIANT: live
+      - task: await-creds-in-secrets-manager
+        file: govuk-infrastructure/concourse/tasks/await-creds-in-secretsmanager.yml
+        params:
+          APPLICATION: content-store
+          VARIANT: draft
     - in_parallel:
       - task: update-live-ecs-service
         file: govuk-infrastructure/concourse/tasks/update-ecs-service.yml
