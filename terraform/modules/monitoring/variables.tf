@@ -28,11 +28,6 @@ variable "publishing_service_domain" {
   description = "e.g. test.publishing.service.gov.uk"
 }
 
-variable "govuk_management_access_sg_id" {
-  description = "ID of security group (from the govuk-aws repo) for access from jumpboxes etc. This SG is added to all ECS instances."
-  type        = string
-}
-
 variable "grafana_desired_count" {
   description = "Desired count of Grafana instances"
   type        = number

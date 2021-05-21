@@ -639,6 +639,7 @@ jobs:
         params:
          APPLICATION: frontend
          VARIANT: draft
+         ASSUME_ROLE_ARN: ((concourse_deployer_role_arn))
       - task: update-live-task-definition
         file: govuk-infrastructure/concourse/tasks/update-task-definition.yml
         input_mapping:
@@ -648,6 +649,7 @@ jobs:
         params:
          APPLICATION: frontend
          VARIANT: live
+         ASSUME_ROLE_ARN: ((concourse_deployer_role_arn))
     - in_parallel:
       - task: update-draft-ecs-service
         file: govuk-infrastructure/concourse/tasks/update-ecs-service.yml
@@ -757,6 +759,7 @@ jobs:
           APPLICATION: publisher
           VARIANT: web
           GOVUK_ENVIRONMENT: ((govuk_environment))
+          ASSUME_ROLE_ARN: ((concourse_deployer_role_arn))
       - task: update-worker-task-definition
         file: govuk-infrastructure/concourse/tasks/update-task-definition.yml
         input_mapping:
@@ -767,6 +770,7 @@ jobs:
           APPLICATION: publisher
           VARIANT: worker
           GOVUK_ENVIRONMENT: ((govuk_environment))
+          ASSUME_ROLE_ARN: ((concourse_deployer_role_arn))
     - in_parallel:
       - <<: *await-secretsmanager-creds
         params:
@@ -870,6 +874,7 @@ jobs:
           APPLICATION: publishing-api
           VARIANT: web
           GOVUK_ENVIRONMENT: ((govuk_environment))
+          ASSUME_ROLE_ARN: ((concourse_deployer_role_arn))
       - task: update-worker-task-definition
         file: govuk-infrastructure/concourse/tasks/update-task-definition.yml
         input_mapping:
@@ -880,6 +885,7 @@ jobs:
           APPLICATION: publishing-api
           VARIANT: worker
           GOVUK_ENVIRONMENT: ((govuk_environment))
+          ASSUME_ROLE_ARN: ((concourse_deployer_role_arn))
     - in_parallel:
       - <<: *await-secretsmanager-creds
         params:
@@ -968,6 +974,7 @@ jobs:
         params:
           APPLICATION: content-store
           VARIANT: draft
+          ASSUME_ROLE_ARN: ((concourse_deployer_role_arn))
       - task: update-live-task-definition
         file: govuk-infrastructure/concourse/tasks/update-task-definition.yml
         input_mapping:
@@ -977,6 +984,7 @@ jobs:
         params:
           APPLICATION: content-store
           VARIANT: live
+          ASSUME_ROLE_ARN: ((concourse_deployer_role_arn))
     - in_parallel:
       - <<: *await-secretsmanager-creds
         params:
@@ -1044,6 +1052,7 @@ jobs:
         params:
           APPLICATION: router
           VARIANT: draft
+          ASSUME_ROLE_ARN: ((concourse_deployer_role_arn))
       - task: update-live-task-definition
         file: govuk-infrastructure/concourse/tasks/update-task-definition.yml
         input_mapping:
@@ -1053,6 +1062,7 @@ jobs:
         params:
           APPLICATION: router
           VARIANT: live
+          ASSUME_ROLE_ARN: ((concourse_deployer_role_arn))
     - in_parallel:
       - task: update-draft-ecs-service
         file: govuk-infrastructure/concourse/tasks/update-ecs-service.yml
@@ -1114,6 +1124,7 @@ jobs:
         params:
           APPLICATION: router-api
           VARIANT: draft
+          ASSUME_ROLE_ARN: ((concourse_deployer_role_arn))
       - task: update-live-task-definition
         file: govuk-infrastructure/concourse/tasks/update-task-definition.yml
         input_mapping:
@@ -1123,6 +1134,7 @@ jobs:
         params:
           APPLICATION: router-api
           VARIANT: live
+          ASSUME_ROLE_ARN: ((concourse_deployer_role_arn))
     - in_parallel:
       - task: update-draft-ecs-service
         file: govuk-infrastructure/concourse/tasks/update-ecs-service.yml
@@ -1184,6 +1196,7 @@ jobs:
           APPLICATION: signon
           GOVUK_ENVIRONMENT: ((govuk_environment))
           VARIANT: web
+          ASSUME_ROLE_ARN: ((concourse_deployer_role_arn))
         input_mapping:
           app-image: signon-image
         output_mapping:
@@ -1272,6 +1285,7 @@ jobs:
         APPLICATION: smokey
         GOVUK_ENVIRONMENT: ((govuk_environment))
         VARIANT: default
+        ASSUME_ROLE_ARN: ((concourse_deployer_role_arn))
     serial: true
     on_failure:
       <<: *notify-slack-failure
@@ -1308,6 +1322,7 @@ jobs:
         params:
           APPLICATION: static
           VARIANT: draft
+          ASSUME_ROLE_ARN: ((concourse_deployer_role_arn))
       - task: update-live-task-definition
         file: govuk-infrastructure/concourse/tasks/update-task-definition.yml
         input_mapping:
@@ -1317,6 +1332,7 @@ jobs:
         params:
           APPLICATION: static
           VARIANT: live
+          ASSUME_ROLE_ARN: ((concourse_deployer_role_arn))
     - in_parallel:
       - task: update-draft-ecs-service
         file: govuk-infrastructure/concourse/tasks/update-ecs-service.yml
@@ -1371,6 +1387,7 @@ jobs:
       params:
         APPLICATION: authenticating-proxy
         VARIANT: web
+        ASSUME_ROLE_ARN: ((concourse_deployer_role_arn))
     - task: update-ecs-service
       file: govuk-infrastructure/concourse/tasks/update-ecs-service.yml
       input_mapping:

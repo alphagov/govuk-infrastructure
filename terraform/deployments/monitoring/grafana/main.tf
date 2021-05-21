@@ -1,10 +1,5 @@
 terraform {
-  backend "s3" {
-    bucket  = "govuk-terraform-test"
-    key     = "projects/grafana.tfstate"
-    region  = "eu-west-1"
-    encrypt = true
-  }
+  backend "s3" {}
 
   required_providers {
     aws = {

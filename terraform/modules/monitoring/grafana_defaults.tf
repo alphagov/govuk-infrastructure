@@ -24,5 +24,5 @@ locals {
     GF_SECURITY_ADMIN_PASSWORD   = aws_secretsmanager_secret_version.grafana_password.arn,
   }
 
-  grafana_security_groups = concat([aws_security_group.grafana.id], [var.govuk_management_access_sg_id])
+  grafana_security_groups = [aws_security_group.grafana.id]
 }
