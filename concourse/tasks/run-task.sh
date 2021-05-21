@@ -67,7 +67,8 @@ aws ecs wait tasks-stopped --tasks $task_id --cluster $CLUSTER
 echo "task finished."
 task_results=$(aws ecs describe-tasks --tasks $task_id --cluster $CLUSTER)
 
-ecs-cli logs --cluster $CLUSTER --task-id $task_id --since "60" | head -n 5000
+container_id=$(echo $task_results | jq .tasks[0].containers[]  | select(.name=="app") | .runtimeId)
+echo "Check Splunk for logs: https://gds.splunkcloud.com/en-GB/app/gds-006-govuk/search?q=search%20index%3D%22govuk_replatforming%22%20container_id%3D$container_id"
 
 exit_code=$(echo $task_results | jq [.tasks[0].containers[].exitCode] | jq add)
 echo "Exiting with code $exit_code"
