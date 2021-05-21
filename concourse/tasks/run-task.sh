@@ -47,7 +47,28 @@ EOF
 task_definition_arn="$(cat "task-definition-arn/task-definition-arn")"
 network_config=$(jq -r ".${VARIANT}.network_config" "app-terraform-outputs/${APPLICATION}.json")
 
-echo "Starting task..."
+echo "  Starting $COMMAND ❤"
+ALPACA='
+         , , , , ,
+      /\,/"`"`"\`\ /\,
+      | `         ` |
+      `  ⌒       ⌒  `
+      (  ◉  ❤   ◉  )
+      (      ⌣      ) ------ Starting task ❤
+      (             )
+       (           )
+       (           )
+       (           )
+      (             )"`"``"`(``)
+      (                        )
+     (                         )
+     (                         )
+     (                        )
+      (     )`(     )((      )
+       \, ,/   \, ,/   \  \ /
+         ⌣       ⌣     ⌣ ⌣
+'
+echo "${ALPACA}"
 
 task=$(aws ecs run-task --cluster $CLUSTER \
 --task-definition $task_definition_arn --launch-type FARGATE --count 1 \
