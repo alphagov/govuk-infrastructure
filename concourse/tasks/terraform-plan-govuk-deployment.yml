@@ -24,4 +24,5 @@ run:
       -var "assume_role_arn=$ASSUME_ROLE_ARN" \
       -var-file ../variables/common.tfvars \
       -var-file ../variables/test/common.tfvars \
-      -var-file ../variables/test/infrastructure.tfvars
+      -var-file ../variables/test/infrastructure.tfvars \
+      -lock=false
