@@ -12,7 +12,7 @@ inputs:
   - name: app-image
 params:
   AWS_REGION: eu-west-1
-  ASSUME_ROLE_ARN: 'arn:aws:iam::430354129336:role/govuk-concourse-deployer'
+  ASSUME_ROLE_ARN: ((concourse_deployer_role_arn))
   IMAGE_ASSETS_PATH:
   S3_BUCKET_PATH_PATTERN:
   WORKSPACE:

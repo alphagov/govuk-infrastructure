@@ -18,7 +18,7 @@ outputs:
   - name: task-definition-arn
 params:
   AWS_REGION: eu-west-1
-  ASSUME_ROLE_ARN: 'arn:aws:iam::430354129336:role/govuk-concourse-deployer'
+  ASSUME_ROLE_ARN: ((concourse_deployer_role_arn))
   APPLICATION:
   VARIANT:
   REGISTRY: '172025368201.dkr.ecr.eu-west-1.amazonaws.com'

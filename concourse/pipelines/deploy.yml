@@ -338,8 +338,9 @@ jobs:
         - name: govuk-infrastructure
         params:
           AWS_REGION: eu-west-1
-          ASSUME_ROLE_ARN: 'arn:aws:iam::430354129336:role/govuk-concourse-deployer'
+          ASSUME_ROLE_ARN: ((concourse_deployer_role_arn))
           WORKSPACE: ((workspace))
+          GOVUK_ENVIRONMENT: ((govuk_environment))
         platform: linux
         image_resource:
           type: docker-image
@@ -359,15 +360,15 @@ jobs:
 
               cd govuk-infrastructure/terraform/deployments/govuk-publishing-platform
 
-              terraform init -backend-config=./test.backend -backend-config "role_arn=$ASSUME_ROLE_ARN"
+              terraform init -backend-config "./${GOVUK_ENVIRONMENT}.backend" -backend-config "role_arn=$ASSUME_ROLE_ARN"
 
               terraform workspace select "$WORKSPACE"
 
               terraform destroy  \
               -var "assume_role_arn=$ASSUME_ROLE_ARN" \
               -var-file ../variables/common.tfvars \
-              -var-file ../variables/test/common.tfvars \
-              -var-file ../variables/test/infrastructure.tfvars \
+              -var-file "../variables/${GOVUK_ENVIRONMENT}/common.tfvars" \
+              -var-file "../variables/${GOVUK_ENVIRONMENT}/infrastructure.tfvars" \
               -auto-approve
 
   - name: update-pipeline
@@ -457,8 +458,9 @@ jobs:
           optional: true
         params:
           AWS_REGION: eu-west-1
-          ASSUME_ROLE_ARN: 'arn:aws:iam::430354129336:role/govuk-concourse-deployer'
+          ASSUME_ROLE_ARN: ((concourse_deployer_role_arn))
           WORKSPACE: ((workspace))
+          GOVUK_ENVIRONMENT: ((govuk_environment))
         platform: linux
         image_resource:
           type: docker-image
@@ -478,15 +480,15 @@ jobs:
 
             cd govuk-infrastructure/terraform/deployments/govuk-publishing-platform
 
-            terraform init -backend-config=./test.backend -backend-config "role_arn=$ASSUME_ROLE_ARN"
+            terraform init -backend-config "./${GOVUK_ENVIRONMENT}.backend" -backend-config "role_arn=$ASSUME_ROLE_ARN"
 
             terraform workspace select "$WORKSPACE" || terraform workspace new "$WORKSPACE"
 
             terraform apply \
               -var "assume_role_arn=$ASSUME_ROLE_ARN" \
               -var-file ../variables/common.tfvars \
-              -var-file ../variables/test/common.tfvars \
-              -var-file ../variables/test/infrastructure.tfvars \
+              -var-file "../variables/${GOVUK_ENVIRONMENT}/common.tfvars" \
+              -var-file "../variables/${GOVUK_ENVIRONMENT}/infrastructure.tfvars" \
               -auto-approve
 
             terraform output -json > "$root_dir/govuk-terraform-outputs/govuk-terraform-outputs.json"
@@ -564,7 +566,7 @@ jobs:
       put: deploy-slack-channel
       params:
         channel: "#govuk-deploy-alerts" # TODO: Alert owner Slack channels in future, i.e. ((search_team_slack))
-        username: 'test-((workspace)) deploy-apps' # TODO: Change `test` to ((govuk_enviroment))
+        username: '((govuk_environment))-((workspace)) deploy-apps'
         icon_emoji: ':concourse:'
         silent: true
         text: |
@@ -592,6 +594,7 @@ jobs:
       task: run-smoke-tests
       file: govuk-infrastructure/concourse/tasks/run-task.yml
       params: &smoke-tests-params
+        ASSUME_ROLE_ARN: ((concourse_deployer_role_arn))
         APPLICATION: smokey
         VARIANT: default
         COMMAND: bundle exec cucumber --profile test --strict-undefined -t @replatforming -t \"not @notreplatforming\"
@@ -615,6 +618,7 @@ jobs:
       - task: bootstrap-secrets
         file: govuk-infrastructure/concourse/tasks/bootstrap-app-secrets.yml
         params:
+          ASSUME_ROLE_ARN: ((concourse_deployer_role_arn))
           APPLICATION: frontend
           VARIANT: live
       - task: upload-rails-assets
@@ -623,8 +627,9 @@ jobs:
           app-image: frontend-image
         params:
           IMAGE_ASSETS_PATH: app-image/rootfs/app/public/assets/frontend
-          S3_BUCKET_PATH_PATTERN: s3://govuk-test-%s-frontends-rails-assets/assets/frontend/ # %s will be replaced by interpolated workspace in upload-rails-assets.yml
+          S3_BUCKET_PATH_PATTERN: s3://govuk-((govuk_environment))-%s-frontends-rails-assets/assets/frontend/ # %s will be replaced by interpolated workspace in upload-rails-assets.yml
           WORKSPACE: ((workspace))
+          ASSUME_ROLE_ARN: ((concourse_deployer_role_arn))
       - task: update-draft-task-definition
         file: govuk-infrastructure/concourse/tasks/update-task-definition.yml
         input_mapping:
@@ -651,6 +656,7 @@ jobs:
         params:
          ECS_SERVICE: draft-frontend
          WORKSPACE: ((workspace))
+         ASSUME_ROLE_ARN: ((concourse_deployer_role_arn))
       - task: update-live-ecs-service
         file: govuk-infrastructure/concourse/tasks/update-ecs-service.yml
         input_mapping:
@@ -658,16 +664,19 @@ jobs:
         params:
          ECS_SERVICE: frontend
          WORKSPACE: ((workspace))
+         ASSUME_ROLE_ARN: ((concourse_deployer_role_arn))
     - in_parallel:
       - &await-secretsmanager-creds
         task: await-creds-in-secrets-manager
         file: govuk-infrastructure/concourse/tasks/await-creds-in-secretsmanager.yml
         attempts: 3
         params:
+          ASSUME_ROLE_ARN: ((concourse_deployer_role_arn))
           APPLICATION: frontend
           VARIANT: live
       - <<: *await-secretsmanager-creds
         params:
+          ASSUME_ROLE_ARN: ((concourse_deployer_role_arn))
           APPLICATION: frontend
           VARIANT: draft
     - in_parallel:
@@ -679,6 +688,7 @@ jobs:
         params: &await-deploy-complete-params
           ECS_SERVICE: frontend
           WORKSPACE: ((workspace))
+          ASSUME_ROLE_ARN: ((concourse_deployer_role_arn))
       - <<: *await-deploy-complete
         task: await-deploy-complete-draft
         params:
@@ -725,6 +735,7 @@ jobs:
       - task: bootstrap-secrets
         file: govuk-infrastructure/concourse/tasks/bootstrap-app-secrets.yml
         params:
+          ASSUME_ROLE_ARN: ((concourse_deployer_role_arn))
           APPLICATION: publisher
           VARIANT: web
       - task: upload-rails-assets
@@ -733,8 +744,9 @@ jobs:
           app-image: publisher-image
         params:
           IMAGE_ASSETS_PATH: app-image/rootfs/app/public/assets/publisher
-          S3_BUCKET_PATH_PATTERN: s3://govuk-test-%s-backends-rails-assets/assets/publisher/ # %s will be replaced by interpolated workspace in upload-rails-assets.yml
+          S3_BUCKET_PATH_PATTERN: s3://govuk-((govuk_environment))-%s-backends-rails-assets/assets/publisher/ # %s will be replaced by interpolated workspace in upload-rails-assets.yml
           WORKSPACE: ((workspace))
+          ASSUME_ROLE_ARN: ((concourse_deployer_role_arn))
       - task: update-web-task-definition
         file: govuk-infrastructure/concourse/tasks/update-task-definition.yml
         input_mapping:
@@ -744,7 +756,7 @@ jobs:
         params:
           APPLICATION: publisher
           VARIANT: web
-          GOVUK_ENVIRONMENT: test
+          GOVUK_ENVIRONMENT: ((govuk_environment))
       - task: update-worker-task-definition
         file: govuk-infrastructure/concourse/tasks/update-task-definition.yml
         input_mapping:
@@ -754,14 +766,16 @@ jobs:
         params:
           APPLICATION: publisher
           VARIANT: worker
-          GOVUK_ENVIRONMENT: test
+          GOVUK_ENVIRONMENT: ((govuk_environment))
     - in_parallel:
       - <<: *await-secretsmanager-creds
         params:
+          ASSUME_ROLE_ARN: ((concourse_deployer_role_arn))
           APPLICATION: publisher
           VARIANT: web
       - <<: *await-secretsmanager-creds
         params:
+          ASSUME_ROLE_ARN: ((concourse_deployer_role_arn))
           APPLICATION: publisher
           VARIANT: worker
     - task: run-db-migrations
@@ -769,6 +783,7 @@ jobs:
       input_mapping:
         task-definition-arn: web-task-definition-arn
       params:
+        ASSUME_ROLE_ARN: ((concourse_deployer_role_arn))
         APPLICATION: publisher
         COMMAND: "bundle exec rails db:migrate"
         VARIANT: web
@@ -781,6 +796,7 @@ jobs:
         params:
           ECS_SERVICE: publisher-web
           WORKSPACE: ((workspace))
+          ASSUME_ROLE_ARN: ((concourse_deployer_role_arn))
       - task: update-worker-ecs-service
         file: govuk-infrastructure/concourse/tasks/update-ecs-service.yml
         input_mapping:
@@ -788,6 +804,7 @@ jobs:
         params:
           ECS_SERVICE: publisher-worker
           WORKSPACE: ((workspace))
+          ASSUME_ROLE_ARN: ((concourse_deployer_role_arn))
     - in_parallel:
       - <<: *await-deploy-complete
         task: await-deploy-complete-web
@@ -840,6 +857,7 @@ jobs:
       - task: bootstrap-secrets
         file: govuk-infrastructure/concourse/tasks/bootstrap-app-secrets.yml
         params:
+          ASSUME_ROLE_ARN: ((concourse_deployer_role_arn))
           APPLICATION: publishing-api
           VARIANT: web
       - task: update-web-task-definition
@@ -851,7 +869,7 @@ jobs:
         params:
           APPLICATION: publishing-api
           VARIANT: web
-          GOVUK_ENVIRONMENT: test
+          GOVUK_ENVIRONMENT: ((govuk_environment))
       - task: update-worker-task-definition
         file: govuk-infrastructure/concourse/tasks/update-task-definition.yml
         input_mapping:
@@ -861,14 +879,16 @@ jobs:
         params:
           APPLICATION: publishing-api
           VARIANT: worker
-          GOVUK_ENVIRONMENT: test
+          GOVUK_ENVIRONMENT: ((govuk_environment))
     - in_parallel:
       - <<: *await-secretsmanager-creds
         params:
+          ASSUME_ROLE_ARN: ((concourse_deployer_role_arn))
           APPLICATION: publishing-api
           VARIANT: web
       - <<: *await-secretsmanager-creds
         params:
+          ASSUME_ROLE_ARN: ((concourse_deployer_role_arn))
           APPLICATION: publishing-api
           VARIANT: worker
     - task: run-db-migrations
@@ -876,6 +896,7 @@ jobs:
       input_mapping:
         task-definition-arn: web-task-definition-arn
       params:
+        ASSUME_ROLE_ARN: ((concourse_deployer_role_arn))
         APPLICATION: publishing-api
         COMMAND: "bundle exec rails db:migrate"
         VARIANT: web
@@ -886,6 +907,7 @@ jobs:
         params:
           ECS_SERVICE: publishing-api-web
           WORKSPACE: ((workspace))
+          ASSUME_ROLE_ARN: ((concourse_deployer_role_arn))
         input_mapping:
           task-definition-arn: web-task-definition-arn
       - task: update-worker-ecs-service
@@ -893,6 +915,7 @@ jobs:
         params:
           ECS_SERVICE: publishing-api-worker
           WORKSPACE: ((workspace))
+          ASSUME_ROLE_ARN: ((concourse_deployer_role_arn))
         input_mapping:
           task-definition-arn: worker-task-definition-arn
     - in_parallel:
@@ -927,11 +950,13 @@ jobs:
       - task: bootstrap-secrets
         file: govuk-infrastructure/concourse/tasks/bootstrap-app-secrets.yml
         params:
+          ASSUME_ROLE_ARN: ((concourse_deployer_role_arn))
           APPLICATION: content-store
           VARIANT: draft
       - task: bootstrap-secrets
         file: govuk-infrastructure/concourse/tasks/bootstrap-app-secrets.yml
         params:
+          ASSUME_ROLE_ARN: ((concourse_deployer_role_arn))
           APPLICATION: content-store
           VARIANT: live
       - task: update-draft-task-definition
@@ -955,11 +980,13 @@ jobs:
     - in_parallel:
       - <<: *await-secretsmanager-creds
         params:
+          ASSUME_ROLE_ARN: ((concourse_deployer_role_arn))
           APPLICATION: content-store
           VARIANT: live
       - task: await-creds-in-secrets-manager
         file: govuk-infrastructure/concourse/tasks/await-creds-in-secretsmanager.yml
         params:
+          ASSUME_ROLE_ARN: ((concourse_deployer_role_arn))
           APPLICATION: content-store
           VARIANT: draft
     - in_parallel:
@@ -970,6 +997,7 @@ jobs:
         params:
           ECS_SERVICE: content-store
           WORKSPACE: ((workspace))
+          ASSUME_ROLE_ARN: ((concourse_deployer_role_arn))
       - task: update-draft-ecs-service
         file: govuk-infrastructure/concourse/tasks/update-ecs-service.yml
         input_mapping:
@@ -977,6 +1005,7 @@ jobs:
         params:
           ECS_SERVICE: draft-content-store
           WORKSPACE: ((workspace))
+          ASSUME_ROLE_ARN: ((concourse_deployer_role_arn))
     - in_parallel:
       - <<: *await-deploy-complete
         task: await-deploy-complete-live
@@ -1032,6 +1061,7 @@ jobs:
         params:
           ECS_SERVICE: draft-router
           WORKSPACE: ((workspace))
+          ASSUME_ROLE_ARN: ((concourse_deployer_role_arn))
       - task: update-live-ecs-service
         file: govuk-infrastructure/concourse/tasks/update-ecs-service.yml
         input_mapping:
@@ -1039,6 +1069,7 @@ jobs:
         params:
           ECS_SERVICE: router
           WORKSPACE: ((workspace))
+          ASSUME_ROLE_ARN: ((concourse_deployer_role_arn))
     - in_parallel:
       - <<: *await-deploy-complete
         task: await-deploy-complete-draft
@@ -1071,6 +1102,7 @@ jobs:
     - in_parallel:
       - <<: *await-secretsmanager-creds
         params:
+          ASSUME_ROLE_ARN: ((concourse_deployer_role_arn))
           APPLICATION: router-api
           VARIANT: live
       - task: update-draft-task-definition
@@ -1099,6 +1131,7 @@ jobs:
         params:
           ECS_SERVICE: draft-router-api
           WORKSPACE: ((workspace))
+          ASSUME_ROLE_ARN: ((concourse_deployer_role_arn))
       - task: update-live-ecs-service
         file: govuk-infrastructure/concourse/tasks/update-ecs-service.yml
         input_mapping:
@@ -1106,6 +1139,7 @@ jobs:
         params:
           ECS_SERVICE: router-api
           WORKSPACE: ((workspace))
+          ASSUME_ROLE_ARN: ((concourse_deployer_role_arn))
     - in_parallel:
       - <<: *await-deploy-complete
         task: await-deploy-complete-draft
@@ -1141,13 +1175,14 @@ jobs:
           app-image: signon-image
         params:
           IMAGE_ASSETS_PATH: app-image/rootfs/app/public/assets/signon
-          S3_BUCKET_PATH_PATTERN: s3://govuk-test-%s-backends-rails-assets/assets/signon/ # %s will be replaced by interpolated workspace in upload-rails-assets.yml
+          S3_BUCKET_PATH_PATTERN: s3://govuk-((govuk_environment))-%s-backends-rails-assets/assets/signon/ # %s will be replaced by interpolated workspace in upload-rails-assets.yml
           WORKSPACE: ((workspace))
+          ASSUME_ROLE_ARN: ((concourse_deployer_role_arn))
       - task: update-task-definition
         file: govuk-infrastructure/concourse/tasks/update-task-definition.yml
         params:
           APPLICATION: signon
-          GOVUK_ENVIRONMENT: test
+          GOVUK_ENVIRONMENT: ((govuk_environment))
           VARIANT: web
         input_mapping:
           app-image: signon-image
@@ -1157,14 +1192,16 @@ jobs:
     - task: make-bootstrap-command
       file: govuk-infrastructure/concourse/tasks/make-signon-bootstrap-command.yml
       params:
-        GOVUK_ENVIRONMENT: test
+        GOVUK_ENVIRONMENT: ((govuk_environment))
         WORKSPACE: ((workspace))
+        ASSUME_ROLE_ARN: ((concourse_deployer_role_arn))
     - task: create-signon-resources
       file: govuk-infrastructure/concourse/tasks/run-task.yml
       input_mapping:
         task-definition-arn: task-definition-arn
         run-task-command: run-task-command
       params:
+        ASSUME_ROLE_ARN: ((concourse_deployer_role_arn))
         APPLICATION: signon
         VARIANT: web
     - task: update-ecs-service
@@ -1173,8 +1210,9 @@ jobs:
         task-definition-arn: task-definition-arn
       params:
         ECS_SERVICE: signon
-        GOVUK_ENVIRONMENT: test
+        GOVUK_ENVIRONMENT: ((govuk_environment))
         WORKSPACE: ((workspace))
+        ASSUME_ROLE_ARN: ((concourse_deployer_role_arn))
     - <<: *await-deploy-complete
       task: await-deploy-complete
       params:
@@ -1186,6 +1224,7 @@ jobs:
       input_mapping:
         app-terraform-outputs: app-terraform-outputs
       params:
+        ASSUME_ROLE_ARN: ((concourse_deployer_role_arn))
         APPLICATION: signon
         VARIANT: web
     serial: true
@@ -1231,7 +1270,7 @@ jobs:
         app-image: smokey-image
       params:
         APPLICATION: smokey
-        GOVUK_ENVIRONMENT: test
+        GOVUK_ENVIRONMENT: ((govuk_environment))
         VARIANT: default
     serial: true
     on_failure:
@@ -1257,8 +1296,9 @@ jobs:
           app-image: static-image
         params:
           IMAGE_ASSETS_PATH: app-image/rootfs/app/public/assets/static
-          S3_BUCKET_PATH_PATTERN: s3://govuk-test-%s-frontends-rails-assets/assets/static/ # %s will be replaced by interpolated workspace in upload-rails-assets.yml
+          S3_BUCKET_PATH_PATTERN: s3://govuk-((govuk_environment))-%s-frontends-rails-assets/assets/static/ # %s will be replaced by interpolated workspace in upload-rails-assets.yml
           WORKSPACE: ((workspace))
+          ASSUME_ROLE_ARN: ((concourse_deployer_role_arn))
       - task: update-draft-task-definition
         file: govuk-infrastructure/concourse/tasks/update-task-definition.yml
         input_mapping:
@@ -1285,6 +1325,7 @@ jobs:
         params:
           ECS_SERVICE: draft-static
           WORKSPACE: ((workspace))
+          ASSUME_ROLE_ARN: ((concourse_deployer_role_arn))
       - task: update-live-ecs-service
         file: govuk-infrastructure/concourse/tasks/update-ecs-service.yml
         input_mapping:
@@ -1292,6 +1333,7 @@ jobs:
         params:
           ECS_SERVICE: static
           WORKSPACE: ((workspace))
+          ASSUME_ROLE_ARN: ((concourse_deployer_role_arn))
     - in_parallel:
       - <<: *await-deploy-complete
         task: await-deploy-complete-live
@@ -1336,6 +1378,7 @@ jobs:
       params:
         ECS_SERVICE: authenticating-proxy
         WORKSPACE: ((workspace))
+        ASSUME_ROLE_ARN: ((concourse_deployer_role_arn))
     - <<: *await-deploy-complete
       task: await-deploy-complete-live
       params:
