@@ -46,6 +46,7 @@ container_id=$(aws ecs describe-tasks \
   --cluster "$CLUSTER" \
   --tasks $task_arn \
   --query 'tasks[0] | containers[?name==`app`].runtimeId' \
+  --region "$AWS_REGION" \
   --output text
 )
 
