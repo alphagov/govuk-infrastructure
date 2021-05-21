@@ -365,6 +365,8 @@ jobs:
 
               terraform destroy  \
               -var "assume_role_arn=$ASSUME_ROLE_ARN" \
+              -var-file ../variables/common.tfvars \
+              -var-file ../variables/test/common.tfvars \
               -var-file ../variables/test/infrastructure.tfvars \
               -auto-approve
 
@@ -482,6 +484,8 @@ jobs:
 
             terraform apply \
               -var "assume_role_arn=$ASSUME_ROLE_ARN" \
+              -var-file ../variables/common.tfvars \
+              -var-file ../variables/test/common.tfvars \
               -var-file ../variables/test/infrastructure.tfvars \
               -auto-approve
 

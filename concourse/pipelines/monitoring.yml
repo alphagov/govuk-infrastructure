@@ -65,7 +65,8 @@ jobs:
             terraform init -backend-config "role_arn=$ASSUME_ROLE_ARN"
             terraform apply \
               -var "assume_role_arn=$ASSUME_ROLE_ARN" \
-              -var-file ../../variables/test/monitoring.tfvars \
+              -var-file ../../variables/common.tfvars \
+              -var-file ../../variables/test/common.tfvars \
               -auto-approve
 
   - name: configure-grafana

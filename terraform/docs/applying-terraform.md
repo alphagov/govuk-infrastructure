@@ -30,7 +30,11 @@ For example, run the following commands to update the test environment:
 ```sh
 cd terraform/deployments/govuk-publishing-platform
 gds aws govuk-test-admin -- terraform init
-gds aws govuk-test-admin -- terraform apply -var-file=../variables/test/infrastructure.tfvars
+
+gds aws govuk-test-admin -- terraform apply \
+ -var-file ../variables/common.tfvars \
+ -var-file ../variables/test/common.tfvars \
+ -var-file=../variables/test/infrastructure.tfvars
 ```
 
 ### Application
@@ -92,7 +96,8 @@ cd terraform/deployments/monitoring-test/infra
 gds aws govuk-test-admin -- terraform init
 
 gds aws govuk-test-admin -- terraform apply \
- -var-file=../../variables/test/infrastructure.tfvars
+ -var-file ../variables/common.tfvars \
+ -var-file ../variables/test/common.tfvars
 ```
 
 3. Grafana Task Definition & Service Update

@@ -7,5 +7,7 @@ Apply once per GOV.UK environment.
 ## Applying
 
 ```shell
-terraform apply -var-file=../variables/<govuk_environment>/iam.tfvars
+terraform apply \
+ -var-file ../variables/common.tfvars \
+ -var-file ../variables/test/common.tfvars
 ```
