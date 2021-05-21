@@ -559,8 +559,8 @@ jobs:
     on_failure: &notify-slack-failure
       put: deploy-slack-channel
       params:
-        channel: "#govuk-deploy-alerts"
-        username: 'Concourse deploy pipeline'
+        channel: "#govuk-deploy-alerts" # TODO: Alert owner Slack channels in future, i.e. ((search_team_slack))
+        username: 'test-((workspace)) deploy-apps' # TODO: Change `test` to ((govuk_enviroment))
         icon_emoji: ':concourse:'
         silent: true
         text: |
