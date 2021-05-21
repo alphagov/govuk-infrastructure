@@ -26,7 +26,7 @@ resources:
     source:
       <<: *git-repo-source
       uri: git@github.com:alphagov/content-store.git
-      branch: master
+      branch: main
 
   - <<: *git-repo
     name: frontend-repo
