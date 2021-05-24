@@ -377,7 +377,7 @@ jobs:
     - file: govuk-infrastructure/concourse/pipelines/deploy.yml
       set_pipeline: self
       var_files:
-        - govuk-infrastructure/concourse/parameters/((govuk_environment))/parameters.yml
+        - govuk-infrastructure/concourse/parameters/((govuk_environment))/((workspace)).yml
 
   - name: run-terraform
     serial: true

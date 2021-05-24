@@ -1,5 +1,0 @@
-govuk_infrastructure_branch: main
-workspace: default
-disable_slack_channel_alerts: false
-skip_db_migrations: false
-background_image: "https://live.staticflickr.com/7486/15537665259_a2d796c7d4_k_d.jpg"
