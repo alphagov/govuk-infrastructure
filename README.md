@@ -24,6 +24,9 @@ more recommendations on using pre-commit.
 
 Further documentation about how to perform various tasks can be found [here](./docs)
 
+There are also docs in the [terraform/docs](./terraform/docs) and
+[concourse/docs](./concourse/docs) directories.
+
 ### Who we are
 
 We're the GOV.UK Replatforming team, discovering the future of GOV.UK's infrastructure, one line of code at a time. You can find us in #govuk-replatforming on the GDS Slack, and our [(internal) Trello board exists](https://trello.com/b/u4FCzm53/).
