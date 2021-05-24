@@ -53,7 +53,7 @@ resources:
     source:
       <<: *git-repo-source
       uri: git@github.com:alphagov/router.git
-      branch: master
+      branch: main
 
   - <<: *git-repo
     name: router-api-repo
