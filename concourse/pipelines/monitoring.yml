@@ -5,7 +5,7 @@ resources:
   - icon: github
     name: govuk-infrastructure
     source:
-      branch: main
+      branch: ((govuk_infrastructure_branch))
       uri: https://github.com/alphagov/govuk-infrastructure
     type: git
 
@@ -32,6 +32,8 @@ jobs:
       trigger: true
     - file: govuk-infrastructure/concourse/pipelines/monitoring.yml
       set_pipeline: monitoring
+      var_files:
+        - govuk-infrastructure/concourse/parameters/((govuk_environment))/monitoring.yml
 
   - name: deploy-monitoring
     plan:

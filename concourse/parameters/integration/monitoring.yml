@@ -1,0 +1,2 @@
+govuk_infrastructure_branch: main
+concourse_deployer_role_arn: arn:aws:iam::210287912431:role/govuk-concourse-deployer
