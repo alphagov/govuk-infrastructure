@@ -587,7 +587,7 @@ jobs:
       task: fetch-smokey-task-definition
       file: govuk-infrastructure/concourse/tasks/fetch-task-definition.yml
       params:
-        APPLICATION: smokey
+        APPLICATION: smokey-((workspace))
     - &run-smoke-test
       task: run-smoke-tests
       file: govuk-infrastructure/concourse/tasks/run-task.yml

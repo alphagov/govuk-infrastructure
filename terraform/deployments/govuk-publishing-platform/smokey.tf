@@ -28,13 +28,12 @@ module "smokey_container_definition" {
   ports = []
 }
 
-# TODO: can we remove the v2?
 module "smokey_task_definition" {
   source                = "../../modules/task-definition"
   container_definitions = [module.smokey_container_definition.json_format]
   cpu                   = 512
   execution_role_arn    = aws_iam_role.execution.arn
-  family                = "smokey"
+  family                = "smokey-${terraform.workspace}"
   memory                = 1024
   task_role_arn         = aws_iam_role.task.arn
 }
