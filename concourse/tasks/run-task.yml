@@ -15,7 +15,7 @@ inputs:
     optional: true
 params:
   AWS_REGION: eu-west-1
-  ASSUME_ROLE_ARN: ((concourse_deployer_role_arn))
+  ASSUME_ROLE_ARN:
   APPLICATION:
   CLUSTER: task_runner
   COMMAND: # Place command in run-task-command file or use COMMAND param

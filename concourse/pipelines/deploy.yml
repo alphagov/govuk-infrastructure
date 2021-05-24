@@ -337,8 +337,8 @@ jobs:
         inputs:
         - name: govuk-infrastructure
         params:
-          AWS_REGION: eu-west-1
           ASSUME_ROLE_ARN: ((concourse_deployer_role_arn))
+          AWS_REGION: eu-west-1
           WORKSPACE: ((workspace))
           GOVUK_ENVIRONMENT: ((govuk_environment))
         platform: linux
@@ -378,7 +378,7 @@ jobs:
     - file: govuk-infrastructure/concourse/pipelines/deploy.yml
       set_pipeline: self
       var_files:
-        - govuk-infrastructure/concourse/parameters/((govuk_environment))/parameters.yml
+        - govuk-infrastructure/concourse/parameters/((govuk_environment))/deploy.yml
 
   - name: run-terraform
     serial: true
@@ -626,47 +626,47 @@ jobs:
         input_mapping:
           app-image: frontend-image
         params:
+          ASSUME_ROLE_ARN: ((concourse_deployer_role_arn))
           IMAGE_ASSETS_PATH: app-image/rootfs/app/public/assets/frontend
           S3_BUCKET_PATH_PATTERN: s3://govuk-((govuk_environment))-%s-frontends-rails-assets/assets/frontend/ # %s will be replaced by interpolated workspace in upload-rails-assets.yml
           WORKSPACE: ((workspace))
-          ASSUME_ROLE_ARN: ((concourse_deployer_role_arn))
       - task: update-draft-task-definition
         file: govuk-infrastructure/concourse/tasks/update-task-definition.yml
         input_mapping:
           app-image: frontend-image
         output_mapping:
-         task-definition-arn: draft-task-definition-arn
+          task-definition-arn: draft-task-definition-arn
         params:
-         APPLICATION: frontend
-         VARIANT: draft
-         ASSUME_ROLE_ARN: ((concourse_deployer_role_arn))
+          ASSUME_ROLE_ARN: ((concourse_deployer_role_arn))
+          APPLICATION: frontend
+          VARIANT: draft
       - task: update-live-task-definition
         file: govuk-infrastructure/concourse/tasks/update-task-definition.yml
         input_mapping:
           app-image: frontend-image
         output_mapping:
-         task-definition-arn: live-task-definition-arn
+          task-definition-arn: live-task-definition-arn
         params:
-         APPLICATION: frontend
-         VARIANT: live
-         ASSUME_ROLE_ARN: ((concourse_deployer_role_arn))
+          ASSUME_ROLE_ARN: ((concourse_deployer_role_arn))
+          APPLICATION: frontend
+          VARIANT: live
     - in_parallel:
       - task: update-draft-ecs-service
         file: govuk-infrastructure/concourse/tasks/update-ecs-service.yml
         input_mapping:
-         task-definition-arn: draft-task-definition-arn
+          task-definition-arn: draft-task-definition-arn
         params:
-         ECS_SERVICE: draft-frontend
-         WORKSPACE: ((workspace))
-         ASSUME_ROLE_ARN: ((concourse_deployer_role_arn))
+          ASSUME_ROLE_ARN: ((concourse_deployer_role_arn))
+          ECS_SERVICE: draft-frontend
+          WORKSPACE: ((workspace))
       - task: update-live-ecs-service
         file: govuk-infrastructure/concourse/tasks/update-ecs-service.yml
         input_mapping:
-         task-definition-arn: live-task-definition-arn
+          task-definition-arn: live-task-definition-arn
         params:
-         ECS_SERVICE: frontend
-         WORKSPACE: ((workspace))
-         ASSUME_ROLE_ARN: ((concourse_deployer_role_arn))
+          ASSUME_ROLE_ARN: ((concourse_deployer_role_arn))
+          ECS_SERVICE: frontend
+          WORKSPACE: ((workspace))
     - in_parallel:
       - &await-secretsmanager-creds
         task: await-creds-in-secrets-manager
@@ -688,9 +688,9 @@ jobs:
         attempts: 4
         timeout: 5m
         params: &await-deploy-complete-params
+          ASSUME_ROLE_ARN: ((concourse_deployer_role_arn))
           ECS_SERVICE: frontend
           WORKSPACE: ((workspace))
-          ASSUME_ROLE_ARN: ((concourse_deployer_role_arn))
       - <<: *await-deploy-complete
         task: await-deploy-complete-draft
         params:
@@ -745,10 +745,10 @@ jobs:
         input_mapping:
           app-image: publisher-image
         params:
+          ASSUME_ROLE_ARN: ((concourse_deployer_role_arn))
           IMAGE_ASSETS_PATH: app-image/rootfs/app/public/assets/publisher
           S3_BUCKET_PATH_PATTERN: s3://govuk-((govuk_environment))-%s-backends-rails-assets/assets/publisher/ # %s will be replaced by interpolated workspace in upload-rails-assets.yml
           WORKSPACE: ((workspace))
-          ASSUME_ROLE_ARN: ((concourse_deployer_role_arn))
       - task: update-web-task-definition
         file: govuk-infrastructure/concourse/tasks/update-task-definition.yml
         input_mapping:
@@ -756,10 +756,10 @@ jobs:
         output_mapping:
           task-definition-arn: web-task-definition-arn
         params:
+          ASSUME_ROLE_ARN: ((concourse_deployer_role_arn))
           APPLICATION: publisher
           VARIANT: web
           GOVUK_ENVIRONMENT: ((govuk_environment))
-          ASSUME_ROLE_ARN: ((concourse_deployer_role_arn))
       - task: update-worker-task-definition
         file: govuk-infrastructure/concourse/tasks/update-task-definition.yml
         input_mapping:
@@ -767,10 +767,10 @@ jobs:
         output_mapping:
           task-definition-arn: worker-task-definition-arn
         params:
+          ASSUME_ROLE_ARN: ((concourse_deployer_role_arn))
           APPLICATION: publisher
           VARIANT: worker
           GOVUK_ENVIRONMENT: ((govuk_environment))
-          ASSUME_ROLE_ARN: ((concourse_deployer_role_arn))
     - in_parallel:
       - <<: *await-secretsmanager-creds
         params:
@@ -1122,9 +1122,9 @@ jobs:
         output_mapping:
           task-definition-arn: draft-task-definition-arn
         params:
+          ASSUME_ROLE_ARN: ((concourse_deployer_role_arn))
           APPLICATION: router-api
           VARIANT: draft
-          ASSUME_ROLE_ARN: ((concourse_deployer_role_arn))
       - task: update-live-task-definition
         file: govuk-infrastructure/concourse/tasks/update-task-definition.yml
         input_mapping:
@@ -1132,26 +1132,26 @@ jobs:
         output_mapping:
           task-definition-arn: live-task-definition-arn
         params:
+          ASSUME_ROLE_ARN: ((concourse_deployer_role_arn))
           APPLICATION: router-api
           VARIANT: live
-          ASSUME_ROLE_ARN: ((concourse_deployer_role_arn))
     - in_parallel:
       - task: update-draft-ecs-service
         file: govuk-infrastructure/concourse/tasks/update-ecs-service.yml
         input_mapping:
           task-definition-arn: draft-task-definition-arn
         params:
+          ASSUME_ROLE_ARN: ((concourse_deployer_role_arn))
           ECS_SERVICE: draft-router-api
           WORKSPACE: ((workspace))
-          ASSUME_ROLE_ARN: ((concourse_deployer_role_arn))
       - task: update-live-ecs-service
         file: govuk-infrastructure/concourse/tasks/update-ecs-service.yml
         input_mapping:
           task-definition-arn: live-task-definition-arn
         params:
+          ASSUME_ROLE_ARN: ((concourse_deployer_role_arn))
           ECS_SERVICE: router-api
           WORKSPACE: ((workspace))
-          ASSUME_ROLE_ARN: ((concourse_deployer_role_arn))
     - in_parallel:
       - <<: *await-deploy-complete
         task: await-deploy-complete-draft
@@ -1186,17 +1186,17 @@ jobs:
         input_mapping:
           app-image: signon-image
         params:
+          ASSUME_ROLE_ARN: ((concourse_deployer_role_arn))
           IMAGE_ASSETS_PATH: app-image/rootfs/app/public/assets/signon
           S3_BUCKET_PATH_PATTERN: s3://govuk-((govuk_environment))-%s-backends-rails-assets/assets/signon/ # %s will be replaced by interpolated workspace in upload-rails-assets.yml
           WORKSPACE: ((workspace))
-          ASSUME_ROLE_ARN: ((concourse_deployer_role_arn))
       - task: update-task-definition
         file: govuk-infrastructure/concourse/tasks/update-task-definition.yml
         params:
+          ASSUME_ROLE_ARN: ((concourse_deployer_role_arn))
           APPLICATION: signon
           GOVUK_ENVIRONMENT: ((govuk_environment))
           VARIANT: web
-          ASSUME_ROLE_ARN: ((concourse_deployer_role_arn))
         input_mapping:
           app-image: signon-image
         output_mapping:
@@ -1205,9 +1205,9 @@ jobs:
     - task: make-bootstrap-command
       file: govuk-infrastructure/concourse/tasks/make-signon-bootstrap-command.yml
       params:
+        ASSUME_ROLE_ARN: ((concourse_deployer_role_arn))
         GOVUK_ENVIRONMENT: ((govuk_environment))
         WORKSPACE: ((workspace))
-        ASSUME_ROLE_ARN: ((concourse_deployer_role_arn))
     - task: create-signon-resources
       file: govuk-infrastructure/concourse/tasks/run-task.yml
       input_mapping:
@@ -1222,10 +1222,10 @@ jobs:
       input_mapping:
         task-definition-arn: task-definition-arn
       params:
+        ASSUME_ROLE_ARN: ((concourse_deployer_role_arn))
         ECS_SERVICE: signon
         GOVUK_ENVIRONMENT: ((govuk_environment))
         WORKSPACE: ((workspace))
-        ASSUME_ROLE_ARN: ((concourse_deployer_role_arn))
     - <<: *await-deploy-complete
       task: await-deploy-complete
       params:
@@ -1282,10 +1282,10 @@ jobs:
       input_mapping:
         app-image: smokey-image
       params:
+        ASSUME_ROLE_ARN: ((concourse_deployer_role_arn))
         APPLICATION: smokey
         GOVUK_ENVIRONMENT: ((govuk_environment))
         VARIANT: default
-        ASSUME_ROLE_ARN: ((concourse_deployer_role_arn))
     serial: true
     on_failure:
       <<: *notify-slack-failure
@@ -1309,10 +1309,10 @@ jobs:
         input_mapping:
           app-image: static-image
         params:
+          ASSUME_ROLE_ARN: ((concourse_deployer_role_arn))
           IMAGE_ASSETS_PATH: app-image/rootfs/app/public/assets/static
           S3_BUCKET_PATH_PATTERN: s3://govuk-((govuk_environment))-%s-frontends-rails-assets/assets/static/ # %s will be replaced by interpolated workspace in upload-rails-assets.yml
           WORKSPACE: ((workspace))
-          ASSUME_ROLE_ARN: ((concourse_deployer_role_arn))
       - task: update-draft-task-definition
         file: govuk-infrastructure/concourse/tasks/update-task-definition.yml
         input_mapping:
@@ -1320,9 +1320,9 @@ jobs:
         output_mapping:
           task-definition-arn: draft-task-definition-arn
         params:
+          ASSUME_ROLE_ARN: ((concourse_deployer_role_arn))
           APPLICATION: static
           VARIANT: draft
-          ASSUME_ROLE_ARN: ((concourse_deployer_role_arn))
       - task: update-live-task-definition
         file: govuk-infrastructure/concourse/tasks/update-task-definition.yml
         input_mapping:
@@ -1330,26 +1330,26 @@ jobs:
         output_mapping:
           task-definition-arn: live-task-definition-arn
         params:
+          ASSUME_ROLE_ARN: ((concourse_deployer_role_arn))
           APPLICATION: static
           VARIANT: live
-          ASSUME_ROLE_ARN: ((concourse_deployer_role_arn))
     - in_parallel:
       - task: update-draft-ecs-service
         file: govuk-infrastructure/concourse/tasks/update-ecs-service.yml
         input_mapping:
           task-definition-arn: draft-task-definition-arn
         params:
+          ASSUME_ROLE_ARN: ((concourse_deployer_role_arn))
           ECS_SERVICE: draft-static
           WORKSPACE: ((workspace))
-          ASSUME_ROLE_ARN: ((concourse_deployer_role_arn))
       - task: update-live-ecs-service
         file: govuk-infrastructure/concourse/tasks/update-ecs-service.yml
         input_mapping:
           task-definition-arn: live-task-definition-arn
         params:
+          ASSUME_ROLE_ARN: ((concourse_deployer_role_arn))
           ECS_SERVICE: static
           WORKSPACE: ((workspace))
-          ASSUME_ROLE_ARN: ((concourse_deployer_role_arn))
     - in_parallel:
       - <<: *await-deploy-complete
         task: await-deploy-complete-live
@@ -1385,17 +1385,17 @@ jobs:
       output_mapping:
         task-definition-arn: task-definition-arn
       params:
+        ASSUME_ROLE_ARN: ((concourse_deployer_role_arn))
         APPLICATION: authenticating-proxy
         VARIANT: web
-        ASSUME_ROLE_ARN: ((concourse_deployer_role_arn))
     - task: update-ecs-service
       file: govuk-infrastructure/concourse/tasks/update-ecs-service.yml
       input_mapping:
         task-definition-arn: task-definition-arn
       params:
+        ASSUME_ROLE_ARN: ((concourse_deployer_role_arn))
         ECS_SERVICE: authenticating-proxy
         WORKSPACE: ((workspace))
-        ASSUME_ROLE_ARN: ((concourse_deployer_role_arn))
     - <<: *await-deploy-complete
       task: await-deploy-complete-live
       params:

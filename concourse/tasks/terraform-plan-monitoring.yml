@@ -9,7 +9,7 @@ image_resource:
 inputs:
   - name: govuk-infrastructure-commit
 params:
-  ASSUME_ROLE_ARN: ((concourse_ci_role_arn))
+  ASSUME_ROLE_ARN:
   AWS_REGION: eu-west-1
   TF_IN_AUTOMATION: true
 run:
