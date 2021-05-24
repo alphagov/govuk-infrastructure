@@ -51,14 +51,6 @@ container_id=$(aws ecs describe-tasks \
 )
 
 echo "App container ID: $container_id"
-
-echo "Waiting for $ECS_SERVICE ECS service to reach steady state..."
-
 echo "Check Splunk for logs: https://gds.splunkcloud.com/en-GB/app/gds-006-govuk/search?q=search%20index%3D%22govuk_replatforming%22%20container_id%3D$container_id"
 
-aws ecs wait services-stable \
-  --cluster "$CLUSTER" \
-  --services "$ECS_SERVICE" \
-  --region "$AWS_REGION"
-
-echo "Updated $ECS_SERVICE to task definition $new_task_definition_arn."
+echo "Deploy started."
