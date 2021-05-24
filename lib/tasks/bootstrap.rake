@@ -54,6 +54,7 @@ def signon_client(secretsmanager, api_token_arn, api_url)
   Signon::Client.new(
     api_url: api_url,
     auth_token: admin_secret.secret_string,
+    max_retries: 10,
   )
 end
 
