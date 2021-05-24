@@ -29,12 +29,15 @@ For example, run the following commands to update the test environment:
 
 ```sh
 cd terraform/deployments/govuk-publishing-platform
-gds aws govuk-test-admin -- terraform init
+
+gds aws govuk-test-admin -- terraform init -backend-config test.backend
+
+gds aws govuk-test-admin -- terraform workspace select default
 
 gds aws govuk-test-admin -- terraform apply \
- -var-file ../variables/common.tfvars \
- -var-file ../variables/test/common.tfvars \
- -var-file=../variables/test/infrastructure.tfvars
+  -var-file ../variables/common.tfvars \
+  -var-file ../variables/test/common.tfvars \
+  -var-file ../variables/test/infrastructure.tfvars
 ```
 
 ### Application
