@@ -25,4 +25,5 @@ run:
       -var-file ../variables/common.tfvars \
       -var-file ../variables/test/common.tfvars \
       -var-file ../variables/test/infrastructure.tfvars \
-      -lock=false
+      -lock=false \
+      -refresh=false
