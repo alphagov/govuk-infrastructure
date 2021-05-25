@@ -674,7 +674,7 @@ jobs:
       - &await-deploy-complete
         task: await-deploy-complete-live
         file: govuk-infrastructure/concourse/tasks/await-deploy-complete.yml
-        attempts: 4
+        attempts: 5
         timeout: 5m
         params: &await-deploy-complete-params
           ECS_SERVICE: frontend
