@@ -10,3 +10,5 @@ locals {
 
   monitoring_external_domain = "monitoring.${var.external_app_domain}"
 }
+
+data "aws_caller_identity" "current" {}
