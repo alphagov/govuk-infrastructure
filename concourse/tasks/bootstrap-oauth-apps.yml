@@ -11,7 +11,7 @@ inputs:
   - name: govuk-infrastructure
 params:
   AWS_REGION: eu-west-1
-  ASSUME_ROLE_ARN: 'arn:aws:iam::430354129336:role/govuk-concourse-deployer'
+  ASSUME_ROLE_ARN:
   APPLICATION:
   VARIANT:
 run:

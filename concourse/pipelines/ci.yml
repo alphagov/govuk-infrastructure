@@ -21,7 +21,7 @@ resources:
   - icon: github
     name: govuk-infrastructure
     source:
-      branch: main
+      branch: ((govuk_infrastructure_branch))
       uri: https://github.com/alphagov/govuk-infrastructure
     type: git
 
@@ -32,6 +32,8 @@ jobs:
       trigger: true
     - file: govuk-infrastructure/concourse/pipelines/ci.yml
       set_pipeline: ci-govuk-infrastructure-main
+      var_files:
+        - govuk-infrastructure/concourse/parameters/ci/ci.yml
 
   - name: terraform-plan-govuk-deployment
     plan:
@@ -41,6 +43,8 @@ jobs:
       params: {status: pending, context: terraform-plan-govuk-deployment}
     - task: terraform-plan
       file: govuk-infrastructure-commit/repo/concourse/tasks/terraform-plan-govuk-deployment.yml
+      params:
+        ASSUME_ROLE_ARN: ((concourse_ci_role_arn))
       on_success:
         put: govuk-infrastructure-commit
         params: {status: success, context: terraform-plan-govuk-deployment}
@@ -62,6 +66,8 @@ jobs:
       params: {status: pending, context: terraform-plan-govuk-deployment}
     - task: terraform-plan
       file: govuk-infrastructure-commit/repo/concourse/tasks/terraform-plan-monitoring.yml
+      params:
+        ASSUME_ROLE_ARN: ((concourse_ci_role_arn))
       on_success:
         put: govuk-infrastructure-commit
         params: {status: success, context: terraform-plan-monitoring}

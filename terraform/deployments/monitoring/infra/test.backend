@@ -1,0 +1,4 @@
+bucket  = "govuk-terraform-test"
+key     = "projects/monitoring.tfstate"
+encrypt = true
+region  = "eu-west-1"

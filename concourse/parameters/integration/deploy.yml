@@ -1,4 +1,5 @@
 govuk_infrastructure_branch: main
+concourse_deployer_role_arn: arn:aws:iam::210287912431:role/govuk-concourse-deployer
 workspace: default
 disable_slack_channel_alerts: false
 skip_db_migrations: true
