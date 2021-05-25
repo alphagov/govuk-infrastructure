@@ -84,7 +84,7 @@ resource "aws_iam_policy" "monitoring_access_secrets" {
         "secretsmanager:GetSecretValue"
       ],
       "Resource": [
-        "arn:aws:secretsmanager:eu-west-1:430354129336:secret:*"
+        "arn:aws:secretsmanager:eu-west-1:${data.aws_caller_identity.current.account_id}:secret:*"
       ]
     }
   ]

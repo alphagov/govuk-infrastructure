@@ -11,7 +11,7 @@ locals {
     image = "${var.grafana_registry}/${var.grafana_image_name}:${var.grafana_image_tag}"
     # TODO: decide repository policy for non-govuk apps
     repositoryCredentials : {
-      credentialsParameter : "arn:aws:secretsmanager:eu-west-1:430354129336:secret:dockerhub-govukci"
+      credentialsParameter : "arn:aws:secretsmanager:eu-west-1:${data.aws_caller_identity.current.account_id}:secret:dockerhub-govukci"
     }
     linuxParameters = {
       initProcessEnabled = true

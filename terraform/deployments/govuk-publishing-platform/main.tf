@@ -74,3 +74,5 @@ locals {
     terraform_workspace  = terraform.workspace
   }
 }
+
+data "aws_caller_identity" "current" {}
