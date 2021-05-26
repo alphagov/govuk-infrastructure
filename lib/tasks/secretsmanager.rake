@@ -67,11 +67,11 @@ namespace :secretsmanager do
     config.fetch("arns").each do |secret_arn|
       metadata = secrets_client.describe_secret(secret_id: secret_arn)
       versions = metadata.version_ids_to_stages
-      is_unset = versions.nil? || versions.values.none? do |stages|
+      already_set = !versions.nil? && versions.values.any? do |stages|
         stages.include?("AWSCURRENT")
       end
 
-      unless is_unset
+      if already_set
         puts "Secret #{secret_arn} already set; skipping. 🔒"
         next
       end
