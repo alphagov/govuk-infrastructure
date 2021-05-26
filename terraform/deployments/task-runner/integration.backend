@@ -1,0 +1,5 @@
+bucket  = "govuk-ecs-terraform-integration"
+key     = "projects/task-runner.tfstate"
+encrypt = true
+region  = "eu-west-1"
+dynamodb_table = "terraform-lock"
