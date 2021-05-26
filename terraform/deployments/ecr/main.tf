@@ -110,7 +110,10 @@ resource "aws_ecr_repository_policy" "pull_images_from_ecr_policy_policy" {
         "Sid" : "AllowCrossAccountPull",
         "Effect" : "Allow",
         "Principal" : {
-          "AWS" : "arn:aws:iam::430354129336:root"
+          "AWS" : [
+            "arn:aws:iam::${var.test_aws_account_id}:root",
+            "arn:aws:iam::${var.integration_aws_account_id}:root"
+          ]
         },
         "Action" : [
           "ecr:GetDownloadUrlForLayer",
@@ -131,7 +134,7 @@ resource "aws_iam_role" "pull_images_from_ecr_role" {
         "Effect" : "Allow",
         "Action" : "sts:AssumeRole",
         "Principal" : {
-          "AWS" : "arn:aws:iam::430354129336:root"
+          "AWS" : "arn:aws:iam::${var.test_aws_account_id}:root"
         }
       }
     ]

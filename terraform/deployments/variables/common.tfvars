@@ -1,5 +1,7 @@
-production_aws_account_id = "172025368201"
-concourse_aws_account_id  = "047969882937"
+production_aws_account_id  = "172025368201"
+integration_aws_account_id = "210287912431"
+test_aws_account_id        = "430354129336"
+concourse_aws_account_id   = "047969882937"
 
 registry = "172025368201.dkr.ecr.eu-west-1.amazonaws.com"
 
