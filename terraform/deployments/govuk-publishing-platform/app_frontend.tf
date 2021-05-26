@@ -29,8 +29,7 @@ locals {
       {
         # TODO Should frontend and draft frontend share a bearer token for publishing api?
         PUBLISHING_API_BEARER_TOKEN = module.signon_bearer_tokens.frontend_to_pub_api.secret_arn
-        SECRET_KEY_BASE             = data.aws_secretsmanager_secret.frontend_secret_key_base.arn,
-        SENTRY_DSN                  = data.aws_secretsmanager_secret.sentry_dsn.arn,
+        SECRET_KEY_BASE             = aws_secretsmanager_secret.secret_key_base["frontend"].arn
       }
     )
 
