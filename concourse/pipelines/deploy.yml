@@ -239,6 +239,7 @@ resources:
     source:
       <<: *registry-source
       repository: smokey
+      variant: baker-add-publishing-smoke-test
 
   - name: everyday-at-11pm
     type: cron-resource
