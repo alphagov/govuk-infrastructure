@@ -1,4 +1,4 @@
 bucket  = "govuk-ecs-terraform-integration"
-key     = "projects/govuk.tfstate"
+key     = "projects/terraform-lock.tfstate"
 encrypt = true
 region  = "eu-west-1"
