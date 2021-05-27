@@ -21,5 +21,6 @@ params:
   COMMAND: # Place command in run-task-command file or use COMMAND param
   VARIANT:
   DISABLE: false
+  LOG_TO_SPLUNK: true
 run:
   path: ./src/concourse/tasks/run-task.sh
