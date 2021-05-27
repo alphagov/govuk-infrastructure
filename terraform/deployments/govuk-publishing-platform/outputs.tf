@@ -16,7 +16,7 @@ output "content-store" {
       signon_secrets = {
         bearer_tokens      = local.generated_bearer_tokens.draft_content_store,
         admin_password_arn = aws_secretsmanager_secret.signon_admin_password.arn,
-        api_user_email     = local.signon_api_user.draft_content_store,
+        api_user_email     = local.signon_api_user.draft_content_store.email,
         signon_api_url     = local.signon_api_url,
       }
     },
@@ -27,7 +27,7 @@ output "content-store" {
       signon_secrets = {
         bearer_tokens      = local.generated_bearer_tokens.content_store,
         admin_password_arn = aws_secretsmanager_secret.signon_admin_password.arn,
-        api_user_email     = local.signon_api_user.content_store,
+        api_user_email     = local.signon_api_user.content_store.email,
         signon_api_url     = local.signon_api_url,
       }
     },
@@ -43,7 +43,7 @@ output "publisher" {
       signon_secrets = {
         bearer_tokens      = local.generated_bearer_tokens.publisher,
         admin_password_arn = aws_secretsmanager_secret.signon_admin_password.arn,
-        api_user_email     = local.signon_api_user.publisher,
+        api_user_email     = local.signon_api_user.publisher.email,
         signon_api_url     = local.signon_api_url,
       }
     },
@@ -67,7 +67,7 @@ output "frontend" {
       signon_secrets = {
         bearer_tokens      = local.generated_bearer_tokens.frontend,
         admin_password_arn = aws_secretsmanager_secret.signon_admin_password.arn,
-        api_user_email     = local.signon_api_user.frontend,
+        api_user_email     = local.signon_api_user.frontend.email,
         signon_api_url     = local.signon_api_url,
       }
     },
@@ -83,7 +83,7 @@ output "publishing-api" {
       signon_secrets = {
         bearer_tokens      = local.generated_bearer_tokens.publishing_api,
         admin_password_arn = aws_secretsmanager_secret.signon_admin_password.arn,
-        api_user_email     = local.signon_api_user.publishing_api,
+        api_user_email     = local.signon_api_user.publishing_api.email,
         signon_api_url     = local.signon_api_url,
       }
     },

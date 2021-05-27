@@ -132,6 +132,7 @@ RSpec.describe "event handler" do
   let(:permissions) { "signin" }
   let(:api_user) { "publisher@example.org" }
   let(:generated_secret) { "hunter2" }
+  let(:s3_bucket_name) { "my-lovely-bucket" }
 
   before do
     allow_any_instance_of(Aws::SecretsManager::Client).to \
@@ -143,6 +144,8 @@ RSpec.describe "event handler" do
     ENV["ADMIN_PASSWORD_KEY"] = password
     ENV["APPLICATION_NAME"] = app_name
     ENV["PERMISSIONS"] = permissions
+    ENV["DEPLOY_EVENT_BUCKET"] = s3_bucket_name
+    ENV["DEPLOY_EVENT_KEY"] = "workspace/#{app_name}"
 
     stub_admin_password
   end
@@ -357,6 +360,7 @@ RSpec.describe "event handler" do
 
     context "when secret rotation not yet finished" do
       let(:old_token) { "version1" }
+      let(:application_name) { "Publishing API" }
       let(:versions) do
         {
           old_token => %w[AWSPENDING AWSCURRENT],
@@ -364,7 +368,11 @@ RSpec.describe "event handler" do
         }
       end
 
-      it "sets the secret as finished" do
+      let(:put_object_response) do
+        double(version_id: "123")
+      end
+
+      it "sets the secret as finished and puts an object in S3" do
         allow_any_instance_of(Aws::SecretsManager::Client).to \
           receive(:update_secret_version_stage)
           .with(
@@ -373,6 +381,12 @@ RSpec.describe "event handler" do
             move_to_version_id: token,
             remove_from_version_id: old_token,
           )
+
+        allow_any_instance_of(Aws::S3::Client).to \
+          receive(:put_object)
+          .with(
+            hash_including(:body, :key, bucket: s3_bucket_name),
+          ).and_return(put_object_response)
 
         expect { call }.not_to raise_error
       end

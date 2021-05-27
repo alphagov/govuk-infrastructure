@@ -19,6 +19,13 @@ resource_types:
       repository: governmentpaas/s3-resource
       tag: latest # TODO - don't use latest (once we've worked out a policy for third party images)
 
+  # This resource uses an instance profile to access buckets in our AWS accounts
+  - name: s3-iam
+    type: registry-image
+    source:
+      repository: govuk/s3-resource
+      tag: 0.0.0v6
+
   - name: registry-image
     type: docker-image
     source:
@@ -170,6 +177,89 @@ resources:
       region_name: eu-west-2
       versioned_file: ((workspace))/authenticating-proxy.json
       initial_version: "0"
+
+  - &deploy-event-trigger
+    name: frontend-deploy-event-trigger
+    type: s3-iam
+    icon: file
+    source: &deploy-event-trigger-source
+      aws_role_arn: ((concourse_deployer_role_arn))
+      bucket: deploy-event-((workspace))
+      region_name: eu-west-1
+      private: true
+      skip_download: true
+      regexp: frontend/(.*).json
+      initial_path: frontend/0.json
+
+  - <<: *deploy-event-trigger
+    name: content-store-deploy-event-trigger
+    source:
+      <<: *deploy-event-trigger-source
+      regexp: content-store/(.*).json
+      initial_path: content-store/0.json
+
+  - <<: *deploy-event-trigger
+    name: draft-content-store-deploy-event-trigger
+    source:
+      <<: *deploy-event-trigger-source
+      regexp: draft-content-store/(.*).json
+      initial_path: draft-content-store/0.json
+
+  - <<: *deploy-event-trigger
+    name: draft-frontend-deploy-event-trigger
+    source:
+      <<: *deploy-event-trigger-source
+      regexp: draft-frontend/(.*).json
+      initial_path: draft-frontend/0.json
+
+  - <<: *deploy-event-trigger
+    name: publisher-deploy-event-trigger
+    source:
+      <<: *deploy-event-trigger-source
+      regexp: publisher/(.*).json
+      initial_path: publisher/0.json
+
+  - <<: *deploy-event-trigger
+    name: publishing-api-deploy-event-trigger
+    source:
+      <<: *deploy-event-trigger-source
+      regexp: publishing-api/(.*).json
+      initial_path: publishing-api/0.json
+
+  - <<: *deploy-event-trigger
+    name: router-api-deploy-event-trigger
+    source:
+      <<: *deploy-event-trigger-source
+      regexp: router-api/(.*).json
+      initial_path: router-api/0.json
+
+  - <<: *deploy-event-trigger
+    name: draft-router-api-deploy-event-trigger
+    source:
+      <<: *deploy-event-trigger-source
+      regexp: draft-router-api/(.*).json
+      initial_path: draft-router-api/0.json
+
+  - <<: *deploy-event-trigger
+    name: router-deploy-event-trigger
+    source:
+      <<: *deploy-event-trigger-source
+      regexp: router/(.*).json
+      initial_path: router/0.json
+
+  - <<: *deploy-event-trigger
+    name: static-deploy-event-trigger
+    source:
+      <<: *deploy-event-trigger-source
+      regexp: static/(.*).json
+      initial_path: static/0.json
+
+  - <<: *deploy-event-trigger
+    name: authenticating-proxy-deploy-event-trigger
+    source:
+      <<: *deploy-event-trigger-source
+      regexp: authenticating-proxy/(.*).json
+      initial_path: authenticating-proxy/0.json
 
   - &registry-image
     name: frontend-image
@@ -656,6 +746,12 @@ jobs:
         trigger: true
       - get: frontend-image
         trigger: true
+      - try:
+          get: frontend-deploy-event-trigger
+          trigger: true
+      - try:
+          get: draft-frontend-deploy-event-trigger
+          trigger: true
     - in_parallel:
       - task: bootstrap-secrets
         file: govuk-infrastructure/concourse/tasks/bootstrap-app-secrets.yml
@@ -775,6 +871,9 @@ jobs:
         trigger: true
       - get: publisher-image
         trigger: true
+      - try:
+          get: publisher-deploy-event-trigger
+          trigger: true
     - in_parallel:
       - task: bootstrap-secrets
         file: govuk-infrastructure/concourse/tasks/bootstrap-app-secrets.yml
@@ -899,6 +998,9 @@ jobs:
         trigger: true
       - get: publishing-api-image
         trigger: true
+      - try:
+          get: publishing-api-deploy-event-trigger
+          trigger: true
     - in_parallel:
       - task: bootstrap-secrets
         file: govuk-infrastructure/concourse/tasks/bootstrap-app-secrets.yml
@@ -994,6 +1096,12 @@ jobs:
         trigger: true
       - get: content-store-image
         trigger: true
+      - try:
+          get: content-store-deploy-event-trigger
+          trigger: true
+      - try:
+          get: draft-content-store-deploy-event-trigger
+          trigger: true
     - in_parallel:
       - task: bootstrap-secrets
         file: govuk-infrastructure/concourse/tasks/bootstrap-app-secrets.yml
@@ -1084,6 +1192,9 @@ jobs:
         trigger: true
       - get: router-image
         trigger: true
+      - try:
+          get: router-deploy-event-trigger
+          trigger: true
     - in_parallel:
       - task: update-draft-task-definition
         file: govuk-infrastructure/concourse/tasks/update-task-definition.yml
@@ -1151,6 +1262,12 @@ jobs:
         trigger: true
       - get: router-api-image
         trigger: true
+      - try:
+          get: router-api-deploy-event-trigger
+          trigger: true
+      - try:
+          get: draft-router-api-deploy-event-trigger
+          trigger: true
     - in_parallel:
       - <<: *await-secretsmanager-creds
         params:
@@ -1345,6 +1462,9 @@ jobs:
         trigger: true
       - get: static-image
         trigger: true
+      - try:
+          get: static-deploy-event-trigger
+          trigger: true
     - in_parallel:
       - task: upload-rails-assets
         file: govuk-infrastructure/concourse/tasks/upload-rails-assets.yml
@@ -1420,6 +1540,9 @@ jobs:
         trigger: true
       - get: authenticating-proxy-image
         trigger: true
+      - try:
+          get: authenticating-proxy-deploy-event-trigger
+          trigger: true
     - task: update-task-definition
       file: govuk-infrastructure/concourse/tasks/update-task-definition.yml
       input_mapping:
