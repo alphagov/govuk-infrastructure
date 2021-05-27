@@ -59,7 +59,7 @@ module "content_store" {
     {
       GOVUK_STATSD_PREFIX         = "govuk-ecs.app.content-store"
       PLEK_SERVICE_ROUTER_API_URI = local.defaults.router_api_uri
-      MONGODB_URI                 = "${local.content_store_defaults.mongodb_url}/live_content_store_production"
+      MONGODB_URI                 = "${local.content_store_defaults.mongodb_url}/content_store_production"
     },
   )
   secrets_from_arns = merge(
