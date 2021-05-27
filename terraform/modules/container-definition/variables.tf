@@ -38,16 +38,19 @@ variable "image" {
 variable "splunk_url_secret_arn" {
   type        = string
   description = "ARN to the secret containing the URL for the Splunk instance (of the form `https://http-inputs-XXXXXXXX.splunkcloud.com:PORT`)."
+  default     = null
 }
 
 variable "splunk_token_secret_arn" {
   type        = string
   description = "ARN to the secret containing the HTTP Event Collector (HEC) token."
+  default     = null
 }
 
 variable "splunk_index" {
   type        = string
   description = "Splunk index to log events to (which HEC token must have access to write to)."
+  default     = null
 }
 
 variable "splunk_sourcetype" {
@@ -79,4 +82,20 @@ DESC
 variable "user" {
   type    = string
   default = null
+}
+
+variable "log_group" {
+  type    = string
+  default = null
+}
+
+variable "log_stream_prefix" {
+  type        = string
+  description = "Set log_stream_prefix to an ECS Service name, if applicable. A prefix makes it easier to associate a log with a service."
+  default     = null
+}
+
+variable "log_to_splunk" {
+  type    = bool
+  default = true
 }
