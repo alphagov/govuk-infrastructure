@@ -56,7 +56,7 @@ locals {
         MONGODB_URI                 = data.aws_secretsmanager_secret.publisher_mongodb_uri.arn,
         GDS_SSO_OAUTH_ID            = module.oauth_applications["publisher"].id_arn
         GDS_SSO_OAUTH_SECRET        = module.oauth_applications["publisher"].secret_arn
-        PUBLISHING_API_BEARER_TOKEN = module.publisher_to_publishing_api_bearer_token.secret_arn,
+        PUBLISHING_API_BEARER_TOKEN = module.signon_bearer_tokens.pub_to_pub_api.secret_arn
         SECRET_KEY_BASE             = data.aws_secretsmanager_secret.publisher_secret_key_base.arn,
       }
     )
