@@ -15,15 +15,7 @@ data "aws_secretsmanager_secret" "splunk_token" {
 
 # Frontend app secrets
 
-data "aws_secretsmanager_secret" "frontend_secret_key_base" {
-  name = "frontend_app-SECRET_KEY_BASE" # pragma: allowlist secret
-}
-
 # Content store app secrets
-
-data "aws_secretsmanager_secret" "content_store_secret_key_base" {
-  name = "content-store_SECRET_KEY_BASE" # pragma: allowlist secret
-}
 
 # Publisher app secrets
 
@@ -57,9 +49,6 @@ data "aws_secretsmanager_secret" "publisher_link_checker_api_secret_token" {
 data "aws_secretsmanager_secret" "publisher_mongodb_uri" {
   name = "publisher_app-MONGODB_URI"
 }
-data "aws_secretsmanager_secret" "publisher_secret_key_base" {
-  name = "publisher_app-SECRET_KEY_BASE" # pragma: allowlist secret
-}
 
 # Publishing API app
 
@@ -75,10 +64,6 @@ data "aws_secretsmanager_secret" "publishing_api_rabbitmq_password" {
   name = "publishing_api_app-RABBITMQ_PASSWORD"
 }
 
-data "aws_secretsmanager_secret" "publishing_api_secret_key_base" {
-  name = "publishing_api_app-SECRET_KEY_BASE"
-}
-
 # Signon app
 
 data "aws_secretsmanager_secret" "signon_devise_pepper" {
@@ -87,10 +72,6 @@ data "aws_secretsmanager_secret" "signon_devise_pepper" {
 
 data "aws_secretsmanager_secret" "signon_devise_secret_key" {
   name = "signon_app-DEVISE_SECRET_KEY" # pragma: allowlist secret
-}
-
-data "aws_secretsmanager_secret" "signon_secret_key_base" {
-  name = "signon_app-SECRET_KEY_BASE" # pragma: allowlist secret
 }
 
 data "aws_secretsmanager_secret" "signon_database_url" {
@@ -113,27 +94,10 @@ data "aws_secretsmanager_secret" "smokey_signon_password" {
 
 # Static app
 
-data "aws_secretsmanager_secret" "static_secret_key_base" {
-  name = "static_SECRET_KEY_BASE" # pragma: allowlist secret
-}
-data "aws_secretsmanager_secret" "draft_static_secret_key_base" {
-  name = "draft-static_SECRET_KEY_BASE" # pragma: allowlist secret
-}
-
 # Router-api app
-
-data "aws_secretsmanager_secret" "router_api_secret_key_base" {
-  name = "router-api_SECRET_KEY_BASE"
-}
-data "aws_secretsmanager_secret" "draft_router_api_secret_key_base" {
-  name = "draft-router-api_SECRET_KEY_BASE"
-}
 
 # Authenticating-proxy app
 
-data "aws_secretsmanager_secret" "authenticating_proxy_secret_key_base" {
-  name = "authenticating-proxy_SECRET_KEY_BASE"
-}
 data "aws_secretsmanager_secret" "authenticating_proxy_jwt_auth_secret" {
   name = "authenticating-proxy_JWT_AUTH_SECRET"
 }

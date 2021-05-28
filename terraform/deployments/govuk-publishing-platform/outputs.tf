@@ -208,3 +208,10 @@ output "authenticating-proxy" {
 output "cluster_name" {
   value = aws_ecs_cluster.cluster.name
 }
+
+output "secret_key_bases" {
+  value = {
+    arns = [for k, v in aws_secretsmanager_secret.secret_key_base : v.arn]
+  }
+  description = "ARNs of SecretsManager secrets for secret_key_base creds"
+}

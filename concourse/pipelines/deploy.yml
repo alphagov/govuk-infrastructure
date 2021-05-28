@@ -87,6 +87,15 @@ resources:
       region_name: eu-west-2
       versioned_file: ((workspace))/govuk-terraform-outputs.json
 
+  - name: secret_key_bases-terraform-outputs
+    type: s3
+    icon: file
+    source:
+      bucket: ((readonly_private_bucket_name))
+      region_name: eu-west-2
+      versioned_file: ((workspace))/secret_key_bases.json
+      initial_version: "0"
+
   - name: content-store-terraform-outputs
     type: s3
     icon: file
@@ -271,6 +280,7 @@ groups:
       - smoke-test-frontend
       - smoke-test-publisher
       - smoke-test-signon
+      - autogenerate-secrets
 
   - name: terraform
     jobs:
@@ -400,6 +410,7 @@ jobs:
       - get: router-terraform-outputs
       - get: frontend-terraform-outputs
       - get: authenticating-proxy-terraform-outputs
+      - get: secret_key_bases-terraform-outputs
     - task: terraform-apply
       config:
         inputs:
@@ -409,6 +420,9 @@ jobs:
           optional: true
         - name: frontend-terraform-outputs
           path: old-frontend-terraform-outputs
+          optional: true
+        - name: secret_key_bases-terraform-outputs
+          path: old-secret_key_bases-terraform-outputs
           optional: true
         - name: publisher-terraform-outputs
           path: old-publisher-terraform-outputs
@@ -453,6 +467,8 @@ jobs:
           path: new-router-api-terraform-outputs
         - name: router-terraform-outputs
           path: new-router-terraform-outputs
+        - name: secret_key_bases-terraform-outputs
+          path: new-secret_key_bases-terraform-outputs
         - name: authenticating-proxy-terraform-outputs
           path: new-authenticating-proxy-terraform-outputs
           optional: true
@@ -494,16 +510,16 @@ jobs:
             terraform output -json > "$root_dir/govuk-terraform-outputs/govuk-terraform-outputs.json"
 
             update_terraform_outputs() {
-              app="$1"
-              terraform output -json "${app}" > "$root_dir/new-${app}-terraform-outputs/${app}.json"
+              output="$1"
+              terraform output -json "${output}" > "$root_dir/new-${output}-terraform-outputs/${output}.json"
 
               if cmp \
-                "$root_dir/old-${app}-terraform-outputs/${app}.json" \
-                "$root_dir/new-${app}-terraform-outputs/${app}.json"
+                "$root_dir/old-${output}-terraform-outputs/${output}.json" \
+                "$root_dir/new-${output}-terraform-outputs/${output}.json"
               then
                 # If the new terraform outputs are the same as the old ones
                 # delete them to avoid unnecessarily creating a new resource version
-                rm "$root_dir/new-${app}-terraform-outputs/${app}.json"
+                rm "$root_dir/new-${output}-terraform-outputs/${output}.json"
               fi
             }
 
@@ -517,11 +533,16 @@ jobs:
             update_terraform_outputs router-api
             update_terraform_outputs router
             update_terraform_outputs authenticating-proxy
+            update_terraform_outputs secret_key_bases
 
     - in_parallel:
       - put: govuk-terraform-outputs
         params:
           file: govuk-terraform-outputs/govuk-terraform-outputs.json
+      - try:
+          put: secret_key_bases-terraform-outputs
+          params:
+            file: secret_key_bases-terraform-outputs/secret_key_bases.json
       - try:
           put: content-store-terraform-outputs
           params:
@@ -598,6 +619,27 @@ jobs:
         APPLICATION: smokey
         VARIANT: default
         COMMAND: bundle exec cucumber --profile test --strict-undefined -t @replatforming -t \"not @notreplatforming\"
+    on_failure:
+      <<: *notify-slack-failure
+
+  - name: autogenerate-secrets
+    plan:
+    - in_parallel:
+      - get: govuk-infrastructure
+        resource: govuk-infrastructure-concourse-tasks
+        trigger: true
+      - get: secret_key_bases
+        resource: secret_key_bases-terraform-outputs
+        passed:
+        - run-terraform
+        trigger: true
+    - task: secret_key_base
+      file: govuk-infrastructure/concourse/tasks/autogenerate-secret-key-base.yml
+      input_mapping:
+        terraform-outputs: secret_key_bases
+      params:
+        ASSUME_ROLE_ARN: ((concourse_deployer_role_arn))
+    serial: true
     on_failure:
       <<: *notify-slack-failure
 

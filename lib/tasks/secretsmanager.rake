@@ -49,4 +49,42 @@ namespace :secretsmanager do
       exit 1
     end
   end
+
+  desc "Autogenerate secret_key_base for Rails apps"
+  task :autogenerate_secret_key_base do
+    config = JSON.parse(File.read("../terraform-outputs/secret_key_bases.json"))
+
+    credentials = Aws::AssumeRoleCredentials.new(
+      client: Aws::STS::Client.new,
+      role_arn: ENV["ASSUME_ROLE_ARN"],
+      role_session_name: "create-rails-app-secret_key_base",
+    )
+    secrets_client = Aws::SecretsManager::Client.new(
+      region: ENV["AWS_REGION"],
+      credentials: credentials,
+    )
+
+    config.fetch("arns").each do |secret_arn|
+      metadata = secrets_client.describe_secret(secret_id: secret_arn)
+      versions = metadata.version_ids_to_stages
+      already_set = !versions.nil? && versions.values.any? do |stages|
+        stages.include?("AWSCURRENT")
+      end
+
+      if already_set
+        puts "Secret #{secret_arn} already set; skipping. 🔒"
+        next
+      end
+
+      secrets_client.put_secret_value(
+        secret_id: secret_arn,
+        secret_string: SecureRandom.hex(64),
+        version_stages: %w[AWSCURRENT],
+      )
+
+      puts "Generated secret_key_base for #{secret_arn} 🔑"
+    end
+
+    puts "Done! All secrets generated. 🔐"
+  end
 end
