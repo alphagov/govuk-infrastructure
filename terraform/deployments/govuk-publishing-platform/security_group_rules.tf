@@ -65,6 +65,16 @@ resource "aws_security_group_rule" "content_store_from_router_tcp" {
 # Content Store (Draft)
 #
 
+resource "aws_security_group_rule" "draft_content_store_to_any_any" {
+  description       = "Draft Content Store sends requests to anywhere over any protocol"
+  type              = "egress"
+  from_port         = 0
+  to_port           = 0
+  protocol          = -1
+  cidr_blocks       = ["0.0.0.0/0"]
+  security_group_id = module.draft_content_store.security_group_id
+}
+
 resource "aws_security_group_rule" "draft_content_store_from_publishing_api_http" {
   description              = "Draft Content Store accepts requests from Publishing API over HTTP"
   type                     = "ingress"
