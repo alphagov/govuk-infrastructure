@@ -19,12 +19,7 @@ locals {
       }
     )
 
-    secrets_from_arns = merge(
-      local.defaults.secrets_from_arns,
-      {
-        SECRET_KEY_BASE = data.aws_secretsmanager_secret.content_store_secret_key_base.arn,
-      }
-    )
+    secrets_from_arns = local.defaults.secrets_from_arns
 
     mongodb_url = format(
       "mongodb://%s,%s,%s",
@@ -69,6 +64,7 @@ module "content_store" {
       GDS_SSO_OAUTH_SECRET        = module.oauth_applications["content_store"].secret_arn,
       PUBLISHING_API_BEARER_TOKEN = module.signon_bearer_tokens.cs_to_pub_api.secret_arn
       ROUTER_API_BEARER_TOKEN     = module.signon_bearer_tokens.cs_to_router_api.secret_arn
+      SECRET_KEY_BASE             = aws_secretsmanager_secret.secret_key_base["content_store"].arn
     }
   )
   splunk_url_secret_arn   = local.defaults.splunk_url_secret_arn
@@ -121,6 +117,7 @@ module "draft_content_store" {
       GDS_SSO_OAUTH_SECRET        = module.oauth_applications["draft_content_store"].secret_arn,
       PUBLISHING_API_BEARER_TOKEN = module.signon_bearer_tokens.dcs_to_pub_api.secret_arn
       ROUTER_API_BEARER_TOKEN     = module.signon_bearer_tokens.dcs_to_draft_router_api.secret_arn
+      SECRET_KEY_BASE             = aws_secretsmanager_secret.secret_key_base["draft_content_store"].arn
     }
   )
   splunk_url_secret_arn   = local.defaults.splunk_url_secret_arn

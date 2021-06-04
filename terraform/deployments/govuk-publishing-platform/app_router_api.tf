@@ -54,7 +54,7 @@ module "router_api" {
     {
       GDS_SSO_OAUTH_ID     = module.oauth_applications["router_api"].id_arn,
       GDS_SSO_OAUTH_SECRET = module.oauth_applications["router_api"].secret_arn,
-      SECRET_KEY_BASE      = data.aws_secretsmanager_secret.router_api_secret_key_base.arn,
+      SECRET_KEY_BASE      = aws_secretsmanager_secret.secret_key_base["router_api"].arn
     },
   )
   splunk_url_secret_arn   = local.defaults.splunk_url_secret_arn
@@ -97,7 +97,7 @@ module "draft_router_api" {
     {
       GDS_SSO_OAUTH_ID     = module.oauth_applications["draft_router_api"].id_arn,
       GDS_SSO_OAUTH_SECRET = module.oauth_applications["draft_router_api"].secret_arn,
-      SECRET_KEY_BASE      = data.aws_secretsmanager_secret.draft_router_api_secret_key_base.arn,
+      SECRET_KEY_BASE      = aws_secretsmanager_secret.secret_key_base["draft_router_api"].arn
     },
   )
   splunk_url_secret_arn   = local.defaults.splunk_url_secret_arn

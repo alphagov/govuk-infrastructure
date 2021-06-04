@@ -19,7 +19,7 @@ locals {
     secrets_from_arns = merge(
       local.defaults.secrets_from_arns,
       {
-        SECRET_KEY_BASE       = data.aws_secretsmanager_secret.signon_secret_key_base.arn
+        SECRET_KEY_BASE       = aws_secretsmanager_secret.secret_key_base["signon"].arn,
         SENTRY_DSN            = data.aws_secretsmanager_secret.sentry_dsn.arn
         DATABASE_URL          = data.aws_secretsmanager_secret.signon_database_url.arn
         DEVISE_PEPPER         = data.aws_secretsmanager_secret.signon_devise_pepper.arn

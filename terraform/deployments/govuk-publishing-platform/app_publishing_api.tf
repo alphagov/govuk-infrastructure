@@ -46,7 +46,7 @@ locals {
         GDS_SSO_OAUTH_SECRET             = module.oauth_applications["publishing_api"].secret_arn
         RABBITMQ_PASSWORD                = data.aws_secretsmanager_secret.publishing_api_rabbitmq_password.arn
         ROUTER_API_BEARER_TOKEN          = module.signon_bearer_tokens.pub_api_to_router_api.secret_arn
-        SECRET_KEY_BASE                  = data.aws_secretsmanager_secret.publishing_api_secret_key_base.arn
+        SECRET_KEY_BASE                  = aws_secretsmanager_secret.secret_key_base["publishing_api"].arn
       }
     )
   }
