@@ -12,9 +12,11 @@ locals {
       GOVUK_APP_DOMAIN          = local.mesh_domain,
       GOVUK_APP_DOMAIN_EXTERNAL = local.workspace_external_domain,
       GOVUK_APP_TYPE            = "rack",
+      GOVUK_ENVIRONMENT         = var.govuk_environment
       GOVUK_STATSD_HOST         = "statsd.${local.mesh_domain}"
       GOVUK_STATSD_PROTOCOL     = "tcp"
       GOVUK_WEBSITE_ROOT        = local.public_entry_url
+      GOVUK_WORKSPACE           = local.workspace
       PORT                      = 80,
       RAILS_ENV                 = "production",
       SENTRY_ENVIRONMENT        = "${var.govuk_environment}-ecsplatform-${local.workspace}",
@@ -44,6 +46,6 @@ locals {
     splunk_url_secret_arn   = data.aws_secretsmanager_secret.splunk_url.arn
     splunk_token_secret_arn = data.aws_secretsmanager_secret.splunk_token.arn
     splunk_index            = "govuk_replatforming"
-    splunk_sourcetype       = "log"
+    splunk_sourcetype       = "syslog"
   }
 }

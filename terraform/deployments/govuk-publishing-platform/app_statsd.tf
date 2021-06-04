@@ -5,6 +5,13 @@ locals {
     memory                = 2048 # TODO parameterize this
     environment_variables = local.defaults.environment_variables
     secrets_from_arns     = local.defaults.secrets_from_arns
+
+    environment_variables = merge(
+      local.defaults.environment_variables,
+      {
+        GOVUK_APP_NAME = "statsd"
+      }
+    )
   }
 }
 
