@@ -477,6 +477,16 @@ resource "aws_security_group_rule" "draft_router_api_from_draft_content_store_ht
   source_security_group_id = module.draft_content_store.security_group_id
 }
 
+resource "aws_security_group_rule" "draft_router_api_to_any_any" {
+  description       = "Draft Router API sends requests to anywhere over any protocol"
+  type              = "egress"
+  from_port         = 0
+  to_port           = 0
+  protocol          = -1
+  cidr_blocks       = ["0.0.0.0/0"]
+  security_group_id = module.draft_router_api.security_group_id
+}
+
 #
 # Router DB
 #
