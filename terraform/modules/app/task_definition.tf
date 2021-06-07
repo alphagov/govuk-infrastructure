@@ -72,7 +72,6 @@ module "envoy_container_definition" {
   user                    = local.user_id
 }
 
-# TODO: Can we remove the v2?
 module "task_definition" {
   source = "../../modules/task-definition"
   container_definitions = [
