@@ -1,6 +1,40 @@
 variable "container_definitions" {
   description = "List of ECS ContainerDefinitions for the task, as maps in HCL/JSON syntax (not strings)."
-  type        = list(any)
+  type = list(object({
+    name        = string
+    command     = list(string)
+    essential   = bool
+    environment = list(object({ name = string, value = string }))
+    dependsOn   = list(object({ containerName = string, condition = string }))
+    healthCheck = object({
+      command     = list(string)
+      startPeriod = number
+      retries     = number
+    })
+    image           = string
+    linuxParameters = object({ initProcessEnabled = bool })
+    logConfiguration = object({
+      logDriver = string
+      options = object({
+        env               = string
+        tag               = string
+        splunk-sourcetype = string
+        splunk-index      = string
+        splunk-format     = string
+      })
+      secretOptions = list(object({
+        name      = string
+        valueFrom = string
+        })
+      )
+    })
+    mountPoints = list(any),
+    portMappings = list(
+      object({ containerPort = number, hostPort = number, protocol = string })
+    )
+    secrets = list(object({ name = string, valueFrom = string }))
+    user    = string
+  }))
 }
 
 variable "cpu" {
