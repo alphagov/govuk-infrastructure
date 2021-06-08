@@ -98,7 +98,6 @@ module "signon_bearer_tokens" {
   name                            = each.key
   environment                     = var.govuk_environment
   private_subnets                 = local.private_subnets
-  providers                       = { aws = aws, archive = archive }
   signon_admin_password_arn       = aws_secretsmanager_secret.signon_admin_password.arn
   signon_host                     = module.signon.virtual_service_name
   signon_lambda_security_group_id = aws_security_group.signon_lambda.id

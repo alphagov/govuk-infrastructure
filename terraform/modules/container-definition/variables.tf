@@ -19,7 +19,7 @@ DESC
 }
 
 variable "dependsOn" {
-  type        = list(any)
+  type        = list(object({ containerName = string, condition = string }))
   default     = []
   description = "See ECS Task Definition spec for dependsOn"
 }

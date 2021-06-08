@@ -91,7 +91,6 @@ resource "aws_wafv2_web_acl" "backends_origin_cloudfront_web_acl" {
 module "backends_origin" {
   source = "../../modules/origin"
 
-  providers           = { aws = aws, random = random }
   name                = "backends"
   vpc_id              = local.vpc_id
   aws_region          = data.aws_region.current.name

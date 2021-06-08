@@ -49,7 +49,6 @@ resource "aws_wafv2_web_acl" "all_frontends_origins_cloudfront_web_acl" {
 module "www_frontends_origin" {
   source = "../../modules/origin"
 
-  providers                            = { aws = aws, random = random }
   name                                 = "www-frontends"
   vpc_id                               = local.vpc_id
   aws_region                           = data.aws_region.current.name
@@ -113,7 +112,6 @@ resource "aws_lb_listener_rule" "router" {
 module "draft_frontends_origin" {
   source = "../../modules/origin"
 
-  providers                            = { aws = aws, aws.us_east_1 = aws.us_east_1, random = random }
   name                                 = "draft-frontends"
   vpc_id                               = local.vpc_id
   aws_region                           = data.aws_region.current.name

@@ -3,7 +3,7 @@ image_resource:
   type: docker-image
   source:
     repository: hashicorp/terraform
-    tag: 0.14.6
+    tag: 0.15.5
     username: ((docker_hub_username))
     password: ((docker_hub_authtoken))
 inputs:
