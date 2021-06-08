@@ -14,22 +14,7 @@ resource "aws_s3_bucket" "backends_content_schema" {
   }
 }
 
-data "aws_iam_policy_document" "backends_cloudfront_access_s3_policy" {
-  statement {
-    actions   = ["s3:GetObject"]
-    resources = ["${aws_s3_bucket.backends_content_schema.arn}/*"]
-
-    principals {
-      type = "AWS"
-      identifiers = [
-        module.backends_origin.cloudfront_access_identity_iam_arn,
-        module.backends_origin.cloudfront_access_identity_iam_arn
-      ]
-    }
-  }
-}
-
 resource "aws_s3_bucket_policy" "backends_cloudfront_access_s3_policy" {
-  bucket = aws_s3_bucket.backends_rails_assets.id
+  bucket = aws_s3_bucket.backends_content_schema.id
   policy = data.aws_iam_policy_document.backends_cloudfront_access_s3_policy.json
 }
