@@ -104,6 +104,12 @@ resource "aws_cloudfront_distribution" "origin" {
     ssl_support_method       = "sni-only"
     minimum_protocol_version = "TLSv1.2_2019"
   }
+  
+  logging_config {
+    include_cookies = false
+    bucket          = "cyber-security-cloudfront.s3.amazonaws.com"
+    prefix          = "govuk-${var.workspace}"
+  }
 }
 
 resource "aws_route53_record" "origin_cloudfront" {
