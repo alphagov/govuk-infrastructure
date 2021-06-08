@@ -26,7 +26,7 @@ resources:
     source:
       <<: *git-repo-source
       uri: git@github.com:alphagov/govuk-infrastructure.git
-      branch: add-publishing-smoke-test
+      branch: copy-of-add-publishing-smoke-test
 
   - &docker-image
     name: smokey-image
