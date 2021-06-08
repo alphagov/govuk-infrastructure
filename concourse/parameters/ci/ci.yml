@@ -1,2 +1,2 @@
-govuk_infrastructure_branch: add-publishing-smoke-test
+govuk_infrastructure_branch: copy-of-add-publishing-smoke-test
 concourse_ci_role_arn: arn:aws:iam::430354129336:role/govuk-ci-concourse

@@ -1,4 +1,4 @@
-govuk_infrastructure_branch: add-publishing-smoke-test
+govuk_infrastructure_branch: copy-of-add-publishing-smoke-test
 concourse_deployer_role_arn: arn:aws:iam::430354129336:role/govuk-concourse-deployer
 workspace: baker
 disable_slack_channel_alerts: true
