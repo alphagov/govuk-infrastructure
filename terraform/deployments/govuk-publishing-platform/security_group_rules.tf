@@ -462,6 +462,16 @@ resource "aws_security_group_rule" "router_api_from_content_store_http" {
   source_security_group_id = module.content_store.security_group_id
 }
 
+resource "aws_security_group_rule" "router_api_to_any_any" {
+  description       = "Router API sends requests to anywhere over any protocol"
+  type              = "egress"
+  from_port         = 0
+  to_port           = 0
+  protocol          = -1
+  cidr_blocks       = ["0.0.0.0/0"]
+  security_group_id = module.router_api.security_group_id
+}
+
 #
 # Router API (Draft)
 #
