@@ -1,0 +1,3 @@
+workspace: chris
+govuk_infrastructure_branch: sengi/workspace
+disable_slack_channel_alerts: true
