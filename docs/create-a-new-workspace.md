@@ -59,12 +59,12 @@ Change the contents of `concourse/parameters/test/deploy.yml` to the
 following:
 
 ```
-workspace: <workspace-name>
-# so the pipeline uses your branch (crucially the set_pipeline step will use
-# this file!)
 govuk_infrastructure_branch: <githubusername>/workspace
+concourse_deployer_role_arn: arn:aws:iam::430354129336:role/govuk-concourse-deployer
+workspace: <workspace-name>
 # so you don't create noise in the govuk-deploy-alerts channel
 disable_slack_channel_alerts: true
+skip_db_migrations: true
 ```
 
 Commit the new `deploy.yml` and push your branch to GitHub.
