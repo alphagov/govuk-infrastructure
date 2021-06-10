@@ -55,11 +55,11 @@ Create a new branch
 git checkout -b <githubusername>/workspace
 ```
 
-Change the contents of `concourse/pipelines/deploy-parameters.yml` to the
+Change the contents of `concourse/parameters/deploy-parameters.yml` to the
 following:
 
 ```
-workspace: personal # or something else, it's your workspace
+workspace: <workspace-name>
 # so the pipeline uses your branch (crucially the set_pipeline step will use
 # this file!)
 govuk_infrastructure_branch: <githubusername>/workspace
@@ -67,12 +67,27 @@ govuk_infrastructure_branch: <githubusername>/workspace
 disable_slack_channel_alerts: true
 ```
 
+Commit the new `deploy-parameters.yml` and push your branch to GitHub.
+
+```
+git add concourse/parameters/deploy-parameters.yml
+git commit
+git push --set-upstream origin <githubusername>/workspace
+```
+
+Log into Concourse and update the `fly` command if necessary.
+
+```
+fly -t govuk-test login --team-name govuk-test --concourse-url https://cd.gds-reliability.engineering
+fly -t govuk-test sync
+```
+
 Finally, set the pipeline, and then unpause it
 
 ```
 fly sp -t govuk-test -p deploy-apps-<workspace-name> \
 -c concourse/pipelines/deploy.yml \
--l concourse/pipelines/deploy-parameters.yml
+-l concourse/parameters/deploy-parameters.yml
 
 fly up -t govuk-test -p deploy-apps-<workspace-name>
 ```
