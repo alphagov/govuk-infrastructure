@@ -55,7 +55,7 @@ Create a new branch
 git checkout -b <githubusername>/workspace
 ```
 
-Change the contents of `concourse/pipelines/deploy-parameters.yml` to the
+Change the contents of `concourse/parameters/deploy-parameters.yml` to the
 following:
 
 ```
@@ -70,7 +70,7 @@ disable_slack_channel_alerts: true
 Commit the new `deploy-parameters.yml` and push your branch to GitHub.
 
 ```
-git add concourse/pipelines/deploy-parameters.yml
+git add concourse/parameters/deploy-parameters.yml
 git commit
 git push --set-upstream origin <githubusername>/workspace
 ```
@@ -87,7 +87,7 @@ Finally, set the pipeline, and then unpause it
 ```
 fly sp -t govuk-test -p deploy-apps-<workspace-name> \
 -c concourse/pipelines/deploy.yml \
--l concourse/pipelines/deploy-parameters.yml
+-l concourse/parameters/deploy-parameters.yml
 
 fly up -t govuk-test -p deploy-apps-<workspace-name>
 ```
