@@ -1,4 +1,0 @@
-workspace: chris
-govuk_infrastructure_branch: sengi/workspace
-disable_slack_channel_alerts: true
-skip_db_migrations: true
