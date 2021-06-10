@@ -1,3 +1,4 @@
+concourse_deployer_role_arn: arn:aws:iam::430354129336:role/govuk-concourse-deployer
 workspace: chris
 govuk_infrastructure_branch: sengi/workspace
 disable_slack_channel_alerts: true
