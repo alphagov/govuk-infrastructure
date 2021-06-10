@@ -55,22 +55,22 @@ Create a new branch
 git checkout -b <githubusername>/workspace
 ```
 
-Change the contents of `concourse/parameters/deploy-parameters.yml` to the
+Change the contents of `concourse/parameters/test/deploy.yml` to the
 following:
 
 ```
-workspace: <workspace-name>
-# so the pipeline uses your branch (crucially the set_pipeline step will use
-# this file!)
 govuk_infrastructure_branch: <githubusername>/workspace
+concourse_deployer_role_arn: arn:aws:iam::430354129336:role/govuk-concourse-deployer
+workspace: <workspace-name>
 # so you don't create noise in the govuk-deploy-alerts channel
 disable_slack_channel_alerts: true
+skip_db_migrations: true
 ```
 
-Commit the new `deploy-parameters.yml` and push your branch to GitHub.
+Commit the new `deploy.yml` and push your branch to GitHub.
 
 ```
-git add concourse/parameters/deploy-parameters.yml
+git add concourse/parameters/test/deploy.yml
 git commit
 git push --set-upstream origin <githubusername>/workspace
 ```
@@ -87,7 +87,7 @@ Finally, set the pipeline, and then unpause it
 ```
 fly sp -t govuk-test -p deploy-apps-<workspace-name> \
 -c concourse/pipelines/deploy.yml \
--l concourse/parameters/deploy-parameters.yml
+-l concourse/parameters/test/deploy.yml
 
 fly up -t govuk-test -p deploy-apps-<workspace-name>
 ```
