@@ -11,28 +11,10 @@ variable "container_definitions" {
       startPeriod = number
       retries     = number
     })
-    image           = string
-    linuxParameters = object({ initProcessEnabled = bool })
-    logConfiguration = object({
-      logDriver = string
-      options = object({
-        env                   = optional(string)
-        tag                   = optional(string)
-        splunk-sourcetype     = optional(string)
-        splunk-index          = optional(string)
-        splunk-format         = optional(string)
-        awslogs-create-group  = optional(string)
-        awslogs-group         = optional(string)
-        awslogs-region        = optional(string)
-        awslogs-stream-prefix = optional(string)
-      })
-      secretOptions = list(object({
-        name      = string
-        valueFrom = string
-        })
-      )
-    })
-    mountPoints = list(any),
+    image            = string
+    linuxParameters  = object({ initProcessEnabled = bool })
+    logConfiguration = any
+    mountPoints      = list(any),
     portMappings = list(
       object({ containerPort = number, hostPort = number, protocol = string })
     )
