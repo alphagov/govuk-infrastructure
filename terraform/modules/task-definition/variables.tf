@@ -11,24 +11,10 @@ variable "container_definitions" {
       startPeriod = number
       retries     = number
     })
-    image           = string
-    linuxParameters = object({ initProcessEnabled = bool })
-    logConfiguration = object({
-      logDriver = string
-      options = object({
-        env               = string
-        tag               = string
-        splunk-sourcetype = string
-        splunk-index      = string
-        splunk-format     = string
-      })
-      secretOptions = list(object({
-        name      = string
-        valueFrom = string
-        })
-      )
-    })
-    mountPoints = list(any),
+    image            = string
+    linuxParameters  = object({ initProcessEnabled = bool })
+    logConfiguration = any
+    mountPoints      = list(any),
     portMappings = list(
       object({ containerPort = number, hostPort = number, protocol = string })
     )

@@ -1,3 +1,37 @@
+locals {
+  log_configuration_splunk = {
+    logDriver = "splunk"
+    options = {
+      env               = "GOVUK_APP_NAME",
+      tag               = "image_name={{.ImageName}} container_name={{.Name}} container_id={{.FullID}}",
+      splunk-sourcetype = var.splunk_sourcetype,
+      splunk-index      = var.splunk_index,
+      splunk-format     = "raw"
+    }
+    secretOptions = [
+      {
+        name      = "splunk-token",
+        valueFrom = var.splunk_token_secret_arn
+      },
+      {
+        name      = "splunk-url",
+        valueFrom = var.splunk_url_secret_arn
+      },
+    ],
+  }
+
+  log_configuration_aws = {
+    logDriver = "awslogs"
+    options = {
+      awslogs-create-group  = "true", # TODO create the log group in terraform so we can configure the retention policy
+      awslogs-group         = var.log_group,
+      awslogs-region        = var.aws_region,
+      awslogs-stream-prefix = var.log_stream_prefix,
+    },
+    secretOptions = [],
+  }
+}
+
 output "json_format" {
   value = {
     name        = var.name,
@@ -14,29 +48,10 @@ output "json_format" {
     linuxParameters = {
       initProcessEnabled = true
     }
-    logConfiguration = {
-      logDriver = "splunk",
-      options = {
-        env               = "GOVUK_APP_NAME",
-        tag               = "image_name={{.ImageName}} container_name={{.Name}} container_id={{.FullID}}",
-        splunk-sourcetype = var.splunk_sourcetype,
-        splunk-index      = var.splunk_index,
-        splunk-format     = "raw"
-      }
-      secretOptions = [
-        {
-          name      = "splunk-token",
-          valueFrom = var.splunk_token_secret_arn
-        },
-        {
-          name      = "splunk-url",
-          valueFrom = var.splunk_url_secret_arn
-        },
-      ],
-    },
-    mountPoints  = [],
-    portMappings = [for port in var.ports : { containerPort = port, hostPort = port, protocol = "tcp" }],
-    secrets      = [for key, value in var.secrets_from_arns : { name = key, valueFrom = value }]
-    user         = var.user
+    logConfiguration = var.log_to_splunk ? local.log_configuration_splunk : local.log_configuration_aws
+    mountPoints      = [],
+    portMappings     = [for port in var.ports : { containerPort = port, hostPort = port, protocol = "tcp" }],
+    secrets          = [for key, value in var.secrets_from_arns : { name = key, valueFrom = value }]
+    user             = var.user
   }
 }
