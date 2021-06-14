@@ -42,7 +42,7 @@ module "static" {
   secrets_from_arns = merge(
     local.static_defaults.secrets_from_arns,
     {
-      SECRET_KEY_BASE = data.aws_secretsmanager_secret.static_secret_key_base.arn,
+      SECRET_KEY_BASE = aws_secretsmanager_secret.secret_key_base["static"].arn,
     },
   )
   splunk_url_secret_arn   = local.defaults.splunk_url_secret_arn
@@ -84,7 +84,7 @@ module "draft_static" {
   secrets_from_arns = merge(
     local.static_defaults.secrets_from_arns,
     {
-      SECRET_KEY_BASE = data.aws_secretsmanager_secret.draft_static_secret_key_base.arn,
+      SECRET_KEY_BASE = aws_secretsmanager_secret.secret_key_base["draft_static"].arn,
     },
   )
   splunk_url_secret_arn   = local.defaults.splunk_url_secret_arn

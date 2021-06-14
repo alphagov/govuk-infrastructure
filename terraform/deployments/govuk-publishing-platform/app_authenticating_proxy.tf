@@ -25,7 +25,7 @@ locals {
         GDS_SSO_OAUTH_ID     = module.oauth_applications["authenticating_proxy"].id_arn,
         GDS_SSO_OAUTH_SECRET = module.oauth_applications["authenticating_proxy"].secret_arn,
         JWT_AUTH_SECRET      = data.aws_secretsmanager_secret.authenticating_proxy_jwt_auth_secret.arn,
-        SECRET_KEY_BASE      = data.aws_secretsmanager_secret.authenticating_proxy_secret_key_base.arn,
+        SECRET_KEY_BASE      = aws_secretsmanager_secret.secret_key_base["authenticating_proxy"].arn,
       }
     )
   }

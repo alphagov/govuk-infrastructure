@@ -29,7 +29,6 @@ locals {
       {
         # TODO Should frontend and draft frontend share a bearer token for publishing api?
         PUBLISHING_API_BEARER_TOKEN = module.signon_bearer_tokens.frontend_to_pub_api.secret_arn
-        SECRET_KEY_BASE             = aws_secretsmanager_secret.secret_key_base["frontend"].arn
       }
     )
 
@@ -59,19 +58,24 @@ module "frontend" {
   subnets                          = local.private_subnets
   extra_security_groups            = [aws_security_group.mesh_ecs_service.id]
   environment_variables            = local.frontend_defaults.environment_variables
-  secrets_from_arns                = local.frontend_defaults.secrets_from_arns
-  splunk_url_secret_arn            = local.defaults.splunk_url_secret_arn
-  splunk_token_secret_arn          = local.defaults.splunk_token_secret_arn
-  splunk_index                     = local.defaults.splunk_index
-  splunk_sourcetype                = local.defaults.splunk_sourcetype
-  aws_region                       = data.aws_region.current.name
-  cpu                              = local.frontend_defaults.cpu
-  memory                           = local.frontend_defaults.memory
-  task_role_arn                    = aws_iam_role.task.arn
-  execution_role_arn               = aws_iam_role.execution.arn
-  additional_tags                  = local.additional_tags
-  environment                      = var.govuk_environment
-  workspace                        = local.workspace
+  secrets_from_arns = merge(
+    local.frontend_defaults.secrets_from_arns,
+    {
+      SECRET_KEY_BASE = aws_secretsmanager_secret.secret_key_base["frontend"].arn
+    },
+  )
+  splunk_url_secret_arn   = local.defaults.splunk_url_secret_arn
+  splunk_token_secret_arn = local.defaults.splunk_token_secret_arn
+  splunk_index            = local.defaults.splunk_index
+  splunk_sourcetype       = local.defaults.splunk_sourcetype
+  aws_region              = data.aws_region.current.name
+  cpu                     = local.frontend_defaults.cpu
+  memory                  = local.frontend_defaults.memory
+  task_role_arn           = aws_iam_role.task.arn
+  execution_role_arn      = aws_iam_role.execution.arn
+  additional_tags         = local.additional_tags
+  environment             = var.govuk_environment
+  workspace               = local.workspace
 }
 
 module "draft_frontend" {
@@ -99,7 +103,12 @@ module "draft_frontend" {
       PLEK_SERVICE_STATIC_URI        = local.defaults.draft_static_uri
     }
   )
-  secrets_from_arns       = local.frontend_defaults.secrets_from_arns
+  secrets_from_arns = merge(
+    local.frontend_defaults.secrets_from_arns,
+    {
+      SECRET_KEY_BASE = aws_secretsmanager_secret.secret_key_base["draft_frontend"].arn
+    },
+  )
   splunk_url_secret_arn   = local.defaults.splunk_url_secret_arn
   splunk_token_secret_arn = local.defaults.splunk_token_secret_arn
   splunk_index            = local.defaults.splunk_index
