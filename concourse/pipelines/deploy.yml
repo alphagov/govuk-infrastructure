@@ -618,6 +618,7 @@ jobs:
         ASSUME_ROLE_ARN: ((concourse_deployer_role_arn))
         APPLICATION: smokey
         VARIANT: default
+        LOG_TO_SPLUNK: false
         COMMAND: bundle exec cucumber --profile test --strict-undefined -t @replatforming -t \"not @notreplatforming and not @not((govuk_environment))\"
     on_failure:
       <<: *notify-slack-failure
