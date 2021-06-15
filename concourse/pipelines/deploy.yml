@@ -614,6 +614,7 @@ jobs:
     - &run-smoke-test
       task: run-smoke-tests
       file: govuk-infrastructure/concourse/tasks/run-task.yml
+      attempts: 3
       params: &smoke-tests-params
         ASSUME_ROLE_ARN: ((concourse_deployer_role_arn))
         APPLICATION: smokey
