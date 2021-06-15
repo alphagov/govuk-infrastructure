@@ -132,23 +132,16 @@ def handler(event:, context:) # rubocop:disable Lint/UnusedMethodArgument
     raise NotPendingVersion, error
   end
 
-  signon_client = SignonClient.new(
-    api_user: ENV.fetch("API_USER_EMAIL"),
-    auth_token: get_admin_password(service_client, logger),
-    logger: logger,
-  )
-
   case step
   when "createSecret"
-    create_secret(service_client, arn, token, logger, signon_client)
+    create_secret(service_client, arn, token, logger)
   when "setSecret"
     check_secret(service_client, arn, token, logger)
   when "testSecret"
-    test_secret(service_client, arn, token, logger, signon_client)
+    test_secret(service_client, arn, token, logger)
   when "finishSecret"
     finish_secret(
       service_client,
-      ENV.fetch("DEPLOY_EVENT_KEY"),
       ENV.fetch("DEPLOY_EVENT_BUCKET"),
       arn,
       token,
@@ -163,29 +156,49 @@ end
 # This method first checks for the existence of a secret for the passed in
 # token. If one does not exist, it will generate a new secret and put it with
 # the passed in token.
-def create_secret(service_client, arn, token, logger, signon_client)
-  # Check if the current SecretsManager secret resource exists. If there's
-  # no current secret we'll create a new one.
-  service_client.get_secret_value(secret_id: arn, version_stage: "AWSCURRENT")
+def create_secret(service_client, arn, token, logger)
+  # Retrieves the current SecretsManager secret resource. If no current version
+  # exists we will exit.
+  current_secret = service_client.get_secret_value(secret_id: arn, version_stage: "AWSCURRENT")
 
   # Now try to get the secret version, if that fails, put a new secret
-  service_client.get_secret_value(secret_id: arn, version_id: token, version_stage: "AWSPENDING")
-  logger.info("createSecret: Successfully retrieved secret for #{arn}.")
-rescue Aws::SecretsManager::Errors::ResourceNotFoundException
-  secret_string = signon_client.create_bearer_token(
-    application_name: ENV.fetch("APPLICATION_NAME"),
-    permissions: ENV.fetch("PERMISSIONS").split(","),
-  )
+  begin
+    service_client.get_secret_value(secret_id: arn, version_id: token, version_stage: "AWSPENDING")
+    logger.info("createSecret: Successfully retrieved secret for #{arn}.")
+  rescue Aws::SecretsManager::Errors::ResourceNotFoundException
+    options = JSON.parse(current_secret.secret_string)
+    api_user = options.fetch("api_user_email")
+    application_name = options.fetch("application_name")
+    deploy_event_key = options.fetch("deploy_event_key")
+    permissions = options.fetch("permissions")
 
-  # Put the secret
-  service_client.put_secret_value(
-    secret_id: arn,
-    client_request_token: token,
-    secret_string: secret_string,
-    version_stages: %w[AWSPENDING],
-  )
+    signon_client = SignonClient.new(
+      api_user: api_user,
+      auth_token: get_admin_password(service_client, logger),
+      logger: logger,
+    )
 
-  logger.info("createSecret: Successfully put secret for ARN #{arn} and version #{token}.")
+    bearer_token = signon_client.create_bearer_token(
+      application_name: application_name,
+      permissions: permissions,
+    )
+
+    # Put the secret
+    service_client.put_secret_value(
+      secret_id: arn,
+      client_request_token: token,
+      secret_string: JSON.generate(
+        api_user_email: api_user,
+        application_name: application_name,
+        deploy_event_key: deploy_event_key,
+        permissions: permissions,
+        bearer_token: bearer_token,
+      ),
+      version_stages: %w[AWSPENDING],
+    )
+
+    logger.info("createSecret: Successfully put secret for ARN #{arn} and version #{token}.")
+  end
 end
 
 # Check the secret is in SecretsManager (in place of Lambda set step)
@@ -202,22 +215,31 @@ end
 
 # Test the secret
 # Validates signon has the token and the correct permissions are set.
-def test_secret(service_client, arn, token, logger, signon_client)
-  secret = service_client.get_secret_value(secret_id: arn, version_id: token, version_stage: "AWSPENDING")
+def test_secret(service_client, arn, token, logger)
+  resp = service_client.get_secret_value(secret_id: arn, version_id: token, version_stage: "AWSPENDING")
+  secret = JSON.parse(resp.secret_string)
+  application_name = secret.fetch("application_name")
+  permissions = secret.fetch("permissions")
 
-  signon_client.test_bearer_token(
-    token: secret.secret_string,
-    application_name: ENV.fetch("APPLICATION_NAME"),
-    permissions: ENV.fetch("PERMISSIONS"),
+  signon_client = SignonClient.new(
+    api_user: secret.fetch("api_user_email"),
+    auth_token: get_admin_password(service_client, logger),
+    logger: logger,
   )
 
-  logger.info("[wip] testSecret SUCCESS! The secret is working!")
+  signon_client.test_bearer_token(
+    token: secret.fetch("bearer_token"),
+    application_name: application_name,
+    permissions: permissions,
+  )
+
+  logger.info("testSecret SUCCESS! The secret is working!")
 end
 
 # Finish the secret
 # This method finalizes the rotation process by marking the secret version
 # passed in as the AWSCURRENT secret.
-def finish_secret(service_client, deploy_key, s3_bucket, arn, token, logger)
+def finish_secret(service_client, s3_bucket, arn, token, logger)
   # First describe the secret to get the current version
   metadata = service_client.describe_secret(secret_id: arn)
   versions = metadata.version_ids_to_stages
@@ -240,9 +262,13 @@ def finish_secret(service_client, deploy_key, s3_bucket, arn, token, logger)
   )
   logger.info("finishSecret: Successfully set AWSCURRENT stage to version #{token} for secret #{arn}.")
 
+  resp = service_client.get_secret_value(secret_id: arn, version_id: token, version_stage: "AWSCURRENT")
+  secret = JSON.parse(resp.secret_string)
+  deploy_event_key = secret.fetch("deploy_event_key")
+
   s3 = Aws::S3::Client.new
   timestamp = Time.now.strftime("%Y-%m-%dT%H-%M-%S")
-  filename = "#{deploy_key}/#{timestamp}-#{SecureRandom.hex(2)}.json"
+  filename = "#{deploy_event_key}/#{timestamp}-#{SecureRandom.hex(2)}.json"
   resp = s3.put_object({
     body: JSON.generate(
       reason: "Secret #{arn} was rotated by Lambda",
@@ -252,7 +278,7 @@ def finish_secret(service_client, deploy_key, s3_bucket, arn, token, logger)
     key: filename,
   })
 
-  logger.info("finishSecret: Successfully wrote #{filename} to S3 bucket #{s3_bucket}. Version ID: #{resp.version_id}")
+  logger.info("finishSecret: Successfully wrote #{filename} to S3 bucket #{s3_bucket}/#{deploy_event_key}. Version ID: #{resp.version_id}")
 end
 
 def get_admin_password(service_client, _logger)

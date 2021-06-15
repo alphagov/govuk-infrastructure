@@ -11,8 +11,7 @@ RSpec.describe SignonClient do
   let(:api_user) { "publisher@example.org" }
   let(:auth_token) { "hunter2" }
   let(:application_name) { "publishing-api" }
-  let(:permissions) { "signin,publish" }
-
+  let(:permissions) { %w[signin publish] }
   let(:client) do
     described_class.new(api_user: api_user, auth_token: auth_token, max_retries: 0)
   end
@@ -130,6 +129,7 @@ RSpec.describe "event handler" do
   end
   let(:app_name) { "publishing-api" }
   let(:permissions) { "signin" }
+  let(:deploy_event_key) { "workspace/#{app_name}" }
   let(:api_user) { "publisher@example.org" }
   let(:generated_secret) { "hunter2" }
   let(:s3_bucket_name) { "my-lovely-bucket" }
@@ -140,12 +140,8 @@ RSpec.describe "event handler" do
       .with(secret_id: arn)
       .and_return(metadata)
 
-    ENV["API_USER_EMAIL"] = api_user
     ENV["ADMIN_PASSWORD_KEY"] = password
-    ENV["APPLICATION_NAME"] = app_name
-    ENV["PERMISSIONS"] = permissions
     ENV["DEPLOY_EVENT_BUCKET"] = s3_bucket_name
-    ENV["DEPLOY_EVENT_KEY"] = "workspace/#{app_name}"
 
     stub_admin_password
   end
@@ -195,44 +191,16 @@ RSpec.describe "event handler" do
       end
     end
 
-    context "when new secret" do
+    context "when no current version is set" do
       let(:token) { "version1" }
       let(:versions) { { "version1" => %w[AWSPENDING] } }
 
-      it "creates a secret in signon" do
-        # Control flow through try/catch :(
+      it "exits without creating a new secret" do
         stub_get_secret
           .with(secret_id: arn, version_stage: "AWSCURRENT")
           .and_raise(Aws::SecretsManager::Errors::ResourceNotFoundException.new("error", "body"))
 
-        stub_get_secret
-          .with(secret_id: arn, version_stage: "AWSPENDING", version_id: token)
-          .and_raise(Aws::SecretsManager::Errors::ResourceNotFoundException.new("error", "body"))
-
-        stub = stub_request(:post, /signon.example.org/)
-               .with(
-                 body: JSON.generate(
-                   api_user_email: api_user,
-                   application_name: app_name,
-                   permissions: [permissions],
-                 ),
-               )
-               .to_return(
-                 status: 200,
-                 body: JSON.generate(token: generated_secret),
-               )
-
-        allow_any_instance_of(Aws::SecretsManager::Client).to \
-          receive(:put_secret_value)
-          .with(
-            secret_id: arn,
-            client_request_token: token,
-            secret_string: generated_secret,
-            version_stages: %w[AWSPENDING],
-          )
-
-        expect { call }.not_to raise_error
-        expect(stub).to have_been_requested
+        expect { call }.to raise_error Aws::SecretsManager::Errors::ResourceNotFoundException
       end
     end
 
@@ -248,6 +216,18 @@ RSpec.describe "event handler" do
       it "creates a secret in signon" do
         stub_get_secret
           .with(secret_id: arn, version_stage: "AWSCURRENT")
+          .and_return(
+            double(secret_string: JSON.generate(
+              api_user_email: api_user,
+              application_name: app_name,
+              deploy_event_key: deploy_event_key,
+              permissions: permissions,
+              bearer_token: token,
+            )),
+          )
+
+        stub_get_secret
+          .with(secret_id: arn, version_id: token, version_stage: "AWSPENDING")
           .and_raise(Aws::SecretsManager::Errors::ResourceNotFoundException.new("error", "body"))
 
         stub = stub_request(:post, /signon.example.org/)
@@ -255,7 +235,7 @@ RSpec.describe "event handler" do
                  body: JSON.generate(
                    api_user_email: api_user,
                    application_name: app_name,
-                   permissions: [permissions],
+                   permissions: permissions,
                  ),
                )
                .to_return(
@@ -268,7 +248,13 @@ RSpec.describe "event handler" do
           .with(
             secret_id: arn,
             client_request_token: token,
-            secret_string: generated_secret,
+            secret_string: JSON.generate(
+              api_user_email: api_user,
+              application_name: app_name,
+              deploy_event_key: deploy_event_key,
+              permissions: permissions,
+              bearer_token: generated_secret,
+            ),
             version_stages: %w[AWSPENDING],
           )
 
@@ -326,7 +312,13 @@ RSpec.describe "event handler" do
         it "does not raise an error" do
           stub_get_secret
             .with(secret_id: arn, version_id: token, version_stage: "AWSPENDING")
-            .and_return(double(secret_string: generated_secret))
+            .and_return(double(secret_string: JSON.generate(
+              api_user_email: api_user,
+              application_name: app_name,
+              deploy_event_key: deploy_event_key,
+              permissions: permissions,
+              bearer_token: generated_secret,
+            )))
 
           check_secret_in_signon = stub_request(:post, /signon.example.org/)
                                    .with(body: {
@@ -380,6 +372,21 @@ RSpec.describe "event handler" do
             version_stage: "AWSCURRENT",
             move_to_version_id: token,
             remove_from_version_id: old_token,
+          )
+
+        stub_get_secret
+          .with(
+            secret_id: arn,
+            version_stage: "AWSCURRENT",
+            version_id: token,
+          ).and_return(
+            double(secret_string: JSON.generate(
+              api_user_email: api_user,
+              application_name: app_name,
+              deploy_event_key: deploy_event_key,
+              permissions: permissions,
+              bearer_token: generated_secret,
+            )),
           )
 
         allow_any_instance_of(Aws::S3::Client).to \

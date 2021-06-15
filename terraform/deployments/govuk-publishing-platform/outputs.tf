@@ -17,6 +17,7 @@ output "content-store" {
         bearer_tokens      = local.generated_bearer_tokens.draft_content_store,
         admin_password_arn = aws_secretsmanager_secret.signon_admin_password.arn,
         api_user_email     = local.signon_api_user.draft_content_store.email,
+        deploy_event_key   = local.signon_api_user.draft_content_store.app_name
         signon_api_url     = local.signon_api_url,
       }
     },
@@ -28,6 +29,7 @@ output "content-store" {
         bearer_tokens      = local.generated_bearer_tokens.content_store,
         admin_password_arn = aws_secretsmanager_secret.signon_admin_password.arn,
         api_user_email     = local.signon_api_user.content_store.email,
+        deploy_event_key   = local.signon_api_user.content_store.app_name
         signon_api_url     = local.signon_api_url,
       }
     },
@@ -44,6 +46,7 @@ output "publisher" {
         bearer_tokens      = local.generated_bearer_tokens.publisher,
         admin_password_arn = aws_secretsmanager_secret.signon_admin_password.arn,
         api_user_email     = local.signon_api_user.publisher.email,
+        deploy_event_key   = local.signon_api_user.publisher.app_name
         signon_api_url     = local.signon_api_url,
       }
     },
@@ -84,6 +87,7 @@ output "publishing-api" {
         bearer_tokens      = local.generated_bearer_tokens.publishing_api,
         admin_password_arn = aws_secretsmanager_secret.signon_admin_password.arn,
         api_user_email     = local.signon_api_user.publishing_api.email,
+        deploy_event_key   = local.signon_api_user.publishing_api.app_name
         signon_api_url     = local.signon_api_url,
       }
     },

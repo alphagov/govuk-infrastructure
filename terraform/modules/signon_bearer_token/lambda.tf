@@ -27,11 +27,7 @@ resource "aws_lambda_function" "bearer_token" {
 
   environment {
     variables = {
-      API_USER_EMAIL      = var.api_user_email
-      APPLICATION_NAME    = var.app_name
       DEPLOY_EVENT_BUCKET = var.deploy_event_bucket_name
-      DEPLOY_EVENT_KEY    = var.client_app
-      PERMISSIONS         = local.permissions
       ADMIN_PASSWORD_KEY  = var.signon_admin_password_arn
       SIGNON_API_URL      = "http://${var.signon_host}/api/v1"
     }
