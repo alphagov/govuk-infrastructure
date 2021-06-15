@@ -1,12 +1,3 @@
-data "aws_secretsmanager_secret" "github_client_id" {
-  name = "grafana_github_client_id"
-}
-
-data "aws_secretsmanager_secret" "github_client_secret" {
-  name = "grafana_github_client_secret"
-}
-
-
 resource "random_password" "grafana_password" {
   length  = 64
   special = false

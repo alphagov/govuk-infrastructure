@@ -19,8 +19,8 @@ locals {
 
 
   grafana_secrets_from_arns = {
-    GF_AUTH_GITHUB_CLIENT_ID     = data.aws_secretsmanager_secret.github_client_id.arn,
-    GF_AUTH_GITHUB_CLIENT_SECRET = data.aws_secretsmanager_secret.github_client_secret.arn,
+    GF_AUTH_GITHUB_CLIENT_ID     = var.github_client_id_secret_arn,
+    GF_AUTH_GITHUB_CLIENT_SECRET = var.github_client_secret_secret_arn,
     GF_SECURITY_ADMIN_PASSWORD   = aws_secretsmanager_secret_version.grafana_password.arn,
   }
 

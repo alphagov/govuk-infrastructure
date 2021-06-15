@@ -2,6 +2,20 @@
 
 This project enables developers to run manual and scheduled tasks in ECS.
 
+## Applying
+
+```shell
+terraform init -backend-config <govuk_environment>.backend -reconfigure
+
+terraform apply \
+ -var-file ../variables/common.tfvars \
+ -var-file ../variables/<govuk_environment>/common.tfvars
+```
+
+where:
+`<govuk_environment>` is the GOV.UK environment where you want the changes to be
+applied.
+
 ## Running a rake task
 
 To run a one-off rake task, you must do something like the following:

@@ -101,3 +101,11 @@ variable "grafana_image_tag" {
   type    = string
   default = "latest"
 }
+
+variable "github_client_id_secret_arn" {
+  type = string
+}
+
+variable "github_client_secret_secret_arn" {
+  type = string
+}
