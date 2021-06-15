@@ -16,6 +16,179 @@ resource "random_password" "signon_admin_password" {
 }
 
 #
+# SecretsManager Rotation Lambda
+#
+
+locals {
+  bearer_token_lambda_name = "bearer_token_rotater-${local.workspace}"
+}
+
+data "archive_file" "bearer_token_rotater" {
+  type        = "zip"
+  source_file = "${path.module}/../../../lambdas/signon_bearer_token_rotater.rb"
+  output_path = "${path.module}/../../../lambdas/signon_bearer_token_rotater.zip"
+}
+
+resource "aws_lambda_function" "bearer_token" {
+  function_name = local.bearer_token_lambda_name
+  role          = aws_iam_role.lambda_execution_role.arn
+  handler       = "signon_bearer_token_rotater.handler"
+
+  filename         = data.archive_file.bearer_token_rotater.output_path
+  source_code_hash = data.archive_file.bearer_token_rotater.output_base64sha256
+
+  runtime = "ruby2.7"
+
+  vpc_config {
+    subnet_ids         = local.private_subnets
+    security_group_ids = [aws_security_group.signon_lambda.id]
+  }
+
+  environment {
+    variables = {
+      ADMIN_PASSWORD_KEY  = aws_secretsmanager_secret.signon_admin_password.arn
+      DEPLOY_EVENT_BUCKET = aws_s3_bucket.deploy_event_bucket.id
+      # TODO: Should be HTTPS
+      SIGNON_API_URL = "http://${module.signon.virtual_service_name}/api/v1"
+    }
+  }
+
+  # As recommended in Terraform docs
+  depends_on = [
+    aws_iam_role_policy_attachment.lambda_logs,
+    aws_iam_role_policy_attachment.vpc,
+    aws_cloudwatch_log_group.bearer_token,
+  ]
+
+  tags = merge(
+    local.additional_tags,
+    {
+      Name = "${local.bearer_token_lambda_name}-${var.govuk_environment}-${local.workspace}"
+    },
+  )
+}
+
+resource "aws_cloudwatch_log_group" "bearer_token" {
+  name              = "/aws/lambda/${local.bearer_token_lambda_name}"
+  retention_in_days = 90
+}
+
+# Adds a trust policy to the lambda function.
+resource "aws_lambda_permission" "allow_secretsmanager" {
+  statement_id  = "AllowExecutionFromSecretsManager"
+  action        = "lambda:InvokeFunction"
+  function_name = aws_lambda_function.bearer_token.function_name
+  principal     = "secretsmanager.amazonaws.com"
+}
+
+resource "aws_iam_role" "lambda_execution_role" {
+  name = "${local.bearer_token_lambda_name}-execution_role"
+
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Action = "sts:AssumeRole"
+        Effect = "Allow"
+        Principal = {
+          Service = "lambda.amazonaws.com"
+        }
+      },
+    ]
+  })
+}
+
+resource "aws_iam_role_policy_attachment" "lambda_logs" {
+  role       = aws_iam_role.lambda_execution_role.name
+  policy_arn = aws_iam_policy.lambda_logging.arn
+}
+
+resource "aws_iam_policy" "lambda_logging" {
+  name        = "${local.bearer_token_lambda_name}-logging-policy"
+  path        = "/"
+  description = "IAM policy for logging from a lambda"
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Action = [
+          "logs:CreateLogStream",
+          "logs:PutLogEvents"
+        ]
+        Resource = "arn:aws:logs:*:*:*"
+        Effect   = "Allow"
+      }
+    ]
+  })
+}
+
+resource "aws_iam_role_policy_attachment" "secretsmanager_rotation" {
+  role       = aws_iam_role.lambda_execution_role.name
+  policy_arn = aws_iam_policy.secretsmanager_rotation.arn
+}
+
+resource "aws_iam_policy" "secretsmanager_rotation" {
+  name        = "${local.bearer_token_lambda_name}-rotation-policy"
+  path        = "/"
+  description = "Allow lambda to rotate a signon secret"
+
+  policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [
+      {
+        Effect = "Allow",
+        Action = [
+          "secretsmanager:DescribeSecret",
+          "secretsmanager:GetSecretValue",
+          "secretsmanager:PutSecretValue",
+          "secretsmanager:UpdateSecretVersionStage"
+        ],
+        Resource = "*",
+        Condition = {
+          StringEquals = {
+            "secretsmanager:resource/AllowRotationLambdaArn" = aws_lambda_function.bearer_token.arn
+          }
+        }
+      },
+      {
+        Effect = "Allow",
+        Action = [
+          "secretsmanager:GetSecretValue"
+        ],
+        Resource = aws_secretsmanager_secret.signon_admin_password.arn
+      }
+    ]
+  })
+}
+
+resource "aws_iam_role_policy_attachment" "vpc" {
+  role       = aws_iam_role.lambda_execution_role.name
+  policy_arn = aws_iam_policy.vpc.arn
+}
+
+resource "aws_iam_policy" "vpc" {
+  name        = "${local.bearer_token_lambda_name}_vpc_policy"
+  path        = "/"
+  description = "Allow lambda to interact with VPC"
+
+  policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [
+      {
+        Action = [
+          "ec2:CreateNetworkInterface",
+          "ec2:DeleteNetworkInterface",
+          "ec2:DescribeNetworkInterfaces"
+        ],
+        Resource = "*",
+        Effect   = "Allow"
+      }
+    ]
+  })
+}
+
+#
 # Signon bearer tokens
 #
 
@@ -116,17 +289,10 @@ module "signon_bearer_tokens" {
   for_each = local.signon_bearer_tokens
   source   = "../../modules/signon_bearer_token"
 
-  additional_tags                 = local.additional_tags
-  api_user_email                  = each.value.api_user
-  app_name                        = each.value.app
-  client_app                      = each.value.client_app
-  name                            = each.key
-  deploy_event_bucket_arn         = aws_s3_bucket.deploy_event_bucket.arn
-  deploy_event_bucket_name        = aws_s3_bucket.deploy_event_bucket.id
-  environment                     = var.govuk_environment
-  private_subnets                 = local.private_subnets
-  signon_admin_password_arn       = aws_secretsmanager_secret.signon_admin_password.arn
-  signon_host                     = module.signon.virtual_service_name
-  signon_lambda_security_group_id = aws_security_group.signon_lambda.id
-  workspace                       = local.workspace
+  additional_tags         = local.additional_tags
+  app_name                = each.value.app
+  aws_lambda_function_arn = aws_lambda_function.bearer_token.arn
+  name                    = each.key
+  environment             = var.govuk_environment
+  workspace               = local.workspace
 }

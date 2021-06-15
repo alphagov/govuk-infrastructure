@@ -1,6 +1,6 @@
 output "required_secrets" {
-  value       = values(var.secrets_from_arns)
-  description = "ARNs of SecretsManager secrets required by this app."
+  value       = [for arn in values(var.secrets_from_arns) : join(":", slice(split(":", arn), 0, 7))]
+  description = "ARNs of SecretsManager secrets required by this app. ARNs won't include versions, json-keys"
 }
 
 output "security_group_id" {

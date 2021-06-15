@@ -62,8 +62,8 @@ module "content_store" {
     {
       GDS_SSO_OAUTH_ID            = module.oauth_applications["content_store"].id_arn,
       GDS_SSO_OAUTH_SECRET        = module.oauth_applications["content_store"].secret_arn,
-      PUBLISHING_API_BEARER_TOKEN = module.signon_bearer_tokens.cs_to_pub_api.secret_arn
-      ROUTER_API_BEARER_TOKEN     = module.signon_bearer_tokens.cs_to_router_api.secret_arn
+      PUBLISHING_API_BEARER_TOKEN = module.signon_bearer_tokens.cs_to_pub_api.secret_arn_value
+      ROUTER_API_BEARER_TOKEN     = module.signon_bearer_tokens.cs_to_router_api.secret_arn_value
       SECRET_KEY_BASE             = aws_secretsmanager_secret.secret_key_base["content_store"].arn
     }
   )
@@ -115,8 +115,8 @@ module "draft_content_store" {
     {
       GDS_SSO_OAUTH_ID            = module.oauth_applications["draft_content_store"].id_arn,
       GDS_SSO_OAUTH_SECRET        = module.oauth_applications["draft_content_store"].secret_arn,
-      PUBLISHING_API_BEARER_TOKEN = module.signon_bearer_tokens.dcs_to_pub_api.secret_arn
-      ROUTER_API_BEARER_TOKEN     = module.signon_bearer_tokens.dcs_to_draft_router_api.secret_arn
+      PUBLISHING_API_BEARER_TOKEN = module.signon_bearer_tokens.dcs_to_pub_api.secret_arn_value
+      ROUTER_API_BEARER_TOKEN     = module.signon_bearer_tokens.dcs_to_draft_router_api.secret_arn_value
       SECRET_KEY_BASE             = aws_secretsmanager_secret.secret_key_base["draft_content_store"].arn
     }
   )
