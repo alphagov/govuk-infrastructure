@@ -27,14 +27,6 @@ data "terraform_remote_state" "infra_networking" {
   }
 }
 
-data "aws_secretsmanager_secret" "splunk_url" {
-  name = "SPLUNK_HEC_URL"
-}
-
-data "aws_secretsmanager_secret" "splunk_token" {
-  name = "SPLUNK_TOKEN"
-}
-
 locals {
   workspace = terraform.workspace == "default" ? "ecs" : terraform.workspace #default terraform workspace mapped to ecs
   additional_tags = {
@@ -57,13 +49,15 @@ module "monitoring" {
   splunk_sourcetype       = "log"
   splunk_index            = "govuk_replatforming"
 
-  vpc_id                   = data.terraform_remote_state.infra_networking.outputs.vpc_id
-  private_subnets          = data.terraform_remote_state.infra_networking.outputs.private_subnet_ids
-  public_subnets           = data.terraform_remote_state.infra_networking.outputs.public_subnet_ids
-  grafana_cidrs_allow_list = concat(var.office_cidrs_list, var.concourse_cidrs_list)
-  govuk_environment        = var.govuk_environment
-  workspace                = local.workspace
-  additional_tags          = local.additional_tags
-  capacity_provider        = var.ecs_default_capacity_provider
-  grafana_image_tag        = "7.5.6"
+  vpc_id                          = data.terraform_remote_state.infra_networking.outputs.vpc_id
+  private_subnets                 = data.terraform_remote_state.infra_networking.outputs.private_subnet_ids
+  public_subnets                  = data.terraform_remote_state.infra_networking.outputs.public_subnet_ids
+  grafana_cidrs_allow_list        = concat(var.office_cidrs_list, var.concourse_cidrs_list)
+  govuk_environment               = var.govuk_environment
+  workspace                       = local.workspace
+  additional_tags                 = local.additional_tags
+  capacity_provider               = var.ecs_default_capacity_provider
+  grafana_image_tag               = "7.5.6"
+  github_client_id_secret_arn     = data.aws_secretsmanager_secret.github_client_id.arn
+  github_client_secret_secret_arn = data.aws_secretsmanager_secret.github_client_secret.arn
 }

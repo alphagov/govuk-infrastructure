@@ -6,12 +6,19 @@ infrastructure in a new AWS account.
 
 A DynamoDB table is created in each GOV.UK environment for Terraform locking.
 
+
+## Applying
+
 Applying:
 
 ```sh
-terraform init -backend-config=./$ENVIRONMENT.backend
+terraform init -backend-config=./<govuk_environment>.backend
 terraform apply
 ```
+
+where:
+`<govuk_environment>` is the GOV.UK environment where you want the changes to be
+applied.
 
 This creates a table `terraform-lock`.
 
