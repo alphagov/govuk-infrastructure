@@ -184,7 +184,7 @@ resources:
     icon: file
     source: &deploy-event-trigger-source
       aws_role_arn: ((concourse_deployer_role_arn))
-      bucket: deploy-event-((workspace))
+      bucket: deploy-event-((govuk_environment))-((workspace))
       region_name: eu-west-1
       private: true
       skip_download: true
