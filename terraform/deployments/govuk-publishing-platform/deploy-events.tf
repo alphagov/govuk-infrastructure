@@ -1,5 +1,5 @@
 resource "aws_s3_bucket" "deploy_event_bucket" {
-  bucket = "deploy-event-${terraform.workspace}"
+  bucket = "deploy-event-${var.govuk_environment}-${terraform.workspace}"
   acl    = "private"
 
   tags = merge(
