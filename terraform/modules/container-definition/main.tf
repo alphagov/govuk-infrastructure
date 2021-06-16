@@ -2,11 +2,11 @@ locals {
   log_configuration_splunk = {
     logDriver = "splunk"
     options = {
-      env               = "GOVUK_APP_NAME",
+      env               = "GOVUK_APP_NAME,GOVUK_ENVIRONMENT,GOVUK_WORKSPACE",
       tag               = "image_name={{.ImageName}} container_name={{.Name}} container_id={{.FullID}}",
       splunk-sourcetype = var.splunk_sourcetype,
       splunk-index      = var.splunk_index,
-      splunk-format     = "raw"
+      splunk-format     = "json"
     }
     secretOptions = [
       {
