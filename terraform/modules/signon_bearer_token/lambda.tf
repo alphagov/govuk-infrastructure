@@ -27,17 +27,20 @@ resource "aws_lambda_function" "bearer_token" {
 
   environment {
     variables = {
-      API_USER_EMAIL     = var.api_user_email
-      APPLICATION_NAME   = var.app_name
-      PERMISSIONS        = local.permissions
-      ADMIN_PASSWORD_KEY = var.signon_admin_password_arn
-      SIGNON_API_URL     = "http://${var.signon_host}/api/v1"
+      API_USER_EMAIL      = var.api_user_email
+      APPLICATION_NAME    = var.app_name
+      DEPLOY_EVENT_BUCKET = var.deploy_event_bucket_name
+      DEPLOY_EVENT_KEY    = var.client_app
+      PERMISSIONS         = local.permissions
+      ADMIN_PASSWORD_KEY  = var.signon_admin_password_arn
+      SIGNON_API_URL      = "http://${var.signon_host}/api/v1"
     }
   }
 
   # As recommended in Terraform docs
   depends_on = [
     aws_iam_role_policy_attachment.lambda_logs,
+    aws_iam_role_policy_attachment.s3,
     aws_iam_role_policy_attachment.vpc,
     aws_cloudwatch_log_group.bearer_token,
   ]

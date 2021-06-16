@@ -1,7 +1,9 @@
+require "aws-sdk-s3"
 require "aws-sdk-secretsmanager"
 require "json"
 require "logger"
 require "net/http"
+require "securerandom"
 require "uri"
 
 class SignonClient
@@ -144,7 +146,14 @@ def handler(event:, context:) # rubocop:disable Lint/UnusedMethodArgument
   when "testSecret"
     test_secret(service_client, arn, token, logger, signon_client)
   when "finishSecret"
-    finish_secret(service_client, arn, token, logger)
+    finish_secret(
+      service_client,
+      ENV.fetch("DEPLOY_EVENT_KEY"),
+      ENV.fetch("DEPLOY_EVENT_BUCKET"),
+      arn,
+      token,
+      logger,
+    )
   else
     raise ArgumentError, "Invalid step parameter"
   end
@@ -208,7 +217,7 @@ end
 # Finish the secret
 # This method finalizes the rotation process by marking the secret version
 # passed in as the AWSCURRENT secret.
-def finish_secret(service_client, arn, token, logger)
+def finish_secret(service_client, deploy_key, s3_bucket, arn, token, logger)
   # First describe the secret to get the current version
   metadata = service_client.describe_secret(secret_id: arn)
   versions = metadata.version_ids_to_stages
@@ -230,6 +239,20 @@ def finish_secret(service_client, arn, token, logger)
     remove_from_version_id: current_version,
   )
   logger.info("finishSecret: Successfully set AWSCURRENT stage to version #{token} for secret #{arn}.")
+
+  s3 = Aws::S3::Client.new
+  timestamp = Time.now.strftime("%Y-%m-%dT%H-%M-%S")
+  filename = "#{deploy_key}/#{timestamp}-#{SecureRandom.hex(2)}.json"
+  resp = s3.put_object({
+    body: JSON.generate(
+      reason: "Secret #{arn} was rotated by Lambda",
+      timestamp: timestamp,
+    ),
+    bucket: s3_bucket,
+    key: filename,
+  })
+
+  logger.info("finishSecret: Successfully wrote #{filename} to S3 bucket #{s3_bucket}. Version ID: #{resp.version_id}")
 end
 
 def get_admin_password(service_client, _logger)
