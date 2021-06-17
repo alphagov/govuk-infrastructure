@@ -70,6 +70,7 @@ module Signon
       app_config.dig("bearer_tokens").each do |token|
         bootstrap_bearer_token(
           api_user: app_config.dig("api_user_email"),
+          deploy_event_key: app_config.dig("deploy_event_key"),
           token: token,
           secrets_client: secretsmanager,
           signon_client: signon,
@@ -78,7 +79,7 @@ module Signon
       end
     end
 
-    def self.bootstrap_bearer_token(api_user:, token:, secrets_client:, signon_client:, logger: Logger.new($stdout))
+    def self.bootstrap_bearer_token(api_user:, deploy_event_key:, token:, secrets_client:, signon_client:, logger: Logger.new($stdout))
       secret_arn = token.dig("secret_arn")
       metadata = secrets_client.describe_secret(secret_id: secret_arn)
       unless metadata.rotation_enabled
@@ -93,16 +94,24 @@ module Signon
       end
 
       logger.info "Secret #{secret_arn} doesn't have a secret value. Creating it..."
+      application_name = token.dig("application")
+      permissions = token.dig("permissions").split(",")
       secret_string = signon_client.create_bearer_token(
         api_user: api_user,
-        application_name: token.dig("application"),
-        permissions: token.dig("permissions").split(","),
+        application_name: application_name,
+        permissions: permissions,
       )
 
       logger.info "Secret #{secret_arn} created. Putting value in SecretsManager..."
       secrets_client.put_secret_value(
         secret_id: secret_arn,
-        secret_string: secret_string,
+        secret_string: JSON.generate(
+          api_user_email: api_user,
+          application_name: application_name,
+          deploy_event_key: deploy_event_key,
+          permissions: permissions,
+          bearer_token: secret_string,
+        ),
         version_stages: %w[AWSCURRENT],
       )
       logger.info "Secret #{secret_arn} finished."

@@ -35,6 +35,7 @@ RSpec.describe Signon::Bootstrap do
       described_class.bootstrap_tokens(
         app_config: {
           "api_user_email" => api_user,
+          "deploy_event_key" => app_name,
           "bearer_tokens" => [
             {
               "secret_arn" => token_arn,
@@ -90,7 +91,13 @@ RSpec.describe Signon::Bootstrap do
         expect(secretsmanager_client).to receive(:put_secret_value)
           .with(
             secret_id: token_arn,
-            secret_string: generated_secret,
+            secret_string: JSON.generate(
+              api_user_email: api_user,
+              application_name: app_name,
+              deploy_event_key: app_name,
+              permissions: [permissions],
+              bearer_token: generated_secret,
+            ),
             version_stages: %w[AWSCURRENT],
           )
 

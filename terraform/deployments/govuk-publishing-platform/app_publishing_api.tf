@@ -38,14 +38,14 @@ locals {
     secrets_from_arns = merge(
       local.defaults.secrets_from_arns,
       {
-        CONTENT_STORE_BEARER_TOKEN       = module.signon_bearer_tokens.pub_api_to_cs.secret_arn
+        CONTENT_STORE_BEARER_TOKEN       = module.signon_bearer_tokens.pub_api_to_cs.secret_arn_value
         DATABASE_URL                     = data.aws_secretsmanager_secret.publishing_api_database_url.arn
-        DRAFT_CONTENT_STORE_BEARER_TOKEN = module.signon_bearer_tokens.pub_api_to_dcs.secret_arn
+        DRAFT_CONTENT_STORE_BEARER_TOKEN = module.signon_bearer_tokens.pub_api_to_dcs.secret_arn_value
         EVENT_LOG_AWS_SECRET_KEY         = data.aws_secretsmanager_secret.publishing_api_event_log_aws_secret_key.arn
         GDS_SSO_OAUTH_ID                 = module.oauth_applications["publishing_api"].id_arn
         GDS_SSO_OAUTH_SECRET             = module.oauth_applications["publishing_api"].secret_arn
         RABBITMQ_PASSWORD                = data.aws_secretsmanager_secret.publishing_api_rabbitmq_password.arn
-        ROUTER_API_BEARER_TOKEN          = module.signon_bearer_tokens.pub_api_to_router_api.secret_arn
+        ROUTER_API_BEARER_TOKEN          = module.signon_bearer_tokens.pub_api_to_router_api.secret_arn_value
         SECRET_KEY_BASE                  = aws_secretsmanager_secret.secret_key_base["publishing_api"].arn
       }
     )
