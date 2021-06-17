@@ -188,6 +188,31 @@ resource "aws_iam_policy" "vpc" {
   })
 }
 
+resource "aws_iam_role_policy_attachment" "s3" {
+  role       = aws_iam_role.lambda_execution_role.name
+  policy_arn = aws_iam_policy.s3.arn
+}
+
+resource "aws_iam_policy" "s3" {
+  name        = "${local.bearer_token_lambda_name}-s3-write"
+  path        = "/"
+  description = "Allow lambda to write events to S3 deploy-events bucket"
+
+  policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [
+      {
+        Action = [
+          "s3:PutObject",
+          "s3:PutObjectAcl"
+        ],
+        Resource = "${aws_s3_bucket.deploy_event_bucket.arn}/*",
+        Effect   = "Allow"
+      }
+    ]
+  })
+}
+
 #
 # Signon bearer tokens
 #
