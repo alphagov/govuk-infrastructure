@@ -71,6 +71,7 @@ output "frontend" {
         bearer_tokens      = local.generated_bearer_tokens.frontend,
         admin_password_arn = aws_secretsmanager_secret.signon_admin_password.arn,
         api_user_email     = local.signon_api_user.frontend.email,
+        deploy_event_key   = local.signon_api_user.frontend.app_name
         signon_api_url     = local.signon_api_url,
       }
     },
