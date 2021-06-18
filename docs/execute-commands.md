@@ -1,6 +1,6 @@
 # Execute commands
 
-You can run commands inside containers use Amazon ECS Exec. This is a lot
+You can run commands inside containers using Amazon ECS Exec. This is a lot
 like SSH, although what happens under the hood is quite different.
 
 To use this feature, you need to install the AWS CLI and [install the Session Manager plugin][].
@@ -48,7 +48,17 @@ again or run a new task with execute command enabled and try again.
 ```
 
 This sometimes happens in the `app` container, sometimes in the `envoy`
-container, sometimes in both.
+container, sometimes in both. It can also occur if the container is not yet in a
+`HEALTHY` state, i.e. it just started, so ensure that the container is ready
+before troubleshooting further:
+
+```
+aws ecs describe-tasks \
+  --cluster govuk-ecs \
+  --tasks "$task_arn" \
+  --query "tasks[0].containers[?name=='app'] | [0].healthStatus" \
+  --output text
+```
 
 If there are multiple instances of a task you could try one of the other instances:
 
