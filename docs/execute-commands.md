@@ -49,14 +49,14 @@ again or run a new task with execute command enabled and try again.
 
 This sometimes happens in the `app` container, sometimes in the `envoy`
 container, sometimes in both. It can also occur if the container is not yet in a
-`HEALTHY` state, i.e. it just started, so ensure that the container is ready
-before troubleshooting further:
+`RUNNING` / `HEALTHY` state (e.g. because it just started) so ensure that the
+container is ready before troubleshooting further:
 
 ```
 aws ecs describe-tasks \
   --cluster govuk-ecs \
   --tasks "$task_arn" \
-  --query "tasks[0].containers[?name=='app'] | [0].healthStatus" \
+  --query "tasks[0].containers[?name=='app'] | [0] | [ lastStatus, healthStatus ]" \
   --output text
 ```
 
