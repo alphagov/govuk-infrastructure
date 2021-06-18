@@ -856,7 +856,7 @@ jobs:
     - <<: *run-smoke-test
       params:
         <<: *smoke-tests-params
-        COMMAND: bundle exec cucumber --profile test --strict-undefined -t @app-frontend -t \"not @notreplatforming\"
+        COMMAND: bundle exec cucumber --profile test --strict-undefined -t @app-frontend -t @replatforming -t \"not @notreplatforming\"
     on_failure:
       <<: *notify-slack-failure
 
@@ -983,7 +983,7 @@ jobs:
     - <<: *run-smoke-test
       params:
         <<: *smoke-tests-params
-        COMMAND: bundle exec cucumber --profile test --strict-undefined -t @app-publisher -t \"not @notreplatforming and not @not((govuk_environment))\"
+        COMMAND: bundle exec cucumber --profile test --strict-undefined -t @app-publisher -t @replatforming -t \"not @notreplatforming and not @not((govuk_environment))\"
     on_failure:
       <<: *notify-slack-failure
 
@@ -1421,7 +1421,7 @@ jobs:
     - <<: *run-smoke-test
       params:
         <<: *smoke-tests-params
-        COMMAND: bundle exec cucumber --profile test --strict-undefined -t @app-signon -t \"not @notreplatforming\"
+        COMMAND: bundle exec cucumber --profile test --strict-undefined -t @app-signon -t @replatforming -t \"not @notreplatforming\"
     on_failure:
       <<: *notify-slack-failure
 
