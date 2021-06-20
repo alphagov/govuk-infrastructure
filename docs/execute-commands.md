@@ -34,7 +34,7 @@ aws ecs execute-command \
 
 ## Known bugs
 
-AWS ECS is a new feature, and it has some known bugs.
+AWS ECS Exec is a new feature, and it has some known bugs.
 
 ### The execute command failed because execute command was not enabled when the task was run
 
