@@ -29,8 +29,8 @@ resource_types:
   - name: registry-image
     type: docker-image
     source:
-      repository: concourse/registry-image-resource
-      tag: 1.2.1
+      repository: govuk/registry-image
+      tag: f0.0.1
       username: ((docker_hub_username))
       password: ((docker_hub_authtoken))
 
@@ -267,12 +267,13 @@ resources:
     icon: docker
     source: &registry-source
       repository: frontend
-      aws_role_arn: arn:aws:iam::172025368201:role/pull_images_from_ecr_role
       aws_region: eu-west-1
-      aws_access_key_id: ((concourse-ecr-readonly-user_aws-access-key))
-      aws_secret_access_key: ((concourse-ecr-readonly-user_aws-secret-access-key))
-      aws_ecr_registry_id: "172025368201"
+      aws_ecr_registry_id: ((ecr_registry_id))
+      aws_ec2_credentials: true
       variant: release
+      aws_role_arns:
+        - ((concourse_deployer_role_arn))
+        - ((concourse_ecr_role_arn))
 
   - <<: *registry-image
     name: static-image

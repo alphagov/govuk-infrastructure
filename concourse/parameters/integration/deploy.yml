@@ -1,5 +1,7 @@
 govuk_infrastructure_branch: main
+ecr_registry_id: "172025368201"
 concourse_deployer_role_arn: arn:aws:iam::210287912431:role/govuk-concourse-deployer
+concourse_ecr_role_arn: arn:aws:iam::172025368201:role/pull_images_from_ecr_role
 workspace: default
 disable_slack_channel_alerts: false
 skip_db_migrations: true
