@@ -85,7 +85,7 @@ resources:
     source:
       <<: *git-repo-source
       uri: git@github.com:alphagov/govuk-infrastructure.git
-      branch: main
+      branch: update-apps-to-use-govuk-environment-name
 
   - &docker-image
     name: smokey-image
