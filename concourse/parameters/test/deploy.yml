@@ -2,5 +2,5 @@ govuk_infrastructure_branch: update-apps-to-use-govuk-environment-name
 concourse_deployer_role_arn: arn:aws:iam::430354129336:role/govuk-concourse-deployer
 workspace: baker
 disable_slack_channel_alerts: true
-skip_db_migrations: false
+skip_db_migrations: true
 background_image: "https://live.staticflickr.com/65535/48764355776_2769bccf4f_k.jpg"
