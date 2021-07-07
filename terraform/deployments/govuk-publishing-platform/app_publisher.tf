@@ -26,6 +26,7 @@ locals {
         GOVUK_APP_ROOT                   = "/app"
         # TODO: how does GOVUK_ASSET_ROOT relate to ASSET_HOST? Is one a function of the other? Are they both really in use? Is GOVUK_ASSET_ROOT always just "https://${ASSET_HOST}"?
         GOVUK_ASSET_ROOT                = local.defaults.asset_root_url
+        GOVUK_ENVIRONMENT_NAME          = var.govuk_environment
         GOVUK_STATSD_PREFIX             = "govuk-ecs.app.${local.publisher_app_name}"
         PLEK_SERVICE_CONTENT_STORE_URI  = local.defaults.content_store_uri
         PLEK_SERVICE_PUBLISHING_API_URI = local.defaults.publishing_api_uri
