@@ -118,7 +118,7 @@ resources:
     source:
       <<: *docker-image-source
       repository: publisher
-      tag: latest
+      tag: header-environment-change
 
   - <<: *docker-image
     name: publishing-api-image

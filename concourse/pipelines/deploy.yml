@@ -285,6 +285,7 @@ resources:
     source:
       <<: *registry-source
       repository: publisher
+      tag: header-environment-change
 
   - <<: *registry-image
     name: publishing-api-image
