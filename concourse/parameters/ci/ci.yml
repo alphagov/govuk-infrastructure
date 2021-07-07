@@ -1,2 +1,2 @@
-govuk_infrastructure_branch: main
+govuk_infrastructure_branch: update-apps-to-use-govuk-environment-name
 concourse_ci_role_arn: arn:aws:iam::430354129336:role/govuk-ci-concourse
