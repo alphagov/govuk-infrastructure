@@ -72,6 +72,14 @@ output "proxy_properties" {
     # additional addresses."
     EgressIgnoredIPs = "169.254.170.2,169.254.169.254"
 
+    # https://trello.com/c/6yn0REmI/368
+    # We've experienced intermittent failures of Mongo connections, so we're
+    # excluding traffic to external services from App Mesh as it's the most
+    # likely cause of this hard-to-reproduce issue. There's no benefit to
+    # having this traffic go through Envoy anyway.
+    # [3306=mysql, 5432=postgres, 5672=rabbitmq, 6379=redis, 27017=mongo]
+    EgressIgnoredPorts = [3306, 5432, 5672, 6379, 27017]
+
     # From the user guide: The Envoy proxy doesn't route traffic from processes
     # that use this user ID. You can choose any userID that you want for this
     # property value, but this ID must be the same as the user ID for the
