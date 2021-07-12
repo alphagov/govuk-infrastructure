@@ -13,6 +13,7 @@ locals {
       GOVUK_APP_DOMAIN_EXTERNAL = local.workspace_external_domain,
       GOVUK_APP_TYPE            = "rack",
       GOVUK_ENVIRONMENT         = var.govuk_environment
+      GOVUK_ENVIRONMENT_NAME    = var.govuk_environment # For setting environment label in apps - see https://github.com/alphagov/govuk-puppet/commit/5fc81d2e5eace5d36358aa3f5b6d6c84a982ea9c
       GOVUK_STATSD_HOST         = "statsd.${local.mesh_domain}"
       GOVUK_STATSD_PROTOCOL     = "tcp"
       GOVUK_WEBSITE_ROOT        = local.public_entry_url
