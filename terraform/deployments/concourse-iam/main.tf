@@ -39,6 +39,21 @@ resource "aws_iam_role" "govuk_concourse_deployer" {
       }
     ]
   })
+
+  inline_policy {
+    name = "assume_production_ECR_role"
+
+    policy = jsonencode({
+      "Version" : "2012-10-17",
+      "Statement" : [
+        {
+          "Effect" : "Allow",
+          "Action" : "sts:AssumeRole",
+          "Resource" : "arn:aws:iam::${var.production_aws_account_id}:role/pull_images_from_ecr_role"
+        }
+      ]
+    })
+  }
 }
 
 # TODO - this policy is overly permissive - concourse doesn't need to be able
