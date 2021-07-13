@@ -1001,6 +1001,8 @@ jobs:
         trigger: true
       - get: publishing-api-image
         trigger: true
+        params:
+         skip_download: true
       - try:
           get: publishing-api-deploy-event-trigger
           trigger: true
@@ -1099,6 +1101,8 @@ jobs:
         trigger: true
       - get: content-store-image
         trigger: true
+        params:
+         skip_download: true
       - try:
           get: content-store-deploy-event-trigger
           trigger: true
@@ -1195,6 +1199,8 @@ jobs:
         trigger: true
       - get: router-image
         trigger: true
+        params:
+         skip_download: true
       - try:
           get: router-deploy-event-trigger
           trigger: true
@@ -1265,6 +1271,8 @@ jobs:
         trigger: true
       - get: router-api-image
         trigger: true
+        params:
+         skip_download: true
       - try:
           get: router-api-deploy-event-trigger
           trigger: true
@@ -1439,6 +1447,8 @@ jobs:
         trigger: true
       - get: smokey-image
         trigger: true
+        params:
+         skip_download: true
     - task: update-task-definition
       file: govuk-infrastructure/concourse/tasks/update-task-definition.yml
       input_mapping:
@@ -1543,6 +1553,8 @@ jobs:
         trigger: true
       - get: authenticating-proxy-image
         trigger: true
+        params:
+         skip_download: true
       - try:
           get: authenticating-proxy-deploy-event-trigger
           trigger: true
