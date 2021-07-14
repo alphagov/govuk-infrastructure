@@ -113,23 +113,3 @@ resource "aws_iam_role_policy" "concourse_terraform_planner_test" {
     ]
   })
 }
-
-resource "aws_iam_user" "concourse_ecr_readonly_user" {
-  name = "concourse_ecr_readonly_user"
-}
-
-resource "aws_iam_user_policy" "concourse_ecr_readonly_user_policy" {
-  name = "concourse_ecr_readonly_user_policy"
-  user = aws_iam_user.concourse_ecr_readonly_user.name
-
-  policy = jsonencode({
-    "Version" : "2012-10-17",
-    "Statement" : [
-      {
-        "Effect" : "Allow",
-        "Action" : "sts:AssumeRole",
-        "Resource" : "arn:aws:iam::${var.production_aws_account_id}:role/pull_images_from_ecr_role"
-      }
-    ]
-  })
-}
