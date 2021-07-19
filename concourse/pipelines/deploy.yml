@@ -51,6 +51,12 @@ resources:
       uri: https://github.com/alphagov/govuk-infrastructure
     type: git
 
+  - <<: *git-repo
+    name: content-schemas
+    source:
+      branch: main
+      uri: https://github.com/alphagov/govuk-content-schemas
+
   - name: publishing-api-terraform-outputs
     type: s3
     icon: file
@@ -762,14 +768,14 @@ jobs:
           ASSUME_ROLE_ARN: ((concourse_deployer_role_arn))
           APPLICATION: frontend
           VARIANT: live
-      - task: upload-rails-assets
-        file: govuk-infrastructure/concourse/tasks/upload-rails-assets.yml
+      - task: push-dir-to-s3
+        file: govuk-infrastructure/concourse/tasks/push-dir-to-s3.yml
         input_mapping:
-          app-image: frontend-image
+          src: frontend-image
         params:
           ASSUME_ROLE_ARN: ((concourse_deployer_role_arn))
-          IMAGE_ASSETS_PATH: app-image/rootfs/app/public/assets/frontend
-          S3_BUCKET_PATH_PATTERN: s3://govuk-((govuk_environment))-%s-frontends-rails-assets/assets/frontend/ # %s will be replaced by interpolated workspace in upload-rails-assets.yml
+          SOURCE_PATH: src/rootfs/app/public/assets/frontend
+          S3_BUCKET_PATH_PATTERN: s3://govuk-((govuk_environment))-%s-frontends-rails-assets/assets/frontend/ # %s will be replaced by interpolated workspace in push-dir-to-s3.yml
           WORKSPACE: ((workspace))
       - task: update-draft-task-definition
         file: govuk-infrastructure/concourse/tasks/update-task-definition.yml
@@ -884,14 +890,14 @@ jobs:
           ASSUME_ROLE_ARN: ((concourse_deployer_role_arn))
           APPLICATION: publisher
           VARIANT: web
-      - task: upload-rails-assets
-        file: govuk-infrastructure/concourse/tasks/upload-rails-assets.yml
+      - task: push-dir-to-s3
+        file: govuk-infrastructure/concourse/tasks/push-dir-to-s3.yml
         input_mapping:
-          app-image: publisher-image
+          src: publisher-image
         params:
           ASSUME_ROLE_ARN: ((concourse_deployer_role_arn))
-          IMAGE_ASSETS_PATH: app-image/rootfs/app/public/assets/publisher
-          S3_BUCKET_PATH_PATTERN: s3://govuk-((govuk_environment))-%s-backends-rails-assets/assets/publisher/ # %s will be replaced by interpolated workspace in upload-rails-assets.yml
+          SOURCE_PATH: src/rootfs/app/public/assets/publisher
+          S3_BUCKET_PATH_PATTERN: s3://govuk-((govuk_environment))-%s-backends-rails-assets/assets/publisher/ # %s will be replaced by interpolated workspace in push-dir-to-s3.yml
           WORKSPACE: ((workspace))
       - task: update-web-task-definition
         file: govuk-infrastructure/concourse/tasks/update-task-definition.yml
@@ -1006,6 +1012,8 @@ jobs:
       - try:
           get: publishing-api-deploy-event-trigger
           trigger: true
+      - get: content-schemas
+        trigger: true
     - in_parallel:
       - task: bootstrap-secrets
         file: govuk-infrastructure/concourse/tasks/bootstrap-app-secrets.yml
@@ -1035,6 +1043,15 @@ jobs:
           VARIANT: worker
           GOVUK_ENVIRONMENT: ((govuk_environment))
           ASSUME_ROLE_ARN: ((concourse_deployer_role_arn))
+      - task: push-content-schemas-to-s3
+        file: govuk-infrastructure/concourse/tasks/push-dir-to-s3.yml
+        input_mapping:
+          src: content-schemas
+        params:
+          ASSUME_ROLE_ARN: ((concourse_deployer_role_arn))
+          SOURCE_PATH: src
+          S3_BUCKET_PATH_PATTERN: s3://govuk-((govuk_environment))-%s-content-schemas/
+          WORKSPACE: ((workspace))
     - in_parallel:
       - <<: *await-secretsmanager-creds
         params:
@@ -1351,14 +1368,14 @@ jobs:
       - get: signon-image
         trigger: true
     - in_parallel:
-      - task: upload-rails-assets
-        file: govuk-infrastructure/concourse/tasks/upload-rails-assets.yml
+      - task: push-dir-to-s3
+        file: govuk-infrastructure/concourse/tasks/push-dir-to-s3.yml
         input_mapping:
-          app-image: signon-image
+          src: signon-image
         params:
           ASSUME_ROLE_ARN: ((concourse_deployer_role_arn))
-          IMAGE_ASSETS_PATH: app-image/rootfs/app/public/assets/signon
-          S3_BUCKET_PATH_PATTERN: s3://govuk-((govuk_environment))-%s-backends-rails-assets/assets/signon/ # %s will be replaced by interpolated workspace in upload-rails-assets.yml
+          SOURCE_PATH: src/rootfs/app/public/assets/signon
+          S3_BUCKET_PATH_PATTERN: s3://govuk-((govuk_environment))-%s-backends-rails-assets/assets/signon/ # %s will be replaced by interpolated workspace in push-dir-to-s3.yml
           WORKSPACE: ((workspace))
       - task: update-task-definition
         file: govuk-infrastructure/concourse/tasks/update-task-definition.yml
@@ -1479,14 +1496,14 @@ jobs:
           get: static-deploy-event-trigger
           trigger: true
     - in_parallel:
-      - task: upload-rails-assets
-        file: govuk-infrastructure/concourse/tasks/upload-rails-assets.yml
+      - task: push-dir-to-s3
+        file: govuk-infrastructure/concourse/tasks/push-dir-to-s3.yml
         input_mapping:
-          app-image: static-image
+          src: static-image
         params:
           ASSUME_ROLE_ARN: ((concourse_deployer_role_arn))
-          IMAGE_ASSETS_PATH: app-image/rootfs/app/public/assets/static
-          S3_BUCKET_PATH_PATTERN: s3://govuk-((govuk_environment))-%s-frontends-rails-assets/assets/static/ # %s will be replaced by interpolated workspace in upload-rails-assets.yml
+          SOURCE_PATH: src/rootfs/app/public/assets/static
+          S3_BUCKET_PATH_PATTERN: s3://govuk-((govuk_environment))-%s-frontends-rails-assets/assets/static/ # %s will be replaced by interpolated workspace in push-dir-to-s3.yml
           WORKSPACE: ((workspace))
       - task: update-draft-task-definition
         file: govuk-infrastructure/concourse/tasks/update-task-definition.yml

@@ -16,10 +16,10 @@ fi
 
 S3_BUCKET_PATH=$(printf "$S3_BUCKET_PATH_PATTERN" "$WORKSPACE")
 
-echo "Uploading rails assets from ${IMAGE_ASSETS_PATH} to ${S3_BUCKET_PATH} ..."
+echo "Uploading files from ${SOURCE_PATH} to ${S3_BUCKET_PATH} ..."
 
 aws s3 sync \
-  "${IMAGE_ASSETS_PATH}" \
+  "${SOURCE_PATH}" \
   "${S3_BUCKET_PATH}"
 
-echo "Finished uploading rails assets from ${IMAGE_ASSETS_PATH} to ${S3_BUCKET_PATH}"
+echo "Finished uploading files from ${SOURCE_PATH} to ${S3_BUCKET_PATH}"
