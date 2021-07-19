@@ -2,19 +2,18 @@ platform: linux
 image_resource:
   type: docker-image
   source:
-    repository: governmentpaas/awscli
-    tag: latest # TODO - manage image versions ourselves instead of using latest
+    repository: govuk/ecs-cli
+    tag: latest
     username: ((docker_hub_username))
     password: ((docker_hub_authtoken))
 inputs:
   - name: govuk-infrastructure
-    path: src
-  - name: app-image
+  - name: src
 params:
   AWS_REGION: eu-west-1
   ASSUME_ROLE_ARN:
-  IMAGE_ASSETS_PATH:
+  SOURCE_PATH: src
   S3_BUCKET_PATH_PATTERN:
   WORKSPACE:
 run:
-  path: ./src/concourse/tasks/upload-rails-assets.sh
+  path: ./govuk-infrastructure/concourse/tasks/push-dir-to-s3.sh
