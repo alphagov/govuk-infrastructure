@@ -13,7 +13,6 @@ locals {
       local.defaults.environment_variables,
       {
         GOVUK_APP_NAME                  = "frontend",
-        GOVUK_CONTENT_SCHEMAS_PATH      = local.content_schemas.mount_point.containerPath,
         PLEK_SERVICE_PUBLISHING_API_URI = local.defaults.publishing_api_uri
         PLEK_SERVICE_SIGNON_URI         = local.defaults.signon_uri
         UNICORN_WORKER_PROCESSES        = 12,
