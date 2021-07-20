@@ -35,6 +35,11 @@ variable "image" {
   default = null
 }
 
+variable "mount_points" {
+  type    = list(object({ sourceVolume = string, containerPath = string, readOnly = bool }))
+  default = []
+}
+
 variable "splunk_url_secret_arn" {
   type        = string
   description = "ARN to the secret containing the URL for the Splunk instance (of the form `https://http-inputs-XXXXXXXX.splunkcloud.com:PORT`)."

@@ -51,3 +51,8 @@ variable "proxy_configuration" {
 variable "task_role_arn" {
   type = string
 }
+
+variable "volumes" {
+  type    = list(object({ name = string }))
+  default = []
+}

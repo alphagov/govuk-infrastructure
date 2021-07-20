@@ -49,9 +49,13 @@ output "json_format" {
       initProcessEnabled = true
     }
     logConfiguration = var.log_to_splunk ? local.log_configuration_splunk : local.log_configuration_aws
-    mountPoints      = [],
+    mountPoints      = var.mount_points,
     portMappings     = [for port in var.ports : { containerPort = port, hostPort = port, protocol = "tcp" }],
     secrets          = [for key, value in var.secrets_from_arns : { name = key, valueFrom = value }]
     user             = var.user
   }
+}
+
+output "name" {
+  value = var.name
 }

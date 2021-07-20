@@ -182,3 +182,8 @@ resource "aws_iam_policy" "ecs_exec_access" {
 }
 EOF
 }
+
+resource "aws_iam_role_policy_attachment" "content_schemas_read_access" {
+  role       = aws_iam_role.task.id
+  policy_arn = aws_iam_policy.content_schemas_read_access_policy.arn
+}
