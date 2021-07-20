@@ -35,6 +35,13 @@ resources:
       uri: git@github.com:alphagov/frontend.git
 
   - <<: *git-repo
+    name: infra-concourse-task-repo
+    source:
+      <<: *git-repo-source
+      uri: git@github.com:alphagov/govuk-infrastructure.git
+      paths: [ docker/infra-concourse-task, Gemfile*, .ruby-version, concourse, lib, Rakefile ]
+
+  - <<: *git-repo
     name: publisher-repo
     source:
       <<: *git-repo-source
@@ -112,6 +119,12 @@ resources:
       tag: latest
 
   - <<: *docker-image
+    name: infra-concourse-task-image
+    source:
+      <<: *docker-image-source
+      repository: infra-concourse-task
+
+  - <<: *docker-image
     name: publisher-image
     source:
       <<: *docker-image-source
@@ -184,6 +197,12 @@ resources:
     source:
       <<: *semver-version-source
       key: frontend-version
+
+  - <<: *semver-version
+    name: infra-concourse-task-version
+    source:
+      <<: *semver-version-source
+      key: infra-concourse-task-version
 
   - <<: *semver-version
     name: publisher-version
@@ -344,6 +363,40 @@ jobs:
       - put: frontend-version
         params:
           file: frontend-version/version
+    on_failure:
+      <<: *notify-slack-failure
+
+  - name: infra-concourse-task
+    serial: true
+    plan:
+    - in_parallel:
+      - get: infra-concourse-task-repo
+        trigger: true
+      - get: infra-concourse-task-version
+        params:
+          bump: minor
+          pre_without_version: true
+          pre: release
+      - get: govuk-infrastructure
+    - task: build-image
+      privileged: true
+      file: govuk-infrastructure/concourse/tasks/build-image-definition.yml
+      input_mapping:
+        git-repo: infra-concourse-task-repo
+    - put: infra-concourse-task-image
+      params:
+        image: image/image.tar
+        additional_tags: infra-concourse-task-version/version
+    - in_parallel:
+      - put: infra-concourse-task-repo
+        params:
+          only_tag: true
+          tag_prefix: infra-concourse-task_
+          tag: infra-concourse-task-version/version
+          repository: infra-concourse-task-repo
+      - put: infra-concourse-task-version
+        params:
+          file: infra-concourse-task-version/version
     on_failure:
       <<: *notify-slack-failure
 
