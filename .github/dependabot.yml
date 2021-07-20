@@ -4,3 +4,13 @@ updates:
     directory: "/terraform"
     schedule:
       interval: "weekly"
+  - package-ecosystem: bundler
+    directory: /
+    schedule:
+      interval: weekly
+  - package-ecosystem: docker
+    ignore:
+      - dependency-name: ruby
+    directory: /docker/images/
+    schedule:
+      interval: weekly
