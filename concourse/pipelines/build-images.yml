@@ -33,7 +33,6 @@ resources:
     source:
       <<: *git-repo-source
       uri: git@github.com:alphagov/frontend.git
-      branch: master
 
   - <<: *git-repo
     name: publisher-repo
