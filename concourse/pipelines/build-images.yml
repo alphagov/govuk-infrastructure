@@ -383,6 +383,8 @@ jobs:
       file: govuk-infrastructure/concourse/tasks/build-image-definition.yml
       input_mapping:
         git-repo: infra-concourse-task-repo
+      params:
+        DOCKERFILE: git-repo/docker/images/infra-concourse-task/Dockerfile
     - put: infra-concourse-task-image
       params:
         image: image/image.tar
