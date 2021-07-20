@@ -22,7 +22,7 @@ locals {
         EVENT_LOG_AWS_USERNAME   = "govuk-publishing-api-event-log_user"
         GOVUK_APP_NAME           = "publishing-api"
         # TODO: Remove once content-schemas issue is fixed
-        GOVUK_CONTENT_SCHEMAS_PATH           = "/govuk-content-schemas"
+        GOVUK_CONTENT_SCHEMAS_PATH           = local.content_schemas.mount_point.containerPath
         GOVUK_STATSD_PREFIX                  = "govuk-ecs.app.publishing-api"
         PLEK_SERVICE_CONTENT_STORE_URI       = local.defaults.content_store_uri
         PLEK_SERVICE_DRAFT_CONTENT_STORE_URI = local.defaults.draft_content_store_uri
@@ -49,6 +49,13 @@ locals {
         SECRET_KEY_BASE                  = aws_secretsmanager_secret.secret_key_base["publishing_api"].arn
       }
     )
+
+    mount_points          = [local.content_schemas.mount_point]
+    additional_containers = [module.content_schemas_container_definition.json_format]
+    container_dependencies = [
+      { containerName : module.content_schemas_container_definition.name, condition : "SUCCESS" }
+    ]
+    volumes = [local.content_schemas.volume]
   }
 }
 
@@ -56,6 +63,9 @@ module "publishing_api_web" {
   registry                         = var.registry
   image_name                       = "publishing-api"
   service_name                     = "publishing-api-web"
+  additional_containers            = local.publishing_api_defaults.additional_containers
+  container_dependencies           = local.publishing_api_defaults.container_dependencies
+  mount_points                     = local.publishing_api_defaults.mount_points
   backend_virtual_service_names    = local.publishing_api_defaults.backend_services
   mesh_name                        = aws_appmesh_mesh.govuk.id
   service_discovery_namespace_id   = aws_service_discovery_private_dns_namespace.govuk_publishing_platform.id
@@ -81,6 +91,7 @@ module "publishing_api_web" {
   environment                      = var.govuk_environment
   workspace                        = local.workspace
   command                          = ["foreman", "run", "web"]
+  volumes                          = local.publishing_api_defaults.volumes
 }
 
 module "publishing_api_worker" {
@@ -92,6 +103,9 @@ module "publishing_api_worker" {
   service_discovery_namespace_id   = aws_service_discovery_private_dns_namespace.govuk_publishing_platform.id
   service_discovery_namespace_name = aws_service_discovery_private_dns_namespace.govuk_publishing_platform.name
   vpc_id                           = local.vpc_id
+  additional_containers            = local.publishing_api_defaults.additional_containers
+  container_dependencies           = local.publishing_api_defaults.container_dependencies
+  mount_points                     = local.publishing_api_defaults.mount_points
   cluster_id                       = aws_ecs_cluster.cluster.id
   source                           = "../../modules/app"
   desired_count                    = var.publishing_api_worker_desired_count
@@ -113,4 +127,5 @@ module "publishing_api_worker" {
   environment                      = var.govuk_environment
   workspace                        = local.workspace
   command                          = ["foreman", "run", "worker"]
+  volumes                          = local.publishing_api_defaults.volumes
 }

@@ -33,13 +33,17 @@ locals {
 }
 
 module "app_container_definition" {
-  source                  = "../../modules/container-definition"
-  image                   = "${var.registry}/${var.image_name}:${var.image_tag}"
-  aws_region              = var.aws_region
-  command                 = var.command
-  healthcheck_command     = var.container_healthcheck_command
-  environment_variables   = var.environment_variables
-  dependsOn               = [{ containerName : "envoy", condition : "HEALTHY" }]
+  source                = "../../modules/container-definition"
+  image                 = "${var.registry}/${var.image_name}:${var.image_tag}"
+  aws_region            = var.aws_region
+  command               = var.command
+  healthcheck_command   = var.container_healthcheck_command
+  environment_variables = var.environment_variables
+  dependsOn = concat(
+    [{ containerName : "envoy", condition : "HEALTHY" }],
+    var.container_dependencies
+  )
+  mount_points            = var.mount_points
   splunk_url_secret_arn   = var.splunk_url_secret_arn
   splunk_token_secret_arn = var.splunk_token_secret_arn
   splunk_sourcetype       = var.splunk_sourcetype
@@ -74,10 +78,10 @@ module "envoy_container_definition" {
 
 module "task_definition" {
   source = "../../modules/task-definition"
-  container_definitions = [
+  container_definitions = concat([
     module.app_container_definition.json_format,
     module.envoy_container_definition.json_format,
-  ]
+  ], var.additional_containers)
   cpu                = var.cpu
   execution_role_arn = var.execution_role_arn
   family             = local.family
@@ -88,6 +92,7 @@ module "task_definition" {
     properties    = [for key, value in local.envoy_proxy_properties : { name : key, value : tostring(value) }]
   }
   task_role_arn = var.task_role_arn
+  volumes       = var.volumes
 }
 
 resource "aws_ecs_task_definition" "bootstrap" {
@@ -98,15 +103,22 @@ resource "aws_ecs_task_definition" "bootstrap" {
   requires_compatibilities = ["FARGATE"]
   execution_role_arn       = var.execution_role_arn
   task_role_arn            = var.task_role_arn
-  container_definitions = jsonencode([
+  container_definitions = jsonencode(concat([
     module.app_container_definition.json_format,
     module.envoy_container_definition.json_format,
-  ])
+  ], var.additional_containers))
 
   proxy_configuration {
     type           = "APPMESH"
     container_name = "envoy"
     properties     = local.envoy_proxy_properties
+  }
+
+  dynamic "volume" {
+    for_each = var.volumes
+    content {
+      name = volume.value["name"]
+    }
   }
 
   tags = merge(

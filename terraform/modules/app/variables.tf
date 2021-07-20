@@ -1,3 +1,9 @@
+variable "additional_containers" {
+  default     = []
+  description = "Additional containers in the ECS service task, i.e. extra init containers"
+  type        = list(any)
+}
+
 variable "backend_virtual_service_names" {
   type        = list(any)
   description = "aws_appmesh_virtual_service names called by this app"
@@ -18,6 +24,12 @@ variable "command" {
   default     = null
 }
 
+variable "container_dependencies" {
+  default     = []
+  description = "Additional container dependencies on the app container"
+  type        = list(object({ containerName = string, condition = string }))
+}
+
 variable "image_name" {
   type        = string
   description = "Used only for bootstrapping. Provide only the image name, not the tag."
@@ -27,6 +39,12 @@ variable "image_tag" {
   type        = string
   default     = "latest"
   description = "Used only for bootstrapping. Override default tag latest."
+}
+
+variable "mount_points" {
+  default     = []
+  description = "Mount points on the app container"
+  type        = list(object({ sourceVolume = string, containerPath = string, readOnly = bool }))
 }
 
 variable "registry" {
@@ -163,4 +181,9 @@ variable "additional_tags" {
   default     = {}
   description = "Additional resource tags"
   type        = map(string)
+}
+
+variable "volumes" {
+  type    = list(object({ name = string }))
+  default = []
 }
