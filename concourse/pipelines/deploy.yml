@@ -309,14 +309,12 @@ resources:
     source:
       <<: *registry-source
       repository: publishing-api
-      tag: bilbof_dockerfile-fix # TODO - remove this once content-store supports content-schemas
 
   - <<: *registry-image
     name: content-store-image
     source:
       <<: *registry-source
       repository: content-store
-      tag: bill-content-schemas # TODO - remove this once content-store supports content-schemas
 
   - <<: *registry-image
     name: router-image
