@@ -39,6 +39,7 @@ module "content_schemas_container_definition" {
   splunk_url_secret_arn   = local.defaults.splunk_url_secret_arn
   splunk_token_secret_arn = local.defaults.splunk_token_secret_arn
   splunk_index            = local.defaults.splunk_index
+  splunk_sourcetype       = local.defaults.splunk_sourcetype
   name                    = "content_schemas_downloader"
   ports                   = []
   mount_points            = [local.content_schemas.mount_point]
