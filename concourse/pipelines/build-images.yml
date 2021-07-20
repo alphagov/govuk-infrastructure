@@ -242,6 +242,7 @@ jobs:
       set_pipeline: build-images
 
   - name: smokey
+    serial: true
     plan:
     - in_parallel:
       - get: smokey-repo
