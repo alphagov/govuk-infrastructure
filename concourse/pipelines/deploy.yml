@@ -51,6 +51,12 @@ resources:
       uri: https://github.com/alphagov/govuk-infrastructure
     type: git
 
+  - <<: *git-repo
+    name: content-schemas
+    source:
+      branch: main
+      uri: https://github.com/alphagov/govuk-content-schemas
+
   - name: publishing-api-terraform-outputs
     type: s3
     icon: file
@@ -178,6 +184,17 @@ resources:
       versioned_file: ((workspace))/authenticating-proxy.json
       initial_version: "0"
 
+  # This S3 bucket resource triggers a bootstrap event, which eventually
+  # triggers all jobs in the pipeline necessary to spin up a namespace.
+  - name: bootstrap-event
+    type: s3
+    icon: file
+    source:
+      bucket: ((readonly_private_bucket_name))
+      region_name: eu-west-2
+      versioned_file: ((workspace))/event.json
+      initial_version: "0"
+
   - &deploy-event-trigger
     name: frontend-deploy-event-trigger
     type: s3-iam
@@ -292,14 +309,12 @@ resources:
     source:
       <<: *registry-source
       repository: publishing-api
-      tag: bilbof_dockerfile-fix # TODO - remove this once content-store supports content-schemas
 
   - <<: *registry-image
     name: content-store-image
     source:
       <<: *registry-source
       repository: content-store
-      tag: bill-content-schemas # TODO - remove this once content-store supports content-schemas
 
   - <<: *registry-image
     name: router-image
@@ -355,8 +370,10 @@ groups:
   - name: all
     jobs:
       - update-pipeline
+      - create-infrastructure
       - run-terraform
       - deploy-content-store
+      - deploy-content-schemas
       - deploy-frontend
       - destroy-infrastructure
       - deploy-publisher
@@ -376,6 +393,7 @@ groups:
   - name: terraform
     jobs:
       - destroy-infrastructure
+      - create-infrastructure
       - run-terraform
 
   - name: admin
@@ -395,6 +413,7 @@ groups:
   - name: publishing-api
     jobs:
       - deploy-publishing-api
+      - deploy-content-schemas
 
   - name: router
     jobs:
@@ -426,6 +445,41 @@ groups:
       - deploy-authenticating-proxy
 
 jobs:
+  # create-infrastructure triggers the creation of all resources in a GOV.UK
+  # namespace by placing a file in an S3 bucket.
+  # TODO: Do we need to remove the object when we destroy infra?
+  - name: create-infrastructure
+    serial: true
+    plan:
+    - try:
+        get: everyday-at-6am
+        trigger: true
+    - task: create-bootstrap-trigger
+      config:
+        outputs:
+        - name: bootstrap-event
+        params:
+          WORKSPACE: ((workspace))
+        platform: linux
+        image_resource:
+          type: docker-image
+          source:
+            # TODO: Use ECR
+            repository: govuk/infra-concourse-task
+            tag: 0.0.2
+            username: ((docker_hub_username))
+            password: ((docker_hub_authtoken))
+        run:
+          path: sh
+          args:
+            - '-c'
+            - |
+              set -eu
+              echo "{\"date\":\"$(date '+%Y-%m-%d %H:%M:%S')\"}" > bootstrap-event/event.json
+    - put: bootstrap-event
+      params:
+        file: bootstrap-event/event.json
+
   - name: destroy-infrastructure
     plan:
     - get: everyday-at-11pm
@@ -489,8 +543,9 @@ jobs:
         passed:
         - update-pipeline
         trigger: true
-      - get: everyday-at-6am
+      - get: bootstrap-event
         trigger: true
+        passed: [create-infrastructure]
       - get: content-store-terraform-outputs
       - get: publisher-terraform-outputs
       - get: publishing-api-terraform-outputs
@@ -762,14 +817,14 @@ jobs:
           ASSUME_ROLE_ARN: ((concourse_deployer_role_arn))
           APPLICATION: frontend
           VARIANT: live
-      - task: upload-rails-assets
-        file: govuk-infrastructure/concourse/tasks/upload-rails-assets.yml
+      - task: push-dir-to-s3
+        file: govuk-infrastructure/concourse/tasks/push-dir-to-s3.yml
         input_mapping:
-          app-image: frontend-image
+          src: frontend-image
         params:
           ASSUME_ROLE_ARN: ((concourse_deployer_role_arn))
-          IMAGE_ASSETS_PATH: app-image/rootfs/app/public/assets/frontend
-          S3_BUCKET_PATH_PATTERN: s3://govuk-((govuk_environment))-%s-frontends-rails-assets/assets/frontend/ # %s will be replaced by interpolated workspace in upload-rails-assets.yml
+          SOURCE_PATH: src/rootfs/app/public/assets/frontend
+          S3_BUCKET_PATH_PATTERN: s3://govuk-((govuk_environment))-%s-frontends-rails-assets/assets/frontend/ # %s will be replaced by interpolated workspace in push-dir-to-s3.yml
           WORKSPACE: ((workspace))
       - task: update-draft-task-definition
         file: govuk-infrastructure/concourse/tasks/update-task-definition.yml
@@ -884,14 +939,14 @@ jobs:
           ASSUME_ROLE_ARN: ((concourse_deployer_role_arn))
           APPLICATION: publisher
           VARIANT: web
-      - task: upload-rails-assets
-        file: govuk-infrastructure/concourse/tasks/upload-rails-assets.yml
+      - task: push-dir-to-s3
+        file: govuk-infrastructure/concourse/tasks/push-dir-to-s3.yml
         input_mapping:
-          app-image: publisher-image
+          src: publisher-image
         params:
           ASSUME_ROLE_ARN: ((concourse_deployer_role_arn))
-          IMAGE_ASSETS_PATH: app-image/rootfs/app/public/assets/publisher
-          S3_BUCKET_PATH_PATTERN: s3://govuk-((govuk_environment))-%s-backends-rails-assets/assets/publisher/ # %s will be replaced by interpolated workspace in upload-rails-assets.yml
+          SOURCE_PATH: src/rootfs/app/public/assets/publisher
+          S3_BUCKET_PATH_PATTERN: s3://govuk-((govuk_environment))-%s-backends-rails-assets/assets/publisher/ # %s will be replaced by interpolated workspace in push-dir-to-s3.yml
           WORKSPACE: ((workspace))
       - task: update-web-task-definition
         file: govuk-infrastructure/concourse/tasks/update-task-definition.yml
@@ -988,6 +1043,30 @@ jobs:
     on_failure:
       <<: *notify-slack-failure
 
+  - name: deploy-content-schemas
+    plan:
+    - in_parallel:
+      - get: bootstrap-event
+        trigger: true
+        passed:
+        - run-terraform
+        params:
+         skip_download: true
+      - get: govuk-infrastructure
+        resource: govuk-infrastructure-concourse-tasks
+      - get: content-schemas
+        # TODO: Set to false to prevent continuous deployment
+        trigger: true
+    - task: push-content-schemas-to-s3
+      file: govuk-infrastructure/concourse/tasks/push-dir-to-s3.yml
+      input_mapping:
+        src: content-schemas
+      params:
+        ASSUME_ROLE_ARN: ((concourse_deployer_role_arn))
+        SOURCE_PATH: src
+        S3_BUCKET_PATH_PATTERN: s3://govuk-((govuk_environment))-%s-content-schemas/
+        WORKSPACE: ((workspace))
+
   - name: deploy-publishing-api
     plan:
     - in_parallel:
@@ -999,6 +1078,17 @@ jobs:
         passed:
         - run-terraform
         trigger: true
+      - get: bootstrap-event
+        trigger: true
+        passed:
+        - deploy-content-schemas
+        params:
+         skip_download: true
+      - get: content-schemas
+        trigger: true
+        passed: [deploy-content-schemas]
+        params:
+         skip_download: true
       - get: publishing-api-image
         trigger: true
         params:
@@ -1351,14 +1441,14 @@ jobs:
       - get: signon-image
         trigger: true
     - in_parallel:
-      - task: upload-rails-assets
-        file: govuk-infrastructure/concourse/tasks/upload-rails-assets.yml
+      - task: push-dir-to-s3
+        file: govuk-infrastructure/concourse/tasks/push-dir-to-s3.yml
         input_mapping:
-          app-image: signon-image
+          src: signon-image
         params:
           ASSUME_ROLE_ARN: ((concourse_deployer_role_arn))
-          IMAGE_ASSETS_PATH: app-image/rootfs/app/public/assets/signon
-          S3_BUCKET_PATH_PATTERN: s3://govuk-((govuk_environment))-%s-backends-rails-assets/assets/signon/ # %s will be replaced by interpolated workspace in upload-rails-assets.yml
+          SOURCE_PATH: src/rootfs/app/public/assets/signon
+          S3_BUCKET_PATH_PATTERN: s3://govuk-((govuk_environment))-%s-backends-rails-assets/assets/signon/ # %s will be replaced by interpolated workspace in push-dir-to-s3.yml
           WORKSPACE: ((workspace))
       - task: update-task-definition
         file: govuk-infrastructure/concourse/tasks/update-task-definition.yml
@@ -1479,14 +1569,14 @@ jobs:
           get: static-deploy-event-trigger
           trigger: true
     - in_parallel:
-      - task: upload-rails-assets
-        file: govuk-infrastructure/concourse/tasks/upload-rails-assets.yml
+      - task: push-dir-to-s3
+        file: govuk-infrastructure/concourse/tasks/push-dir-to-s3.yml
         input_mapping:
-          app-image: static-image
+          src: static-image
         params:
           ASSUME_ROLE_ARN: ((concourse_deployer_role_arn))
-          IMAGE_ASSETS_PATH: app-image/rootfs/app/public/assets/static
-          S3_BUCKET_PATH_PATTERN: s3://govuk-((govuk_environment))-%s-frontends-rails-assets/assets/static/ # %s will be replaced by interpolated workspace in upload-rails-assets.yml
+          SOURCE_PATH: src/rootfs/app/public/assets/static
+          S3_BUCKET_PATH_PATTERN: s3://govuk-((govuk_environment))-%s-frontends-rails-assets/assets/static/ # %s will be replaced by interpolated workspace in push-dir-to-s3.yml
           WORKSPACE: ((workspace))
       - task: update-draft-task-definition
         file: govuk-infrastructure/concourse/tasks/update-task-definition.yml

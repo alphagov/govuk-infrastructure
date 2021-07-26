@@ -18,6 +18,11 @@ variable "environment_variables" {
 DESC
 }
 
+variable "essential" {
+  type    = bool
+  default = true
+}
+
 variable "dependsOn" {
   type        = list(object({ containerName = string, condition = string }))
   default     = []
@@ -33,6 +38,11 @@ variable "healthcheck_command" {
 variable "image" {
   type    = string
   default = null
+}
+
+variable "mount_points" {
+  type    = list(object({ sourceVolume = string, containerPath = string, readOnly = bool }))
+  default = []
 }
 
 variable "splunk_url_secret_arn" {
