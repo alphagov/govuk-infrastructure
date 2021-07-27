@@ -138,6 +138,7 @@ resource "aws_iam_role" "pull_images_from_ecr_role" {
         "Effect" : "Allow",
         "Action" : "sts:AssumeRole",
         "Principal" : {
+          "AWS" : "arn:aws:iam::${var.integration_aws_account_id}:root",
           "AWS" : "arn:aws:iam::${var.test_aws_account_id}:root"
         }
       }
