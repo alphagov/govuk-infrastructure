@@ -75,10 +75,15 @@ module Signon
   private
 
     class TokenNotFound < StandardError; end
+
     class ApplicationNotFound < StandardError; end
+
     class TokenNotCreated < StandardError; end
+
     class ApplicationNotCreated < StandardError; end
+
     class ApplicationAlreadyCreated < StandardError; end
+
     class ApplicationNotFound < StandardError; end
 
     def attempt(&request)
@@ -107,7 +112,7 @@ module Signon
 
     def already_exists(res)
       # TODO: Remove deprecated check once
-      deprecated = res.code == "400" && JSON.parse(res.body).dig("error") == "Record already exists"
+      deprecated = res.code == "400" && JSON.parse(res.body)["error"] == "Record already exists"
       new = res.code == "409"
       new || deprecated
     end

@@ -14,8 +14,8 @@ namespace :bootstrap do
     )
     signon = signon_client(
       secretsmanager,
-      signon_secrets.dig("admin_password_arn"),
-      signon_secrets.dig("signon_api_url"),
+      signon_secrets["admin_password_arn"],
+      signon_secrets["signon_api_url"],
     )
     Signon::Bootstrap.bootstrap_tokens(
       app_config: signon_secrets,
@@ -27,7 +27,7 @@ namespace :bootstrap do
   desc "Create Signon applications for an environment"
   task :oauth_applications do
     app_config = JSON.parse(File.read("../app-terraform-outputs/signon.json"))
-    oauth_application_config = app_config.dig("oauth_application_config")
+    oauth_application_config = app_config["oauth_application_config"]
     secretsmanager = secretsmanager_client(
       "bootstrap-oauth-apps",
       ENV["ASSUME_ROLE_ARN"],
@@ -35,11 +35,11 @@ namespace :bootstrap do
     )
     signon = signon_client(
       secretsmanager,
-      oauth_application_config.dig("admin_password_arn"),
-      oauth_application_config.dig("signon_api_url"),
+      oauth_application_config["admin_password_arn"],
+      oauth_application_config["signon_api_url"],
     )
     Signon::Bootstrap.bootstrap_applications(
-      applications: oauth_application_config.dig("applications"),
+      applications: oauth_application_config["applications"],
       signon: signon,
       secretsmanager: secretsmanager,
     )

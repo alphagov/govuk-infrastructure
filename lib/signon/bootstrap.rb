@@ -18,9 +18,9 @@ module Signon
     end
 
     def self.bootstrap_application(app:, secretsmanager:, signon:, logger:)
-      app_name = app.dig("name")
-      oauth_id_arn = app.dig("id_arn")
-      oauth_secret_arn = app.dig("secret_arn")
+      app_name = app["name"]
+      oauth_id_arn = app["id_arn"]
+      oauth_secret_arn = app["secret_arn"]
 
       bootstrap_required = [oauth_id_arn, oauth_secret_arn].any? do |arn|
         should_bootstrap(secretsmanager, arn)
@@ -37,12 +37,12 @@ module Signon
       logger.info "Application #{app_name} created or fetched. Putting creds in SecretsManager..."
       secretsmanager.put_secret_value(
         secret_id: oauth_id_arn,
-        secret_string: secrets.dig("oauth_id"),
+        secret_string: secrets["oauth_id"],
         version_stages: %w[AWSCURRENT],
       )
       secretsmanager.put_secret_value(
         secret_id: oauth_secret_arn,
-        secret_string: secrets.dig("oauth_secret"),
+        secret_string: secrets["oauth_secret"],
         version_stages: %w[AWSCURRENT],
       )
       logger.info "App (#{app_name}) bootstrapping finished."
@@ -50,14 +50,14 @@ module Signon
 
     def self.find_or_create_app(signon_client, app)
       signon_client.create_application(
-        name: app.dig("name"),
-        description: app.dig("description"),
-        home_uri: app.dig("home_uri"),
-        permissions: app.dig("permissions"),
-        redirect_uri: app.dig("redirect_uri"),
+        name: app["name"],
+        description: app["description"],
+        home_uri: app["home_uri"],
+        permissions: app["permissions"],
+        redirect_uri: app["redirect_uri"],
       )
     rescue Signon::Client::ApplicationAlreadyCreated
-      signon_client.get_application(name: app.dig("name"))
+      signon_client.get_application(name: app["name"])
     end
 
     def self.should_bootstrap(secretsmanager, secret_arn)
@@ -67,10 +67,10 @@ module Signon
     end
 
     def self.bootstrap_tokens(app_config:, signon:, secretsmanager:, logger: Logger.new($stdout))
-      app_config.dig("bearer_tokens").each do |token|
+      app_config["bearer_tokens"].each do |token|
         bootstrap_bearer_token(
-          api_user: app_config.dig("api_user_email"),
-          deploy_event_key: app_config.dig("deploy_event_key"),
+          api_user: app_config["api_user_email"],
+          deploy_event_key: app_config["deploy_event_key"],
           token: token,
           secrets_client: secretsmanager,
           signon_client: signon,
@@ -80,7 +80,7 @@ module Signon
     end
 
     def self.bootstrap_bearer_token(api_user:, deploy_event_key:, token:, secrets_client:, signon_client:, logger: Logger.new($stdout))
-      secret_arn = token.dig("secret_arn")
+      secret_arn = token["secret_arn"]
       metadata = secrets_client.describe_secret(secret_id: secret_arn)
       unless metadata.rotation_enabled
         raise NotRotatable, "Secret #{secret_arn} is not enabled for rotation"
@@ -94,8 +94,8 @@ module Signon
       end
 
       logger.info "Secret #{secret_arn} doesn't have a secret value. Creating it..."
-      application_name = token.dig("application")
-      permissions = token.dig("permissions").split(",")
+      application_name = token["application"]
+      permissions = token["permissions"].split(",")
       secret_string = signon_client.create_bearer_token(
         api_user: api_user,
         application_name: application_name,

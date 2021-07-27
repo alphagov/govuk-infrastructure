@@ -23,7 +23,7 @@ RSpec.describe Signon::Bootstrap do
   end
 
   def expect_token_secret_describe_call
-    expect(secretsmanager_client).to receive(:describe_secret)
+    allow(secretsmanager_client).to receive(:describe_secret)
       .with(secret_id: token_arn)
       .and_return(metadata)
   end
@@ -80,7 +80,7 @@ RSpec.describe Signon::Bootstrap do
 
       it "creates a secret in signon" do
         expect_token_secret_describe_call
-        expect(signon_client).to receive(:create_bearer_token)
+        allow(signon_client).to receive(:create_bearer_token)
           .with(
             api_user: api_user,
             application_name: app_name,
@@ -144,11 +144,11 @@ RSpec.describe Signon::Bootstrap do
       end
 
       it "will create the application and put the secret in SecretsManager" do
-        expect(secretsmanager_client).to receive(:describe_secret)
+        allow(secretsmanager_client).to receive(:describe_secret)
           .with(secret_id: id_arn)
           .and_return(metadata)
 
-        expect(signon_client).to receive(:create_application)
+        allow(signon_client).to receive(:create_application)
           .with(
             name: name,
             description: description,
@@ -183,11 +183,11 @@ RSpec.describe Signon::Bootstrap do
         end
 
         it "will verify the credentials have been set in SecretsManager and not create a new application or secret" do
-          expect(secretsmanager_client).to receive(:describe_secret)
+          allow(secretsmanager_client).to receive(:describe_secret)
             .with(secret_id: secret_arn)
             .and_return(metadata)
 
-          expect(secretsmanager_client).to receive(:describe_secret)
+          allow(secretsmanager_client).to receive(:describe_secret)
             .with(secret_id: id_arn)
             .and_return(metadata)
 
@@ -204,11 +204,11 @@ RSpec.describe Signon::Bootstrap do
         end
 
         it "will retrieve the credentials from Signon and set them in SecretsManager" do
-          expect(secretsmanager_client).to receive(:describe_secret)
+          allow(secretsmanager_client).to receive(:describe_secret)
             .with(secret_id: id_arn)
             .and_return(metadata)
 
-          expect(signon_client).to receive(:create_application)
+          allow(signon_client).to receive(:create_application)
             .with(
               name: name,
               description: description,
@@ -218,7 +218,7 @@ RSpec.describe Signon::Bootstrap do
             )
             .and_raise(Signon::Client::ApplicationAlreadyCreated)
 
-          expect(signon_client).to receive(:get_application)
+          allow(signon_client).to receive(:get_application)
             .with(name: name)
             .and_return({ "oauth_id" => oauth_id, "oauth_secret" => oauth_secret })
 
