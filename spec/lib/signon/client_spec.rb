@@ -8,7 +8,7 @@ RSpec.describe Signon::Client do
   let(:permissions) { "signin,publish" }
 
   let(:client) do
-    logger = Logger.new(STDOUT)
+    logger = Logger.new($stdout)
     logger.level = Logger::WARN
     described_class.new(api_url: api_url, auth_token: auth_token, max_retries: 0, logger: logger)
   end
