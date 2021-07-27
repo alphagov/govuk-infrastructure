@@ -3,6 +3,12 @@ display:
   background_image: ((background_image))
 
 definitions:
+- &bootstrap-trigger
+  get: bootstrap-event
+  trigger: true
+  passed: [run-terraform]
+  params:
+   skip_download: true
 
 resource_types:
   - name: slack-notification
@@ -748,6 +754,12 @@ jobs:
         get: govuk-infrastructure
         resource: govuk-infrastructure-concourse-tasks
         trigger: true
+      - <<: *bootstrap-trigger
+        passed:
+        - deploy-frontend
+        - deploy-publisher
+        - deploy-signon
+        - deploy-authenticating-proxy
       - &get-smokey-app-tf-outputs
         get: app-terraform-outputs
         resource: smokey-terraform-outputs
@@ -781,6 +793,8 @@ jobs:
         passed:
         - run-terraform
         trigger: true
+      - <<: *bootstrap-trigger
+        passed: [run-terraform]
     - task: secret_key_base
       file: govuk-infrastructure/concourse/tasks/autogenerate-secret-key-base.yml
       input_mapping:
@@ -806,6 +820,8 @@ jobs:
         passed:
         - run-terraform
         trigger: true
+      - <<: *bootstrap-trigger
+        passed: [deploy-signon,deploy-static,deploy-content-store]
       - get: frontend-image
         trigger: true
       - try:
@@ -940,6 +956,8 @@ jobs:
         passed:
         - run-terraform
         trigger: true
+      - <<: *bootstrap-trigger
+        passed: [deploy-signon,deploy-frontend,deploy-publishing-api]
       - get: publisher-image
         trigger: true
       - try:
@@ -1058,12 +1076,8 @@ jobs:
   - name: deploy-content-schemas
     plan:
     - in_parallel:
-      - get: bootstrap-event
-        trigger: true
-        passed:
-        - run-terraform
-        params:
-         skip_download: true
+      - <<: *bootstrap-trigger
+        passed: [run-terraform]
       - get: govuk-infrastructure
         resource: govuk-infrastructure-concourse-tasks
       - get: content-schemas
@@ -1090,12 +1104,8 @@ jobs:
         passed:
         - run-terraform
         trigger: true
-      - get: bootstrap-event
-        trigger: true
-        passed:
-        - deploy-content-schemas
-        params:
-         skip_download: true
+      - <<: *bootstrap-trigger
+        passed: [deploy-signon,deploy-content-schemas,deploy-content-store]
       - get: content-schemas
         trigger: true
         passed: [deploy-content-schemas]
@@ -1200,6 +1210,8 @@ jobs:
         passed:
         - run-terraform
         trigger: true
+      - <<: *bootstrap-trigger
+        passed: [deploy-signon,deploy-router-api]
       - get: content-store-image
         trigger: true
         params:
@@ -1372,6 +1384,8 @@ jobs:
         passed:
         - run-terraform
         trigger: true
+      - <<: *bootstrap-trigger
+        passed: [deploy-signon]
       - get: router-api-image
         trigger: true
         params:
@@ -1451,6 +1465,8 @@ jobs:
         passed:
         - run-terraform
         trigger: true
+      - <<: *bootstrap-trigger
+        passed: [run-terraform,autogenerate-secrets]
       - get: signon-image
         trigger: true
     - in_parallel:
@@ -1529,6 +1545,8 @@ jobs:
         - get: signon-terraform-outputs
           passed: [deploy-signon]
           trigger: true
+        - <<: *bootstrap-trigger
+          passed: [deploy-signon]
         - get: signon-image
           passed: [deploy-signon]
           trigger: true
@@ -1580,6 +1598,8 @@ jobs:
         passed:
         - run-terraform
         trigger: true
+      - <<: *bootstrap-trigger
+        passed: [run-terraform]
       - get: static-image
         trigger: true
       - try:
@@ -1658,6 +1678,8 @@ jobs:
         passed:
         - run-terraform
         trigger: true
+      - <<: *bootstrap-trigger
+        passed: [deploy-signon]
       - get: authenticating-proxy-image
         trigger: true
         params:
