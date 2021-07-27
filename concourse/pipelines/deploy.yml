@@ -406,13 +406,26 @@ groups:
     jobs:
       - update-pipeline
 
+  - name: content-store
+    jobs:
+      - deploy-signon
+      - deploy-router-api
+      - deploy-content-store
+
   - name: frontend
     jobs:
+      - deploy-signon
+      - deploy-static
+      - deploy-content-store
       - deploy-frontend
       - smoke-test-frontend
 
   - name: publisher
     jobs:
+      - deploy-signon
+      - deploy-static
+      - deploy-content-store
+      - deploy-frontend
       - deploy-publisher
       - smoke-test-publisher
 
@@ -420,6 +433,8 @@ groups:
     jobs:
       - deploy-publishing-api
       - deploy-content-schemas
+      - deploy-signon
+      - deploy-content-store
 
   - name: router
     jobs:
@@ -427,10 +442,12 @@ groups:
 
   - name: router-api
     jobs:
+      - deploy-signon
       - deploy-router-api
 
   - name: signon
     jobs:
+      - autogenerate-secrets
       - deploy-signon
       - smoke-test-signon
 
@@ -448,6 +465,7 @@ groups:
 
   - name: authenticating-proxy
     jobs:
+      - deploy-signon
       - deploy-authenticating-proxy
 
 jobs:
