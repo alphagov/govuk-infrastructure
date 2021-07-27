@@ -787,6 +787,10 @@ jobs:
         terraform-outputs: secret_key_bases
       params:
         ASSUME_ROLE_ARN: ((concourse_deployer_role_arn))
+      vars:
+        concourse_deployer_role_arn: ((concourse_deployer_role_arn))
+        concourse_ecr_role_arn: ((concourse_ecr_role_arn))
+        ecr_registry_id: ((ecr_registry_id))
     serial: true
     on_failure:
       <<: *notify-slack-failure
@@ -811,12 +815,17 @@ jobs:
           get: draft-frontend-deploy-event-trigger
           trigger: true
     - in_parallel:
-      - task: bootstrap-secrets
+      - &bootstrap-secrets
+        task: bootstrap-secrets
         file: govuk-infrastructure/concourse/tasks/bootstrap-app-secrets.yml
         params:
           ASSUME_ROLE_ARN: ((concourse_deployer_role_arn))
           APPLICATION: frontend
           VARIANT: live
+        vars:
+          concourse_deployer_role_arn: ((concourse_deployer_role_arn))
+          concourse_ecr_role_arn: ((concourse_ecr_role_arn))
+          ecr_registry_id: ((ecr_registry_id))
       - task: push-dir-to-s3
         file: govuk-infrastructure/concourse/tasks/push-dir-to-s3.yml
         input_mapping:
@@ -872,6 +881,10 @@ jobs:
           ASSUME_ROLE_ARN: ((concourse_deployer_role_arn))
           APPLICATION: frontend
           VARIANT: live
+        vars:
+          concourse_deployer_role_arn: ((concourse_deployer_role_arn))
+          concourse_ecr_role_arn: ((concourse_ecr_role_arn))
+          ecr_registry_id: ((ecr_registry_id))
       - <<: *await-secretsmanager-creds
         params:
           ASSUME_ROLE_ARN: ((concourse_deployer_role_arn))
@@ -933,8 +946,7 @@ jobs:
           get: publisher-deploy-event-trigger
           trigger: true
     - in_parallel:
-      - task: bootstrap-secrets
-        file: govuk-infrastructure/concourse/tasks/bootstrap-app-secrets.yml
+      - <<: *bootstrap-secrets
         params:
           ASSUME_ROLE_ARN: ((concourse_deployer_role_arn))
           APPLICATION: publisher
@@ -1097,8 +1109,7 @@ jobs:
           get: publishing-api-deploy-event-trigger
           trigger: true
     - in_parallel:
-      - task: bootstrap-secrets
-        file: govuk-infrastructure/concourse/tasks/bootstrap-app-secrets.yml
+      - <<: *bootstrap-secrets
         params:
           ASSUME_ROLE_ARN: ((concourse_deployer_role_arn))
           APPLICATION: publishing-api
@@ -1200,14 +1211,12 @@ jobs:
           get: draft-content-store-deploy-event-trigger
           trigger: true
     - in_parallel:
-      - task: bootstrap-secrets
-        file: govuk-infrastructure/concourse/tasks/bootstrap-app-secrets.yml
+      - <<: *bootstrap-secrets
         params:
           ASSUME_ROLE_ARN: ((concourse_deployer_role_arn))
           APPLICATION: content-store
           VARIANT: draft
-      - task: bootstrap-secrets
-        file: govuk-infrastructure/concourse/tasks/bootstrap-app-secrets.yml
+      - <<: *bootstrap-secrets
         params:
           ASSUME_ROLE_ARN: ((concourse_deployer_role_arn))
           APPLICATION: content-store
@@ -1244,6 +1253,10 @@ jobs:
           ASSUME_ROLE_ARN: ((concourse_deployer_role_arn))
           APPLICATION: content-store
           VARIANT: draft
+        vars:
+          concourse_deployer_role_arn: ((concourse_deployer_role_arn))
+          concourse_ecr_role_arn: ((concourse_ecr_role_arn))
+          ecr_registry_id: ((ecr_registry_id))
     - in_parallel:
       - task: update-live-ecs-service
         file: govuk-infrastructure/concourse/tasks/update-ecs-service.yml
@@ -1500,6 +1513,10 @@ jobs:
         ASSUME_ROLE_ARN: ((concourse_deployer_role_arn))
         APPLICATION: signon
         VARIANT: web
+      vars:
+        concourse_deployer_role_arn: ((concourse_deployer_role_arn))
+        concourse_ecr_role_arn: ((concourse_ecr_role_arn))
+        ecr_registry_id: ((ecr_registry_id))
     serial: true
     on_failure:
       <<: *notify-slack-failure
