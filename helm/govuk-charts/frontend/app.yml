@@ -1,0 +1,76 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend
+spec:
+  type: NodePort
+  selector:
+    app: frontend
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend
+  labels:
+    app: frontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: frontend
+  template:
+    metadata:
+      labels:
+        app: frontend
+    spec:
+      containers:
+      - name: frontend
+        image: 172025368201.dkr.ecr.eu-west-1.amazonaws.com/frontend@sha256:46d607f5762451052db0e2dbaa55b1d54a8dc441778ec35642d4cb6fce433658
+        ports:
+        - containerPort: 80
+        env:
+          - name: ASSET_HOST
+            value: "https://www-origin.fred.eks.test.govuk.digital"
+          - name: DEFAULT_TTL
+            value: "1800"
+          - name: GOVUK_APP_DOMAIN
+            value: "default.svc.cluster.local"
+          - name: GOVUK_APP_DOMAIN_EXTERNAL
+            value: "fred.eks.test.govuk.digital"
+          - name: GOVUK_APP_NAME
+            value: "frontend"
+          - name: GOVUK_APP_TYPE
+            value: "rack"
+          - name: GOVUK_ASSET_ROOT
+            value: "https://assets.test.publishing.service.gov.uk"
+          - name: GOVUK_CONTENT_SCHEMAS_PATH
+            value: "/govuk-content-schemas"
+          - name: GOVUK_ENVIRONMENT
+            value: "test"
+          - name: GOVUK_WEBSITE_ROOT
+            value: "https://www.fred.eks.test.govuk.digital"
+          - name: GOVUK_WORKSPACE
+            value: "fred"
+          - name: PLEK_SERVICE_CONTENT_STORE_URI
+            value: "http://content-store.default.svc.cluster.local"
+          - name: PLEK_SERVICE_PUBLISHING_API_URI
+            value: "http://publishing-api-web.default.svc.cluster.local"
+          - name: PLEK_SERVICE_SIGNON_URI
+            value: "https://signon.fred.eks.test.govuk.digital"
+          - name: PLEK_SERVICE_STATIC_URI
+            value: "http://static.default.svc.cluster.local"
+          - name: PORT
+            value: "80"
+          - name: RAILS_ENV
+            value: "production"
+          - name: SENTRY_ENVIRONMENT
+            value: "test-ecsplatform-ecs"
+          - name: UNICORN_WORKER_PROCESSES
+            value: "12"
+          - name: SECRET_KEY_BASE
+            value: "123456789"
