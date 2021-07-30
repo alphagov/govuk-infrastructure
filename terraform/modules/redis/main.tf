@@ -31,14 +31,15 @@ resource "aws_security_group" "redis" {
 }
 
 resource "aws_elasticache_replication_group" "redis_cluster" {
+  apply_immediately             = true # TODO: Disable for production
   replication_group_id          = var.cluster_name
   replication_group_description = "${var.cluster_name} Redis cluster with Redis master and replica"
   node_type                     = var.node_type
   port                          = local.redis_port
   number_cache_clusters         = 2
-  parameter_group_name          = "default.redis3.2"
+  parameter_group_name          = "default.redis6.x"
   automatic_failover_enabled    = true
-  engine_version                = "3.2.10"
+  engine_version                = "6.x"
   subnet_group_name             = aws_elasticache_subnet_group.redis_cluster_subnet_group.name
   security_group_ids            = [aws_security_group.redis.id]
 
