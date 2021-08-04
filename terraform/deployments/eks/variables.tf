@@ -7,13 +7,8 @@ variable "assume_role_arn" {
 variable "govuk_aws_state_bucket" {
   type        = string
   description = "The name of the S3 bucket used for govuk-aws's terraform state files"
-  default     = "govuk-terraform-steppingstone-test"
-}
-
-variable "external_domain" {
-  type        = string
-  description = "full domain where services will be accessible publicly"
-  default     = "tmp.eks.test.govuk.digital"
+  # TODO: this probably should not have a default
+  default = "govuk-terraform-steppingstone-test"
 }
 
 variable "worker_node_instance_type" {
@@ -22,23 +17,20 @@ variable "worker_node_instance_type" {
   default     = "m5.4xlarge"
 }
 
-variable "desired_workers_size" {
+variable "workers_size_desired" {
   type        = number
-  description = "desired number of worker nodes"
-  default     = 1
+  description = "Desired capacity of managed node autoscale group."
+  default     = 3
 }
 
-#TODO: move default to variables file
-variable "admin_roles" {
-  description = "name of Additional IAM roles to add to the aws-auth configmap"
-  type        = list(string)
-  default = [
-    "frederic.francois-admin",
-    "william.franklin-admin",
-    "roch.trinque-admin",
-    "stephen.ford-admin",
-    "karl.baker-admin",
-    "chris.banks-admin",
-    "nadeem.sabri-admin",
-  ]
+variable "workers_size_min" {
+  type        = number
+  description = "Min capacity of managed node autoscale group."
+  default     = 3
+}
+
+variable "workers_size_max" {
+  type        = number
+  description = "Max capacity of managed node autoscale group."
+  default     = 3
 }
