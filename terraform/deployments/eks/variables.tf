@@ -11,10 +11,10 @@ variable "govuk_aws_state_bucket" {
   default = "govuk-terraform-steppingstone-test"
 }
 
-variable "worker_node_instance_type" {
+variable "workers_instance_type" {
   type        = string
-  description = "worker_node_instance_type"
-  default     = "m5.4xlarge"
+  description = "Instance type for the managed node group."
+  default     = "m5.xlarge"
 }
 
 variable "workers_size_desired" {

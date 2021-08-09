@@ -29,7 +29,7 @@ module "eks" {
 
   worker_groups = [
     {
-      instance_type        = "m5.xlarge"
+      instance_type        = var.workers_instance_type
       asg_desired_capacity = var.workers_size_desired
       asg_max_size         = var.workers_size_max
       asg_min_size         = var.workers_size_min
