@@ -6,11 +6,6 @@ terraform {
       source  = "hashicorp/aws"
       version = "~> 3.33"
     }
-
-    kubernetes = {
-      source  = "hashicorp/kubernetes"
-      version = "2.3.2"
-    }
   }
 }
 
@@ -22,51 +17,23 @@ provider "aws" {
   }
 }
 
-resource "aws_iam_role" "eks_cluster" {
-  name = "eks_cluster-tmp"
+module "eks" {
+  source  = "terraform-aws-modules/eks/aws"
+  version = "17.1.0"
 
-  assume_role_policy = <<POLICY
-{
-  "Version": "2012-10-17",
-  "Statement": [
+  cluster_name    = "govuk-tmp" # TODO: name
+  cluster_version = "1.21"
+  subnets         = data.terraform_remote_state.infra_networking.outputs.private_subnet_ids
+  vpc_id          = data.terraform_remote_state.infra_networking.outputs.vpc_id
+  manage_aws_auth = false
+
+  worker_groups = [
     {
-      "Effect": "Allow",
-      "Principal": {
-        "Service": "eks.amazonaws.com"
-      },
-      "Action": "sts:AssumeRole"
+      instance_type        = var.workers_instance_type
+      asg_desired_capacity = var.workers_size_desired
+      asg_max_size         = var.workers_size_max
+      asg_min_size         = var.workers_size_min
+      root_volume_type     = "gp3"
     }
   ]
 }
-POLICY
-}
-
-resource "aws_iam_role_policy_attachment" "eks_AmazonEKSClusterPolicy" {
-  policy_arn = "arn:aws:iam::aws:policy/AmazonEKSClusterPolicy"
-  role       = aws_iam_role.eks_cluster.name
-}
-
-# Optionally, enable Security Groups for Pods
-# Reference: https://docs.aws.amazon.com/eks/latest/userguide/security-groups-for-pods.html
-#resource "aws_iam_role_policy_attachment" "eks_AmazonEKSVPCResourceController" {
-#  policy_arn = "arn:aws:iam::aws:policy/AmazonEKSVPCResourceController"
-#  role       = aws_iam_role.eks_cluster.name
-#}
-
-resource "aws_eks_cluster" "govuk" {
-  name     = "govuk-tmp"
-  role_arn = aws_iam_role.eks_cluster.arn
-
-  vpc_config {
-    subnet_ids = data.terraform_remote_state.infra_networking.outputs.private_subnet_ids
-  }
-
-  # Ensure that IAM Role permissions are created before and deleted after EKS Cluster handling.
-  # Otherwise, EKS will not be able to properly delete EKS managed EC2 infrastructure such as Security Groups.
-  depends_on = [
-    aws_iam_role_policy_attachment.eks_AmazonEKSClusterPolicy,
-    #aws_iam_role_policy_attachment.eks_AmazonEKSVPCResourceController,
-  ]
-}
-
-
