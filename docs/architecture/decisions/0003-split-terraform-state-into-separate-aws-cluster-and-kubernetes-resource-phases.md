@@ -33,7 +33,7 @@ As Terraform providers are not fully handled as nodes in the TF plan graph it ca
 Split Terraform resources into two separate states and phases (actual names TBD):
 
 1. cluster-infrastructure - EKS cluster and associated AWS resources. No `kubernetes` provider should be defined.
-2. cluster-services - Kubernetes resources (e.g. ingress controllers) and in-cluster configuration (e.g. `aws-auth` ConfigMap), with the `kubernetes` provider configured via TF remote data sources, after `cluster-infrastructure` has been applied
+2. cluster-services - Kubernetes resources (e.g. ingress controllers) and in-cluster configuration (e.g. `aws-auth` ConfigMap), with the `kubernetes` provider configured via TF remote state, after `cluster-infrastructure` has been applied. No `aws` provider should be defined, unless we identify a need to access AWS data sources for use in k8s resources (e.g. obtaining current AWS region).
 
 ## Consequences
 
