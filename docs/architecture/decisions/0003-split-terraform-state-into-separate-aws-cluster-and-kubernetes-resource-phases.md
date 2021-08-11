@@ -37,7 +37,7 @@ Split Terraform resources into two separate states and phases (actual names TBD)
 
 ## Consequences
 
-The EKS module's `manage_aws_auth` input variable must be set to `false` to prevent the module attempting to create aws auth `ConfigMap` objects.
+[The EKS module's](https://registry.terraform.io/modules/terraform-aws-modules/eks/aws/latest) `manage_aws_auth` input variable must be set to `false` to prevent the module attempting to create aws auth `ConfigMap` objects.
 
 This should also prevent potential issues when tearing down an EKS cluster with deployed workloads. As ingress controllers and k8s `Service` objects commonly provision AWS load balancers themselves, Terraform does not know about these LBs and therefore does not include them in the plan graph, which can lead to Terraform attempting to delete a cluster with references to detatched AWS resources.
 
