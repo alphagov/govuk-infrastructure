@@ -1,0 +1,84 @@
+---
+resource_types:
+  - name: slack-notification
+    type: docker-image
+    source:
+      repository: cfcommunity/slack-notification-resource
+      tag: latest # TODO - don't use latest (once we've worked out a policy for third party images)
+      username: ((docker_hub_username))
+      password: ((docker_hub_authtoken))
+
+resources:
+  - icon: github
+    name: govuk-infrastructure
+    source:
+      branch: ((govuk_infrastructure_branch))
+      uri: https://github.com/alphagov/govuk-infrastructure
+    type: git
+
+  - name: deploy-slack-channel
+    type: slack-notification
+    icon: bell-ring
+    source:
+      url: https://hooks.slack.com/services/((deploy_apps_slack_webhook))
+      disable: ((disable_slack_channel_alerts))
+
+jobs:
+  - name: update-pipeline
+    plan:
+    - get: govuk-infrastructure
+      trigger: true
+    - file: govuk-infrastructure/concourse/pipelines/eks.yml
+      set_pipeline: self
+      var_files:
+        - govuk-infrastructure/concourse/parameters/((govuk_environment))/eks.yml
+
+  - name: terraform-eks-cluster
+    plan:
+    - get: govuk-infrastructure
+      trigger: true
+      passed:
+      - update-pipeline
+    - task: terraform-cluster
+      config: &terraform-cluster-config
+        inputs:
+        - name: govuk-infrastructure
+        params: &terraform-cluster-params
+          ASSUME_ROLE_ARN: ((concourse_deployer_role_arn))
+          AWS_REGION: ((aws_region))
+          DEPLOYMENT_PATH: govuk-infrastructure/terraform/deployments/eks
+          ENVIRONMENT: ((govuk_environment))
+        platform: linux
+        image_resource:
+          type: docker-image
+          source:
+            repository: digiticketsgroup/terraforming
+            tag: tf-1.0.1-aws-2.2.18-jq-1.5-git-2.32.0 #TODO: build our own image instead.
+            username: ((docker_hub_username))
+            password: ((docker_hub_authtoken))
+        run: 
+          path: govuk-infrastructure/concourse/tasks/terraform-apply.sh
+    on_failure: &notify-slack-failure
+      put: deploy-slack-channel
+      params:
+        channel: "#govuk-deploy-alerts" # TODO: Alert owner Slack channels in future
+        username: ((govuk_environment)) $BUILD_JOB_NAME
+        icon_emoji: ":concourse:"
+        silent: true
+        text: |
+          :red_circle: Failed deploy: https://cd.gds-reliability.engineering/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME
+
+  - name: terraform-eks-cluster-addons
+    plan:
+    - get: govuk-infrastructure
+      trigger: true
+      passed:
+      - terraform-eks-cluster
+    - task: terraform-cluster-addons
+      config: 
+        <<: *terraform-cluster-config
+        params: 
+          <<: *terraform-cluster-params
+          DEPLOYMENT_PATH: govuk-infrastructure/terraform/deployments/eks-stage2
+    on_failure:
+      <<: *notify-slack-failure
