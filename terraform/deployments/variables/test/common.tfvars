@@ -1,4 +1,5 @@
 govuk_aws_state_bucket = "govuk-terraform-steppingstone-test"
+eks_state_bucket       = "govuk-terraform-test"
 
 govuk_environment             = "test"
 ecs_default_capacity_provider = "FARGATE_SPOT"
