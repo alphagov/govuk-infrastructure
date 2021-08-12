@@ -21,7 +21,7 @@ module "eks" {
   source  = "terraform-aws-modules/eks/aws"
   version = "17.1.0"
 
-  cluster_name    = "govuk-tmp" # TODO: name
+  cluster_name    = "govuk"
   cluster_version = "1.21"
   subnets         = data.terraform_remote_state.infra_networking.outputs.private_subnet_ids
   vpc_id          = data.terraform_remote_state.infra_networking.outputs.vpc_id
