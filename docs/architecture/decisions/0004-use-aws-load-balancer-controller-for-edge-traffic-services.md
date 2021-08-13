@@ -30,6 +30,6 @@ The load balancer controller does not handle DNS for declared ingress hostnames 
 
 An appropriate ALB/NLB topography (how many LBs routing to where) will need to be established - by default the controller will provision one ALB per `Ingress` resource, which may not be what we want. Ingresses [can be grouped however](https://kubernetes-sigs.github.io/aws-load-balancer-controller/v2.2/guide/ingress/annotations/#ingressgroup).
 
-The load balancer controller supports [AWS WAF and Shield](https://kubernetes-sigs.github.io/aws-load-balancer-controller/v2.2/guide/ingress/annotations/#addons), which can be investigated at a later date.
+The load balancer controller supports [AWS WAF and Shield](https://kubernetes-sigs.github.io/aws-load-balancer-controller/v2.2/guide/ingress/annotations/#addons), both of which are currently in use on GOV.UK.
 
 Access control for Ingress rules must be investigated, likely in conjunction with Kubernetes `namespace` usage - if all of GOV.UK is deployed into a single namespace, and multiple users or service accounts have the same level of access to `Ingress` objects, then user or process for component A could modify or destroy ingress rules for component B.
