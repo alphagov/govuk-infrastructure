@@ -57,7 +57,8 @@ jobs:
             username: ((docker_hub_username))
             password: ((docker_hub_authtoken))
         run:
-          path: govuk-infrastructure/concourse/tasks/terraform-apply.sh
+          path: govuk-infrastructure/concourse/tasks/terraform.sh
+          args: ["apply"]
     on_failure: &notify-slack-failure
       put: deploy-slack-channel
       params:
