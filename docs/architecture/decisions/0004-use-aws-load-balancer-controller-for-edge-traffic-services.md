@@ -8,7 +8,7 @@ Accepted
 
 ## Context
 
-We require a method of managing and direcing external internet traffic into the cluster. Kubernetes provides [several options for handling inbound traffic](https://medium.com/google-cloud/kubernetes-nodeport-vs-loadbalancer-vs-ingress-when-should-i-use-what-922f010849e0).
+We require a method of managing and directing external internet traffic into the cluster. Kubernetes provides [several options for handling inbound traffic](https://medium.com/google-cloud/kubernetes-nodeport-vs-loadbalancer-vs-ingress-when-should-i-use-what-922f010849e0).
 
 We do not want to expose the cluster directly to the internet, and so require an AWS load balancer in front of the cluster. The load balancer must support TLS termination and integration with our DNS provider (AWS Route 53).
 
