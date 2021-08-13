@@ -1,6 +1,8 @@
 govuk_aws_state_bucket = "govuk-terraform-steppingstone-test"
 eks_state_bucket       = "govuk-terraform-test"
 
+cluster_log_retention_in_days = 7
+
 govuk_environment             = "test"
 ecs_default_capacity_provider = "FARGATE_SPOT"
 

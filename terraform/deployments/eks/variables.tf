@@ -3,6 +3,11 @@ variable "govuk_aws_state_bucket" {
   description = "The name of the S3 bucket used for govuk-aws's Terraform state files."
 }
 
+variable "cluster_log_retention_in_days" {
+  type        = number
+  description = "Number of days to retain cluster log events in CloudWatch."
+}
+
 variable "workers_instance_type" {
   type        = string
   description = "Instance type for the managed node group."
