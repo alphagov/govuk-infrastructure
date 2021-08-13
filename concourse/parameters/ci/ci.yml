@@ -1,2 +1,3 @@
-govuk_infrastructure_branch: main
+aws_region: eu-west-1
 concourse_ci_role_arn: arn:aws:iam::430354129336:role/govuk-ci-concourse
+govuk_infrastructure_branch: main
