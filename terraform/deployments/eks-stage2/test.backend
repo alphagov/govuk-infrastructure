@@ -2,3 +2,4 @@ bucket  = "govuk-terraform-test"
 key     = "projects/eks-stage2.tfstate"
 encrypt = true
 region  = "eu-west-1"
+dynamodb_table = "terraform-lock"
