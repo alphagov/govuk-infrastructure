@@ -19,7 +19,11 @@ locals {
     },
   ]
 
-  admin_roles_and_arns = data.terraform_remote_state.infra_security.outputs.admin_roles_and_arns
+  concourse_worker_role = {
+    "govuk-concourse-deployer" = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/govuk-concourse-deployer"
+  }
+
+  admin_roles_and_arns = merge(data.terraform_remote_state.infra_security.outputs.admin_roles_and_arns, local.concourse_worker_role)
   admin_configmap_roles = [
     for user, arn in local.admin_roles_and_arns : {
       rolearn  = arn
