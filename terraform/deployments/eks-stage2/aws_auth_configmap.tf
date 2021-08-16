@@ -24,8 +24,7 @@ locals {
     for user, arn in local.admin_roles_and_arns : {
       rolearn  = arn
       username = user
-      # TODO: don't use system:masters.
-      groups = ["system:masters"]
+      groups   = ["cluster-admins"]
     }
   ]
 }
@@ -44,5 +43,21 @@ resource "kubernetes_config_map" "aws_auth" {
         local.admin_configmap_roles,
       ))
     )
+  }
+}
+
+resource "kubernetes_cluster_role_binding" "cluster_admins" {
+  metadata {
+    name = "cluster-admins"
+  }
+  role_ref {
+    api_group = "rbac.authorization.k8s.io"
+    kind      = "ClusterRole"
+    name      = "cluster-admin"
+  }
+  subject {
+    kind      = "Group"
+    name      = "cluster-admins"
+    api_group = "rbac.authorization.k8s.io"
   }
 }
