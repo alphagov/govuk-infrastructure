@@ -46,9 +46,9 @@ resource "kubernetes_config_map" "aws_auth" {
   }
 }
 
-resource "kubernetes_cluster_role_binding" "cluster_admin" {
+resource "kubernetes_cluster_role_binding" "cluster_admins" {
   metadata {
-    name = "cluster-admin"
+    name = "cluster-admins"
   }
   role_ref {
     api_group = "rbac.authorization.k8s.io"
