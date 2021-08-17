@@ -2,11 +2,11 @@ data "aws_region" "current" {}
 
 data "aws_caller_identity" "current" {}
 
-data "terraform_remote_state" "eks" {
+data "terraform_remote_state" "cluster_infrastructure" {
   backend = "s3"
   config = {
-    bucket = var.eks_state_bucket
-    key    = "projects/eks.tfstate"
+    bucket = var.cluster_infrastructure_state_bucket
+    key    = "projects/cluster-infrastructure.tfstate"
     region = data.aws_region.current.name
   }
 }
