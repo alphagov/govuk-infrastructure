@@ -39,11 +39,11 @@ jobs:
       trigger: true
       passed:
       - update-pipeline
-    - task: terraform-cluster
-      config: &terraform-cluster-config
+    - task: terraform-apply
+      config: &terraform-apply-config
         inputs:
         - name: govuk-infrastructure
-        params: &terraform-cluster-params
+        params: &terraform-apply-params
           ASSUME_ROLE_ARN: ((concourse_deployer_role_arn))
           AWS_REGION: ((aws_region))
           DEPLOYMENT_PATH: govuk-infrastructure/terraform/deployments/cluster-infrastructure
@@ -75,11 +75,11 @@ jobs:
       trigger: true
       passed:
       - terraform-cluster-infrastructure
-    - task: terraform-cluster-addons
+    - task: terraform-apply
       config:
-        <<: *terraform-cluster-config
+        <<: *terraform-apply-config
         params:
-          <<: *terraform-cluster-params
+          <<: *terraform-apply-params
           DEPLOYMENT_PATH: govuk-infrastructure/terraform/deployments/cluster-services
     on_failure:
       <<: *notify-slack-failure
