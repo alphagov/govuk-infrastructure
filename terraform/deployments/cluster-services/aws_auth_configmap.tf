@@ -13,7 +13,7 @@
 locals {
   default_configmap_roles = [
     {
-      rolearn  = data.terraform_remote_state.eks.outputs.worker_iam_role_arn
+      rolearn  = data.terraform_remote_state.cluster_infrastructure.outputs.worker_iam_role_arn
       username = "system:node:{{EC2PrivateDNSName}}"
       groups   = ["system:bootstrappers", "system:nodes"]
     },

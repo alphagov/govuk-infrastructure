@@ -33,7 +33,7 @@ jobs:
       var_files:
         - govuk-infrastructure/concourse/parameters/((govuk_environment))/eks.yml
 
-  - name: terraform-eks-cluster
+  - name: terraform-cluster-infrastructure
     plan:
     - get: govuk-infrastructure
       trigger: true
@@ -46,7 +46,7 @@ jobs:
         params: &terraform-cluster-params
           ASSUME_ROLE_ARN: ((concourse_deployer_role_arn))
           AWS_REGION: ((aws_region))
-          DEPLOYMENT_PATH: govuk-infrastructure/terraform/deployments/eks
+          DEPLOYMENT_PATH: govuk-infrastructure/terraform/deployments/cluster-infrastructure
           ENVIRONMENT: ((govuk_environment))
         platform: linux
         image_resource:
@@ -69,7 +69,7 @@ jobs:
         text: |
           :red_circle: Failed deploy: https://cd.gds-reliability.engineering/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME
 
-  - name: terraform-eks-cluster-addons
+  - name: terraform-cluster-services
     plan:
     - get: govuk-infrastructure
       trigger: true
@@ -80,6 +80,6 @@ jobs:
         <<: *terraform-cluster-config
         params:
           <<: *terraform-cluster-params
-          DEPLOYMENT_PATH: govuk-infrastructure/terraform/deployments/eks-stage2
+          DEPLOYMENT_PATH: govuk-infrastructure/terraform/deployments/cluster-services
     on_failure:
       <<: *notify-slack-failure
