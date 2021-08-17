@@ -74,7 +74,7 @@ jobs:
     - get: govuk-infrastructure
       trigger: true
       passed:
-      - terraform-eks-cluster
+      - terraform-cluster-infrastructure
     - task: terraform-cluster-addons
       config:
         <<: *terraform-cluster-config
