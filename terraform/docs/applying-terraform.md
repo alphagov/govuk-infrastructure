@@ -1,140 +1,44 @@
 # Applying Terraform
 
-> **Note:** This document may become outdated. Please update this document
-if you find it is inaccurate.
+The EKS cluster is deployed via Terraform in two stages. See [adr-3] for background.
 
-We have attempted - where possible - to separate infrastructure concerns
-(ECS Services, databases, Route53 records, etc.) from application concerns
-(ECS Task Definitions, containers).
+- `cluster-infrastructure` is concerned only with setting-up the EKS cluster and associated AWS resources (such as the worker groups and auto-scaling groups).
+- `cluster-services` is concerned only with setting up the Kubernetes resources and configuration for base services, including the `aws-auth` ConfigMap, ingress controller, etc.
 
-Therefore, there is a single command (`terraform apply`) to create or update the
-infrastructure, and another set of commands to update application concerns.
+## Automated Deployment via Concourse
 
-### Automated Deployment via Concourse
+The `cluster-infrastructure` and `cluster-services` modules are deployed one after another by the [`eks` Concourse pipeline](https://cd.gds-reliability.engineering/teams/govuk-test/pipelines/eks).
 
-Once you have merged your code in the `main`, this will kick off a new deployment
-in [Concourse](https://cd.gds-reliability.engineering/teams/govuk-tools/pipelines/deploy-apps-test)
-which will terraform the base infrastructure to reflect the code in the `main` branch.
+The pipeline will trigger on any commit to the `main` branch of the `govuk-infrastructure` repo.
 
-After the base infrastructure has been terraformed, the Concourse pipeline will create new task definitions
-for any services/applications that have changed. If a new task definition has been created, the respective
-ECS Service will be updated/deployed.
+The automated deployment is not truly continuous in that it has no way to detect *when* something/someone else changes the resources which it owns. That is, any manual/external changes to (for example) AWS resources will be ignored until the next commit to `main`, at which point they'll be overwritten.
 
 ## Local Deployment
 
-### Infrastructure
+For testing before merging to `main`, we can run Terraform locally against the test account.
+
+### Cluster infrastructure
 
 You can update the base infrastructure from your machine to test things.
 For example, run the following commands to update the test environment:
 
 ```sh
-cd terraform/deployments/govuk-publishing-platform
-
-gds aws govuk-test-admin -- terraform init -backend-config test.backend
-
-gds aws govuk-test-admin -- terraform workspace select default
-
-gds aws govuk-test-admin -- terraform apply \
-  -var-file ../variables/common.tfvars \
-  -var-file ../variables/test/common.tfvars \
-  -var-file ../variables/test/infrastructure.tfvars
+cd terraform/deployments/cluster-infrastructure
+gds aws govuk-test-admin -- terraform init -backend-config=test.backend -reconfigure
+gds aws govuk-test-admin -- terraform plan -var-file ../variables/test/common.tfvars
 ```
 
-### Application
+### Cluster services
 
-To deploy app changes to ECS Services, we update the task definition using
-the deployment module in `terraform/deployments/apps` and then run a
-set of commands using the AWS CLI to update the ECS Service.
+As above, but with `terraform/deployments/cluster-services`.
 
-This should be performed by a Concourse pipeline.
-
-Example:
+### Running kubectl
 
 ```sh
-APPLICATION=frontend
-GOVUK_ENVIRONMENT=test
-BUILD_TAG=release_123
-AWS_REGION=eu-west-1
-
-cd "src/terraform/deployments/apps/$GOVUK_ENVIRONMENT/$APPLICATION"
-
-terraform apply -var "image_tag=$BUILD_TAG"
-
-task_definition_arn=$(terraform output task_definition_arn)
-
-aws ecs update-service \
- --cluster govuk \
- --service "$APPLICATION" \
- --task-definition "$task_definition_arn" \
- --region "$AWS_REGION"
-
-aws ecs wait services-stable \
- --cluster govuk \
- --services "$APPLICATION" \
- --region "$AWS_REGION"
+AWS_DEFAULT_REGION=eu-west-1
+eval $(gds aws govuk-test-admin -e)
+aws eks update-kubeconfig --name govuk
+kubectl get nodes
 ```
 
-### Monitoring
-
-The monitoring stack of GOV.UK is in a separate cluster compared to the one where
-the GOV.UK apps run. Below are the details how to run deploy the monitoring stack
-which includes only Grafana for now.
-
-1. Github Secrets
-
-You need to ask a GitHub admin for the `alphagov` organisation to create a new
-OAuth app for Grafana authentication. The redirect URL for OAuth is usually in
-the format `https://<fqdn_grafana>/login/github` where `<fqdn_grafana>` is the
-Fully Qualified Domain Name under which Grafana can be accessed.
-
-Once a Grafana GitHub OAuth is created, you need to add to AWS Secret Manager
-the `client_id` and the `client_secret` as `grafana_github_client_id` and
-`grafana_github_client_secret` respectively.
-
-2. Infrastructure
-
-```sh
-cd terraform/deployments/monitoring-test/infra
-
-gds aws govuk-test-admin -- terraform init
-
-gds aws govuk-test-admin -- terraform apply \
- -var-file ../variables/common.tfvars \
- -var-file ../variables/test/common.tfvars
-```
-
-3. Grafana Task Definition & Service Update
-
-```sh
-cd terraform/deployments/monitoring-test/grafana
-
-gds aws govuk-test-admin -- terraform init
-
-gds aws govuk-test-admin -- terraform apply
-
-task_definition_arn=$(gds aws govuk-test-admin -- terraform output task_definition_arn)
-
-gds aws govuk-test-admin -- aws ecs update-service  \
- --cluster monitoring \
- --service "grafana" \
- --task-definition "$task_definition_arn" \
- --region eu-west-1
-
- aws ecs wait services-stable \
-  --cluster monitoring \
-  --services "grafana" \
-  --region eu-west-1
-```
-
-4. Grafana Internal Configuration
-
-```sh
-cd terraform/deployments/monitoring-test/grafana/app-config
-
-gds aws govuk-test-admin -- terraform init
-
-gds aws govuk-test-admin -- terraform apply
-```
-
-If you get an error: `Error: status: 404, body: {"message":"Data source not found"}`,
-you should run: `gds aws govuk-test-admin -- terraform state rm module.grafana-app-config.grafana_data_source.cloudwatch` before re-applying the terraform.
+[adr-3]: https://github.com/alphagov/govuk-infrastructure/blob/main/docs/architecture/decisions/0003-split-terraform-state-into-separate-aws-cluster-and-kubernetes-resource-phases.md
