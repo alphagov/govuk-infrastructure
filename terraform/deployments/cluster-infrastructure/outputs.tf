@@ -17,3 +17,13 @@ output "cluster_endpoint" {
   description = "The endpoint for the EKS cluster's kube-apiserver."
   value       = module.eks.cluster_endpoint
 }
+
+output "aws_lb_controller_role_arn" {
+  description = "IAM role ARN corresponding to the k8s service account for the AWS Load Balancer Controller."
+  value       = aws_iam_role.aws_lb_controller.arn
+}
+
+output "aws_lb_controller_service_account_name" {
+  description = "Name of the k8s service account for the AWS Load Balancer Controller."
+  value       = local.aws_lb_controller_service_account_name
+}
