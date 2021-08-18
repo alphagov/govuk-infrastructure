@@ -1,23 +1,11 @@
-# The eks-stage2 module is responsible for Kubernetes objects within the EKS
-# cluster.
+# The cluster-services module is responsible for Kubernetes objects within the
+# EKS cluster.
 #
-# It has to be a separate root module (aka deployment/project) because
-# Terraform does not handle dependencies in provider configurations, which
-# means the Kubernetes and Helm providers cannot reliably be initialised in the
-# same root module which creates the EKS cluster (see warning in
-# https://registry.terraform.io/providers/hashicorp/kubernetes/latest/docs#stacking-with-managed-kubernetes-cluster-resources).
+# Any AWS resources relating to the cluster belong in
+# ../cluster-infrastructure, not in this module.
+#
+# See https://github.com/alphagov/govuk-infrastructure/blob/main/docs/architecture/decisions/0003-split-terraform-state-into-separate-aws-cluster-and-kubernetes-resource-phases.md
 
 terraform {
   backend "s3" {}
-
-  required_providers {
-    aws = {
-      source  = "hashicorp/aws"
-      version = "~> 3.33"
-    }
-  }
-}
-
-provider "aws" {
-  region = "eu-west-1"
 }
