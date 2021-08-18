@@ -10,10 +10,6 @@ terraform {
   backend "s3" {}
 }
 
-data "aws_eks_cluster_auth" "auth" {
-  name = data.terraform_remote_state.cluster_infrastructure.outputs.cluster_id
-}
-
 provider "kubernetes" {
   host                   = data.terraform_remote_state.cluster_infrastructure.outputs.cluster_endpoint
   cluster_ca_certificate = base64decode(data.terraform_remote_state.cluster_infrastructure.outputs.cluster_certificate_authority_data)
