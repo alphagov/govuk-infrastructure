@@ -27,6 +27,19 @@ locals {
       groups   = ["cluster-admins"]
     }
   ]
+
+  ci_planner_username_and_rolearn = {
+    "govuk-ci-concourse" = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/govuk-ci-concourse"
+  }
+
+  readonly_roles_and_arns = merge(data.terraform_remote_state.infra_security.outputs.user_roles_and_arns, local.ci_planner_username_and_rolearn)
+  readonly_configmap_roles = [
+    for user, arn in local.readonly_roles_and_arns : {
+      rolearn  = arn
+      username = user
+      groups   = ["readonly"]
+    }
+  ]
 }
 
 resource "kubernetes_config_map" "aws_auth" {
@@ -41,6 +54,7 @@ resource "kubernetes_config_map" "aws_auth" {
       distinct(concat(
         local.default_configmap_roles,
         local.admin_configmap_roles,
+        local.readonly_configmap_roles,
       ))
     )
   }
@@ -58,6 +72,50 @@ resource "kubernetes_cluster_role_binding" "cluster_admins" {
   subject {
     kind      = "Group"
     name      = "cluster-admins"
+    api_group = "rbac.authorization.k8s.io"
+  }
+}
+
+resource "kubernetes_cluster_role_binding" "cluster_readonly" {
+  metadata {
+    name = "cluster-readonly"
+  }
+  role_ref {
+    api_group = "rbac.authorization.k8s.io"
+    kind      = "ClusterRole"
+    name      = "view"
+  }
+  subject {
+    kind      = "Group"
+    name      = "readonly"
+    api_group = "rbac.authorization.k8s.io"
+  }
+}
+
+resource "kubernetes_cluster_role" "read_crs_and_crbs" {
+  metadata {
+    name = "read-crs-and-crbs"
+  }
+
+  rule {
+    api_groups = ["rbac.authorization.k8s.io"]
+    resources  = ["clusterrolebindings", "clusterroles"]
+    verbs      = ["get", "list", "watch"]
+  }
+}
+
+resource "kubernetes_cluster_role_binding" "read_crs_and_crbs" {
+  metadata {
+    name = "read-crs-and-crbs"
+  }
+  role_ref {
+    api_group = "rbac.authorization.k8s.io"
+    kind      = "ClusterRole"
+    name      = kubernetes_cluster_role.read_crs_and_crbs.metadata.0.name
+  }
+  subject {
+    kind      = "Group"
+    name      = "readonly"
     api_group = "rbac.authorization.k8s.io"
   }
 }
