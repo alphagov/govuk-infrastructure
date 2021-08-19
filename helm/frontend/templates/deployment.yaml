@@ -1,0 +1,73 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}
+  labels:
+    app: {{ .Release.Name }}
+spec:
+  replicas: {{ .Values.replicaCount}}
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}
+    spec:
+      containers:
+        - name: {{ .Release.Name }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          ports:
+            - containerPort: {{ .Values.containerPort }}
+          env:
+            - name: ASSET_HOST
+              value: "{{ .Values.appAssetHost | default (printf "https://www-origin.%s.%s.%s" .Release.Namespace .Values.govukEnvironment .Values.govukDomainExternal) }}"
+            - name: GOVUK_APP_DOMAIN
+              value: "{{ .Values.appGovukAppDomain | default (printf "%s.%s.%s" .Release.Namespace .Values.govukEnvironment .Values.clusterDomain) }}"
+            - name: GOVUK_APP_DOMAIN_EXTERNAL
+              value: "{{ .Values.appGovukDomainExternal | default (printf "%s.%s.%s" .Release.Namespace .Values.govukEnvironment .Values.govukDomainExternal) }}"
+            - name: GOVUK_APP_NAME
+              value: "{{ .Values.appGovukAppName | default .Release.Name }}"
+            - name: GOVUK_APP_TYPE
+              value: "{{ .Values.appGovukAppType }}"
+            - name: GOVUK_WEBSITE_ROOT
+              value: "{{ .Values.appGovukWebsiteRoot | default (printf "https://www-origin.%s.%s.%s" .Release.Namespace .Values.govukEnvironment .Values.govukDomainExternal) }}"
+            - name: DEFAULT_TTL
+              value: "{{ .Values.appDefaultTtl }}"
+            - name: GOVUK_ASSET_ROOT
+              value: "{{ .Values.appGovukAssetRoot | default (printf "https://assets.%s.%s.%s" .Release.Namespace .Values.govukEnvironment .Values.govukDomainExternal) }}"
+            - name: GOVUK_CONTENT_SCHEMAS_PATH
+              value: "{{ .Values.appGovukContentSchemasPath }}"
+            - name: GOVUK_ENVIRONMENT
+              value: "{{ .Values.govukEnvironment }}"
+            - name: PLEK_SERVICE_CONTENT_STORE_URI
+              value: "{{ .Values.appPlekServiceContentStoreUri | default (printf "http://content-store.%s.%s" .Release.Namespace .Values.clusterDomain) }}"
+            - name: PLEK_SERVICE_PUBLISHING_API_URI
+              value: "{{ .Values.appPlekServicePublishingApiUri | default (printf "http://publishing-api-web.%s.%s" .Release.Namespace .Values.clusterDomain) }}"
+            - name: PLEK_SERVICE_SIGNON_URI
+              value: "{{ .Values.appPlekServiceSignonUri | default (printf "http://signon.%s.%s" .Release.Namespace .Values.clusterDomain) }}"
+            - name: PLEK_SERVICE_STATIC_URI
+              value: "{{ .Values.appPlekServiceStaticUri | default (printf "http://static.%s.%s" .Release.Namespace .Values.clusterDomain) }}"
+            - name: PORT
+              value: "{{ .Values.containerPort }}"
+            - name: RAILS_ENV
+              value: "{{ .Values.appRailsEnv }}"
+            - name: SECRET_KEY_BASE
+              value: "secret" #TODO: fix when we know how to handle secrets
+          {{- with .Values.appExtraEnv }}
+            {{- . | toYaml | trim | nindent 12 }}
+          {{- end }}
+          resources:
+{{ toYaml .Values.resources | indent 12 }}
+          livenessProbe:
+            httpGet:
+              path: /healthcheck/live
+              port: {{ .Values.containerPort }}
+            initialDelaySeconds: 30
+            periodSeconds: 5
+          readinessProbe:
+            httpGet:
+              path: /healthcheck/ready
+              port: {{ .Values.containerPort }}
+            initialDelaySeconds: 30
+            periodSeconds: 5
