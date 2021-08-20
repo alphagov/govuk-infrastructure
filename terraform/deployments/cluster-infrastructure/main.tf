@@ -1,3 +1,11 @@
+# The cluster-infrastructure module is responsible for the AWS resources which
+# constitute the EKS cluster.
+#
+# Any Kubernetes objects which need to be managed via Terraform belong in
+# ../cluster-services, not in this module.
+#
+# See https://github.com/alphagov/govuk-infrastructure/blob/main/docs/architecture/decisions/0003-split-terraform-state-into-separate-aws-cluster-and-kubernetes-resource-phases.md
+
 terraform {
   backend "s3" {}
 
@@ -21,6 +29,7 @@ module "eks" {
   cluster_version  = "1.21"
   subnets          = data.terraform_remote_state.infra_networking.outputs.private_subnet_ids
   vpc_id           = data.terraform_remote_state.infra_networking.outputs.vpc_id
+  enable_irsa      = true
   manage_aws_auth  = false
   write_kubeconfig = false
 
