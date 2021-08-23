@@ -1,0 +1,42 @@
+# values used to compute other values
+govukEnvironment: test
+govukStack: pink
+govukDomainExternal: govuk.digital
+govukDomainInternal: govuk-internal.digital
+clusterDomain: svc.cluster.local
+
+service:
+  annotations: {}
+  type: NodePort
+  port: 80
+  targetPort: 80
+
+deployment:
+  replicaCount: 1
+  image:
+    repository: 172025368201.dkr.ecr.eu-west-1.amazonaws.com/content-store
+    tag: latest
+  containerPort: 80
+  resources:
+    limits:
+    # cpu:
+    # memory: 1024M
+    requests:
+    # cpu:
+    # memory: 1024M
+  # values used to generate the environment variables for the pod
+  appDefaultTll: "1800"
+  appGovukAppDomain: #default (printf "%s.%s.%s" .Release.Namespace .Values.govukEnvironment .Values.clusterDomain )
+  appGovukDomainExternal: #default (printf "%s.%s.%s" .Release.Namespace .Values.govukEnvironment .Values.govukDomainExternal )
+  appGovukAppName: #default .Release.Name
+  appGovukAppType: "rack"
+  appGovukContentSchemasPath: "/govuk-content-schemas"
+  appGovukWebsiteRoot: #default (printf "https://www-origin.%s.%s.%s" .Release.Namespace .Values.govukEnvironment .Values.govukDomainExternal )
+  appMongodbUri: #default (printf "mongodb://mongo-1.%[1]s.%[2]s.%[3]s,mongo-2.%[1]s.%[2]s.%[3]s,mongo-3.%[1]s.%[2]s.%[3]s/content_store_production" .Values.govukStack .Values.govukEnvironment .Values.govukDomainInternal )
+  appPlekServicePublishingApiUri: #default (printf "http://publishing-api-web.%s.%s" .Release.Namespace .Values.clusterDomain )
+  appPlekServiceRouterApiUri: #default (printf "http://router-api.%s.%s" .Release.Namespace .Values.clusterDomain )
+  appPlekServiceSignonUri: #default (printf "http://signon.%s.%s" .Release.Namespace .Values.clusterDomain )
+  appRailsEnv: "production"
+  appExtraEnv: # extra envs that you to pass to the app
+   #- name: hello
+   #  value: world

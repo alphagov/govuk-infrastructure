@@ -61,18 +61,18 @@ jobs:
         run:
           path: govuk-infrastructure-commit/repo/concourse/tasks/terraform.sh
           args: ["plan", "-lock=false", "-refresh=false"]
-      on_success:
-        put: govuk-infrastructure-commit
-        params: {status: success, context: terraform-plan-cluster-infrastructure}
-      on_failure:
-        put: govuk-infrastructure-commit
-        params: {status: failure, context: terraform-plan-cluster-infrastructure}
-      on_abort:
-        put: govuk-infrastructure-commit
-        params: {status: error, context: terraform-plan-cluster-infrastructure}
-      on_error:
-        put: govuk-infrastructure-commit
-        params: {status: error, context: terraform-plan-cluster-infrastructure}
+    on_success:
+      put: govuk-infrastructure-commit
+      params: {status: success, context: terraform-plan-cluster-infrastructure}
+    on_failure:
+      put: govuk-infrastructure-commit
+      params: {status: failure, context: terraform-plan-cluster-infrastructure}
+    on_abort:
+      put: govuk-infrastructure-commit
+      params: {status: error, context: terraform-plan-cluster-infrastructure}
+    on_error:
+      put: govuk-infrastructure-commit
+      params: {status: error, context: terraform-plan-cluster-infrastructure}
 
   - name: terraform-cluster-services
     plan:
@@ -86,15 +86,15 @@ jobs:
         params:
           <<: *terraform-cluster-params
           DEPLOYMENT_PATH: govuk-infrastructure-commit/repo/terraform/deployments/cluster-services
-      on_success:
-        put: govuk-infrastructure-commit
-        params: {status: success, context: terraform-plan-cluster-services}
-      on_failure:
-        put: govuk-infrastructure-commit
-        params: {status: failure, context: terraform-plan-cluster-services}
-      on_abort:
-        put: govuk-infrastructure-commit
-        params: {status: error, context: terraform-plan-cluster-services}
-      on_error:
-        put: govuk-infrastructure-commit
-        params: {status: error, context: terraform-plan-cluster-services}
+    on_success:
+      put: govuk-infrastructure-commit
+      params: {status: success, context: terraform-plan-cluster-services}
+    on_failure:
+      put: govuk-infrastructure-commit
+      params: {status: failure, context: terraform-plan-cluster-services}
+    on_abort:
+      put: govuk-infrastructure-commit
+      params: {status: error, context: terraform-plan-cluster-services}
+    on_error:
+      put: govuk-infrastructure-commit
+      params: {status: error, context: terraform-plan-cluster-services}
