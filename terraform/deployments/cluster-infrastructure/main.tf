@@ -31,6 +31,13 @@ module "eks" {
   manage_aws_auth  = false
   write_kubeconfig = false
 
+  # TODO: Tag the node pool ASG once
+  # https://github.com/terraform-aws-modules/terraform-aws-eks/issues/1455 is
+  # addressed. This may or may not involve passing additional args here.
+  # Ideally the default_tags above would propagate automatically to the ASG but
+  # that isn't possible yet because of the above bug and
+  # https://github.com/hashicorp/terraform-provider-aws/issues/19204.
+
   cluster_log_retention_in_days = var.cluster_log_retention_in_days
   cluster_enabled_log_types = [
     "api", "audit", "authenticator", "controllerManager", "scheduler"
