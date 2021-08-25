@@ -6,7 +6,7 @@
 # https://github.com/alphagov/govuk-infrastructure/blob/main/docs/architecture/decisions/0003-split-terraform-state-into-separate-aws-cluster-and-kubernetes-resource-phases.md#decision for rationale.
 
 resource "aws_iam_policy" "aws_lb_controller" {
-  name        = "AWSLoadBalancerControllerIAMPolicy"
+  name        = "AWSLoadBalancerController-${var.cluster_name}"
   description = "Allow AWS Load Balancer Controller to manage ALBs/NLBs etc."
 
   # The argument to jsonencode() is the verbatim contents of
@@ -233,7 +233,7 @@ locals {
 }
 
 resource "aws_iam_role" "aws_lb_controller" {
-  name        = "AmazonEKSLoadBalancerControllerRole"
+  name        = "AmazonEKSLoadBalancerController-${var.cluster_name}"
   description = "Role for the AWS Load Balancer Controller. Corresponds to ${local.aws_lb_controller_service_account_name} k8s ServiceAccount."
   assume_role_policy = jsonencode({
     "Version" : "2012-10-17",

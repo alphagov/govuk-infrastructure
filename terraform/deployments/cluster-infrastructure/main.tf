@@ -36,7 +36,7 @@ module "eks" {
   source  = "terraform-aws-modules/eks/aws"
   version = "17.1.0"
 
-  cluster_name     = local.cluster_name
+  cluster_name     = var.cluster_name
   cluster_version  = "1.21"
   subnets          = data.terraform_remote_state.infra_networking.outputs.private_subnet_ids
   vpc_id           = data.terraform_remote_state.infra_networking.outputs.vpc_id
@@ -70,7 +70,7 @@ module "eks" {
           "value"               = "true"
         },
         {
-          "key"                 = "k8s.io/cluster-autoscaler/${local.cluster_name}"
+          "key"                 = "k8s.io/cluster-autoscaler/${var.cluster_name}"
           "propagate_at_launch" = "false"
           "value"               = "owned"
         }

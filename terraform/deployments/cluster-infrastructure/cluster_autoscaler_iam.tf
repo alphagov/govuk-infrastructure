@@ -14,6 +14,9 @@ locals {
 # which is Apache-2.0 licenced:
 # https://github.com/terraform-aws-modules/terraform-aws-eks/blob/master/LICENSE
 #
+# Significant changes from upstream:
+# - The aws_iam_policy uses a constructed name instead of name_prefix.
+#
 # TODO: If we make any significant changes to this code (i.e. if it diverges
 # significantly from upstream), we need to summarise those changes here
 # in order to comply with the licence.
@@ -28,7 +31,7 @@ module "cluster_autoscaler_iam_role" {
 }
 
 resource "aws_iam_policy" "cluster_autoscaler" {
-  name_prefix = "cluster-autoscaler"
+  name        = "EKSClusterAutoscaler-${var.cluster_name}"
   description = "EKS cluster-autoscaler policy for cluster ${module.eks.cluster_id}"
   policy      = data.aws_iam_policy_document.cluster_autoscaler.json
 }

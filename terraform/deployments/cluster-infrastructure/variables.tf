@@ -8,6 +8,12 @@ variable "cluster_log_retention_in_days" {
   description = "Number of days to retain cluster log events in CloudWatch."
 }
 
+variable "cluster_name" {
+  type        = string
+  description = "Name for the EKS cluster."
+  default     = "govuk"
+}
+
 variable "workers_instance_type" {
   type        = string
   description = "Instance type for the managed node group."
