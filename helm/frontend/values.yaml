@@ -1,0 +1,47 @@
+# Default values for frontend.
+
+govukEnvironment: test
+govukDomainExternal: govuk.digital
+govukDomainInternal: govuk-internal.digital
+clusterDomain: svc.cluster.local
+
+service:
+  type: NodePort
+  annotations: {}
+  port: 80
+
+
+replicaCount: 1
+
+image:
+  repository: 172025368201.dkr.ecr.eu-west-1.amazonaws.com/frontend
+  pullPolicy: IfNotPresent
+  tag: latest
+
+containerPort: 80
+
+resources:
+  limits:
+  # cpu:
+  # memory: 1024M
+  requests:
+  # cpu:
+  # memory: 1024M
+
+appDefaultTtl: "1800"
+appGovukAppDomain: # see template for how default value is computed
+appGovukDomainExternal: # see template for how default value is computed
+appGovukAppName: # see template for how default value is computed
+appGovukAppType: "rack"
+appGovukContentSchemasPath: "/govuk-content-schemas"
+appGovukWebsiteRoot: # see template for how default value is computed
+appPlekServicePublishingApiUri: # see template for how default value is computed
+appPlekServiceSignonUri: # see template for how default value is computed
+appPlekServiceContentStoreUri: # see template for how default value is computed
+appPlekServiceStaticUri: # see template for how default value is computed
+appRailsEnv: "production"
+appAssetHost: # see template for how default value is computed
+appGovukAssetRoot: # see template for how default value is computed
+appExtraEnv: # extra envs that you to pass to the app
+ #- name: hello
+ #  value: world
