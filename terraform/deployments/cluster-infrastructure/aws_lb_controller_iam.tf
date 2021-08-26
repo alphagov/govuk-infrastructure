@@ -228,9 +228,8 @@ locals {
   # "https://oidc.eks.eu-west-1.amazonaws.com/id/B4378A8EBD334FEEFDF3BCB6D0E612C6"
   # but the string to which IAM compares this lacks the protocol part, so we
   # have to strip the "https://" when we construct the trust policy
-  # (assume-role policy). The subscript [0] is not an off-by-one; it really
-  # does means the first capturing group and not the entire matched pattern.
-  cluster_oidc_issuer = regex("https://(.*)", module.eks.cluster_oidc_issuer_url)[0]
+  # (assume-role policy).
+  cluster_oidc_issuer = replace(module.eks.cluster_oidc_issuer_url, "https://", "")
 }
 
 resource "aws_iam_role" "aws_lb_controller" {
