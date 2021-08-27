@@ -34,6 +34,7 @@ locals {
     "static",
     "statsd",
     "authenticating-proxy",
+    "govuk-terraform",
   ]
 }
 
