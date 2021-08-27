@@ -17,15 +17,18 @@ terraform {
   }
 }
 
+locals {
+  default_tags = {
+    cluster              = var.cluster_name
+    project              = "replatforming"
+    repository           = "govuk-infrastructure"
+    terraform_deployment = basename(abspath(path.root))
+  }
+}
+
 provider "aws" {
   region = "eu-west-1"
-  default_tags {
-    tags = {
-      project              = "replatforming"
-      repository           = "govuk-infrastructure"
-      terraform_deployment = basename(abspath(path.root))
-    }
-  }
+  default_tags { tags = local.default_tags }
 }
 
 locals {
@@ -36,7 +39,7 @@ module "eks" {
   source  = "terraform-aws-modules/eks/aws"
   version = "17.1.0"
 
-  cluster_name     = local.cluster_name
+  cluster_name     = var.cluster_name
   cluster_version  = "1.21"
   subnets          = data.terraform_remote_state.infra_networking.outputs.private_subnet_ids
   vpc_id           = data.terraform_remote_state.infra_networking.outputs.vpc_id
@@ -44,25 +47,31 @@ module "eks" {
   manage_aws_auth  = false
   write_kubeconfig = false
 
-  # TODO: Tag the node pool ASG once
-  # https://github.com/terraform-aws-modules/terraform-aws-eks/issues/1455 is
-  # addressed. This may or may not involve passing additional args here.
-  # Ideally the default_tags above would propagate automatically to the ASG but
-  # that isn't possible yet because of the above bug and
-  # https://github.com/hashicorp/terraform-provider-aws/issues/19204.
-
   cluster_log_retention_in_days = var.cluster_log_retention_in_days
   cluster_enabled_log_types = [
     "api", "audit", "authenticator", "controllerManager", "scheduler"
   ]
 
+  workers_group_defaults = {
+    root_volume_type = "gp3"
+    # TODO: remove this workaround for adding default tags to the ASG once
+    # https://github.com/terraform-aws-modules/terraform-aws-eks/issues/1455
+    # and https://github.com/hashicorp/terraform-provider-aws/issues/19204 are
+    # fully resolved. local.default_tags can then be inlined in
+    # provider.aws.default_tags.
+    tags = [for k, v in local.default_tags : {
+      key                 = k
+      value               = v
+      propagate_at_launch = true
+    }]
+  }
+
   worker_groups = [
     {
-      instance_type        = var.workers_instance_type
       asg_desired_capacity = var.workers_size_desired
       asg_max_size         = var.workers_size_max
       asg_min_size         = var.workers_size_min
-      root_volume_type     = "gp3"
+      instance_type        = var.workers_instance_type
       tags = [
         {
           "key"                 = "k8s.io/cluster-autoscaler/enabled"
@@ -70,7 +79,7 @@ module "eks" {
           "value"               = "true"
         },
         {
-          "key"                 = "k8s.io/cluster-autoscaler/${local.cluster_name}"
+          "key"                 = "k8s.io/cluster-autoscaler/${var.cluster_name}"
           "propagate_at_launch" = "false"
           "value"               = "owned"
         }
