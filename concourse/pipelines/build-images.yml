@@ -92,6 +92,14 @@ resources:
       uri: git@github.com:alphagov/govuk-infrastructure.git
       branch: main
 
+  - <<: *git-repo
+    name: govuk-infrastructure-govuk-terraform
+    source:
+      <<: *git-repo-source
+      uri: git@github.com:alphagov/govuk-infrastructure.git
+      branch: main
+      paths: [ docker/images/govuk-terraform ]
+
   - &docker-image
     name: smokey-image
     type: registry-image
@@ -173,6 +181,13 @@ resources:
       repository: authenticating-proxy
       tag: latest
 
+  - <<: *docker-image
+    name: govuk-terraform-image
+    source:
+      <<: *docker-image-source
+      repository: govuk-terraform
+      tag: latest
+
   - &semver-version
     name: smokey-version
     type: semver
@@ -245,6 +260,12 @@ resources:
     source:
       <<: *semver-version-source
       key: authenticating-proxy-version
+
+  - <<: *semver-version
+    name: govuk-terraform-version
+    source:
+      <<: *semver-version-source
+      key: govuk-terraform-proxy-version
 
   - name: ci-slack-channel
     type: slack-notification
@@ -630,5 +651,33 @@ jobs:
       - put: authenticating-proxy-version
         params:
           file: authenticating-proxy-version/version
+    on_failure:
+      <<: *notify-slack-failure
+
+  - name: govuk-terraform
+    serial: true
+    plan:
+    - in_parallel:
+      - get: govuk-infrastructure-govuk-terraform
+        trigger: true
+      - get: govuk-terraform-version
+        params:
+          bump: minor
+          pre_without_version: true
+          pre: release
+    - task: build-image
+      privileged: true
+      file: govuk-infrastructure-govuk-terraform/concourse/tasks/build-image-definition.yml
+      input_mapping:
+        git-repo: govuk-infrastructure-govuk-terraform
+      params:
+        DOCKERFILE: git-repo/docker/images/govuk-terraform/Dockerfile
+    - put: govuk-terraform-image
+      params:
+        image: image/image.tar
+        additional_tags: govuk-terraform-version/version
+    - put: govuk-terraform-version
+      params:
+        file: govuk-terraform-version/version
     on_failure:
       <<: *notify-slack-failure
