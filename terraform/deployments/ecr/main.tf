@@ -34,9 +34,10 @@ locals {
     "static",
     "statsd",
     "authenticating-proxy",
+    "govuk-terraform",
     "govuk-ruby-2.7.2",
     "govuk-ruby-2.7.3",
-    "govuk-ruby-2.6.6",
+    "govuk-ruby-2.6.6"
   ]
 }
 
