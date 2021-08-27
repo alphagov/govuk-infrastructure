@@ -101,11 +101,8 @@ resource "aws_iam_role_policy_attachment" "push_to_ecr_role_attachment" {
   policy_arn = aws_iam_policy.push_image_to_ecr_policy.arn
 }
 
-# TODO: aws_ecr_repository must be created first, but this dependency is hidden
-# from Terraform. Using aws_ecr_repository.repositories rather than
-# local.repositories may resolve this.
 resource "aws_ecr_repository_policy" "pull_images_from_ecr_policy_policy" {
-  for_each   = toset(local.repositories)
+  for_each   = toset([for repo in local.repositories : aws_ecr_repository.repositories[repo].name])
   repository = each.key
   policy = jsonencode({
     "Version" : "2008-10-17",
