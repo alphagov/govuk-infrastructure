@@ -109,6 +109,12 @@ resource "aws_iam_role_policy" "concourse_terraform_planner_test" {
         "Action" : "secretsmanager:GetSecretValue",
         "Resource" : ["arn:aws:secretsmanager:eu-west-1:${data.aws_caller_identity.current.account_id}:secret:signon_admin_password_ecs-*",
         "arn:aws:secretsmanager:eu-west-1:${data.aws_caller_identity.current.account_id}:secret:grafana_password-*"]
+      },
+      {
+        "Sid" : "TerraformPlannerGetProductionECRImages",
+        "Effect" : "Allow",
+        "Action" : "sts:AssumeRole",
+        "Resource" : "arn:aws:iam::${var.production_aws_account_id}:role/pull_images_from_ecr_role"
       }
     ]
   })
