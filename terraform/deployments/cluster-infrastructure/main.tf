@@ -28,11 +28,15 @@ provider "aws" {
   }
 }
 
+locals {
+  cluster_name = "govuk"
+}
+
 module "eks" {
   source  = "terraform-aws-modules/eks/aws"
   version = "17.1.0"
 
-  cluster_name     = "govuk"
+  cluster_name     = local.cluster_name
   cluster_version  = "1.21"
   subnets          = data.terraform_remote_state.infra_networking.outputs.private_subnet_ids
   vpc_id           = data.terraform_remote_state.infra_networking.outputs.vpc_id
@@ -59,6 +63,18 @@ module "eks" {
       asg_max_size         = var.workers_size_max
       asg_min_size         = var.workers_size_min
       root_volume_type     = "gp3"
+      tags = [
+        {
+          "key"                 = "k8s.io/cluster-autoscaler/enabled"
+          "propagate_at_launch" = "false"
+          "value"               = "true"
+        },
+        {
+          "key"                 = "k8s.io/cluster-autoscaler/${local.cluster_name}"
+          "propagate_at_launch" = "false"
+          "value"               = "owned"
+        }
+      ]
     }
   ]
 }

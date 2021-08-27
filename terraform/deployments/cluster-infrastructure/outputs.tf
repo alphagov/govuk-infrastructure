@@ -8,6 +8,16 @@ output "worker_iam_role_arn" {
   value       = module.eks.worker_iam_role_arn
 }
 
+output "cluster_autoscaler_service_account_name" {
+  description = "Name of the k8s service account for the cluster autoscaler."
+  value       = local.cluster_autoscaler_service_account_name
+}
+
+output "cluster_autoscaler_role_arn" {
+  description = "IAM role ARN corresponding to the k8s service account for the AWS Load Balancer Controller."
+  value       = module.cluster_autoscaler_iam_role.iam_role_arn
+}
+
 output "cluster_id" {
   description = "The name (also known as the ID) of the EKS cluster."
   value       = module.eks.cluster_id
