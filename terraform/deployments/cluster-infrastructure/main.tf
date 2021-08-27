@@ -43,7 +43,8 @@ module "eks" {
   manage_aws_auth  = false
   write_kubeconfig = false
 
-  cluster_log_retention_in_days = var.cluster_log_retention_in_days
+  cluster_endpoint_private_access = true
+  cluster_log_retention_in_days   = var.cluster_log_retention_in_days
   cluster_enabled_log_types = [
     "api", "audit", "authenticator", "controllerManager", "scheduler"
   ]
