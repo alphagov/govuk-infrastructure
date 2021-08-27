@@ -8,6 +8,14 @@ resource_types:
       repository: govuk/github-commit
       tag: 0.1.0
 
+  - name: registry-image
+    type: docker-image
+    source:
+      repository: govuk/registry-image
+      tag: f0.0.1
+      username: ((docker_hub_username))
+      password: ((docker_hub_authtoken))
+
 resources:
   - name: govuk-infrastructure-commit
     type: github-commit
@@ -52,12 +60,16 @@ jobs:
           ENVIRONMENT: ((govuk_environment))
         platform: linux
         image_resource:
-          type: docker-image
+          type: registry-image
           source:
-            repository: digiticketsgroup/terraforming
-            tag: tf-1.0.1-aws-2.2.18-jq-1.5-git-2.32.0 #TODO: build our own image instead.
-            username: ((docker_hub_username))
-            password: ((docker_hub_authtoken))
+            repository: govuk-terraform
+            aws_region: eu-west-1
+            aws_ecr_registry_id: ((ecr_registry_id))
+            aws_ec2_credentials: true
+            variant: release
+            aws_role_arns:
+              - ((concourse_ci_role_arn))
+              - ((concourse_ecr_role_arn))
         run:
           path: govuk-infrastructure-commit/repo/concourse/tasks/terraform.sh
           args: ["plan", "-lock=false", "-refresh=false"]
