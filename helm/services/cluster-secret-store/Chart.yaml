@@ -1,0 +1,4 @@
+apiVersion: v3
+name: cluster-secret-store
+description: A Helm chart for an external-secrets ClusterSecretStore, integrates with AWS SecretsManager
+version: 0.1.0
