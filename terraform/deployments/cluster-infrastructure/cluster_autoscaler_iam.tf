@@ -6,7 +6,7 @@
 
 locals {
   cluster_autoscaler_service_account_namespace = "kube-system"
-  cluster_autoscaler_service_account_name      = "cluster-autoscaler"
+  cluster_autoscaler_service_account_name      = "cluster-autoscaler-${var.cluster_name}"
 }
 
 # The rest of this file is taken from
