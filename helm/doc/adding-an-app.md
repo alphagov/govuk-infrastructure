@@ -13,6 +13,7 @@ typical to use `helm create <app_name>` to create a template app that is then
 customized for a given GOV.UK app.
 
 For a typical non-internet facing app, the helm directory structure is:
+```
 ├── Chart.yaml
 ├── templates
 │   ├── deployment.yaml
@@ -20,6 +21,7 @@ For a typical non-internet facing app, the helm directory structure is:
 │   ├── \_helpers.tpl
 │   ├── NOTES.txt
 └── values.yaml
+```
 
 For an internet facing app, there will be an additional `ingress.yaml` template
 file to configure the AWS load balancer that will direct traffic to that app.
