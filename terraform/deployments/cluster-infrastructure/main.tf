@@ -18,6 +18,8 @@ terraform {
 }
 
 locals {
+  cluster_services_namespace = "cluster-services"
+  secrets_prefix             = "govuk"
   default_tags = {
     cluster              = var.cluster_name
     project              = "replatforming"
