@@ -233,7 +233,7 @@ locals {
 }
 
 resource "aws_iam_role" "aws_lb_controller" {
-  name        = "AmazonEKSLoadBalancerController-${var.cluster_name}"
+  name        = "AWSLoadBalancerController-${var.cluster_name}"
   description = "Role for the AWS Load Balancer Controller. Corresponds to ${local.aws_lb_controller_service_account_name} k8s ServiceAccount."
   assume_role_policy = jsonencode({
     "Version" : "2012-10-17",
