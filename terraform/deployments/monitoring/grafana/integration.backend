@@ -1,4 +1,0 @@
-bucket  = "govuk-terraform-integration"
-key     = "projects/grafana.tfstate"
-encrypt = true
-region  = "eu-west-1"
