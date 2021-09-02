@@ -36,3 +36,7 @@ provider "helm" {
     }
   }
 }
+
+locals {
+  services_ns = data.terraform_remote_state.cluster_infrastructure.outputs.cluster_services_namespace
+}
