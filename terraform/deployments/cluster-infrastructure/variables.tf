@@ -14,6 +14,21 @@ variable "cluster_name" {
   default     = "govuk"
 }
 
+variable "eks_control_plane_subnets" {
+  type        = map(object({ az = string, cidr = string }))
+  description = "Map of {subnet_name: {az=<az>, cidr=<cidr>}} for the public subnets for the EKS cluster's apiserver."
+}
+
+variable "eks_private_subnets" {
+  type        = map(object({ az = string, cidr = string }))
+  description = "Map of {subnet_name: {az=<az>, cidr=<cidr>}} for the private subnets for the EKS cluster's nodes and pods."
+}
+
+variable "eks_public_subnets" {
+  type        = map(object({ az = string, cidr = string }))
+  description = "Map of {subnet_name: {az=<az>, cidr=<cidr>}} for the public subnets where the EKS cluster will create Internet-facing load balancers."
+}
+
 variable "workers_instance_type" {
   type        = string
   description = "Instance type for the managed node group."

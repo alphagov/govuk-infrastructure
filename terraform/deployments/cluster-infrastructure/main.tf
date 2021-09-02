@@ -31,23 +31,20 @@ provider "aws" {
   default_tags { tags = local.default_tags }
 }
 
-locals {
-  cluster_name = "govuk"
-}
-
 module "eks" {
   source  = "terraform-aws-modules/eks/aws"
   version = "17.1.0"
 
   cluster_name     = var.cluster_name
   cluster_version  = "1.21"
-  subnets          = data.terraform_remote_state.infra_networking.outputs.private_subnet_ids
-  vpc_id           = data.terraform_remote_state.infra_networking.outputs.vpc_id
+  subnets          = [for s in aws_subnet.eks_control_plane : s.id]
+  vpc_id           = data.terraform_remote_state.infra_vpc.outputs.vpc_id
   enable_irsa      = true
   manage_aws_auth  = false
   write_kubeconfig = false
 
-  cluster_log_retention_in_days = var.cluster_log_retention_in_days
+  cluster_endpoint_private_access = true
+  cluster_log_retention_in_days   = var.cluster_log_retention_in_days
   cluster_enabled_log_types = [
     "api", "audit", "authenticator", "controllerManager", "scheduler"
   ]
@@ -72,16 +69,17 @@ module "eks" {
       asg_max_size         = var.workers_size_max
       asg_min_size         = var.workers_size_min
       instance_type        = var.workers_instance_type
+      subnets              = [for s in aws_subnet.eks_private : s.id]
       tags = [
         {
-          "key"                 = "k8s.io/cluster-autoscaler/enabled"
-          "propagate_at_launch" = "false"
-          "value"               = "true"
+          key                 = "k8s.io/cluster-autoscaler/enabled"
+          value               = "true"
+          propagate_at_launch = false
         },
         {
-          "key"                 = "k8s.io/cluster-autoscaler/${var.cluster_name}"
-          "propagate_at_launch" = "false"
-          "value"               = "owned"
+          key                 = "k8s.io/cluster-autoscaler/${var.cluster_name}"
+          value               = "owned"
+          propagate_at_launch = false
         }
       ]
     }
