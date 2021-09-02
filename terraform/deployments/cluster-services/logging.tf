@@ -2,8 +2,7 @@
 # NOTE: Kibana and Elasticsearch will in future be replaced by Logit.
 
 locals {
-  fluentbit_service_account_name = "fluentbit"
-  logging_namespace              = "logging"
+  logging_namespace = "logging"
 
   fluentbit_output = <<-OUTPUT
   [OUTPUT]
