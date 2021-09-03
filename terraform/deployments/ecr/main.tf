@@ -1,4 +1,4 @@
-# This is supposed to be applied in the production environment
+# This module should be applied in the production account only.
 
 terraform {
   backend "s3" {
@@ -8,10 +8,11 @@ terraform {
     encrypt = true
   }
 
+  required_version = "~> 1.0"
   required_providers {
     aws = {
       source  = "hashicorp/aws"
-      version = "~> 3.13"
+      version = "~> 3.0"
     }
   }
 }
