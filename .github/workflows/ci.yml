@@ -10,7 +10,7 @@ jobs:
       - uses: ruby/setup-ruby@v1
       - uses: hashicorp/setup-terraform@v1
         with:
-          terraform_version: 1.0.0
+          terraform_version: 1.0.5
           terraform_wrapper: false
 
       - name: Set up Helm
