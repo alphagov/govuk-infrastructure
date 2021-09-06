@@ -12,7 +12,8 @@ resource "helm_release" "external_secrets" {
   create_namespace = true
   values = [yamlencode({
     serviceAccount = {
-      name = data.terraform_remote_state.cluster_infrastructure.outputs.external_secrets_service_account_name
+      name      = data.terraform_remote_state.cluster_infrastructure.outputs.external_secrets_service_account_name
+      namespace = local.services_ns
       annotations = {
         "eks.amazonaws.com/role-arn" = data.terraform_remote_state.cluster_infrastructure.outputs.external_secrets_role_arn
       }
