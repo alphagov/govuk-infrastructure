@@ -21,9 +21,4 @@ eks_private_subnets = {
   c = { az = "eu-west-1c", cidr = "10.1.32.0/22" }
 }
 
-govuk_environment             = "integration"
-ecs_default_capacity_provider = "FARGATE_SPOT"
-
-publishing_service_domain = "integration.publishing.service.gov.uk"
-internal_app_domain       = "integration.govuk-internal.digital"
-external_app_domain       = "integration.govuk.digital"
+govuk_environment = "integration"
