@@ -16,9 +16,9 @@ spec:
     spec:
       containers:
         - name: {{ .Release.Name }}
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          image: "{{ .Values.appImage.repository }}:{{ .Values.appImage.tag }}"
           ports:
-            - containerPort: {{ .Values.containerPort }}
+            - containerPort: {{ .Values.appPort }}
           env:
             - name: GOVUK_APP_DOMAIN
               value: "{{ .Values.appGovukAppDomain | default (printf "%s.%s.%s" .Release.Namespace .Values.govukEnvironment .Values.clusterDomain) }}"
@@ -35,7 +35,7 @@ spec:
             - name: GOVUK_ENVIRONMENT
               value: "{{ .Values.govukEnvironment }}"
             - name: PORT
-              value: "{{ .Values.containerPort }}"
+              value: "{{ .Values.appPort }}"
             - name: RAILS_ENV
               value: "{{ .Values.govukEnvironment }}"
             - name: REDIS_URL
@@ -54,12 +54,24 @@ spec:
           livenessProbe:
             httpGet:
               path: /healthcheck/live
-              port: {{ .Values.containerPort }}
+              port: {{ .Values.appPort }}
             initialDelaySeconds: 30
             periodSeconds: 5
           readinessProbe:
             httpGet:
               path: /healthcheck/ready
-              port: {{ .Values.containerPort }}
+              port: {{ .Values.appPort }}
             initialDelaySeconds: 30
             periodSeconds: 5
+        - name: {{ .Release.Name }}-nginx
+          image: "{{ .Values.nginxImage.repository }}:{{ .Values.nginxImage.tag }}"
+          ports:
+            - containerPort: {{ .Values.nginxPort }}
+          volumeMounts:
+          - name: {{ .Release.Name }}-nginx-conf
+            mountPath: /etc/nginx/nginx.conf
+            subPath: nginx.conf
+      volumes:
+      - name: {{ .Release.Name }}-nginx-conf
+        configMap:
+          name: {{ .Release.Name }}-nginx-conf

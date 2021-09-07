@@ -1,0 +1,37 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Name }}-nginx-conf
+data:
+  nginx.conf: |-
+    user  nginx;
+    
+    error_log  /var/log/nginx/error.log warn;
+    pid        /var/run/nginx.pid;
+
+    events {
+      worker_connections  1024;
+    }
+
+    http {
+      include       /etc/nginx/mime.types;
+      default_type  application/octet-stream;
+
+      server_tokens off;
+
+      sendfile        on;
+      keepalive_timeout  65;
+
+      upstream {{ .Release.Name }} {
+        server 127.0.0.1:{{ .Values.appPort }};
+      }
+
+      server {
+        listen {{ .Values.nginxPort }};
+
+        location / {
+          proxy_pass         http://{{ .Release.Name }};
+          proxy_redirect     off;
+        }
+      }
+    }
