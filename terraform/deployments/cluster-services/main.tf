@@ -8,20 +8,22 @@
 
 terraform {
   backend "s3" {}
+
+  required_version = "~> 1.0"
   required_providers {
     kubernetes = {
       source  = "hashicorp/kubernetes"
-      version = "~> 2.4"
+      version = "~> 2.0"
     }
     helm = {
       source  = "hashicorp/helm"
-      version = "~> 2.3"
+      version = "~> 2.0"
     }
     # The AWS provider is only used here for remote state in remote.tf. Please
     # do not add AWS resources to this module.
     aws = {
       source  = "hashicorp/aws"
-      version = "~> 3.57"
+      version = "~> 3.0"
     }
   }
 }
