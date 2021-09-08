@@ -5,6 +5,7 @@ image_resource:
     repository: vito/oci-build-task
 inputs:
 - name: git-repo
+- name: base-image
 outputs:
 - name: image
 params:
