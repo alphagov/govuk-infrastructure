@@ -127,6 +127,20 @@ resources:
       tag: latest
 
   - <<: *docker-image
+    name: govuk-ruby-2.7.2
+    source:
+      <<: *docker-image-source
+      repository: govuk-ruby-2.7.2
+      tag: latest
+
+  - <<: *docker-image
+    name: govuk-ruby-2.7.3
+    source:
+      <<: *docker-image-source
+      repository: govuk-ruby-2.7.3
+      tag: latest
+
+  - <<: *docker-image
     name: infra-concourse-task-image
     source:
       <<: *docker-image-source
@@ -287,6 +301,10 @@ jobs:
     - in_parallel:
       - get: smokey-repo
         trigger: true
+      - get: govuk-ruby-2.7.2
+        params:
+          format: oci
+        trigger: true
       - get: smokey-version
         params:
           bump: minor
@@ -298,6 +316,9 @@ jobs:
       file: govuk-infrastructure/concourse/tasks/build-image-definition.yml
       input_mapping:
         git-repo: smokey-repo
+        base-image: govuk-ruby-2.7.2
+      params:
+        IMAGE_ARG_base_image: base-image/image.tar
     - put: smokey-image
       params:
         image: image/image.tar
@@ -327,6 +348,10 @@ jobs:
     - in_parallel:
       - get: content-store-repo
         trigger: true
+      - get: govuk-ruby-2.7.2
+        params:
+          format: oci
+        trigger: true
       - get: content-store-version
         params:
           bump: minor
@@ -338,6 +363,9 @@ jobs:
       file: govuk-infrastructure/concourse/tasks/build-image-definition.yml
       input_mapping:
         git-repo: content-store-repo
+        base-image: govuk-ruby-2.7.2
+      params:
+        IMAGE_ARG_base_image: base-image/image.tar
     - put: content-store-image
       params:
         image: image/image.tar
@@ -360,6 +388,10 @@ jobs:
     - in_parallel:
       - get: frontend-repo
         trigger: true
+      - get: govuk-ruby-2.7.3
+        params:
+          format: oci
+        trigger: true
       - get: frontend-version
         params:
           bump: minor
@@ -371,6 +403,9 @@ jobs:
       file: govuk-infrastructure/concourse/tasks/build-image-definition.yml
       input_mapping:
         git-repo: frontend-repo
+        base-image: govuk-ruby-2.7.2
+      params:
+        IMAGE_ARG_base_image: base-image/image.tar
     - put: frontend-image
       params:
         image: image/image.tar
@@ -429,6 +464,10 @@ jobs:
     - in_parallel:
       - get: publisher-repo
         trigger: true
+      - get: govuk-ruby-2.7.2
+        params:
+          format: oci
+        trigger: true
       - get: publisher-version
         params:
           bump: minor
@@ -440,6 +479,9 @@ jobs:
       file: govuk-infrastructure/concourse/tasks/build-image-definition.yml
       input_mapping:
         git-repo: publisher-repo
+        base-image: govuk-ruby-2.7.2
+      params:
+        IMAGE_ARG_base_image: base-image/image.tar
     - put: publisher-image
       params:
         image: image/image.tar
@@ -462,6 +504,10 @@ jobs:
     - in_parallel:
       - get: publishing-api-repo
         trigger: true
+      - get: govuk-ruby-2.7.2
+        params:
+          format: oci
+        trigger: true
       - get: publishing-api-version
         params:
           bump: minor
@@ -473,6 +519,9 @@ jobs:
       file: govuk-infrastructure/concourse/tasks/build-image-definition.yml
       input_mapping:
         git-repo: publishing-api-repo
+        base-image: govuk-ruby-2.7.2
+      params:
+        IMAGE_ARG_base_image: base-image/image.tar
     - put: publishing-api-image
       params:
         image: image/image.tar
@@ -528,6 +577,10 @@ jobs:
     - in_parallel:
       - get: router-api-repo
         trigger: true
+      - get: govuk-ruby-2.7.2
+        params:
+          format: oci
+        trigger: true
       - get: router-api-version
         params:
           bump: minor
@@ -539,6 +592,9 @@ jobs:
       file: govuk-infrastructure/concourse/tasks/build-image-definition.yml
       input_mapping:
         git-repo: router-api-repo
+        base-image: govuk-ruby-2.7.2
+      params:
+        IMAGE_ARG_base_image: base-image/image.tar
     - put: router-api-image
       params:
         image: image/image.tar
@@ -561,6 +617,10 @@ jobs:
     - in_parallel:
       - get: signon-repo
         trigger: true
+      - get: govuk-ruby-2.7.2
+        params:
+          format: oci
+        trigger: true
       - get: signon-version
         params:
           bump: minor
@@ -572,6 +632,9 @@ jobs:
       file: govuk-infrastructure/concourse/tasks/build-image-definition.yml
       input_mapping:
         git-repo: signon-repo
+        base-image: govuk-ruby-2.7.2
+      params:
+        IMAGE_ARG_base_image: base-image/image.tar
     - put: signon-image
       params:
         image: image/image.tar
@@ -594,6 +657,10 @@ jobs:
     - in_parallel:
       - get: static-repo
         trigger: true
+      - get: govuk-ruby-2.7.2
+        params:
+          format: oci
+        trigger: true
       - get: static-version
         params:
           bump: minor
@@ -605,6 +672,9 @@ jobs:
       file: govuk-infrastructure/concourse/tasks/build-image-definition.yml
       input_mapping:
         git-repo: static-repo
+        base-image: govuk-ruby-2.7.2
+      params:
+        IMAGE_ARG_base_image: base-image/image.tar
     - put: static-image
       params:
         image: image/image.tar
@@ -627,6 +697,10 @@ jobs:
     - in_parallel:
       - get: authenticating-proxy-repo
         trigger: true
+      - get: govuk-ruby-2.7.2
+        params:
+          format: oci
+        trigger: true
       - get: authenticating-proxy-version
         params:
           bump: minor
@@ -638,6 +712,9 @@ jobs:
       file: govuk-infrastructure/concourse/tasks/build-image-definition.yml
       input_mapping:
         git-repo: authenticating-proxy-repo
+        base-image: govuk-ruby-2.7.2
+      params:
+        IMAGE_ARG_base_image: base-image/image.tar
     - put: authenticating-proxy-image
       params:
         image: image/image.tar
