@@ -16,9 +16,10 @@ spec:
     spec:
       containers:
         - name: {{ .Release.Name }}
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          image: "{{ .Values.appImage.repository }}:{{ .Values.appImage.tag }}"
           ports:
-            - containerPort: {{ .Values.containerPort }}
+            - name: http
+              containerPort: {{ .Values.appPort }}
           env:
             - name: DEFAULT_TTL
               value: "{{ .Values.appDefaultTtl }}"
@@ -45,7 +46,7 @@ spec:
             - name: PLEK_SERVICE_SIGNON_URI
               value: "{{ .Values.appPlekServiceSignonUri | default (printf "http://signon.%s.%s" .Release.Namespace .Values.clusterDomain) }}"
             - name: PORT
-              value: "{{ .Values.containerPort }}"
+              value: "{{ .Values.appPort }}"
             - name: RAILS_ENV
               value: "{{ .Values.appRailsEnv }}"
             - name: SECRET_KEY_BASE
@@ -58,12 +59,41 @@ spec:
           livenessProbe:
             httpGet:
               path: /healthcheck/live
-              port: {{ .Values.containerPort }}
+              port: http
             initialDelaySeconds: 30
             periodSeconds: 5
           readinessProbe:
             httpGet:
               path: /healthcheck/ready
-              port: {{ .Values.containerPort }}
+              port: http
             initialDelaySeconds: 30
             periodSeconds: 5
+        - name: {{ .Release.Name }}-nginx
+          image: "{{ .Values.nginxImage.repository }}:{{ .Values.nginxImage.tag }}"
+          ports:
+            - name: http
+              containerPort: {{ .Values.nginxPort }}
+          livenessProbe:
+            tcpSocket:
+              port: http
+            initialDelaySeconds: 30
+            timeoutSeconds: 5
+            periodSeconds: 10
+            failureThreshold: 6
+            successThreshold: 1
+          readinessProbe:
+            tcpSocket:
+              port: http
+            initialDelaySeconds: 5
+            timeoutSeconds: 3
+            periodSeconds: 5
+            failureThreshold: 3
+            successThreshold: 1
+          volumeMounts:
+          - name: {{ .Release.Name }}-nginx-conf
+            mountPath: /etc/nginx/nginx.conf
+            subPath: nginx.conf
+      volumes:
+      - name: {{ .Release.Name }}-nginx-conf
+        configMap:
+          name: {{ .Release.Name }}-nginx-conf
