@@ -33,6 +33,26 @@ output "cluster_services_namespace" {
   value       = local.cluster_services_namespace
 }
 
+output "external_dns_service_account_name" {
+  description = "Name of the k8s service account for the external-dns addon."
+  value       = local.external_dns_service_account_name
+}
+
+output "external_dns_role_arn" {
+  description = "IAM role ARN corresponding to the k8s service account for the external-dns addon."
+  value       = module.external_dns_iam_role.iam_role_arn
+}
+
+output "external_dns_zone_id" {
+  description = "Hosted Zone ID of the Route53 zone to be managed by the external-dns addon."
+  value       = aws_route53_zone.cluster_public.zone_id
+}
+
+output "external_dns_zone_name" {
+  description = "Domain name of the Route53 zone to be managed by the external-dns addon."
+  value       = local.external_dns_domain_name
+}
+
 output "external_secrets_service_account_name" {
   description = "Name of the k8s service account for external-secrets."
   value       = local.external_secrets_service_account_name
