@@ -29,6 +29,11 @@ variable "eks_public_subnets" {
   description = "Map of {subnet_name: {az=<az>, cidr=<cidr>}} for the public subnets where the EKS cluster will create Internet-facing load balancers."
 }
 
+variable "external_dns_subdomain" {
+  type        = string
+  description = "Subdomain name for a Route53 zone which will be created underneath external_root_zone (e.g. 'eks' to be created underneath staging.govuk.digital), for use by the external-dns addon. external-dns will create records for ALBs/NLBs created by Ingresses and Service[type=LoadBalancer] in this zone."
+}
+
 variable "workers_instance_type" {
   type        = string
   description = "Instance type for the managed node group."
