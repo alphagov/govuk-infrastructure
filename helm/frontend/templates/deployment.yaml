@@ -18,7 +18,8 @@ spec:
         - name: {{ .Release.Name }}
           image: "{{ .Values.appImage.repository }}:{{ .Values.appImage.tag }}"
           ports:
-            - containerPort: {{ .Values.appPort }}
+            - name: http
+              containerPort: {{ .Values.appPort }}
           env:
             - name: ASSET_HOST
               value: "{{ .Values.appAssetHost | default (printf "https://www-origin.%s.%s.%s" .Release.Namespace .Values.govukEnvironment .Values.govukDomainExternal) }}"
@@ -62,19 +63,36 @@ spec:
           livenessProbe:
             httpGet:
               path: /healthcheck/live
-              port: {{ .Values.appPort }}
+              port: http
             initialDelaySeconds: 30
             periodSeconds: 5
           readinessProbe:
             httpGet:
               path: /healthcheck/ready
-              port: {{ .Values.appPort }}
+              port: http
             initialDelaySeconds: 30
             periodSeconds: 5
         - name: {{ .Release.Name }}-nginx
           image: "{{ .Values.nginxImage.repository }}:{{ .Values.nginxImage.tag }}"
           ports:
-            - containerPort: {{ .Values.nginxPort }}
+            - name: http
+              containerPort: {{ .Values.nginxPort }}
+          livenessProbe:
+            tcpSocket:
+              port: http
+            initialDelaySeconds: 30
+            timeoutSeconds: 5
+            periodSeconds: 10
+            failureThreshold: 6
+            successThreshold: 1
+          readinessProbe:
+            tcpSocket:
+              port: http
+            initialDelaySeconds: 5
+            timeoutSeconds: 3
+            periodSeconds: 5
+            failureThreshold: 3
+            successThreshold: 1
           volumeMounts:
           - name: {{ .Release.Name }}-nginx-conf
             mountPath: /etc/nginx/nginx.conf
