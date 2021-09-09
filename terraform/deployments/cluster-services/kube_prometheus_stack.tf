@@ -10,7 +10,8 @@ resource "helm_release" "kube_prometheus_stack" {
   values = [yamlencode({
     alertmanager = {
       ingress = {
-        enabled = true
+        enabled  = true
+        pathType = "Prefix"
         annotations = {
           "alb.ingress.kubernetes.io/scheme"      = "internet-facing"
           "alb.ingress.kubernetes.io/target-type" = "ip"
@@ -30,7 +31,8 @@ resource "helm_release" "kube_prometheus_stack" {
     }
     prometheus = {
       ingress = {
-        enabled = true
+        enabled  = true
+        pathType = "Prefix"
         annotations = {
           "alb.ingress.kubernetes.io/scheme"      = "internet-facing"
           "alb.ingress.kubernetes.io/target-type" = "ip"
