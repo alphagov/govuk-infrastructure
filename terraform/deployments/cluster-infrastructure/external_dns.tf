@@ -44,7 +44,8 @@ data "aws_iam_policy_document" "external_dns" {
 }
 
 resource "aws_route53_zone" "cluster_public" {
-  name = local.external_dns_domain_name
+  name          = local.external_dns_domain_name
+  force_destroy = var.force_destroy
 }
 
 resource "aws_route53_record" "cluster_public_ns" {
