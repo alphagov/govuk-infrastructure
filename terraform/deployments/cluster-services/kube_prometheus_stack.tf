@@ -1,5 +1,9 @@
 # Installs Prometheus Operator, Prometheus, Prometheus rules, Grafana, Grafana dashboards, and Prometheus CRDs
 
+locals {
+  dns_zone_name = trimsuffix(data.terraform_remote_state.cluster_infrastructure.outputs.external_dns_zone_name, ".")
+}
+
 resource "helm_release" "kube_prometheus_stack" {
   name             = "kube-prometheus-stack"
   repository       = "https://prometheus-community.github.io/helm-charts"
@@ -11,6 +15,7 @@ resource "helm_release" "kube_prometheus_stack" {
     alertmanager = {
       ingress = {
         enabled  = true
+        hosts    = ["alertmanager.${local.dns_zone_name}"]
         pathType = "Prefix"
         annotations = {
           "alb.ingress.kubernetes.io/scheme"      = "internet-facing"
@@ -20,7 +25,8 @@ resource "helm_release" "kube_prometheus_stack" {
     }
     grafana = {
       ingress = {
-        enabled = true
+        enabled  = true
+        hosts    = ["grafana.${local.dns_zone_name}"]
         pathType = "Prefix"
         annotations = {
           "alb.ingress.kubernetes.io/scheme"      = "internet-facing"
@@ -31,6 +37,7 @@ resource "helm_release" "kube_prometheus_stack" {
     prometheus = {
       ingress = {
         enabled  = true
+        hosts    = ["prometheus.${local.dns_zone_name}"]
         pathType = "Prefix"
         annotations = {
           "alb.ingress.kubernetes.io/scheme"      = "internet-facing"
