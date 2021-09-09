@@ -11,16 +11,31 @@ resource "helm_release" "kube_prometheus_stack" {
     alertmanager = {
       ingress = {
         enabled = true
+        annotations = {
+          "alb.ingress.kubernetes.io/scheme"      = "internet-facing"
+          "alb.ingress.kubernetes.io/target-type" = "ip"
+          "kubernetes.io/ingress.class"           = "alb"
+        }
       }
     }
     grafana = {
       ingress = {
         enabled = true
+        annotations = {
+          "alb.ingress.kubernetes.io/scheme"      = "internet-facing"
+          "alb.ingress.kubernetes.io/target-type" = "ip"
+          "kubernetes.io/ingress.class"           = "alb"
+        }
       }
     }
     prometheus = {
       ingress = {
         enabled = true
+        annotations = {
+          "alb.ingress.kubernetes.io/scheme"      = "internet-facing"
+          "alb.ingress.kubernetes.io/target-type" = "ip"
+          "kubernetes.io/ingress.class"           = "alb"
+        }
       }
     }
   })]
