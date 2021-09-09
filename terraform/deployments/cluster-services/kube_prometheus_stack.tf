@@ -15,7 +15,6 @@ resource "helm_release" "kube_prometheus_stack" {
         annotations = {
           "alb.ingress.kubernetes.io/scheme"      = "internet-facing"
           "alb.ingress.kubernetes.io/target-type" = "ip"
-          "kubernetes.io/ingress.class"           = "alb"
         }
       }
     }
@@ -25,7 +24,6 @@ resource "helm_release" "kube_prometheus_stack" {
         annotations = {
           "alb.ingress.kubernetes.io/scheme"      = "internet-facing"
           "alb.ingress.kubernetes.io/target-type" = "ip"
-          "kubernetes.io/ingress.class"           = "alb"
         }
       }
     }
@@ -36,7 +34,6 @@ resource "helm_release" "kube_prometheus_stack" {
         annotations = {
           "alb.ingress.kubernetes.io/scheme"      = "internet-facing"
           "alb.ingress.kubernetes.io/target-type" = "ip"
-          "kubernetes.io/ingress.class"           = "alb"
         }
       }
     }
