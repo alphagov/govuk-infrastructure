@@ -5,6 +5,21 @@
 # ../cluster-services/aws_lb_controller.tf. See
 # https://github.com/alphagov/govuk-infrastructure/blob/main/docs/architecture/decisions/0003-split-terraform-state-into-separate-aws-cluster-and-kubernetes-resource-phases.md#decision for rationale.
 
+locals {
+  aws_lb_controller_service_account_name = "aws-load-balancer-controller"
+}
+
+module "aws_lb_controller_iam_role" {
+  source                        = "terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc"
+  version                       = "4.3.0"
+  create_role                   = true
+  role_name                     = "${local.aws_lb_controller_service_account_name}-${var.cluster_name}"
+  role_description              = "Role for the AWS Load Balancer Controller. Corresponds to ${local.aws_lb_controller_service_account_name} k8s ServiceAccount."
+  provider_url                  = local.cluster_oidc_issuer
+  role_policy_arns              = [aws_iam_policy.aws_lb_controller.arn]
+  oidc_fully_qualified_subjects = ["system:serviceaccount:${local.cluster_services_namespace}:${local.aws_lb_controller_service_account_name}"]
+}
+
 resource "aws_iam_policy" "aws_lb_controller" {
   name        = "AWSLoadBalancerController-${var.cluster_name}"
   description = "Allow AWS Load Balancer Controller to manage ALBs/NLBs etc."
@@ -219,42 +234,4 @@ resource "aws_iam_policy" "aws_lb_controller" {
       }
     ]
   })
-}
-
-locals {
-  aws_lb_controller_service_account_name = "aws-load-balancer-controller"
-
-  # module.eks.cluster_oidc_issuer_url is a full URL, e.g.
-  # "https://oidc.eks.eu-west-1.amazonaws.com/id/B4378A8EBD334FEEFDF3BCB6D0E612C6"
-  # but the string to which IAM compares this lacks the protocol part, so we
-  # have to strip the "https://" when we construct the trust policy
-  # (assume-role policy).
-  cluster_oidc_issuer = replace(module.eks.cluster_oidc_issuer_url, "https://", "")
-}
-
-resource "aws_iam_role" "aws_lb_controller" {
-  name        = "AWSLoadBalancerController-${var.cluster_name}"
-  description = "Role for the AWS Load Balancer Controller. Corresponds to ${local.aws_lb_controller_service_account_name} k8s ServiceAccount."
-  assume_role_policy = jsonencode({
-    "Version" : "2012-10-17",
-    "Statement" : [
-      {
-        "Effect" : "Allow",
-        "Principal" : {
-          "Federated" : module.eks.oidc_provider_arn
-        },
-        "Action" : "sts:AssumeRoleWithWebIdentity",
-        "Condition" : {
-          "StringEquals" : {
-            "${local.cluster_oidc_issuer}:sub" : "system:serviceaccount:kube-system:${local.aws_lb_controller_service_account_name}"
-          }
-        }
-      }
-    ]
-  })
-}
-
-resource "aws_iam_role_policy_attachment" "aws_lb_controller" {
-  role       = aws_iam_role.aws_lb_controller.name
-  policy_arn = aws_iam_policy.aws_lb_controller.arn
 }
