@@ -21,6 +21,7 @@ resource "helm_release" "kube_prometheus_stack" {
     grafana = {
       ingress = {
         enabled = true
+        pathType = "Prefix"
         annotations = {
           "alb.ingress.kubernetes.io/scheme"      = "internet-facing"
           "alb.ingress.kubernetes.io/target-type" = "ip"
