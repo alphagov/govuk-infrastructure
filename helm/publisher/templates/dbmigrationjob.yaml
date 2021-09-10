@@ -1,0 +1,37 @@
+{{- if .Values.dbMigrationEnabled -}}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ .Release.Name }}-dbmigrate-{{ now | unixEpoch }}
+spec:
+  template:
+    metadata:
+      name: "{{ .Release.Name }}"
+      labels:
+        app.kubernetes.io/managed-by: {{ .Release.Service | quote }}
+        app.kubernetes.io/instance: {{ .Release.Name | quote }}
+        helm.sh/chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    spec:
+      restartPolicy: Never
+      containers:
+      - name: {{ .Release.Name }}-dbmigrate
+        image: "{{ .Values.appImage.repository }}:{{ .Values.appImage.tag }}"
+        command: ["bundle"]
+        args: ["exec", "rails", "db:migrate"]
+        envFrom:
+          - configMapRef:
+              name: {{ .Release.Name }}-env
+        env:
+        {{- range .Values.secrets }}
+          - name: {{ . | title }}
+            valueFrom:
+              secretKeyRef:
+                name: {{ $.Release.Name }}
+                key: {{ . | title }}
+        {{- end }}
+        {{- with .Values.webExtraEnv }}
+          {{- . | toYaml | trim | nindent 12 }}
+        {{- end }}
+        resources:
+{{ toYaml .Values.webResources | indent 12 }}
+{{- end}}

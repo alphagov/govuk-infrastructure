@@ -1,0 +1,118 @@
+# Default values for Publisher.
+
+govukEnvironment: test
+govukDomainExternal: govuk.digital
+govukDomainInternal: govuk-internal.digital
+clusterDomain: svc.cluster.local
+
+service:
+  type: NodePort
+  annotations: {}
+  port: 80
+
+webReplicaCount: 1
+workerReplicaCount: 1
+
+# Publisher uses the same image version in both Web and Worker mode.
+appImage:
+  repository: 172025368201.dkr.ecr.eu-west-1.amazonaws.com/publisher
+  pullPolicy: Always
+  tag: latest
+
+nginxImage:
+  repository: nginx
+  pullPolicy: Always
+  tag: stable
+
+nginxPort: 80
+appPort: 3000
+
+webResources: {}
+  # If you do want to specify resources, uncomment the following lines,
+  # adjust them as necessary, and remove the curly braces after 'resources:'.
+  # limits:
+  #  cpu: 100m
+  #  memory: 128Mi
+  # requests:
+  #  cpu: 100m
+  #  memory: 128Mi
+
+workerResources: {}
+  # If you do want to specify resources, uncomment the following lines,
+  # adjust them as necessary, and remove the curly braces after 'resources:'.
+  # limits:
+  #  cpu: 100m
+  #  memory: 128Mi
+  # requests:
+  #  cpu: 100m
+  #  memory: 128Mi
+
+## See template file for how application conatiner env default value is computed
+appAssetsPrefix: "/assets/publisher"
+appBasicAuthUsername: "gds"
+appDefaultTtl: "1800"
+appEmailGroupBusiness: "test-address@digital.cabinet-office.gov.uk"
+appEmailGroupCitizen: "test-address@digital.cabinet-office.gov.uk"
+appEmailGroupForcePublishAlerts: "test-address@digital.cabinet-office.gov.uk"
+appFactCheckSubjectPrefix: "dev"
+appFactCheckUsername: "govuk-fact-check-test@digital.cabinet-office.gov.uk"
+appGovukAppDomain:
+appGovukDomainExternal:
+appGovukAppName:
+appGovukAppRoot: "/app"
+appGovukAppType: "rack"
+appGovukWebsiteRoot:
+appGovukAssetRoot:
+appAssetHost:
+appPlekServicePublishingApiUri:
+appPlekServiceSignonUri:
+appPlekServiceContentStoreUri:
+appPlekServicePublisherUri:
+appPlekServiceStaticUri:
+appRailsEnv: "production"
+appRedisUrl: "redis://redis.ecs.test.govuk-internal.digital:6379"    # TODO: decide on Redis for EKS
+
+
+## Extra environment variables to attach to Publisher Web container
+##
+# webExtraEnv:
+#   - name: hello
+#     value: world
+
+## Extra environment variables to attach to Publisher Worker container
+##
+# workerExtraEnv:
+#   - name: hello
+#     value: world
+
+
+ingress:
+  enabled: true
+  name: publisher
+  host:
+  path: "/"
+  pathType: "Prefix"
+  annotations:
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/target-type: ip
+
+secretsPrefix: "govuk/"
+
+secrets:
+  - ASSET_MANAGER_BEARER_TOKEN
+  - FACT_CHECK_PASSWORD
+  - FACT_CHECK_REPLY_TO_ADDRESS
+  - FACT_CHECK_REPLY_TO_ID
+  - GA_UNIVERSAL_ID
+  - GDS_SSO_OAUTH_ID
+  - GDS_SSO_OAUTH_SECRET
+  - GOVUK_NOTIFY_API_KEY
+  - GOVUK_NOTIFY_TEMPLATE_ID
+  - JWT_AUTH_SECRET
+  - LINK_CHECKER_API_BEARER_TOKEN
+  - LINK_CHECKER_API_SECRET_TOKEN
+  - MONGODB_URI
+  - PUBLISHING_API_BEARER_TOKEN
+  - SECRET_KEY_BASE
+
+dbMigrationEnabled: true
