@@ -1,7 +1,7 @@
 # Installs Prometheus Operator, Prometheus, Prometheus rules, Grafana, Grafana dashboards, and Prometheus CRDs
 
 locals {
-  dns_zone_name = trimsuffix(data.terraform_remote_state.cluster_infrastructure.outputs.external_dns_zone_name, ".")
+  dns_zone_name = data.terraform_remote_state.cluster_infrastructure.outputs.external_dns_zone_name
 }
 
 resource "helm_release" "kube_prometheus_stack" {
