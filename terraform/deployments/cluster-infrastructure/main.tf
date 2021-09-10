@@ -21,6 +21,14 @@ terraform {
 locals {
   cluster_services_namespace = "cluster-services"
   secrets_prefix             = "govuk"
+
+  # module.eks.cluster_oidc_issuer_url is a full URL, e.g.
+  # "https://oidc.eks.eu-west-1.amazonaws.com/id/B4378A8EBD334FEEFDF3BCB6D0E612C6"
+  # but the string to which IAM compares this lacks the protocol part, so we
+  # have to strip the "https://" when we construct the trust policy
+  # (assume-role policy).
+  cluster_oidc_issuer = replace(module.eks.cluster_oidc_issuer_url, "https://", "")
+
   default_tags = {
     cluster              = var.cluster_name
     project              = "replatforming"
