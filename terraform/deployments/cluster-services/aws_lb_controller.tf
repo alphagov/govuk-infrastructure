@@ -21,3 +21,9 @@ resource "helm_release" "aws_lb_controller" {
     }
   })]
 }
+
+resource "helm_release" "aws_lb_ingress_class" {
+  name    = "aws-lb-ingress-class"
+  chart   = "../../../helm/services/ingress-class"
+  version = "0.1.0" # TODO: Dependabot or equivalent so this doesn't get neglected.
+}
