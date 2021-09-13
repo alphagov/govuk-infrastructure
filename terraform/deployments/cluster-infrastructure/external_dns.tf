@@ -58,6 +58,15 @@ resource "aws_route53_record" "cluster_public_ns_parent" {
   records = aws_route53_zone.cluster_public.name_servers
 }
 
+resource "aws_route53_record" "cluster_public_soa" {
+  zone_id         = aws_route53_zone.cluster_public.id
+  name            = aws_route53_zone.cluster_public.name
+  type            = "SOA"
+  ttl             = 21600
+  records         = ["${aws_route53_zone.cluster_public.name_servers[0]} awsdns-hostmaster.amazon.com. 1 7200 900 1209600 900"] # NCACHE=10m
+  allow_overwrite = true
+}
+
 resource "aws_acm_certificate" "cluster_public" {
   domain_name               = "*.${local.external_dns_zone_name}"
   subject_alternative_names = ["*.${var.publishing_service_domain}"]
