@@ -36,7 +36,7 @@ variable "external_dns_subdomain" {
 
 variable "publishing_service_domain" {
   type        = string
-  description = "FQDN of the user-facing domain for the publishing apps, e.g. staging.publishing.gov.uk. This domain is included as a wildcard SAN on the TLS cert for Ingresses etc."
+  description = "FQDN of the user-facing domain for the publishing apps, e.g. staging.publishing.service.gov.uk. This domain is included as a wildcard SAN on the TLS cert for Ingresses etc."
 }
 
 variable "force_destroy" {
