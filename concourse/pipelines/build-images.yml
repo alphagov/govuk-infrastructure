@@ -403,7 +403,7 @@ jobs:
       file: govuk-infrastructure/concourse/tasks/build-image-definition.yml
       input_mapping:
         git-repo: frontend-repo
-        base-image: govuk-ruby-2.7.2
+        base-image: govuk-ruby-2.7.3
       params:
         IMAGE_ARG_base_image: base-image/image.tar
     - put: frontend-image
