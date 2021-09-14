@@ -26,11 +26,11 @@ spec:
     - host: {{ .Values.ingress.host | default (printf "publisher-%s.eks.%s.%s" .Release.Namespace .Values.govukEnvironment .Values.govukDomainExternal ) }}
       http:
         paths:
-          - backend:
+          - path: {{ .Values.ingress.path }}
+            pathType: Prefix
+            backend:
               service:
                 name: {{ $fullName }}
                 port:
                   number: {{ $svcPort }}
-            path: {{ .Values.ingress.path }}
-            pathType: {{ .Values.ingress.pathType }}
 {{- end }}
