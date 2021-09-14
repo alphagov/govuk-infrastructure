@@ -1,18 +1,7 @@
 {{- if .Values.ingress.enabled -}}
 {{- $fullName := .Release.Name -}}
 {{- $svcPort := .Values.service.port -}}
-{{- if and .Values.ingress.className (not (semverCompare ">=1.18-0" .Capabilities.KubeVersion.GitVersion)) }}
-  {{- if not (hasKey .Values.ingress.annotations "kubernetes.io/ingress.class") }}
-  {{- $_ := set .Values.ingress.annotations "kubernetes.io/ingress.class" .Values.ingress.className}}
-  {{- end }}
-{{- end }}
-{{- if semverCompare ">=1.19-0" .Capabilities.KubeVersion.GitVersion -}}
 apiVersion: networking.k8s.io/v1
-{{- else if semverCompare ">=1.14-0" .Capabilities.KubeVersion.GitVersion -}}
-apiVersion: networking.k8s.io/v1beta1
-{{- else -}}
-apiVersion: extensions/v1beta1
-{{- end }}
 kind: Ingress
 metadata:
   name: {{ .Values.ingress.name }}
@@ -34,21 +23,14 @@ spec:
     {{- end }}
   {{- end }}
   rules:
-    - host: "{{ .Values.ingress.host | default (printf "publisher.%s.eks.%s.%s" .Release.Namespace .Values.govukEnvironment .Values.govukDomainExternal ) }}"
+    - host: {{ .Values.ingress.host | default (printf "publisher-%s.eks.%s.%s" .Release.Namespace .Values.govukEnvironment .Values.govukDomainExternal ) }}
       http:
         paths:
-          - backend:
-            {{- if semverCompare ">=1.19-0" $.Capabilities.KubeVersion.GitVersion }}
+          - path: {{ .Values.ingress.path }}
+            pathType: Prefix
+            backend:
               service:
                 name: {{ $fullName }}
                 port:
                   number: {{ $svcPort }}
-            {{- else }}
-            serviceName: {{ $fullName }}
-            servicePort: {{ $svcPort }}
-            {{- end }}
-            path: {{ .Values.ingress.path }}
-            {{- if and .Values.ingress.pathType (semverCompare ">=1.18-0" $.Capabilities.KubeVersion.GitVersion) }}
-            pathType: {{ .Values.ingress.pathType }}
-            {{- end }}
 {{- end }}
