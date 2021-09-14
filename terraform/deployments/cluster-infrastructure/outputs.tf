@@ -50,7 +50,7 @@ output "external_dns_zone_id" {
 
 output "external_dns_zone_name" {
   description = "Domain name of the Route53 zone to be managed by the external-dns addon."
-  value       = local.external_dns_domain_name
+  value       = local.external_dns_zone_name
 }
 
 output "external_secrets_service_account_name" {
