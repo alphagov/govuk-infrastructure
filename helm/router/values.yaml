@@ -15,7 +15,7 @@ replicaCount: 1
 
 image:
   repository: 172025368201.dkr.ecr.eu-west-1.amazonaws.com/router
-  pullPolicy: IfNotPresent
+  pullPolicy: Always
   tag: latest
 
 containerPort: 80
