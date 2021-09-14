@@ -5,7 +5,7 @@ metadata:
 data:
   nginx.conf: |-
     user  nginx;
-    
+
     error_log  /var/log/nginx/error.log warn;
     pid        /var/run/nginx.pid;
 
@@ -30,6 +30,8 @@ data:
         listen {{ .Values.nginxPort }};
 
         location / {
+          proxy_set_header   Host $host;
+          proxy_set_header   X-Real-IP $remote_addr;
           proxy_pass         http://{{ .Release.Name }};
           proxy_redirect     off;
         }

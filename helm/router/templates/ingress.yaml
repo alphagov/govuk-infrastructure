@@ -34,8 +34,8 @@ spec:
     {{- end }}
   {{- end }}
   rules:
-    #- host: "{{ .Values.ingress.host | default (printf "www-origin.%s.%s.%s" .Release.Namespace .Values.govukEnvironment .Values.govukDomainExternal ) }}" #TODO: fix when k8s DNS set up
-    -  http:
+    - host: "{{ .Values.ingress.host | default (printf "www-origin.%s.eks.%s.%s" .Release.Namespace .Values.govukEnvironment .Values.govukDomainExternal ) }}"
+      http:
         paths:
           - path: {{ .Values.ingress.path }}
             {{- if and .Values.ingress.pathType (semverCompare ">=1.18-0" $.Capabilities.KubeVersion.GitVersion) }}
