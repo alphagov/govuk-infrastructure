@@ -15,7 +15,5 @@ spec:
   ports:
     - port: {{ .Values.service.port }}
       targetPort: {{ .Values.nginxPort}}
-      protocol: TCP
-      name: http
   selector:
     app: {{ .Release.Name }}
