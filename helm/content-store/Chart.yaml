@@ -2,5 +2,5 @@ apiVersion: v2
 name: content-store
 description: A Helm chart for GOV.UK Content-Store
 type: application
-version: 0.2.0
+version: 0.3.0
 appVersion: "1.16.0"
