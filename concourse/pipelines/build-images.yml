@@ -403,7 +403,7 @@ jobs:
       file: govuk-infrastructure/concourse/tasks/build-image-definition.yml
       input_mapping:
         git-repo: frontend-repo
-        base-image: govuk-ruby-2.7.2
+        base-image: govuk-ruby-2.7.3
       params:
         IMAGE_ARG_base_image: base-image/image.tar
     - put: frontend-image
@@ -428,6 +428,10 @@ jobs:
     - in_parallel:
       - get: infra-concourse-task-repo
         trigger: true
+      - get: govuk-ruby-2.7.3
+        params:
+          format: oci
+        trigger: true
       - get: infra-concourse-task-version
         params:
           bump: minor
@@ -439,6 +443,7 @@ jobs:
       file: govuk-infrastructure/concourse/tasks/build-image-definition.yml
       input_mapping:
         git-repo: infra-concourse-task-repo
+        base-image: govuk-ruby-2.7.3
       params:
         DOCKERFILE: git-repo/docker/images/infra-concourse-task/Dockerfile
     - put: infra-concourse-task-image
