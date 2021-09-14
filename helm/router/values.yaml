@@ -29,30 +29,28 @@ resources:
   # memory: 1024M
   # values used to generate the environment variables for the pod
 
-appGovukAppDomain: # see template for how default value is computed
-appGovukAppName: # see template for how default value is computed
+appGovukAppDomain:
+appGovukAppName:
 appGovukAppType: "rack"
-appMongodbUri: # see template for how default value is computed
+appMongodbUri:
 appRouterMongoDb: "router"
 appRailsEnv: "production"
-appBackendUrlContentStore: # see template for how default value is computed
-appBackendUrlFrontend: # see template for how default value is computed
-appBackendUrlStatic: # see template for how default value is computed
+appBackendUrlContentStore:
+appBackendUrlFrontend:
+appBackendUrlStatic:
 appDefaultTtl: "1800"
-appGovukDomainExternal: # see template for how default value is computed
+appGovukDomainExternal:
 appGovukAppRoot: "/var/apps/router"
-appGovukWebsiteRoot: # see template for how default value is computed
+appGovukWebsiteRoot:
 appRouterApiAddr: "3055"
 appRouterBackendHeaderTimeout: "20"
 
 ingress:
   enabled: true
   name: www-origin
-  host: # default (printf "www-origin.%s.%s" .Release.Namespace .Values.govukEnvironment .Values.govukDomainExternal)
+  host:
   path: "/"
   pathType: "Prefix"
-  className: alb
   annotations:
-    kubernetes.io/ingress.class: alb
-    alb.ingress.kubernetes.io/scheme : internet-facing
+    alb.ingress.kubernetes.io/scheme: internet-facing
     alb.ingress.kubernetes.io/target-type: ip

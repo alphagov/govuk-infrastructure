@@ -15,7 +15,5 @@ spec:
   ports:
     - port: {{ .Values.service.port }}
       targetPort: {{ .Values.containerPort }}
-      protocol: TCP
-      name: https
   selector:
     app: {{ .Release.Name }}
