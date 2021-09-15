@@ -9,7 +9,7 @@ resource "helm_release" "aws_lb_controller" {
   name       = "aws-load-balancer-controller"
   repository = "https://aws.github.io/eks-charts"
   chart      = "aws-load-balancer-controller"
-  version    = "1.2.6" # TODO: Dependabot or equivalent so this doesn't get neglected.
+  version    = "1.2.7" # TODO: Dependabot or equivalent so this doesn't get neglected.
   namespace  = local.services_ns
   values = [yamlencode({
     clusterName = data.terraform_remote_state.cluster_infrastructure.outputs.cluster_id
