@@ -1,5 +1,0 @@
-apiVersion: v2
-name: publisher
-description: A Helm chart for GOV.UK Publisher
-type: application
-version: 0.2.0
