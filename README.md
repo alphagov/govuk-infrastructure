@@ -1,5 +1,11 @@
 **This is a work in progress. This code does not represent production infrastructure yet. For the canonical source of GOV.UK's infrastructure, see [alphagov/govuk-aws](https://github.com/alphagov/govuk-aws) and [alphagov/govuk-puppet](https://github.com/alphagov/govuk-puppet) repos.**
 
+### What's in this repo
+
+The govuk-infrastructure repo contains Terraform modules and Concourse pipelines for turning up an EKS cluster for GOV.UK.
+
+Helm charts have moved to [alphagov/govuk-helm-charts](https://github.com/alphagov/govuk-helm-charts).
+
 ### Usage
 
 To install the [currently used version of Terraform](./terraform/.terraform-version):
