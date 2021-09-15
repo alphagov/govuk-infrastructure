@@ -1,6 +1,0 @@
-apiVersion: v2
-name: static
-description: A Helm chart for GOV.UK Static
-type: application
-version: 0.3.0
-appVersion: "1.16.0"

@@ -1,4 +1,0 @@
-apiVersion: v3
-name: ingress-class
-description: A Helm chart for a IngressClass resource, for use with AWS Load Balancer Controller
-version: 0.1.0

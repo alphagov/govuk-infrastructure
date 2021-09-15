@@ -1,2 +1,0 @@
-className: aws-alb
-controller: ingress.k8s.aws/alb
