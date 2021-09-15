@@ -12,7 +12,8 @@ resource "helm_release" "aws_lb_controller" {
   version    = "1.2.7" # TODO: Dependabot or equivalent so this doesn't get neglected.
   namespace  = local.services_ns
   values = [yamlencode({
-    clusterName = data.terraform_remote_state.cluster_infrastructure.outputs.cluster_id
+    clusterName      = data.terraform_remote_state.cluster_infrastructure.outputs.cluster_id
+    defaultSSLPolicy = "ELBSecurityPolicy-TLS-1-2-Ext-2018-06" # No TLS 1.0 or 1.1.
     serviceAccount = {
       name = data.terraform_remote_state.cluster_infrastructure.outputs.aws_lb_controller_service_account_name
       annotations = {
