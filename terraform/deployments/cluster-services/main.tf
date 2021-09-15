@@ -56,5 +56,13 @@ provider "helm" {
 }
 
 locals {
-  services_ns = data.terraform_remote_state.cluster_infrastructure.outputs.cluster_services_namespace
+  services_ns            = data.terraform_remote_state.cluster_infrastructure.outputs.cluster_services_namespace
+  external_dns_zone_name = data.terraform_remote_state.cluster_infrastructure.outputs.external_dns_zone_name
+  alb_ingress_annotations = {
+    "alb.ingress.kubernetes.io/scheme"       = "internet-facing"
+    "alb.ingress.kubernetes.io/target-type"  = "ip"
+    "alb.ingress.kubernetes.io/listen-ports" = jsonencode([{ HTTP = 80 }, { HTTPS = 443 }])
+    "alb.ingress.kubernetes.io/ssl-redirect" = "443"
+    "alb.ingress.kubernetes.io/ssl-policy"   = "ELBSecurityPolicy-TLS-1-2-Ext-2018-06" # No TLS 1.0 or 1.1.
+  }
 }
