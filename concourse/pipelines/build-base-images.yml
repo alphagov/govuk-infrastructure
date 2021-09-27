@@ -12,7 +12,6 @@ resources:
     type: git
     source: &git-repo-source
       uri: git@github.com:alphagov/govuk-infrastructure.git
-      branch: base_image
       private_key: | # pragma: allowlist secret
         ((govukci_private_key))
 
