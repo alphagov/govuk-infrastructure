@@ -35,3 +35,13 @@ resource "helm_release" "cluster_secret_store" {
     serviceAccountName = data.terraform_remote_state.cluster_infrastructure.outputs.external_secrets_service_account_name
   })]
 }
+
+resource "helm_release" "cluster_secrets" {
+  depends_on = [helm_release.cluster_secret_store]
+
+  chart      = "cluster-secrets"
+  name       = "cluster-secrets"
+  namespace  = local.services_ns
+  repository = "https://alphagov.github.io/govuk-helm-charts/"
+  version    = "0.1.0" # TODO: Dependabot or equivalent so this doesn't get neglected.
+}
