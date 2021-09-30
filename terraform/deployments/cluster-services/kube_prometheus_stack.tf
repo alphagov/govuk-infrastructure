@@ -37,6 +37,10 @@ resource "helm_release" "kube_prometheus_stack" {
           "alb.ingress.kubernetes.io/load-balancer-name" = "prometheus"
         })
       }
+      prometheusSpec = {
+        # Allow empty ruleSelector (https://github.com/prometheus-community/helm-charts/blob/2cacc16807caedc6cabf1606db27e0d78c844564/charts/kube-prometheus-stack/templates/prometheus/prometheus.yaml#L202)
+        ruleSelectorNilUsesHelmValues = false
+      }
     }
   })]
 }
