@@ -47,7 +47,7 @@ module "eks" {
   version = "17.8.0"
 
   cluster_name     = var.cluster_name
-  cluster_version  = "1.21"
+  cluster_version  = var.cluster_version
   subnets          = [for s in aws_subnet.eks_control_plane : s.id]
   vpc_id           = data.terraform_remote_state.infra_vpc.outputs.vpc_id
   enable_irsa      = true
