@@ -60,39 +60,28 @@ module "eks" {
     "api", "audit", "authenticator", "controllerManager", "scheduler"
   ]
 
-  workers_group_defaults = {
-    root_volume_type = "gp3"
-    # TODO: remove this workaround for adding default tags to the ASG once
+  node_groups_defaults = {
+    # TODO: remove this workaround for adding default tags to node ASGs once
     # https://github.com/terraform-aws-modules/terraform-aws-eks/issues/1455
     # and https://github.com/hashicorp/terraform-provider-aws/issues/19204 are
     # fully resolved. local.default_tags can then be inlined in
     # provider.aws.default_tags.
-    tags = [for k, v in local.default_tags : {
-      key                 = k
-      value               = v
-      propagate_at_launch = true
-    }]
+    additional_tags = local.default_tags
+    capacity_type   = var.workers_default_capacity_type
+    disk_size       = 50 # GB
+    subnets         = [for s in aws_subnet.eks_private : s.id]
   }
 
-  worker_groups = [
+  node_groups = [
     {
-      asg_desired_capacity = var.workers_size_desired
-      asg_max_size         = var.workers_size_max
-      asg_min_size         = var.workers_size_min
-      instance_type        = var.workers_instance_type
-      subnets              = [for s in aws_subnet.eks_private : s.id]
-      tags = [
-        {
-          key                 = "k8s.io/cluster-autoscaler/enabled"
-          value               = "true"
-          propagate_at_launch = false
-        },
-        {
-          key                 = "k8s.io/cluster-autoscaler/${var.cluster_name}"
-          value               = "owned"
-          propagate_at_launch = false
-        }
-      ]
+      desired_capacity = var.workers_size_desired
+      max_capacity     = var.workers_size_max
+      min_capacity     = var.workers_size_min
+      instance_types   = var.workers_instance_types
+      additional_tags = {
+        "k8s.io/cluster-autoscaler/enabled"             = "true"
+        "k8s.io/cluster-autoscaler/${var.cluster_name}" = "owned"
+      }
     }
   ]
 }

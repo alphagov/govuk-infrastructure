@@ -56,10 +56,16 @@ variable "force_destroy" {
   default     = false
 }
 
-variable "workers_instance_type" {
+variable "workers_instance_types" {
+  type        = list(string)
+  description = "List of instance types for the managed node group, in order of preference. The second and subsequent preferences are only relevant when using spot instances."
+  default     = ["m5.xlarge"]
+}
+
+variable "workers_default_capacity_type" {
   type        = string
-  description = "Instance type for the managed node group."
-  default     = "m5.xlarge"
+  description = "Default capacity type for managed node groups: SPOT or ON_DEMAND."
+  default     = "ON_DEMAND"
 }
 
 variable "workers_size_desired" {
