@@ -79,28 +79,33 @@ resource "aws_acm_certificate" "cluster_public" {
   }
 }
 
-# See https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/acm_certificate_validation#example-usage
+# See
+# https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/acm_certificate_validation#alternative-domains-dns-validation-with-route-53
 resource "aws_route53_record" "cluster_public_cert_validation" {
   for_each = {
-    # TODO: Delegate the non-prod domains to the non-prod AWS accounts so that
-    # the validation records for *.(env.)?publishing.service.gov.uk can easily
-    # be added here as part of turnup/DR automation. Those records currently
-    # exist for the test/integration/staging/prod environments in a single zone
-    # managed in alphagov/govuk-dns-config.
     for dvo in aws_acm_certificate.cluster_public.domain_validation_options : dvo.domain_name => {
       name   = dvo.resource_record_name
       record = dvo.resource_record_value
       type   = dvo.resource_record_type
+      # TODO: Delegate the non-prod domains to the non-prod AWS accounts so
+      # that the validation records for *.(env.)?publishing.service.gov.uk can
+      # be managed here. The whole of publishing.service.gov.uk is currently a
+      # single zone in the prod account, managed in alphagov/govuk-dns-config.
+      # Then fix zone_id below to be conditional on dvo.domain_name like in the
+      # example linked above. Until then, this creates a useless but harmless
+      # record for publishing_service_domain in the wrong zone. Can't filter it
+      # out with an if clause, because Terraform can't handle it: "The for_each
+      # value depends on resource attributes that cannot be determined until
+      # apply."
+      zone_id = aws_route53_zone.cluster_public.id
     }
-    if length(regexall("${local.external_dns_zone_name}\\.$", dvo.resource_record_name)) > 0
-    # i.e. if dvo.resource_record_name.endswith(local.external_dns_zone_name + ".")
   }
   allow_overwrite = true
   name            = each.value.name
   records         = [each.value.record]
   ttl             = 300
   type            = each.value.type
-  zone_id         = aws_route53_zone.cluster_public.id
+  zone_id         = each.value.zone_id
 }
 
 resource "aws_acm_certificate_validation" "cluster_public" {
