@@ -2,11 +2,13 @@
 
 resource "helm_release" "filebeat" {
   depends_on = [helm_release.cluster_secrets]
-  chart      = "filebeat"
-  name       = "filebeat"
-  namespace  = local.services_ns
-  repository = "https://helm.elastic.co"
-  version    = "7.7.1" # TODO: Dependabot or equivalent so this doesn't get neglected.
+
+  name             = "filebeat"
+  repository       = "https://helm.elastic.co"
+  chart            = "filebeat"
+  version          = "7.7.1" # TODO: Dependabot or equivalent so this doesn't get neglected.
+  namespace        = local.services_ns
+  create_namespace = true
   values = [yamlencode({
     filebeatConfig = {
       "filebeat.yml" = yamlencode({

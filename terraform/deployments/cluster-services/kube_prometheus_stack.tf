@@ -4,9 +4,9 @@ resource "helm_release" "kube_prometheus_stack" {
   name             = "kube-prometheus-stack"
   repository       = "https://prometheus-community.github.io/helm-charts"
   chart            = "kube-prometheus-stack"
-  create_namespace = true
   version          = "18.0.5" # TODO: Dependabot or equivalent so this doesn't get neglected.
   namespace        = "monitoring"
+  create_namespace = true
   values = [yamlencode({
     alertmanager = {
       ingress = {
