@@ -4,11 +4,12 @@
 # ../cluster-infrastructure/external_dns.tf.
 
 resource "helm_release" "external_dns" {
-  name       = "external-dns"
-  repository = "https://charts.bitnami.com/bitnami"
-  chart      = "external-dns"
-  version    = "5.4.4" # TODO: Dependabot or equivalent so this doesn't get neglected.
-  namespace  = local.services_ns
+  name             = "external-dns"
+  repository       = "https://charts.bitnami.com/bitnami"
+  chart            = "external-dns"
+  version          = "5.4.4" # TODO: Dependabot or equivalent so this doesn't get neglected.
+  namespace        = local.services_ns
+  create_namespace = true
   values = [yamlencode({
     aws = {
       region   = data.aws_region.current.name
