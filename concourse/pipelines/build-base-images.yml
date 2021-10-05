@@ -104,7 +104,7 @@ jobs:
           - get: govuk-ruby-2.7.2-image
       - task: build-image
         privileged: true
-        file: govuk-infrastructure/concourse/tasks/build-image-definition.yml
+        file: govuk-infrastructure/concourse/tasks/build-base-image-definition.yml
         input_mapping:
           git-repo: govuk-infrastructure
         params:
@@ -219,7 +219,7 @@ jobs:
           - get: govuk-ruby-2.7.3-image
       - task: build-image
         privileged: true
-        file: govuk-infrastructure/concourse/tasks/build-image-definition.yml
+        file: govuk-infrastructure/concourse/tasks/build-base-image-definition.yml
         input_mapping:
           git-repo: govuk-infrastructure
         params:
@@ -334,7 +334,7 @@ jobs:
           - get: govuk-ruby-2.6.6-image
       - task: build-image
         privileged: true
-        file: govuk-infrastructure/concourse/tasks/build-image-definition.yml
+        file: govuk-infrastructure/concourse/tasks/build-base-image-definition.yml
         input_mapping:
           git-repo: govuk-infrastructure
         params:
