@@ -110,3 +110,28 @@ jobs:
       on_error:
         put: govuk-infrastructure-commit
         params: {status: error, context: terraform-plan-cluster-services}
+
+  - name: terraform-govuk-publishing-infrastructure
+    plan:
+    - get: govuk-infrastructure-commit
+      trigger: true
+    - put: govuk-infrastructure-commit
+      params: {status: pending, context: terraform-plan-govuk-publishing-infrastructure}
+    - task: terraform-govuk-publishing-infrastructure
+      config:
+        <<: *terraform-cluster-config
+        params:
+          <<: *terraform-cluster-params
+          DEPLOYMENT_PATH: govuk-infrastructure-commit/repo/terraform/deployments/govuk-publishing-infrastructure
+      on_success:
+        put: govuk-infrastructure-commit
+        params: {status: success, context: terraform-plan-govuk-publishing-infrastructure}
+      on_failure:
+        put: govuk-infrastructure-commit
+        params: {status: failure, context: terraform-plan-govuk-publishing-infrastructure}
+      on_abort:
+        put: govuk-infrastructure-commit
+        params: {status: error, context: terraform-plan-govuk-publishing-infrastructure}
+      on_error:
+        put: govuk-infrastructure-commit
+        params: {status: error, context: terraform-plan-govuk-publishing-infrastructure}
