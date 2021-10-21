@@ -85,6 +85,8 @@ jobs:
     plan:
     - get: govuk-infrastructure
       trigger: true
+      passed:
+      - update-pipeline
     - task: terraform-apply
       config:
         <<: *terraform-apply-config
