@@ -81,12 +81,26 @@ jobs:
         text: |
           :red_circle: Failed deploy: https://cd.gds-reliability.engineering/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME
 
+  - name: terraform-govuk-publishing-infrastructure
+    plan:
+    - get: govuk-infrastructure
+      trigger: true
+    - task: terraform-apply
+      config:
+        <<: *terraform-apply-config
+        params:
+          <<: *terraform-apply-params
+          DEPLOYMENT_PATH: govuk-infrastructure/terraform/deployments/govuk-publishing-infrastructure
+    on_failure:
+      <<: *notify-slack-failure
+
   - name: terraform-cluster-services
     plan:
     - get: govuk-infrastructure
       trigger: true
       passed:
       - terraform-cluster-infrastructure
+      - terraform-govuk-publishing-infrastructure
     - task: terraform-apply
       config:
         <<: *terraform-apply-config
