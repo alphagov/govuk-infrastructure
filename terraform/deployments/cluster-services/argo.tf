@@ -61,7 +61,7 @@ resource "helm_release" "argo_config" {
   name       = "argocd-config"
   namespace  = local.services_ns
   repository = "https://alphagov.github.io/govuk-helm-charts/"
-  version    = "0.1.2" # TODO: Dependabot or equivalent so this doesn't get neglected.
+  version    = "0.2.0" # TODO: Dependabot or equivalent so this doesn't get neglected.
   values = [yamlencode({
     # TODO: This TF module should not need to know the govuk_environment, since
     # there is only one per AWS account.
