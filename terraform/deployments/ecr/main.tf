@@ -56,6 +56,11 @@ resource "aws_iam_user" "concourse_ecr_user" {
   name = "concourse_ecr_user"
 }
 
+#Github actions publish images to ECR IAM user
+resource "aws_iam_user" "github_ecr_user" {
+  name = "github_ecr_user"
+}
+
 resource "aws_iam_role" "push_image_to_ecr_role" {
   name = "push_image_to_ecr_role"
   assume_role_policy = jsonencode({
@@ -173,6 +178,30 @@ resource "aws_iam_policy" "pull_images_from_ecr_policy" {
         "Action" : [
           "ecr:GetAuthorizationToken"
         ]
+      }
+    ]
+  })
+}
+
+resource "aws_iam_user_policy" "github_ecr_user_policy" {
+  name = "github_ecr_user_policy"
+  user = aws_iam_user.github_ecr_user.name
+  policy = jsonencode({
+    "Version" : "2012-10-17",
+    "Statement" : [
+      {
+        "Sid" : "AllowPush",
+        "Effect" : "Allow",
+        "Action" : [
+          "ecr:GetDownloadUrlForLayer",
+          "ecr:BatchGetImage",
+          "ecr:BatchCheckLayerAvailability",
+          "ecr:PutImage",
+          "ecr:InitiateLayerUpload",
+          "ecr:UploadLayerPart",
+          "ecr:CompleteLayerUpload"
+        ],
+        "Resource" : ["*"],
       }
     ]
   })
