@@ -199,6 +199,7 @@ resource "aws_iam_user_policy" "github_ecr_user_policy" {
           "ecr:PutImage",
           "ecr:InitiateLayerUpload",
           "ecr:UploadLayerPart",
+          "ecr:GetAuthorizationToken",
           "ecr:CompleteLayerUpload"
         ],
         "Resource" : ["*"],
