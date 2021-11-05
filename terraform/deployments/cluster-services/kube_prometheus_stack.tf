@@ -37,7 +37,16 @@ resource "helm_release" "kube_prometheus_stack" {
           "alb.ingress.kubernetes.io/load-balancer-name" = "prometheus"
         })
       }
+      # Match all PrometheusRules cluster-wide. (If an app/team needs a separate
+      # Prom instance, it almost certainly needs a separate EKS cluster too.)
       prometheusSpec = {
+        ruleNamespaceSelector = {
+          matchExpressions = [{
+            key      = "no_monitor"
+            operator = "DoesNotExist"
+            values   = []
+          }]
+        }
         # Allow empty ruleSelector (https://github.com/prometheus-community/helm-charts/blob/2cacc16807caedc6cabf1606db27e0d78c844564/charts/kube-prometheus-stack/templates/prometheus/prometheus.yaml#L202)
         ruleSelectorNilUsesHelmValues = false
       }
