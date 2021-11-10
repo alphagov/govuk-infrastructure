@@ -44,4 +44,5 @@ terraform init -input=false -backend-config "${ENVIRONMENT}.backend"
 
 terraform "$tf_action" -input=false \
   -var-file "../variables/${ENVIRONMENT}/common.tfvars" \
+  -var-file "../variables/common.tfvars" \
   $auto_approve "$@"
