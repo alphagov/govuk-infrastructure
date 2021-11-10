@@ -55,17 +55,19 @@ resource "helm_release" "argo_cd" {
   })]
 }
 
-resource "helm_release" "argo_config" {
-  depends_on = [helm_release.argo_cd]
-  chart      = "argocd-config"
-  name       = "argocd-config"
+resource "helm_release" "argo_services" {
+  # Relies on CRDs
+  depends_on = [helm_release.argo_cd, helm_release.argo_events]
+  chart      = "argo-services"
+  name       = "argo-services"
   namespace  = local.services_ns
   repository = "https://alphagov.github.io/govuk-helm-charts/"
-  version    = "0.1.2" # TODO: Dependabot or equivalent so this doesn't get neglected.
+  version    = "0.1.1" # TODO: Dependabot or equivalent so this doesn't get neglected.
   values = [yamlencode({
     # TODO: This TF module should not need to know the govuk_environment, since
     # there is only one per AWS account.
     govukEnvironment = var.govuk_environment
+    argocdUrl        = "https://${local.argo_host}"
   })]
 }
 
@@ -76,76 +78,46 @@ resource "helm_release" "argo_notifications" {
   repository = "https://argoproj.github.io/argo-helm"
   version    = "1.5.1" # TODO: Dependabot or equivalent so this doesn't get neglected.
   values = [yamlencode({
-    argocdUrl = "https://${local.argo_host}"
+    # Configured in argo-services Helm chart
+    cm = {
+      create = false
+    }
+    "argocdUrl" = "https://${local.argo_host}"
 
     # argocd-notifications-secret will be created by ExternalSecrets
     # since the secrets are stored in AWS SecretsManager
     secret = {
       create = false
     }
+  })]
+}
 
-    notifiers = {
-      # this slack webhook (managed by IT Services) allows messages on the `govuk-deploy-alerts` channel 
-      "service.webhook.slack_webhook" = yamlencode({
-        url = "$slack_url"
-        headers = [{
-          name  = "Content-Type"
-          value = "application/json"
-        }]
-      })
-      "service.slack" = null # remove default unconfigured slack service to remove misconfiguration error
+resource "helm_release" "argo_workflows" {
+  chart      = "argo-workflows"
+  name       = "argo-workflows"
+  namespace  = local.services_ns
+  repository = "https://argoproj.github.io/argo-helm"
+  version    = "0.8.0" # TODO: Dependabot or equivalent so this doesn't get neglected.
+  values = [yamlencode({
+    controller = {
+      workflowNamespaces = concat([local.services_ns], var.argo_workflow_namespaces)
     }
 
-    triggers = {
-      "trigger.sync-operation-change" = yamlencode([
-        {
-          when    = "app.status.operationState.phase in ['Succeeded'] and app.status.health.status == 'Healthy'"
-          oncePer = "app.status.sync.revision"
-          send    = ["send-slack"]
-        },
-        {
-          when    = "app.status.operationState.phase in ['Running']"
-          oncePer = "app.status.sync.revision"
-          send    = ["send-slack"]
-        },
-        {
-          when    = "app.status.operationState.phase in ['Error', 'Failed']"
-          oncePer = "app.status.sync.revision"
-          send    = ["send-slack"]
-        },
-      ])
+    workflow = {
+      serviceAccount = {
+        create = true
+      }
     }
+  })]
+}
 
-    templates = {
-      "template.send-slack" = yamlencode({
-        webhook = {
-          slack_webhook = {
-            method = "POST"
-            body   = <<-EOB
-            {
-              "attachments": [{
-                "title": "{{.app.metadata.name}}",
-                "title_link": "{{.context.argocdUrl}}/applications/{{.app.metadata.name}}",
-                {{- if eq .app.status.operationState.phase "Succeeded" -}}
-                "color": "#18be52",
-                {{- else if eq .app.status.operationState.phase "Running" -}}
-                "color": "#beb618",
-                {{- else if or (eq .app.status.operationState.phase "Error") (eq .app.status.operationState.phase "Failed") -}}
-                "color": "#be1b18",
-                {{- else -}}
-                "color": "#183cbe",
-                {{- end -}}
-                "fields": [{
-                  "title": "state",
-                  "value": "{{.app.status.operationState.phase}}",
-                  "short": true
-                }]
-              }]
-            }
-            EOB
-          }
-        }
-      })
-    }
+resource "helm_release" "argo_events" {
+  chart      = "argo-events"
+  name       = "argo-events"
+  namespace  = local.services_ns
+  repository = "https://argoproj.github.io/argo-helm"
+  version    = "1.7.0" # TODO: Dependabot or equivalent so this doesn't get neglected.
+  values = [yamlencode({
+    namespace = local.services_ns
   })]
 }
