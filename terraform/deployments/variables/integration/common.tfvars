@@ -23,3 +23,6 @@ eks_private_subnets = {
 }
 
 govuk_environment = "integration"
+
+publishing_service_domain = "integration.publishing.service.gov.uk"
+external_dns_subdomain    = "eks"
