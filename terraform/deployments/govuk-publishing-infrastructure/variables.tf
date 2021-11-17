@@ -6,7 +6,7 @@ variable "govuk_aws_state_bucket" {
 variable "shared_redis_cluster_name" {
   type        = string
   description = "Name of the shared Redis cluster"
-  default     = "shared-eks"
+  default     = "shared-redis"
 }
 
 variable "shared_redis_cluster_port" {

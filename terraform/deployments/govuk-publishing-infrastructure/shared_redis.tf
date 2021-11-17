@@ -41,7 +41,8 @@ resource "aws_elasticache_replication_group" "shared_redis_cluster" {
 
 resource "aws_route53_record" "shared_redis_cluster_internal_service_record" {
   zone_id = local.internal_dns_zone_id
-  name    = var.shared_redis_cluster_name
+  # TODO: consider removing EKS suffix once the old EC2 environments are gone.
+  name    = "${var.shared_redis_cluster_name}.eks"
   type    = "CNAME"
   ttl     = 300
   records = [aws_elasticache_replication_group.shared_redis_cluster.primary_endpoint_address]
