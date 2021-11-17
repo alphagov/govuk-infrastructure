@@ -63,7 +63,7 @@ resource "aws_route53_record" "cluster_public_soa" {
   name            = aws_route53_zone.cluster_public.name
   type            = "SOA"
   ttl             = 21600
-  records         = ["${aws_route53_zone.cluster_public.name_servers[0]} awsdns-hostmaster.amazon.com. 1 7200 900 1209600 900"] # NCACHE=10m
+  records         = ["${aws_route53_zone.cluster_public.name_servers[0]} awsdns-hostmaster.amazon.com. 1 7200 900 1209600 300"]
   allow_overwrite = true
 }
 
