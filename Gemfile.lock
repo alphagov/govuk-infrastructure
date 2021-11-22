@@ -34,7 +34,7 @@ GEM
       rexml
     diff-lcs (1.4.4)
     hashdiff (1.0.1)
-    i18n (1.8.10)
+    i18n (1.8.11)
       concurrent-ruby (~> 1.0)
     jmespath (1.4.0)
     minitest (5.14.4)
@@ -60,32 +60,31 @@ GEM
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.10.0)
     rspec-support (3.10.0)
-    rubocop (1.21.0)
+    rubocop (1.23.0)
       parallel (~> 1.10)
       parser (>= 3.0.0.0)
       rainbow (>= 2.2.2, < 4.0)
       regexp_parser (>= 1.8, < 3.0)
       rexml
-      rubocop-ast (>= 1.9.1, < 2.0)
+      rubocop-ast (>= 1.12.0, < 2.0)
       ruby-progressbar (~> 1.7)
       unicode-display_width (>= 1.4.0, < 3.0)
-    rubocop-ast (1.11.0)
+    rubocop-ast (1.13.0)
       parser (>= 3.0.1.1)
-    rubocop-govuk (4.1.0)
-      rubocop (= 1.21.0)
-      rubocop-ast (= 1.11.0)
-      rubocop-rails (= 2.12.2)
+    rubocop-govuk (4.2.0)
+      rubocop (= 1.23.0)
+      rubocop-ast (= 1.13.0)
+      rubocop-rails (= 2.12.4)
       rubocop-rake (= 0.6.0)
-      rubocop-rspec (= 2.4.0)
-    rubocop-rails (2.12.2)
+      rubocop-rspec (= 2.6.0)
+    rubocop-rails (2.12.4)
       activesupport (>= 4.2.0)
       rack (>= 1.1)
       rubocop (>= 1.7.0, < 2.0)
     rubocop-rake (0.6.0)
       rubocop (~> 1.0)
-    rubocop-rspec (2.4.0)
-      rubocop (~> 1.0)
-      rubocop-ast (>= 1.1.0)
+    rubocop-rspec (2.6.0)
+      rubocop (~> 1.19)
     ruby-progressbar (1.11.0)
     tzinfo (2.0.4)
       concurrent-ruby (~> 1.0)
@@ -94,7 +93,7 @@ GEM
       addressable (>= 2.8.0)
       crack (>= 0.3.2)
       hashdiff (>= 0.4.0, < 2.0.0)
-    zeitwerk (2.4.2)
+    zeitwerk (2.5.1)
 
 PLATFORMS
   ruby
@@ -104,7 +103,7 @@ DEPENDENCIES
   aws-sdk-secretsmanager
   rake
   rspec
-  rubocop-govuk (~> 4.1)
+  rubocop-govuk (~> 4.2)
   webmock
 
 BUNDLED WITH
