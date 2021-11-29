@@ -30,7 +30,7 @@ resource "helm_release" "filebeat" {
         ]
 
         "output.logstash" : {
-          "hosts" : ["$${LOGSTASH_HOST:? LOGSTASH_HOST variable is not set}:18998"]
+          "hosts" : ["$${LOGSTASH_HOST:? LOGSTASH_HOST variable is not set}:$${LOGSTASH_PORT:? LOGSTASH_PORT variable is not set}"]
           "loadbalance" : true
           "ssl.enabled" : true
         }
@@ -43,6 +43,15 @@ resource "helm_release" "filebeat" {
           secretKeyRef = {
             name = "logit-host"
             key  = "host"
+          }
+        }
+      },
+      {
+        name = "LOGSTASH_PORT"
+        valueFrom = {
+          secretKeyRef = {
+            name = "logit-host"
+            key  = "port"
           }
         }
       }
