@@ -8,7 +8,9 @@ Accepted
 
 ## Context
 
-We want to implement user authentication on the monitoring stack's web applications (Grafana, Prometheus, Alertmanager). We also want to use Github as the identity provider (IdP), as that provides a means for us to control access based on GDS Github organisation and team membership.
+We want to implement user authentication on the monitoring stack's web applications (Grafana, Prometheus, Alertmanager).
+
+We also want to use Github as the identity provider (IdP), as that provides a means for us to control access based on GDS Github organisation and team membership; the alternative option, GSuite, does not currently have the granular role/group structure that we would require to effectively control access, and introducing that group structure would be out of scope for this project, and would likely replicate the Github group/team structure that currently exists.
 
 Grafana supports many authentication methods, including [Github OAuth2](https://grafana.com/docs/grafana/latest/auth/github/) and [OIDC (via generic OAuth2)](https://grafana.com/docs/grafana/latest/auth/generic-oauth/).
 
@@ -28,7 +30,7 @@ Use [Dex](https://dexidp.io) as an SSO service and identity provider for all web
 
 ## Consequences
 
-We will have a single signon (SSO) service for all user-facing platform UIs, now and in the future. This will provide a single point of integration with the underlying identity provider (Github), and so only one component will need a configuration change in the event that the identity provider changes in the future (for example, to Google or Active Directory).
+We will have a single signon (SSO) service and consistent identity provider for all user-facing platform UIs, now and in the future. This will provide a single point of integration with the underlying identity provider (Github), and so only one component will need a configuration change in the event that the identity provider changes in the future (for example, to Google or Active Directory).
 
 Dex is currently deployed as a component of the larger Argo service. As Dex will now be a shared platform service, this should be removed in favour of a standalone Dex [Helm install](https://github.com/dexidp/helm-charts).
 
