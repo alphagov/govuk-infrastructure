@@ -21,8 +21,10 @@ resource "helm_release" "external_dns" {
         "eks.amazonaws.com/role-arn" = data.terraform_remote_state.cluster_infrastructure.outputs.external_dns_role_arn
       }
     }
-    txtOwnerId    = data.terraform_remote_state.cluster_infrastructure.outputs.cluster_id
-    domainFilters = [data.terraform_remote_state.cluster_infrastructure.outputs.external_dns_zone_name]
+    txtOwnerId         = data.terraform_remote_state.cluster_infrastructure.outputs.cluster_id
+    domainFilters      = [data.terraform_remote_state.cluster_infrastructure.outputs.external_dns_zone_name]
+    interval           = "5m"
+    triggerLoopOnEvent = true
     # TODO: hook up Prometheus metrics (metrics.enabled, metrics.podAnnotations etc.)
   })]
 }
