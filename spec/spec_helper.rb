@@ -1,3 +1,5 @@
+require "rake"
+require "climate_control"
 require "webmock/rspec"
 $LOAD_PATH << File.expand_path("../lib", __dir__)
 
@@ -20,6 +22,15 @@ RSpec.configure do |config|
   config.warnings = true
 
   config.default_formatter = "doc"
+
+  config.before(:suite) do
+    Dir.glob("lib/tasks/*.rake").each { |r| Rake::DefaultLoader.new.load r }
+    Dir.glob("./spec/factories/*.rb").sort.each { |f| require f }
+  end
+end
+
+def with_modified_env(options, &block)
+  ClimateControl.modify(options, &block)
 end
 
 WebMock.disable_net_connect!(allow_localhost: false)

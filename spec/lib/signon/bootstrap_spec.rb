@@ -1,242 +1,245 @@
 require "signon/bootstrap"
+require "kubernetes/client"
 
 RSpec.describe Signon::Bootstrap do
-  let(:versions) do
-    { "version" => %w[AWSPENDING] }
-  end
-  let(:metadata) do
-    double(
-      rotation_enabled: true,
-      version_ids_to_stages: versions,
-    )
-  end
-  let(:admin_password_arn) { "admin_password_arn" }
-  let(:admin_password) do
-    double(secret_string: "secret")
-  end
-  let(:secretsmanager_client) do
-    instance_double(Aws::SecretsManager::Client)
-  end
-
   let(:signon_client) do
     instance_double(Signon::Client)
   end
 
-  def expect_token_secret_describe_call
-    allow(secretsmanager_client).to receive(:describe_secret)
-      .with(secret_id: token_arn)
-      .and_return(metadata)
+  let(:kubernetes_client) do
+    instance_double(Kubernetes::Client)
   end
 
-  describe "#bootstrap_tokens" do
-    subject(:call) do
-      logger = Logger.new($stdout)
-      logger.level = Logger::WARN
-      described_class.bootstrap_tokens(
-        app_config: {
-          "api_user_email" => api_user,
-          "deploy_event_key" => app_name,
-          "bearer_tokens" => [
-            {
-              "secret_arn" => token_arn,
-              "application" => app_name,
-              "permissions" => permissions,
-            },
-          ],
-        },
-        signon: signon_client,
-        secretsmanager: secretsmanager_client,
-        logger: logger,
-      )
-    end
+  let(:applications) do
+    Factories::Signon.applications
+  end
 
-    let(:api_user) { "publisher@example.org" }
-    let(:token_arn) { "arn:secretsmanager:123" }
-    let(:app_name) { "publishing-api" }
-    let(:permissions) { "signin" }
-    let(:generated_secret) { "hunter2" }
+  let(:signon_apps) do
+    {
+      "content-store" => { "id" => "content-store-id", "oauth_id" => "123", "oauth_secret" => "456" },
+      "publishing-api" => { "id" => "pub-api-id", "oauth_id" => "456", "oauth_secret" => "789" },
+    }
+  end
 
-    context "when secret rotation is disabled" do
-      let(:metadata) { double(rotation_enabled: false) }
+  let(:api_users) do
+    Factories::Signon.api_users
+  end
 
-      it "raises an error" do
-        expect_token_secret_describe_call
-        expect { call }.to raise_error Signon::Bootstrap::NotRotatable
-      end
-    end
+  let(:bearer_tokens) do
+    [
+      {
+        name: "signon-token-content-store-publishing-api",
+        permissions: [],
+        application_id: "content-store-user-id",
+        api_user_id: "publishing-api-id",
+      },
+      {
+        name: "signon-token-frontend-content-store",
+        permissions: %w[special-access],
+        application_id: "frontend-user-id",
+        api_user_id: "content-store-id",
+      },
+      {
+        name: "signon-token-frontend-publishing-api",
+        permissions: [],
+        application_id: "frontend-user-id",
+        api_user_id: "publishing-api-id",
+      },
+    ]
+  end
 
-    context "when secret has already been created" do
-      let(:versions) { { "version1" => %w[AWSCURRENT] } }
-
-      it "does not create a new token" do
-        expect_token_secret_describe_call
-        expect(signon_client).not_to receive(:create_bearer_token)
-        expect { call }.not_to raise_error
-      end
-    end
-
-    context "when no AWSCURRENT secret version exist yet" do
-      let(:versions) { { "version1" => %w[AWSPENDING] } }
-
-      it "creates a secret in signon" do
-        expect_token_secret_describe_call
-        allow(signon_client).to receive(:create_bearer_token)
-          .with(
-            api_user: api_user,
-            application_name: app_name,
-            permissions: [permissions],
-          )
-          .and_return(generated_secret)
-
-        expect(secretsmanager_client).to receive(:put_secret_value)
-          .with(
-            secret_id: token_arn,
-            secret_string: JSON.generate(
-              api_user_email: api_user,
-              application_name: app_name,
-              deploy_event_key: app_name,
-              permissions: [permissions],
-              bearer_token: generated_secret,
-            ),
-            version_stages: %w[AWSCURRENT],
-          )
-
-        expect { call }.not_to raise_error
-      end
+  let(:generated_tokens) do
+    bearer_tokens.each_with_object({}) do |token, obj|
+      obj[token[:name]] = SecureRandom.hex(3)
     end
   end
 
-  describe "#bootstrap_applications" do
-    subject(:call) do
-      logger = Logger.new($stdout)
-      logger.level = Logger::WARN
-      described_class.bootstrap_applications(
-        applications: [
-          {
-            "name" => name,
-            "id_arn" => id_arn,
-            "secret_arn" => secret_arn,
-            "permissions" => permissions,
-            "description" => description,
-            "home_uri" => home_uri,
-            "redirect_uri" => redirect_uri,
-          },
-        ],
+  describe "#create_applications" do
+    subject(:create_signon_apps) do
+      described_class.create_applications(
+        applications: applications,
         signon: signon_client,
-        secretsmanager: secretsmanager_client,
-        logger: logger,
+        kubernetes: kubernetes_client,
       )
     end
 
-    let(:name) { "Publishing API" }
-    let(:id_arn) { "arn:id:123" }
-    let(:secret_arn) { "arn:secret:123" }
-    let(:permissions) { %w[signin] }
-    let(:description) { "Content Management System backend" }
-    let(:home_uri) { "https://pub-api.example.org" }
-    let(:redirect_uri) { "https://pub-api.example.org/redirect" }
-    let(:oauth_id) { "oauth_id" }
-    let(:oauth_secret) { "oauth_secret" }
-
-    context "when the application has not been created" do
-      let(:versions) do
-        {}
-      end
-
-      it "will create the application and put the secret in SecretsManager" do
-        allow(secretsmanager_client).to receive(:describe_secret)
-          .with(secret_id: id_arn)
-          .and_return(metadata)
-
+    it "creates the applications and stores their creds in Secrets" do
+      applications.each do |app_slug, app|
         allow(signon_client).to receive(:create_application)
           .with(
-            name: name,
-            description: description,
-            home_uri: home_uri,
-            permissions: permissions,
-            redirect_uri: redirect_uri,
+            name: app["name"],
+            description: app["description"],
+            home_uri: app["home_uri"],
+            permissions: app["permissions"],
+            redirect_uri: app["redirect_uri"],
           )
-          .and_return({ "oauth_id" => oauth_id, "oauth_secret" => oauth_secret })
+          .and_return(signon_apps[app_slug])
 
-        expect(secretsmanager_client).to receive(:put_secret_value)
+        allow(kubernetes_client).to receive(:put_secret_value)
           .with(
-            secret_id: secret_arn,
-            secret_string: oauth_secret,
-            version_stages: %w[AWSCURRENT],
+            secret_name: "signon-app-#{app_slug}",
+            secret_data: signon_apps[app_slug],
           )
-
-        expect(secretsmanager_client).to receive(:put_secret_value)
-          .with(
-            secret_id: id_arn,
-            secret_string: oauth_id,
-            version_stages: %w[AWSCURRENT],
-          )
-
-        expect { call }.not_to raise_error
       end
+
+      expect(create_signon_apps).to eq({ "content-store" => "content-store-id", "publishing-api" => "pub-api-id" })
     end
 
-    context "when application has been created" do
-      context "when credentials are in secretsmanager" do
-        let(:versions) do
-          { "version1" => %w[AWSCURRENT] }
-        end
-
-        it "will verify the credentials have been set in SecretsManager and not create a new application or secret" do
-          allow(secretsmanager_client).to receive(:describe_secret)
-            .with(secret_id: secret_arn)
-            .and_return(metadata)
-
-          allow(secretsmanager_client).to receive(:describe_secret)
-            .with(secret_id: id_arn)
-            .and_return(metadata)
-
-          expect(signon_client).not_to receive(:create_application)
-          expect(secretsmanager_client).not_to receive(:put_secret_value)
-
-          expect { call }.not_to raise_error
-        end
-      end
-
-      context "when credentials are not in secretsmanager" do
-        let(:versions) do
-          nil # versions can be nil when there are no versions.
-        end
-
-        it "will retrieve the credentials from Signon and set them in SecretsManager" do
-          allow(secretsmanager_client).to receive(:describe_secret)
-            .with(secret_id: id_arn)
-            .and_return(metadata)
-
+    describe "is idempotent" do
+      context "when one application already created" do
+        it "creates only new applications" do
+          pub_app = applications["publishing-api"]
           allow(signon_client).to receive(:create_application)
             .with(
-              name: name,
-              description: description,
-              home_uri: home_uri,
-              permissions: permissions,
-              redirect_uri: redirect_uri,
+              name: pub_app["name"],
+              description: pub_app["description"],
+              home_uri: pub_app["home_uri"],
+              permissions: pub_app["permissions"],
+              redirect_uri: pub_app["redirect_uri"],
             )
             .and_raise(Signon::Client::ApplicationAlreadyCreated)
 
           allow(signon_client).to receive(:get_application)
-            .with(name: name)
-            .and_return({ "oauth_id" => oauth_id, "oauth_secret" => oauth_secret })
+            .with(name: pub_app["name"])
+            .and_return(signon_apps["publishing-api"])
 
-          expect(secretsmanager_client).to receive(:put_secret_value)
+          content_app = applications["content-store"]
+          allow(signon_client).to receive(:create_application)
             .with(
-              secret_id: secret_arn,
-              secret_string: oauth_secret,
-              version_stages: %w[AWSCURRENT],
+              name: content_app["name"],
+              description: content_app["description"],
+              home_uri: content_app["home_uri"],
+              permissions: content_app["permissions"],
+              redirect_uri: content_app["redirect_uri"],
+            )
+            .and_return(signon_apps["content-store"])
+
+          allow(kubernetes_client).to receive(:put_secret_value)
+            .with(
+              secret_name: "signon-app-publishing-api",
+              secret_data: signon_apps["publishing-api"],
             )
 
-          expect(secretsmanager_client).to receive(:put_secret_value)
+          allow(kubernetes_client).to receive(:put_secret_value)
             .with(
-              secret_id: id_arn,
-              secret_string: oauth_id,
-              version_stages: %w[AWSCURRENT],
+              secret_name: "signon-app-content-store",
+              secret_data: signon_apps["content-store"],
             )
 
-          expect { call }.not_to raise_error
+          expect(create_signon_apps).to eq({ "content-store" => "content-store-id", "publishing-api" => "pub-api-id" })
+        end
+      end
+    end
+  end
+
+  describe "#create_api_users" do
+    subject(:signon_api_users) do
+      described_class.create_api_users(
+        api_users: api_users,
+        signon: signon_client,
+      )
+    end
+
+    it "creates the api users" do
+      api_users.each do |slug, api_user|
+        allow(signon_client).to receive(:create_api_user)
+          .with(name: api_user["name"], email: api_user["email"])
+          .and_return({ "id" => "#{slug}-user-id" })
+      end
+
+      expect(signon_api_users).to eq({
+        "content-store" => "content-store-user-id",
+        "frontend" => "frontend-user-id",
+      })
+    end
+
+    describe "is idempotent" do
+      context "when an api user already exists" do
+        it "creates only new api users" do
+          frontend = api_users["frontend"]
+          content_store = api_users["content-store"]
+
+          allow(signon_client).to receive(:create_api_user)
+            .with(name: frontend["name"], email: frontend["email"])
+            .and_return({ "id" => "frontend-user-id" })
+
+          allow(signon_client).to receive(:create_api_user)
+            .with(name: content_store["name"], email: content_store["email"])
+            .and_raise(Signon::Client::ApiUserAlreadyCreated)
+
+          allow(signon_client).to receive(:get_api_user)
+            .with(email: content_store["email"])
+            .and_return({ "id" => "content-store-user-id" })
+
+          expect(signon_api_users).to eq({
+            "content-store" => "content-store-user-id",
+            "frontend" => "frontend-user-id",
+          })
+        end
+      end
+    end
+  end
+
+  describe "#create_bearer_tokens" do
+    subject(:signon_bearer_tokens) do
+      described_class.create_bearer_tokens(
+        bearer_tokens: bearer_tokens,
+        signon: signon_client,
+        kubernetes: kubernetes_client,
+      )
+    end
+
+    it "creates bearer tokens" do
+      bearer_tokens.each do |token|
+        allow(kubernetes_client).to receive(:secret_exists?)
+          .with({ secret_name: token[:name] })
+          .and_return(false)
+
+        allow(signon_client).to receive(:create_bearer_token)
+          .with({ api_user_id: token[:api_user_id], application_id: token[:application_id], permissions: token[:permissions] })
+          .and_return({ "token" => generated_tokens[token[:name]] })
+
+        allow(kubernetes_client).to receive(:put_secret_value)
+          .with({
+            secret_name: token[:name],
+            secret_data: {
+              bearer_token: generated_tokens[token[:name]],
+            },
+          })
+      end
+
+      expect(signon_bearer_tokens).to eq(nil)
+    end
+
+    describe "is idempotent" do
+      context "when a bearer token already exists" do
+        it "creates only new bearer tokens" do
+          new_token = bearer_tokens.first
+          existing_tokens = bearer_tokens[1..]
+
+          allow(kubernetes_client).to receive(:secret_exists?)
+            .with({ secret_name: new_token[:name] })
+            .and_return(true)
+
+          existing_tokens.each do |token|
+            allow(kubernetes_client).to receive(:secret_exists?)
+              .with({ secret_name: token[:name] })
+              .and_return(false)
+
+            allow(signon_client).to receive(:create_bearer_token)
+              .with({ api_user_id: token[:api_user_id], application_id: token[:application_id], permissions: token[:permissions] })
+              .and_return({ "token" => generated_tokens[token[:name]] })
+
+            allow(kubernetes_client).to receive(:put_secret_value)
+              .with({
+                secret_name: token[:name],
+                secret_data: {
+                  bearer_token: generated_tokens[token[:name]],
+                },
+              })
+          end
+
+          expect(signon_bearer_tokens).to eq(nil)
         end
       end
     end
