@@ -27,3 +27,6 @@ force_destroy     = true
 
 publishing_service_domain = "test.publishing.service.gov.uk"
 external_dns_subdomain    = "eks"
+
+frontend_memcached_node_type   = "cache.t4g.micro"
+shared_redis_cluster_node_type = "cache.t4g.small"
