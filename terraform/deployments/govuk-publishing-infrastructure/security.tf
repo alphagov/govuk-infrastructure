@@ -2,11 +2,12 @@
 #
 # Naming: please use the following conventions where appropriate:
 # For ingress rules:
-#   Name: {destination}_from_{source}_{protocol}
-#   Description: {destination} accepts requests from {source} over {protocol}
+#   Name: {destination}_from_{source}_{port_name}
+#   Description: {destination} accepts requests from {source} on {port_name}
 # For egress rules:
-#   Name: {source}_to_{destination}_{protocol}
-#   Description: {source} sends requests to {destination} over {protocol}
+#   Name: {source}_to_{destination}_{port_name}
+#   Description: {source} sends requests to {destination} on {port_name}
+# Omit the port name if it's obvious from the context.
 
 
 #
@@ -23,11 +24,46 @@ resource "aws_security_group_rule" "shared_redis_cluster_to_any_any" {
   security_group_id = aws_security_group.shared_redis_cluster.id
 }
 
-resource "aws_security_group_rule" "shared_redis_cluster_from_any_tcp" {
-  type              = "ingress"
-  from_port         = var.shared_redis_cluster_port
-  to_port           = var.shared_redis_cluster_port
-  protocol          = "tcp"
-  cidr_blocks       = ["10.0.0.0/8"] # TODO: investigate whether this needs to be tighten further
-  security_group_id = aws_security_group.shared_redis_cluster.id
+resource "aws_security_group_rule" "shared_redis_cluster_from_any" {
+  description              = "Shared Redis cluster for EKS accepts requests from EKS nodes"
+  type                     = "ingress"
+  from_port                = var.shared_redis_cluster_port
+  to_port                  = var.shared_redis_cluster_port
+  protocol                 = "tcp"
+  security_group_id        = aws_security_group.shared_redis_cluster.id
+  source_security_group_id = data.terraform_remote_state.cluster_infrastructure.outputs.worker_security_group_id
+}
+
+#
+# Rules added to external security groups managed by govuk-aws
+#
+
+resource "aws_security_group_rule" "frontend_memcache_from_eks_workers" {
+  description              = "Frontend memcache accepts requests from EKS nodes"
+  type                     = "ingress"
+  from_port                = 11211
+  to_port                  = 11211
+  protocol                 = "tcp"
+  security_group_id        = data.terraform_remote_state.infra_security_groups.outputs.sg_frontend_cache_id
+  source_security_group_id = data.terraform_remote_state.cluster_infrastructure.outputs.worker_security_group_id
+}
+
+resource "aws_security_group_rule" "mongodb_from_eks_workers" {
+  description              = "Shared MongoDB (DocumentDB) accepts requests from EKS nodes"
+  type                     = "ingress"
+  from_port                = 27017
+  to_port                  = 27017
+  protocol                 = "tcp"
+  security_group_id        = data.terraform_remote_state.infra_security_groups.outputs.sg_mongo_id
+  source_security_group_id = data.terraform_remote_state.cluster_infrastructure.outputs.worker_security_group_id
+}
+
+resource "aws_security_group_rule" "router_mongodb_from_eks_workers" {
+  description              = "Router MongoDB accepts requests from EKS nodes"
+  type                     = "ingress"
+  from_port                = 27017
+  to_port                  = 27017
+  protocol                 = "tcp"
+  security_group_id        = data.terraform_remote_state.infra_security_groups.outputs.sg_router-backend_id
+  source_security_group_id = data.terraform_remote_state.cluster_infrastructure.outputs.worker_security_group_id
 }

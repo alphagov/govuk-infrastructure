@@ -8,6 +8,11 @@ output "worker_iam_role_arn" {
   value       = module.eks.worker_iam_role_arn
 }
 
+output "worker_security_group_id" {
+  description = "ID of the security group which contains the worker nodes."
+  value       = module.eks.worker_security_group_id
+}
+
 output "cluster_autoscaler_service_account_name" {
   description = "Name of the k8s service account for the cluster autoscaler."
   value       = local.cluster_autoscaler_service_account_name

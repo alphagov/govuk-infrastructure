@@ -2,6 +2,7 @@ variable "argo_workflow_namespaces" {
   type        = list(string)
   description = "Namespaces in which Argo will run workflows."
 }
+
 variable "govuk_aws_state_bucket" {
   type        = string
   description = "Name of the S3 bucket used for govuk-aws's Terraform state."
