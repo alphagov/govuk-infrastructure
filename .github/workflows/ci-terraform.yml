@@ -1,0 +1,97 @@
+name: Terraform validation and linting
+on:
+  push:
+    paths: ['**/*.tf', '**/*.hcl', '.github/workflows/ci-terraform.yml']
+env:
+  TF_IN_AUTOMATION: true
+  TF_PLUGIN_CACHE_DIR: ${{ github.workspace }}/.terraform.d/plugin-cache
+jobs:
+  tflint:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+      name: Checkout source code
+
+    - uses: hashicorp/setup-terraform@v1
+      with:
+        terraform_version: 1.0.5
+        terraform_wrapper: false
+
+    - name: Create Terraform plugin cache dir
+      run: mkdir -p "$TF_PLUGIN_CACHE_DIR"
+
+    - name: Cache Terraform plugins
+      uses: actions/cache@v2
+      with:
+        path: ${{ env.TF_PLUGIN_CACHE_DIR }}
+        key:
+          terraform-plugins-${{ runner.os }}-${{ hashFiles('**/.terraform.lock.hcl') }}
+
+    - uses: actions/cache@v2
+      name: Cache TFLint plugins
+      with:
+        path: ~/.tflint.d/plugins
+        key: tflint-${{ runner.os }}-${{ hashFiles('**/tflint.hcl') }}
+
+    - uses: terraform-linters/setup-tflint@v1
+      name: Set up TFLint
+      with:
+        tflint_version: v0.33.2
+
+    - name: terraform fmt
+      working-directory: terraform
+      run: |
+        if ! terraform fmt -check -diff -list=true -recursive .; then
+          >&2 echo "Some terraform files weren't formatted correctly. Run 'terraform fmt' to fix them."
+          exit 1
+        fi
+
+    - name: terraform init
+      run: |
+        STEP_EXIT_STATUS=0
+        for d in terraform/deployments/*; do
+          echo "$d"
+          cd "$d"
+          if ! terraform init -backend=false; then STEP_EXIT_STATUS=1; fi
+          cd "$OLDPWD"
+          echo -e '\n-------------------------\n'
+        done
+        exit $STEP_EXIT_STATUS
+
+    - name: terraform validate
+      run: |
+        STEP_EXIT_STATUS=0
+        for d in terraform/deployments/*; do
+          echo "$d"
+          cd "$d"
+          if ! terraform validate; then STEP_EXIT_STATUS=1; fi
+          cd "$OLDPWD"
+          echo -e '\n-------------------------\n'
+        done
+        exit $STEP_EXIT_STATUS
+
+    - name: tflint
+      run: |
+        STEP_EXIT_STATUS=0
+        TFLINT_PLUGINS="--enable-plugin=aws"
+        tflint --version
+        tflint --init $TFLINT_PLUGINS
+        for d in terraform/deployments/*; do
+          echo "$d"
+          cd "$d"
+          set +e
+          touch tflint.hcl  # For modules which don't have a tflint.hcl.
+          tflint --config=tflint.hcl -f compact --module . $TFLINT_PLUGINS \
+            --enable-rule=terraform_comment_syntax \
+            --enable-rule=terraform_deprecated_index \
+            --enable-rule=terraform_required_providers \
+            --enable-rule=terraform_standard_module_structure \
+            --enable-rule=terraform_typed_variables \
+            --enable-rule=terraform_unused_declarations \
+            --enable-rule=terraform_unused_required_providers
+          if [[ $? -eq 1 ]]; then STEP_EXIT_STATUS=1; fi  # Don't fail on warnings (status 2).
+          set -e
+          cd "$OLDPWD"
+          echo -e '\n-------------------------\n'
+        done
+        exit $STEP_EXIT_STATUS
