@@ -27,26 +27,40 @@ resource "aws_security_group_rule" "shared_redis_cluster_to_any_any" {
 resource "aws_security_group_rule" "shared_redis_cluster_from_any" {
   description              = "Shared Redis cluster for EKS accepts requests from EKS nodes"
   type                     = "ingress"
-  from_port                = var.shared_redis_cluster_port
-  to_port                  = var.shared_redis_cluster_port
+  from_port                = 6379
+  to_port                  = 6379
   protocol                 = "tcp"
   security_group_id        = aws_security_group.shared_redis_cluster.id
   source_security_group_id = data.terraform_remote_state.cluster_infrastructure.outputs.worker_security_group_id
 }
 
 #
-# Rules added to external security groups managed by govuk-aws
+# Frontend memcached
 #
 
-resource "aws_security_group_rule" "frontend_memcache_from_eks_workers" {
-  description              = "Frontend memcache accepts requests from EKS nodes"
+resource "aws_security_group_rule" "frontend_memcached_to_any_any" {
+  description       = "Frontend memcached sends requests to anywhere over any protocol"
+  type              = "egress"
+  from_port         = 0
+  to_port           = 0
+  protocol          = -1
+  cidr_blocks       = ["0.0.0.0/0"]
+  security_group_id = aws_security_group.frontend_memcached.id
+}
+
+resource "aws_security_group_rule" "frontend_memcached_from_eks_workers" {
+  description              = "Frontend memcached accepts requests from EKS nodes"
   type                     = "ingress"
   from_port                = 11211
   to_port                  = 11211
   protocol                 = "tcp"
-  security_group_id        = data.terraform_remote_state.infra_security_groups.outputs.sg_frontend_cache_id
+  security_group_id        = aws_security_group.frontend_memcached.id
   source_security_group_id = data.terraform_remote_state.cluster_infrastructure.outputs.worker_security_group_id
 }
+
+#
+# Rules added to external security groups managed by govuk-aws
+#
 
 resource "aws_security_group_rule" "mongodb_from_eks_workers" {
   description              = "Shared MongoDB (DocumentDB) accepts requests from EKS nodes"
