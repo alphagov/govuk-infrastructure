@@ -21,6 +21,8 @@ provider "aws" {
   region = "eu-west-1"
 }
 
+# TODO: Get rid of this list and just give CI permission to create repos, e.g.
+# with https://github.com/byu-oit/github-action-create-ecr-repo-if-missing
 locals {
   repositories = [
     "content-store",
@@ -46,7 +48,7 @@ locals {
 resource "aws_ecr_repository" "repositories" {
   for_each             = toset(local.repositories)
   name                 = each.key
-  image_tag_mutability = "MUTABLE"
+  image_tag_mutability = "MUTABLE" # TODO: consider not allowing mutable tags.
 
   image_scanning_configuration {
     scan_on_push = true
@@ -57,9 +59,9 @@ resource "aws_iam_user" "concourse_ecr_user" {
   name = "concourse_ecr_user"
 }
 
-#Github actions publish images to ECR IAM user
 resource "aws_iam_user" "github_ecr_user" {
   name = "github_ecr_user"
+  tags = { "Description" = "GitHub Actions publishes images to ECR." }
 }
 
 resource "aws_iam_role" "push_image_to_ecr_role" {
@@ -83,7 +85,6 @@ data "aws_iam_policy_document" "push_image_to_ecr_policy_document" {
     actions = [
       "ecr:GetAuthorizationToken",
     ]
-
     resources = ["*"]
   }
 
@@ -97,7 +98,6 @@ data "aws_iam_policy_document" "push_image_to_ecr_policy_document" {
       "ecr:PutImage",
       "ecr:UploadLayerPart",
     ]
-
     resources = [for repo in local.repositories : aws_ecr_repository.repositories[repo].arn]
   }
 }
@@ -121,12 +121,7 @@ resource "aws_ecr_repository_policy" "pull_images_from_ecr_policy_policy" {
       {
         "Sid" : "AllowCrossAccountPull",
         "Effect" : "Allow",
-        "Principal" : {
-          "AWS" : [
-            "arn:aws:iam::${var.test_aws_account_id}:root",
-            "arn:aws:iam::${var.integration_aws_account_id}:root"
-          ]
-        },
+        "Principal" : { "AWS" : var.puller_arns },
         "Action" : [
           "ecr:GetDownloadUrlForLayer",
           "ecr:BatchCheckLayerAvailability",
@@ -146,10 +141,7 @@ resource "aws_iam_role" "pull_images_from_ecr_role" {
         "Effect" : "Allow",
         "Action" : "sts:AssumeRole",
         "Principal" : {
-          "AWS" : [
-            "arn:aws:iam::${var.integration_aws_account_id}:root",
-            "arn:aws:iam::${var.test_aws_account_id}:root"
-          ]
+          "AWS" : var.puller_arns
         }
       }
     ]
@@ -165,7 +157,8 @@ resource "aws_iam_policy" "pull_images_from_ecr_policy" {
         "Sid" : "AllowECRPull",
         "Effect" : "Allow",
         "Resource" : ["*"],
-        "Action" : ["ecr:GetDownloadUrlForLayer",
+        "Action" : [
+          "ecr:GetDownloadUrlForLayer",
           "ecr:BatchCheckLayerAvailability",
           "ecr:BatchGetImage",
           "ecr:List*",
@@ -176,9 +169,7 @@ resource "aws_iam_policy" "pull_images_from_ecr_policy" {
         "Sid" : "AllowECRToken",
         "Effect" : "Allow",
         "Resource" : ["*"],
-        "Action" : [
-          "ecr:GetAuthorizationToken"
-        ]
+        "Action" : ["ecr:GetAuthorizationToken"]
       }
     ]
   })
