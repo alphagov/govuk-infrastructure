@@ -1,12 +1,5 @@
-# This module should be applied in the production account only.
-
 terraform {
-  backend "s3" {
-    bucket  = "govuk-terraform-steppingstone-production"
-    key     = "govuk/ecr.tfstate"
-    region  = "eu-west-1"
-    encrypt = true
-  }
+  backend "s3" {}
 
   required_version = "~> 1.0"
   required_providers {
