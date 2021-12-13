@@ -12,6 +12,13 @@ terraform {
 
 provider "aws" {
   region = "eu-west-1"
+  default_tags {
+    tags = {
+      project              = "replatforming"
+      repository           = "govuk-infrastructure"
+      terraform_deployment = basename(abspath(path.root))
+    }
+  }
 }
 
 # TODO: Get rid of this list and just give CI permission to create repos, e.g.
