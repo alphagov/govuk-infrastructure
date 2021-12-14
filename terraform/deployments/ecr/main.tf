@@ -64,8 +64,8 @@ resource "aws_iam_user" "github_ecr_user" {
   tags = { "Description" = "GitHub Actions publishes images to ECR." }
 }
 
-resource "aws_iam_role" "push_image_to_ecr_role" {
-  name = "push_image_to_ecr_role"
+resource "aws_iam_role" "push_to_ecr" {
+  name = "push_to_ecr"
   assume_role_policy = jsonencode({
     "Version" : "2012-10-17",
     "Statement" : [
@@ -80,7 +80,7 @@ resource "aws_iam_role" "push_image_to_ecr_role" {
   })
 }
 
-data "aws_iam_policy_document" "push_image_to_ecr_policy_document" {
+data "aws_iam_policy_document" "push_to_ecr" {
   statement {
     actions = [
       "ecr:GetAuthorizationToken",
@@ -102,17 +102,17 @@ data "aws_iam_policy_document" "push_image_to_ecr_policy_document" {
   }
 }
 
-resource "aws_iam_policy" "push_image_to_ecr_policy" {
-  name   = "push_image_to_ecr_policy"
-  policy = data.aws_iam_policy_document.push_image_to_ecr_policy_document.json
+resource "aws_iam_policy" "push_to_ecr" {
+  name   = "push_to_ecr"
+  policy = data.aws_iam_policy_document.push_to_ecr.json
 }
 
-resource "aws_iam_role_policy_attachment" "push_to_ecr_role_attachment" {
-  role       = aws_iam_role.push_image_to_ecr_role.name
-  policy_arn = aws_iam_policy.push_image_to_ecr_policy.arn
+resource "aws_iam_role_policy_attachment" "push_to_ecr" {
+  role       = aws_iam_role.push_to_ecr.name
+  policy_arn = aws_iam_policy.push_to_ecr.arn
 }
 
-resource "aws_ecr_repository_policy" "pull_images_from_ecr_policy_policy" {
+resource "aws_ecr_repository_policy" "pull_from_ecr" {
   for_each   = toset([for repo in local.repositories : aws_ecr_repository.repositories[repo].name])
   repository = each.key
   policy = jsonencode({
@@ -132,8 +132,8 @@ resource "aws_ecr_repository_policy" "pull_images_from_ecr_policy_policy" {
   })
 }
 
-resource "aws_iam_role" "pull_images_from_ecr_role" {
-  name = "pull_images_from_ecr_role"
+resource "aws_iam_role" "pull_from_ecr" {
+  name = "pull_from_ecr"
   assume_role_policy = jsonencode({
     "Version" : "2012-10-17",
     "Statement" : [
@@ -148,8 +148,8 @@ resource "aws_iam_role" "pull_images_from_ecr_role" {
   })
 }
 
-resource "aws_iam_policy" "pull_images_from_ecr_policy" {
-  name = "pull_images_from_ecr_policy"
+resource "aws_iam_policy" "pull_from_ecr" {
+  name = "pull_from_ecr"
   policy = jsonencode({
     "Version" : "2012-10-17",
     "Statement" : [
@@ -200,7 +200,7 @@ resource "aws_iam_user_policy" "github_ecr_user_policy" {
   })
 }
 
-resource "aws_iam_role_policy_attachment" "pull_images_from_ecr_role_attachment" {
-  role       = aws_iam_role.pull_images_from_ecr_role.name
-  policy_arn = aws_iam_policy.pull_images_from_ecr_policy.arn
+resource "aws_iam_role_policy_attachment" "pull_from_ecr" {
+  role       = aws_iam_role.pull_from_ecr.name
+  policy_arn = aws_iam_policy.pull_from_ecr.arn
 }
