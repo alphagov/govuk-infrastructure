@@ -5,7 +5,7 @@ the `govuk-infrastructure` repo that you are now viewing.
 
 **Note:** This repository does not currently manage any production
 infrastructure. For the docs for the _current_ infrastructure, please see
-[govuk-aws][].
+[govuk-aws].
 
 ## What is this document for
 
@@ -35,24 +35,13 @@ The `govuk-infrastructure` repository holds the configuration for the AWS
 services that we use to run GOV.UK.
 
 GOV.UK apps and other services (such as databases) used to run in EC2. For
-the old configuration, please see the [govuk-aws][] repository.
+the old configuration, please see the [govuk-aws] repository.
 
-We use [Terraform][] to manage AWS resources.
-We use [Concourse][] to run our CI/CD pipelines.
+We use [Terraform] to manage AWS resources.
 
 ### CI/CD
 
-Tests for govuk-infrastructure happen in GitHub Actions and Concourse.
-
-`govuk-infrastructure` is deployed with Concourse by the `deploy-apps`
-pipeline.
-
-Concourse is run for GOV.UK by the Reliability Engineering Autom8 team.
-They have [docs for Concourse][] too.
-
-Concourse is available at https://cd.gds-reliability.engineering/.
+Tests for govuk-infrastructure happen in GitHub Actions.
 
 [govuk-aws]: https://github.com/alphagov/govuk-aws
-[Terraform]: https://www.terraform.io
-[Concourse]: https://concourse-ci.org/
-[docs for Concourse]: https://reliability-engineering.cloudapps.digital/continuous-deployment.html#continuous-deployment
+[Terraform]: https://www.terraform.io/

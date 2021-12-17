@@ -14,8 +14,8 @@ The common column distinguishes between Tags that have been added as part of an 
 | chargeable_entity | govuk-publishing-platform-[Environment] | This is required for billing. | govuk-publishing-platform-test | yes |
 | environment | test integration staging production | Environment area to which this belongs. | test | yes |
 |project | replatforming | This is the project under which this was developed. | replatforming | yes |
-| repository | govuk-aws govuk-infrastructure | This is the Git repo in which this service resides. | govuk-infrastructure | yes |
-| terraform_deployment | concourse-iam govuk-publishing-platform task-runner monitoring-test | The source in which the service resides. | govuk-publishing-platform | yes | 
+| repository | govuk-aws govuk-infrastructure | This is the Git repo where this service resides. | govuk-infrastructure | yes |
+| terraform_deployment | cluster-infrastructure cluster-services ecr govuk-publishing-infrastructure | The source directory where the resource's Terraform code resides. | cluster-infrastructure | yes |
 |terraform_workspace | default bill chris fred karl nadeem steve roch towers | This should be the name of the terraform workspace that created the service. | default | yes |
 
 
