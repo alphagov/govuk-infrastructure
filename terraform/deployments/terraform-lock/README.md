@@ -1,31 +1,28 @@
 # Terraform state lock
 
-This provides [DynamoDB State Locking][] for other Terraform deployments. It should
-usually be the first Terraform deployment you apply when bringing up the
-infrastructure in a new AWS account.
+This provides [DynamoDB State Locking] for the other Terraform root modules
+under `terraform/deployments`. It should be the first module to apply when
+bringing up the infrastructure in a new AWS account.
 
-A DynamoDB table is created in each GOV.UK environment for Terraform locking.
+Each GOV.UK AWS account (environment) has a table called `terraform-lock`.
+
+The table is created by this module and then referred to by the other root
+modules with the line `dynamodb_table = "terraform-lock"` in their backend
+config files (`*.backend`).
+
+State locking happens automatically. See [State
+Locking](https://www.terraform.io/docs/language/state/locking.html) in the
+Terraform docs for more detail.
 
 
 ## Applying
 
-Applying:
-
 ```sh
-terraform init -backend-config=./<govuk_environment>.backend
+terraform init -backend-config=<environment>.backend -upgrade
 terraform apply
 ```
 
-where:
-`<govuk_environment>` is the GOV.UK environment where you want the changes to be
-applied.
-
-This creates a table `terraform-lock`.
-
-The table is then used by the S3 backend of `govuk-publishing-platform`,
-in the backend config `dynamodb_table = "terraform-lock"`.
-
-State locking happens automatically.
-See the docs for more detail: https://www.terraform.io/docs/language/state/locking.html
+where `<environment>` is the GOV.UK environment where you want to apply the
+changes.
 
 [DynamoDB State Locking]: https://www.terraform.io/docs/language/settings/backends/s3.html#dynamodb-state-locking
