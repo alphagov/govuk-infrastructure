@@ -1,12 +1,5 @@
-# This module should be applied in the production account only.
-
 terraform {
-  backend "s3" {
-    bucket  = "govuk-terraform-steppingstone-production"
-    key     = "govuk/ecr.tfstate"
-    region  = "eu-west-1"
-    encrypt = true
-  }
+  backend "s3" {}
 
   required_version = "~> 1.0"
   required_providers {
@@ -19,8 +12,17 @@ terraform {
 
 provider "aws" {
   region = "eu-west-1"
+  default_tags {
+    tags = {
+      project              = "replatforming"
+      repository           = "govuk-infrastructure"
+      terraform_deployment = basename(abspath(path.root))
+    }
+  }
 }
 
+# TODO: Get rid of this list and just give CI permission to create repos, e.g.
+# with https://github.com/byu-oit/github-action-create-ecr-repo-if-missing
 locals {
   repositories = [
     "content-store",
@@ -46,7 +48,7 @@ locals {
 resource "aws_ecr_repository" "repositories" {
   for_each             = toset(local.repositories)
   name                 = each.key
-  image_tag_mutability = "MUTABLE"
+  image_tag_mutability = "MUTABLE" # TODO: consider not allowing mutable tags.
 
   image_scanning_configuration {
     scan_on_push = true
@@ -57,13 +59,13 @@ resource "aws_iam_user" "concourse_ecr_user" {
   name = "concourse_ecr_user"
 }
 
-#Github actions publish images to ECR IAM user
 resource "aws_iam_user" "github_ecr_user" {
   name = "github_ecr_user"
+  tags = { "Description" = "GitHub Actions publishes images to ECR." }
 }
 
-resource "aws_iam_role" "push_image_to_ecr_role" {
-  name = "push_image_to_ecr_role"
+resource "aws_iam_role" "push_to_ecr" {
+  name = "push_to_ecr"
   assume_role_policy = jsonencode({
     "Version" : "2012-10-17",
     "Statement" : [
@@ -78,12 +80,11 @@ resource "aws_iam_role" "push_image_to_ecr_role" {
   })
 }
 
-data "aws_iam_policy_document" "push_image_to_ecr_policy_document" {
+data "aws_iam_policy_document" "push_to_ecr" {
   statement {
     actions = [
       "ecr:GetAuthorizationToken",
     ]
-
     resources = ["*"]
   }
 
@@ -97,22 +98,21 @@ data "aws_iam_policy_document" "push_image_to_ecr_policy_document" {
       "ecr:PutImage",
       "ecr:UploadLayerPart",
     ]
-
     resources = [for repo in local.repositories : aws_ecr_repository.repositories[repo].arn]
   }
 }
 
-resource "aws_iam_policy" "push_image_to_ecr_policy" {
-  name   = "push_image_to_ecr_policy"
-  policy = data.aws_iam_policy_document.push_image_to_ecr_policy_document.json
+resource "aws_iam_policy" "push_to_ecr" {
+  name   = "push_to_ecr"
+  policy = data.aws_iam_policy_document.push_to_ecr.json
 }
 
-resource "aws_iam_role_policy_attachment" "push_to_ecr_role_attachment" {
-  role       = aws_iam_role.push_image_to_ecr_role.name
-  policy_arn = aws_iam_policy.push_image_to_ecr_policy.arn
+resource "aws_iam_role_policy_attachment" "push_to_ecr" {
+  role       = aws_iam_role.push_to_ecr.name
+  policy_arn = aws_iam_policy.push_to_ecr.arn
 }
 
-resource "aws_ecr_repository_policy" "pull_images_from_ecr_policy_policy" {
+resource "aws_ecr_repository_policy" "pull_from_ecr" {
   for_each   = toset([for repo in local.repositories : aws_ecr_repository.repositories[repo].name])
   repository = each.key
   policy = jsonencode({
@@ -121,12 +121,7 @@ resource "aws_ecr_repository_policy" "pull_images_from_ecr_policy_policy" {
       {
         "Sid" : "AllowCrossAccountPull",
         "Effect" : "Allow",
-        "Principal" : {
-          "AWS" : [
-            "arn:aws:iam::${var.test_aws_account_id}:root",
-            "arn:aws:iam::${var.integration_aws_account_id}:root"
-          ]
-        },
+        "Principal" : { "AWS" : var.puller_arns },
         "Action" : [
           "ecr:GetDownloadUrlForLayer",
           "ecr:BatchCheckLayerAvailability",
@@ -137,8 +132,8 @@ resource "aws_ecr_repository_policy" "pull_images_from_ecr_policy_policy" {
   })
 }
 
-resource "aws_iam_role" "pull_images_from_ecr_role" {
-  name = "pull_images_from_ecr_role"
+resource "aws_iam_role" "pull_from_ecr" {
+  name = "pull_from_ecr"
   assume_role_policy = jsonencode({
     "Version" : "2012-10-17",
     "Statement" : [
@@ -146,18 +141,15 @@ resource "aws_iam_role" "pull_images_from_ecr_role" {
         "Effect" : "Allow",
         "Action" : "sts:AssumeRole",
         "Principal" : {
-          "AWS" : [
-            "arn:aws:iam::${var.integration_aws_account_id}:root",
-            "arn:aws:iam::${var.test_aws_account_id}:root"
-          ]
+          "AWS" : var.puller_arns
         }
       }
     ]
   })
 }
 
-resource "aws_iam_policy" "pull_images_from_ecr_policy" {
-  name = "pull_images_from_ecr_policy"
+resource "aws_iam_policy" "pull_from_ecr" {
+  name = "pull_from_ecr"
   policy = jsonencode({
     "Version" : "2012-10-17",
     "Statement" : [
@@ -165,7 +157,8 @@ resource "aws_iam_policy" "pull_images_from_ecr_policy" {
         "Sid" : "AllowECRPull",
         "Effect" : "Allow",
         "Resource" : ["*"],
-        "Action" : ["ecr:GetDownloadUrlForLayer",
+        "Action" : [
+          "ecr:GetDownloadUrlForLayer",
           "ecr:BatchCheckLayerAvailability",
           "ecr:BatchGetImage",
           "ecr:List*",
@@ -176,9 +169,7 @@ resource "aws_iam_policy" "pull_images_from_ecr_policy" {
         "Sid" : "AllowECRToken",
         "Effect" : "Allow",
         "Resource" : ["*"],
-        "Action" : [
-          "ecr:GetAuthorizationToken"
-        ]
+        "Action" : ["ecr:GetAuthorizationToken"]
       }
     ]
   })
@@ -209,7 +200,7 @@ resource "aws_iam_user_policy" "github_ecr_user_policy" {
   })
 }
 
-resource "aws_iam_role_policy_attachment" "pull_images_from_ecr_role_attachment" {
-  role       = aws_iam_role.pull_images_from_ecr_role.name
-  policy_arn = aws_iam_policy.pull_images_from_ecr_policy.arn
+resource "aws_iam_role_policy_attachment" "pull_from_ecr" {
+  role       = aws_iam_role.pull_from_ecr.name
+  policy_arn = aws_iam_policy.pull_from_ecr.arn
 }

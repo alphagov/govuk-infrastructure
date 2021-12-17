@@ -1,9 +1,4 @@
-variable "test_aws_account_id" {
-  type        = string
-  description = "account id for the test environment"
-}
-
-variable "integration_aws_account_id" {
-  type        = string
-  description = "account id for the integration environment"
+variable "puller_arns" {
+  type        = list(string)
+  description = "List of IAM principals who should be authorised to pull from this registry."
 }
