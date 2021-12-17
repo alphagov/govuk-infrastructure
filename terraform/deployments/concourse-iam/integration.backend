@@ -1,4 +1,0 @@
-bucket  = "govuk-ecs-terraform-integration"
-key     = "projects/concourse-iam.tfstate"
-region  = "eu-west-1"
-encrypt = true
