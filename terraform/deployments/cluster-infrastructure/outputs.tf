@@ -8,9 +8,9 @@ output "worker_iam_role_arn" {
   value       = module.eks.worker_iam_role_arn
 }
 
-output "worker_security_group_id" {
-  description = "ID of the security group which contains the worker nodes."
-  value       = module.eks.worker_security_group_id
+output "cluster_security_group_id" {
+  description = "ID of the security group which contains the kube-apiservers and managed worker nodes."
+  value       = module.eks.cluster_security_group_id
 }
 
 output "cluster_autoscaler_service_account_name" {
