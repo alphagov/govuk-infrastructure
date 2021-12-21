@@ -1,4 +1,0 @@
-bucket  = "govuk-terraform-test"
-key     = "projects/concourse-iam.tfstate"
-region  = "eu-west-1"
-encrypt = true
