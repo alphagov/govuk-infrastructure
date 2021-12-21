@@ -2,7 +2,7 @@
 
 ### What's in this repo
 
-The govuk-infrastructure repo contains Terraform modules and Concourse pipelines for turning up an EKS cluster for GOV.UK.
+The govuk-infrastructure repo contains Terraform modules for turning up an EKS cluster for GOV.UK.
 
 Helm charts have moved to [alphagov/govuk-helm-charts](https://github.com/alphagov/govuk-helm-charts).
 
@@ -30,8 +30,7 @@ more recommendations on using pre-commit.
 
 Further documentation about how to perform various tasks can be found [here](./docs)
 
-There are also docs in the [terraform/docs](./terraform/docs) and
-[concourse/docs](./concourse/docs) directories.
+There are also docs in the [terraform/docs](./terraform/docs) and directories.
 
 ### Who we are
 
