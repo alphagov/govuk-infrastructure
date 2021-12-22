@@ -3,7 +3,6 @@
 source "https://rubygems.org"
 
 gem "aws-sdk-s3"
-gem "aws-sdk-secretsmanager" # TODO: Remove
 gem "kubeclient", "~> 4.9"
 gem "rake"
 

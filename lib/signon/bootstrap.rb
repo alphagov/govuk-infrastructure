@@ -1,4 +1,3 @@
-require "aws-sdk-secretsmanager"
 require "logger"
 require_relative "./client"
 

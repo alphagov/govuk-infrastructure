@@ -24,9 +24,6 @@ GEM
       aws-sdk-core (~> 3, >= 3.122.0)
       aws-sdk-kms (~> 1)
       aws-sigv4 (~> 1.4)
-    aws-sdk-secretsmanager (1.54.0)
-      aws-sdk-core (~> 3, >= 3.122.0)
-      aws-sigv4 (~> 1.1)
     aws-sigv4 (1.4.0)
       aws-eventstream (~> 1, >= 1.0.2)
     climate_control (1.0.1)
@@ -139,7 +136,6 @@ PLATFORMS
 
 DEPENDENCIES
   aws-sdk-s3
-  aws-sdk-secretsmanager
   climate_control (~> 1.0)
   kubeclient (~> 4.9)
   rake

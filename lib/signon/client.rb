@@ -4,8 +4,6 @@ require "logger"
 require "net/http"
 require "uri"
 
-# TODO: This client duplicates the client used by the Lambda rotation function.
-# Require this client from the Lambda rather than duplicating the code.
 module Signon
   class Client
     def initialize(api_url:, auth_token:, logger: Logger.new($stdout), max_retries: 10)
