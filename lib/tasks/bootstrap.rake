@@ -1,72 +1,62 @@
 require "json"
 require_relative "../signon/bootstrap"
+require_relative "../signon/client"
+require_relative "../kubernetes/client"
+require_relative "../kubernetes/client_factory"
 
 namespace :bootstrap do
-  desc "Bootstrap bearer tokens for a Signon ApiUser"
-  task :bearer_tokens do
-    application = ENV["APPLICATION"]
-    app_config = JSON.parse(File.read("../app-terraform-outputs/#{application}.json"))
-    signon_secrets = app_config.dig(ENV["VARIANT"], "signon_secrets")
-    secretsmanager = secretsmanager_client(
-      "bootstrap-#{application}-bearer-tokens",
-      ENV["ASSUME_ROLE_ARN"],
-      ENV["AWS_REGION"],
-    )
-    signon = signon_client(
-      secretsmanager,
-      signon_secrets["admin_password_arn"],
-      signon_secrets["signon_api_url"],
-    )
-    Signon::Bootstrap.bootstrap_tokens(
-      app_config: signon_secrets,
-      signon: signon,
-      secretsmanager: secretsmanager,
-    )
-  end
-
-  desc "Create Signon applications for an environment"
-  task :oauth_applications do
-    app_config = JSON.parse(File.read("../app-terraform-outputs/signon.json"))
-    oauth_application_config = app_config["oauth_application_config"]
-    secretsmanager = secretsmanager_client(
-      "bootstrap-oauth-apps",
-      ENV["ASSUME_ROLE_ARN"],
-      ENV["AWS_REGION"],
-    )
-    signon = signon_client(
-      secretsmanager,
-      oauth_application_config["admin_password_arn"],
-      oauth_application_config["signon_api_url"],
-    )
-    Signon::Bootstrap.bootstrap_applications(
-      applications: oauth_application_config["applications"],
-      signon: signon,
-      secretsmanager: secretsmanager,
-    )
+  desc "Bootstrap Signon resources in a Kubernetes cluster"
+  task :signon do
+    bootstrap_signon
   end
 end
 
-def signon_client(secretsmanager, api_token_arn, api_url)
-  admin_secret = secretsmanager.get_secret_value(
-    secret_id: api_token_arn,
-    version_stage: "AWSCURRENT",
-  )
-  Signon::Client.new(
-    api_url: api_url,
-    auth_token: admin_secret.secret_string,
+def bootstrap_signon
+  applications = JSON.parse(ENV.fetch("APPLICATIONS"))
+  api_users = JSON.parse(ENV.fetch("API_USERS"))
+
+  signon = Signon::Client.new(
+    api_url: ENV.fetch("SIGNON_API_ENDPOINT"),
+    auth_token: ENV.fetch("SIGNON_AUTH_TOKEN"),
     max_retries: 10,
   )
-end
 
-def secretsmanager_client(session_name, role_arn, region)
-  credentials = Aws::AssumeRoleCredentials.new(
-    client: Aws::STS::Client.new,
-    role_arn: role_arn,
-    role_session_name: session_name,
+  kubernetes = Kubernetes::ClientFactory.create({
+    control_plane_uri: ENV.fetch("KUBERNETES_CONTROL_PLANE_URI", "https://kubernetes.default.svc"),
+    version: ENV.fetch("KUBERNETES_API_VERSION", "v1"),
+  })
+
+  signon_apps = Signon::Bootstrap.create_applications(
+    applications: applications,
+    signon: signon,
+    kubernetes: kubernetes,
   )
 
-  Aws::SecretsManager::Client.new(
-    region: region,
-    credentials: credentials,
+  signon_users = Signon::Bootstrap.create_api_users(
+    api_users: api_users,
+    signon: signon,
   )
+
+  bearer_tokens = api_users.map { |username, data|
+    data.fetch("bearer_tokens", []).map do |token|
+      {
+        name: "signon-token-#{username}-#{token['application_slug']}",
+        permissions: token.fetch("permissions", []),
+        api_user_id: signon_users[username],
+        application_id: signon_apps[token["application_slug"]],
+      }
+    end
+  }.flatten
+
+  Signon::Bootstrap.create_bearer_tokens(
+    bearer_tokens: bearer_tokens,
+    signon: signon,
+    kubernetes: kubernetes,
+  )
+
+  puts JSON.generate({
+    applications: signon_apps.keys,
+    api_users: api_users.map { |name, _| name },
+    bearer_tokens: bearer_tokens.map { |token| token[:name] },
+  })
 end

@@ -4,61 +4,57 @@ require "logger"
 require "net/http"
 require "uri"
 
-# TODO: This client duplicates the client used by the Lambda rotation function.
-# Require this client from the Lambda rather than duplicating the code.
 module Signon
   class Client
-    def initialize(api_url:, auth_token:, logger: Logger.new($stdout), max_retries: 9)
+    def initialize(api_url:, auth_token:, logger: Logger.new($stdout), max_retries: 10)
       @api_url = api_url
       @auth_token = auth_token
       @max_retries = max_retries
       @logger = logger
     end
 
-    def create_bearer_token(api_user:, application_name:, permissions:)
+    def create_bearer_token(api_user_id:, application_id:, permissions:)
       attempt do
-        uri = URI("#{@api_url}/authorisations")
-        req = Net::HTTP::Post.new(uri)
-        req.body = {
-          api_user_email: api_user,
-          application_name: application_name,
-          permissions: permissions,
-        }.to_json
-        res = do_request(req, uri)
-        raise TokenNotCreated, "Status: #{res.code}; #{res.message}; #{res.body}" unless %w[200 201].include?(res.code)
+        req = build_post_request(
+          "/api-users/#{api_user_id}/authorisations",
+          {
+            application_id: application_id,
+            permissions: permissions,
+          },
+        )
+        res = do_request(req)
+        raise TokenNotCreated, "Status: #{res.code}; #{res.message}; #{res.body}" unless req_successful(res)
 
-        JSON.parse(res.body).fetch("token")
+        JSON.parse(res.body)
       end
     end
 
-    def test_bearer_token(api_user:, token:, application_name:, permissions:)
+    def test_bearer_token(api_user_id:, application_id:, token:, permissions:)
       attempt do
-        uri = URI("#{@api_url}/authorisations/test")
-        req = Net::HTTP::Post.new(uri)
-        req.body = {
-          token: token,
-          api_user_email: api_user,
-          application_name: application_name,
-          permissions: permissions,
-        }.to_json
-        res = do_request(req, uri)
+        req = build_post_request(
+          "/api-users/#{api_user_id}/authorisations/test",
+          {
+            token: token,
+            application_name: application_id,
+            permissions: permissions,
+          },
+        )
+        res = do_request(req)
         raise TokenNotFound, "Status: #{res.code}; #{res.message}; #{res.body}" unless res.code == "200"
       end
     end
 
     def create_application(name:, description:, home_uri:, permissions:, redirect_uri:)
-      uri = URI("#{@api_url}/applications")
-      req = Net::HTTP::Post.new(uri)
-      req.body = {
+      req = build_post_request("/applications", {
         name: name,
         description: description,
         home_uri: home_uri,
         permissions: permissions,
         redirect_uri: redirect_uri,
-      }.to_json
-      res = do_request(req, uri)
-      raise ApplicationAlreadyCreated if already_exists(res)
-      raise ApplicationNotCreated, "Status: #{res.code}; #{res.message}; #{res.body}" unless %w[200 201].include?(res.code)
+      })
+      res = do_request(req)
+      raise ApplicationAlreadyCreated if res.code_type == Net::HTTPConflict
+      raise ApplicationNotCreated, "Status: #{res.code}; #{res.message}; #{res.body}" unless req_successful(res)
 
       JSON.parse(res.body)
     end
@@ -66,8 +62,28 @@ module Signon
     def get_application(name:)
       uri = URI("#{@api_url}/applications?name=#{CGI.escape name}")
       req = Net::HTTP::Get.new(uri)
-      res = do_request(req, uri)
+      res = do_request(req)
       raise ApplicationNotFound, "Status: #{res.code}; #{res.message}; #{res.body}" unless res.code == "200"
+
+      JSON.parse(res.body)
+    end
+
+    def create_api_user(name:, email:)
+      req = build_post_request("/api-users", { name: name, email: email })
+      res = do_request(req)
+      raise ApiUserAlreadyCreated if res.code_type == Net::HTTPConflict
+      raise ApiUserNotCreated, "Status: #{res.code}; #{res.message}; #{res.body}" unless req_successful(res)
+
+      JSON.parse(res.body)
+    end
+
+    def get_api_user(email:)
+      uri = URI("#{@api_url}/api-users?email=#{email}")
+      req = Net::HTTP::Get.new(uri)
+      res = do_request(req)
+      if res.code_type == Net::HTTPNotFound
+        raise ApiUserNotFound, "Status: #{res.code}; #{res.message}; #{res.body}"
+      end
 
       JSON.parse(res.body)
     end
@@ -86,6 +102,18 @@ module Signon
 
     class ApplicationNotFound < StandardError; end
 
+    class ApiUserAlreadyCreated < StandardError; end
+
+    class ApiUserNotCreated < StandardError; end
+
+    class ApiUserNotFound < StandardError; end
+
+    def build_post_request(path, body)
+      req = Net::HTTP::Post.new(URI("#{@api_url}#{path}"))
+      req.body = body.to_json
+      req
+    end
+
     def attempt(&request)
       retries ||= 0
       begin
@@ -102,19 +130,18 @@ module Signon
       end
     end
 
-    def do_request(request, uri)
+    def do_request(request)
       request["Authorization"] = "Bearer #{@auth_token}"
       request["Content-Type"] = "application/json"
-      Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) do |http|
+      # NOTE: SSL is not enabled since requests stay in-cluster and we have not
+      # configured TLS between in-cluster services.
+      Net::HTTP.start(request.uri.hostname, request.uri.port, use_ssl: false) do |http|
         http.request(request)
       end
     end
 
-    def already_exists(res)
-      # TODO: Remove deprecated check once
-      deprecated = res.code == "400" && JSON.parse(res.body)["error"] == "Record already exists"
-      new = res.code == "409"
-      new || deprecated
+    def req_successful(res)
+      %w[200 201].include?(res.code)
     end
   end
 end

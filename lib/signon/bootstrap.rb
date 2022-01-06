@@ -1,4 +1,3 @@
-require "aws-sdk-secretsmanager"
 require "logger"
 require_relative "./client"
 
@@ -6,115 +5,58 @@ module Signon
   module Bootstrap
     class NotRotatable < StandardError; end
 
-    def self.bootstrap_applications(applications:, signon:, secretsmanager:, logger: Logger.new($stdout))
-      applications.each do |app|
-        bootstrap_application(
-          app: app,
-          secretsmanager: secretsmanager,
-          signon: signon,
-          logger: logger,
+    def self.create_applications(applications:, signon:, kubernetes:)
+      applications.each_with_object({}) do |(app_slug, app_data), obj|
+        application = begin
+          signon.create_application(
+            name: app_data["name"],
+            description: app_data["description"],
+            home_uri: app_data["home_uri"],
+            permissions: app_data["permissions"],
+            redirect_uri: app_data["redirect_uri"],
+          )
+        rescue Signon::Client::ApplicationAlreadyCreated
+          signon.get_application(name: app_data["name"])
+        end
+        kubernetes.put_secret_value(
+          secret_name: "signon-app-#{app_slug}",
+          secret_data: application,
+        )
+        obj[app_slug] = application.fetch("id")
+      end
+    end
+
+    def self.create_api_users(api_users:, signon:)
+      api_users.each_with_object({}) do |(slug, api_user), obj|
+        response = begin
+          signon.create_api_user(
+            name: api_user["name"],
+            email: api_user["email"],
+          )
+        rescue Signon::Client::ApiUserAlreadyCreated
+          signon.get_api_user(email: api_user["email"])
+        end
+
+        obj[slug] = response["id"]
+      end
+    end
+
+    def self.create_bearer_tokens(bearer_tokens:, signon:, kubernetes:)
+      bearer_tokens.each do |token|
+        next if kubernetes.secret_exists?(secret_name: token[:name])
+
+        response = signon.create_bearer_token(
+          api_user_id: token[:api_user_id],
+          application_id: token[:application_id],
+          permissions: token[:permissions],
+        )
+
+        kubernetes.put_secret_value(
+          secret_name: token[:name],
+          secret_data: { bearer_token: response.fetch("token") },
         )
       end
-    end
-
-    def self.bootstrap_application(app:, secretsmanager:, signon:, logger:)
-      app_name = app["name"]
-      oauth_id_arn = app["id_arn"]
-      oauth_secret_arn = app["secret_arn"]
-
-      bootstrap_required = [oauth_id_arn, oauth_secret_arn].any? do |arn|
-        should_bootstrap(secretsmanager, arn)
-      end
-
-      unless bootstrap_required
-        logger.info "Secrets for #{app_name} already bootstrapped. Bailing out."
-        return
-      end
-
-      logger.info "Secret (#{app_name}) doesn't have secret values in SecretsManager. Creating them..."
-      secrets = find_or_create_app(signon, app)
-
-      logger.info "Application #{app_name} created or fetched. Putting creds in SecretsManager..."
-      secretsmanager.put_secret_value(
-        secret_id: oauth_id_arn,
-        secret_string: secrets["oauth_id"],
-        version_stages: %w[AWSCURRENT],
-      )
-      secretsmanager.put_secret_value(
-        secret_id: oauth_secret_arn,
-        secret_string: secrets["oauth_secret"],
-        version_stages: %w[AWSCURRENT],
-      )
-      logger.info "App (#{app_name}) bootstrapping finished."
-    end
-
-    def self.find_or_create_app(signon_client, app)
-      signon_client.create_application(
-        name: app["name"],
-        description: app["description"],
-        home_uri: app["home_uri"],
-        permissions: app["permissions"],
-        redirect_uri: app["redirect_uri"],
-      )
-    rescue Signon::Client::ApplicationAlreadyCreated
-      signon_client.get_application(name: app["name"])
-    end
-
-    def self.should_bootstrap(secretsmanager, secret_arn)
-      metadata = secretsmanager.describe_secret(secret_id: secret_arn)
-      versions = metadata.version_ids_to_stages
-      versions.nil? || versions.values.none? { |stages| stages.include?("AWSCURRENT") }
-    end
-
-    def self.bootstrap_tokens(app_config:, signon:, secretsmanager:, logger: Logger.new($stdout))
-      app_config["bearer_tokens"].each do |token|
-        bootstrap_bearer_token(
-          api_user: app_config["api_user_email"],
-          deploy_event_key: app_config["deploy_event_key"],
-          token: token,
-          secrets_client: secretsmanager,
-          signon_client: signon,
-          logger: logger,
-        )
-      end
-    end
-
-    def self.bootstrap_bearer_token(api_user:, deploy_event_key:, token:, secrets_client:, signon_client:, logger: Logger.new($stdout))
-      secret_arn = token["secret_arn"]
-      metadata = secrets_client.describe_secret(secret_id: secret_arn)
-      unless metadata.rotation_enabled
-        raise NotRotatable, "Secret #{secret_arn} is not enabled for rotation"
-      end
-
-      versions = metadata.version_ids_to_stages
-      has_current_version = versions.values.any? { |stages| stages.include?("AWSCURRENT") }
-      if has_current_version
-        logger.info "Secret #{secret_arn} already bootstrapped."
-        return
-      end
-
-      logger.info "Secret #{secret_arn} doesn't have a secret value. Creating it..."
-      application_name = token["application"]
-      permissions = token["permissions"].split(",")
-      secret_string = signon_client.create_bearer_token(
-        api_user: api_user,
-        application_name: application_name,
-        permissions: permissions,
-      )
-
-      logger.info "Secret #{secret_arn} created. Putting value in SecretsManager..."
-      secrets_client.put_secret_value(
-        secret_id: secret_arn,
-        secret_string: JSON.generate(
-          api_user_email: api_user,
-          application_name: application_name,
-          deploy_event_key: deploy_event_key,
-          permissions: permissions,
-          bearer_token: secret_string,
-        ),
-        version_stages: %w[AWSCURRENT],
-      )
-      logger.info "Secret #{secret_arn} finished."
+      nil
     end
   end
 end
