@@ -41,7 +41,8 @@ locals {
     "govuk-ruby-2.7.2",
     "govuk-ruby-2.7.3",
     "govuk-ruby-2.6.6",
-    "asset-manager"
+    "asset-manager",
+    "whitehall"
   ]
 }
 
