@@ -26,8 +26,7 @@ GOV.UK is set of services that provides the website www.gov.uk.
 
 ### Hosting provider
 
-GOV.UK apps run in containers on AWS Elastic Container Service (ECS) on the
-Fargate serverless compute engine.
+GOV.UK apps run in containers on AWS Elastic Kubernetes Service (EKS).
 
 ### Configuration as code
 

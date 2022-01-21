@@ -1,6 +1,6 @@
 # Signon secrets
 
-Many apps running in ECS have the following secrets:
+Many apps running in EKS have the following secrets:
 
 * GDS_SSO_OAUTH_ID
 * GDS_SSO_OAUTH_SECRET
@@ -48,7 +48,7 @@ The bootstrap job does not delete old resources - you should delete those manual
 ## Rotation
 
 Bearer token rotation not yet implemented for Kubernetes.
-In the ECS platform we used AWS SecretsManager and a rotation Lambda to
+In the EKS platform we used AWS SecretsManager and a rotation Lambda to
 implement this feature.
 
 [Signon]: https://github.com/alphagov/signon

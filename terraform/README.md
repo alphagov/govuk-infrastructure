@@ -8,4 +8,3 @@
 ## Directory structure
 
 * `deployments`: root modules, from where you can run Terraform commands.
-* `modules`: non-root modules
