@@ -101,6 +101,17 @@ resource "helm_release" "argo_workflows" {
   values = [yamlencode({
     controller = {
       workflowNamespaces = concat([local.services_ns], var.argo_workflow_namespaces)
+      workflowDefaults = {
+        spec = {
+          activeDeadlineSeconds = 7200
+          ttlStrategy = {
+            secondsAfterSuccess = 432000
+          }
+          podGC = {
+            strategy = "OnPodCompletion"
+          }
+        }
+      }
     }
 
     workflow = {
