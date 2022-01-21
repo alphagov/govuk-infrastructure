@@ -5,17 +5,11 @@ The EKS cluster is deployed via Terraform in two stages. See [adr-3] for backgro
 - `cluster-infrastructure` is concerned only with setting-up the EKS cluster and associated AWS resources (such as the worker groups and auto-scaling groups).
 - `cluster-services` is concerned only with setting up the Kubernetes resources and configuration for base services, including the `aws-auth` ConfigMap, ingress controller, etc.
 
-## Automated Deployment via Concourse
-
-The `cluster-infrastructure` and `cluster-services` modules are deployed one after another by the [`eks` Concourse pipeline](https://cd.gds-reliability.engineering/teams/govuk-test/pipelines/eks).
-
-The pipeline will trigger on any commit to the `main` branch of the `govuk-infrastructure` repo.
-
-The automated deployment is not truly continuous in that it has no way to detect *when* something/someone else changes the resources which it owns. That is, any manual/external changes to (for example) AWS resources will be ignored until the next commit to `main`, at which point they'll be overwritten.
-
-## Local Deployment
+## Deployment
 
 For testing before merging to `main`, we can run Terraform locally against the test account.
+
+**Currently, there is process for automated deployments of Terraform**
 
 ### Cluster infrastructure
 
