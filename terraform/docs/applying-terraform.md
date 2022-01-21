@@ -24,7 +24,13 @@ gds aws govuk-test-admin -- terraform plan -var-file ../variables/test/common.tf
 
 ### Cluster services
 
-As above, but with `terraform/deployments/cluster-services`.
+Similar to above but with `terraform/deployments/cluster-services` and extra var file:
+
+```sh
+cd terraform/deployments/cluster-services
+gds aws govuk-test-admin -- terraform init -backend-config=test.backend -reconfigure
+gds aws govuk-test-admin -- terraform plan -var-file ../variables/common.tfvars -var-file ../variables/test/common.tfvars
+```
 
 ### Running kubectl
 
