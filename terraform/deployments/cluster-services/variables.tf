@@ -22,3 +22,8 @@ variable "dex_github_orgs_teams" {
   type        = list(object({ name = string, teams = list(string) }))
   description = "List of GitHub orgs and associated teams that Dex authorises. Format [{name='github_org', teams=['github_team_name']}] "
 }
+
+variable "powerusers_namespaces" {
+  type        = list(string)
+  description = "List of namespaces where powerusers have admin access"
+}
