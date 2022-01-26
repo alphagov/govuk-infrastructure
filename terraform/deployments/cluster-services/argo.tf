@@ -53,6 +53,10 @@ resource "helm_release" "argo_cd" {
         https            = true
       }
     }
+
+    dex = {
+      enabled = false
+    }
   })]
 }
 
