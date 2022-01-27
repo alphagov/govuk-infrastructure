@@ -1,4 +1,4 @@
-variable "argo_workflow_namespaces" {
+variable "argo_workflows_namespaces" {
   type        = list(string)
   description = "Namespaces in which Argo will run workflows."
 }

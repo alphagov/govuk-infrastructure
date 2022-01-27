@@ -1,1 +1,1 @@
-argo_workflow_namespaces = ["apps"]
+argo_workflows_namespaces = ["apps"]
