@@ -17,3 +17,8 @@ variable "govuk_environment" {
   type        = string
   description = "Acceptable values are test, integration, staging, production"
 }
+
+variable "dex_github_orgs_teams" {
+  type        = list(object({ name = string, teams = list(string) }))
+  description = "List of GitHub orgs and associated teams that Dex authorises. Format [{name='github_org', teams=['github_team_name']}] "
+}
