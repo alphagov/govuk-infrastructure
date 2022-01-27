@@ -1,7 +1,7 @@
 # Installs and configures ArgoCD for deploying GOV.UK apps
 locals {
   argo_host          = "argo.${local.external_dns_zone_name}"
-  argo_workflow_host = "argo-workflow.${local.external_dns_zone_name}"
+  argo_workflow_host = "argo-workflows.${local.external_dns_zone_name}"
 }
 
 resource "helm_release" "argo_cd" {
