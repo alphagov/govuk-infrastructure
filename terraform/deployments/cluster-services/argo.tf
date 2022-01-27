@@ -1,7 +1,7 @@
 # Installs and configures ArgoCD for deploying GOV.UK apps
 locals {
-  argo_host          = "argo.${local.external_dns_zone_name}"
-  argo_workflow_host = "argo-workflow.${local.external_dns_zone_name}"
+  argo_host           = "argo.${local.external_dns_zone_name}"
+  argo_workflows_host = "argo-workflows.${local.external_dns_zone_name}"
 }
 
 resource "helm_release" "argo_cd" {
@@ -101,7 +101,7 @@ resource "helm_release" "argo_workflows" {
   version    = "0.9.5" # TODO: Dependabot or equivalent so this doesn't get neglected.
   values = [yamlencode({
     controller = {
-      workflowNamespaces = concat([local.services_ns], var.argo_workflow_namespaces)
+      workflowNamespaces = concat([local.services_ns], var.argo_workflows_namespaces)
       workflowDefaults = {
         spec = {
           activeDeadlineSeconds = 7200
@@ -126,15 +126,15 @@ resource "helm_release" "argo_workflows" {
       ingress = {
         enabled = true
         annotations = {
-          "alb.ingress.kubernetes.io/group.name"         = "argo-workflow"
+          "alb.ingress.kubernetes.io/group.name"         = "argo-workflows"
           "alb.ingress.kubernetes.io/scheme"             = "internet-facing"
           "alb.ingress.kubernetes.io/target-type"        = "ip"
-          "alb.ingress.kubernetes.io/load-balancer-name" = "argo-workflow"
+          "alb.ingress.kubernetes.io/load-balancer-name" = "argo-workflows"
           "alb.ingress.kubernetes.io/listen-ports"       = jsonencode([{ "HTTP" : 80 }, { "HTTPS" : 443 }])
           "alb.ingress.kubernetes.io/ssl-redirect"       = "443"
         }
         ingressClassName = "aws-alb"
-        hosts            = [local.argo_workflow_host]
+        hosts            = [local.argo_workflows_host]
       }
     }
   })]
