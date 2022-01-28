@@ -30,3 +30,5 @@ external_dns_subdomain    = "eks"
 
 frontend_memcached_node_type   = "cache.t4g.micro"
 shared_redis_cluster_node_type = "cache.t4g.small"
+
+dex_github_orgs_teams = [{ name = "alphagov", teams = ["gov-uk", "gov-uk-production"] }]

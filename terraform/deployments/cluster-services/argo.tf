@@ -5,6 +5,8 @@ locals {
 }
 
 resource "helm_release" "argo_cd" {
+  # Dex is used to provide SSO facility to ArgoCD
+  depends_on = [helm_release.dex]
   chart      = "argo-cd"
   name       = "argo-cd"
   namespace  = local.services_ns
@@ -53,6 +55,10 @@ resource "helm_release" "argo_cd" {
         https            = true
       }
     }
+
+    dex = {
+      enabled = false
+    }
   })]
 }
 
@@ -94,6 +100,8 @@ resource "helm_release" "argo_notifications" {
 }
 
 resource "helm_release" "argo_workflows" {
+  # Dex is used to provide SSO facility to ArgoCD
+  depends_on = [helm_release.dex]
   chart      = "argo-workflows"
   name       = "argo-workflows"
   namespace  = local.services_ns
@@ -122,7 +130,7 @@ resource "helm_release" "argo_workflows" {
     }
 
     server = {
-      vextraArgs = ["--auth-mode=client"]
+      extraArgs = ["--auth-mode=client", "--auth-mode=sso"]
       ingress = {
         enabled = true
         annotations = {
@@ -136,6 +144,19 @@ resource "helm_release" "argo_workflows" {
         ingressClassName = "aws-alb"
         hosts            = [local.argo_workflows_host]
       }
+      sso = {
+        issuer = "https://${local.dex_host}"
+        clientId = {
+          name = "govuk-dex-argo-workflows"
+          key  = "ARGO_WORKFLOWS_CLIENT_ID"
+        }
+        clientSecret = {
+          name = "govuk-dex-argo-workflows"
+          key  = "ARGO_WORKFLOWS_CLIENT_SECRET"
+        }
+        redirectUrl = "https://${local.argo_workflows_host}/oauth2/callback"
+      }
+
     }
   })]
 }
