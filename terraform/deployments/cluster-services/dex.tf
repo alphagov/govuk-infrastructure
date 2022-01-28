@@ -45,6 +45,12 @@ resource "helm_release" "dex" {
           idEnv        = "ARGO_WORKFLOWS_CLIENT_ID"
           secretEnv    = "ARGO_WORKFLOWS_CLIENT_SECRET"
           redirectURIs = ["https://${local.argo_workflows_host}/oauth2/callback"]
+        },
+        {
+          name         = "argocd"
+          idEnv        = "ARGOCD_CLIENT_ID"
+          secretEnv    = "ARGOCD_CLIENT_SECRET"
+          redirectURIs = ["https://${local.argo_host}/auth/callback"]
         }
       ]
     }
@@ -83,6 +89,24 @@ resource "helm_release" "dex" {
           secretKeyRef = {
             name = "govuk-dex-argo-workflows"
             key  = "ARGO_WORKFLOWS_CLIENT_SECRET"
+          }
+        }
+      },
+      {
+        name = "ARGOCD_CLIENT_ID"
+        valueFrom = {
+          secretKeyRef = {
+            name = "govuk-dex-argocd"
+            key  = "ARGOCD_CLIENT_ID"
+          }
+        }
+      },
+      {
+        name = "ARGOCD_CLIENT_SECRET"
+        valueFrom = {
+          secretKeyRef = {
+            name = "govuk-dex-argocd"
+            key  = "ARGOCD_CLIENT_SECRET"
           }
         }
       }

@@ -5,13 +5,11 @@ locals {
 }
 
 resource "helm_release" "argo_cd" {
-  # Dex is used to provide SSO facility to ArgoCD
-  depends_on = [helm_release.dex]
   chart      = "argo-cd"
   name       = "argo-cd"
   namespace  = local.services_ns
   repository = "https://argoproj.github.io/argo-helm"
-  version    = "3.26.9" # TODO: Dependabot or equivalent so this doesn't get neglected.
+  version    = "3.32.1" # TODO: Dependabot or equivalent so this doesn't get neglected.
   values = [yamlencode({
     server = {
       # TLS Termination happens at the ALB, the insecure flag prevents Argo
@@ -36,6 +34,18 @@ resource "helm_release" "argo_cd" {
 
       config = {
         url = "https://${local.argo_host}"
+
+        "oidc.config" = yamlencode({
+          name         = "GitHub"
+          issuer       = "https://${local.dex_host}"
+          clientID     = "$govuk-dex-argocd:ARGOCD_CLIENT_ID"
+          clientSecret = "$govuk-dex-argocd:ARGOCD_CLIENT_SECRET"
+        })
+      }
+
+      rbacConfig = {
+        # All log in users are admin
+        "policy.default" = "role:admin"
       }
 
       ingressGrpc = {
@@ -100,7 +110,8 @@ resource "helm_release" "argo_notifications" {
 }
 
 resource "helm_release" "argo_workflows" {
-  # Dex is used to provide SSO facility to ArgoCD
+  # Dex is used to provide SSO facility to Argo-Workflows and there is a bug
+  # where Argo Workflows fail to start if Dex is not present
   depends_on = [helm_release.dex]
   chart      = "argo-workflows"
   name       = "argo-workflows"
