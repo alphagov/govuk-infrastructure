@@ -42,7 +42,8 @@ locals {
     "govuk-ruby-2.7.3",
     "govuk-ruby-2.6.6",
     "asset-manager",
-    "whitehall"
+    "whitehall",
+    "info-frontend"
   ]
 }
 
