@@ -43,7 +43,8 @@ locals {
     "govuk-ruby-2.6.6",
     "asset-manager",
     "whitehall",
-    "info-frontend"
+    "info-frontend",
+    "collections"
   ]
 }
 
