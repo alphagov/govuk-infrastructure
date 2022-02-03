@@ -18,11 +18,11 @@ Terraform docs for more detail.
 ## Applying
 
 ```sh
-terraform init -backend-config=<environment>.backend -upgrade
-terraform apply
+ENV=test  # or integration, staging, production
+
+gds aws govuk-${ENV?}-admin -- terraform init -backend-config=${ENV?}.backend -reconfigure -upgrade
+gds aws govuk-${ENV?}-admin -- terraform apply
 ```
 
-where `<environment>` is the GOV.UK environment where you want to apply the
-changes.
 
 [DynamoDB State Locking]: https://www.terraform.io/docs/language/settings/backends/s3.html#dynamodb-state-locking

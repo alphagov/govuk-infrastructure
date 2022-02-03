@@ -1,3 +1,3 @@
-# Govuk-Publishing-Infrastructure
+# GOV.UK Publishing Infrastructure module
 
-This deployment manages AWS resources which are specific to GOV.UK Publishing.
+This root module manages AWS resources which are specific to GOV.UK Publishing.

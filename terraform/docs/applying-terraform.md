@@ -7,36 +7,41 @@ The EKS cluster is deployed via Terraform in two stages. See [adr-3] for backgro
 
 ## Deployment
 
+**We no longer have any deployment automation for Terraform** (since the demise of Big Concourse).
+
 For testing before merging to `main`, we can run Terraform locally against the test account.
 
-**Currently, there is process for automated deployments of Terraform**
+When turning up from scratch, deploy the root modules in this order:
 
-### Cluster infrastructure
+1. `terraform-lock`
+1. `ecr` (test and production accounts only)
+1. `cluster-infrastructure`
+1. `cluster-services`
+1. `govuk-publishing-infrastructure`
 
-You can update the base infrastructure from your machine to test things.
-For example, run the following commands to update the test environment:
+### `cluster-infrastructure`, `cluster-services` or `govuk-publishing-infrastructure` modules
 
 ```sh
+ENV=test  # or integration, staging, production
 cd terraform/deployments/cluster-infrastructure
-gds aws govuk-test-admin -- terraform init -backend-config=test.backend -reconfigure
-gds aws govuk-test-admin -- terraform plan -var-file ../variables/test/common.tfvars
+
+gds aws govuk-${ENV?}-admin -- terraform init -backend-config=${ENV?}.backend -reconfigure -upgrade
+gds aws govuk-${ENV?}-admin -- terraform apply -var-file ../variables/common.tfvars -var-file ../variables/${ENV?}/common.tfvars
 ```
 
-### Cluster services
+### Other modules
 
-Similar to above but with `terraform/deployments/cluster-services` and extra var file:
+See the README.md for the module:
 
-```sh
-cd terraform/deployments/cluster-services
-gds aws govuk-test-admin -- terraform init -backend-config=test.backend -reconfigure
-gds aws govuk-test-admin -- terraform plan -var-file ../variables/common.tfvars -var-file ../variables/test/common.tfvars
-```
+* [`ecr`](../deployments/ecr/README.md) (test and production accounts only)
+* [`github`](../deployments/github/README.md)
+* [`terraform-lock`](../deployments/terraform-lock/README.md)
 
-### Running kubectl
+## Running kubectl
 
 ```sh
 AWS_DEFAULT_REGION=eu-west-1
-eval $(gds aws govuk-test-admin -e)
+gds aws govuk-test-admin -e -- bash -l
 aws eks update-kubeconfig --name govuk
 kubectl get nodes
 ```
