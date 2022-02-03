@@ -26,10 +26,11 @@ name: Build and publish to ECR
 
 on:
   workflow_call:
-    types: [requested]
-    branches:
-      - 'main'
-      - 'master'
+    secrets:
+      AWS_GOVUK_ECR_ACCESS_KEY_ID:
+        required: true
+      AWS_GOVUK_ECR_SECRET_ACCESS_KEY:
+        required: true
 
 jobs:
   publish:
