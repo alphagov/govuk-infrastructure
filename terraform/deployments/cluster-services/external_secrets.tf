@@ -7,7 +7,7 @@ resource "helm_release" "external_secrets" {
   name             = "external-secrets"
   repository       = "https://charts.external-secrets.io"
   chart            = "external-secrets"
-  version          = "0.3.5" # TODO: Dependabot or equivalent so this doesn't get neglected.
+  version          = "0.4.1" # TODO: Dependabot or equivalent so this doesn't get neglected.
   namespace        = local.services_ns
   create_namespace = true
   values = [yamlencode({
