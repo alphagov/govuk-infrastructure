@@ -1,5 +1,12 @@
 # Installs Prometheus Operator, Prometheus, Prometheus rules, Grafana, Grafana dashboards, and Prometheus CRDs
 
+locals {
+  alert_manager_host = "alertmanager.${local.external_dns_zone_name}"
+  grafana_host       = "grafana.${local.external_dns_zone_name}"
+  prometheus_host    = "prometheus.${local.external_dns_zone_name}"
+}
+
+
 resource "helm_release" "kube_prometheus_stack" {
   name             = "kube-prometheus-stack"
   repository       = "https://prometheus-community.github.io/helm-charts"
@@ -11,7 +18,7 @@ resource "helm_release" "kube_prometheus_stack" {
     alertmanager = {
       ingress = {
         enabled  = true
-        hosts    = ["alertmanager.${local.external_dns_zone_name}"]
+        hosts    = [local.alert_manager_host]
         pathType = "Prefix"
         annotations = merge(local.alb_ingress_annotations, {
           "alb.ingress.kubernetes.io/load-balancer-name" = "alertmanager"
@@ -21,17 +28,47 @@ resource "helm_release" "kube_prometheus_stack" {
     grafana = {
       ingress = {
         enabled  = true
-        hosts    = ["grafana.${local.external_dns_zone_name}"]
+        hosts    = [local.grafana_host]
         pathType = "Prefix"
         annotations = merge(local.alb_ingress_annotations, {
           "alb.ingress.kubernetes.io/load-balancer-name" = "grafana"
         })
       }
+      "grafana.ini" = {
+        "auth.generic_oauth" = {
+          name                = "GitHub"
+          enabled             = true
+          allow_sign_up       = true
+          auth_url            = "https://${local.dex_host}/auth"
+          token_url           = "https://${local.dex_host}/token"
+          api_url             = "https://${local.dex_host}/userinfo"
+          scopes              = "openid profile email groups"
+          role_attribute_path = "to_string('Admin')" #TODO: map users/groups to different Grafana roles, e.g. Admin, Viewer, Editor
+        }
+        server = {
+          domain   = local.grafana_host
+          root_url = "https://%(domain)s"
+        }
+      }
+      envValueFrom = {
+        "GF_AUTH_GENERIC_OAUTH_CLIENT_ID" = {
+          secretKeyRef = {
+            name = "govuk-dex-grafana"
+            key  = "GRAFANA_CLIENT_ID"
+          }
+        },
+        "GF_AUTH_GENERIC_OAUTH_CLIENT_SECRET" = {
+          secretKeyRef = {
+            name = "govuk-dex-grafana"
+            key  = "GRAFANA_CLIENT_SECRET"
+          }
+        }
+      }
     }
     prometheus = {
       ingress = {
         enabled  = true
-        hosts    = ["prometheus.${local.external_dns_zone_name}"]
+        hosts    = [local.prometheus_host]
         pathType = "Prefix"
         annotations = merge(local.alb_ingress_annotations, {
           "alb.ingress.kubernetes.io/load-balancer-name" = "prometheus"

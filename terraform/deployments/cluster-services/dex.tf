@@ -51,6 +51,12 @@ resource "helm_release" "dex" {
           idEnv        = "ARGOCD_CLIENT_ID"
           secretEnv    = "ARGOCD_CLIENT_SECRET"
           redirectURIs = ["https://${local.argo_host}/auth/callback"]
+        },
+        {
+          name         = "grafana"
+          idEnv        = "GRAFANA_CLIENT_ID"
+          secretEnv    = "GRAFANA_CLIENT_SECRET"
+          redirectURIs = ["https://${local.grafana_host}/login/generic_oauth"]
         }
       ]
     }
@@ -107,6 +113,24 @@ resource "helm_release" "dex" {
           secretKeyRef = {
             name = "govuk-dex-argocd"
             key  = "ARGOCD_CLIENT_SECRET"
+          }
+        }
+      },
+      {
+        name = "GRAFANA_CLIENT_ID"
+        valueFrom = {
+          secretKeyRef = {
+            name = "govuk-dex-grafana"
+            key  = "GRAFANA_CLIENT_ID"
+          }
+        }
+      },
+      {
+        name = "GRAFANA_CLIENT_SECRET"
+        valueFrom = {
+          secretKeyRef = {
+            name = "govuk-dex-grafana"
+            key  = "GRAFANA_CLIENT_SECRET"
           }
         }
       }
