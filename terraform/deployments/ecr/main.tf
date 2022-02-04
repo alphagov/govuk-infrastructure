@@ -44,7 +44,8 @@ locals {
     "asset-manager",
     "whitehall",
     "info-frontend",
-    "collections"
+    "collections",
+    "finder-frontend"
   ]
 }
 
