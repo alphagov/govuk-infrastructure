@@ -7,6 +7,10 @@ terraform {
       source  = "hashicorp/aws"
       version = "~> 3.0"
     }
+    github = {
+      source  = "integrations/github"
+      version = "~> 4.0"
+    }
   }
 }
 
@@ -21,32 +25,28 @@ provider "aws" {
   }
 }
 
-# TODO: Get rid of this list and just give CI permission to create repos, e.g.
-# with https://github.com/byu-oit/github-action-create-ecr-repo-if-missing
+# NOTE: Uses GITHUB_TOKEN env var, an OAuth / Personal Access Token, for auth
+provider "github" {
+  owner = "alphagov"
+}
+
+data "github_repositories" "govuk" {
+  query = "org:alphagov topic:container topic:govuk fork:false archived:false"
+}
+
 locals {
-  repositories = [
-    "content-store",
-    "frontend",
+  repositories = concat(
+    local.extra_repositories,
+    data.github_repositories.govuk.names
+  )
+
+  extra_repositories = [
     "infra-concourse-task",
-    "publisher",
-    "publishing-api",
-    "router",
-    "router-api",
-    "signon",
-    "smokey",
-    "static",
     "statsd",
-    "authenticating-proxy",
     "govuk-terraform",
     "govuk-ruby-2.7.2",
     "govuk-ruby-2.7.3",
     "govuk-ruby-2.6.6",
-    "asset-manager",
-    "whitehall",
-    "info-frontend",
-    "collections",
-    "finder-frontend",
-    "government-frontend"
   ]
 }
 
@@ -85,6 +85,9 @@ resource "aws_iam_role" "push_to_ecr" {
   })
 }
 
+data "aws_caller_identity" "current" {}
+data "aws_region" "current" {}
+
 data "aws_iam_policy_document" "push_to_ecr" {
   statement {
     actions = [
@@ -103,7 +106,7 @@ data "aws_iam_policy_document" "push_to_ecr" {
       "ecr:PutImage",
       "ecr:UploadLayerPart",
     ]
-    resources = [for repo in local.repositories : aws_ecr_repository.repositories[repo].arn]
+    resources = ["arn:aws:ecr:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:repository/*"]
   }
 }
 
