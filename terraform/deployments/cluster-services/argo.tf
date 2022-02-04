@@ -128,7 +128,7 @@ resource "helm_release" "argo_workflows" {
             secondsAfterSuccess = 432000
           }
           podGC = {
-            strategy = "OnPodCompletion"
+            strategy = "OnWorkflowSuccess"
           }
         }
       }
