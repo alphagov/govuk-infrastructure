@@ -45,7 +45,8 @@ locals {
     "whitehall",
     "info-frontend",
     "collections",
-    "finder-frontend"
+    "finder-frontend",
+    "government-frontend"
   ]
 }
 
