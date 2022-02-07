@@ -55,9 +55,8 @@ You can use an existing backend file as a template.
 To deploy the root modules, see [Applying Terraform](../terraform/docs/applying-terraform.md).
 
 
-## `govuk-publishing-platform` deployment
+## `cluster-services` deployment
 
-There are some [Secrets Manager
-secrets](../terraform/deployments/govuk-publishing-platform/secrets_manager.tf)
+There are some [prerequisite secrets](../terraform/docs/prerequisite-secrets.tf)
 which are not generated automatically. Create these secrets before running
 `terraform apply` for the first time.
