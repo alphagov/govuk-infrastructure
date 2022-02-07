@@ -57,6 +57,6 @@ To deploy the root modules, see [Applying Terraform](../terraform/docs/applying-
 
 ## `cluster-services` deployment
 
-There are some [prerequisite secrets](../terraform/docs/prerequisite-secrets.tf)
+There are some [prerequisite secrets](prerequisite-secrets.tf)
 which are not generated automatically. Create these secrets before running
 `terraform apply` for the first time.
