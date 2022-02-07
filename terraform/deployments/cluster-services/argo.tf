@@ -11,6 +11,13 @@ resource "helm_release" "argo_cd" {
   repository = "https://argoproj.github.io/argo-helm"
   version    = "3.32.1" # TODO: Dependabot or equivalent so this doesn't get neglected.
   values = [yamlencode({
+    global = {
+      image = { # TODO: remove this section when v2.3.0 is released and includes fix: https://github.com/argoproj/argo-cd/pull/8350
+        repository = "quay.io/argoproj/argocd"
+        tag        = "v2.3.0-rc5"
+      }
+    }
+
     server = {
       # TLS Termination happens at the ALB, the insecure flag prevents Argo
       # server from upgrading the request after TLS termination.
