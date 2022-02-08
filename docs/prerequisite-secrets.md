@@ -52,7 +52,7 @@ The format of secret is given below to aid creation from scratch:
    }
    ```
 
- 3. `govuk/dex/grafana`: shared OAUTH secret between Dex and Grafana.
+3. `govuk/dex/grafana`: shared OAUTH secret between Dex and Grafana.
 
     ```
     {
@@ -60,3 +60,12 @@ The format of secret is given below to aid creation from scratch:
       GRAFANA_CLIENT_SECRET: <secret_2>
     }
     ```
+
+4. `govuk/dex/alert-manager`: shared OAUTH secret between Dex and Alert Manager.
+
+   ```
+   {
+     clientID: <secret_1>,
+     clientSecret: <secret_2>
+   }
+   ```
