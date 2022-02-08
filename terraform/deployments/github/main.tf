@@ -21,7 +21,7 @@ provider "github" {
 #
 
 data "github_repositories" "govuk" {
-  query = "topic:govuk org:alphagov fork:false archived:false"
+  query = "topic:govuk topic:container org:alphagov fork:false archived:false"
 }
 
 data "github_repository" "govuk" {
