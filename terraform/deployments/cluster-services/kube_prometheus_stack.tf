@@ -64,13 +64,13 @@ resource "helm_release" "kube_prometheus_stack" {
         "GF_AUTH_GENERIC_OAUTH_CLIENT_ID" = {
           secretKeyRef = {
             name = "govuk-dex-grafana"
-            key  = "GRAFANA_CLIENT_ID"
+            key  = "clientID"
           }
         },
         "GF_AUTH_GENERIC_OAUTH_CLIENT_SECRET" = {
           secretKeyRef = {
             name = "govuk-dex-grafana"
-            key  = "GRAFANA_CLIENT_SECRET"
+            key  = "clientSecret"
           }
         }
       }

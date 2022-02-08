@@ -45,13 +45,13 @@ resource "helm_release" "argo_cd" {
         "oidc.config" = yamlencode({
           name         = "GitHub"
           issuer       = "https://${local.dex_host}"
-          clientID     = "$govuk-dex-argocd:ARGOCD_CLIENT_ID"
-          clientSecret = "$govuk-dex-argocd:ARGOCD_CLIENT_SECRET"
+          clientID     = "$govuk-dex-argocd:clientID"
+          clientSecret = "$govuk-dex-argocd:clientSecret"
         })
       }
 
       rbacConfig = {
-        # All log in users are admin
+        # TODO: all logged in users are admin, maybe we want differentiation
         "policy.default" = "role:admin"
       }
 
@@ -166,13 +166,14 @@ resource "helm_release" "argo_workflows" {
         issuer = "https://${local.dex_host}"
         clientId = {
           name = "govuk-dex-argo-workflows"
-          key  = "ARGO_WORKFLOWS_CLIENT_ID"
+          key  = "clientID"
         }
         clientSecret = {
           name = "govuk-dex-argo-workflows"
-          key  = "ARGO_WORKFLOWS_CLIENT_SECRET"
+          key  = "clientSecret"
         }
         redirectUrl = "https://${local.argo_workflows_host}/oauth2/callback"
+        # TODO: all logged in users are admin, maybe we want differentiation
       }
 
     }

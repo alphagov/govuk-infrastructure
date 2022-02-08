@@ -27,8 +27,8 @@ The format of secret is given below to aid creation from scratch:
 
    ```
    {
-     GITHUB_CLIENT_ID: <secret_1>,
-     GITHUB_CLIENT_SECRET: <secret_2>
+     clientID: <secret_1>,
+     clientSecret: <secret_2>
    }
    ```
 
@@ -38,8 +38,8 @@ The format of secret is given below to aid creation from scratch:
 
    ```
    {
-     ARGOCD_CLIENT_ID: <secret_1>,
-     ARGOCD_CLIENT_SECRET: <secret_2>
+     clientID: <secret_1>,
+     clientSecret: <secret_2>
    }
    ```
 
@@ -47,8 +47,8 @@ The format of secret is given below to aid creation from scratch:
 
    ```
    {
-     ARGO_WORKFLOWS_CLIENT_ID: <secret_1>,
-     ARGO_WORKFLOWS_CLIENT_SECRET: <secret_2>
+     clientID: <secret_1>,
+     clientSecret: <secret_2>
    }
    ```
 
@@ -56,8 +56,8 @@ The format of secret is given below to aid creation from scratch:
 
     ```
     {
-      GRAFANA_CLIENT_ID: <secret_1>,
-      GRAFANA_CLIENT_SECRET: <secret_2>
+      clientID: <secret_1>,
+      clientSecret: <secret_2>
     }
     ```
 
