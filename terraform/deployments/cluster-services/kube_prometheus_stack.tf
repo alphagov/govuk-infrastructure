@@ -22,6 +22,16 @@ resource "helm_release" "kube_prometheus_stack" {
         pathType = "Prefix"
         annotations = merge(local.alb_ingress_annotations, {
           "alb.ingress.kubernetes.io/load-balancer-name" = "alertmanager"
+          "alb.ingress.kubernetes.io/auth-type"          = "oidc"
+          "alb.ingress.kubernetes.io/auth-idp-oidc" = jsonencode(
+            { issuer                = "https://${local.dex_host}"
+              authorizationEndpoint = "https://${local.dex_host}/auth"
+              tokenEndpoint         = "https://${local.dex_host}/token"
+              userInfoEndpoint      = "https://${local.dex_host}/userinfo"
+              secretName            = "govuk-dex-alert-manager"
+          })
+          "alb.ingress.kubernetes.io/auth-on-unauthenticated-request" = "authenticate"
+          "alb.ingress.kubernetes.io/auth-scope"                      = "email openid"
         })
       }
     }
@@ -72,6 +82,16 @@ resource "helm_release" "kube_prometheus_stack" {
         pathType = "Prefix"
         annotations = merge(local.alb_ingress_annotations, {
           "alb.ingress.kubernetes.io/load-balancer-name" = "prometheus"
+          "alb.ingress.kubernetes.io/auth-type"          = "oidc"
+          "alb.ingress.kubernetes.io/auth-idp-oidc" = jsonencode(
+            { issuer                = "https://${local.dex_host}"
+              authorizationEndpoint = "https://${local.dex_host}/auth"
+              tokenEndpoint         = "https://${local.dex_host}/token"
+              userInfoEndpoint      = "https://${local.dex_host}/userinfo"
+              secretName            = "govuk-dex-prometheus"
+          })
+          "alb.ingress.kubernetes.io/auth-on-unauthenticated-request" = "authenticate"
+          "alb.ingress.kubernetes.io/auth-scope"                      = "email openid"
         })
       }
       # Match all PrometheusRules cluster-wide. (If an app/team needs a separate

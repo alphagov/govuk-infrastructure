@@ -57,6 +57,18 @@ resource "helm_release" "dex" {
           idEnv        = "GRAFANA_CLIENT_ID"
           secretEnv    = "GRAFANA_CLIENT_SECRET"
           redirectURIs = ["https://${local.grafana_host}/login/generic_oauth"]
+        },
+        {
+          name         = "prometheus"
+          idEnv        = "PROMETHEUS_CLIENT_ID"
+          secretEnv    = "PROMETHEUS_CLIENT_SECRET"
+          redirectURIs = ["https://${local.prometheus_host}/oauth2/idpresponse"]
+        },
+        {
+          name         = "alert-manager"
+          idEnv        = "ALERT_MANAGER_CLIENT_ID"
+          secretEnv    = "ALERT_MANAGER_CLIENT_SECRET"
+          redirectURIs = ["https://${local.alert_manager_host}/oauth2/idpresponse"]
         }
       ]
     }
@@ -131,6 +143,42 @@ resource "helm_release" "dex" {
           secretKeyRef = {
             name = "govuk-dex-grafana"
             key  = "GRAFANA_CLIENT_SECRET"
+          }
+        }
+      },
+      {
+        name = "PROMETHEUS_CLIENT_ID"
+        valueFrom = {
+          secretKeyRef = {
+            name = "govuk-dex-prometheus"
+            key  = "clientID"
+          }
+        }
+      },
+      {
+        name = "PROMETHEUS_CLIENT_SECRET"
+        valueFrom = {
+          secretKeyRef = {
+            name = "govuk-dex-prometheus"
+            key  = "clientSecret"
+          }
+        }
+      },
+      {
+        name = "ALERT_MANAGER_CLIENT_ID"
+        valueFrom = {
+          secretKeyRef = {
+            name = "govuk-dex-alert-manager"
+            key  = "clientID"
+          }
+        }
+      },
+      {
+        name = "ALERT_MANAGER_CLIENT_SECRET"
+        valueFrom = {
+          secretKeyRef = {
+            name = "govuk-dex-alert-manager"
+            key  = "clientSecret"
           }
         }
       }
