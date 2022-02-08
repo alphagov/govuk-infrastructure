@@ -79,7 +79,7 @@ resource "helm_release" "dex" {
         valueFrom = {
           secretKeyRef = {
             name = "govuk-dex-github"
-            key  = "GITHUB_CLIENT_ID"
+            key  = "clientID"
           }
         }
       },
@@ -88,7 +88,7 @@ resource "helm_release" "dex" {
         valueFrom = {
           secretKeyRef = {
             name = "govuk-dex-github"
-            key  = "GITHUB_CLIENT_SECRET"
+            key  = "clientSecret"
           }
         }
       },
@@ -97,7 +97,7 @@ resource "helm_release" "dex" {
         valueFrom = {
           secretKeyRef = {
             name = "govuk-dex-argo-workflows"
-            key  = "ARGO_WORKFLOWS_CLIENT_ID"
+            key  = "clientID"
           }
         }
       },
@@ -106,7 +106,7 @@ resource "helm_release" "dex" {
         valueFrom = {
           secretKeyRef = {
             name = "govuk-dex-argo-workflows"
-            key  = "ARGO_WORKFLOWS_CLIENT_SECRET"
+            key  = "clientSecret"
           }
         }
       },
@@ -115,7 +115,7 @@ resource "helm_release" "dex" {
         valueFrom = {
           secretKeyRef = {
             name = "govuk-dex-argocd"
-            key  = "ARGOCD_CLIENT_ID"
+            key  = "clientID"
           }
         }
       },
@@ -124,7 +124,7 @@ resource "helm_release" "dex" {
         valueFrom = {
           secretKeyRef = {
             name = "govuk-dex-argocd"
-            key  = "ARGOCD_CLIENT_SECRET"
+            key  = "clientSecret"
           }
         }
       },
@@ -133,7 +133,7 @@ resource "helm_release" "dex" {
         valueFrom = {
           secretKeyRef = {
             name = "govuk-dex-grafana"
-            key  = "GRAFANA_CLIENT_ID"
+            key  = "clientID"
           }
         }
       },
@@ -142,7 +142,7 @@ resource "helm_release" "dex" {
         valueFrom = {
           secretKeyRef = {
             name = "govuk-dex-grafana"
-            key  = "GRAFANA_CLIENT_SECRET"
+            key  = "clientSecret"
           }
         }
       },
