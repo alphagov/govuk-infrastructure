@@ -36,3 +36,12 @@ data "terraform_remote_state" "infra_security_groups" {
     region = data.aws_region.current.name
   }
 }
+
+data "terraform_remote_state" "infra_vpc" {
+  backend = "s3"
+  config = {
+    bucket = var.govuk_aws_state_bucket
+    key    = "govuk/infra-vpc.tfstate"
+    region = data.aws_region.current.name
+  }
+}

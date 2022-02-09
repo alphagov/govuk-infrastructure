@@ -22,6 +22,12 @@ eks_private_subnets = {
   c = { az = "eu-west-1c", cidr = "10.1.32.0/22" }
 }
 
+rabbitmq_subnets = {
+  a = { az = "eu-west-1a", cidr = "10.1.36.0/28" }
+  b = { az = "eu-west-1b", cidr = "10.1.36.16/28" }
+  c = { az = "eu-west-1c", cidr = "10.1.36.32/28" }
+}
+
 govuk_environment = "integration"
 
 publishing_service_domain = "integration.publishing.service.gov.uk"

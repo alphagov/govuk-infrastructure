@@ -7,6 +7,10 @@ terraform {
       source  = "hashicorp/aws"
       version = "~> 3.0"
     }
+    random = {
+      source  = "hashicorp/random"
+      version = "~> 3.1"
+    }
   }
 }
 
@@ -27,3 +31,5 @@ provider "aws" {
   region = "eu-west-1"
   default_tags { tags = local.default_tags }
 }
+
+provider "random" {}
