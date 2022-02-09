@@ -40,6 +40,15 @@ locals {
       groups   = ["readonly"]
     }
   ]
+
+  poweruser_roles_and_arns = data.terraform_remote_state.infra_security.outputs.poweruser_roles_and_arns
+  poweruser_configmap_roles = [
+    for user, arn in local.poweruser_roles_and_arns : {
+      rolearn  = arn
+      username = user
+      groups   = ["powerusers", "readonly"]
+    }
+  ]
 }
 
 resource "kubernetes_config_map" "aws_auth" {
@@ -55,6 +64,7 @@ resource "kubernetes_config_map" "aws_auth" {
         local.default_configmap_roles,
         local.admin_configmap_roles,
         local.readonly_configmap_roles,
+        local.poweruser_configmap_roles,
       ))
     )
   }
@@ -116,6 +126,36 @@ resource "kubernetes_cluster_role_binding" "read_crs_and_crbs" {
   subject {
     kind      = "Group"
     name      = "readonly"
+    api_group = "rbac.authorization.k8s.io"
+  }
+}
+
+resource "kubernetes_cluster_role" "poweruser" {
+  metadata {
+    name = "poweruser"
+  }
+  rule {
+    api_groups = ["*"]
+    resources  = ["*"]
+    verbs      = ["*"]
+  }
+}
+
+resource "kubernetes_role_binding" "poweruser" {
+  for_each = toset(var.powerusers_namespaces)
+
+  metadata {
+    name      = "poweruser-${each.key}"
+    namespace = each.key
+  }
+  role_ref {
+    api_group = "rbac.authorization.k8s.io"
+    kind      = "ClusterRole"
+    name      = "poweruser"
+  }
+  subject {
+    kind      = "Group"
+    name      = "powerusers"
     api_group = "rbac.authorization.k8s.io"
   }
 }
