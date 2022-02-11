@@ -45,3 +45,19 @@ data "terraform_remote_state" "infra_vpc" {
     region = data.aws_region.current.name
   }
 }
+
+data "terraform_remote_state" "app_govuk_rds" {
+  backend = "s3"
+
+  config = {
+    bucket = var.govuk_aws_state_bucket
+    key    = "blue/app-govuk-rds.tfstate"
+    region = data.aws_region.current.name
+  }
+
+  # TODO: hack because govuk-aws/app-govuk-rds is not terraformed in `test`.
+  # `test` still uses a single postgres instance for many apps.
+  defaults = {
+    sg_rds = {}
+  }
+}

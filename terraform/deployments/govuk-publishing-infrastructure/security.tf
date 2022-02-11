@@ -82,3 +82,29 @@ resource "aws_security_group_rule" "router_mongodb_from_eks_workers" {
   security_group_id        = data.terraform_remote_state.infra_security_groups.outputs.sg_router-backend_id
   source_security_group_id = data.terraform_remote_state.cluster_infrastructure.outputs.cluster_security_group_id
 }
+
+# TODO: Only the Postgresql instances created by govuk-aws/app-govuk-rds are
+# open to traffic from EKS nodes. There are 2 other instances, content-data-api
+# and transition, which are not covered since they are in a different terraform
+# project and have not been migrated yet.
+resource "aws_security_group_rule" "postgres_from_eks_workers" {
+  for_each                 = data.terraform_remote_state.app_govuk_rds.outputs.sg_rds
+  description              = "Database accepts requests from EKS nodes"
+  type                     = "ingress"
+  from_port                = 5432
+  to_port                  = 5432
+  protocol                 = "tcp"
+  security_group_id        = each.value
+  source_security_group_id = data.terraform_remote_state.cluster_infrastructure.outputs.cluster_security_group_id
+}
+
+resource "aws_security_group_rule" "mysql_from_eks_workers" {
+  for_each                 = data.terraform_remote_state.app_govuk_rds.outputs.sg_rds
+  description              = "Database accepts requests from EKS nodes"
+  type                     = "ingress"
+  from_port                = 3306
+  to_port                  = 3306
+  protocol                 = "tcp"
+  security_group_id        = each.value
+  source_security_group_id = data.terraform_remote_state.cluster_infrastructure.outputs.cluster_security_group_id
+}
