@@ -12,9 +12,15 @@ jobs:
     - uses: actions/checkout@v2
       name: Checkout source code
 
+    - name: Determine Terraform version to use
+      uses: dflook/terraform-version@4acf4de147e9ea706a8b30e3725fc522cd6ab001
+      id: terraform-version
+      with:
+        path: terraform
+
     - uses: hashicorp/setup-terraform@v1
       with:
-        terraform_version: 1.0.5
+        terraform_version: ${{ steps.terraform-version.outputs.terraform }}
         terraform_wrapper: false
 
     - name: Create Terraform plugin cache dir
