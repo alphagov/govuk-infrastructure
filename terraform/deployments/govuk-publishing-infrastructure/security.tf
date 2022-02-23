@@ -108,3 +108,13 @@ resource "aws_security_group_rule" "mysql_from_eks_workers" {
   security_group_id        = each.value
   source_security_group_id = data.terraform_remote_state.cluster_infrastructure.outputs.cluster_security_group_id
 }
+
+resource "aws_security_group_rule" "search_elb_from_eks_workers" {
+  description              = "Search elb requests from EKS nodes"
+  type                     = "ingress"
+  from_port                = 443
+  to_port                  = 443
+  protocol                 = "tcp"
+  security_group_id        = data.terraform_remote_state.infra_security_groups.outputs.sg_search_elb_id
+  source_security_group_id = data.terraform_remote_state.cluster_infrastructure.outputs.cluster_security_group_id
+}
