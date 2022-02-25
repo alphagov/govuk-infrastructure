@@ -99,4 +99,39 @@ RSpec.describe "rake bootstrap:signon" do
       bootstrap_task
     end
   end
+
+  context "when application has not been created" do
+    let(:api_users) do
+      {
+        "frontend" => {
+          "name" => "Frontend",
+          "username" => "frontend",
+          "email" => "frontend@test.publishing.service.gov.uk",
+          "bearer_tokens" => [
+            { "application_slug" => "non-existent-application" },
+          ],
+        },
+      }
+    end
+
+    it "raises an alert" do
+      with_modified_env APPLICATIONS: JSON.generate(applications),
+                        API_USERS: JSON.generate(api_users),
+                        SIGNON_API_ENDPOINT: "https://signon.example.gov.uk",
+                        SIGNON_AUTH_TOKEN: "signon-auth-token" do
+        allow(Signon::Client).to receive(:new)
+          .with(api_url: "https://signon.example.gov.uk", auth_token: "signon-auth-token", max_retries: 10)
+          .and_return(signon_client)
+        allow(Signon::Bootstrap).to receive(:create_applications)
+          .with(applications: applications, signon: signon_client, kubernetes: kubernetes_client)
+          .and_return(signon_applications)
+        allow(Signon::Bootstrap).to receive(:create_api_users)
+          .with(api_users: api_users, signon: signon_client)
+          .and_return(signon_api_users)
+        expect { bootstrap_task }.to raise_error(
+          /Unknown application: non-existent-application for api_user frontend./,
+        )
+      end
+    end
+  end
 end
