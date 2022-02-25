@@ -128,3 +128,23 @@ resource "aws_security_group_rule" "content_store_ec2_from_eks_workers" {
   security_group_id        = data.terraform_remote_state.infra_security_groups.outputs.sg_content-store_internal_elb_id
   source_security_group_id = data.terraform_remote_state.cluster_infrastructure.outputs.cluster_security_group_id
 }
+
+resource "aws_security_group_rule" "email_alert_api_ec2_from_eks_workers" {
+  description              = "Email Alert API internal ELB requests from EKS nodes"
+  type                     = "ingress"
+  from_port                = 443
+  to_port                  = 443
+  protocol                 = "tcp"
+  security_group_id        = data.terraform_remote_state.infra_security_groups.outputs.sg_email-alert-api_elb_internal_id
+  source_security_group_id = data.terraform_remote_state.cluster_infrastructure.outputs.cluster_security_group_id
+}
+
+resource "aws_security_group_rule" "account_api_ec2_from_eks_workers" {
+  description              = "Account API internal ELB requests from EKS nodes"
+  type                     = "ingress"
+  from_port                = 443
+  to_port                  = 443
+  protocol                 = "tcp"
+  security_group_id        = data.terraform_remote_state.infra_security_groups.outputs.sg_account_elb_internal_id
+  source_security_group_id = data.terraform_remote_state.cluster_infrastructure.outputs.cluster_security_group_id
+}
