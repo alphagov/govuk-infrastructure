@@ -39,11 +39,20 @@ def bootstrap_signon
 
   bearer_tokens = api_users.map { |username, data|
     data.fetch("bearer_tokens", []).map do |token|
+      app_slug = token["application_slug"]
+      app_id = signon_apps[app_slug]
+
+      unless app_id
+        raise ArgumentError, "
+          Unknown application: #{app_slug} for api_user #{username}.\n
+          Did you create the #{app_slug} application?"
+      end
+
       {
         name: "signon-token-#{username}-#{token['application_slug']}",
         permissions: token.fetch("permissions", []),
         api_user_id: signon_users[username],
-        application_id: signon_apps[token["application_slug"]],
+        application_id: app_id,
       }
     end
   }.flatten
