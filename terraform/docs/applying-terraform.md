@@ -16,8 +16,8 @@ When turning up from scratch, deploy the root modules in this order:
 1. `terraform-lock`
 1. `ecr` (test and production accounts only)
 1. `cluster-infrastructure`
-1. `cluster-services`
 1. `govuk-publishing-infrastructure`
+1. `cluster-services`
 
 ### `cluster-infrastructure`, `cluster-services` or `govuk-publishing-infrastructure` modules
 

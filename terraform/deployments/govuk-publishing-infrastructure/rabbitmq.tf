@@ -6,7 +6,7 @@ resource "aws_mq_broker" "rabbitmq_broker" {
   broker_name = local.rabbitmq_name
 
   engine_type                = "RabbitMQ"
-  engine_version             = "3.8.26"
+  engine_version             = "3.8.27"
   storage_type               = "ebs"
   host_instance_type         = "mq.m5.large"
   security_groups            = [aws_security_group.rabbitmq.id]
