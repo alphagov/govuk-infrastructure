@@ -59,6 +59,18 @@ module Signon
       JSON.parse(res.body)
     end
 
+    def update_application(id:, name:, description:, permissions:)
+      req = build_patch_request("/applications/#{id}", {
+        name: name,
+        description: description,
+        permissions: permissions,
+      })
+      res = do_request(req)
+      raise ApplicationNotFound, "Status: #{res.code}; #{res.message}; #{res.body}" unless res.code == "200"
+
+      JSON.parse(res.body)
+    end
+
     def get_application(name:)
       uri = URI("#{@api_url}/applications?name=#{CGI.escape name}")
       req = Net::HTTP::Get.new(uri)
@@ -110,6 +122,12 @@ module Signon
 
     def build_post_request(path, body)
       req = Net::HTTP::Post.new(URI("#{@api_url}#{path}"))
+      req.body = body.to_json
+      req
+    end
+
+    def build_patch_request(path, body)
+      req = Net::HTTP::Patch.new(URI("#{@api_url}#{path}"))
       req.body = body.to_json
       req
     end
