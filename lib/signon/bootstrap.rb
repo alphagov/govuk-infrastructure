@@ -16,7 +16,22 @@ module Signon
             redirect_uri: app_data["redirect_uri"],
           )
         rescue Signon::Client::ApplicationAlreadyCreated
-          signon.get_application(name: app_data["name"])
+          existing_app = signon.get_application(name: app_data["name"])
+
+          same_config = existing_app["name"] == app_data["name"] &&
+            existing_app["description"] == app_data["description"] &&
+            existing_app["permissions"].sort == app_data["permissions"].sort
+
+          if same_config
+            existing_app
+          else
+            signon.update_application(
+              id: existing_app["id"],
+              name: app_data["name"],
+              description: app_data["description"],
+              permissions: app_data["permissions"],
+            )
+          end
         end
         kubernetes.put_secret_value(
           secret_name: "signon-app-#{app_slug}",

@@ -16,8 +16,22 @@ RSpec.describe Signon::Bootstrap do
 
   let(:signon_apps) do
     {
-      "content-store" => { "id" => "content-store-id", "oauth_id" => "123", "oauth_secret" => "456" },
-      "publishing-api" => { "id" => "pub-api-id", "oauth_id" => "456", "oauth_secret" => "789" },
+      "content-store" => {
+        "id" => "content-store-id",
+        "oauth_id" => "123",
+        "oauth_secret" => "456",
+        "name" => "Content Store",
+        "description" => "Central store for current live content on GOV.UK",
+        "permissions" => ["special-access"],
+      },
+      "publishing-api" => {
+        "id" => "pub-api-id",
+        "oauth_id" => "456",
+        "oauth_secret" => "789",
+        "name" => "publishing-api",
+        "description" => "Publish content",
+        "permissions" => [],
+      },
     }
   end
 
@@ -85,6 +99,67 @@ RSpec.describe Signon::Bootstrap do
       expect(create_signon_apps).to eq({ "content-store" => "content-store-id", "publishing-api" => "pub-api-id" })
     end
 
+    it "updates an existing application if different and stores their creds in Secrets" do
+      content_app = applications["content-store"]
+      allow(signon_client).to receive(:create_application)
+        .with(
+          name: content_app["name"],
+          description: content_app["description"],
+          home_uri: content_app["home_uri"],
+          permissions: content_app["permissions"],
+          redirect_uri: content_app["redirect_uri"],
+        )
+        .and_return(signon_apps["content-store"])
+
+      app = applications["publishing-api"]
+      existing_app = signon_apps["publishing-api"]
+      allow(signon_client).to receive(:create_application)
+        .with(
+          name: app["name"],
+          description: app["description"],
+          home_uri: app["home_uri"],
+          permissions: app["permissions"],
+          redirect_uri: app["redirect_uri"],
+        )
+        .and_raise(Signon::Client::ApplicationAlreadyCreated)
+
+      allow(signon_client).to receive(:get_application)
+        .with(name: app["name"])
+        .and_return(existing_app)
+
+      new_app = {
+        "id" => existing_app["id"],
+        "name" => app["name"],
+        "description" => app["description"],
+        "permissions" => app["permissions"],
+        "oauth_id" => existing_app["oauth_id"],
+        "oauth_secret" => existing_app["oauth_secret"],
+      }
+
+      allow(signon_client).to receive(:update_application)
+        .with(
+          id: existing_app["id"],
+          name: app["name"],
+          description: app["description"],
+          permissions: app["permissions"],
+        )
+        .and_return(new_app)
+
+      allow(kubernetes_client).to receive(:put_secret_value)
+        .with(
+          secret_name: "signon-app-publishing-api",
+          secret_data: new_app,
+        )
+
+      allow(kubernetes_client).to receive(:put_secret_value)
+        .with(
+          secret_name: "signon-app-content-store",
+          secret_data: signon_apps["content-store"],
+        )
+
+      expect(create_signon_apps).to eq({ "content-store" => "content-store-id", "publishing-api" => "pub-api-id" })
+    end
+
     describe "is idempotent" do
       context "when one application already created" do
         it "creates only new applications" do
@@ -97,10 +172,6 @@ RSpec.describe Signon::Bootstrap do
               permissions: pub_app["permissions"],
               redirect_uri: pub_app["redirect_uri"],
             )
-            .and_raise(Signon::Client::ApplicationAlreadyCreated)
-
-          allow(signon_client).to receive(:get_application)
-            .with(name: pub_app["name"])
             .and_return(signon_apps["publishing-api"])
 
           content_app = applications["content-store"]
@@ -112,6 +183,10 @@ RSpec.describe Signon::Bootstrap do
               permissions: content_app["permissions"],
               redirect_uri: content_app["redirect_uri"],
             )
+            .and_raise(Signon::Client::ApplicationAlreadyCreated)
+
+          allow(signon_client).to receive(:get_application)
+            .with(name: content_app["name"])
             .and_return(signon_apps["content-store"])
 
           allow(kubernetes_client).to receive(:put_secret_value)
