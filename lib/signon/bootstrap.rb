@@ -5,37 +5,49 @@ module Signon
   module Bootstrap
     class NotRotatable < StandardError; end
 
-    def self.create_applications(applications:, signon:, kubernetes:)
-      applications.each_with_object({}) do |(app_slug, app_data), obj|
-        application = begin
-          signon.create_application(
+    def self.sync_application(signon:, kubernetes:, app_slug:, app_data:)
+      application = begin
+        signon.create_application(
+          name: app_data["name"],
+          description: app_data["description"],
+          home_uri: app_data["home_uri"],
+          permissions: app_data["permissions"],
+          redirect_uri: app_data["redirect_uri"],
+        )
+      rescue Signon::Client::ApplicationAlreadyCreated
+        existing_app = signon.get_application(name: app_data["name"])
+
+        same_config = existing_app["name"] == app_data["name"] &&
+          existing_app["description"] == app_data["description"] &&
+          existing_app["permissions"].sort == app_data["permissions"].sort
+
+        if same_config
+          existing_app
+        else
+          signon.update_application(
+            id: existing_app["id"],
             name: app_data["name"],
             description: app_data["description"],
-            home_uri: app_data["home_uri"],
             permissions: app_data["permissions"],
-            redirect_uri: app_data["redirect_uri"],
           )
-        rescue Signon::Client::ApplicationAlreadyCreated
-          existing_app = signon.get_application(name: app_data["name"])
-
-          same_config = existing_app["name"] == app_data["name"] &&
-            existing_app["description"] == app_data["description"] &&
-            existing_app["permissions"].sort == app_data["permissions"].sort
-
-          if same_config
-            existing_app
-          else
-            signon.update_application(
-              id: existing_app["id"],
-              name: app_data["name"],
-              description: app_data["description"],
-              permissions: app_data["permissions"],
-            )
-          end
         end
-        kubernetes.put_secret_value(
-          secret_name: "signon-app-#{app_slug}",
-          secret_data: application,
+      end
+
+      kubernetes.put_secret_value(
+        secret_name: "signon-app-#{app_slug}",
+        secret_data: application,
+      )
+
+      application
+    end
+
+    def self.sync_applications(applications:, signon:, kubernetes:)
+      applications.each_with_object({}) do |(app_slug, app_data), obj|
+        application = sync_application(
+          signon: signon,
+          kubernetes: kubernetes,
+          app_slug: app_slug,
+          app_data: app_data,
         )
         obj[app_slug] = application.fetch("id")
       end
