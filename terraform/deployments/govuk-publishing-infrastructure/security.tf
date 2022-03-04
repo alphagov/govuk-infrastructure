@@ -148,3 +148,13 @@ resource "aws_security_group_rule" "account_api_ec2_from_eks_workers" {
   security_group_id        = data.terraform_remote_state.infra_security_groups.outputs.sg_account_elb_internal_id
   source_security_group_id = data.terraform_remote_state.cluster_infrastructure.outputs.cluster_security_group_id
 }
+
+resource "aws_security_group_rule" "efs_from_eks_workers" {
+  description              = "Shared EFS (Elastic File System) accepts requests from EKS nodes"
+  type                     = "ingress"
+  from_port                = 2049
+  to_port                  = 2049
+  protocol                 = "tcp"
+  security_group_id        = data.terraform_remote_state.infra_security_groups.outputs.sg_asset-master-efs_id
+  source_security_group_id = data.terraform_remote_state.cluster_infrastructure.outputs.cluster_security_group_id
+}
