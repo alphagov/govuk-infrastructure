@@ -41,7 +41,7 @@ locals {
   )
 
   extra_repositories = [
-    "infra-concourse-task",
+    "signon-resources",
     "statsd",
     "govuk-terraform",
     "govuk-ruby-2.7.2",
