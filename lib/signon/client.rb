@@ -66,7 +66,8 @@ module Signon
         permissions: permissions,
       })
       res = do_request(req)
-      raise ApplicationNotFound, "Status: #{res.code}; #{res.message}; #{res.body}" unless res.code == "200"
+      raise ApplicationNotFound if res.code_type == Net::HTTPNotFound
+      raise ApplicationNotUpdated, "Status: #{res.code}; #{res.message}; #{res.body}" if res.code != "200"
 
       JSON.parse(res.body)
     end
@@ -109,6 +110,8 @@ module Signon
     class TokenNotCreated < StandardError; end
 
     class ApplicationNotCreated < StandardError; end
+
+    class ApplicationNotUpdated < StandardError; end
 
     class ApplicationAlreadyCreated < StandardError; end
 

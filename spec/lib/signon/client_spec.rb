@@ -171,6 +171,13 @@ RSpec.describe Signon::Client do
         expect { response }.to raise_error(Signon::Client::ApplicationNotFound)
       end
     end
+
+    context "when response returns a non 200 response" do
+      it "raises a custom error" do
+        stub_req(endpoint, method: :patch).to_return(status: 403)
+        expect { response }.to raise_error(Signon::Client::ApplicationNotUpdated)
+      end
+    end
   end
 
   describe "#get_application" do
