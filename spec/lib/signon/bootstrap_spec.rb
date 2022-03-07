@@ -48,7 +48,6 @@ RSpec.describe Signon::Bootstrap do
   end
 
   describe "#sync_application" do
-    let(:app_slug) { "publishing-api" }
     let(:app_data) do
       {
         "name" => "Publishing API",
@@ -56,6 +55,7 @@ RSpec.describe Signon::Bootstrap do
         "permissions" => [],
         "home_url" => "https://publishing-api.test-env.publishing.service.gov.uk",
         "redirect_uri" => "https://publishing-api.test-env.publishing.service.gov.uk/auth/gds/callback",
+        "secret_name" => "signon-app-publishing-api",
       }
     end
 
@@ -83,7 +83,7 @@ RSpec.describe Signon::Bootstrap do
 
       allow(kubernetes_client).to receive(:put_secret_value)
         .with(
-          secret_name: "signon-app-#{app_slug}",
+          secret_name: app_data["secret_name"],
           secret_data: signon_response,
         )
 
@@ -91,7 +91,6 @@ RSpec.describe Signon::Bootstrap do
         described_class.sync_application(
           signon: signon_client,
           kubernetes: kubernetes_client,
-          app_slug: app_slug,
           app_data: app_data,
         ),
       ).to eq(signon_response)
@@ -130,7 +129,7 @@ RSpec.describe Signon::Bootstrap do
 
       allow(kubernetes_client).to receive(:put_secret_value)
         .with(
-          secret_name: "signon-app-#{app_slug}",
+          secret_name: new_app_data["secret_name"],
           secret_data: new_signon_response,
         )
 
@@ -138,7 +137,6 @@ RSpec.describe Signon::Bootstrap do
         described_class.sync_application(
           signon: signon_client,
           kubernetes: kubernetes_client,
-          app_slug: app_slug,
           app_data: new_app_data,
         ),
       ).to eq(new_signon_response)
@@ -161,7 +159,7 @@ RSpec.describe Signon::Bootstrap do
 
       allow(kubernetes_client).to receive(:put_secret_value)
         .with(
-          secret_name: "signon-app-#{app_slug}",
+          secret_name: app_data["secret_name"],
           secret_data: signon_response,
         )
 
@@ -169,7 +167,6 @@ RSpec.describe Signon::Bootstrap do
         described_class.sync_application(
           signon: signon_client,
           kubernetes: kubernetes_client,
-          app_slug: app_slug,
           app_data: app_data,
         ),
       ).to eq(signon_response)

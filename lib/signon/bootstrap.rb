@@ -5,7 +5,7 @@ module Signon
   module Bootstrap
     class NotRotatable < StandardError; end
 
-    def self.sync_application(signon:, kubernetes:, app_slug:, app_data:)
+    def self.sync_application(signon:, kubernetes:, app_data:)
       application = begin
         signon.create_application(
           name: app_data["name"],
@@ -34,7 +34,7 @@ module Signon
       end
 
       kubernetes.put_secret_value(
-        secret_name: "signon-app-#{app_slug}",
+        secret_name: app_data.fetch("secret_name"),
         secret_data: application,
       )
 
@@ -46,7 +46,6 @@ module Signon
         application = sync_application(
           signon: signon,
           kubernetes: kubernetes,
-          app_slug: app_slug,
           app_data: app_data,
         )
         obj[app_slug] = application.fetch("id")
