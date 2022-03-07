@@ -1,4 +1,4 @@
-name: Build and publish infra-task image to ECR
+name: Build and publish signon-resources image to ECR
 
 on:
   push:
@@ -12,7 +12,7 @@ on:
 
 jobs:
   publish:
-    name: Build infra-task image
+    name: Build signon-resources image
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -34,11 +34,11 @@ jobs:
         id: build-image
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          ECR_REPOSITORY: ${{ github.event.repository.name }}
+          ECR_REPOSITORY: signon-resources
           IMAGE_TAG: ${{ github.sha }}
         run: |
           # Build a docker container and push it to ECR
-          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG -f docker/images/infra-task/Dockerfile .
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG -f docker/images/signon-resources/Dockerfile .
           echo "Pushing image to ECR..."
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
           echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
