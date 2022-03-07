@@ -1,11 +1,14 @@
 name: Build and publish signon-resources image to ECR
 
 on:
+  workflow_dispatch:
+    branches:
+      - main
   push:
     branches:
       - main
     paths:
-      - "lib"
+      - "lib/**"
       - "Gemfile"
       - "Rakefile"
       - ".ruby-version"
