@@ -26,7 +26,7 @@ def bootstrap_signon
     version: ENV.fetch("KUBERNETES_API_VERSION", "v1"),
   })
 
-  signon_apps = Signon::Bootstrap.create_applications(
+  signon_apps = Signon::Bootstrap.sync_applications(
     applications: applications,
     signon: signon,
     kubernetes: kubernetes,

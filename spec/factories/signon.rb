@@ -9,6 +9,7 @@ module Factories
           "home_url" => "https://content-store.test-env.publishing.service.gov.uk",
           "redirect_uri" => "https://content-store.test-env.publishing.service.gov.uk/auth/gds/callback",
           "permissions" => %w[special-access],
+          "secret_name" => "signon-app-content-store",
         },
         "publishing-api" => {
           "name" => "Publishing API",
@@ -16,6 +17,7 @@ module Factories
           "description" => "Publishing engine",
           "home_url" => "https://publishing-api.test-env.publishing.service.gov.uk",
           "redirect_uri" => "https://publishing-api.test-env.publishing.service.gov.uk/auth/gds/callback",
+          "secret_name" => "signon-app-publishing-api",
         },
       }
     end

@@ -132,6 +132,54 @@ RSpec.describe Signon::Client do
     end
   end
 
+  describe "#update_application" do
+    subject(:response) do
+      client.update_application(
+        id: 1,
+        name: "app",
+        description: "new desc",
+        permissions: %w[new_premission],
+      )
+    end
+
+    let(:endpoint) { "#{api_url}/applications/1" }
+
+    context "when signon request is successful" do
+      let(:res) do
+        {
+          "id" => 1,
+          "name" => "app",
+          "description" => "new desc",
+          "oauth_id" => "a",
+          "oauth_secret" => "b",
+          "permissions" => %w[new_premission],
+        }
+      end
+
+      it "does not raise an error" do
+        stub_req(endpoint, method: :patch).to_return(
+          status: 200, body: JSON.generate(res),
+        )
+        expect { response }.not_to raise_error
+        expect(response).to eq res
+      end
+    end
+
+    context "when application does not exist" do
+      it "raises a custom error" do
+        stub_req(endpoint, method: :patch).to_return(status: 404)
+        expect { response }.to raise_error(Signon::Client::ApplicationNotFound)
+      end
+    end
+
+    context "when response returns a non 200 response" do
+      it "raises a custom error" do
+        stub_req(endpoint, method: :patch).to_return(status: 403)
+        expect { response }.to raise_error(Signon::Client::ApplicationNotUpdated)
+      end
+    end
+  end
+
   describe "#get_application" do
     subject(:response) do
       client.get_application(name: "Publishing API")
