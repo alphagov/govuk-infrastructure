@@ -77,6 +77,7 @@ module "eks" {
       desired_capacity = var.workers_size_desired
       max_capacity     = var.workers_size_max
       min_capacity     = var.workers_size_min
+      version          = var.cluster_version
       instance_types   = var.workers_instance_types
       additional_tags = {
         "k8s.io/cluster-autoscaler/enabled"             = "true"
