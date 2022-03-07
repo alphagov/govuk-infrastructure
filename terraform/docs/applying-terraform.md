@@ -23,7 +23,7 @@ When turning up from scratch, deploy the root modules in this order:
 
 ```sh
 ENV=test  # or integration, staging, production
-cd terraform/deployments/cluster-infrastructure
+cd terraform/deployments/cluster-infrastructure  # or cluster-services or govuk-publishing-infrastructure
 
 gds aws govuk-${ENV?}-admin -- terraform init -backend-config=${ENV?}.backend -reconfigure -upgrade
 gds aws govuk-${ENV?}-admin -- terraform apply -var-file ../variables/common.tfvars -var-file ../variables/${ENV?}/common.tfvars
