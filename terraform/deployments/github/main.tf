@@ -39,3 +39,8 @@ resource "github_actions_organization_secret_repositories" "aws_govuk_ecr_secret
   secret_name             = "AWS_GOVUK_ECR_SECRET_ACCESS_KEY"
   selected_repository_ids = [for repo in data.github_repository.govuk : repo.repo_id]
 }
+
+resource "github_actions_organization_secret_repositories" "ci_user_github_api_token" {
+  secret_name             = "GOVUK_CI_GITHUB_API_TOKEN"
+  selected_repository_ids = [for repo in data.github_repository.govuk : repo.repo_id]
+}

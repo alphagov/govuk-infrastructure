@@ -64,3 +64,7 @@ jobs:
           echo "Pushing image to ECR..."
           docker push $ECR_REGISTRY/$ECR_REPOSITORY -a
           echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
+
+      - name: Deploy to integration
+        id: deploy-integration
+        uses: ./.github/workflows/deploy-to-eks
