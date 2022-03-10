@@ -61,3 +61,13 @@ data "terraform_remote_state" "app_govuk_rds" {
     sg_rds = {}
   }
 }
+
+data "terraform_remote_state" "app_search" {
+  backend = "s3"
+
+  config = {
+    bucket = var.govuk_aws_state_bucket
+    key    = "blue/app-search.tfstate"
+    region = data.aws_region.current.name
+  }
+}
