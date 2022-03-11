@@ -16,5 +16,5 @@ Once an upgrade is done you cannot downgrade a cluster anymore, you will have to
 1. Increment cluster_version to the version you are upgrading to in terraform/deployment/variables/<ENV>/common.tfvars 
 1. Plan and apply the cluster-infrastructure terraform project, it should take about half an hour for the control plane, and another half hour for the nodegroup.
 1. During the upgrade monitor the health of the running apps to make sure there is no interruption of service.
-1. If aplicable you might want to upgrade the cluster add-ons next. Modify cluster_addon_versions accordingly.
+1. Upgrade the cluster add-ons. See the docs for each addon under [EKS Addons](https://docs.aws.amazon.com/eks/latest/userguide/eks-add-ons.html) for Amazon's recommended addon versions to use for a given cluster version. Modify `cluster_addon_versions` accordingly.
 1. Plan and apply the cluster-infrastructure terraform project as before. 
