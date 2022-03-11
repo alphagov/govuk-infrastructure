@@ -12,7 +12,7 @@ Once an upgrade is done you cannot downgrade a cluster anymore, you will have to
 
 ## Step by step procedure
 
-1. Make sure the control plane version is the same as the nodegroup, it should already be the case. If not applying the cluster-infrastructure terraform project should solve this.
+1. Make sure the control plane version is the same as the nodegroup, it should already be the case. If not, applying the cluster-infrastructure terraform project should solve this.
 1. Increment cluster_version to the version you are upgrading to in terraform/deployment/variables/<ENV>/common.tfvars 
 1. Plan and apply the cluster-infrastructure terraform project, it should take about half an hour for the control plane, and another half hour for the nodegroup.
 1. During the upgrade monitor the health of the running apps to make sure there is no interruption of service.
