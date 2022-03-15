@@ -57,4 +57,4 @@ jobs:
           git commit -m "Deploy ${REPOSITORY}:${IMAGE_TAG} to ${GOVUK_ENV}"
           REALLY_PUSH_TO_MAIN=1 git push "${repo}" "${branch}"
           echo "Done!"
-          echo "::set-output deployed=image::${REPOSITORY}:${IMAGE_TAG}"
+          echo "::set-output name=image::${REPOSITORY}:${IMAGE_TAG}"
