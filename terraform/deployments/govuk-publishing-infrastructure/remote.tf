@@ -10,6 +10,15 @@ data "terraform_remote_state" "cluster_infrastructure" {
   }
 }
 
+data "terraform_remote_state" "infra_assets" {
+  backend = "s3"
+  config = {
+    bucket = var.govuk_aws_state_bucket
+    key    = "govuk/infra-assets.tfstate"
+    region = data.aws_region.current.name
+  }
+}
+
 data "terraform_remote_state" "infra_networking" {
   backend = "s3"
   config = {
