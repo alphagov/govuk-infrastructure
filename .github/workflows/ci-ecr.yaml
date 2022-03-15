@@ -67,4 +67,4 @@ jobs:
 
       - name: Deploy to integration
         id: deploy-integration
-        uses: ./.github/workflows/deploy-to-eks
+        uses: ./.github/workflows/deploy-to-eks.yaml
