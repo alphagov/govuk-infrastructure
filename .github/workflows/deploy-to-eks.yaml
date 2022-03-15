@@ -39,9 +39,9 @@ jobs:
           GIT_USER_EMAIL: govuk-ci@digital.cabinet-office.gov.uk
           GIT_USER_NAME: govuk-ci
           GITHUB_TOKEN: ${{ secrets.GOVUK_CI_GITHUB_API_TOKEN }}
-          GOVUK_ENV: integration
+          ENVIRONMENT: integration
           IMAGE_TAG: ${{ github.sha }}
-          REPOSITORY: ${{ github.event.repository.name }}
+          APPLICATION: ${{ github.event.repository.name }}
         run: |
           set -eu
           git config --global user.email "${GIT_USER_EMAIL}"
@@ -49,12 +49,12 @@ jobs:
           echo "Modifying Helm Charts repo..."
           repo="https://${GIT_USER_NAME}:${GITHUB_TOKEN}@github.com/alphagov/govuk-helm-charts.git"
           branch="main"
-          file="charts/argocd-apps/image-tags/${GOVUK_ENV}/${REPOSITORY}"
+          file="charts/argocd-apps/image-tags/${ENVIRONMENT}/${APPLICATION}"
           git clone --depth 1 --branch main "${repo}"
           cd "govuk-helm-charts"
           echo "${IMAGE_TAG}" > "${file}"
           git add $file
-          git commit -m "Deploy ${REPOSITORY}:${IMAGE_TAG} to ${GOVUK_ENV}"
+          git commit -m "Deploy ${APPLICATION}:${IMAGE_TAG} to ${ENVIRONMENT}"
           REALLY_PUSH_TO_MAIN=1 git push "${repo}" "${branch}"
           echo "Done!"
-          echo "::set-output name=image::${REPOSITORY}:${IMAGE_TAG}"
+          echo "::set-output name=image::${APPLICATION}:${IMAGE_TAG}"
