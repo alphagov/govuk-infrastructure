@@ -46,15 +46,25 @@ jobs:
           set -eu
           git config --global user.email "${GIT_USER_EMAIL}"
           git config --global user.name "${GIT_USER_NAME}"
+
           echo "Modifying Helm Charts repo..."
           repo="https://${GIT_USER_NAME}:${GITHUB_TOKEN}@github.com/alphagov/govuk-helm-charts.git"
-          branch="main"
+          branch="update-image-tag/${APPLICATION}/${ENVIRONMENT}/${IMAGE_TAG}"
           file="charts/argocd-apps/image-tags/${ENVIRONMENT}/${APPLICATION}"
+
           git clone --depth 1 --branch main "${repo}"
           cd "govuk-helm-charts"
+          git checkout -b "${branch}"
+
           echo "${IMAGE_TAG}" > "${file}"
+
           git add $file
           git commit -m "Deploy ${APPLICATION}:${IMAGE_TAG} to ${ENVIRONMENT}"
-          REALLY_PUSH_TO_MAIN=1 git push "${repo}" "${branch}"
+          git push "${repo}" "${branch}"
+
+          gh api repos/alphagov/govuk-helm-charts/merges -f head="${branch}" -f base=main
+
+          git push origin --delete "${branch}"
+
           echo "Done!"
           echo "::set-output name=image::${APPLICATION}:${IMAGE_TAG}"
