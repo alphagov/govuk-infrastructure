@@ -106,6 +106,14 @@ resource "helm_release" "kube_prometheus_stack" {
         }
         # Allow empty ruleSelector (https://github.com/prometheus-community/helm-charts/blob/2cacc16807caedc6cabf1606db27e0d78c844564/charts/kube-prometheus-stack/templates/prometheus/prometheus.yaml#L202)
         ruleSelectorNilUsesHelmValues = false
+        podMonitorNamespaceSelector = {
+          matchExpressions = [{
+            key      = "no_monitor"
+            operator = "DoesNotExist"
+            values   = []
+          }]
+        }
+        podMonitorSelectorNilUsesHelmValues = false
       }
     }
   })]
