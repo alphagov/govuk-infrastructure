@@ -83,5 +83,5 @@ variable "workers_size_min" {
 variable "workers_size_max" {
   type        = number
   description = "Max capacity of managed node autoscale group."
-  default     = 9
+  default     = 15
 }
