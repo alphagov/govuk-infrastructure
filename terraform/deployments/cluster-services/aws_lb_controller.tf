@@ -9,7 +9,7 @@ resource "helm_release" "aws_lb_controller" {
   name             = "aws-load-balancer-controller"
   repository       = "https://aws.github.io/eks-charts"
   chart            = "aws-load-balancer-controller"
-  version          = "1.2.7" # TODO: Dependabot or equivalent so this doesn't get neglected.
+  version          = "1.4.1" # TODO: Dependabot or equivalent so this doesn't get neglected.
   namespace        = local.services_ns
   create_namespace = true
   values = [yamlencode({
@@ -21,6 +21,11 @@ resource "helm_release" "aws_lb_controller" {
         "eks.amazonaws.com/role-arn" = data.terraform_remote_state.cluster_infrastructure.outputs.aws_lb_controller_role_arn
       }
     }
+    # TODO: remove this clusterSecretsPermissions back-compatibility kludge
+    # once we have a proper Role/RoleBinding in place to allow
+    # aws-lb-controller to read just the secrets that it really needs
+    # (alphagov/govuk-helm-charts#348).
+    clusterSecretsPermissions = { allowAllSecrets : true }
   })]
 }
 
