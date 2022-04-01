@@ -3,6 +3,8 @@ cluster_infrastructure_state_bucket = "govuk-terraform-test"
 
 cluster_version               = 1.21
 cluster_log_retention_in_days = 7
+workers_default_capacity_type = "SPOT"
+workers_size_desired          = 3
 
 eks_control_plane_subnets = {
   a = { az = "eu-west-1a", cidr = "10.200.19.0/28" }
