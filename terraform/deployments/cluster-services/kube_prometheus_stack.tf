@@ -59,6 +59,10 @@ resource "helm_release" "kube_prometheus_stack" {
           domain   = local.grafana_host
           root_url = "https://%(domain)s"
         }
+        database = {
+          type     = "mysql"
+          ssl_mode = "false"
+        }
       }
       envValueFrom = {
         "GF_AUTH_GENERIC_OAUTH_CLIENT_ID" = {
@@ -71,6 +75,24 @@ resource "helm_release" "kube_prometheus_stack" {
           secretKeyRef = {
             name = "govuk-dex-grafana"
             key  = "clientSecret"
+          }
+        },
+        "GF_DATABASE_HOST" = {
+          secretKeyRef = {
+            name = "govuk-grafana-database"
+            key  = "host"
+          }
+        },
+        "GF_DATABASE_USER" = {
+          secretKeyRef = {
+            name = "govuk-grafana-database"
+            key  = "username"
+          }
+        },
+        "GF_DATABASE_PASSWORD" = {
+          secretKeyRef = {
+            name = "govuk-grafana-database"
+            key  = "password"
           }
         }
       }
