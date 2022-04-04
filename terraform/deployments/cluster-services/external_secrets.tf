@@ -28,7 +28,6 @@ resource "helm_release" "cluster_secret_store" {
   name       = "cluster-secret-store"
   repository = "https://alphagov.github.io/govuk-helm-charts/"
   chart      = "cluster-secret-store"
-  version    = "0.1.0" # TODO: Dependabot or equivalent so this doesn't get neglected.
   namespace  = local.services_ns
   values = [yamlencode({
     awsRegion          = data.aws_region.current.name
@@ -43,5 +42,4 @@ resource "helm_release" "cluster_secrets" {
   name       = "cluster-secrets"
   namespace  = local.services_ns
   repository = "https://alphagov.github.io/govuk-helm-charts/"
-  version    = "0.1.0" # TODO: Dependabot or equivalent so this doesn't get neglected.
 }
