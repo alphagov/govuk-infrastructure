@@ -28,5 +28,4 @@ resource "helm_release" "aws_lb_ingress_class" {
   name       = "aws-lb-ingress-class"
   repository = "https://alphagov.github.io/govuk-helm-charts/"
   chart      = "ingress-class"
-  version    = "0.1.0" # TODO: Dependabot or equivalent so this doesn't get neglected.
 }
