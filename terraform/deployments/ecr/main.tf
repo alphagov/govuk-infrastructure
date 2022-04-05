@@ -41,6 +41,7 @@ locals {
   )
 
   extra_repositories = [
+    "github-cli",
     "signon-resources",
     "statsd",
     "govuk-terraform",
