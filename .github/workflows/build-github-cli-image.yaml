@@ -11,34 +11,11 @@ on:
       - "docker/images/github-cli/Dockerfile"
 
 jobs:
-  publish:
-    name: Build image
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v1
-        with:
-          # TODO: Remove long-lived keys and switch to OIDC once https://github.com/github/roadmap/issues/249 lands.
-          aws-access-key-id: ${{ secrets.AWS_GOVUK_ECR_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_GOVUK_ECR_SECRET_ACCESS_KEY }}
-          aws-region: eu-west-1
-
-      - name: Login to Amazon ECR
-        id: login-ecr
-        uses: aws-actions/amazon-ecr-login@v1
-
-      - name: Build, tag, and push image to Amazon ECR
-        id: build-image
-        env:
-          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          ECR_REPOSITORY: github-cli
-          IMAGE_TAG: ${{ github.sha }}
-        run: |
-          # Build a docker container and push it to ECR
-          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG -f docker/images/github-cli/Dockerfile .
-          echo "Pushing image to ECR..."
-          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
-          echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
+  build-publish-image-to-ecr:
+    uses: alphagov/govuk-infrastructure/.github/workflows/ci-ecr.yaml@main
+    with:
+      ecr_repository_name: github-cli
+      additional_build_args: "-f docker/images/github-cli/Dockerfile"
+    secrets:
+      AWS_GOVUK_ECR_ACCESS_KEY_ID: ${{ secrets.AWS_GOVUK_ECR_ACCESS_KEY_ID }}
+      AWS_GOVUK_ECR_SECRET_ACCESS_KEY: ${{ secrets.AWS_GOVUK_ECR_SECRET_ACCESS_KEY }}
