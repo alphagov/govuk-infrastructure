@@ -82,3 +82,13 @@ output "aws_lb_controller_service_account_name" {
   description = "Name of the k8s service account for the AWS Load Balancer Controller."
   value       = local.aws_lb_controller_service_account_name
 }
+
+output "cluster_logging_role_arn" {
+  description = "IAM role ARN corresponding to the k8s service account for cluster logging"
+  value       = module.cluster_logging_iam_role.iam_role_arn
+}
+
+output "cluster_logging_service_account_name" {
+  description = "Name of the k8s service account for cluster logging"
+  value       = local.cluster_logging_service_account_name
+}
