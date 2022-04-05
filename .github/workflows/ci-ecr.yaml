@@ -26,6 +26,14 @@ name: Build and publish to ECR
 
 on:
   workflow_call:
+    inputs:
+      ecr_repository_name:
+        required: false
+        type: string
+        default: ${{ github.event.repository.name }}
+      additional_build_args:
+        required: false
+        type: string
     secrets:
       AWS_GOVUK_ECR_ACCESS_KEY_ID:
         required: true
@@ -56,12 +64,15 @@ jobs:
         id: build-image
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          ECR_REPOSITORY: ${{ github.event.repository.name }}
+          ECR_REPOSITORY: ${{ inputs.ecr_repository_name }}
           IMAGE_TAG: ${{ github.sha }}
           DOCKER_BUILDKIT: "1"
         run: |
           # Build a docker container and push it to ECR
-          docker build -t "${ECR_REGISTRY}/${ECR_REPOSITORY}:${IMAGE_TAG}" -t "${ECR_REGISTRY}/${ECR_REPOSITORY}:latest" .
+          docker build \
+            -t "${ECR_REGISTRY}/${ECR_REPOSITORY}:${IMAGE_TAG}" \
+            -t "${ECR_REGISTRY}/${ECR_REPOSITORY}:latest" \
+            ${{ inputs.additional_build_args }} .
           echo "Pushing image to ECR..."
           docker push "${ECR_REGISTRY}/${ECR_REPOSITORY}" -a
           echo "::set-output name=image::${ECR_REGISTRY}/${ECR_REPOSITORY}:${IMAGE_TAG}"
