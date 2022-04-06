@@ -19,3 +19,12 @@ data "terraform_remote_state" "infra_root_dns_zones" {
     region = data.aws_region.current.name
   }
 }
+
+data "terraform_remote_state" "infra_networking" {
+  backend = "s3"
+  config = {
+    bucket = var.govuk_aws_state_bucket
+    key    = "govuk/infra-networking.tfstate"
+    region = data.aws_region.current.name
+  }
+}

@@ -4,7 +4,7 @@ locals {
   alert_manager_host = "alertmanager.${local.external_dns_zone_name}"
   grafana_host       = "grafana.${local.external_dns_zone_name}"
   prometheus_host    = "prometheus.${local.external_dns_zone_name}"
-  grafana_iam_role   = data.terraform_remote_state.monitoring.outputs.grafana_iam_role
+  grafana_iam_role   = data.terraform_remote_state.cluster_infrastructure.outputs.grafana_iam_role_arn
 }
 
 
@@ -12,7 +12,7 @@ resource "helm_release" "kube_prometheus_stack" {
   name             = "kube-prometheus-stack"
   repository       = "https://prometheus-community.github.io/helm-charts"
   chart            = "kube-prometheus-stack"
-  version          = "34.8.0" # TODO: Dependabot or equivalent so this doesn't get neglected.
+  version          = "34.9.0" # TODO: Dependabot or equivalent so this doesn't get neglected.
   namespace        = "monitoring"
   create_namespace = true
   values = [yamlencode({
@@ -25,12 +25,14 @@ resource "helm_release" "kube_prometheus_stack" {
           "alb.ingress.kubernetes.io/load-balancer-name" = "alertmanager"
           "alb.ingress.kubernetes.io/auth-type"          = "oidc"
           "alb.ingress.kubernetes.io/auth-idp-oidc" = jsonencode(
-            { issuer                = "https://${local.dex_host}"
+            {
+              issuer                = "https://${local.dex_host}"
               authorizationEndpoint = "https://${local.dex_host}/auth"
               tokenEndpoint         = "https://${local.dex_host}/token"
               userInfoEndpoint      = "https://${local.dex_host}/userinfo"
               secretName            = "govuk-dex-alert-manager"
-          })
+            }
+          )
           "alb.ingress.kubernetes.io/auth-on-unauthenticated-request" = "authenticate"
           "alb.ingress.kubernetes.io/auth-scope"                      = "email openid"
         })
@@ -61,8 +63,8 @@ resource "helm_release" "kube_prometheus_stack" {
           root_url = "https://%(domain)s"
         }
         database = {
-          type     = "mysql"
-          ssl_mode = "false"
+          type     = "postgres"
+          ssl_mode = "disable"
         }
       }
       envValueFrom = {
