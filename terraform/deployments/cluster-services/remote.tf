@@ -20,3 +20,13 @@ data "terraform_remote_state" "infra_security" {
     region = data.aws_region.current.name
   }
 }
+
+data "terraform_remote_state" "monitoring" {
+  backend   = "s3"
+  workspace = terraform.workspace
+  config = {
+    bucket = var.cluster_infrastructure_state_bucket
+    key    = "projects/monitoring.tfstate"
+    region = data.aws_region.current.name
+  }
+}

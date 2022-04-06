@@ -43,6 +43,11 @@ output "cluster_services_namespace" {
   value       = local.cluster_services_namespace
 }
 
+output "cluster_oidc_issuer" {
+  description = "The OIDC issuer of the cluster"
+  value       = local.cluster_oidc_issuer
+}
+
 output "external_dns_service_account_name" {
   description = "Name of the k8s service account for the external-dns addon."
   value       = local.external_dns_service_account_name

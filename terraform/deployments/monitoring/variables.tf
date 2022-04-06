@@ -19,3 +19,9 @@ variable "grafana_database_max_capacity" {
   description = "Maximum capacity of the Grafana database"
   default     = 8
 }
+
+variable "monitoring_namespace" {
+  type        = string
+  description = "Namespace where the monitoring apps are deployed to"
+  default     = "monitoring"
+}
