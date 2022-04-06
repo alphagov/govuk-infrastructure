@@ -26,7 +26,7 @@ module "cluster_autoscaler_iam_role" {
   create_role                   = true
   role_name                     = "${local.cluster_autoscaler_service_account_name}-${var.cluster_name}"
   role_description              = "Role for Cluster Autoscaler. Corresponds to ${local.cluster_autoscaler_service_account_name} k8s ServiceAccount."
-  provider_url                  = local.cluster_oidc_issuer
+  provider_url                  = module.eks.oidc_provider
   role_policy_arns              = [aws_iam_policy.cluster_autoscaler.arn]
   oidc_fully_qualified_subjects = ["system:serviceaccount:${local.cluster_autoscaler_service_account_namespace}:${local.cluster_autoscaler_service_account_name}"]
 }

@@ -15,7 +15,7 @@ module "aws_lb_controller_iam_role" {
   create_role                   = true
   role_name                     = "${local.aws_lb_controller_service_account_name}-${var.cluster_name}"
   role_description              = "Role for the AWS Load Balancer Controller. Corresponds to ${local.aws_lb_controller_service_account_name} k8s ServiceAccount."
-  provider_url                  = local.cluster_oidc_issuer
+  provider_url                  = module.eks.oidc_provider
   role_policy_arns              = [aws_iam_policy.aws_lb_controller.arn]
   oidc_fully_qualified_subjects = ["system:serviceaccount:${local.cluster_services_namespace}:${local.aws_lb_controller_service_account_name}"]
 }

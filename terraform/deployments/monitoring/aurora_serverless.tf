@@ -18,7 +18,7 @@ module "grafana_database" {
   subnets               = local.database_subnets
   create_security_group = true
 
-  allowed_security_groups = [data.terraform_remote_state.cluster_infrastructure.outputs.cluster_security_group_id]
+  allowed_security_groups = [data.terraform_remote_state.cluster_infrastructure.outputs.node_security_group_id]
 
   db_parameter_group_name         = aws_db_parameter_group.grafana_database.id
   db_cluster_parameter_group_name = aws_rds_cluster_parameter_group.grafana_database.id

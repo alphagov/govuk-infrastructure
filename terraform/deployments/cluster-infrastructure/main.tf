@@ -21,70 +21,62 @@ terraform {
 locals {
   cluster_services_namespace = "cluster-services"
   secrets_prefix             = "govuk"
-
-  # module.eks.cluster_oidc_issuer_url is a full URL, e.g.
-  # "https://oidc.eks.eu-west-1.amazonaws.com/id/B4378A8EBD334FEEFDF3BCB6D0E612C6"
-  # but the string to which IAM compares this lacks the protocol part, so we
-  # have to strip the "https://" when we construct the trust policy
-  # (assume-role policy).
-  cluster_oidc_issuer = replace(module.eks.cluster_oidc_issuer_url, "https://", "")
-
-  default_tags = {
-    cluster              = var.cluster_name
-    project              = "replatforming"
-    repository           = "govuk-infrastructure"
-    terraform_deployment = basename(abspath(path.root))
-  }
 }
 
 provider "aws" {
   region = "eu-west-1"
-  default_tags { tags = local.default_tags }
+  default_tags {
+    tags = {
+      cluster              = var.cluster_name
+      project              = "replatforming"
+      repository           = "govuk-infrastructure"
+      terraform_deployment = basename(abspath(path.root))
+    }
+  }
 }
 
 module "eks" {
   source  = "terraform-aws-modules/eks/aws"
-  version = "17.20.0"
+  version = "~> 18.0"
 
-  cluster_name     = var.cluster_name
-  cluster_version  = var.cluster_version
-  subnets          = [for s in aws_subnet.eks_control_plane : s.id]
-  vpc_id           = data.terraform_remote_state.infra_vpc.outputs.vpc_id
-  enable_irsa      = true
-  manage_aws_auth  = false
-  write_kubeconfig = false
+  cluster_name    = var.cluster_name
+  cluster_version = var.cluster_version
+  subnet_ids      = [for s in aws_subnet.eks_control_plane : s.id]
+  vpc_id          = data.terraform_remote_state.infra_vpc.outputs.vpc_id
 
-  cluster_endpoint_private_access = true
-  cluster_log_retention_in_days   = var.cluster_log_retention_in_days
+  cluster_endpoint_private_access        = true
+  cloudwatch_log_group_retention_in_days = var.cluster_log_retention_in_days
   cluster_enabled_log_types = [
     "api", "audit", "authenticator", "controllerManager", "scheduler"
   ]
 
-  node_groups_defaults = {
-    # TODO: remove this workaround for adding default tags to node ASGs once
-    # https://github.com/terraform-aws-modules/terraform-aws-eks/issues/1455
-    # and https://github.com/hashicorp/terraform-provider-aws/issues/19204 are
-    # fully resolved. local.default_tags can then be inlined in
-    # provider.aws.default_tags.
-    additional_tags = local.default_tags
-    capacity_type   = var.workers_default_capacity_type
-    disk_size       = 50 # GB
-    subnets         = [for s in aws_subnet.eks_private : s.id]
+  eks_managed_node_group_defaults = {
+    ami_type      = "AL2_x86_64"
+    capacity_type = var.workers_default_capacity_type
+    disk_size     = 50 # GB
+    subnet_ids    = [for s in aws_subnet.eks_private : s.id]
+    # We don't need or want an extra SG for each node group. The module already
+    # creates one for all node groups. aws-load-balancer-controller doesn't
+    # play nice with multiple SGs on nodes.
+    create_security_group = false
   }
 
-  node_groups = [
-    {
-      desired_capacity = var.workers_size_desired
-      max_capacity     = var.workers_size_max
-      min_capacity     = var.workers_size_min
-      version          = var.cluster_version
-      instance_types   = var.workers_instance_types
+  eks_managed_node_groups = {
+    main = {
+      name = var.cluster_name
+      # TODO: set iam_role_permissions_boundary
+      # TODO: apply provider default_tags to instances; might need to set launch_template_tags.
+      desired_size   = var.workers_size_desired
+      max_size       = var.workers_size_max
+      min_size       = var.workers_size_min
+      instance_types = var.workers_instance_types
+      # TODO: specify update_config if needed (are the defaults ok?)
       additional_tags = {
         "k8s.io/cluster-autoscaler/enabled"             = "true"
         "k8s.io/cluster-autoscaler/${var.cluster_name}" = "owned"
       }
     }
-  ]
+  }
 }
 
 # TODO: move these into module.eks once it supports cluster addons, i.e. once
@@ -96,4 +88,44 @@ resource "aws_eks_addon" "cluster_addons" {
   addon_version     = lookup(var.cluster_addon_versions, each.key, null)
   cluster_name      = module.eks.cluster_id
   resolve_conflicts = "OVERWRITE"
+}
+
+resource "aws_security_group_rule" "control_plane_to_nodes" {
+  description              = "Cluster API (primary SG, not the additional SG) to node groups"
+  type                     = "ingress"
+  from_port                = 443
+  to_port                  = 443
+  protocol                 = "tcp"
+  security_group_id        = module.eks.node_security_group_id
+  source_security_group_id = module.eks.cluster_primary_security_group_id
+}
+
+resource "aws_security_group_rule" "nodes_egress_any" {
+  description       = "Allow all egress from worker nodes"
+  type              = "egress"
+  from_port         = 0
+  to_port           = 0
+  protocol          = "-1"
+  security_group_id = module.eks.node_security_group_id
+  cidr_blocks       = ["0.0.0.0/0"]
+}
+
+resource "aws_security_group_rule" "node_to_node_any" {
+  description              = "Allow all traffic between worker nodes"
+  type                     = "ingress"
+  from_port                = 0
+  to_port                  = 0
+  protocol                 = "-1"
+  security_group_id        = module.eks.node_security_group_id
+  source_security_group_id = module.eks.node_security_group_id
+}
+
+resource "aws_security_group_rule" "node_ingress_any" {
+  description              = "Allow all traffic to worker nodes"
+  type                     = "ingress"
+  from_port                = 0
+  to_port                  = 0
+  protocol                 = "-1"
+  security_group_id        = module.eks.node_security_group_id
+  source_security_group_id = module.eks.cluster_primary_security_group_id
 }
