@@ -48,11 +48,6 @@ output "cluster_services_namespace" {
   value       = local.cluster_services_namespace
 }
 
-output "cluster_oidc_issuer" {
-  description = "The OIDC issuer of the cluster"
-  value       = module.eks.oidc_provider
-}
-
 output "external_dns_service_account_name" {
   description = "Name of the k8s service account for the external-dns addon."
   value       = local.external_dns_service_account_name
@@ -91,4 +86,9 @@ output "aws_lb_controller_role_arn" {
 output "aws_lb_controller_service_account_name" {
   description = "Name of the k8s service account for the AWS Load Balancer Controller."
   value       = local.aws_lb_controller_service_account_name
+}
+
+output "grafana_iam_role_arn" {
+  description = "IAM role ARN corresponding to the k8s service account for Grafana."
+  value       = module.grafana_iam_role.iam_role_arn
 }

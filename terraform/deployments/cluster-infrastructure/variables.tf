@@ -85,3 +85,45 @@ variable "workers_size_max" {
   description = "Max capacity of managed node autoscale group."
   default     = 15
 }
+
+variable "grafana_db_min_capacity" {
+  type        = number
+  description = "Minimum capacity of the Grafana RDS Aurora Serverless database."
+  default     = 2
+}
+
+variable "grafana_db_max_capacity" {
+  type        = number
+  description = "Maximum capacity of the Grafana RDS Aurora Serverless database."
+  default     = 8
+}
+
+variable "grafana_db_auto_pause" {
+  type        = bool
+  description = "Whether to auto-scale the Grafana RDS database to zero when it's idle. Takes 30s to start up again when traffic arrives. Best avoided in production."
+  default     = false
+}
+
+variable "grafana_db_seconds_until_auto_pause" {
+  type        = number
+  description = "The timeout after which an idle Grafana RDS instance gets scaled down to zero, if grafana_db_auto_pause is true."
+  default     = 7200
+}
+
+variable "rds_apply_immediately" {
+  type        = bool
+  description = "If true, apply changes to RDS instances immediately instead of scheduling them for the next maintenance window."
+  default     = false
+}
+
+variable "rds_skip_final_snapshot" {
+  type        = bool
+  description = "If true, allow deletion of RDS instances via Terraform by removing the requirement for a final snapshot to be taken on deletion. Do not enable this in production."
+  default     = false
+}
+
+variable "secrets_recovery_window_in_days" {
+  type        = number
+  description = "Set to 0 in non-production environments to allow Terraform to delete and re-create secrets in AWS Secrets Manager."
+  default     = 7
+}
