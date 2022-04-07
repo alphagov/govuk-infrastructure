@@ -16,8 +16,8 @@ When turning up from scratch, deploy the root modules in this order:
 1. `terraform-lock`
 1. `ecr` (test and production accounts only)
 1. `cluster-infrastructure`
+1. Delete the `aws-auth` configmap by running `gds aws govuk-${ENV?}-admin -- aws eks update-kubeconfig --name govuk && kubectl -n kube-system delete cm aws-auth`. This is a workaround for the problem that one of the AWS-managed EKS addons creates a default aws-auth configmap which then either needs to be imported into Terraform or deleted.
 1. `govuk-publishing-infrastructure`
-1. `monitoring`
 1. `cluster-services`
 
 ### `cluster-infrastructure`, `cluster-services` or `govuk-publishing-infrastructure` modules
