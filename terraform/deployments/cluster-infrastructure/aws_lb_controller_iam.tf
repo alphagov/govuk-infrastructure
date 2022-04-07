@@ -11,7 +11,7 @@ locals {
 
 module "aws_lb_controller_iam_role" {
   source                        = "terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc"
-  version                       = "4.3.0"
+  version                       = "~> 4.0"
   create_role                   = true
   role_name                     = "${local.aws_lb_controller_service_account_name}-${var.cluster_name}"
   role_description              = "Role for the AWS Load Balancer Controller. Corresponds to ${local.aws_lb_controller_service_account_name} k8s ServiceAccount."
