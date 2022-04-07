@@ -13,7 +13,7 @@ locals {
 
 module "external_dns_iam_role" {
   source                        = "terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc"
-  version                       = "4.3.0"
+  version                       = "~> 4.0"
   create_role                   = true
   role_name                     = "${local.external_dns_service_account_name}-${var.cluster_name}"
   role_description              = "Role for External DNS addon. Corresponds to ${local.external_dns_service_account_name} k8s ServiceAccount."

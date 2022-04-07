@@ -50,7 +50,7 @@ output "cluster_services_namespace" {
 
 output "cluster_oidc_issuer" {
   description = "The OIDC issuer of the cluster"
-  value       = local.cluster_oidc_issuer
+  value       = module.eks.oidc_provider
 }
 
 output "external_dns_service_account_name" {
