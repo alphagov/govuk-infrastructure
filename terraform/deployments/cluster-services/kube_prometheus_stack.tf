@@ -178,6 +178,7 @@ resource "helm_release" "kube_prometheus_stack" {
           }]
         }
         podMonitorSelectorNilUsesHelmValues = false
+        serviceMonitorSelectorNilUsesHelmValues = false
       }
     }
   })]
