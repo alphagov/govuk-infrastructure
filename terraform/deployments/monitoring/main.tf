@@ -15,6 +15,7 @@ locals {
   vpc_id               = data.terraform_remote_state.infra_networking.outputs.vpc_id
   internal_dns_zone_id = data.terraform_remote_state.infra_root_dns_zones.outputs.internal_root_zone_id
   database_subnets     = data.terraform_remote_state.infra_networking.outputs.private_subnet_rds_ids
+  cluster_oidc_issuer  = data.terraform_remote_state.cluster_infrastructure.outputs.cluster_oidc_issuer
 
   default_tags = {
     project              = "replatforming"

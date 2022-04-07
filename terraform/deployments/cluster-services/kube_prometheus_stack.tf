@@ -4,6 +4,7 @@ locals {
   alert_manager_host = "alertmanager.${local.external_dns_zone_name}"
   grafana_host       = "grafana.${local.external_dns_zone_name}"
   prometheus_host    = "prometheus.${local.external_dns_zone_name}"
+  grafana_iam_role   = data.terraform_remote_state.monitoring.outputs.grafana_iam_role
 }
 
 
@@ -11,7 +12,7 @@ resource "helm_release" "kube_prometheus_stack" {
   name             = "kube-prometheus-stack"
   repository       = "https://prometheus-community.github.io/helm-charts"
   chart            = "kube-prometheus-stack"
-  version          = "19.2.3" # TODO: Dependabot or equivalent so this doesn't get neglected.
+  version          = "34.8.0" # TODO: Dependabot or equivalent so this doesn't get neglected.
   namespace        = "monitoring"
   create_namespace = true
   values = [yamlencode({
@@ -96,6 +97,45 @@ resource "helm_release" "kube_prometheus_stack" {
           }
         }
       }
+      serviceAccount = {
+        annotations = {
+          "eks.amazonaws.com/role-arn" = local.grafana_iam_role
+        }
+      }
+      env = {
+        "AWS_ROLE_ARN"                = local.grafana_iam_role
+        "AWS_WEB_IDENTITY_TOKEN_FILE" = "/var/run/secrets/eks.amazonaws.com/serviceaccount/token"
+        "AWS_REGION"                  = data.aws_region.current.name
+      }
+      extraSecretMounts = [
+        { name      = "aws-iam-token"
+          mountPath = "/var/run/secrets/eks.amazonaws.com/serviceaccount"
+          readOnly  = true
+          projected = {
+            defaultMode = 420 #This is 644 in octal
+            sources = [
+              { serviceAccountToken = {
+                audience          = "sts.amazonaws.com"
+                expirationSeconds = 86400
+                path              = "token"
+                }
+              },
+            ]
+          }
+        }
+      ]
+      additionalDataSources = [
+        { name     = "CloudWatch"
+          type     = "cloudwatch"
+          access   = "proxy"
+          uid      = "cloudwatch"
+          editable = false
+          jsonData = {
+            authType     = "default"
+            efaultRegion = data.aws_region.current.name
+          }
+        }
+      ]
     }
     prometheus = {
       ingress = {
