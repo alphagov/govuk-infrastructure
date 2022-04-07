@@ -1,0 +1,4 @@
+bucket  = "govuk-terraform-staging"
+key     = "projects/terraform-lock.tfstate"
+encrypt = true
+region  = "eu-west-1"
