@@ -56,6 +56,7 @@ provider "helm" {
 }
 
 locals {
+  monitoring_ns          = data.terraform_remote_state.cluster_infrastructure.outputs.monitoring_namespace
   services_ns            = data.terraform_remote_state.cluster_infrastructure.outputs.cluster_services_namespace
   external_dns_zone_name = data.terraform_remote_state.cluster_infrastructure.outputs.external_dns_zone_name
   alb_ingress_annotations = {

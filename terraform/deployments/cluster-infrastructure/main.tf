@@ -21,6 +21,7 @@ terraform {
 locals {
   cluster_services_namespace = "cluster-services"
   secrets_prefix             = "govuk"
+  monitoring_namespace       = "monitoring"
 }
 
 provider "aws" {

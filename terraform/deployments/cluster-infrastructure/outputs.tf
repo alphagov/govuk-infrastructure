@@ -92,3 +92,8 @@ output "grafana_iam_role_arn" {
   description = "IAM role ARN corresponding to the k8s service account for Grafana."
   value       = module.grafana_iam_role.iam_role_arn
 }
+
+output "monitoring_namespace" {
+  description = "The namespace for monitoring."
+  value       = local.monitoring_namespace
+}
