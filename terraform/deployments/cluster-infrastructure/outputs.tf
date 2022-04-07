@@ -5,17 +5,22 @@ output "cluster_certificate_authority_data" {
 
 output "worker_iam_role_arn" {
   description = "IAM role ARN for EKS worker node groups"
-  value       = module.eks.worker_iam_role_arn
+  value       = module.eks.eks_managed_node_groups["main"].iam_role_arn
 }
 
 output "worker_iam_role_name" {
   description = "IAM role name for EKS worker node groups"
-  value       = module.eks.worker_iam_role_name
+  value       = module.eks.eks_managed_node_groups["main"].iam_role_name
 }
 
-output "cluster_security_group_id" {
-  description = "ID of the security group which contains the kube-apiservers and managed worker nodes."
+output "control_plane_security_group_id" {
+  description = "ID of the security group which contains the (AWS-owned) control plane nodes."
   value       = module.eks.cluster_primary_security_group_id
+}
+
+output "node_security_group_id" {
+  description = "ID of the security group which contains the worker nodes."
+  value       = module.eks.node_security_group_id
 }
 
 output "cluster_autoscaler_service_account_name" {

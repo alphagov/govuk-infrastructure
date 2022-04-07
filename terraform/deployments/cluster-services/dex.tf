@@ -5,11 +5,13 @@ locals {
 }
 
 resource "helm_release" "dex" {
-  chart      = "dex"
-  name       = "dex"
-  namespace  = local.services_ns
-  repository = "https://charts.dexidp.io"
-  version    = "0.6.5" # TODO: Dependabot or equivalent so this doesn't get neglected.
+  depends_on       = [helm_release.aws_lb_controller]
+  chart            = "dex"
+  name             = "dex"
+  namespace        = local.services_ns
+  create_namespace = true
+  repository       = "https://charts.dexidp.io"
+  version          = "0.6.5" # TODO: Dependabot or equivalent so this doesn't get neglected.
   values = [yamlencode({
     config = {
       issuer = "https://${local.dex_host}"

@@ -25,14 +25,13 @@ resource "aws_security_group_rule" "shared_redis_cluster_to_any_any" {
 }
 
 resource "aws_security_group_rule" "shared_redis_cluster_from_any" {
-  description       = "Shared Redis cluster for EKS accepts requests from EKS nodes"
-  type              = "ingress"
-  from_port         = 6379
-  to_port           = 6379
-  protocol          = "tcp"
-  security_group_id = aws_security_group.shared_redis_cluster.id
-  # EKS creates *managed* nodes in the *cluster* SG, not the worker node SG. Go figure.
-  source_security_group_id = data.terraform_remote_state.cluster_infrastructure.outputs.cluster_security_group_id
+  description              = "Shared Redis cluster for EKS accepts requests from EKS nodes"
+  type                     = "ingress"
+  from_port                = 6379
+  to_port                  = 6379
+  protocol                 = "tcp"
+  security_group_id        = aws_security_group.shared_redis_cluster.id
+  source_security_group_id = data.terraform_remote_state.cluster_infrastructure.outputs.node_security_group_id
 }
 
 #
@@ -56,7 +55,7 @@ resource "aws_security_group_rule" "frontend_memcached_from_eks_workers" {
   to_port                  = 11211
   protocol                 = "tcp"
   security_group_id        = aws_security_group.frontend_memcached.id
-  source_security_group_id = data.terraform_remote_state.cluster_infrastructure.outputs.cluster_security_group_id
+  source_security_group_id = data.terraform_remote_state.cluster_infrastructure.outputs.node_security_group_id
 }
 
 #
@@ -70,7 +69,7 @@ resource "aws_security_group_rule" "mongodb_from_eks_workers" {
   to_port                  = 27017
   protocol                 = "tcp"
   security_group_id        = data.terraform_remote_state.infra_security_groups.outputs.sg_mongo_id
-  source_security_group_id = data.terraform_remote_state.cluster_infrastructure.outputs.cluster_security_group_id
+  source_security_group_id = data.terraform_remote_state.cluster_infrastructure.outputs.node_security_group_id
 }
 
 resource "aws_security_group_rule" "router_mongodb_from_eks_workers" {
@@ -80,7 +79,7 @@ resource "aws_security_group_rule" "router_mongodb_from_eks_workers" {
   to_port                  = 27017
   protocol                 = "tcp"
   security_group_id        = data.terraform_remote_state.infra_security_groups.outputs.sg_router-backend_id
-  source_security_group_id = data.terraform_remote_state.cluster_infrastructure.outputs.cluster_security_group_id
+  source_security_group_id = data.terraform_remote_state.cluster_infrastructure.outputs.node_security_group_id
 }
 
 # TODO: Only the Postgresql instances created by govuk-aws/app-govuk-rds are
@@ -95,7 +94,7 @@ resource "aws_security_group_rule" "postgres_from_eks_workers" {
   to_port                  = 5432
   protocol                 = "tcp"
   security_group_id        = each.value
-  source_security_group_id = data.terraform_remote_state.cluster_infrastructure.outputs.cluster_security_group_id
+  source_security_group_id = data.terraform_remote_state.cluster_infrastructure.outputs.node_security_group_id
 }
 
 resource "aws_security_group_rule" "mysql_from_eks_workers" {
@@ -106,7 +105,7 @@ resource "aws_security_group_rule" "mysql_from_eks_workers" {
   to_port                  = 3306
   protocol                 = "tcp"
   security_group_id        = each.value
-  source_security_group_id = data.terraform_remote_state.cluster_infrastructure.outputs.cluster_security_group_id
+  source_security_group_id = data.terraform_remote_state.cluster_infrastructure.outputs.node_security_group_id
 }
 
 resource "aws_security_group_rule" "elasticsearch_from_eks_workers" {
@@ -116,7 +115,7 @@ resource "aws_security_group_rule" "elasticsearch_from_eks_workers" {
   to_port                  = 443
   protocol                 = "tcp"
   security_group_id        = data.terraform_remote_state.infra_security_groups.outputs.sg_elasticsearch6_id
-  source_security_group_id = data.terraform_remote_state.cluster_infrastructure.outputs.cluster_security_group_id
+  source_security_group_id = data.terraform_remote_state.cluster_infrastructure.outputs.node_security_group_id
 }
 
 resource "aws_security_group_rule" "search_elb_from_eks_workers" {
@@ -126,7 +125,7 @@ resource "aws_security_group_rule" "search_elb_from_eks_workers" {
   to_port                  = 443
   protocol                 = "tcp"
   security_group_id        = data.terraform_remote_state.infra_security_groups.outputs.sg_search_elb_id
-  source_security_group_id = data.terraform_remote_state.cluster_infrastructure.outputs.cluster_security_group_id
+  source_security_group_id = data.terraform_remote_state.cluster_infrastructure.outputs.node_security_group_id
 }
 
 resource "aws_security_group_rule" "content_store_ec2_from_eks_workers" {
@@ -136,7 +135,7 @@ resource "aws_security_group_rule" "content_store_ec2_from_eks_workers" {
   to_port                  = 443
   protocol                 = "tcp"
   security_group_id        = data.terraform_remote_state.infra_security_groups.outputs.sg_content-store_internal_elb_id
-  source_security_group_id = data.terraform_remote_state.cluster_infrastructure.outputs.cluster_security_group_id
+  source_security_group_id = data.terraform_remote_state.cluster_infrastructure.outputs.node_security_group_id
 }
 
 resource "aws_security_group_rule" "email_alert_api_ec2_from_eks_workers" {
@@ -146,7 +145,7 @@ resource "aws_security_group_rule" "email_alert_api_ec2_from_eks_workers" {
   to_port                  = 443
   protocol                 = "tcp"
   security_group_id        = data.terraform_remote_state.infra_security_groups.outputs.sg_email-alert-api_elb_internal_id
-  source_security_group_id = data.terraform_remote_state.cluster_infrastructure.outputs.cluster_security_group_id
+  source_security_group_id = data.terraform_remote_state.cluster_infrastructure.outputs.node_security_group_id
 }
 
 resource "aws_security_group_rule" "account_api_ec2_from_eks_workers" {
@@ -156,7 +155,7 @@ resource "aws_security_group_rule" "account_api_ec2_from_eks_workers" {
   to_port                  = 443
   protocol                 = "tcp"
   security_group_id        = data.terraform_remote_state.infra_security_groups.outputs.sg_account_elb_internal_id
-  source_security_group_id = data.terraform_remote_state.cluster_infrastructure.outputs.cluster_security_group_id
+  source_security_group_id = data.terraform_remote_state.cluster_infrastructure.outputs.node_security_group_id
 }
 
 resource "aws_security_group_rule" "backend_ec2_from_eks_workers" {
@@ -166,7 +165,7 @@ resource "aws_security_group_rule" "backend_ec2_from_eks_workers" {
   to_port                  = 443
   protocol                 = "tcp"
   security_group_id        = data.terraform_remote_state.infra_security_groups.outputs.sg_backend_elb_internal_id
-  source_security_group_id = data.terraform_remote_state.cluster_infrastructure.outputs.cluster_security_group_id
+  source_security_group_id = data.terraform_remote_state.cluster_infrastructure.outputs.node_security_group_id
 }
 
 resource "aws_security_group_rule" "efs_from_eks_workers" {
@@ -176,7 +175,7 @@ resource "aws_security_group_rule" "efs_from_eks_workers" {
   to_port                  = 2049
   protocol                 = "tcp"
   security_group_id        = data.terraform_remote_state.infra_security_groups.outputs.sg_asset-master-efs_id
-  source_security_group_id = data.terraform_remote_state.cluster_infrastructure.outputs.cluster_security_group_id
+  source_security_group_id = data.terraform_remote_state.cluster_infrastructure.outputs.node_security_group_id
 }
 
 resource "aws_security_group_rule" "mapit_from_eks_workers" {
@@ -186,7 +185,7 @@ resource "aws_security_group_rule" "mapit_from_eks_workers" {
   to_port                  = 443
   protocol                 = "tcp"
   security_group_id        = data.terraform_remote_state.infra_security_groups.outputs.sg_mapit_elb_id
-  source_security_group_id = data.terraform_remote_state.cluster_infrastructure.outputs.cluster_security_group_id
+  source_security_group_id = data.terraform_remote_state.cluster_infrastructure.outputs.node_security_group_id
 }
 
 resource "aws_security_group_rule" "licensify_frontend_from_eks_workers" {
@@ -196,5 +195,5 @@ resource "aws_security_group_rule" "licensify_frontend_from_eks_workers" {
   to_port                  = 443
   protocol                 = "tcp"
   security_group_id        = data.terraform_remote_state.infra_security_groups.outputs.sg_licensify-frontend_internal_lb_id
-  source_security_group_id = data.terraform_remote_state.cluster_infrastructure.outputs.cluster_security_group_id
+  source_security_group_id = data.terraform_remote_state.cluster_infrastructure.outputs.node_security_group_id
 }
