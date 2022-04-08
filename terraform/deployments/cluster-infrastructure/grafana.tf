@@ -11,7 +11,7 @@ module "grafana_iam_role" {
   role_description              = "Role for Grafana to access AWS data sources. Corresponds to ${local.grafana_service_account} k8s ServiceAccount."
   provider_url                  = module.eks.oidc_provider
   role_policy_arns              = [aws_iam_policy.grafana.arn]
-  oidc_fully_qualified_subjects = ["system:serviceaccount:monitoring:${local.grafana_service_account}"]
+  oidc_fully_qualified_subjects = ["system:serviceaccount:${local.monitoring_namespace}:${local.grafana_service_account}"]
 }
 
 resource "aws_iam_policy" "grafana" {

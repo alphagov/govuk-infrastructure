@@ -13,7 +13,7 @@ resource "helm_release" "kube_prometheus_stack" {
   repository       = "https://prometheus-community.github.io/helm-charts"
   chart            = "kube-prometheus-stack"
   version          = "34.9.0" # TODO: Dependabot or equivalent so this doesn't get neglected.
-  namespace        = "monitoring"
+  namespace        = local.monitoring_ns
   create_namespace = true
   values = [yamlencode({
     alertmanager = {
@@ -177,7 +177,8 @@ resource "helm_release" "kube_prometheus_stack" {
             values   = []
           }]
         }
-        podMonitorSelectorNilUsesHelmValues = false
+        podMonitorSelectorNilUsesHelmValues     = false
+        serviceMonitorSelectorNilUsesHelmValues = false
       }
     }
   })]
