@@ -63,7 +63,7 @@ resource "aws_security_group_rule" "frontend_memcached_from_eks_workers" {
 #
 
 resource "aws_security_group_rule" "mongodb_from_eks_workers" {
-  description              = "Shared MongoDB (DocumentDB) accepts requests from EKS nodes"
+  description              = "Shared MongoDB accepts requests from EKS nodes"
   type                     = "ingress"
   from_port                = 27017
   to_port                  = 27017
@@ -79,6 +79,16 @@ resource "aws_security_group_rule" "router_mongodb_from_eks_workers" {
   to_port                  = 27017
   protocol                 = "tcp"
   security_group_id        = data.terraform_remote_state.infra_security_groups.outputs.sg_router-backend_id
+  source_security_group_id = data.terraform_remote_state.cluster_infrastructure.outputs.node_security_group_id
+}
+
+resource "aws_security_group_rule" "shared_docdb_from_eks_workers" {
+  description              = "Shared DocumentDB accepts requests from EKS nodes"
+  type                     = "ingress"
+  from_port                = 27017
+  to_port                  = 27017
+  protocol                 = "tcp"
+  security_group_id        = data.terraform_remote_state.infra_security_groups.outputs.sg_shared_documentdb_id
   source_security_group_id = data.terraform_remote_state.cluster_infrastructure.outputs.node_security_group_id
 }
 
