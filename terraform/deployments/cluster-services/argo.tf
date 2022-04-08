@@ -18,15 +18,8 @@ resource "helm_release" "argo_cd" {
   namespace        = local.services_ns
   create_namespace = true
   repository       = "https://argoproj.github.io/argo-helm"
-  version          = "3.32.1" # TODO: Dependabot or equivalent so this doesn't get neglected.
+  version          = "4.5.0" # TODO: Dependabot or equivalent so this doesn't get neglected.
   values = [yamlencode({
-    global = {
-      image = { # TODO: remove this section when v2.3.0 is released and includes fix: https://github.com/argoproj/argo-cd/pull/8350
-        repository = "quay.io/argoproj/argocd"
-        tag        = "v2.3.0-rc5"
-      }
-    }
-
     server = {
       # TLS Termination happens at the ALB, the insecure flag prevents Argo
       # server from upgrading the request after TLS termination.
@@ -85,6 +78,12 @@ resource "helm_release" "argo_cd" {
     dex = {
       enabled = false
     }
+
+    notifications = {
+      argocdUrl = "https://${local.argo_host}"
+      cm        = { create = false }
+      secret    = { create = false }
+    }
   })]
 }
 
@@ -104,28 +103,6 @@ resource "helm_release" "argo_services" {
   })]
 }
 
-resource "helm_release" "argo_notifications" {
-  chart            = "argocd-notifications"
-  name             = "argocd-notifications"
-  namespace        = local.services_ns
-  create_namespace = true
-  repository       = "https://argoproj.github.io/argo-helm"
-  version          = "1.5.1" # TODO: Dependabot or equivalent so this doesn't get neglected.
-  values = [yamlencode({
-    # Configured in argo-services Helm chart
-    cm = {
-      create = false
-    }
-    "argocdUrl" = "https://${local.argo_host}"
-
-    # argocd-notifications-secret will be created by ExternalSecrets
-    # since the secrets are stored in AWS SecretsManager
-    secret = {
-      create = false
-    }
-  })]
-}
-
 resource "helm_release" "argo_workflows" {
   # Dex is used to provide SSO facility to Argo-Workflows and there is a bug
   # where Argo Workflows fail to start if Dex is not present
@@ -135,7 +112,7 @@ resource "helm_release" "argo_workflows" {
   namespace        = local.services_ns
   create_namespace = true
   repository       = "https://argoproj.github.io/argo-helm"
-  version          = "0.9.5" # TODO: Dependabot or equivalent so this doesn't get neglected.
+  version          = "0.13.1" # TODO: Dependabot or equivalent so this doesn't get neglected.
   values = [yamlencode({
     controller = {
       workflowNamespaces = concat([local.services_ns], var.argo_workflows_namespaces)
@@ -197,7 +174,7 @@ resource "helm_release" "argo_events" {
   namespace        = local.services_ns
   create_namespace = true
   repository       = "https://argoproj.github.io/argo-helm"
-  version          = "1.7.0" # TODO: Dependabot or equivalent so this doesn't get neglected.
+  version          = "1.12.0" # TODO: Dependabot or equivalent so this doesn't get neglected.
   values = [yamlencode({
     namespace = local.services_ns
   })]
