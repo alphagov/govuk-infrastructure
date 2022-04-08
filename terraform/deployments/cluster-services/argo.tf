@@ -2,6 +2,7 @@
 locals {
   argo_host           = "argo.${local.external_dns_zone_name}"
   argo_workflows_host = "argo-workflows.${local.external_dns_zone_name}"
+  argo_events_host    = "argo-events.${local.external_dns_zone_name}"
 }
 
 resource "kubernetes_namespace" "apps" {
@@ -99,8 +100,10 @@ resource "helm_release" "argo_services" {
   values = [yamlencode({
     # TODO: This TF module should not need to know the govuk_environment, since
     # there is only one per AWS account.
-    govukEnvironment = var.govuk_environment
-    argocdUrl        = "https://${local.argo_host}"
+    govukEnvironment     = var.govuk_environment
+    argocdUrl            = "https://${local.argo_host}"
+    argoEventsHost       = local.argo_events_host
+    enableWebhookIngress = (var.govuk_environment == "integration")
   })]
 }
 
