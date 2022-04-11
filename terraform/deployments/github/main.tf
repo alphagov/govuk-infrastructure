@@ -44,3 +44,15 @@ resource "github_actions_organization_secret_repositories" "ci_user_github_api_t
   secret_name             = "GOVUK_CI_GITHUB_API_TOKEN"
   selected_repository_ids = [for repo in data.github_repository.govuk : repo.repo_id]
 }
+
+resource "github_actions_organization_secret" "argo_events_webhook_token" {
+  secret_name             = "ARGO_EVENTS_WEBHOOK_TOKEN"
+  visibility              = "selected"
+  selected_repository_ids = [for repo in data.github_repository.govuk : repo.repo_id]
+}
+
+resource "github_actions_organization_secret" "argo_events_webhook_url" {
+  secret_name             = "ARGO_EVENTS_WEBHOOK_URL"
+  visibility              = "selected"
+  selected_repository_ids = [for repo in data.github_repository.govuk : repo.repo_id]
+}
