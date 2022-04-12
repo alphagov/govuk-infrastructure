@@ -128,8 +128,13 @@ resource "helm_release" "argo_workflows" {
           podGC = {
             strategy = "OnWorkflowSuccess"
           }
+          securityContext = {
+            runAsNonRoot = true
+            runAsUser    = 1001
+          }
         }
       }
+      containerRuntimeExecutor = "emissary"
     }
 
     workflow = {
@@ -166,7 +171,6 @@ resource "helm_release" "argo_workflows" {
         redirectUrl = "https://${local.argo_workflows_host}/oauth2/callback"
         # TODO: all logged in users are admin, maybe we want differentiation
       }
-
     }
   })]
 }
