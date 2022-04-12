@@ -128,6 +128,10 @@ resource "helm_release" "argo_workflows" {
           podGC = {
             strategy = "OnWorkflowSuccess"
           }
+          securityContext = {
+            runAsNonRoot = true
+            runAsUser    = 1001
+          }
         }
       }
       containerRuntimeExecutor = "emissary"
