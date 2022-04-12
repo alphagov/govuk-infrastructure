@@ -16,7 +16,8 @@
 #   deploy-to-eks:
 #     uses: alphagov/govuk-infrastructure/.github/workflows/deploy.yaml@main
 #     secrets:
-#       GOVUK_CI_GITHUB_API_TOKEN: ${{ secrets.GOVUK_CI_GITHUB_API_TOKEN }}
+#       WEBHOOK_TOKEN: ${{ secrets.WEBHOOK_TOKEN }}
+#       WEBHOOK_URL: ${{ secrets.WEBHOOK_URL }}
 
 # REUSABLE WORKFLOW
 # -----------------
@@ -26,7 +27,9 @@ name: Deploy
 on:
   workflow_call:
     secrets:
-      GOVUK_CI_GITHUB_API_TOKEN:
+      WEBHOOK_TOKEN:
+        required: true
+      WEBHOOK_URL:
         required: true
 
 jobs:
@@ -34,37 +37,16 @@ jobs:
     name: Update image tag
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
+      - name: Send webhook
         env:
-          GIT_USER_EMAIL: govuk-ci@digital.cabinet-office.gov.uk
-          GIT_USER_NAME: govuk-ci
-          GITHUB_TOKEN: ${{ secrets.GOVUK_CI_GITHUB_API_TOKEN }}
           ENVIRONMENT: integration
           IMAGE_TAG: ${{ github.sha }}
-          APPLICATION: ${{ github.event.repository.name }}
+          REPO_NAME: ${{ github.event.repository.name }}
+          WEBHOOK_TOKEN: ${{ secrets.WEBHOOK_TOKEN }}
+          WEBHOOK_URL: ${{ secrets.WEBHOOK_URL }}
         run: |
-          set -eu
-          git config --global user.email "${GIT_USER_EMAIL}"
-          git config --global user.name "${GIT_USER_NAME}"
-
-          echo "Modifying Helm Charts repo..."
-          repo="https://${GIT_USER_NAME}:${GITHUB_TOKEN}@github.com/alphagov/govuk-helm-charts.git"
-          branch="update-image-tag/${APPLICATION}/${ENVIRONMENT}/${IMAGE_TAG}"
-          file="charts/argocd-apps/image-tags/${ENVIRONMENT}/${APPLICATION}"
-
-          git clone --depth 1 --branch main "${repo}"
-          cd "govuk-helm-charts"
-          git checkout -b "${branch}"
-
-          echo "${IMAGE_TAG}" > "${file}"
-
-          git add $file
-          git commit -m "Deploy ${APPLICATION}:${IMAGE_TAG} to ${ENVIRONMENT}"
-          git push "${repo}" "${branch}"
-
-          gh api repos/alphagov/govuk-helm-charts/merges -f head="${branch}" -f base=main
-
-          git push origin --delete "${branch}"
-
-          echo "Done!"
-          echo "::set-output name=image::${APPLICATION}:${IMAGE_TAG}"
+          curl \
+            -H "Content-Type: application/json" \
+            -H "Authorization: Bearer ${WEBHOOK_TOKEN}" \
+            -d "{\"environment\": \"${ENVIRONMENT}\", \"repoName\": \"${REPO_NAME}\", \"imageTag\": \"${IMAGE_TAG}\"}" \
+            "${WEBHOOK_URL}"
