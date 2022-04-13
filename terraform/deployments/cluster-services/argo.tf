@@ -131,6 +131,29 @@ resource "helm_release" "argo_workflows" {
         }
       }
       containerRuntimeExecutor = "emissary"
+      resources = {
+        requests = {
+          cpu    = "100m"
+          memory = "64Mi"
+        }
+        limits = {
+          cpu    = "500m"
+          memory = "128Mi"
+        }
+      }
+    }
+
+    executor = {
+      resources = {
+        requests = {
+          cpu    = "100m"
+          memory = "64Mi"
+        }
+        limits = {
+          cpu    = "500m"
+          memory = "512Mi"
+        }
+      }
     }
 
     workflow = {
@@ -166,6 +189,16 @@ resource "helm_release" "argo_workflows" {
         }
         redirectUrl = "https://${local.argo_workflows_host}/oauth2/callback"
         # TODO: all logged in users are admin, maybe we want differentiation
+      }
+      resources = {
+        requests = {
+          cpu    = "100m"
+          memory = "64Mi"
+        }
+        limits = {
+          cpu    = "500m"
+          memory = "128Mi"
+        }
       }
     }
   })]
