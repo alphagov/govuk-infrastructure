@@ -75,12 +75,15 @@ jobs:
           DOCKER_BUILDKIT: "1"
         run: |
           IMAGE_TAG=$(git rev-parse HEAD)
+          LATEST_GIT_SHA=$(git ls-remote origin HEAD | cut -f 1)
+          IMAGE_TAG_ARGS="-t ${ECR_REGISTRY}/${ECR_REPOSITORY}:${IMAGE_TAG}"
+
+          if [ "${LATEST_GIT_SHA}" = "${IMAGE_TAG}" ]; then
+            IMAGE_TAG_ARGS+=" -t ${ECR_REGISTRY}/${ECR_REPOSITORY}:latest"
+          fi
 
           # Build a docker container and push it to ECR
-          docker build \
-            -t "${ECR_REGISTRY}/${ECR_REPOSITORY}:${IMAGE_TAG}" \
-            -t "${ECR_REGISTRY}/${ECR_REPOSITORY}:latest" \
-            ${{ inputs.additional_build_args }} .
+          docker build ${IMAGE_TAG_ARGS} ${{ inputs.additional_build_args }} .
           echo "Pushing image to ECR..."
           docker push "${ECR_REGISTRY}/${ECR_REPOSITORY}" -a
           echo "::set-output name=image::${ECR_REGISTRY}/${ECR_REPOSITORY}:${IMAGE_TAG}"
