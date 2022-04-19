@@ -54,8 +54,10 @@ resource "helm_release" "argo_cd" {
       }
 
       rbacConfig = {
-        # TODO: all logged in users are admin, maybe we want differentiation
-        "policy.default" = "role:admin"
+        "policy.csv" = <<EOT
+          g, alphagov:${var.argo_read_only_team}, role:readonly
+          g, alphagov:${var.argo_read_write_team}, role:admin
+          EOT
       }
 
       ingressGrpc = {

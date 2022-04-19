@@ -10,6 +10,18 @@ variable "argo_workflows_namespaces" {
   default     = ["apps"]
 }
 
+variable "argo_read_write_team" {
+  type        = string
+  description = "Name of the GitHub team that should have read-write access to Argo"
+  default     = "gov-uk-production"
+}
+
+variable "argo_read_only_team" {
+  type        = string
+  description = "Name of the GitHub team that should have read-only access to Argo"
+  default     = "gov-uk"
+}
+
 variable "govuk_aws_state_bucket" {
   type        = string
   description = "Name of the S3 bucket used for govuk-aws's Terraform state."
