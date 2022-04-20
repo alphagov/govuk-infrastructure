@@ -134,6 +134,23 @@ resource "helm_release" "argo_workflows" {
             runAsNonRoot = true
             runAsUser    = 1001
           }
+          podSpecPatch = yamlencode({
+            containers = [
+              {
+                name = "main"
+                resources = {
+                  requests = {
+                    cpu    = "100m"
+                    memory = "64Mi"
+                  }
+                  limits = {
+                    cpu    = "500m"
+                    memory = "128Mi"
+                  }
+                }
+              }
+            ]
+          })
         }
       }
       containerRuntimeExecutor = "emissary"
