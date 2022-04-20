@@ -54,7 +54,7 @@ resource "helm_release" "argo_cd" {
       }
 
       rbacConfig = {
-        "policy.csv" = <<EOT
+        "policy.csv" = <<-EOT
           g, alphagov:${var.argo_read_only_team}, role:readonly
           g, alphagov:${var.argo_read_write_team}, role:admin
           EOT
@@ -120,6 +120,9 @@ resource "helm_release" "argo_workflows" {
   version          = "0.13.1" # TODO: Dependabot or equivalent so this doesn't get neglected.
   values = [yamlencode({
     controller = {
+      podSecurityContext = {
+        runAsNonRoot = true
+      }
       workflowNamespaces = concat([local.services_ns], var.argo_workflows_namespaces)
       workflowDefaults = {
         spec = {
@@ -157,11 +160,11 @@ resource "helm_release" "argo_workflows" {
       resources = {
         requests = {
           cpu    = "100m"
-          memory = "64Mi"
+          memory = "128Mi"
         }
         limits = {
           cpu    = "500m"
-          memory = "128Mi"
+          memory = "256Mi"
         }
       }
     }
