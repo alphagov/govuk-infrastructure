@@ -13,13 +13,13 @@ variable "argo_workflows_namespaces" {
 variable "argo_read_write_team" {
   type        = string
   description = "Name of the GitHub team that should have read-write access to Argo"
-  default     = "gov-uk-production"
+  default     = "alphagov:gov-uk-production"
 }
 
 variable "argo_read_only_team" {
   type        = string
   description = "Name of the GitHub team that should have read-only access to Argo"
-  default     = "gov-uk"
+  default     = "alphagov:gov-uk"
 }
 
 variable "govuk_aws_state_bucket" {
