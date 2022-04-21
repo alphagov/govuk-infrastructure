@@ -105,6 +105,10 @@ resource "helm_release" "argo_services" {
     argocdUrl            = "https://${local.argo_host}"
     argoEventsHost       = local.argo_events_host
     enableWebhookIngress = (var.govuk_environment == "integration")
+    rbacTeams = {
+      read_only  = var.argo_read_only_team
+      read_write = var.argo_read_write_team
+    }
   })]
 }
 
@@ -214,7 +218,10 @@ resource "helm_release" "argo_workflows" {
           key  = "clientSecret"
         }
         redirectUrl = "https://${local.argo_workflows_host}/oauth2/callback"
-        # TODO: all logged in users are admin, maybe we want differentiation
+        scopes      = ["groups"]
+        rbac = {
+          enabled = true
+        }
       }
       resources = {
         requests = {
