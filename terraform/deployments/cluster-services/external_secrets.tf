@@ -43,5 +43,5 @@ resource "helm_release" "cluster_secrets" {
   name       = "cluster-secrets"
   namespace  = local.services_ns
   repository = "https://alphagov.github.io/govuk-helm-charts/"
-  version    = "0.9.2" # TODO: Dependabot or equivalent so this doesn't get neglected.
+  version    = "0.9.3" # TODO: Dependabot or equivalent so this doesn't get neglected.
 }
