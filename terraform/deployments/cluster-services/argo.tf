@@ -55,8 +55,8 @@ resource "helm_release" "argo_cd" {
 
       rbacConfig = {
         "policy.csv" = <<-EOT
-          g, alphagov:${var.argo_read_only_team}, role:readonly
-          g, alphagov:${var.argo_read_write_team}, role:admin
+          g, ${var.argo_read_only_team}, role:readonly
+          g, ${var.argo_read_write_team}, role:admin
           EOT
       }
 
@@ -98,6 +98,7 @@ resource "helm_release" "argo_services" {
   namespace        = local.services_ns
   create_namespace = true
   repository       = "https://alphagov.github.io/govuk-helm-charts/"
+  version          = "0.1.11"
   values = [yamlencode({
     # TODO: This TF module should not need to know the govuk_environment, since
     # there is only one per AWS account.
