@@ -49,14 +49,15 @@ resource "helm_release" "kube_prometheus_stack" {
       }
       "grafana.ini" = {
         "auth.generic_oauth" = {
-          name                = "GitHub"
-          enabled             = true
-          allow_sign_up       = true
-          auth_url            = "https://${local.dex_host}/auth"
-          token_url           = "https://${local.dex_host}/token"
-          api_url             = "https://${local.dex_host}/userinfo"
-          scopes              = "openid profile email groups"
-          role_attribute_path = "to_string('Admin')" #TODO: map users/groups to different Grafana roles, e.g. Admin, Viewer, Editor
+          name                  = "GitHub"
+          enabled               = true
+          allow_sign_up         = true
+          auth_url              = "https://${local.dex_host}/auth"
+          token_url             = "https://${local.dex_host}/token"
+          api_url               = "https://${local.dex_host}/userinfo"
+          scopes                = "openid profile email groups"
+          role_attribute_path   = "contains(groups[*], '${var.github_read_write_team}') && 'Admin' || contains(groups[*], '${var.github_read_only_team}') && 'Viewer'"
+          role_attribute_strict = true
         }
         server = {
           domain   = local.grafana_host
