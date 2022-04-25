@@ -55,8 +55,8 @@ resource "helm_release" "argo_cd" {
 
       rbacConfig = {
         "policy.csv" = <<-EOT
-          g, ${var.argo_read_only_team}, role:readonly
-          g, ${var.argo_read_write_team}, role:admin
+          g, ${var.github_read_only_team}, role:readonly
+          g, ${var.github_read_write_team}, role:admin
           EOT
       }
 
@@ -107,8 +107,8 @@ resource "helm_release" "argo_services" {
     argoEventsHost       = local.argo_events_host
     enableWebhookIngress = (var.govuk_environment == "integration")
     rbacTeams = {
-      read_only  = var.argo_read_only_team
-      read_write = var.argo_read_write_team
+      read_only  = var.github_read_only_team
+      read_write = var.github_read_write_team
     }
   })]
 }

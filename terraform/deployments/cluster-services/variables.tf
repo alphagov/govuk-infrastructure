@@ -10,15 +10,15 @@ variable "argo_workflows_namespaces" {
   default     = ["apps"]
 }
 
-variable "argo_read_write_team" {
+variable "github_read_write_team" {
   type        = string
-  description = "Name of the GitHub team that should have read-write access to Argo"
+  description = "Name of the GitHub team that should have read-write access to Dex SSO-enabled applications"
   default     = "alphagov:gov-uk-production"
 }
 
-variable "argo_read_only_team" {
+variable "github_read_only_team" {
   type        = string
-  description = "Name of the GitHub team that should have read-only access to Argo"
+  description = "Name of the GitHub team that should have read-only access to Dex SSO-enabled applications"
   default     = "alphagov:gov-uk"
 }
 
