@@ -34,8 +34,8 @@ frontend_memcached_node_type   = "cache.t4g.micro"
 shared_redis_cluster_node_type = "cache.t4g.small"
 
 # Non-production-only access is sufficient to access tools in this cluster.
-dex_github_orgs_teams = [{ name = "alphagov", teams = ["gov-uk", "gov-uk-production"] }]
-argo_read_write_team  = "alphagov:gov-uk"
+dex_github_orgs_teams  = [{ name = "alphagov", teams = ["gov-uk", "gov-uk-production"] }]
+github_read_write_team = "alphagov:gov-uk"
 
 grafana_db_auto_pause   = true
 rds_apply_immediately   = true
