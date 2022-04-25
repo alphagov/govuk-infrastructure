@@ -9,6 +9,6 @@ gem "rake"
 group :development, :test do
   gem "climate_control", "~> 1.0"
   gem "rspec"
-  gem "rubocop-govuk", "~> 4.3"
+  gem "rubocop-govuk", "~> 4.4"
   gem "webmock"
 end
