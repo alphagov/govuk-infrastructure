@@ -48,9 +48,3 @@ variable "powerusers_namespaces" {
   description = "List of namespaces where powerusers have admin access"
   default     = ["apps"]
 }
-
-variable "psp_baseline_namespaces" {
-  type        = list(string)
-  description = "List of namespaces where psp-baseline should apply"
-  default = ["apps", "default"]
-}
