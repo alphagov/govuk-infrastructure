@@ -26,6 +26,11 @@ name: Deploy
 
 on:
   workflow_call:
+    inputs:
+      imageTag:
+        description: 'A image tag to deploy'
+        required: true
+        type: string
     secrets:
       WEBHOOK_TOKEN:
         required: true
@@ -40,7 +45,7 @@ jobs:
       - name: Send webhook
         env:
           ENVIRONMENT: integration
-          IMAGE_TAG: ${{ github.sha }}
+          IMAGE_TAG: ${{ inputs.imageTag }}
           REPO_NAME: ${{ github.event.repository.name }}
           WEBHOOK_TOKEN: ${{ secrets.WEBHOOK_TOKEN }}
           WEBHOOK_URL: ${{ secrets.WEBHOOK_URL }}
