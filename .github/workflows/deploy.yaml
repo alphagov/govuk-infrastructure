@@ -28,8 +28,9 @@ on:
   workflow_call:
     inputs:
       imageTag:
-        description: 'A image tag to deploy'
-        required: true
+        description: 'An image tag to deploy'
+        required: false
+        default: ${{ github.sha }}
         type: string
     secrets:
       WEBHOOK_TOKEN:
