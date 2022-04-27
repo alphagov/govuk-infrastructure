@@ -43,11 +43,17 @@ on:
         required: true
       AWS_GOVUK_ECR_SECRET_ACCESS_KEY:
         required: true
+    outputs:
+      imageTag:
+        description: "The image tag for the built image"
+        value: ${{ jobs.publish.outputs.imageTag }}
 
 jobs:
   publish:
     name: Build
     runs-on: ubuntu-latest
+    outputs:
+      imageTag: ${{ steps.build-image.outputs.imageTag }}
     steps:
       - name: Checkout
         id: checkout
@@ -86,4 +92,4 @@ jobs:
           docker build ${IMAGE_TAG_ARGS} ${{ inputs.additional_build_args }} .
           echo "Pushing image to ECR..."
           docker push "${ECR_REGISTRY}/${ECR_REPOSITORY}" -a
-          echo "::set-output name=image::${ECR_REGISTRY}/${ECR_REPOSITORY}:${IMAGE_TAG}"
+          echo "::set-output name=imageTag::${IMAGE_TAG}"
