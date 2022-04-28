@@ -153,7 +153,7 @@ resource "helm_release" "argo_workflows" {
                   }
                   limits = {
                     cpu    = "500m"
-                    memory = "128Mi"
+                    memory = "256Mi"
                   }
                 }
               }
@@ -169,7 +169,7 @@ resource "helm_release" "argo_workflows" {
         }
         limits = {
           cpu    = "500m"
-          memory = "256Mi"
+          memory = "512Mi"
         }
       }
     }
@@ -231,7 +231,7 @@ resource "helm_release" "argo_workflows" {
         }
         limits = {
           cpu    = "500m"
-          memory = "128Mi"
+          memory = "256Mi"
         }
       }
     }
