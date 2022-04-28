@@ -54,7 +54,6 @@ module "eks" {
   eks_managed_node_group_defaults = {
     ami_type      = "AL2_x86_64"
     capacity_type = var.workers_default_capacity_type
-    disk_size     = 50 # GB
     subnet_ids    = [for s in aws_subnet.eks_private : s.id]
     # We don't need or want an extra SG for each node group. The module already
     # creates one for all node groups. aws-load-balancer-controller doesn't
@@ -67,10 +66,13 @@ module "eks" {
       name = var.cluster_name
       # TODO: set iam_role_permissions_boundary
       # TODO: apply provider default_tags to instances; might need to set launch_template_tags.
-      desired_size   = var.workers_size_desired
-      max_size       = var.workers_size_max
-      min_size       = var.workers_size_min
-      instance_types = var.workers_instance_types
+      desired_size           = var.workers_size_desired
+      max_size               = var.workers_size_max
+      min_size               = var.workers_size_min
+      instance_types         = var.workers_instance_types
+      disk_size              = var.node_disk_size
+      create_launch_template = false
+      launch_template_name   = ""
       # TODO: specify update_config if needed (are the defaults ok?)
       additional_tags = {
         "k8s.io/cluster-autoscaler/enabled"             = "true"
