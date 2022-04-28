@@ -16,6 +16,10 @@ resource "helm_release" "dex" {
     config = {
       issuer = "https://${local.dex_host}"
 
+      oauth2 = {
+        skipApprovalScreen = true
+      }
+
       storage = {
         type = "kubernetes"
         config = {
