@@ -32,6 +32,11 @@ on:
         required: false
         default: ${{ github.sha }}
         type: string
+      manualDeploy:
+        description: 'Whether it is a manual deployment'
+        required: false
+        default: "false"
+        type: string
     secrets:
       WEBHOOK_TOKEN:
         required: true
@@ -48,11 +53,12 @@ jobs:
           ENVIRONMENT: integration
           IMAGE_TAG: ${{ inputs.imageTag }}
           REPO_NAME: ${{ github.event.repository.name }}
+          MANUAL_DEPLOY: ${{ inputs.manualDeploy }}
           WEBHOOK_TOKEN: ${{ secrets.WEBHOOK_TOKEN }}
           WEBHOOK_URL: ${{ secrets.WEBHOOK_URL }}
         run: |
           curl \
             -H "Content-Type: application/json" \
             -H "Authorization: Bearer ${WEBHOOK_TOKEN}" \
-            -d "{\"environment\": \"${ENVIRONMENT}\", \"repoName\": \"${REPO_NAME}\", \"imageTag\": \"${IMAGE_TAG}\"}" \
+            -d "{\"environment\": \"${ENVIRONMENT}\", \"repoName\": \"${REPO_NAME}\", \"imageTag\": \"${IMAGE_TAG}\", \"manualDeploy\": \"${MANUAL_DEPLOY}\"}" \
             "${WEBHOOK_URL}"
