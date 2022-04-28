@@ -29,6 +29,7 @@ resource "helm_release" "prometheus_oauth2_proxy" {
 
     proxyVarsAsSecrets = false
 
+    extraArgs = { "skip-provider-button" = "true" }
     extraEnv = [
       {
         name  = "OAUTH2_PROXY_UPSTREAMS"
@@ -101,6 +102,7 @@ resource "helm_release" "alertmanager_oauth2_proxy" {
 
     proxyVarsAsSecrets = false
 
+    extraArgs = { "skip-provider-button" = "true" }
     extraEnv = [
       {
         name  = "OAUTH2_PROXY_UPSTREAMS"
