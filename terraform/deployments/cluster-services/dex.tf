@@ -64,13 +64,13 @@ resource "helm_release" "dex" {
           name         = "prometheus"
           idEnv        = "PROMETHEUS_CLIENT_ID"
           secretEnv    = "PROMETHEUS_CLIENT_SECRET"
-          redirectURIs = ["https://${local.prometheus_host}/oauth2/idpresponse"]
+          redirectURIs = ["https://${local.prometheus_host}/oauth2/callback"]
         },
         {
           name         = "alert-manager"
           idEnv        = "ALERT_MANAGER_CLIENT_ID"
           secretEnv    = "ALERT_MANAGER_CLIENT_SECRET"
-          redirectURIs = ["https://${local.alert_manager_host}/oauth2/idpresponse"]
+          redirectURIs = ["https://${local.alert_manager_host}/oauth2/callback"]
         }
       ]
     }

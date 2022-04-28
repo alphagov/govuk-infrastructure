@@ -21,5 +21,6 @@ resource "helm_release" "kubescape" {
     name  = "accountGuid"
     value = jsondecode(data.aws_secretsmanager_secret_version.kubescape-account-guid.secret_string)["accountGuid"]
   }
+  wait          = false
   wait_for_jobs = false
 }
