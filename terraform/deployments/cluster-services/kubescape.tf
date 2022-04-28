@@ -12,7 +12,7 @@ resource "helm_release" "kubescape" {
   namespace        = "armo-system"
   create_namespace = true
   repository       = "https://armosec.github.io/armo-helm/"
-  version          = "1.7.0"
+  version          = "1.7.1"
   set {
     name  = "clusterName"
     value = "govuk-${var.govuk_environment}"

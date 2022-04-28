@@ -59,7 +59,7 @@ variable "force_destroy" {
 variable "workers_instance_types" {
   type        = list(string)
   description = "List of instance types for the managed node group, in order of preference. The second and subsequent preferences are only relevant when using spot instances."
-  default     = ["m5.xlarge"]
+  default     = ["m5.2xlarge"]
 }
 
 variable "workers_default_capacity_type" {
@@ -84,6 +84,12 @@ variable "workers_size_max" {
   type        = number
   description = "Max capacity of managed node autoscale group."
   default     = 15
+}
+
+variable "node_disk_size" {
+  type        = number
+  description = "Size in GB of the node default volume"
+  default     = 50
 }
 
 variable "grafana_db_min_capacity" {
