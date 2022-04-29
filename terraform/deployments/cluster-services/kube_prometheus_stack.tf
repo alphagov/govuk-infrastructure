@@ -260,7 +260,7 @@ resource "helm_release" "kube_prometheus_stack" {
           editable = false
           jsonData = {
             authType     = "default"
-            efaultRegion = data.aws_region.current.name
+            defaultRegion = data.aws_region.current.name
           }
         }
       ]
