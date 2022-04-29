@@ -235,35 +235,32 @@ resource "helm_release" "kube_prometheus_stack" {
         "AWS_WEB_IDENTITY_TOKEN_FILE" = "/var/run/secrets/eks.amazonaws.com/serviceaccount/token"
         "AWS_REGION"                  = data.aws_region.current.name
       }
-      extraSecretMounts = [
-        { name      = "aws-iam-token"
-          mountPath = "/var/run/secrets/eks.amazonaws.com/serviceaccount"
-          readOnly  = true
-          projected = {
-            defaultMode = 420 #This is 644 in octal
-            sources = [
-              { serviceAccountToken = {
-                audience          = "sts.amazonaws.com"
-                expirationSeconds = 86400
-                path              = "token"
-                }
-              },
-            ]
-          }
+      extraSecretMounts = [{
+        name      = "aws-iam-token"
+        mountPath = "/var/run/secrets/eks.amazonaws.com/serviceaccount"
+        readOnly  = true
+        projected = {
+          defaultMode = 420 # 0644 octal
+          sources = [{
+            serviceAccountToken = {
+              audience          = "sts.amazonaws.com"
+              expirationSeconds = 86400
+              path              = "token"
+            }
+          }]
         }
-      ]
-      additionalDataSources = [
-        { name     = "CloudWatch"
-          type     = "cloudwatch"
-          access   = "proxy"
-          uid      = "cloudwatch"
-          editable = false
-          jsonData = {
-            authType     = "default"
-            defaultRegion = data.aws_region.current.name
-          }
+      }]
+      additionalDataSources = [{
+        name     = "CloudWatch"
+        type     = "cloudwatch"
+        access   = "proxy"
+        uid      = "cloudwatch"
+        editable = false
+        jsonData = {
+          authType      = "default"
+          defaultRegion = data.aws_region.current.name
         }
-      ]
+      }]
     }
     prometheus = {
       # Match all PrometheusRules cluster-wide. (If an app/team needs a separate
@@ -276,7 +273,7 @@ resource "helm_release" "kube_prometheus_stack" {
             values   = []
           }]
         }
-        # Allow empty ruleSelector (https://github.com/prometheus-community/helm-charts/blob/2cacc16807caedc6cabf1606db27e0d78c844564/charts/kube-prometheus-stack/templates/prometheus/prometheus.yaml#L202)
+        # Allow empty ruleSelector (https://github.com/prometheus-community/helm-charts/blob/2cacc16/charts/kube-prometheus-stack/templates/prometheus/prometheus.yaml#L202)
         ruleSelectorNilUsesHelmValues = false
         podMonitorNamespaceSelector = {
           matchExpressions = [{
