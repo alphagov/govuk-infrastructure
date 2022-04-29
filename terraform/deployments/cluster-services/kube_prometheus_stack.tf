@@ -7,6 +7,13 @@ locals {
   grafana_iam_role           = data.terraform_remote_state.cluster_infrastructure.outputs.grafana_iam_role_arn
   prometheus_internal_url    = "http://kube-prometheus-stack-prometheus:9090"
   alert_manager_internal_url = "http://kube-prometheus-stack-alertmanager:9093"
+  oauth2_proxy_extra_env = [for k, v in {
+    # Only one role is supported, so only admins can access Prometheus/Alertmanager UI.
+    "OAUTH2_PROXY_ALLOWED_GROUP"         = var.github_read_write_team
+    "OAUTH2_PROXY_OIDC_ISSUER_URL"       = "https://${local.dex_host}"
+    "OAUTH2_PROXY_PROVIDER"              = "oidc"
+    "OAUTH2_PROXY_PROVIDER_DISPLAY_NAME" = "GitHub"
+  } : { name = k, value = v }]
 }
 
 resource "helm_release" "prometheus_oauth2_proxy" {
@@ -18,6 +25,7 @@ resource "helm_release" "prometheus_oauth2_proxy" {
   create_namespace = true
 
   values = [yamlencode({
+    proxyVarsAsSecrets = false
     ingress = {
       enabled  = true
       pathType = "Prefix"
@@ -26,30 +34,11 @@ resource "helm_release" "prometheus_oauth2_proxy" {
         "alb.ingress.kubernetes.io/load-balancer-name" = "prometheus"
       })
     }
-
-    proxyVarsAsSecrets = false
-
     extraArgs = { "skip-provider-button" = "true" }
-    extraEnv = [
+    extraEnv = concat(local.oauth2_proxy_extra_env, [
       {
-        name  = "OAUTH2_PROXY_UPSTREAMS"
+        name = "OAUTH2_PROXY_UPSTREAMS"
         value = local.prometheus_internal_url
-      },
-      {
-        name  = "OAUTH2_PROXY_PROVIDER"
-        value = "oidc"
-      },
-      {
-        name  = "OAUTH2_PROXY_PROVIDER_DISPLAY_NAME"
-        value = "GitHub"
-      },
-      {
-        name  = "OAUTH2_PROXY_OIDC_ISSUER_URL"
-        value = "https://${local.dex_host}"
-      },
-      { # Only one role is supported so only admins will be able access Prometheus UI
-        name  = "OAUTH2_PROXY_ALLOWED_GROUP"
-        value = var.github_read_write_team
       },
       {
         name = "OAUTH2_PROXY_CLIENT_ID"
@@ -78,7 +67,7 @@ resource "helm_release" "prometheus_oauth2_proxy" {
           }
         }
       }
-    ]
+    ])
   })]
 }
 
@@ -91,6 +80,7 @@ resource "helm_release" "alertmanager_oauth2_proxy" {
   create_namespace = true
 
   values = [yamlencode({
+    proxyVarsAsSecrets = false
     ingress = {
       enabled  = true
       pathType = "Prefix"
@@ -99,30 +89,11 @@ resource "helm_release" "alertmanager_oauth2_proxy" {
         "alb.ingress.kubernetes.io/load-balancer-name" = "alertmanager"
       })
     }
-
-    proxyVarsAsSecrets = false
-
     extraArgs = { "skip-provider-button" = "true" }
-    extraEnv = [
+    extraEnv = concat(local.oauth2_proxy_extra_env, [
       {
-        name  = "OAUTH2_PROXY_UPSTREAMS"
+        name = "OAUTH2_PROXY_UPSTREAMS"
         value = local.alert_manager_internal_url
-      },
-      {
-        name  = "OAUTH2_PROXY_PROVIDER"
-        value = "oidc"
-      },
-      {
-        name  = "OAUTH2_PROXY_PROVIDER_DISPLAY_NAME"
-        value = "GitHub"
-      },
-      {
-        name  = "OAUTH2_PROXY_OIDC_ISSUER_URL"
-        value = "https://${local.dex_host}"
-      },
-      { # Only one role is supported so only admins will be able access Alert Manager UI
-        name  = "OAUTH2_PROXY_ALLOWED_GROUP"
-        value = var.github_read_write_team
       },
       {
         name = "OAUTH2_PROXY_CLIENT_ID"
@@ -151,7 +122,7 @@ resource "helm_release" "alertmanager_oauth2_proxy" {
           }
         }
       }
-    ]
+    ])
   })]
 }
 
