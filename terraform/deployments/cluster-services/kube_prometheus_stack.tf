@@ -1,12 +1,19 @@
 # Installs Prometheus Operator, Prometheus, Prometheus rules, Grafana, Grafana dashboards, and Prometheus CRDs
 
 locals {
-  alert_manager_host         = "alertmanager.${local.external_dns_zone_name}"
-  grafana_host               = "grafana.${local.external_dns_zone_name}"
-  prometheus_host            = "prometheus.${local.external_dns_zone_name}"
-  grafana_iam_role           = data.terraform_remote_state.cluster_infrastructure.outputs.grafana_iam_role_arn
-  prometheus_internal_url    = "http://kube-prometheus-stack-prometheus:9090"
-  alert_manager_internal_url = "http://kube-prometheus-stack-alertmanager:9093"
+  alertmanager_host         = "alertmanager.${local.external_dns_zone_name}"
+  grafana_host              = "grafana.${local.external_dns_zone_name}"
+  prometheus_host           = "prometheus.${local.external_dns_zone_name}"
+  grafana_iam_role          = data.terraform_remote_state.cluster_infrastructure.outputs.grafana_iam_role_arn
+  prometheus_internal_url   = "http://kube-prometheus-stack-prometheus:9090"
+  alertmanager_internal_url = "http://kube-prometheus-stack-alertmanager:9093"
+  oauth2_proxy_extra_env = [for k, v in {
+    # Only one role is supported, so only admins can access Prometheus/Alertmanager UI.
+    "OAUTH2_PROXY_ALLOWED_GROUP"         = var.github_read_write_team
+    "OAUTH2_PROXY_OIDC_ISSUER_URL"       = "https://${local.dex_host}"
+    "OAUTH2_PROXY_PROVIDER"              = "oidc"
+    "OAUTH2_PROXY_PROVIDER_DISPLAY_NAME" = "GitHub"
+  } : { name = k, value = v }]
 }
 
 resource "helm_release" "prometheus_oauth2_proxy" {
@@ -18,6 +25,7 @@ resource "helm_release" "prometheus_oauth2_proxy" {
   create_namespace = true
 
   values = [yamlencode({
+    proxyVarsAsSecrets = false
     ingress = {
       enabled  = true
       pathType = "Prefix"
@@ -26,30 +34,11 @@ resource "helm_release" "prometheus_oauth2_proxy" {
         "alb.ingress.kubernetes.io/load-balancer-name" = "prometheus"
       })
     }
-
-    proxyVarsAsSecrets = false
-
     extraArgs = { "skip-provider-button" = "true" }
-    extraEnv = [
+    extraEnv = concat(local.oauth2_proxy_extra_env, [
       {
         name  = "OAUTH2_PROXY_UPSTREAMS"
         value = local.prometheus_internal_url
-      },
-      {
-        name  = "OAUTH2_PROXY_PROVIDER"
-        value = "oidc"
-      },
-      {
-        name  = "OAUTH2_PROXY_PROVIDER_DISPLAY_NAME"
-        value = "GitHub"
-      },
-      {
-        name  = "OAUTH2_PROXY_OIDC_ISSUER_URL"
-        value = "https://${local.dex_host}"
-      },
-      { # Only one role is supported so only admins will be able access Prometheus UI
-        name  = "OAUTH2_PROXY_ALLOWED_GROUP"
-        value = var.github_read_write_team
       },
       {
         name = "OAUTH2_PROXY_CLIENT_ID"
@@ -78,7 +67,7 @@ resource "helm_release" "prometheus_oauth2_proxy" {
           }
         }
       }
-    ]
+    ])
   })]
 }
 
@@ -91,38 +80,20 @@ resource "helm_release" "alertmanager_oauth2_proxy" {
   create_namespace = true
 
   values = [yamlencode({
+    proxyVarsAsSecrets = false
     ingress = {
       enabled  = true
       pathType = "Prefix"
-      hosts    = [local.alert_manager_host]
+      hosts    = [local.alertmanager_host]
       annotations = merge(local.alb_ingress_annotations, {
         "alb.ingress.kubernetes.io/load-balancer-name" = "alertmanager"
       })
     }
-
-    proxyVarsAsSecrets = false
-
     extraArgs = { "skip-provider-button" = "true" }
-    extraEnv = [
+    extraEnv = concat(local.oauth2_proxy_extra_env, [
       {
         name  = "OAUTH2_PROXY_UPSTREAMS"
-        value = local.alert_manager_internal_url
-      },
-      {
-        name  = "OAUTH2_PROXY_PROVIDER"
-        value = "oidc"
-      },
-      {
-        name  = "OAUTH2_PROXY_PROVIDER_DISPLAY_NAME"
-        value = "GitHub"
-      },
-      {
-        name  = "OAUTH2_PROXY_OIDC_ISSUER_URL"
-        value = "https://${local.dex_host}"
-      },
-      { # Only one role is supported so only admins will be able access Alert Manager UI
-        name  = "OAUTH2_PROXY_ALLOWED_GROUP"
-        value = var.github_read_write_team
+        value = local.alertmanager_internal_url
       },
       {
         name = "OAUTH2_PROXY_CLIENT_ID"
@@ -151,7 +122,7 @@ resource "helm_release" "alertmanager_oauth2_proxy" {
           }
         }
       }
-    ]
+    ])
   })]
 }
 
@@ -235,35 +206,32 @@ resource "helm_release" "kube_prometheus_stack" {
         "AWS_WEB_IDENTITY_TOKEN_FILE" = "/var/run/secrets/eks.amazonaws.com/serviceaccount/token"
         "AWS_REGION"                  = data.aws_region.current.name
       }
-      extraSecretMounts = [
-        { name      = "aws-iam-token"
-          mountPath = "/var/run/secrets/eks.amazonaws.com/serviceaccount"
-          readOnly  = true
-          projected = {
-            defaultMode = 420 #This is 644 in octal
-            sources = [
-              { serviceAccountToken = {
-                audience          = "sts.amazonaws.com"
-                expirationSeconds = 86400
-                path              = "token"
-                }
-              },
-            ]
-          }
+      extraSecretMounts = [{
+        name      = "aws-iam-token"
+        mountPath = "/var/run/secrets/eks.amazonaws.com/serviceaccount"
+        readOnly  = true
+        projected = {
+          defaultMode = 420 # 0644 octal
+          sources = [{
+            serviceAccountToken = {
+              audience          = "sts.amazonaws.com"
+              expirationSeconds = 86400
+              path              = "token"
+            }
+          }]
         }
-      ]
-      additionalDataSources = [
-        { name     = "CloudWatch"
-          type     = "cloudwatch"
-          access   = "proxy"
-          uid      = "cloudwatch"
-          editable = false
-          jsonData = {
-            authType     = "default"
-            efaultRegion = data.aws_region.current.name
-          }
+      }]
+      additionalDataSources = [{
+        name     = "CloudWatch"
+        type     = "cloudwatch"
+        access   = "proxy"
+        uid      = "cloudwatch"
+        editable = false
+        jsonData = {
+          authType      = "default"
+          defaultRegion = data.aws_region.current.name
         }
-      ]
+      }]
     }
     prometheus = {
       # Match all PrometheusRules cluster-wide. (If an app/team needs a separate
@@ -276,7 +244,7 @@ resource "helm_release" "kube_prometheus_stack" {
             values   = []
           }]
         }
-        # Allow empty ruleSelector (https://github.com/prometheus-community/helm-charts/blob/2cacc16807caedc6cabf1606db27e0d78c844564/charts/kube-prometheus-stack/templates/prometheus/prometheus.yaml#L202)
+        # Allow empty ruleSelector (https://github.com/prometheus-community/helm-charts/blob/2cacc16/charts/kube-prometheus-stack/templates/prometheus/prometheus.yaml#L202)
         ruleSelectorNilUsesHelmValues = false
         podMonitorNamespaceSelector = {
           matchExpressions = [{

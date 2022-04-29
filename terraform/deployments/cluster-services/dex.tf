@@ -74,7 +74,7 @@ resource "helm_release" "dex" {
           name         = "alert-manager"
           idEnv        = "ALERT_MANAGER_CLIENT_ID"
           secretEnv    = "ALERT_MANAGER_CLIENT_SECRET"
-          redirectURIs = ["https://${local.alert_manager_host}/oauth2/callback"]
+          redirectURIs = ["https://${local.alertmanager_host}/oauth2/callback"]
         }
       ]
     }
