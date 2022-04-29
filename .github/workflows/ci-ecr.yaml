@@ -2,9 +2,7 @@
 # -----
 #
 # on:
-#   workflow_dispatch:
-#     branches:
-#       - main
+#   workflow_dispatch: {}
 #   push:
 #     branches:
 #       - main
