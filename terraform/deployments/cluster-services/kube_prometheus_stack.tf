@@ -1,12 +1,12 @@
 # Installs Prometheus Operator, Prometheus, Prometheus rules, Grafana, Grafana dashboards, and Prometheus CRDs
 
 locals {
-  alert_manager_host         = "alertmanager.${local.external_dns_zone_name}"
-  grafana_host               = "grafana.${local.external_dns_zone_name}"
-  prometheus_host            = "prometheus.${local.external_dns_zone_name}"
-  grafana_iam_role           = data.terraform_remote_state.cluster_infrastructure.outputs.grafana_iam_role_arn
-  prometheus_internal_url    = "http://kube-prometheus-stack-prometheus:9090"
-  alert_manager_internal_url = "http://kube-prometheus-stack-alertmanager:9093"
+  alertmanager_host         = "alertmanager.${local.external_dns_zone_name}"
+  grafana_host              = "grafana.${local.external_dns_zone_name}"
+  prometheus_host           = "prometheus.${local.external_dns_zone_name}"
+  grafana_iam_role          = data.terraform_remote_state.cluster_infrastructure.outputs.grafana_iam_role_arn
+  prometheus_internal_url   = "http://kube-prometheus-stack-prometheus:9090"
+  alertmanager_internal_url = "http://kube-prometheus-stack-alertmanager:9093"
   oauth2_proxy_extra_env = [for k, v in {
     # Only one role is supported, so only admins can access Prometheus/Alertmanager UI.
     "OAUTH2_PROXY_ALLOWED_GROUP"         = var.github_read_write_team
@@ -37,7 +37,7 @@ resource "helm_release" "prometheus_oauth2_proxy" {
     extraArgs = { "skip-provider-button" = "true" }
     extraEnv = concat(local.oauth2_proxy_extra_env, [
       {
-        name = "OAUTH2_PROXY_UPSTREAMS"
+        name  = "OAUTH2_PROXY_UPSTREAMS"
         value = local.prometheus_internal_url
       },
       {
@@ -84,7 +84,7 @@ resource "helm_release" "alertmanager_oauth2_proxy" {
     ingress = {
       enabled  = true
       pathType = "Prefix"
-      hosts    = [local.alert_manager_host]
+      hosts    = [local.alertmanager_host]
       annotations = merge(local.alb_ingress_annotations, {
         "alb.ingress.kubernetes.io/load-balancer-name" = "alertmanager"
       })
@@ -92,8 +92,8 @@ resource "helm_release" "alertmanager_oauth2_proxy" {
     extraArgs = { "skip-provider-button" = "true" }
     extraEnv = concat(local.oauth2_proxy_extra_env, [
       {
-        name = "OAUTH2_PROXY_UPSTREAMS"
-        value = local.alert_manager_internal_url
+        name  = "OAUTH2_PROXY_UPSTREAMS"
+        value = local.alertmanager_internal_url
       },
       {
         name = "OAUTH2_PROXY_CLIENT_ID"
