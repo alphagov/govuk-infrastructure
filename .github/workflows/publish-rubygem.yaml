@@ -1,0 +1,65 @@
+# USAGE
+# -----
+#
+# on: [push, pull_request]
+#
+# jobs:
+#   test:
+#     runs-on: ubuntu-latest
+#     steps:
+#     - uses: actions/checkout@v2
+#     - uses: ruby/setup-ruby@v1
+#       with:
+#         bundler-cache: true
+#     - run: bundle exec rake
+#
+#   publish:
+#     needs: test
+#     if: ${{ github.ref == 'refs/heads/main' }}
+#     permissions:
+#       contents: write
+#     uses: alphagov/govuk-infrastructure/.github/workflows/publish-rubygem.yaml@main
+#     secrets:
+#       GEM_HOST_API_KEY: ${{ secrets.ALPHAGOV_RUBYGEMS_API_KEY }}
+
+# REUSABLE WORKFLOW
+# -----------------
+name: Publish a Rubygem
+
+on:
+  workflow_call:
+    inputs:
+      gem_name:
+        required: false
+        type: string
+        default: ${{ github.event.repository.name }}
+    secrets:
+      GEM_HOST_API_KEY:
+        required: true
+
+jobs:
+  publish:
+    name: Publish gem
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+    - uses: actions/checkout@v2
+    - uses: ruby/setup-ruby@v1
+      with:
+        rubygems: latest
+        bundler-cache: true
+    - env:
+        GEM_NAME: ${{ inputs.gem_name }}
+        GEM_HOST_API_KEY: ${{ secrets.GEM_HOST_API_KEY }}
+      run: |
+        VERSION=$(ruby -e "puts eval(File.read('$GEM_NAME.gemspec')).version")
+        GEM_VERSION=$(gem list --exact --remote $GEM_NAME)
+        if [ "$GEM_VERSION" != "$GEM_NAME (${VERSION})" ]; then
+          gem build ${GEM_NAME}.gemspec
+          gem push "${GEM_NAME}-${VERSION}.gem"
+        fi
+        if ! git ls-remote --tags --exit-code origin v${VERSION}; then
+          git tag v${VERSION}
+          git push --tags
+        fi
