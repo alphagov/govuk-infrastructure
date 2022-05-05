@@ -59,7 +59,7 @@ variable "force_destroy" {
 variable "workers_instance_types" {
   type        = list(string)
   description = "List of instance types for the managed node group, in order of preference. The second and subsequent preferences are only relevant when using spot instances."
-  default     = ["m5.2xlarge"]
+  default     = ["m6i.2xlarge", "m5.2xlarge", "m6i.xlarge", "m5.2xlarge"]
 }
 
 variable "workers_default_capacity_type" {
