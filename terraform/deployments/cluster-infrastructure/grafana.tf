@@ -79,7 +79,7 @@ module "grafana_db" {
   vpc_id                  = data.terraform_remote_state.infra_networking.outputs.vpc_id
   subnets                 = data.terraform_remote_state.infra_networking.outputs.private_subnet_rds_ids
   create_security_group   = true
-  allowed_security_groups = [module.eks.node_security_group_id]
+  allowed_security_groups = [local.node_security_group_id]
 
   db_parameter_group_name         = aws_db_parameter_group.grafana.id
   db_cluster_parameter_group_name = aws_rds_cluster_parameter_group.grafana.id
