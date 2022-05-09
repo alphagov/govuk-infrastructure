@@ -22,6 +22,7 @@ locals {
   cluster_services_namespace = "cluster-services"
   secrets_prefix             = "govuk"
   monitoring_namespace       = "monitoring"
+  node_security_group_id     = module.eks.cluster_primary_security_group_id
 }
 
 provider "aws" {
@@ -51,13 +52,11 @@ module "eks" {
     "api", "audit", "authenticator", "controllerManager", "scheduler"
   ]
 
+  create_node_security_group = false # We're just using the cluster primary SG.
   eks_managed_node_group_defaults = {
-    ami_type      = "AL2_x86_64"
-    capacity_type = var.workers_default_capacity_type
-    subnet_ids    = [for s in aws_subnet.eks_private : s.id]
-    # We don't need or want an extra SG for each node group. The module already
-    # creates one for all node groups. aws-load-balancer-controller doesn't
-    # play nice with multiple SGs on nodes.
+    ami_type              = "AL2_x86_64"
+    capacity_type         = var.workers_default_capacity_type
+    subnet_ids            = [for s in aws_subnet.eks_private : s.id]
     create_security_group = false
   }
 
@@ -91,44 +90,4 @@ resource "aws_eks_addon" "cluster_addons" {
   addon_version     = lookup(var.cluster_addon_versions, each.key, null)
   cluster_name      = module.eks.cluster_id
   resolve_conflicts = "OVERWRITE"
-}
-
-resource "aws_security_group_rule" "control_plane_to_nodes" {
-  description              = "Cluster API (primary SG, not the additional SG) to node groups"
-  type                     = "ingress"
-  from_port                = 443
-  to_port                  = 443
-  protocol                 = "tcp"
-  security_group_id        = module.eks.node_security_group_id
-  source_security_group_id = module.eks.cluster_primary_security_group_id
-}
-
-resource "aws_security_group_rule" "nodes_egress_any" {
-  description       = "Allow all egress from worker nodes"
-  type              = "egress"
-  from_port         = 0
-  to_port           = 0
-  protocol          = "-1"
-  security_group_id = module.eks.node_security_group_id
-  cidr_blocks       = ["0.0.0.0/0"]
-}
-
-resource "aws_security_group_rule" "node_to_node_any" {
-  description              = "Allow all traffic between worker nodes"
-  type                     = "ingress"
-  from_port                = 0
-  to_port                  = 0
-  protocol                 = "-1"
-  security_group_id        = module.eks.node_security_group_id
-  source_security_group_id = module.eks.node_security_group_id
-}
-
-resource "aws_security_group_rule" "node_ingress_any" {
-  description              = "Allow all traffic to worker nodes"
-  type                     = "ingress"
-  from_port                = 0
-  to_port                  = 0
-  protocol                 = "-1"
-  security_group_id        = module.eks.node_security_group_id
-  source_security_group_id = module.eks.cluster_primary_security_group_id
 }
