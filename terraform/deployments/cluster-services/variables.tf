@@ -42,9 +42,3 @@ variable "dex_github_orgs_teams" {
   description = "List of GitHub orgs and associated teams that Dex authorises. Format [{name='github_org', teams=['github_team_name']}] "
   default     = [{ name = "alphagov", teams = ["gov-uk-production"] }]
 }
-
-variable "powerusers_namespaces" {
-  type        = list(string)
-  description = "List of namespaces where powerusers have admin access"
-  default     = ["apps"]
-}
