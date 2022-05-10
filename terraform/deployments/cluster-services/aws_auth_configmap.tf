@@ -49,6 +49,7 @@ locals {
       groups   = ["powerusers", "readonly"]
     }
   ]
+  poweruser_namespaces = [kubernetes_namespace.apps]
 }
 
 resource "kubernetes_config_map" "aws_auth" {
@@ -142,7 +143,7 @@ resource "kubernetes_cluster_role" "poweruser" {
 }
 
 resource "kubernetes_role_binding" "poweruser" {
-  for_each = toset(var.powerusers_namespaces)
+  for_each = toset([for ns in local.poweruser_namespaces : ns.metadata[0].name])
 
   metadata {
     name      = "poweruser-${each.key}"
