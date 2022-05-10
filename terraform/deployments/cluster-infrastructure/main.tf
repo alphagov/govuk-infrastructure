@@ -52,7 +52,10 @@ module "eks" {
     "api", "audit", "authenticator", "controllerManager", "scheduler"
   ]
 
-  create_node_security_group = false # We're just using the cluster primary SG.
+  # We're just using the cluster primary SG as created by EKS.
+  create_cluster_security_group = false
+  create_node_security_group    = false
+
   eks_managed_node_group_defaults = {
     ami_type              = "AL2_x86_64"
     capacity_type         = var.workers_default_capacity_type
