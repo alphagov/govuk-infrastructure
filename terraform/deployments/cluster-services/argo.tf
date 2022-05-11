@@ -3,6 +3,13 @@ locals {
   argo_host           = "argo.${local.external_dns_zone_name}"
   argo_workflows_host = "argo-workflows.${local.external_dns_zone_name}"
   argo_events_host    = "argo-events.${local.external_dns_zone_name}"
+  argo_metrics_config = {
+    enabled = true
+    serviceMonitor = {
+      enabled   = true
+      namespace = local.monitoring_ns
+    }
+  }
 }
 
 resource "kubernetes_namespace" "apps" {
@@ -77,57 +84,26 @@ resource "helm_release" "argo_cd" {
         https            = true
       }
 
-      metrics = {
-        enabled = true
-        serviceMonitor = {
-          enabled   = true
-          namespace = local.monitoring_ns
-        }
-      }
+      metrics = local.argo_metrics_config
     }
 
     controller = {
-      metrics = {
-        enabled = true
-        serviceMonitor = {
-          enabled   = true
-          namespace = local.monitoring_ns
-        }
-      }
+      metrics = local.argo_metrics_config
     }
 
     repoServer = {
-      metrics = {
-        enabled = true
-        serviceMonitor = {
-          enabled   = true
-          namespace = local.monitoring_ns
-        }
-      }
+      metrics = local.argo_metrics_config
     }
 
     dex = {
       enabled = false
-      metrics = {
-        enabled = true
-        serviceMonitor = {
-          enabled   = true
-          namespace = local.monitoring_ns
-        }
-      }
     }
 
     notifications = {
       argocdUrl = "https://${local.argo_host}"
       cm        = { create = false }
       secret    = { create = false }
-      metrics = {
-        enabled = true
-        serviceMonitor = {
-          enabled   = true
-          namespace = local.monitoring_ns
-        }
-      }
+      metrics   = local.argo_metrics_config
     }
   })]
 }
