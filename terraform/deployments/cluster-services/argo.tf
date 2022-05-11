@@ -108,13 +108,6 @@ resource "helm_release" "argo_cd" {
 
     dex = {
       enabled = false
-      metrics = {
-        enabled = true
-        serviceMonitor = {
-          enabled   = true
-          namespace = local.monitoring_ns
-        }
-      }
     }
 
     notifications = {
