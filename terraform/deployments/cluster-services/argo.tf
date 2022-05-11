@@ -76,16 +76,58 @@ resource "helm_release" "argo_cd" {
         hosts            = [local.argo_host]
         https            = true
       }
+
+      metrics = {
+        enabled = true
+        serviceMonitor = {
+          enabled   = true
+          namespace = local.monitoring_ns
+        }
+      }
+    }
+
+    controller = {
+      metrics = {
+        enabled = true
+        serviceMonitor = {
+          enabled   = true
+          namespace = local.monitoring_ns
+        }
+      }
+    }
+
+    repoServer = {
+      metrics = {
+        enabled = true
+        serviceMonitor = {
+          enabled   = true
+          namespace = local.monitoring_ns
+        }
+      }
     }
 
     dex = {
       enabled = false
+      metrics = {
+        enabled = true
+        serviceMonitor = {
+          enabled   = true
+          namespace = local.monitoring_ns
+        }
+      }
     }
 
     notifications = {
       argocdUrl = "https://${local.argo_host}"
       cm        = { create = false }
       secret    = { create = false }
+      metrics = {
+        enabled = true
+        serviceMonitor = {
+          enabled   = true
+          namespace = local.monitoring_ns
+        }
+      }
     }
   })]
 }
