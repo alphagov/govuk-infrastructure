@@ -4,3 +4,4 @@
 *.tfstate.backup
 *.lock.hcl
 lambdas/*.zip
+*.idea
