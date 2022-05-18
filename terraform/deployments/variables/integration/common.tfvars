@@ -26,6 +26,7 @@ govuk_environment = "integration"
 
 publishing_service_domain = "integration.publishing.service.gov.uk"
 external_dns_subdomain    = "eks"
+www_dns_validation_rdata  = "8xpwlbcbmg9qjx9d2v.fastly-validations.com"
 
 frontend_memcached_node_type   = "cache.t4g.micro"
 shared_redis_cluster_node_type = "cache.t4g.small"
