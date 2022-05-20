@@ -18,14 +18,11 @@ resource "aws_ecr_registry_scanning_configuration" "ecr_scan" {
   }
 }
 
-
-#SNS TOPIC
 resource "aws_sns_topic" "ecr_scan_topic" {
   name = "ecr_scan_topic"
   tags = {
     Name = "ECR-Scan"
   }
-
 }
 
 resource "aws_sns_topic_policy" "ecr_scan_topic_policy" {
@@ -37,38 +34,26 @@ resource "aws_sns_topic_subscription" "ecr_sns_subscription" {
   protocol  = "email"
   topic_arn = aws_sns_topic.ecr_scan_topic.arn
   for_each  = toset(var.emails)
-  endpoint  = "seun.adiomowo@digital.cabinet-office.gov.uk"
+  endpoint  = each.key
 }
-
-
-#### CLOUD-WATCH RULE
 
 resource "aws_cloudwatch_event_rule" "event_rule" {
-  name          = "vuln-findings"
-  description   = "A CloudWatch Event Rule that triggers when each ECR vulnerability image scan is completed. actions using AWS Lambda OR SNS."
-  is_enabled    = true
-  event_pattern = <<PATTERN
-{
-  "source": [
-    "aws.ecr"
-  ],
-  "detail-type": [
-    "ECR Image Scan"
-  ],
-  "detail": {
-    "finding-severity-counts": {
-      "HIGH": [
-        {
-          "numeric": [
-            ">",
-            0
-          ]
-        }
-      ]
+  name        = "vuln-findings"
+  description = "A CloudWatch Event Rule that triggers when each ECR vulnerability image scan is completed. actions using AWS Lambda OR SNS."
+  is_enabled  = true
+  event_pattern = jsonencode({
+    "source" : ["aws.ecr"],
+    "detail-type" : ["ECR Image Scan"],
+    "detail" : {
+      "finding-severity-counts" : {
+        "HIGH" : [
+          {
+            "numeric" : [">", 0]
+          }
+        ]
+      }
     }
-  }
-}
-PATTERN
+  })
 }
 
 resource "aws_cloudwatch_event_target" "event_rule_target" {
