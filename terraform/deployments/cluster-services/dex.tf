@@ -11,7 +11,7 @@ resource "helm_release" "dex" {
   namespace        = local.services_ns
   create_namespace = true
   repository       = "https://charts.dexidp.io"
-  version          = "0.6.5" # TODO: Dependabot or equivalent so this doesn't get neglected.
+  version          = "0.8.2" # TODO: Dependabot or equivalent so this doesn't get neglected.
   values = [yamlencode({
     config = {
       issuer = "https://${local.dex_host}"
