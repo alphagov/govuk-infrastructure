@@ -20,7 +20,7 @@ resource "helm_release" "prometheus_oauth2_proxy" {
   name             = "prometheus-oauth2-proxy"
   repository       = "https://oauth2-proxy.github.io/manifests"
   chart            = "oauth2-proxy"
-  version          = "6.2.0" # TODO: Dependabot or equivalent so this doesn't get neglected.
+  version          = "6.2.1" # TODO: Dependabot or equivalent so this doesn't get neglected.
   namespace        = local.monitoring_ns
   create_namespace = true
 
@@ -75,7 +75,7 @@ resource "helm_release" "alertmanager_oauth2_proxy" {
   name             = "alertmanager-oauth2-proxy"
   repository       = "https://oauth2-proxy.github.io/manifests"
   chart            = "oauth2-proxy"
-  version          = "6.2.0" # TODO: Dependabot or equivalent so this doesn't get neglected.
+  version          = "6.2.1" # TODO: Dependabot or equivalent so this doesn't get neglected.
   namespace        = local.monitoring_ns
   create_namespace = true
 
@@ -130,7 +130,7 @@ resource "helm_release" "kube_prometheus_stack" {
   name             = "kube-prometheus-stack"
   repository       = "https://prometheus-community.github.io/helm-charts"
   chart            = "kube-prometheus-stack"
-  version          = "34.9.0" # TODO: Dependabot or equivalent so this doesn't get neglected.
+  version          = "35.3.1" # TODO: Dependabot or equivalent so this doesn't get neglected.
   namespace        = local.monitoring_ns
   create_namespace = true
   values = [yamlencode({
