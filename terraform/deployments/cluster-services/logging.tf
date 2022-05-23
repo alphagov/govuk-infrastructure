@@ -6,7 +6,7 @@ resource "helm_release" "filebeat" {
   name             = "filebeat"
   repository       = "https://helm.elastic.co"
   chart            = "filebeat"
-  version          = "7.7.1" # TODO: Dependabot or equivalent so this doesn't get neglected.
+  version          = "7.17.3" # TODO: Dependabot or equivalent so this doesn't get neglected.
   namespace        = local.services_ns
   create_namespace = true
   values = [yamlencode({
