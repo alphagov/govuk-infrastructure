@@ -88,6 +88,11 @@ output "aws_lb_controller_service_account_name" {
   value       = local.aws_lb_controller_service_account_name
 }
 
+output "aws_ebs_csi_driver_controller_service_account_name" {
+  description = "Name of the k8s service account for the AWS Ebs Csi Controller"
+  value       = local.csi_driver_controller_service_account_name
+}
+
 output "grafana_iam_role_arn" {
   description = "IAM role ARN corresponding to the k8s service account for Grafana."
   value       = module.grafana_iam_role.iam_role_arn
