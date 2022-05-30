@@ -29,6 +29,10 @@ on:
         required: false
         type: string
         default: ${{ github.event.repository.name }}
+      dockerfile_path:
+        required: false
+        type: string
+        default: Dockerfile
       additional_build_args:
         required: false
         type: string
@@ -87,7 +91,7 @@ jobs:
           fi
 
           # Build a docker container and push it to ECR
-          docker build ${IMAGE_TAG_ARGS} ${{ inputs.additional_build_args }} .
+          docker build ${IMAGE_TAG_ARGS} ${{ inputs.additional_build_args }} -f ${{ inputs.dockerfile_path }} .
           echo "Pushing image to ECR..."
           docker push "${ECR_REGISTRY}/${ECR_REPOSITORY}" -a
           echo "::set-output name=imageTag::${IMAGE_TAG}"
