@@ -35,6 +35,7 @@ jobs:
     with:
       imageTag: ${{ needs.build-and-publish-image.outputs.imageTag }}
       manualDeploy: ${{ 'main' != github.event.inputs.gitRef }}
+      appName: signon-resources
     secrets:
       WEBHOOK_TOKEN: ${{ secrets.ARGO_EVENTS_WEBHOOK_TOKEN }}
       WEBHOOK_URL: ${{ secrets.ARGO_EVENTS_WEBHOOK_URL }}
