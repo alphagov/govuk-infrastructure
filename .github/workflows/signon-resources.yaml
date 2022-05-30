@@ -18,7 +18,7 @@ on:
       - ".ruby-version"
 
 jobs:
-  build-publish-image-image:
+  build-and-publish-image:
     name: Build and publish image
     uses: alphagov/govuk-infrastructure/.github/workflows/ci-ecr.yaml@main
     with:
