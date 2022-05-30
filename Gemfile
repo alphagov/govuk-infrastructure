@@ -7,7 +7,7 @@ gem "kubeclient", "~> 4.9"
 gem "rake"
 
 group :development, :test do
-  gem "climate_control", "~> 1.0"
+  gem "climate_control", "~> 1.1"
   gem "rspec"
   gem "rubocop-govuk", "~> 4.4"
   gem "webmock"
