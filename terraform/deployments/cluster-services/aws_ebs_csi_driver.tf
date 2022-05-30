@@ -13,6 +13,11 @@ resource "helm_release" "csi_driver" {
     name  = "controller.serviceAccount.name"
     value = data.terraform_remote_state.cluster_infrastructure.outputs.aws_ebs_csi_driver_controller_service_account_name
   }
+
+  set {
+    name  = "controller.serviceAccount.annotations.eks\\.amazonaws\\.com/role-arn"
+    value = data.terraform_remote_state.cluster_infrastructure.outputs.aws_ebs_csi_driver_iam_role_arn
+  }
   set {
     name  = "enableVolumeResizing"
     value = true
