@@ -37,6 +37,11 @@ on:
         required: false
         default: "false"
         type: string
+      appName:
+        description: 'Name of the app being deployed'
+        required: false
+        default: ${{ github.event.repository.name }}
+        type: string
     secrets:
       WEBHOOK_TOKEN:
         required: true
@@ -52,7 +57,7 @@ jobs:
         env:
           ENVIRONMENT: integration
           IMAGE_TAG: ${{ inputs.imageTag }}
-          REPO_NAME: ${{ github.event.repository.name }}
+          REPO_NAME: ${{ inputs.appName }}
           MANUAL_DEPLOY: ${{ inputs.manualDeploy }}
           WEBHOOK_TOKEN: ${{ secrets.WEBHOOK_TOKEN }}
           WEBHOOK_URL: ${{ secrets.WEBHOOK_URL }}
