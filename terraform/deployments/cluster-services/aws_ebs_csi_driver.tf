@@ -5,24 +5,17 @@ resource "helm_release" "csi_driver" {
   repository = "https://kubernetes-sigs.github.io/aws-ebs-csi-driver"
   version    = "2.6.8" # TODO: Dependabot or equivalent so this doesn't get neglected.
 
-  set {
-    name  = "controller.serviceAccount.create"
-    value = true
-  }
-  set {
-    name  = "controller.serviceAccount.name"
-    value = data.terraform_remote_state.cluster_infrastructure.outputs.aws_ebs_csi_driver_controller_service_account_name
-  }
-
-  set {
-    name  = "controller.serviceAccount.annotations.eks\\.amazonaws\\.com/role-arn"
-    value = data.terraform_remote_state.cluster_infrastructure.outputs.aws_ebs_csi_driver_iam_role_arn
-  }
-  set {
-    name  = "enableVolumeResizing"
-    value = true
-  }
   values = [yamlencode({
+    enableVolumeResizing = true
+    controller = {
+      serviceAccount = {
+        create = true
+        name   = data.terraform_remote_state.cluster_infrastructure.outputs.aws_ebs_csi_driver_controller_service_account_name
+        annotations = {
+          "eks.amazonaws.com/role-arn" = data.terraform_remote_state.cluster_infrastructure.outputs.aws_ebs_csi_driver_iam_role_arn
+        }
+      }
+    }
     storageClasses = [{
       apiVersion        = "storage.k8s.io/v1"
       kind              = "StorageClass"
