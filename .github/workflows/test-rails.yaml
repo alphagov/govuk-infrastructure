@@ -11,6 +11,12 @@
 # jobs:
 #   test:
 #     uses: alphagov/govuk-infrastructure/.github/workflows/test-rails.yaml@main
+#     with:
+#       requiresJavaScript: true
+#       requiresMongoDB: true
+#       requiresMySQL: true
+#       mysqlUsername: "test"
+#       mysqlPassword: "password"
 
 
 # REUSABLE WORKFLOW
@@ -20,16 +26,29 @@ name: CI
 on:
   workflow_call:
     inputs:
-      requiresMongoDB:
-        description: 'Run MongoDB'
-        required: false
-        default: false
-        type: boolean
       requiresJavaScript:
         description: 'Install Node, Yarn and JavaScript dependencies'
         required: false
         default: true
         type: boolean
+      requiresMongoDB:
+        description: 'Run MongoDB'
+        required: false
+        default: false
+        type: boolean
+      requiresMySQL:
+        description: 'Run MySQL'
+        required: false
+        default: false
+        type: boolean
+      mysqlUsername:
+        description: 'Username for the MySQL database'
+        required: false
+        type: string
+      mysqlPassword:
+        description: 'Password for the MySQL database'
+        required: false
+        type: string
 
 jobs:
   test:
@@ -73,5 +92,38 @@ jobs:
          with:
            mongodb-version: 2.6
 
+       - name: Setup MySQL
+         id: setup-mysql
+         if: ${{ inputs.requiresMySQL }}
+         env:
+           MYSQL_USERNAME: ${{ inputs.mysqlUsername }}
+           MYSQL_PASSWORD: ${{ inputs.mysqlPassword }}
+           MYSQL_PORT: 3306
+         run: |
+           # Stop the MySQL service running on the runner node
+           sudo service mysql stop
+
+           docker run --name mysql --publish "${MYSQL_PORT}:3306" --detach --env MYSQL_ALLOW_EMPTY_PASSWORD=true mysql:8.0
+
+           # Wait for MySQL to be ready to accept connections
+           sleep 10
+
+           # Create user for running tests
+           MYSQL_COMMAND="mysql -h 127.0.0.1 -P ${MYSQL_PORT} -u root"
+
+           $MYSQL_COMMAND -e "CREATE USER '${MYSQL_USERNAME}'@'%' IDENTIFIED BY '${MYSQL_PASSWORD}';"
+           $MYSQL_COMMAND -e "GRANT ALL PRIVILEGES ON *.* TO '${MYSQL_USERNAME}'@'%' WITH GRANT OPTION;"
+           $MYSQL_COMMAND -e "FLUSH PRIVILEGES;"
+
+           echo "::set-output name=db-url::mysql2://${MYSQL_USERNAME}:${MYSQL_PASSWORD}@127.0.0.1:3306"
+
+       - name: Setup Rails database
+         if: ${{ inputs.requiresMySQL || inputs.requiresMongoDB }}
+         env:
+           TEST_DATABASE_URL: ${{ steps.setup-mysql.outputs.db-url }}
+         run: bundle exec rails db:setup
+
        - name: Run tests
+         env:
+           TEST_DATABASE_URL: ${{ steps.setup-mysql.outputs.db-url }}
          run: bundle exec rake
