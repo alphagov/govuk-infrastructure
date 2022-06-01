@@ -1,0 +1,77 @@
+# USAGE
+# -----
+#
+# on:
+#   workflow_dispatch: {}
+#   push:
+#     branches:
+#       - main
+#   pull_request:
+#
+# jobs:
+#   test:
+#     uses: alphagov/govuk-infrastructure/.github/workflows/test-rails.yaml@main
+
+
+# REUSABLE WORKFLOW
+# -----------------
+name: CI
+
+on:
+  workflow_call:
+    inputs:
+      requiresMongoDB:
+        description: 'Run MongoDB'
+        required: false
+        default: false
+        type: boolean
+      requiresJavaScript:
+        description: 'Install Node, Yarn and JavaScript dependencies'
+        required: false
+        default: true
+        type: boolean
+
+jobs:
+  test:
+     name: Test
+     runs-on: ubuntu-latest
+     env:
+       RAILS_ENV: test
+       GOVUK_CONTENT_SCHEMAS_PATH: vendor/govuk-content-schemas
+     steps:
+       - name: Checkout repository
+         uses: actions/checkout@v3
+
+       - name: Checkout GOV.UK Content Schemas
+         uses: actions/checkout@v3
+         with:
+           repository: alphagov/govuk-content-schemas
+           ref: deployed-to-production
+           path: vendor/govuk-content-schemas
+
+       - name: Setup Ruby
+         uses: ruby/setup-ruby@v1
+         with:
+           bundler-cache: true
+
+       - name: Setup Node
+         if: ${{ inputs.requiresJavaScript}}
+         uses: actions/setup-node@v3
+         with:
+           cache: 'yarn'
+
+       - name: Install JavaScript dependencies
+         if: ${{ inputs.requiresJavaScript}}
+         run: yarn install --frozen-lockfile
+
+       - name: Run Brakeman
+         run: bundle exec brakeman . --except CheckRenderInline
+
+       - name: Setup MongoDB
+         if: ${{ inputs.requiresMongoDB }}
+         uses: supercharge/mongodb-github-action@1.7.0
+         with:
+           mongodb-version: 2.6
+
+       - name: Run tests
+         run: bundle exec rake
