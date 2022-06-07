@@ -1,0 +1,13 @@
+# This is the rules file.
+
+groups:
+- name: CoreAlerts
+  rules:
+  - alert: RouterBackendHandlerResponseErrorRate
+    expr: sum(rate(router_backend_handler_response_duration_seconds_count{response_code=~"^5..", job="apps/router"}[5m])) / sum(rate(router_backend_handler_response_duration_seconds_count{job="apps/router"}[5m])) > 0.1
+    for: 10m
+    labels:
+        severity: critical
+    annotations:
+        summary: "High error rate for apps/router"
+        description: "apps/router has high error rate for more than 10 minutes."

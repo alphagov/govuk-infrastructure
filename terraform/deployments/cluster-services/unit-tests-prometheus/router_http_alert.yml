@@ -1,0 +1,8 @@
+  - alert: RouterHighHttp5xxErrorRate
+    expr: sum(rate(promhttp_metric_handler_requests_total{code=~"^5..", job="apps/router"}[10m])) / sum(rate(promhttp_metric_handler_requests_total{job="apps/router"}[10m])) * 100 > 10
+    for: 10m
+    labels:
+      severity: critical
+    annotations:
+      summary: Nginx high HTTP 5xx error rate (instance {{ $labels.instance }})
+      description: "Too many HTTP requests with status 5xx (> 10%)\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
