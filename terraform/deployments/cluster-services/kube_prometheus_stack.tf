@@ -133,130 +133,130 @@ resource "helm_release" "kube_prometheus_stack" {
   version          = "35.3.1" # TODO: Dependabot or equivalent so this doesn't get neglected.
   namespace        = local.monitoring_ns
   create_namespace = true
-  values = [ file("${path.module}/prometheus-files/values.yaml"), 
-  yamlencode({
-    grafana = {
-      ingress = {
-        enabled  = true
-        hosts    = [local.grafana_host]
-        pathType = "Prefix"
-        annotations = merge(local.alb_ingress_annotations, {
-          "alb.ingress.kubernetes.io/load-balancer-name" = "grafana"
-        })
-      }
-      "grafana.ini" = {
-        "auth.generic_oauth" = {
-          name                  = "GitHub"
-          enabled               = true
-          allow_sign_up         = true
-          auth_url              = "https://${local.dex_host}/auth"
-          token_url             = "https://${local.dex_host}/token"
-          api_url               = "https://${local.dex_host}/userinfo"
-          scopes                = "openid profile email groups"
-          role_attribute_path   = "contains(groups[*], '${var.github_read_write_team}') && 'Admin' || contains(groups[*], '${var.github_read_only_team}') && 'Viewer'"
-          role_attribute_strict = true
+  values = [file("${path.module}/prometheus-files/values.yaml"),
+    yamlencode({
+      grafana = {
+        ingress = {
+          enabled  = true
+          hosts    = [local.grafana_host]
+          pathType = "Prefix"
+          annotations = merge(local.alb_ingress_annotations, {
+            "alb.ingress.kubernetes.io/load-balancer-name" = "grafana"
+          })
         }
-        server = {
-          domain   = local.grafana_host
-          root_url = "https://%(domain)s"
-        }
-        database = {
-          type     = "postgres"
-          ssl_mode = "disable"
-        }
-      }
-      envValueFrom = {
-        "GF_AUTH_GENERIC_OAUTH_CLIENT_ID" = {
-          secretKeyRef = {
-            name = "govuk-dex-grafana"
-            key  = "clientID"
+        "grafana.ini" = {
+          "auth.generic_oauth" = {
+            name                  = "GitHub"
+            enabled               = true
+            allow_sign_up         = true
+            auth_url              = "https://${local.dex_host}/auth"
+            token_url             = "https://${local.dex_host}/token"
+            api_url               = "https://${local.dex_host}/userinfo"
+            scopes                = "openid profile email groups"
+            role_attribute_path   = "contains(groups[*], '${var.github_read_write_team}') && 'Admin' || contains(groups[*], '${var.github_read_only_team}') && 'Viewer'"
+            role_attribute_strict = true
           }
-        },
-        "GF_AUTH_GENERIC_OAUTH_CLIENT_SECRET" = {
-          secretKeyRef = {
-            name = "govuk-dex-grafana"
-            key  = "clientSecret"
+          server = {
+            domain   = local.grafana_host
+            root_url = "https://%(domain)s"
           }
-        },
-        "GF_DATABASE_HOST" = {
-          secretKeyRef = {
-            name = "govuk-grafana-database"
-            key  = "host"
-          }
-        },
-        "GF_DATABASE_USER" = {
-          secretKeyRef = {
-            name = "govuk-grafana-database"
-            key  = "username"
-          }
-        },
-        "GF_DATABASE_PASSWORD" = {
-          secretKeyRef = {
-            name = "govuk-grafana-database"
-            key  = "password"
+          database = {
+            type     = "postgres"
+            ssl_mode = "disable"
           }
         }
-      }
-      serviceAccount = {
-        annotations = {
-          "eks.amazonaws.com/role-arn" = local.grafana_iam_role
-        }
-      }
-      env = {
-        "AWS_ROLE_ARN"                = local.grafana_iam_role
-        "AWS_WEB_IDENTITY_TOKEN_FILE" = "/var/run/secrets/eks.amazonaws.com/serviceaccount/token"
-        "AWS_REGION"                  = data.aws_region.current.name
-      }
-      extraSecretMounts = [{
-        name      = "aws-iam-token"
-        mountPath = "/var/run/secrets/eks.amazonaws.com/serviceaccount"
-        readOnly  = true
-        projected = {
-          defaultMode = 420 # 0644 octal
-          sources = [{
-            serviceAccountToken = {
-              audience          = "sts.amazonaws.com"
-              expirationSeconds = 86400
-              path              = "token"
+        envValueFrom = {
+          "GF_AUTH_GENERIC_OAUTH_CLIENT_ID" = {
+            secretKeyRef = {
+              name = "govuk-dex-grafana"
+              key  = "clientID"
             }
-          }]
+          },
+          "GF_AUTH_GENERIC_OAUTH_CLIENT_SECRET" = {
+            secretKeyRef = {
+              name = "govuk-dex-grafana"
+              key  = "clientSecret"
+            }
+          },
+          "GF_DATABASE_HOST" = {
+            secretKeyRef = {
+              name = "govuk-grafana-database"
+              key  = "host"
+            }
+          },
+          "GF_DATABASE_USER" = {
+            secretKeyRef = {
+              name = "govuk-grafana-database"
+              key  = "username"
+            }
+          },
+          "GF_DATABASE_PASSWORD" = {
+            secretKeyRef = {
+              name = "govuk-grafana-database"
+              key  = "password"
+            }
+          }
         }
-      }]
-      additionalDataSources = [{
-        name     = "CloudWatch"
-        type     = "cloudwatch"
-        access   = "proxy"
-        uid      = "cloudwatch"
-        editable = false
-        jsonData = {
-          authType      = "default"
-          defaultRegion = data.aws_region.current.name
+        serviceAccount = {
+          annotations = {
+            "eks.amazonaws.com/role-arn" = local.grafana_iam_role
+          }
         }
-      }]
-    }
-    prometheus = {
-      # Match all PrometheusRules cluster-wide. (If an app/team needs a separate
-      # Prom instance, it almost certainly needs a separate EKS cluster too.)
-      prometheusSpec = {
-        ruleNamespaceSelector = {
-          matchExpressions = [{
-            key      = "no_monitor"
-            operator = "DoesNotExist"
-            values   = []
-          }]
+        env = {
+          "AWS_ROLE_ARN"                = local.grafana_iam_role
+          "AWS_WEB_IDENTITY_TOKEN_FILE" = "/var/run/secrets/eks.amazonaws.com/serviceaccount/token"
+          "AWS_REGION"                  = data.aws_region.current.name
         }
-        # Allow empty ruleSelector (https://github.com/prometheus-community/helm-charts/blob/2cacc16/charts/kube-prometheus-stack/templates/prometheus/prometheus.yaml#L202)
-        ruleSelectorNilUsesHelmValues = false
-        podMonitorNamespaceSelector = {
-          matchExpressions = [{
-            key      = "no_monitor"
-            operator = "DoesNotExist"
-            values   = []
-          }]
-        }
-        podMonitorSelectorNilUsesHelmValues     = false
-        serviceMonitorSelectorNilUsesHelmValues = false
+        extraSecretMounts = [{
+          name      = "aws-iam-token"
+          mountPath = "/var/run/secrets/eks.amazonaws.com/serviceaccount"
+          readOnly  = true
+          projected = {
+            defaultMode = 420 # 0644 octal
+            sources = [{
+              serviceAccountToken = {
+                audience          = "sts.amazonaws.com"
+                expirationSeconds = 86400
+                path              = "token"
+              }
+            }]
+          }
+        }]
+        additionalDataSources = [{
+          name     = "CloudWatch"
+          type     = "cloudwatch"
+          access   = "proxy"
+          uid      = "cloudwatch"
+          editable = false
+          jsonData = {
+            authType      = "default"
+            defaultRegion = data.aws_region.current.name
+          }
+        }]
       }
-    }
+      prometheus = {
+        # Match all PrometheusRules cluster-wide. (If an app/team needs a separate
+        # Prom instance, it almost certainly needs a separate EKS cluster too.)
+        prometheusSpec = {
+          ruleNamespaceSelector = {
+            matchExpressions = [{
+              key      = "no_monitor"
+              operator = "DoesNotExist"
+              values   = []
+            }]
+          }
+          # Allow empty ruleSelector (https://github.com/prometheus-community/helm-charts/blob/2cacc16/charts/kube-prometheus-stack/templates/prometheus/prometheus.yaml#L202)
+          ruleSelectorNilUsesHelmValues = false
+          podMonitorNamespaceSelector = {
+            matchExpressions = [{
+              key      = "no_monitor"
+              operator = "DoesNotExist"
+              values   = []
+            }]
+          }
+          podMonitorSelectorNilUsesHelmValues     = false
+          serviceMonitorSelectorNilUsesHelmValues = false
+        }
+      }
   })]
 }
