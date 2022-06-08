@@ -133,7 +133,7 @@ resource "helm_release" "kube_prometheus_stack" {
   version          = "35.3.1" # TODO: Dependabot or equivalent so this doesn't get neglected.
   namespace        = local.monitoring_ns
   create_namespace = true
-  values = [file("${path.module}/prometheus-files/values.yaml"),
+  values = [templatefile("${path.module}/prometheus-files/alerts.tpl", { map_alerts_yaml = file("${path.module}/prometheus-files/alerts.yml") }),
     yamlencode({
       grafana = {
         ingress = {

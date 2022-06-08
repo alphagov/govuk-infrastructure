@@ -1,15 +1,11 @@
-# This is the main input for unit testing.
-# Only this file is passed as command line argument.
-
 rule_files:
-    - values.yaml
+    - alerts.yml
 
 evaluation_interval: 1m
 
 tests:
-    # Test 1.
+    # Test that alerts will be triggered.
     - interval: 1m
-      # Series data.
       input_series:
           - series: 'router_backend_handler_response_duration_seconds_count{response_code="500", job="apps/router"}'
             values: '0 2+1x6 8x4' # 0 3 4 5 6 7 8 8 8 8 8
@@ -21,7 +17,7 @@ tests:
           - eval_time: 11m
             alertname: RouterBackendHandlerResponseErrorRate
             exp_alerts:
-                # Alert 1, this alert will trigger when the error ratio is >0.1 for more than 10 minutes.
+                # This alert will trigger when the apps/router error ratio is >0.1 for more than 10 minutes.
                 - exp_labels:
                       severity: critical
                   exp_annotations:
@@ -30,7 +26,6 @@ tests:
 
     # Control test, should pass without any alerts triggered.   
     - interval: 1m
-      # Series data.
       input_series:
           - series: 'router_backend_handler_response_duration_seconds_count{job="apps/router"}'
             values: '0+1x11' # 1 2 3 4 5 6 7 8 9 10 11

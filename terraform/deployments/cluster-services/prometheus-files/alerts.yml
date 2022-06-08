@@ -1,5 +1,3 @@
-# This is the rules file.
-
 groups:
 - name: CoreAlerts
   rules:
