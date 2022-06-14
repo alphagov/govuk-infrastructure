@@ -42,6 +42,11 @@ on:
         required: false
         default: ${{ github.event.repository.name }}
         type: string
+      environment:
+        description: 'Environment to deploy to'
+        required: false
+        default: 'integration'
+        type: string
     secrets:
       WEBHOOK_TOKEN:
         required: true
@@ -55,7 +60,7 @@ jobs:
     steps:
       - name: Send webhook
         env:
-          ENVIRONMENT: integration
+          ENVIRONMENT: ${{ inputs.environment }}
           IMAGE_TAG: ${{ inputs.imageTag }}
           REPO_NAME: ${{ inputs.appName }}
           MANUAL_DEPLOY: ${{ inputs.manualDeploy }}
