@@ -30,3 +30,5 @@ www_dns_validation_rdata  = "fnvjfn8tfff6n003cf.fastly-validations.com"
 
 frontend_memcached_node_type   = "cache.t4g.medium"
 shared_redis_cluster_node_type = "cache.t4g.medium"
+
+kube_prometheus_stack_replica_count = 3
