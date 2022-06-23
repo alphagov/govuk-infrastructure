@@ -20,7 +20,7 @@ resource "kubernetes_namespace" "apps" {
 }
 
 resource "helm_release" "argo_cd" {
-  depends_on       = [helm_release.aws_lb_controller]
+  depends_on       = [helm_release.dex]
   chart            = "argo-cd"
   name             = "argo-cd"
   namespace        = local.services_ns
