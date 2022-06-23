@@ -17,6 +17,7 @@ locals {
 }
 
 resource "helm_release" "prometheus_oauth2_proxy" {
+  depends_on       = [helm_release.dex]
   name             = "prometheus-oauth2-proxy"
   repository       = "https://oauth2-proxy.github.io/manifests"
   chart            = "oauth2-proxy"
@@ -72,6 +73,7 @@ resource "helm_release" "prometheus_oauth2_proxy" {
 }
 
 resource "helm_release" "alertmanager_oauth2_proxy" {
+  depends_on       = [helm_release.dex]
   name             = "alertmanager-oauth2-proxy"
   repository       = "https://oauth2-proxy.github.io/manifests"
   chart            = "oauth2-proxy"
@@ -127,6 +129,7 @@ resource "helm_release" "alertmanager_oauth2_proxy" {
 }
 
 resource "helm_release" "kube_prometheus_stack" {
+  depends_on       = [helm_release.dex]
   name             = "kube-prometheus-stack"
   repository       = "https://prometheus-community.github.io/helm-charts"
   chart            = "kube-prometheus-stack"

@@ -5,7 +5,7 @@ locals {
 }
 
 resource "helm_release" "dex" {
-  depends_on       = [helm_release.aws_lb_controller]
+  depends_on       = [helm_release.aws_lb_controller, helm_release.cluster_secrets]
   chart            = "dex"
   name             = "dex"
   namespace        = local.services_ns
