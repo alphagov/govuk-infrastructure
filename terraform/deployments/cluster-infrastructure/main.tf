@@ -52,6 +52,13 @@ module "eks" {
     "api", "audit", "authenticator", "controllerManager", "scheduler"
   ]
 
+  cluster_encryption_config = [
+    {
+      provider_key_arn = aws_kms_key.eks.arn
+      resources        = ["secrets"]
+    }
+  ]
+
   # We're just using the cluster primary SG as created by EKS.
   create_cluster_security_group = false
   create_node_security_group    = false
@@ -82,6 +89,12 @@ module "eks" {
       }
     }
   }
+}
+
+resource "aws_kms_key" "eks" {
+  description             = "EKS Secret Encryption Key"
+  deletion_window_in_days = 7
+  enable_key_rotation     = true
 }
 
 # TODO: move these into module.eks once it supports cluster addons, i.e. once
