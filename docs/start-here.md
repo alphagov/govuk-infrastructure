@@ -38,6 +38,9 @@ the old configuration, please see the [govuk-aws] repository.
 
 We use [Terraform] to manage AWS resources.
 
+You can create a new GOV.UK k8s environment by following the guidance in
+[here](create-a-new-environment.md)
+
 ### CI/CD
 
 Tests for govuk-infrastructure happen in GitHub Actions.
