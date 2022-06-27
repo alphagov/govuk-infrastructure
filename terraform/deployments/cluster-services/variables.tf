@@ -45,5 +45,5 @@ variable "dex_github_orgs_teams" {
 
 variable "kube_prometheus_stack_replica_count" {
   type        = number
-  description = "This dictates the number of replicas we will have in each environment for the following services, Alertmanager, Prometheus and Grafana. These are defined in common.tfvars" 
+  description = "This dictates the number of replicas we will have in each environment for the following services, Alertmanager, Prometheus and Grafana. These are defined in common.tfvars"
 }

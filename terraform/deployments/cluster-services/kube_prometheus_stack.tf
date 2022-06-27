@@ -138,7 +138,7 @@ resource "helm_release" "kube_prometheus_stack" {
   create_namespace = true
   values = [yamlencode({
     grafana = {
-      kube_prometheus_stack_replicas = 1
+      defaultDashboardsTimezone = "Europe/London"
       ingress = {
         enabled  = true
         hosts    = [local.grafana_host]
@@ -239,7 +239,31 @@ resource "helm_release" "kube_prometheus_stack" {
     }
     alertmanager = {
       alertmanagerSpec = {
-        replicas = var.kube_prometheus_stack_replica_count
+        podAntiAffinity = "hard"
+        replicas        = var.kube_prometheus_stack_replica_count
+        topologySpreadConstraints = [{
+          maxSkew           = 1
+          topologyKey       = "topology.kubernetes.io/zone"
+          whenUnsatisfiable = "DoNotSchedule"
+          labelSelector = {
+            matchLabels = {
+              app = "alertmanager"
+            }
+          }
+        }]
+        storage = {
+          volumeClaimTemplate = {
+            spec = {
+              storageClassName = "ebs-sc"
+              accessModes      = ["ReadWriteOnce"]
+              resources = {
+                requests = {
+                  storage = "10Gi"
+                }
+              }
+            }
+          }
+        }
       }
     }
     prometheus = {
@@ -264,34 +288,36 @@ resource "helm_release" "kube_prometheus_stack" {
         }
         podMonitorSelectorNilUsesHelmValues     = false
         serviceMonitorSelectorNilUsesHelmValues = false
-        replicas = var.kube_prometheus_stack_replica_count
-        podAntiAffinity = "hard"
+        replicas                                = var.kube_prometheus_stack_replica_count
+        podAntiAffinity                         = "hard"
         topologySpreadConstraints = [{
-          maxSkew = "1"
-          topologyKey = "topology.kubernetes.io/zone"
+          maxSkew           = 1
+          topologyKey       = "topology.kubernetes.io/zone"
           whenUnsatisfiable = "DoNotSchedule"
-          labelSelector = { 
+          labelSelector = {
             matchLabels = {
               app = "prometheus"
             }
           }
         }]
-        storageSpec = {} 
-          volumeClaimTemplate = {}
-          spec = [{
-            storageClassName = "ebs-sc"
-            accessModes = ["ReadWriteOnce"]
-            resources = {
-              requests = {
-                storage = "50Gi"
+        storageSpec = {
+          volumeClaimTemplate = {
+            spec = {
+              storageClassName = "ebs-sc"
+              accessModes      = ["ReadWriteOnce"]
+              resources = {
+                requests = {
+                  storage = "50Gi"
+                }
               }
             }
-          }]  
-          selector = {
-            matchLabels = {
-              app = "prometheus"
-            }
           }
+        }
+      }
+    }
+    kube_state_metrics = {
+      selfMonitor = {
+        enabled = true
       }
     }
   })]
