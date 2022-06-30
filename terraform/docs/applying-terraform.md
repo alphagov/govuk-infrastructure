@@ -12,6 +12,9 @@ files](../terraform/deployments/variables). To create a new environment, you
 will need to copy the variables directory for an existing environment (e.g.
 [integration](../deployments/variables/integration)) and modify as
 appropriate.
+    1. `cluster-infrastructure` deployment assumes that there is a Fastly CDN service
+       and requires a value (`www_dns_validation_rdata`) for creating the DNS validation of the Fastly domain. You can
+       either use a dummy value or look at setting up the [CDN service](../../docs/setting-up-content-delivery-network.md)
 1. Each of the deployments (except `ecr`) requires a [backend config
 file](https://www.terraform.io/docs/language/settings/backends/configuration.html#partial-configuration)
 You can use an existing backend file as a template.
