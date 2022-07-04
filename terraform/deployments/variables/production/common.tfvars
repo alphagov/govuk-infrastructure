@@ -27,8 +27,7 @@ govuk_environment = "production"
 publishing_service_domain = "publishing.service.gov.uk"
 external_dns_subdomain    = "eks"
 
-# TODO: Needs to be updated
-www_dns_validation_rdata = "fnvjfn8tfff6n003cf.fastly-validations.com"
+www_dns_validation_rdata = "sb6euj4c7g7s54y1pi.fastly-validations.com"
 
 frontend_memcached_node_type   = "cache.t4g.medium"
 shared_redis_cluster_node_type = "cache.t4g.medium"
