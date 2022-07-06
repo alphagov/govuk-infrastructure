@@ -37,6 +37,12 @@ resource "aws_iam_policy" "cluster_autoscaler" {
   policy      = data.aws_iam_policy_document.cluster_autoscaler.json
 }
 
+#
+# Permissions need to match the cluster autoscaler version that is currently
+# deployed in the cluster via ../cluster-services/cluster_autoscaler
+# Permissions list is defined:
+# https://github.com/kubernetes/autoscaler/blob/master/cluster-autoscaler/cloudprovider/aws/CA_with_AWS_IAM_OIDC.md
+#
 data "aws_iam_policy_document" "cluster_autoscaler" {
   statement {
     sid    = "clusterAutoscalerAll"
@@ -48,6 +54,11 @@ data "aws_iam_policy_document" "cluster_autoscaler" {
       "autoscaling:DescribeLaunchConfigurations",
       "autoscaling:DescribeTags",
       "ec2:DescribeLaunchTemplateVersions",
+      "autoscaling:SetDesiredCapacity",
+      "autoscaling:TerminateInstanceInAutoScalingGroup",
+      "autoscaling:UpdateAutoScalingGroup",
+      "ec2:DescribeInstanceTypes",
+      "eks:DescribeNodegroup"
     ]
 
     resources = ["*"]
