@@ -183,13 +183,14 @@ resource "helm_release" "argo_workflows" {
       resources = {
         requests = {
           cpu    = "100m"
-          memory = "512Mi"
+          memory = "1Gi"
         }
         limits = {
           cpu    = "500m"
-          memory = "1Gi"
+          memory = "2Gi"
         }
       }
+      workflowWorkers = 128
     }
 
     executor = {
