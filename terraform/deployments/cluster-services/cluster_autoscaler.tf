@@ -28,5 +28,8 @@ resource "helm_release" "cluster_autoscaler" {
       clusterName = data.terraform_remote_state.cluster_infrastructure.outputs.cluster_id
       enabled     = true
     }
+    extraArgs = {
+      balance-similar-node-groups = true
+    }
   })]
 }
