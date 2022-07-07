@@ -151,7 +151,9 @@ resource "helm_release" "argo_workflows" {
         spec = {
           activeDeadlineSeconds = 7200
           ttlStrategy = {
-            secondsAfterSuccess = 432000
+            secondsAfterFailure    = 259200
+            secondsAfterSuccess    = 259200
+            secondsAfterCompletion = 259200
           }
           podGC = {
             strategy = "OnWorkflowSuccess"
