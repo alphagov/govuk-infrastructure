@@ -33,6 +33,8 @@ resource "helm_release" "argo_cd" {
       # server from upgrading the request after TLS termination.
       extraArgs = ["--insecure"]
 
+      replicas = var.default_desired_ha_replicas
+
       ingress = {
         enabled = true
         annotations = {
@@ -88,11 +90,17 @@ resource "helm_release" "argo_cd" {
     }
 
     controller = {
-      metrics = local.argo_metrics_config
+      metrics  = local.argo_metrics_config
+      replicas = var.default_desired_ha_replicas
     }
 
     repoServer = {
-      metrics = local.argo_metrics_config
+      metrics  = local.argo_metrics_config
+      replicas = var.default_desired_ha_replicas
+    }
+
+    applicationSet = {
+      replicas = var.default_desired_ha_replicas
     }
 
     dex = {
@@ -184,15 +192,16 @@ resource "helm_release" "argo_workflows" {
       containerRuntimeExecutor = "emissary"
       resources = {
         requests = {
-          cpu    = "100m"
+          cpu    = "500m"
           memory = "1Gi"
         }
         limits = {
-          cpu    = "500m"
+          cpu    = "1"
           memory = "2Gi"
         }
       }
       workflowWorkers = 128
+      replicas        = var.default_desired_ha_replicas
     }
 
     executor = {
@@ -247,14 +256,15 @@ resource "helm_release" "argo_workflows" {
       }
       resources = {
         requests = {
-          cpu    = "100m"
-          memory = "64Mi"
+          cpu    = "200m"
+          memory = "256Mi"
         }
         limits = {
           cpu    = "500m"
-          memory = "256Mi"
+          memory = "512Mi"
         }
       }
+      replicas = var.default_desired_ha_replicas
     }
   })]
 }
@@ -268,5 +278,8 @@ resource "helm_release" "argo_events" {
   version          = "1.13.0" # TODO: Dependabot or equivalent so this doesn't get neglected.
   values = [yamlencode({
     namespace = local.services_ns
+    controller = {
+      replicas = var.default_desired_ha_replicas
+    }
   })]
 }
