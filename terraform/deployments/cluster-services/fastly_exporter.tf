@@ -6,4 +6,7 @@ resource "helm_release" "fastly-exporter" {
   version          = "0.1.0" # TODO: Dependabot or equivalent so this doesn't get neglected.
   namespace        = local.monitoring_ns
   create_namespace = true
+  values = [yamlencode({
+    replicaCount = var.default_desired_ha_replicas
+  })]
 }

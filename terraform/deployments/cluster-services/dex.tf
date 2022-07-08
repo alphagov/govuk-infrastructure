@@ -11,8 +11,9 @@ resource "helm_release" "dex" {
   namespace        = local.services_ns
   create_namespace = true
   repository       = "https://charts.dexidp.io"
-  version          = "0.8.2" # TODO: Dependabot or equivalent so this doesn't get neglected.
+  version          = "0.9.0" # TODO: Dependabot or equivalent so this doesn't get neglected.
   values = [yamlencode({
+    replicaCount = var.default_desired_ha_replicas
     config = {
       issuer = "https://${local.dex_host}"
 

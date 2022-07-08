@@ -26,7 +26,7 @@ resource "helm_release" "argo_cd" {
   namespace        = local.services_ns
   create_namespace = true
   repository       = "https://argoproj.github.io/argo-helm"
-  version          = "4.6.5" # TODO: Dependabot or equivalent so this doesn't get neglected.
+  version          = "4.9.12" # TODO: Dependabot or equivalent so this doesn't get neglected.
   values = [yamlencode({
     server = {
       # TLS Termination happens at the ALB, the insecure flag prevents Argo
@@ -100,11 +100,15 @@ resource "helm_release" "argo_cd" {
     }
 
     applicationSet = {
-      replicas = var.default_desired_ha_replicas
+      replicaCount = var.default_desired_ha_replicas
     }
 
     dex = {
       enabled = false
+    }
+
+    redis-ha = {
+      enabled = true
     }
 
     notifications = {
@@ -148,7 +152,7 @@ resource "helm_release" "argo_workflows" {
   namespace        = local.services_ns
   create_namespace = true
   repository       = "https://argoproj.github.io/argo-helm"
-  version          = "0.15.3" # TODO: Dependabot or equivalent so this doesn't get neglected.
+  version          = "0.16.6" # TODO: Dependabot or equivalent so this doesn't get neglected.
   values = [yamlencode({
     controller = {
       podSecurityContext = {
@@ -275,11 +279,22 @@ resource "helm_release" "argo_events" {
   namespace        = local.services_ns
   create_namespace = true
   repository       = "https://argoproj.github.io/argo-helm"
-  version          = "1.13.0" # TODO: Dependabot or equivalent so this doesn't get neglected.
+  version          = "2.0.3" # TODO: Dependabot or equivalent so this doesn't get neglected.
   values = [yamlencode({
     namespace = local.services_ns
     controller = {
       replicas = var.default_desired_ha_replicas
+    }
+    configs = {
+      nats = {
+        versions = [
+          {
+            version            = "0.22.1"
+            natsStreamingImage = "nats-streaming:0.22.1"
+            metricsExporterImage : "natsio/prometheus-nats-exporter:0.8.0"
+          }
+        ]
+      }
     }
   })]
 }

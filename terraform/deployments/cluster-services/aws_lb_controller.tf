@@ -9,7 +9,7 @@ resource "helm_release" "aws_lb_controller" {
   name             = "aws-load-balancer-controller"
   repository       = "https://aws.github.io/eks-charts"
   chart            = "aws-load-balancer-controller"
-  version          = "1.4.1" # TODO: Dependabot or equivalent so this doesn't get neglected.
+  version          = "1.4.2" # TODO: Dependabot or equivalent so this doesn't get neglected.
   namespace        = local.services_ns
   create_namespace = true
   values = [yamlencode({
@@ -21,6 +21,7 @@ resource "helm_release" "aws_lb_controller" {
         "eks.amazonaws.com/role-arn" = data.terraform_remote_state.cluster_infrastructure.outputs.aws_lb_controller_role_arn
       }
     }
+    replicaCount = var.default_desired_ha_replicas
   })]
 }
 
