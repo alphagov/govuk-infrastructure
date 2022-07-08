@@ -31,5 +31,6 @@ resource "helm_release" "cluster_autoscaler" {
     extraArgs = {
       balance-similar-node-groups = true
     }
+    replicaCount = var.default_desired_ha_replicas
   })]
 }
