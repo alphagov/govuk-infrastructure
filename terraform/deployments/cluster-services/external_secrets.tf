@@ -7,15 +7,22 @@ resource "helm_release" "external_secrets" {
   name             = "external-secrets"
   repository       = "https://charts.external-secrets.io"
   chart            = "external-secrets"
-  version          = "0.5.3" # TODO: Dependabot or equivalent so this doesn't get neglected.
+  version          = "0.5.7" # TODO: Dependabot or equivalent so this doesn't get neglected.
   namespace        = local.services_ns
   create_namespace = true
   values = [yamlencode({
+    replicaCount = var.default_desired_ha_replicas
     serviceAccount = {
       name = data.terraform_remote_state.cluster_infrastructure.outputs.external_secrets_service_account_name
       annotations = {
         "eks.amazonaws.com/role-arn" = data.terraform_remote_state.cluster_infrastructure.outputs.external_secrets_role_arn
       }
+    }
+    certController = {
+      replicaCount = var.default_desired_ha_replicas
+    }
+    webhook = {
+      replicaCount = var.default_desired_ha_replicas
     }
   })]
 }
