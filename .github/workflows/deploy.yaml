@@ -38,6 +38,11 @@ on:
         required: false
         default: "false"
         type: string
+      lockIfManualDeploy:
+        description: 'Whether to lock version of app if manual deployment'
+        required: true
+        default: "true"
+        type: string
       appName:
         description: 'Name of the app being deployed'
         required: false
@@ -67,6 +72,7 @@ jobs:
           IMAGE_TAG: ${{ inputs.imageTag }}
           REPO_NAME: ${{ inputs.appName }}
           MANUAL_DEPLOY: ${{ inputs.manualDeploy }}
+          LOCK_IF_MANUAL_DEPLOY: ${{ inputs.lockIfManualDeploy }}
           WEBHOOK_TOKEN: ${{ secrets.WEBHOOK_TOKEN }}
           WEBHOOK_URL: ${{ secrets.WEBHOOK_URL }}
           GITHUB_TOKEN: ${{ secrets.GOVUK_CI_GITHUB_API_TOKEN }}
@@ -78,7 +84,7 @@ jobs:
             curl -s \
               -H "Content-Type: application/json" \
               -H "Authorization: Bearer ${WEBHOOK_TOKEN}" \
-              -d "{\"environment\": \"${ENVIRONMENT}\", \"repoName\": \"${REPO_NAME}\", \"imageTag\": \"${IMAGE_TAG}\", \"manualDeploy\": \"${MANUAL_DEPLOY}\"}" \
+              -d "{\"environment\": \"${ENVIRONMENT}\", \"repoName\": \"${REPO_NAME}\", \"imageTag\": \"${IMAGE_TAG}\", \"manualDeploy\": \"${MANUAL_DEPLOY}\", \"lockIfManualDeploy\": \"${LOCK_IF_MANUAL_DEPLOY}\"}" \
               "${WEBHOOK_URL}"
           # else
           #   echo '::error title="Insufficient permissions to deploy"::The user needs to be a member of the GOV.UK Production Deploy GitHub team to deploy.'
