@@ -7,7 +7,7 @@ resource "helm_release" "external_dns" {
   name             = "external-dns"
   repository       = "https://charts.bitnami.com/bitnami"
   chart            = "external-dns"
-  version          = "6.4.4" # TODO: Dependabot or equivalent so this doesn't get neglected.
+  version          = "6.6.0" # TODO: Dependabot or equivalent so this doesn't get neglected.
   namespace        = local.services_ns
   create_namespace = true
   values = [yamlencode({
@@ -25,6 +25,7 @@ resource "helm_release" "external_dns" {
     domainFilters      = [data.terraform_remote_state.cluster_infrastructure.outputs.external_dns_zone_name]
     interval           = "5m"
     triggerLoopOnEvent = true
+    replicaCount       = var.default_desired_ha_replicas
     # TODO: hook up Prometheus metrics (metrics.enabled, metrics.podAnnotations etc.)
   })]
 }

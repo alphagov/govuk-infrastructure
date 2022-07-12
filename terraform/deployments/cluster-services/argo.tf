@@ -26,12 +26,14 @@ resource "helm_release" "argo_cd" {
   namespace        = local.services_ns
   create_namespace = true
   repository       = "https://argoproj.github.io/argo-helm"
-  version          = "4.6.5" # TODO: Dependabot or equivalent so this doesn't get neglected.
+  version          = "4.9.12" # TODO: Dependabot or equivalent so this doesn't get neglected.
   values = [yamlencode({
     server = {
       # TLS Termination happens at the ALB, the insecure flag prevents Argo
       # server from upgrading the request after TLS termination.
       extraArgs = ["--insecure"]
+
+      replicas = var.default_desired_ha_replicas
 
       ingress = {
         enabled = true
@@ -88,15 +90,25 @@ resource "helm_release" "argo_cd" {
     }
 
     controller = {
-      metrics = local.argo_metrics_config
+      metrics  = local.argo_metrics_config
+      replicas = var.default_desired_ha_replicas
     }
 
     repoServer = {
-      metrics = local.argo_metrics_config
+      metrics  = local.argo_metrics_config
+      replicas = var.default_desired_ha_replicas
+    }
+
+    applicationSet = {
+      replicaCount = var.default_desired_ha_replicas
     }
 
     dex = {
       enabled = false
+    }
+
+    redis-ha = {
+      enabled = true
     }
 
     notifications = {
@@ -140,7 +152,7 @@ resource "helm_release" "argo_workflows" {
   namespace        = local.services_ns
   create_namespace = true
   repository       = "https://argoproj.github.io/argo-helm"
-  version          = "0.15.3" # TODO: Dependabot or equivalent so this doesn't get neglected.
+  version          = "0.16.6" # TODO: Dependabot or equivalent so this doesn't get neglected.
   values = [yamlencode({
     controller = {
       podSecurityContext = {
@@ -151,7 +163,9 @@ resource "helm_release" "argo_workflows" {
         spec = {
           activeDeadlineSeconds = 7200
           ttlStrategy = {
-            secondsAfterSuccess = 432000
+            secondsAfterFailure    = 259200
+            secondsAfterSuccess    = 259200
+            secondsAfterCompletion = 259200
           }
           podGC = {
             strategy = "OnWorkflowSuccess"
@@ -182,14 +196,16 @@ resource "helm_release" "argo_workflows" {
       containerRuntimeExecutor = "emissary"
       resources = {
         requests = {
-          cpu    = "100m"
-          memory = "128Mi"
+          cpu    = "500m"
+          memory = "1Gi"
         }
         limits = {
-          cpu    = "500m"
-          memory = "512Mi"
+          cpu    = "1"
+          memory = "2Gi"
         }
       }
+      workflowWorkers = 128
+      replicas        = var.default_desired_ha_replicas
     }
 
     executor = {
@@ -244,14 +260,15 @@ resource "helm_release" "argo_workflows" {
       }
       resources = {
         requests = {
-          cpu    = "100m"
-          memory = "64Mi"
+          cpu    = "200m"
+          memory = "256Mi"
         }
         limits = {
           cpu    = "500m"
-          memory = "256Mi"
+          memory = "512Mi"
         }
       }
+      replicas = var.default_desired_ha_replicas
     }
   })]
 }
@@ -262,8 +279,22 @@ resource "helm_release" "argo_events" {
   namespace        = local.services_ns
   create_namespace = true
   repository       = "https://argoproj.github.io/argo-helm"
-  version          = "1.13.0" # TODO: Dependabot or equivalent so this doesn't get neglected.
+  version          = "2.0.3" # TODO: Dependabot or equivalent so this doesn't get neglected.
   values = [yamlencode({
     namespace = local.services_ns
+    controller = {
+      replicas = var.default_desired_ha_replicas
+    }
+    configs = {
+      nats = {
+        versions = [
+          {
+            version            = "0.22.1"
+            natsStreamingImage = "nats-streaming:0.22.1"
+            metricsExporterImage : "natsio/prometheus-nats-exporter:0.8.0"
+          }
+        ]
+      }
+    }
   })]
 }

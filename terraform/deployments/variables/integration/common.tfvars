@@ -40,4 +40,5 @@ rds_skip_final_snapshot = true
 
 secrets_recovery_window_in_days = 0
 
-kube_prometheus_stack_replica_count = 1
+default_desired_ha_replicas = 2
+

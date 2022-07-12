@@ -5,12 +5,13 @@
 #
 # The AWS IAM resources for the autoscaler are in
 # ../cluster-infrastructure/cluster_autoscaler_iam.tf.
-
+# and should be updated if a new version of the cluster autoscaler requires a
+# different set of permissions
 resource "helm_release" "cluster_autoscaler" {
   name       = "cluster-autoscaler"
   repository = "https://kubernetes.github.io/autoscaler"
   chart      = "cluster-autoscaler"
-  version    = "9.18.1" # TODO: Dependabot or equivalent so this doesn't get neglected.
+  version    = "9.19.2" # TODO: Dependabot or equivalent so this doesn't get neglected.
   namespace  = "kube-system"
   values = [yamlencode({
     awsRegion = data.aws_region.current.name
@@ -27,5 +28,9 @@ resource "helm_release" "cluster_autoscaler" {
       clusterName = data.terraform_remote_state.cluster_infrastructure.outputs.cluster_id
       enabled     = true
     }
+    extraArgs = {
+      balance-similar-node-groups = true
+    }
+    replicaCount = var.default_desired_ha_replicas
   })]
 }

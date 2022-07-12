@@ -43,7 +43,10 @@ variable "dex_github_orgs_teams" {
   default     = [{ name = "alphagov", teams = ["gov-uk-production-deploy"] }]
 }
 
-variable "kube_prometheus_stack_replica_count" {
+
+variable "default_desired_ha_replicas" {
   type        = number
-  description = "This dictates the number of replicas we will have in each environment for the following services, Alertmanager, Prometheus and Grafana. These are defined in common.tfvars"
+  description = "Default number of desired replicas for high availability"
+  default     = 3
+
 }
