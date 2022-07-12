@@ -63,10 +63,15 @@ jobs:
         if [ "$GEM_VERSION" != "$GEM_NAME (${VERSION})" ]; then
           gem build ${GEM_NAME}.gemspec
           gem push "${GEM_NAME}-${VERSION}.gem"
+        else
+          echo "Skipping gem publish because version (${VERSION}) is already published"
         fi
+
         if ! git ls-remote --tags --exit-code origin v${VERSION}; then
           git tag v${VERSION}
           git push --tags
+        else
+          echo "Skipping git tagging because tag (v${VERSION}) already exists"
         fi
     - if: ${{ github.sha != steps.fetch_default_branch_head.outputs.sha }}
       name: "Skip publish: commit is not HEAD of default branch"
