@@ -49,7 +49,12 @@ jobs:
       with:
         rubygems: latest
         bundler-cache: true
-    - env:
+    - name: "Determine HEAD of default branch"
+      id: fetch_default_branch_head
+      run: echo "::set-output name=sha::$(git ls-remote origin HEAD | cut -f 1)"
+    - if: ${{ github.sha == steps.fetch_default_branch_head.outputs.sha }}
+      name: "Check if gem needs publishing"
+      env:
         GEM_NAME: ${{ inputs.gem_name }}
         GEM_HOST_API_KEY: ${{ secrets.GEM_HOST_API_KEY }}
       run: |
@@ -63,3 +68,7 @@ jobs:
           git tag v${VERSION}
           git push --tags
         fi
+    - if: ${{ github.sha != steps.fetch_default_branch_head.outputs.sha }}
+      name: "Skip publish: commit is not HEAD of default branch"
+      run: |
+        echo "Skipping publish because commit (${GITHUB_SHA}) isn't the HEAD of the default branch (${{ steps.fetch_default_branch_head.outputs.sha }})"
