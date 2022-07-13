@@ -138,6 +138,7 @@ resource "helm_release" "kube_prometheus_stack" {
   create_namespace = true
   values = [yamlencode({
     grafana = {
+      defaultDashboardsTimezone = "Europe/London"
       ingress = {
         enabled  = true
         hosts    = [local.grafana_host]
@@ -236,6 +237,24 @@ resource "helm_release" "kube_prometheus_stack" {
         }
       }]
     }
+    alertmanager = {
+      alertmanagerSpec = {
+        replicas = var.default_desired_ha_replicas
+        storage = {
+          volumeClaimTemplate = {
+            spec = {
+              storageClassName = "ebs-sc"
+              accessModes      = ["ReadWriteOnce"]
+              resources = {
+                requests = {
+                  storage = "10Gi"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
     prometheus = {
       # Match all PrometheusRules cluster-wide. (If an app/team needs a separate
       # Prom instance, it almost certainly needs a separate EKS cluster too.)
@@ -258,6 +277,25 @@ resource "helm_release" "kube_prometheus_stack" {
         }
         podMonitorSelectorNilUsesHelmValues     = false
         serviceMonitorSelectorNilUsesHelmValues = false
+        replicas                                = var.default_desired_ha_replicas
+        storageSpec = {
+          volumeClaimTemplate = {
+            spec = {
+              storageClassName = "ebs-sc"
+              accessModes      = ["ReadWriteOnce"]
+              resources = {
+                requests = {
+                  storage = "50Gi"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    kube_state_metrics = {
+      selfMonitor = {
+        enabled = true
       }
     }
   })]
