@@ -239,18 +239,7 @@ resource "helm_release" "kube_prometheus_stack" {
     }
     alertmanager = {
       alertmanagerSpec = {
-        podAntiAffinity = "hard"
-        replicas        = var.kube_prometheus_stack_replica_count
-        topologySpreadConstraints = [{
-          maxSkew           = 1
-          topologyKey       = "topology.kubernetes.io/zone"
-          whenUnsatisfiable = "DoNotSchedule"
-          labelSelector = {
-            matchLabels = {
-              app = "alertmanager"
-            }
-          }
-        }]
+        replicas = var.default_desired_ha_replicas
         storage = {
           volumeClaimTemplate = {
             spec = {
@@ -288,18 +277,7 @@ resource "helm_release" "kube_prometheus_stack" {
         }
         podMonitorSelectorNilUsesHelmValues     = false
         serviceMonitorSelectorNilUsesHelmValues = false
-        replicas                                = var.kube_prometheus_stack_replica_count
-        podAntiAffinity                         = "hard"
-        topologySpreadConstraints = [{
-          maxSkew           = 1
-          topologyKey       = "topology.kubernetes.io/zone"
-          whenUnsatisfiable = "DoNotSchedule"
-          labelSelector = {
-            matchLabels = {
-              app = "prometheus"
-            }
-          }
-        }]
+        replicas                                = var.default_desired_ha_replicas
         storageSpec = {
           volumeClaimTemplate = {
             spec = {

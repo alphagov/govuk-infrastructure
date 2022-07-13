@@ -41,4 +41,3 @@ rds_skip_final_snapshot = true
 secrets_recovery_window_in_days = 0
 
 default_desired_ha_replicas = 2
-

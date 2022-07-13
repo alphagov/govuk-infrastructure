@@ -43,10 +43,8 @@ variable "dex_github_orgs_teams" {
   default     = [{ name = "alphagov", teams = ["gov-uk-production-deploy"] }]
 }
 
-
 variable "default_desired_ha_replicas" {
   type        = number
   description = "Default number of desired replicas for high availability"
   default     = 3
-
 }
