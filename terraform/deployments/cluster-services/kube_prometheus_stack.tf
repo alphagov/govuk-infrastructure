@@ -139,6 +139,7 @@ resource "helm_release" "kube_prometheus_stack" {
   values = [yamlencode({
     grafana = {
       defaultDashboardsTimezone = "Europe/London"
+      replicas                  = var.default_desired_ha_replicas
       ingress = {
         enabled  = true
         hosts    = [local.grafana_host]
