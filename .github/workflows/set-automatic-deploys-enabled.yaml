@@ -7,12 +7,12 @@
 #   workflow_dispatch:
 #     inputs:
 #       resetImageTag:
-#         description: 'Whether to reset image tag to main'
+#         description: 'Reset image tag to main'
 #         required: false
 #         default: false
 #         type: boolean
 #       automaticDeploysEnabled:
-#         description: 'Set whether automatic deploys is active or not'
+#         description: 'Activate automatic deploys'
 #         required: false
 #         default: true
 #         type: boolean
@@ -35,9 +35,14 @@
 #       automaticDeploysEnabled: ${{ github.event.inputs.automaticDeploysEnabled == 'true' }}
 #       environment: ${{ github.event.inputs.environment }}
 #     secrets:
-#       WEBHOOK_TOKEN: ${{ secrets.ARGO_EVENTS_WEBHOOK_TOKEN }}
+#       WEBHOOK_TOKEN: ${{ secrets.GOVUK_INTEGRATION_ARGO_EVENTS_WEBHOOK_TOKEN }}
 #       WEBHOOK_URL: ${{ secrets.GOVUK_INTEGRATION_ARGO_EVENTS_WEBHOOK_URL }}
 #       GOVUK_CI_GITHUB_API_TOKEN: ${{ secrets.GOVUK_CI_GITHUB_API_TOKEN }}
+
+
+#
+# REUSABLE WORKFLOW
+# -----------------
 
 name: Set automatic_deploys_enabled (optionally image_tag too)
 
@@ -45,12 +50,12 @@ on:
   workflow_call:
     inputs:
       resetImageTag:
-        description: 'Whether to reset image tag to main'
+        description: 'Reset image tag to main'
         required: false
         default: false
         type: boolean
       automaticDeploysEnabled:
-        description: 'Set whether automatic deploys is active or not'
+        description: 'Activate automatic deploys'
         required: true
         default: true
         type: boolean
