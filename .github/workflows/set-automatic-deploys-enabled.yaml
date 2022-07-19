@@ -86,7 +86,7 @@ jobs:
           RESET_IMAGE_TAG: ${{ inputs.resetImageTag }}
         run: |
           IMAGE_TAG=""
-          if [ "${RESET_IMAGE_TAG}" ]; then
+          if [[ "${RESET_IMAGE_TAG}" = "true" ]]; then
             IMAGE_TAG=$(git rev-parse HEAD)
           fi
           echo "::set-output name=tag::"${IMAGE_TAG}""
