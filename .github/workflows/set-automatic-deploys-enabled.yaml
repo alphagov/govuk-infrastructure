@@ -89,7 +89,7 @@ jobs:
           if [ "${RESET_IMAGE_TAG}" ]; then
             IMAGE_TAG=$(git rev-parse HEAD)
           fi
-          echo '::set-output name=tag::"${IMAGE_TAG}"'
+          echo "::set-output name=tag::"${IMAGE_TAG}""
       - name: Send webhook
         env:
           AUTOMATIC_DEPLOYS_ENABLED: ${{ inputs.automaticDeploysEnabled }}
