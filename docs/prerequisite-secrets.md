@@ -68,6 +68,13 @@ In addition, there are
  }
  ```
 
+4. `govuk/alertmanager/pagerduty-routing-key`: routing key used to access pagerduty service.
+
+  Obtained from the `Integration Key` value of the `Events API V2` `Integrations` for the service in pagerduty.
+
+  ```
+  <secret_1>
+  ```
 
 ## Manually generated platform secrets
 
