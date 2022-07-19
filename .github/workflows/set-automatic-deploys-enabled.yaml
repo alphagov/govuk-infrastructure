@@ -107,7 +107,7 @@ jobs:
             curl -s \
               -H "Content-Type: application/json" \
               -H "Authorization: Bearer ${WEBHOOK_TOKEN}" \
-              -d "{\"environment\": \"${ENVIRONMENT}\", \"repoName\": \"${REPO_NAME}\", \"automaticDeploysEnabled\": \"${AUTOMATIC_DEPLOYS_ENABLED}\", \"imageTag\": \"${IMAGE_TAG}}\" \
+              -d "{\"environment\": \"${ENVIRONMENT}\", \"repoName\": \"${REPO_NAME}\", \"automaticDeploysEnabled\": \"${AUTOMATIC_DEPLOYS_ENABLED}\", \"imageTag\": \"${IMAGE_TAG}\"}" \
               "${WEBHOOK_URL}/set-automatic-deploys-enabled"
           else
             echo '::error title="Insufficient permissions to deploy"::The user needs to be a member of the GOV.UK Production Deploy GitHub team to deploy.'
