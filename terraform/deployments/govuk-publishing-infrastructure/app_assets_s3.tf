@@ -1,5 +1,6 @@
 resource "aws_s3_bucket" "app_assets" {
-  bucket = "govuk-app-assets-${var.govuk_environment}"
+  bucket        = "govuk-app-assets-${var.govuk_environment}"
+  force_destroy = true
   tags = {
     Name        = "App static assets for ${var.govuk_environment}"
     Environment = var.govuk_environment
