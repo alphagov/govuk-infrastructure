@@ -13,6 +13,12 @@ variable "govuk_environment" {
   description = "GOV.UK environment where resources are being deployed"
 }
 
+variable "force_destroy" {
+  type        = bool
+  description = "Setting for force_destroy on resources such as S3 buckets and Route53 zones. For use in non-production environments to allow for automated tear-down."
+  default     = false
+}
+
 variable "frontend_memcached_node_type" {
   type        = string
   description = "Instance type for the Frontend memcached."
