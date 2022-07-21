@@ -34,6 +34,9 @@ resource "helm_release" "filebeat" {
           "loadbalance" : true
           "ssl.enabled" : true
         }
+        "logging.files" : {
+          "keepfiles" : 7
+        }
       })
     }
     extraEnvs = [
