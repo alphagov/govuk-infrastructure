@@ -289,9 +289,9 @@ resource "helm_release" "argo_events" {
       nats = {
         versions = [
           {
-            version            = "0.22.1"
-            natsStreamingImage = "nats-streaming:0.22.1"
-            metricsExporterImage : "natsio/prometheus-nats-exporter:0.8.0"
+            version              = "0.22.1"
+            natsStreamingImage   = "nats-streaming:0.22.1"
+            metricsExporterImage = "natsio/prometheus-nats-exporter:0.8.0"
           }
         ]
       }
