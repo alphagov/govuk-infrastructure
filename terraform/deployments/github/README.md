@@ -26,6 +26,11 @@ Our intent is to replace govuk-saas-config with Terraform configuration.
 
 ## Applying Terraform
 
+**Warning**
+Any new resource "github_actions_organization_secret_repositories" that has been
+created in the GitHub Web UI before will be overwritten and set to an empty
+secret.
+
 1. Generate access token
   1. Go to https://github.com/settings/tokens/new
   2. Create a new token with permissions `admin:org` and `public_repo`
