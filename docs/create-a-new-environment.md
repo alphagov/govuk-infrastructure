@@ -33,3 +33,5 @@ helm chart of the [govuk-helm-charts] GitHub repository.
 
 Please see the [GOV.UK k8s manual website](https://govuk-k8s-user-docs.publishing.service.gov.uk/)
 for further details on how to operate the platform.
+
+[govuk-helm-charts]: https://github.com/alphagov/govuk-helm-charts

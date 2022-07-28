@@ -150,4 +150,4 @@ In addition, there are
    }
    ```
 
-[govuk-helm-charts](https://github.com/alphagov/govuk-helm-charts)
+[govuk-helm-charts]: https://github.com/alphagov/govuk-helm-charts
