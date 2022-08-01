@@ -92,6 +92,12 @@ resource "helm_release" "argo_cd" {
     controller = {
       metrics  = local.argo_metrics_config
       replicas = var.default_desired_ha_replicas
+      env = [
+        {
+          name  = "ARGOCD_CONTROLLER_REPLICAS"
+          value = tostring(var.default_desired_ha_replicas)
+        }
+      ]
     }
 
     repoServer = {
