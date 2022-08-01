@@ -90,8 +90,7 @@ resource "helm_release" "argo_cd" {
     }
 
     controller = {
-      metrics  = local.argo_metrics_config
-      replicas = var.default_desired_ha_replicas
+      metrics = local.argo_metrics_config
     }
 
     repoServer = {
