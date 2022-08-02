@@ -28,11 +28,16 @@ resource "helm_release" "filebeat" {
             }]
           }
         ]
-
         "output.logstash" : {
           "hosts" : ["$${LOGSTASH_HOST:? LOGSTASH_HOST variable is not set}:$${LOGSTASH_PORT:? LOGSTASH_PORT variable is not set}"]
           "loadbalance" : true
           "ssl.enabled" : true
+        }
+        "logging.metrics.enabled" : false
+        "http.enabled" : false
+        "logging.level" : "warn"
+        "output.file" : {
+          "enabled" : false
         }
       })
     }
