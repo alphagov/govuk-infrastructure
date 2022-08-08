@@ -30,7 +30,7 @@ on:
       requiresJavaScript:
         description: 'Install Node, Yarn and JavaScript dependencies'
         required: false
-        default: true
+        default: false
         type: boolean
       requiresMongoDB:
         description: 'Run MongoDB'
