@@ -85,29 +85,26 @@ jobs:
   update-image-tag:
     name: Update image tag
     runs-on: ubuntu-latest
+    env:
+      ENVIRONMENT: ${{ inputs.environment || 'integration' }}
     steps:
       - name: Check deploy permissions
         id: deploy-permissions
         env:
-          ENVIRONMENT: ${{ inputs.environment || 'integration' }}
           GH_TOKEN: ${{ secrets.GOVUK_CI_GITHUB_API_TOKEN }}
           GITHUB_TEAM: gov-uk-production-deploy
           GITHUB_USER: ${{ github.triggering_actor }}
         run: |
-          # Check actor has permission to deploy
           TEAM_MEMBERSHIP=$(gh api orgs/alphagov/teams/${GITHUB_TEAM}/memberships/${GITHUB_USER} -q .state || echo "false")
 
-          if [[ "${TEAM_MEMBERSHIP}" = "active" || "${ENVIRONMENT}" = 'integration' ]]; then
-            echo "::set-output name=authorised::true"
-          else
+          if ! [[ "${TEAM_MEMBERSHIP}" = "active" || "${ENVIRONMENT}" = 'integration' ]]; then
             echo '::error title=Insufficient permissions to deploy::User ${{ github.triggering_actor }} needs to be a member of the GOV.UK Production Deploy team'
             exit 1
           fi
 
       - name: Trigger Argo Workflows
-        if: ${{ steps.deploy-permissions.outputs.authorised == 'true' }}
+        if: steps.deploy-permissions.outcome == 'success'
         env:
-          ENVIRONMENT: ${{ inputs.environment || 'integration' }}
           IMAGE_TAG: ${{ inputs.imageTag }}
           REPO_NAME: ${{ inputs.appName }}
           MANUAL_DEPLOY: ${{ github.event_name == 'workflow_dispatch' }}
