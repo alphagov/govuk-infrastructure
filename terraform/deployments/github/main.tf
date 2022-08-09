@@ -30,6 +30,12 @@ data "github_repository" "govuk" {
   full_name = each.key
 }
 
+#
+# Only the list of repositories which will have access to a secret is created/modified
+# here, the secret should have been created in the GitHub UI in advance by a
+# GitHub Admin.
+#
+
 resource "github_actions_organization_secret_repositories" "aws_govuk_ecr_access_key_id" {
   secret_name             = "AWS_GOVUK_ECR_ACCESS_KEY_ID"
   selected_repository_ids = [for repo in data.github_repository.govuk : repo.repo_id]
@@ -45,14 +51,12 @@ resource "github_actions_organization_secret_repositories" "ci_user_github_api_t
   selected_repository_ids = [for repo in data.github_repository.govuk : repo.repo_id]
 }
 
-resource "github_actions_organization_secret" "argo_events_webhook_token" {
+resource "github_actions_organization_secret_repositories" "argo_events_webhook_token" {
   secret_name             = "GOVUK_INTEGRATION_ARGO_EVENTS_WEBHOOK_TOKEN"
-  visibility              = "selected"
   selected_repository_ids = [for repo in data.github_repository.govuk : repo.repo_id]
 }
 
-resource "github_actions_organization_secret" "argo_events_webhook_url" {
+resource "github_actions_organization_secret_repositories" "argo_events_webhook_url" {
   secret_name             = "GOVUK_INTEGRATION_ARGO_EVENTS_WEBHOOK_URL"
-  visibility              = "selected"
   selected_repository_ids = [for repo in data.github_repository.govuk : repo.repo_id]
 }
