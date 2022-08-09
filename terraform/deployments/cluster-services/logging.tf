@@ -35,7 +35,7 @@ resource "helm_release" "filebeat" {
         }
         "logging.metrics.enabled" : false
         "http.enabled" : false
-        "logging.level" : "warn"
+        "logging.level" : "warning"
         "output.file" : {
           "enabled" : false
         }
