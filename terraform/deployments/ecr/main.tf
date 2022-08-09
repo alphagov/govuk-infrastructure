@@ -209,12 +209,12 @@ resource "aws_iam_user_policy" "github_ecr_user_policy" {
   })
 }
 
-resource "aws_ecr_lifecycle_policy" "untaggedImage_expiry_policy" {
+resource "aws_ecr_lifecycle_policy" "ecr_lifecycle_policy" {
   for_each   = toset([for repo in local.repositories : aws_ecr_repository.repositories[repo].name])
   repository = each.key
 
   policy = <<EOF
-{
+  {
     "rules": [
         {
             "rulePriority": 1,
@@ -227,21 +227,7 @@ resource "aws_ecr_lifecycle_policy" "untaggedImage_expiry_policy" {
             },
             "action": {
                 "type": "expire"
-            }
-        }
-    ]
-}
-EOF
-}
-
-resource "aws_ecr_lifecycle_policy" "keep_image_policy" {
-  for_each   = toset([for repo in local.repositories : aws_ecr_repository.repositories[repo].name])
-  repository = each.key
-
-  policy = <<EOF
-{
-    "rules": [
-        {
+            },
             "rulePriority": 1,
             "description": "Keep last 20 images",
             "selection": {
@@ -253,11 +239,12 @@ resource "aws_ecr_lifecycle_policy" "keep_image_policy" {
             "action": {
                 "type": "expire"
             }
-        }
+        }            
     ]
-}
+  }
 EOF
 }
+
 resource "aws_iam_role_policy_attachment" "pull_from_ecr" {
   role       = aws_iam_role.pull_from_ecr.name
   policy_arn = aws_iam_policy.pull_from_ecr.arn
