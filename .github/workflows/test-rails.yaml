@@ -60,6 +60,11 @@ on:
         description: 'Password for the MySQL database'
         required: false
         type: string
+      extraSystemDependencies:
+        description: 'Install additional system dependencies'
+        required: false
+        default: ''
+        type: string
 
 jobs:
   test:
@@ -78,6 +83,12 @@ jobs:
            repository: alphagov/govuk-content-schemas
            ref: deployed-to-production
            path: vendor/govuk-content-schemas
+
+       - name: Install additional system dependencies
+         if: ${{ inputs.extraSystemDependencies }}
+         run: |
+           sudo apt-get update
+           sudo apt-get install -y --no-install-recommends ${{ inputs.extraSystemDependencies }}
 
        - name: Setup Ruby
          uses: ruby/setup-ruby@v1
