@@ -41,6 +41,7 @@ locals {
   )
 
   extra_repositories = [
+    "clamav",
     "github-cli",
     "signon-resources",
     "statsd",
@@ -239,7 +240,7 @@ resource "aws_ecr_lifecycle_policy" "ecr_lifecycle_policy" {
             "action": {
                 "type": "expire"
             }
-        }            
+        }
     ]
   }
 EOF
