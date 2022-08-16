@@ -1,4 +1,4 @@
-resource "helm_release" "csi_driver" {
+resource "helm_release" "ebs_csi_driver" {
   chart      = "aws-ebs-csi-driver"
   name       = "aws-ebs-csi-driver"
   namespace  = "kube-system"
