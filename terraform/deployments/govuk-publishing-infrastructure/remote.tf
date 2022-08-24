@@ -80,3 +80,5 @@ data "terraform_remote_state" "app_search" {
     region = data.aws_region.current.name
   }
 }
+
+data "fastly_ip_ranges" "fastly" {}

@@ -11,6 +11,10 @@ terraform {
       source  = "hashicorp/random"
       version = "~> 3.1"
     }
+    fastly = {
+      source  = "fastly/fastly"
+      version = "~> 2.1"
+    }
   }
 }
 
@@ -34,3 +38,9 @@ provider "aws" {
 }
 
 provider "random" {}
+
+# used by the fastly ip ranges provider.
+# an API key is needed but 'fake' seems to work.
+provider "fastly" {
+  api_key = "fake"
+}
