@@ -154,7 +154,7 @@ jobs:
            docker run --name mysql --publish "${MYSQL_PORT}:3306" --detach --env MYSQL_ALLOW_EMPTY_PASSWORD=true mysql:8.0
 
            # Wait for MySQL to be ready to accept connections
-           sleep 10
+           sleep 15
 
            # Create user for running tests
            MYSQL_COMMAND="mysql -h 127.0.0.1 -P ${MYSQL_PORT} -u root"
