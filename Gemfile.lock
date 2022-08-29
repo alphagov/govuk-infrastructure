@@ -43,7 +43,7 @@ GEM
       http-form_data (~> 2.2)
       http-parser (~> 1.2.0)
     http-accept (1.7.0)
-    http-cookie (1.0.4)
+    http-cookie (1.0.5)
       domain_name (~> 0.5)
     http-form_data (2.3.0)
     http-parser (1.2.3)
@@ -52,9 +52,9 @@ GEM
       concurrent-ruby (~> 1.0)
     jmespath (1.6.1)
     json (2.6.2)
-    jsonpath (1.1.0)
+    jsonpath (1.1.2)
       multi_json
-    kubeclient (4.9.3)
+    kubeclient (4.10.0)
       http (>= 3.0, < 5.0)
       jsonpath (~> 1.0)
       recursive-open-struct (~> 1.1, >= 1.1.1)
@@ -124,7 +124,7 @@ GEM
       concurrent-ruby (~> 1.0)
     unf (0.1.4)
       unf_ext
-    unf_ext (0.0.8.1)
+    unf_ext (0.0.8.2)
     unicode-display_width (2.2.0)
     webmock (3.18.1)
       addressable (>= 2.8.0)
@@ -137,7 +137,7 @@ PLATFORMS
 DEPENDENCIES
   aws-sdk-s3
   climate_control (~> 1.2)
-  kubeclient (~> 4.9)
+  kubeclient (~> 4.10)
   rake
   rspec
   rubocop-govuk (~> 4.7)
