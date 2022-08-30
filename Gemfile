@@ -3,7 +3,7 @@
 source "https://rubygems.org"
 
 gem "aws-sdk-s3"
-gem "kubeclient", "~> 4.9"
+gem "kubeclient", "~> 4.10"
 gem "rake"
 
 group :development, :test do
