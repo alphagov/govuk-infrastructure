@@ -14,8 +14,12 @@ locals {
 
 resource "kubernetes_namespace" "apps" {
   metadata {
-    name   = var.apps_namespace
-    labels = { "app.kubernetes.io/managed-by" = "Terraform" }
+    name = var.apps_namespace
+    labels = {
+      "app.kubernetes.io/managed-by" = "Terraform"
+      # https://kubernetes-sigs.github.io/aws-load-balancer-controller/latest/deploy/pod_readiness_gate/
+      "elbv2.k8s.aws/pod-readiness-gate-inject" = "enabled"
+    }
   }
 }
 
