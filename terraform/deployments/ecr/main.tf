@@ -227,7 +227,7 @@ resource "aws_ecr_lifecycle_policy" "ecr_lifecycle_policy" {
             },
             "action": {
                 "type": "expire"
-            }
+            },
             "rulePriority": 2,
             "description": "Expire images older than 30 days",
             "selection": {
