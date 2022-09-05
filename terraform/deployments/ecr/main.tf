@@ -218,6 +218,17 @@ resource "aws_ecr_lifecycle_policy" "ecr_lifecycle_policy" {
     "rules": [
         {
             "rulePriority": 1,
+            "description": "Rule 1",
+            "selection": {
+                "tagStatus": "tagged",
+                "tagPrefixList": ["deployed-to-prod"],
+                "countType": "imageCountMoreThan",
+                "countNumber": 1
+            },
+            "action": {
+                "type": "expire"
+            }
+            "rulePriority": 2,
             "description": "Expire images older than 30 days",
             "selection": {
                 "tagStatus": "untagged",
@@ -228,7 +239,7 @@ resource "aws_ecr_lifecycle_policy" "ecr_lifecycle_policy" {
             "action": {
                 "type": "expire"
             },
-            "rulePriority": 1,
+            "rulePriority": 3,
             "description": "Keep last 20 images",
             "selection": {
                 "tagStatus": "tagged",
