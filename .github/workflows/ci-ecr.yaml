@@ -89,7 +89,7 @@ jobs:
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           ECR_REPOSITORY: ${{ inputs.ecr_repository_name }}
-          ENVRIONMENT: ${{ inputs.environment }}
+          ENVIRONMENT: ${{ inputs.environment }}
           DOCKER_BUILDKIT: "1"
         run: |
           IMAGE_TAG=$(git rev-parse HEAD)
