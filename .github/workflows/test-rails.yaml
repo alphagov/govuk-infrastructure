@@ -37,6 +37,11 @@ on:
         required: false
         default: false
         type: boolean
+      requiresElasticsearch:
+        description: 'Run Elasticsearch'
+        required: false
+        default: false
+        type: boolean
       requiresRedis:
         description: 'Run Redis'
         required: false
@@ -55,6 +60,16 @@ on:
         description: 'Password for the MySQL database'
         required: false
         type: string
+      extraSystemDependencies:
+        description: 'Install additional system dependencies'
+        required: false
+        default: ''
+        type: string
+      runBrakeman:
+        description: 'Run Brakeman'
+        required: false
+        default: true
+        type: boolean
 
 jobs:
   test:
@@ -74,6 +89,12 @@ jobs:
            ref: deployed-to-production
            path: vendor/govuk-content-schemas
 
+       - name: Install additional system dependencies
+         if: ${{ inputs.extraSystemDependencies }}
+         run: |
+           sudo apt-get update
+           sudo apt-get install -y --no-install-recommends ${{ inputs.extraSystemDependencies }}
+
        - name: Setup Ruby
          uses: ruby/setup-ruby@v1
          with:
@@ -90,6 +111,7 @@ jobs:
          run: yarn install --frozen-lockfile
 
        - name: Run Brakeman
+         if: inputs.runBrakeman
          run: bundle exec brakeman . --except CheckRenderInline
 
        - name: Setup MongoDB
@@ -97,6 +119,20 @@ jobs:
          uses: supercharge/mongodb-github-action@1.7.0
          with:
            mongodb-version: 2.6
+
+       - name: Configure sysctl limits
+         if: ${{ inputs.requiresElasticsearch }}
+         run: |
+           sudo swapoff -a
+           sudo sysctl -w vm.swappiness=1
+           sudo sysctl -w fs.file-max=262144
+           sudo sysctl -w vm.max_map_count=262144
+
+       - name: Setup Elasticsearch
+         if: ${{ inputs.requiresElasticsearch }}
+         uses: elastic/elastic-github-actions/elasticsearch@562b8b6ae4677da97273ff6bc4d630ce96ecbaa5
+         with:
+           stack-version: 6.7.0
 
        - name: Setup Redis
          if: ${{ inputs.requiresRedis }}
@@ -118,7 +154,7 @@ jobs:
            docker run --name mysql --publish "${MYSQL_PORT}:3306" --detach --env MYSQL_ALLOW_EMPTY_PASSWORD=true mysql:8.0
 
            # Wait for MySQL to be ready to accept connections
-           sleep 10
+           sleep 15
 
            # Create user for running tests
            MYSQL_COMMAND="mysql -h 127.0.0.1 -P ${MYSQL_PORT} -u root"
