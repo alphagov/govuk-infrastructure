@@ -210,36 +210,45 @@ resource "aws_ecr_lifecycle_policy" "ecr_lifecycle_policy" {
   for_each   = toset([for repo in local.repositories : aws_ecr_repository.repositories[repo].name])
   repository = each.key
 
-  policy = <<EOF
-  {
-    "rules": [
-        {
-            "rulePriority": 1,
-            "description": "Expire images older than 30 days",
-            "selection": {
-                "tagStatus": "untagged",
-                "countType": "sinceImagePushed",
-                "countUnit": "days",
-                "countNumber": 30
-            },
-            "action": {
-                "type": "expire"
-            },
-            "rulePriority": 1,
-            "description": "Keep last 20 images",
-            "selection": {
-                "tagStatus": "tagged",
-                "tagPrefixList": ["v"],
-                "countType": "imageCountMoreThan",
-                "countNumber": 20
-            },
-            "action": {
-                "type": "expire"
-            }
+  policy = jsonencode({
+    "rules" : [
+      {
+        "rulePriority" : 1,
+        "description" : "Rule 1",
+        "selection" : {
+          "tagStatus" : "tagged",
+          "tagPrefixList" : ["deployed-to"],
+          "countType" : "imageCountMoreThan",
+          "countNumber" : 1
+        },
+        "action" : {
+          "type" : "expire"
+        },
+        "rulePriority" : 2,
+        "description" : "Expire images older than 30 days",
+        "selection" : {
+          "tagStatus" : "tagged",
+          "countType" : "sinceImagePushed",
+          "countUnit" : "days",
+          "countNumber" : 30
+        },
+        "action" : {
+          "type" : "expire"
+        },
+        "rulePriority" : 3,
+        "description" : "Keep last 20 images",
+        "selection" : {
+          "tagStatus" : "tagged",
+          "tagPrefixList" : ["v"],
+          "countType" : "imageCountMoreThan",
+          "countNumber" : 20
+        },
+        "action" : {
+          "type" : "expire"
         }
+      }
     ]
-  }
-EOF
+  })
 }
 
 resource "aws_iam_role_policy_attachment" "pull_from_ecr" {
