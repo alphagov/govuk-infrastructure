@@ -18,11 +18,6 @@ output "aws_ebs_csi_driver_iam_role_arn" {
   value       = module.aws_ebs_csi_driver_iam_role.iam_role_arn
 }
 
-output "aws_efs_csi_driver_iam_role_arn" {
-  description = "IAM role ARN for AWS EFS CSI controller role"
-  value       = module.aws_efs_csi_driver_iam_role.iam_role_arn
-}
-
 output "control_plane_security_group_id" {
   description = "ID of the security group which contains the (AWS-owned) control plane nodes."
   value       = module.eks.cluster_primary_security_group_id
@@ -103,11 +98,6 @@ output "aws_ebs_csi_driver_controller_service_account_name" {
   value       = local.ebs_csi_driver_controller_service_account_name
 }
 
-output "aws_efs_csi_driver_controller_service_account_name" {
-  description = "Name of the k8s service account for the AWS EFS CSI Controller"
-  value       = local.efs_csi_driver_controller_service_account_name
-}
-
 output "grafana_iam_role_arn" {
   description = "IAM role ARN corresponding to the k8s service account for Grafana."
   value       = module.grafana_iam_role.iam_role_arn
@@ -116,8 +106,4 @@ output "grafana_iam_role_arn" {
 output "monitoring_namespace" {
   description = "The namespace for monitoring."
   value       = local.monitoring_namespace
-}
-
-output "clamav_db_efs_id" {
-  value = aws_efs_file_system.clamav-db.id
 }
