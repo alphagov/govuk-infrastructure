@@ -245,7 +245,7 @@ resource "aws_security_group_rule" "eks_ingress_www_origin_from_office_and_fastl
   from_port         = 443
   to_port           = 443
   protocol          = "tcp"
-  cidr_blocks       = concat(data.terraform_remote_state.infra_security_groups.outputs.public_nat_gateway_ips, data.fastly_ip_ranges.fastly.cidr_blocks)
+  cidr_blocks       = concat(formatlist("%s/32", data.terraform_remote_state.cluster_infrastructure.outputs.public_nat_gateway_ips), data.fastly_ip_ranges.fastly.cidr_blocks)
   security_group_id = aws_security_group.eks_ingress_www_origin.id
 }
 
@@ -255,7 +255,7 @@ resource "aws_security_group_rule" "eks_ingress_www_origin_from_office_and_fastl
   from_port         = 80
   to_port           = 80
   protocol          = "tcp"
-  cidr_blocks       = concat(data.terraform_remote_state.infra_security_groups.outputs.public_nat_gateway_ips, data.fastly_ip_ranges.fastly.cidr_blocks)
+  cidr_blocks       = concat(formatlist("%s/32", data.terraform_remote_state.cluster_infrastructure.outputs.public_nat_gateway_ips), data.fastly_ip_ranges.fastly.cidr_blocks)
   security_group_id = aws_security_group.eks_ingress_www_origin.id
 }
 
