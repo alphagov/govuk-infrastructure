@@ -194,6 +194,7 @@ resource "aws_iam_user_policy" "github_ecr_user_policy" {
           "ecr:GetDownloadUrlForLayer",
           "ecr:BatchGetImage",
           "ecr:BatchCheckLayerAvailability",
+          "ecr:DescribeImages",
           "ecr:PutImage",
           "ecr:InitiateLayerUpload",
           "ecr:UploadLayerPart",
@@ -236,7 +237,7 @@ resource "aws_ecr_lifecycle_policy" "ecr_lifecycle_policy" {
             "action": {
                 "type": "expire"
             }
-        }            
+        }
     ]
   }
 EOF
