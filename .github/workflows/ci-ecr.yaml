@@ -86,6 +86,15 @@ jobs:
           LATEST_GIT_SHA=$(git ls-remote origin HEAD | cut -f 1)
           IMAGE_TAG_ARGS="-t ${ECR_REGISTRY}/${ECR_REPOSITORY}:${IMAGE_TAG}"
 
+          check_image_in_ecr() {
+            aws ecr describe-images --repository-name="${1}" --image-ids=imageTag="${2}"
+          }
+
+          if check_image_in_ecr "${ECR_REPOSITORY}" "${IMAGE_TAG}"; then
+            echo "found existing image ${ECR_REPOSITORY}:${IMAGE_TAG} in registry, will not build image again"
+            exit 0
+          fi
+
           if [ "${LATEST_GIT_SHA}" = "${IMAGE_TAG}" ]; then
             IMAGE_TAG_ARGS+=" -t ${ECR_REGISTRY}/${ECR_REPOSITORY}:latest"
           fi
