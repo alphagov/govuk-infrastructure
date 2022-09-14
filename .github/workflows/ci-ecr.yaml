@@ -92,6 +92,7 @@ jobs:
 
           if check_image_in_ecr "${ECR_REPOSITORY}" "${IMAGE_TAG}"; then
             echo "found existing image ${ECR_REPOSITORY}:${IMAGE_TAG} in registry, will not build image again"
+            echo "::set-output name=imageTag::${IMAGE_TAG}"
             exit 0
           fi
 
