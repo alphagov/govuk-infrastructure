@@ -227,6 +227,9 @@ resource "helm_release" "argo_workflows" {
     workflow = {
       serviceAccount = {
         create = true
+        annotations = {
+          "eks.amazonaws.com/role-arn" = data.terraform_remote_state.ecr.outputs.aws_iam_role_push_to_ecr_role_arn
+        }
       }
     }
 
