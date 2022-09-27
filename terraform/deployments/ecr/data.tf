@@ -1,6 +1,6 @@
 data "aws_iam_policy_document" "topic-policy-ecr-sns" {
 
-  policy_id = "ECR-SCAN_ID"
+  policy_id = "ecr_scan_id"
 
   statement {
     actions = [
