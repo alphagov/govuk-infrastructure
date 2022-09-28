@@ -125,3 +125,7 @@ output "clamav_db_efs_id" {
 output "public_nat_gateway_ips" {
   value = [for eip in aws_eip.eks_nat : eip.public_ip]
 }
+
+output "tag_ecr_iam_role_arn" {
+  value = module.tag_ecr_images_iam_role.iam_role_arn
+}

@@ -118,6 +118,26 @@ resource "aws_iam_role_policy_attachment" "push_to_ecr" {
   policy_arn = aws_iam_policy.push_to_ecr.arn
 }
 
+resource "aws_ecr_repository_policy" "tag_ecr_images" {
+  for_each   = toset([for repo in local.repositories : aws_ecr_repository.repositories[repo].name])
+  repository = each.key
+  policy = jsonencode({
+    "Version" : "2008-10-17",
+    "Statement" : [
+      {
+        "Sid" : "AllowCrossAccountTagging",
+        "Effect" : "Allow",
+        "Principal" : { "AWS" : var.puller_arns },
+        "Action" : [
+          "ecr:BatchGetImage",
+          "ecr:PutImage",
+          "ecr:TagResource"
+        ]
+      }
+    ]
+  })
+}
+
 resource "aws_ecr_repository_policy" "pull_from_ecr" {
   for_each   = toset([for repo in local.repositories : aws_ecr_repository.repositories[repo].name])
   repository = each.key
