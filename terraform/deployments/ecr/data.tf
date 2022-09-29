@@ -1,6 +1,6 @@
 data "aws_iam_policy_document" "topic-policy-ecr-sns" {
 
-  policy_id = "__default_policy_ID"
+  policy_id = "ecr_scan_id"
 
   statement {
     actions = [
@@ -19,11 +19,8 @@ data "aws_iam_policy_document" "topic-policy-ecr-sns" {
       test     = "StringEquals"
       variable = "AWS:SourceOwner"
 
-      values = [
-        data.aws_caller_identity.current.account_id
-      ]
+      values = [data.aws_caller_identity.current.account_id]
     }
-
     effect = "Allow"
 
     principals {
@@ -31,30 +28,19 @@ data "aws_iam_policy_document" "topic-policy-ecr-sns" {
       identifiers = ["*"]
     }
 
-    resources = [
-      "*"
-    ]
-
-    sid = "__default_statement_ID"
+    resources = ["*"]
   }
 
   statement {
-    actions = [
-      "sns:Publish"
-
-    ]
-
-    effect = "Allow"
+    actions = ["sns:Publish"]
+    effect  = "Allow"
 
     principals {
       type        = "Service"
       identifiers = ["events.amazonaws.com"]
     }
 
-    resources = [
-      "*"
-    ]
-
-    sid = "TrustCWEToPublishEventsToMyTopic"
+    resources = ["*"]
+    sid       = "TrustCWEToPublishEventsToMyTopic"
   }
 }

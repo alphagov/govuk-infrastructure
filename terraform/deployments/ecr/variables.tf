@@ -5,7 +5,7 @@ variable "puller_arns" {
 
 variable "emails" {
   type    = list(string)
-  default = [] # TODO: Set a default email address before applying.
+  default = [] # TODO: Set emails in tfvars.
 
 }
 
