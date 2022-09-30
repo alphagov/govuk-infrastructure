@@ -282,7 +282,7 @@ resource "helm_release" "argo_events" {
   namespace        = local.services_ns
   create_namespace = true
   repository       = "https://argoproj.github.io/argo-helm"
-  version          = "2.0.3" # TODO: Dependabot or equivalent so this doesn't get neglected.
+  version          = "2.0.6" # TODO: Dependabot or equivalent so this doesn't get neglected.
   values = [yamlencode({
     namespace = local.services_ns
     controller = {
