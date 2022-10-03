@@ -43,8 +43,16 @@ resource "helm_release" "cluster_secret_store" {
   })]
 }
 
+# Required by cluster-secrets chart, but it won't create it itself
+# (even if create_namespace = true is set)
+resource "kubernetes_namespace" "monitoring" {
+  metadata {
+    name = "monitoring"
+  }
+}
+
 resource "helm_release" "cluster_secrets" {
-  depends_on = [helm_release.cluster_secret_store]
+  depends_on = [helm_release.cluster_secret_store, kubernetes_namespace.monitoring]
 
   chart      = "cluster-secrets"
   name       = "cluster-secrets"
