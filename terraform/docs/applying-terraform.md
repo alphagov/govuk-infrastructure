@@ -43,8 +43,6 @@ When turning up from scratch, deploy the root modules in this order:
 1. [`govuk-publishing-infrastructure`](../deployments/govuk-publishing-infrastructure): creates AWS resources specific to the GOV.UK apps where we are not yet
 able to manage those resources via Kubernetes.
 1. [`cluster-services`](../deployments/cluster-services): deploys the base services into the cluster.
-1. Create the Signon API token as a k8s secret by running `kubectl -n apps create secret generic signon-auth-token --from-literal=token=$(openssl rand -base64 40)`. This will allow
-`signon-resources` to create/export tokens from `signon`, see [here](../../docs/signon-secrets.md) for further details.
 
 ### `cluster-infrastructure`, `cluster-services` or `govuk-publishing-infrastructure` modules
 
