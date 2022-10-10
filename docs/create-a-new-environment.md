@@ -28,7 +28,7 @@ To deploy the root modules, see [Applying Terraform](../terraform/docs/applying-
 ## GOV.UK apps deployment
 
 GOV.UK apps are deployed by ArgoCD and the config is stored in the
-[argocd-apps](https://github.com/alphagov/govuk-helm-charts/tree/main/charts/argocd-apps)
+[app-config](https://github.com/alphagov/govuk-helm-charts/tree/main/charts/app-config)
 helm chart of the [govuk-helm-charts] GitHub repository.
 
 Please see the [GOV.UK k8s manual website](https://govuk-k8s-user-docs.publishing.service.gov.uk/)

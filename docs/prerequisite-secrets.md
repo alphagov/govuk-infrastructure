@@ -11,7 +11,7 @@ The secrets listed here are either:
    We don't have a method yet to autogenerate these. E.g. OAUTH shared secret between
    ArgoCD (continuous delivery tool) and Dex (federated OpenID Connect provider).
 3. GOV.UK app specific secrets which are referred to in
-   [govuk-apps-conf](https://github.com/alphagov/govuk-helm-charts/tree/main/charts/govuk-apps-conf/templates/external-secrets)
+   [app-config](https://github.com/alphagov/govuk-helm-charts/tree/main/charts/app-config/templates/external-secrets)
    helm chart of the [govuk-helm-charts] GitHub repository. These are usually copied across from
    from [govuk-secrets](https://github.com/alphagov/govuk-secrets)
 
