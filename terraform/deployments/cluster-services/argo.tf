@@ -123,23 +123,22 @@ resource "helm_release" "argo_cd" {
   })]
 }
 
-resource "helm_release" "argo_services" {
+resource "helm_release" "argo_bootstrap" {
   # Relies on CRDs
   depends_on       = [helm_release.argo_cd, helm_release.argo_events]
-  chart            = "argo-services"
-  name             = "argo-services"
+  chart            = "argo-bootstrap"
+  name             = "argo-bootstrap"
   namespace        = local.services_ns
   create_namespace = true
   repository       = "https://alphagov.github.io/govuk-helm-charts/"
-  version          = "0.2.0" # TODO: Dependabot or equivalent so this doesn't get neglected.
+  version          = "0.1.0" # TODO: Dependabot or equivalent so this doesn't get neglected.
   values = [yamlencode({
     # TODO: This TF module should not need to know the govuk_environment, since
     # there is only one per AWS account.
-    govukEnvironment     = var.govuk_environment
-    argocdUrl            = "https://${local.argo_host}"
-    argoWorkflowsUrl     = "https://${local.argo_workflows_host}"
-    argoEventsHost       = local.argo_events_host
-    enableWebhookIngress = (var.govuk_environment == "integration")
+    govukEnvironment = var.govuk_environment
+    argocdUrl        = "https://${local.argo_host}"
+    argoWorkflowsUrl = "https://${local.argo_workflows_host}"
+    argoEventsHost   = local.argo_events_host
     rbacTeams = {
       read_only  = var.github_read_only_team
       read_write = var.github_read_write_team
