@@ -53,6 +53,16 @@ output "cluster_endpoint" {
   value       = module.eks.cluster_endpoint
 }
 
+output "cluster_oidc_provider" {
+  description = "The OpenID Connect provider for the EKS cluster (without https://)"
+  value       = module.eks.oidc_provider
+}
+
+output "cluster_oidc_provider_arn" {
+  description = "The ARN of the OpenID Connect provider for the EKS cluster."
+  value       = module.eks.oidc_provider_arn
+}
+
 output "cluster_services_namespace" {
   description = "The namespace for cluster services."
   value       = local.cluster_services_namespace
