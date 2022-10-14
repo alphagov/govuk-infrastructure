@@ -135,6 +135,7 @@ resource "helm_release" "argo_bootstrap" {
   values = [yamlencode({
     # TODO: This TF module should not need to know the govuk_environment, since
     # there is only one per AWS account.
+    awsAccountId     = data.aws_caller_identity.current.account_id
     govukEnvironment = var.govuk_environment
     argocdUrl        = "https://${local.argo_host}"
     argoWorkflowsUrl = "https://${local.argo_workflows_host}"
@@ -142,6 +143,12 @@ resource "helm_release" "argo_bootstrap" {
     rbacTeams = {
       read_only  = var.github_read_only_team
       read_write = var.github_read_write_team
+    }
+    iamRoleServiceAccounts = {
+      tagImageWorkflow = {
+        name       = local.tag_image_service_account_name
+        iamRoleArn = module.tag_image_iam_role.iam_role_arn
+      }
     }
   })]
 }
