@@ -52,11 +52,11 @@ resource "github_actions_organization_secret_repositories" "ci_user_github_api_t
 }
 
 resource "github_actions_organization_secret_repositories" "argo_events_webhook_token" {
-  secret_name             = "GOVUK_INTEGRATION_ARGO_EVENTS_WEBHOOK_TOKEN"
+  secret_name             = "GOVUK_ARGO_EVENTS_WEBHOOK_TOKEN"
   selected_repository_ids = [for repo in data.github_repository.govuk : repo.repo_id]
 }
 
 resource "github_actions_organization_secret_repositories" "argo_events_webhook_url" {
-  secret_name             = "GOVUK_INTEGRATION_ARGO_EVENTS_WEBHOOK_URL"
+  secret_name             = "GOVUK_ARGO_EVENTS_WEBHOOK_URL"
   selected_repository_ids = [for repo in data.github_repository.govuk : repo.repo_id]
 }
