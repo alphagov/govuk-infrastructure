@@ -214,34 +214,51 @@ resource "aws_ecr_lifecycle_policy" "ecr_lifecycle_policy" {
     "rules" : [
       {
         "rulePriority" : 1,
-        "description" : "Rule 1",
+        "description" : "Keep last 100 images with tag prefix deployed-to",
         "selection" : {
           "tagStatus" : "tagged",
           "tagPrefixList" : ["deployed-to"],
           "countType" : "imageCountMoreThan",
-          "countNumber" : 1
+          "countNumber" : 100
         },
         "action" : {
           "type" : "expire"
-        },
-        "rulePriority" : 2,
-        "description" : "Expire images older than 30 days",
+        }
+      },
+      {
+         "rulePriority": 2,
+         "description": "Expire untagged images older than 1 day",
+         "selection": {
+             "tagStatus": "untagged",
+             "countType": "sinceImagePushed",
+             "countUnit": "days",
+             "countNumber": 1
+         },
+         "action": {
+             "type": "expire"
+         }
+      },
+      {
+        "rulePriority" : 3,
+        "description" : "Keep last 20 images with tag prefix release_",
         "selection" : {
           "tagStatus" : "tagged",
+          "tagPrefixList" : ["release_"],
+          "countType" : "imageCountMoreThan",
+          "countNumber" : 20
+        },
+        "action" : {
+          "type" : "expire"
+        }
+      },
+      {
+        "rulePriority" : 4,
+        "description" : "Expire images older than 30 days",
+        "selection" : {
+          "tagStatus" : "any",
           "countType" : "sinceImagePushed",
           "countUnit" : "days",
           "countNumber" : 30
-        },
-        "action" : {
-          "type" : "expire"
-        },
-        "rulePriority" : 3,
-        "description" : "Keep last 20 images",
-        "selection" : {
-          "tagStatus" : "tagged",
-          "tagPrefixList" : ["v"],
-          "countType" : "imageCountMoreThan",
-          "countNumber" : 20
         },
         "action" : {
           "type" : "expire"
