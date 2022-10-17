@@ -26,6 +26,7 @@ data "aws_iam_policy_document" "tag_image" {
   statement {
     actions = [
       "ecr:BatchGetImage",
+      "ecr:DescribeImages",
       "ecr:PutImage",
     ]
     resources = ["arn:aws:ecr:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:repository/*"]
