@@ -9,7 +9,7 @@ RUN chmod 644 /usr/share/keyrings/githubcli-archive-keyring.gpg
 RUN echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" > /etc/apt/sources.list.d/github-cli.list
 RUN apt-get update -qq && \
     apt-get install -qy --no-install-recommends \
-        ca-certificates gh git curl awscli podman && \
+        ca-certificates gh git curl awscli && \
     rm -fr /var/lib/apt/lists/*
 
 RUN curl -fsSL "https://github.com/mikefarah/yq/releases/latest/download/yq_linux_${TARGETARCH}.tar.gz" \
@@ -19,7 +19,6 @@ RUN curl -fsSL "https://github.com/mikefarah/yq/releases/latest/download/yq_linu
 # Crude smoke test.
 RUN aws --version && \
     gh --version && \
-    podman --version && \
     yq --version
 
 RUN groupadd -g 1001 user && \
