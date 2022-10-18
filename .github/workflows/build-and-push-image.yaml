@@ -25,15 +25,15 @@ name: Build and push image
 on:
   workflow_call:
     inputs:
-      ecr_repository_name:
+      ecrRepositoryName:
         required: false
         type: string
         default: ${{ github.event.repository.name }}
-      dockerfile_path:
+      dockerfilePath:
         required: false
         type: string
         default: Dockerfile
-      additional_build_args:
+      additionalBuildArgs:
         required: false
         type: string
       gitRef:
@@ -79,7 +79,7 @@ jobs:
         id: build-image
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          ECR_REPOSITORY: ${{ inputs.ecr_repository_name }}
+          ECR_REPOSITORY: ${{ inputs.ecrRepositoryName }}
           DOCKER_BUILDKIT: "1"
         run: |
           IMAGE_TAG=$(git rev-parse HEAD)
@@ -101,7 +101,7 @@ jobs:
           fi
 
           # Build a docker container and push it to ECR
-          docker build ${IMAGE_TAG_ARGS} ${{ inputs.additional_build_args }} -f ${{ inputs.dockerfile_path }} .
+          docker build ${IMAGE_TAG_ARGS} ${{ inputs.additionalBuildArgs }} -f ${{ inputs.dockerfilePath }} .
           echo "Pushing image to ECR..."
           docker push "${ECR_REGISTRY}/${ECR_REPOSITORY}" -a
           echo "::set-output name=imageTag::${IMAGE_TAG}"
