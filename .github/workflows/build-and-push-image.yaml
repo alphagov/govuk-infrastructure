@@ -1,0 +1,107 @@
+# USAGE
+# -----
+#
+# on:
+#   workflow_dispatch: {}
+#   push:
+#     branches:
+#       - main
+#     paths-ignore:
+#       - "Jenkinsfile"
+#       - ".git**"
+#
+# jobs:
+#   build-publish-image-to-ecr:
+#     uses: alphagov/govuk-infrastructure/.github/workflows/ci-ecr.yaml@main
+#     secrets:
+#       AWS_GOVUK_ECR_ACCESS_KEY_ID: ${{ secrets.AWS_GOVUK_ECR_ACCESS_KEY_ID }}
+#       AWS_GOVUK_ECR_SECRET_ACCESS_KEY: ${{ secrets.AWS_GOVUK_ECR_SECRET_ACCESS_KEY }}
+
+
+# REUSABLE WORKFLOW
+# -----------------
+name: Build and push image
+
+on:
+  workflow_call:
+    inputs:
+      ecr_repository_name:
+        required: false
+        type: string
+        default: ${{ github.event.repository.name }}
+      dockerfile_path:
+        required: false
+        type: string
+        default: Dockerfile
+      additional_build_args:
+        required: false
+        type: string
+      gitRef:
+        required: false
+        type: string
+        default: ${{ github.sha }}
+    secrets:
+      AWS_GOVUK_ECR_ACCESS_KEY_ID:
+        required: true
+      AWS_GOVUK_ECR_SECRET_ACCESS_KEY:
+        required: true
+    outputs:
+      imageTag:
+        description: "The image tag for the built image"
+        value: ${{ jobs.publish.outputs.imageTag }}
+
+jobs:
+  publish:
+    name: Build
+    runs-on: ubuntu-latest
+    outputs:
+      imageTag: ${{ steps.build-image.outputs.imageTag }}
+    steps:
+      - name: Checkout
+        id: checkout
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ inputs.gitRef }}
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          # TODO: Remove long-lived keys and switch to OIDC once https://github.com/github/roadmap/issues/249 lands.
+          aws-access-key-id: ${{ secrets.AWS_GOVUK_ECR_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_GOVUK_ECR_SECRET_ACCESS_KEY }}
+          aws-region: eu-west-1
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+
+      - name: Build, tag, and push image to Amazon ECR
+        id: build-image
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          ECR_REPOSITORY: ${{ inputs.ecr_repository_name }}
+          DOCKER_BUILDKIT: "1"
+        run: |
+          IMAGE_TAG=$(git rev-parse HEAD)
+          LATEST_GIT_SHA=$(git ls-remote origin HEAD | cut -f 1)
+          IMAGE_TAG_ARGS="-t ${ECR_REGISTRY}/${ECR_REPOSITORY}:${IMAGE_TAG}"
+
+          check_image_in_ecr() {
+            aws ecr describe-images --repository-name="${1}" --image-ids=imageTag="${2}"
+          }
+
+          if check_image_in_ecr "${ECR_REPOSITORY}" "${IMAGE_TAG}"; then
+            echo "found existing image ${ECR_REPOSITORY}:${IMAGE_TAG} in registry, will not build image again"
+            echo "::set-output name=imageTag::${IMAGE_TAG}"
+            exit 0
+          fi
+
+          if [ "${LATEST_GIT_SHA}" = "${IMAGE_TAG}" ]; then
+            IMAGE_TAG_ARGS+=" -t ${ECR_REGISTRY}/${ECR_REPOSITORY}:latest"
+          fi
+
+          # Build a docker container and push it to ECR
+          docker build ${IMAGE_TAG_ARGS} ${{ inputs.additional_build_args }} -f ${{ inputs.dockerfile_path }} .
+          echo "Pushing image to ECR..."
+          docker push "${ECR_REGISTRY}/${ECR_REPOSITORY}" -a
+          echo "::set-output name=imageTag::${IMAGE_TAG}"
