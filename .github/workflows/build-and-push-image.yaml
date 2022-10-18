@@ -51,8 +51,8 @@ on:
         value: ${{ jobs.publish.outputs.imageTag }}
 
 jobs:
-  publish:
-    name: Build
+  build-and-push-image:
+    name: Build and push image
     runs-on: ubuntu-latest
     outputs:
       imageTag: ${{ steps.build-image.outputs.imageTag }}
