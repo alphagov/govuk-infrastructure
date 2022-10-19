@@ -55,13 +55,19 @@ jobs:
     name: Build and push image
     runs-on: ubuntu-latest
     outputs:
-      imageTag: ${{ steps.build-image.outputs.imageTag }}
+      imageTag: ${{ steps.determine-image-tag.outputs.imageTag }}
     steps:
       - name: Checkout
         id: checkout
         uses: actions/checkout@v2
         with:
           ref: ${{ inputs.gitRef }}
+
+      - name: Determine image tag
+        id: determine-image-tag
+        run: |
+          IMAGE_TAG=$(git rev-parse HEAD)
+          echo "imageTag=${IMAGE_TAG}" >> $GITHUB_OUTPUT
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
@@ -80,9 +86,9 @@ jobs:
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           ECR_REPOSITORY: ${{ inputs.ecrRepositoryName }}
+          IMAGE_TAG: ${{ steps.determine-image-tag.outputs.imageTag }}
           DOCKER_BUILDKIT: "1"
         run: |
-          IMAGE_TAG=$(git rev-parse HEAD)
           LATEST_GIT_SHA=$(git ls-remote origin HEAD | cut -f 1)
           IMAGE_TAG_ARGS="-t ${ECR_REGISTRY}/${ECR_REPOSITORY}:${IMAGE_TAG}"
 
@@ -92,7 +98,6 @@ jobs:
 
           if check_image_in_ecr "${ECR_REPOSITORY}" "${IMAGE_TAG}"; then
             echo "found existing image ${ECR_REPOSITORY}:${IMAGE_TAG} in registry, will not build image again"
-            echo "::set-output name=imageTag::${IMAGE_TAG}"
             exit 0
           fi
 
@@ -104,4 +109,3 @@ jobs:
           docker build ${IMAGE_TAG_ARGS} ${{ inputs.additionalBuildArgs }} -f ${{ inputs.dockerfilePath }} .
           echo "Pushing image to ECR..."
           docker push "${ECR_REGISTRY}/${ECR_REPOSITORY}" -a
-          echo "::set-output name=imageTag::${IMAGE_TAG}"
