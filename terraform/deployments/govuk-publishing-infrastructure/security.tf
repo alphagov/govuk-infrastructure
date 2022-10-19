@@ -222,7 +222,7 @@ resource "aws_security_group_rule" "ec2_www_origin_from_eks_workers" {
 resource "aws_security_group" "eks_ingress_www_origin" {
   name        = "eks_ingress_www_origin"
   vpc_id      = data.terraform_remote_state.infra_vpc.outputs.vpc_id
-  description = "Security group of of EKS ingress www origin"
+  description = "ALBs serving EKS www-origin ingress (and signon ALBs in non-prod environments)."
   tags = {
     Name = "eks_ingress_www_origin"
   }
@@ -236,6 +236,16 @@ resource "aws_security_group_rule" "eks_ingress_www_origin_from_ec2_nat" {
   to_port           = 443
   protocol          = "tcp"
   cidr_blocks       = formatlist("%s/32", data.terraform_remote_state.infra_networking.outputs.nat_gateway_elastic_ips_list)
+  security_group_id = aws_security_group.eks_ingress_www_origin.id
+}
+
+resource "aws_security_group_rule" "eks_ingress_www_origin_from_eks_nat" {
+  description       = "EKS ingress www-origin accepts requests from EKS NAT gateways"
+  type              = "ingress"
+  from_port         = 443
+  to_port           = 443
+  protocol          = "tcp"
+  cidr_blocks       = formatlist("%s/32", data.terraform_remote_state.cluster_infrastructure.outputs.public_nat_gateway_ips)
   security_group_id = aws_security_group.eks_ingress_www_origin.id
 }
 
