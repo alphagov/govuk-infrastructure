@@ -81,7 +81,25 @@ jobs:
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
 
+      - name: Check for existing image
+        id: existing-image
+        env:
+          ECR_REPOSITORY: ${{ inputs.ecrRepositoryName }}
+          IMAGE_TAG: ${{ steps.determine-image-tag.outputs.imageTag }}
+        run: |
+          check_image_in_ecr() {
+            aws ecr describe-images --repository-name="${1}" --image-ids=imageTag="${2}" 2> /dev/null
+          }
+
+          if check_image_in_ecr "${ECR_REPOSITORY}" "${IMAGE_TAG}"; then
+            echo "Found existing image in ${ECR_REPOSITORY} with the tag ${IMAGE_TAG}. Will not build image again."
+            echo "present=true" >> $GITHUB_OUTPUT
+          else
+            echo "present=false" >> $GITHUB_OUTPUT
+          fi
+
       - name: Build, tag, and push image to Amazon ECR
+        if: steps.existing-image.outputs.present == 'false'
         id: build-image
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
@@ -91,15 +109,6 @@ jobs:
         run: |
           LATEST_GIT_SHA=$(git ls-remote origin HEAD | cut -f 1)
           IMAGE_TAG_ARGS="-t ${ECR_REGISTRY}/${ECR_REPOSITORY}:${IMAGE_TAG}"
-
-          check_image_in_ecr() {
-            aws ecr describe-images --repository-name="${1}" --image-ids=imageTag="${2}"
-          }
-
-          if check_image_in_ecr "${ECR_REPOSITORY}" "${IMAGE_TAG}"; then
-            echo "found existing image ${ECR_REPOSITORY}:${IMAGE_TAG} in registry, will not build image again"
-            exit 0
-          fi
 
           if [ "${LATEST_GIT_SHA}" = "${IMAGE_TAG}" ]; then
             IMAGE_TAG_ARGS+=" -t ${ECR_REGISTRY}/${ECR_REPOSITORY}:latest"
