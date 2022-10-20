@@ -82,8 +82,11 @@ jobs:
           ECR_REPOSITORY: ${{ inputs.ecr_repository_name }}
           DOCKER_BUILDKIT: "1"
         run: |
-          IMAGE_TAG=$(git rev-parse HEAD)
-          LATEST_GIT_SHA=$(git ls-remote origin HEAD | cut -f 1)
+          LOCAL_HEAD_SHA="$(git rev-parse HEAD)"
+          REMOTE_HEAD_SHA=$(git ls-remote origin HEAD | cut -f 1)
+
+          IMAGE_TAG="release-${LOCAL_HEAD_SHA}"
+
           IMAGE_TAG_ARGS="-t ${ECR_REGISTRY}/${ECR_REPOSITORY}:${IMAGE_TAG}"
 
           check_image_in_ecr() {
@@ -96,7 +99,7 @@ jobs:
             exit 0
           fi
 
-          if [ "${LATEST_GIT_SHA}" = "${IMAGE_TAG}" ]; then
+          if [ "${REMOTE_HEAD_SHA}" = "${LOCAL_HEAD_SHA}" ]; then
             IMAGE_TAG_ARGS+=" -t ${ECR_REGISTRY}/${ECR_REPOSITORY}:latest"
           fi
 
