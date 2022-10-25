@@ -63,12 +63,6 @@ jobs:
         with:
           ref: ${{ inputs.gitRef }}
 
-      - name: Determine image tag
-        id: determine-image-tag
-        run: |
-          IMAGE_TAG=$(git rev-parse HEAD)
-          echo "imageTag=${IMAGE_TAG}" >> $GITHUB_OUTPUT
-
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
@@ -80,6 +74,26 @@ jobs:
       - name: Login to Amazon ECR
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
+
+      - name: Determine image tag
+        id: determine-image-tag
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          ECR_REPOSITORY: ${{ inputs.ecrRepositoryName }}
+        run: |
+          LOCAL_HEAD_SHA="$(git rev-parse HEAD)"
+          REMOTE_HEAD_SHA=$(git ls-remote origin HEAD | cut -f 1)
+
+          IMAGE_TAG="release-${LOCAL_HEAD_SHA}"
+          FULL_IMAGE_TAG_LIST=("${ECR_REGISTRY}/${ECR_REPOSITORY}:${IMAGE_TAG}")
+
+          # Add latest tag if most recent commit
+          if [ "${REMOTE_HEAD_SHA}" = "${LOCAL_HEAD_SHA}" ]; then
+            FULL_IMAGE_TAG_LIST+="${ECR_REGISTRY}/${ECR_REPOSITORY}:latest"
+          fi
+
+          echo "imageTag=${IMAGE_TAG}" >> $GITHUB_OUTPUT
+          echo "fullImageTagList=${FULL_IMAGE_TAG_LIST}" >> $GITHUB_OUTPUT
 
       - name: Check for existing image
         id: existing-image
@@ -102,19 +116,12 @@ jobs:
         if: steps.existing-image.outputs.present == 'false'
         id: build-image
         env:
-          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          ECR_REPOSITORY: ${{ inputs.ecrRepositoryName }}
-          IMAGE_TAG: ${{ steps.determine-image-tag.outputs.imageTag }}
+          FULL_IMAGE_TAG_LIST: ${{ steps.determine-image-tag.outputs.fullImageTagList }}
           DOCKER_BUILDKIT: "1"
         run: |
-          LATEST_GIT_SHA=$(git ls-remote origin HEAD | cut -f 1)
-          IMAGE_TAG_ARGS="-t ${ECR_REGISTRY}/${ECR_REPOSITORY}:${IMAGE_TAG}"
+          FULL_IMAGE_TAG_LIST=(`echo ${FULL_IMAGE_TAG_LIST}`)
 
-          if [ "${LATEST_GIT_SHA}" = "${IMAGE_TAG}" ]; then
-            IMAGE_TAG_ARGS+=" -t ${ECR_REGISTRY}/${ECR_REPOSITORY}:latest"
-          fi
-
-          docker build ${IMAGE_TAG_ARGS} ${{ inputs.additionalBuildArgs }} -f ${{ inputs.dockerfilePath }} .
+          docker build ${FULL_IMAGE_TAG_LIST[@]/#/-t } ${{ inputs.additionalBuildArgs }} -f ${{ inputs.dockerfilePath }} .
 
       - name: Push image
         if: steps.build-image.conclusion == 'success'
