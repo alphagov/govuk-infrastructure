@@ -1,7 +1,7 @@
 # USAGE
 # -----
 #
-# name: Set automatic_deploys_enabled (optionally image_tag too)
+# name: Set automatic deploys
 #
 # on:
 #   workflow_dispatch:
@@ -27,8 +27,8 @@
 #         default: 'integration'
 #
 # jobs:
-#   set_automatic_deploys_enabled:
-#     name: Set automatic_deploys_enabled to ${{ github.event.inputs.environment }}
+#   set_automatic_deploys:
+#     name: Set automatic deploys
 #     uses: alphagov/govuk-infrastructure/.github/workflows/set-automatic-deploys-enabled.yaml@main
 #     with:
 #       resetImageTag: ${{ github.event.inputs.resetImageTag == 'true' }}
@@ -44,7 +44,7 @@
 # REUSABLE WORKFLOW
 # -----------------
 
-name: Set automatic_deploys_enabled (optionally image_tag too)
+name: Set automatic deploys
 
 on:
   workflow_call:
@@ -78,8 +78,8 @@ on:
         required: true
 
 jobs:
-  set-automatic-deploys-enabled:
-    name: Set automatic_deploys_enabled
+  set-automatic-deploys:
+    name: Set automatic deploys
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
