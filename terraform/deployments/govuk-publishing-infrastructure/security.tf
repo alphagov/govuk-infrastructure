@@ -82,6 +82,16 @@ resource "aws_security_group_rule" "router_mongodb_from_eks_workers" {
   source_security_group_id = data.terraform_remote_state.cluster_infrastructure.outputs.node_security_group_id
 }
 
+resource "aws_security_group_rule" "rabbitmq_from_eks_workers" {
+  description              = "RabbitMQ LB accepts AMQP requests from EKS nodes"
+  type                     = "ingress"
+  from_port                = 5671 # AMQP 1.0
+  to_port                  = 5672 # AMQP 0-9-1
+  protocol                 = "tcp"
+  security_group_id        = data.terraform_remote_state.infra_security_groups.outputs.sg_rabbitmq_elb_id
+  source_security_group_id = data.terraform_remote_state.cluster_infrastructure.outputs.node_security_group_id
+}
+
 resource "aws_security_group_rule" "shared_docdb_from_eks_workers" {
   description              = "Shared DocumentDB accepts requests from EKS nodes"
   type                     = "ingress"
