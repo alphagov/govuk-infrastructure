@@ -82,6 +82,16 @@ resource "aws_security_group_rule" "router_mongodb_from_eks_workers" {
   source_security_group_id = data.terraform_remote_state.cluster_infrastructure.outputs.node_security_group_id
 }
 
+resource "aws_security_group_rule" "rabbitmq_from_eks_workers" {
+  description              = "RabbitMQ LB accepts AMQP requests from EKS nodes"
+  type                     = "ingress"
+  from_port                = 5671 # AMQP 1.0
+  to_port                  = 5672 # AMQP 0-9-1
+  protocol                 = "tcp"
+  security_group_id        = data.terraform_remote_state.infra_security_groups.outputs.sg_rabbitmq_elb_id
+  source_security_group_id = data.terraform_remote_state.cluster_infrastructure.outputs.node_security_group_id
+}
+
 resource "aws_security_group_rule" "shared_docdb_from_eks_workers" {
   description              = "Shared DocumentDB accepts requests from EKS nodes"
   type                     = "ingress"
@@ -208,6 +218,10 @@ resource "aws_security_group_rule" "ec2_www_origin_from_eks_workers" {
   security_group_id = data.terraform_remote_state.infra_security_groups.outputs.sg_cache_external_elb_id
   cidr_blocks       = formatlist("%s/32", data.terraform_remote_state.cluster_infrastructure.outputs.public_nat_gateway_ips)
 }
+
+#
+# EKS Ingress-managed ALBs
+#
 
 resource "aws_security_group" "eks_ingress_www_origin" {
   name        = "eks_ingress_www_origin"
