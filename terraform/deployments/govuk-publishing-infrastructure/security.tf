@@ -219,6 +219,10 @@ resource "aws_security_group_rule" "ec2_www_origin_from_eks_workers" {
   cidr_blocks       = formatlist("%s/32", data.terraform_remote_state.cluster_infrastructure.outputs.public_nat_gateway_ips)
 }
 
+#
+# EKS Ingress-managed ALBs
+#
+
 resource "aws_security_group" "eks_ingress_www_origin" {
   name        = "eks_ingress_www_origin"
   vpc_id      = data.terraform_remote_state.infra_vpc.outputs.vpc_id
