@@ -31,7 +31,7 @@
 #     secrets:
 #       WEBHOOK_TOKEN: ${{ secrets.GOVUK_INTEGRATION_ARGO_EVENTS_WEBHOOK_TOKEN }}
 #       WEBHOOK_URL: ${{ secrets.GOVUK_INTEGRATION_ARGO_EVENTS_WEBHOOK_URL }}
-#       GOVUK_CI_GITHUB_API_TOKEN: ${{ secrets.GOVUK_CI_GITHUB_API_TOKEN }}
+#       GH_TOKEN: ${{ secrets.GH_TOKEN }}
 
 
 #
@@ -63,7 +63,7 @@ on:
         required: true
       WEBHOOK_URL:
         required: true
-      GOVUK_CI_GITHUB_API_TOKEN:
+      GH_TOKEN:
         required: true
 
 jobs:
@@ -74,7 +74,7 @@ jobs:
       - name: Check deploy permissions
         id: deploy-permissions
         env:
-          GH_TOKEN: ${{ secrets.GOVUK_CI_GITHUB_API_TOKEN }}
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
           GITHUB_TEAM: gov-uk-production-deploy
           GITHUB_USER: ${{ github.triggering_actor }}
         run: |
