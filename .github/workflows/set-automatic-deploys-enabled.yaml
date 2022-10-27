@@ -6,11 +6,6 @@
 # on:
 #   workflow_dispatch:
 #     inputs:
-#       resetImageTag:
-#         description: 'Reset image tag to main'
-#         required: false
-#         default: false
-#         type: boolean
 #       automaticDeploysEnabled:
 #         description: 'Activate automatic deploys'
 #         required: false
@@ -31,7 +26,6 @@
 #     name: Set automatic deploys
 #     uses: alphagov/govuk-infrastructure/.github/workflows/set-automatic-deploys-enabled.yaml@main
 #     with:
-#       resetImageTag: ${{ github.event.inputs.resetImageTag == 'true' }}
 #       automaticDeploysEnabled: ${{ github.event.inputs.automaticDeploysEnabled == 'true' }}
 #       environment: ${{ github.event.inputs.environment }}
 #     secrets:
@@ -49,11 +43,6 @@ name: Set automatic deploys
 on:
   workflow_call:
     inputs:
-      resetImageTag:
-        description: 'Reset image tag to main'
-        required: false
-        default: false
-        type: boolean
       automaticDeploysEnabled:
         description: 'Activate automatic deploys'
         required: true
@@ -82,23 +71,9 @@ jobs:
     name: Set automatic deploys
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        id: checkout
-        uses: actions/checkout@v2
-      - name: Get image tag
-        id: image
-        env:
-          RESET_IMAGE_TAG: ${{ inputs.resetImageTag }}
-        run: |
-          IMAGE_TAG=""
-          if [[ "${RESET_IMAGE_TAG}" = "true" ]]; then
-            IMAGE_TAG=$(git rev-parse HEAD)
-          fi
-          echo "::set-output name=tag::"${IMAGE_TAG}""
       - name: Send webhook
         env:
           AUTOMATIC_DEPLOYS_ENABLED: ${{ inputs.automaticDeploysEnabled }}
-          IMAGE_TAG: ${{ steps.image.outputs.tag }}
           ENVIRONMENT: ${{ inputs.environment }}
           REPO_NAME: ${{ inputs.appName }}
           WEBHOOK_TOKEN: ${{ secrets.WEBHOOK_TOKEN }}
@@ -112,7 +87,7 @@ jobs:
             curl -s \
               -H "Content-Type: application/json" \
               -H "Authorization: Bearer ${WEBHOOK_TOKEN}" \
-              -d "{\"environment\": \"${ENVIRONMENT}\", \"repoName\": \"${REPO_NAME}\", \"automaticDeploysEnabled\": \"${AUTOMATIC_DEPLOYS_ENABLED}\", \"imageTag\": \"${IMAGE_TAG}\"}" \
+              -d "{\"environment\": \"${ENVIRONMENT}\", \"repoName\": \"${REPO_NAME}\", \"automaticDeploysEnabled\": \"${AUTOMATIC_DEPLOYS_ENABLED}\"}" \
               "${WEBHOOK_URL}/set-automatic-deploys-enabled"
           else
             echo '::error title="Insufficient permissions to deploy"::The user needs to be a member of the GOV.UK Production Deploy GitHub team to deploy.'
