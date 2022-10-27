@@ -44,17 +44,16 @@ on:
   workflow_call:
     inputs:
       automaticDeploysEnabled:
-        description: 'Activate automatic deploys'
+        description: 'Configures whether automatic deployments are enabled'
         required: true
         default: true
         type: boolean
       appName:
-        description: 'Name of the app being deployed'
         required: false
         default: ${{ github.event.repository.name }}
         type: string
       environment:
-        description: 'Environment to deploy to'
+        description: 'Environment to modify'
         required: false
         default: 'integration'
         type: string
