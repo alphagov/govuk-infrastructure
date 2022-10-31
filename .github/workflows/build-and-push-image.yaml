@@ -89,7 +89,7 @@ jobs:
 
           # Add latest tag if most recent commit
           if [ "${REMOTE_HEAD_SHA}" = "${LOCAL_HEAD_SHA}" ]; then
-            FULL_IMAGE_TAG_LIST+="${ECR_REGISTRY}/${ECR_REPOSITORY}:latest"
+            FULL_IMAGE_TAG_LIST+=("${ECR_REGISTRY}/${ECR_REPOSITORY}:latest")
           fi
 
           echo "imageTag=${IMAGE_TAG}" >> $GITHUB_OUTPUT
