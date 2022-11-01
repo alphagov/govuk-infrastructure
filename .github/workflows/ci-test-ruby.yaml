@@ -1,0 +1,195 @@
+name: Test Ruby
+
+on:
+  workflow_call:
+    inputs:
+      extraSystemDependencies:
+        description: 'Install additional system dependencies'
+        required: false
+        default: ''
+        type: string
+      enableMongoDB:
+        description: 'Run MongoDB'
+        required: false
+        default: false
+        type: boolean
+      enableElasticsearch:
+        description: 'Run Elasticsearch'
+        required: false
+        default: false
+        type: boolean
+      enableRedis:
+        description: 'Run Redis'
+        required: false
+        default: false
+        type: boolean
+      enableMySQL:
+        description: 'Run MySQL'
+        required: false
+        default: false
+        type: boolean
+      enablePostgres:
+        description: 'Run Postgres'
+        required: false
+        default: false
+        type: boolean
+
+jobs:
+  test-ruby:
+    name: Test Ruby
+    runs-on: ubuntu-latest
+    env:
+      RAILS_ENV: test
+      GOVUK_CONTENT_SCHEMAS_PATH: vendor/publishing-api/content_schemas
+    steps:
+      - name: Setup MySQL
+        id: setup-mysql
+        if: ${{ inputs.enableMySQL }}
+        env:
+          YSQL_IMAGE_TAG: 8.0
+          MMYSQL_PORT: 3306
+          MYSQL_PASSWORD: root
+          MYSQL_DB: test
+        run: |
+          # Stop the MySQL service running on the runner node
+          sudo service mysql stop
+
+          # Start 
+          docker run --name mysql \
+           --rm --detach \
+           --publish "${MYSQL_PORT}:3306" \
+           --env "MYSQL_ROOT_PASSWORD=${MYSQL_PASSWORD}" \
+           mysql:${MYSQL_IMAGE_TAG} \
+           --performance-schema=off --innodb_buffer_pool_size=32M \
+           --innodb-log-buffer-size=8M --key_buffer_size=4M
+
+          echo "db-url=mysql2://root:${MYSQL_PASSWORD}@127.0.0.1:${MYSQL_PORT}/${MYSQL_DB}" >> $GITHUB_OUTPUT
+
+      - name: Setup Postrges
+        id: setup-postgres
+        if: ${{ inputs.enablePostgres }}
+        env:
+          POSTGRES_IMAGE_TAG: 13-alpine
+          POSTGRES_PORT: 5432
+          POSTGRES_USER: root
+          POSTGRES_PASSWORD: root
+          POSTGRES_DB: test
+        run: |
+          docker run --name postgres \
+           --rm --detach \
+           --publish "${POSTGRES_PORT}:${POSTGRES_PORT}" \
+           --env "POSTGRES_USER=${POSTGRES_USER}" \
+           --env "POSTGRES_PASSWORD=${POSTGRES_PASSWORD}" \
+           --env "POSTGRES_DB=${POSTGRES_DB}" \
+           postgres:${POSTGRES_IMAGE_TAG}
+
+          echo "db-url=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@127.0.0.1:${POSTGRES_PORT}/${POSTGRES_DB}" >> $GITHUB_OUTPUT
+
+      - name: Setup MongoDB
+        if: ${{ inputs.enableMongoDB }}
+        env:
+          MONGODB_PORT: 27017
+          MONGODB_IMAGE_TAG: 2.6
+          MONGODB_DB: ''
+          MONGODB_USERNAME: ''
+          MONGODB_PASSWORD: ''
+        run: |
+          docker run --name mongodb \
+           --rm --detach \
+           --publish "${MONGODB_PORT}:27017" \
+           --env "MONGO_INITDB_DATABASE=${MONGODB_DB}" \
+           --env "MONGO_INITDB_ROOT_USERNAME=${MONGODB_USERNAME}" \
+           --env "MONGO_INITDB_ROOT_PASSWORD=${MONGODB_PASSWORD}" \
+           mongo:${MONGODB_IMAGE_TAG}
+
+      - name: Setup Elasticsearch
+        if: ${{ inputs.enableElasticsearch }}
+        env:
+          ELASTICSEARCH_IMAGE_TAG: 6.7.2
+          ELASTICSEARCH_PORT: 9200
+        run: |
+          sudo swapoff -a
+          sudo sysctl -w vm.swappiness=1
+          sudo sysctl -w fs.file-max=262144
+          sudo sysctl -w vm.max_map_count=262144
+
+          docker network create elastic
+
+          docker run --name="elasticsearch" \
+           --rm --detach \
+           --env "discovery.type=single-node" \
+           --env "bootstrap.memory_lock=true" \
+           --env "ES_JAVA_OPTS=-Xms1g -Xmx1g" \
+           --env "xpack.security.enabled=false" \
+           --env "xpack.license.self_generated.type=basic" \
+           --ulimit "nofile=65536:65536" \
+           --ulimit "memlock=-1:-1" \
+           --publish "${ELASTICSEARCH_PORT}:9200" \
+           --network "elastic" \
+           elasticsearch:${ELASTICSEARCH_IMAGE_TAG}
+
+           sleep 10
+
+      - name: Setup Redis
+        if: ${{ inputs.enableRedis }}
+        env:
+          REDIS_IMAGE_TAG: 6-alpine
+          REDIS_PORT: 6379
+        run: |
+          # Start container
+          docker run --name redis \
+           --rm --detach \
+           --publish "${REDIS_PORT}:6379" \
+           redis:${REDIS_IMAGE_TAG}
+
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Checkout Publishing API (for Content Schemas)
+        uses: actions/checkout@v3
+        with:
+          repository: alphagov/publishing-api
+          ref: deployed-to-production
+          path: vendor/publishing-api
+
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
+
+      - name: Check for Yarn
+        id: check-for-yarn
+        run: |
+          YARN_ENABLED=false
+          if [[ -f ./yarn.lock ]]; then
+            YARN_ENABLED=true
+          fi
+
+          echo "present=${YARN_ENABLED}" >> "${GITHUB_OUTPUT}"
+
+      - name: Setup Node
+        if: ${{ steps.check-for-yarn.outputs.present == 'true' }}
+        uses: actions/setup-node@v3
+        with:
+          cache: 'yarn'
+
+      - name: Install JavaScript dependencies
+        if: ${{ steps.check-for-yarn.outputs.present == 'true' }}
+        run: yarn install --frozen-lockfile
+
+      - name: Install additional system dependencies
+        if: ${{ inputs.extraSystemDependencies }}
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends ${{ inputs.extraSystemDependencies }}
+
+      - name: Initialize database
+        if: ${{ inputs.enableMySQL || inputs.enablePostgres || inputs.enableMongoDB }}
+        env:
+          TEST_DATABASE_URL: ${{ steps.setup-mysql.outputs.db-url ||  steps.setup-postgres.outputs.db-url }}
+        run: bundle exec rails db:setup
+
+      - name: Run tests
+        env:
+          TEST_DATABASE_URL: ${{ steps.setup-mysql.outputs.db-url }}
+        run: bundle exec rake test
