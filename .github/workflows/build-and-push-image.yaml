@@ -48,7 +48,7 @@ on:
     outputs:
       imageTag:
         description: "The image tag for the built image"
-        value: ${{ jobs.publish.outputs.imageTag }}
+        value: ${{ jobs.build-and-push-image.outputs.imageTag }}
 
 jobs:
   build-and-push-image:
