@@ -91,6 +91,12 @@ module "eks" {
   }
 }
 
+# Allow us to connect to nodes using AWS Systems Manager Session Manager.
+resource "aws_iam_role_policy_attachment" "node_ssm" {
+  role       = module.eks.eks_managed_node_groups["main"].iam_role_name
+  policy_arn = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
+}
+
 resource "aws_kms_key" "eks" {
   description             = "EKS Secret Encryption Key"
   deletion_window_in_days = 7
