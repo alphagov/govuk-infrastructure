@@ -6,17 +6,21 @@ resource "aws_iam_policy" "asset_manager_s3" {
     Version = "2012-10-17"
     Statement = [
       {
-        Effect   = "Allow"
-        Action   = "s3:ListBucket"
+        Effect = "Allow"
+        Action = [
+          "s3:GetBucketLocation",
+          "s3:ListBucket",
+        ]
         Resource = data.terraform_remote_state.infra_assets.outputs.asset_manager_bucket_arn
       },
       {
         Effect = "Allow"
         Action = [
-          "s3:PutObjectAcl",
-          "s3:PutObject",
-          "s3:GetObject",
-          "s3:DeleteObject",
+          "s3:*MultipartUpload*",
+          "s3:*Object",
+          "s3:*ObjectAcl",
+          "s3:*ObjectVersion",
+          "s3:GetObject*Attributes",
         ]
         Resource = "${data.terraform_remote_state.infra_assets.outputs.asset_manager_bucket_arn}/*"
       }
