@@ -12,7 +12,7 @@ module "tag_image_iam_role" {
   oidc_providers = {
     main = {
       provider_arn               = data.terraform_remote_state.cluster_infrastructure.outputs.cluster_oidc_provider_arn
-      namespace_service_accounts = ["${var.apps_namespace}:${local.tag_image_service_account_name}"]
+      namespace_service_accounts = ["${local.services_ns}:${local.tag_image_service_account_name}"]
     }
   }
 }
