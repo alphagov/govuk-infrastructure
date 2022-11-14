@@ -105,7 +105,8 @@ jobs:
           WEBHOOK_TOKEN: ${{ secrets.WEBHOOK_TOKEN }}
           WEBHOOK_URL: ${{ secrets.WEBHOOK_URL }}
         run: |
-          curl --fail-with-body -s \
+          # TODO: use --fail-with-body instead of -f once curl 7.76 is in GH's ubuntu-latest.
+          curl -fs \
             -H "Content-Type: application/json" \
             -H "Authorization: Bearer ${WEBHOOK_TOKEN}" \
             -d "{\"environment\": \"${ENVIRONMENT}\", \"repoName\": \"${REPO_NAME}\", \"imageTag\": \"${IMAGE_TAG}\", \"manualDeploy\": \"${MANUAL_DEPLOY}\"}" \
