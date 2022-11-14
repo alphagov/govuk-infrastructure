@@ -93,7 +93,7 @@ jobs:
           WEBHOOK_TOKEN: ${{ secrets.WEBHOOK_TOKEN }}
           WEBHOOK_URL: ${{ secrets.WEBHOOK_URL }}
         run: |
-          curl -s \
+          curl --fail-with-body -s \
             -H "Content-Type: application/json" \
             -H "Authorization: Bearer ${WEBHOOK_TOKEN}" \
             -d "{\"environment\": \"${ENVIRONMENT}\", \"repoName\": \"${REPO_NAME}\", \"automaticDeploysEnabled\": \"${AUTOMATIC_DEPLOYS_ENABLED}\"}" \
