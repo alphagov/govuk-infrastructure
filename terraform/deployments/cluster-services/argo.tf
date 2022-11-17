@@ -30,7 +30,7 @@ resource "helm_release" "argo_cd" {
   namespace        = local.services_ns
   create_namespace = true
   repository       = "https://argoproj.github.io/argo-helm"
-  version          = "5.5.6" # TODO: Dependabot or equivalent so this doesn't get neglected.
+  version          = "5.13.8" # TODO: Dependabot or equivalent so this doesn't get neglected.
   values = [yamlencode({
     server = {
       # TLS Termination happens at the ALB, the insecure flag prevents Argo
@@ -162,7 +162,7 @@ resource "helm_release" "argo_workflows" {
   namespace        = local.services_ns
   create_namespace = true
   repository       = "https://argoproj.github.io/argo-helm"
-  version          = "0.20.0" # TODO: Dependabot or equivalent so this doesn't get neglected.
+  version          = "0.20.8" # TODO: Dependabot or equivalent so this doesn't get neglected.
   values = [yamlencode({
     controller = {
       podSecurityContext = {
@@ -299,9 +299,10 @@ resource "helm_release" "argo_events" {
       nats = {
         versions = [
           {
-            version              = "0.22.1"
-            natsStreamingImage   = "nats-streaming:0.22.1"
-            metricsExporterImage = "natsio/prometheus-nats-exporter:0.8.0"
+            # TODO: Dependabot or similar so this doesn't get neglected.
+            version              = "0.25.2"
+            natsStreamingImage   = "nats-streaming:0.25.2"
+            metricsExporterImage = "natsio/prometheus-nats-exporter:0.10.1"
           }
         ]
       }
