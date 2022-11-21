@@ -1,13 +1,22 @@
 name: Build and publish github-cli image to ECR
 
 on:
+
   workflow_dispatch:
+    branches:
+      - main
     inputs:
       gitRef:
         description: 'Commit, tag or branch name to deploy'
         required: true
         type: string
         default: 'main'
+
+  push:
+    branches:
+      - main
+    paths:
+      - "images/github-cli/Dockerfile"
 
 jobs:
   build-and-push-image:
