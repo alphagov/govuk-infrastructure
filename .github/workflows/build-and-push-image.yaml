@@ -96,7 +96,7 @@ jobs:
           fi
 
           echo "imageTag=${IMAGE_TAG}" >> $GITHUB_OUTPUT
-          echo "fullImageTagList=${FULL_IMAGE_TAG_LIST}" >> $GITHUB_OUTPUT
+          echo "fullImageTagList=${FULL_IMAGE_TAG_LIST[@]}" >> $GITHUB_OUTPUT
 
       - name: Check for existing image
         id: existing-image
@@ -122,9 +122,14 @@ jobs:
           FULL_IMAGE_TAG_LIST: ${{ steps.determine-image-tag.outputs.fullImageTagList }}
           DOCKER_BUILDKIT: "1"
         run: |
-          FULL_IMAGE_TAG_LIST=(`echo ${FULL_IMAGE_TAG_LIST}`)
+          set -x
 
-          docker build ${FULL_IMAGE_TAG_LIST[@]/#/-t } ${{ inputs.additionalBuildArgs }} -f ${{ inputs.dockerfilePath }} .
+          docker_tag_flags=()
+          for tag in $FULL_IMAGE_TAG_LIST; do
+            docker_tag_flags+=(-t "${tag}")
+          done
+
+          docker build ${docker_tag_flags[@]} ${{ inputs.additionalBuildArgs }} -f ${{ inputs.dockerfilePath }} .
 
       - name: Push image
         if: steps.build-image.conclusion == 'success'
@@ -133,4 +138,4 @@ jobs:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           ECR_REPOSITORY: ${{ inputs.ecrRepositoryName }}
         run: |
-          docker push "${ECR_REGISTRY}/${ECR_REPOSITORY}" -a
+          docker push --all-tags "${ECR_REGISTRY}/${ECR_REPOSITORY}"
