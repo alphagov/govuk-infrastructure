@@ -138,4 +138,4 @@ jobs:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           ECR_REPOSITORY: ${{ inputs.ecrRepositoryName }}
         run: |
-          docker push "${ECR_REGISTRY}/${ECR_REPOSITORY}" -a
+          docker push --all-tags "${ECR_REGISTRY}/${ECR_REPOSITORY}"
