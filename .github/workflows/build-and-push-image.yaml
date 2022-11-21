@@ -96,7 +96,7 @@ jobs:
           fi
 
           echo "imageTag=${IMAGE_TAG}" >> $GITHUB_OUTPUT
-          echo "fullImageTagList=${FULL_IMAGE_TAG_LIST}" >> $GITHUB_OUTPUT
+          echo "fullImageTagList=${FULL_IMAGE_TAG_LIST[@]}" >> $GITHUB_OUTPUT
 
       - name: Check for existing image
         id: existing-image
