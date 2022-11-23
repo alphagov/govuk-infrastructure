@@ -77,17 +77,17 @@ jobs:
      runs-on: ubuntu-latest
      env:
        RAILS_ENV: test
-       GOVUK_CONTENT_SCHEMAS_PATH: vendor/govuk-content-schemas
+       GOVUK_CONTENT_SCHEMAS_PATH: vendor/publishing-api/content_schemas
      steps:
        - name: Checkout repository
          uses: actions/checkout@v3
 
-       - name: Checkout GOV.UK Content Schemas
+       - name: Checkout Publishing API (for Content Schemas)
          uses: actions/checkout@v3
          with:
-           repository: alphagov/govuk-content-schemas
+           repository: alphagov/publishing-api
            ref: deployed-to-production
-           path: vendor/govuk-content-schemas
+           path: vendor/publishing-api
 
        - name: Install additional system dependencies
          if: ${{ inputs.extraSystemDependencies }}
