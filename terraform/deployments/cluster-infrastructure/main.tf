@@ -46,6 +46,12 @@ module "eks" {
   subnet_ids      = [for s in aws_subnet.eks_control_plane : s.id]
   vpc_id          = data.terraform_remote_state.infra_vpc.outputs.vpc_id
 
+  cluster_addons = {
+    coredns    = { resolve_conflicts = "OVERWRITE" }
+    kube-proxy = { resolve_conflicts = "OVERWRITE" }
+    vpc-cni    = { resolve_conflicts = "OVERWRITE" }
+  }
+
   cluster_endpoint_private_access        = true
   cloudwatch_log_group_retention_in_days = var.cluster_log_retention_in_days
   cluster_enabled_log_types = [
@@ -101,15 +107,4 @@ resource "aws_kms_key" "eks" {
   description             = "EKS Secret Encryption Key"
   deletion_window_in_days = 7
   enable_key_rotation     = true
-}
-
-# TODO: move these into module.eks once it supports cluster addons, i.e. once
-# https://github.com/terraform-aws-modules/terraform-aws-eks/pull/1443 is
-# merged.
-resource "aws_eks_addon" "cluster_addons" {
-  for_each          = toset(["coredns", "kube-proxy", "vpc-cni"])
-  addon_name        = each.key
-  addon_version     = lookup(var.cluster_addon_versions, each.key, null)
-  cluster_name      = module.eks.cluster_id
-  resolve_conflicts = "OVERWRITE"
 }
