@@ -1,9 +1,19 @@
+# Patch the obsolete gp2 StorageClass which EKS creates, so that we can set our
+# own one as the default.
+resource "kubernetes_annotations" "rm_default_storageclass" {
+  api_version = "storage.k8s.io/v1"
+  kind        = "StorageClass"
+  force       = "true"
+  metadata { name = "gp2" }
+  annotations = { "storageclass.kubernetes.io/is-default-class" = "false" }
+}
+
 resource "helm_release" "ebs_csi_driver" {
   chart      = "aws-ebs-csi-driver"
   name       = "aws-ebs-csi-driver"
   namespace  = "kube-system"
   repository = "https://kubernetes-sigs.github.io/aws-ebs-csi-driver"
-  version    = "2.9.0" # TODO: Dependabot or equivalent so this doesn't get neglected.
+  version    = "2.13.0" # TODO: Dependabot or equivalent so this doesn't get neglected.
 
   values = [yamlencode({
     enableVolumeResizing = true
@@ -17,9 +27,12 @@ resource "helm_release" "ebs_csi_driver" {
       }
     }
     storageClasses = [{
-      apiVersion        = "storage.k8s.io/v1"
-      kind              = "StorageClass"
-      metadata          = { name = "ebs-sc" }
+      apiVersion = "storage.k8s.io/v1"
+      kind       = "StorageClass"
+      metadata = {
+        name        = "ebs-gp3"
+        annotations = { "storageclass.kubernetes.io/is-default-class" = "true" }
+      }
       provisioner       = "ebs.csi.aws.com"
       parameters        = { type = "gp3" }
       reclaimPolicy     = "Retain"
