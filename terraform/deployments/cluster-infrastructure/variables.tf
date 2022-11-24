@@ -19,12 +19,6 @@ variable "cluster_version" {
   description = "Kubernetes release version for the cluster, e.g. 1.21"
 }
 
-variable "cluster_addon_versions" {
-  type        = map(string)
-  description = "Map of {addon_name: version} denoting pinned versions of the core EKS-managed cluster addons (coredns, kube-proxy, vpc-cni). This is intended to be used only when a default version is broken, and only for a short time. Core addon versions should normally be managed by Amazon, so that cluster upgrades are stable and security patches are rolled out."
-  default     = {}
-}
-
 variable "eks_control_plane_subnets" {
   type        = map(object({ az = string, cidr = string }))
   description = "Map of {subnet_name: {az=<az>, cidr=<cidr>}} for the public subnets for the EKS cluster's apiserver."
