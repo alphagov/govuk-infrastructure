@@ -65,16 +65,27 @@ resource "aws_iam_policy" "grafana" {
   })
 }
 
+data "aws_rds_engine_version" "postgresql" {
+  engine  = "aurora-postgresql"
+  version = "11"
+  filter {
+    name   = "engine-mode"
+    values = ["serverless"]
+  }
+}
+
 module "grafana_db" {
   source  = "terraform-aws-modules/rds-aurora/aws"
-  version = "~> 6.2.0"
+  version = "~> 7.6.0"
 
   name              = local.grafana_db_name
   database_name     = "grafana"
   engine            = "aurora-postgresql"
   engine_mode       = "serverless"
-  engine_version    = "10.14"
+  engine_version    = data.aws_rds_engine_version.postgresql.version
   storage_encrypted = true
+
+  allow_major_version_upgrade = true
 
   vpc_id                  = data.terraform_remote_state.infra_networking.outputs.vpc_id
   subnets                 = data.terraform_remote_state.infra_networking.outputs.private_subnet_rds_ids
@@ -97,13 +108,13 @@ module "grafana_db" {
 }
 
 resource "aws_db_parameter_group" "grafana" {
-  name   = "${local.grafana_db_name}-aurora-serverless-postgres10"
-  family = "aurora-postgresql10"
+  name   = "${local.grafana_db_name}-aurora-serverless-postgres11"
+  family = "aurora-postgresql11"
 }
 
 resource "aws_rds_cluster_parameter_group" "grafana" {
-  name   = "${local.grafana_db_name}-aurora-serverless-postgres10-cluster"
-  family = "aurora-postgresql10"
+  name   = "${local.grafana_db_name}-aurora-serverless-postgres11-cluster"
+  family = "aurora-postgresql11"
 }
 
 resource "aws_route53_record" "grafana_db" {
