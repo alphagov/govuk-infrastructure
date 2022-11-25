@@ -37,3 +37,7 @@ There are also docs in the [terraform/docs](./terraform/docs) and directories.
 ### Who we are
 
 We're the GOV.UK Replatforming team, discovering the future of GOV.UK's infrastructure, one line of code at a time. You can find us in #govuk-replatforming on the GDS Slack, and our [(internal) Trello board exists](https://trello.com/b/u4FCzm53/).
+
+## Licence
+
+[MIT License](LICENCE)
