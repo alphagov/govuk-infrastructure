@@ -208,6 +208,16 @@ resource "aws_security_group_rule" "licensify_frontend_from_eks_workers" {
   source_security_group_id = data.terraform_remote_state.cluster_infrastructure.outputs.node_security_group_id
 }
 
+resource "aws_security_group_rule" "locations_api_from_eks_workers" {
+  description              = "Locations API accepts requests from EKS nodes"
+  type                     = "ingress"
+  from_port                = 443
+  to_port                  = 443
+  protocol                 = "tcp"
+  security_group_id        = data.terraform_remote_state.infra_security_groups.outputs.sg_locations-api_internal_lb_id
+  source_security_group_id = data.terraform_remote_state.cluster_infrastructure.outputs.node_security_group_id
+}
+
 # TODO: Remove after EC2 GOV.UK decommissioned
 resource "aws_security_group_rule" "ec2_www_origin_from_eks_workers" {
   description       = "EC2 www-origin accepts requests from EKS NAT gateways"
