@@ -296,13 +296,15 @@ resource "helm_release" "argo_events" {
       replicas = var.default_desired_ha_replicas
     }
     configs = {
-      nats = {
+      jetstream = {
         versions = [
           {
             # TODO: Dependabot or similar so this doesn't get neglected.
-            version              = "0.25.2"
-            natsStreamingImage   = "nats-streaming:0.25.2"
+            version              = "2.9.8"
+            natsImage            = "nats:2.9.8"
             metricsExporterImage = "natsio/prometheus-nats-exporter:0.10.1"
+            configReloaderImage  = "natsio/nats-server-config-reloader:0.7.4"
+            startCommand         = "/nats-server"
           }
         ]
       }
