@@ -258,7 +258,7 @@ resource "helm_release" "kube_prometheus_stack" {
           storage = {
             volumeClaimTemplate = {
               spec = {
-                storageClassName = "ebs-sc"
+                storageClassName = "ebs-gp3"
                 accessModes      = ["ReadWriteOnce"]
                 resources = {
                   requests = { storage = "10Gi" }
@@ -294,7 +294,7 @@ resource "helm_release" "kube_prometheus_stack" {
           storageSpec = {
             volumeClaimTemplate = {
               spec = {
-                storageClassName = "ebs-sc"
+                storageClassName = "ebs-gp3"
                 accessModes      = ["ReadWriteOnce"]
                 resources = {
                   requests = { storage = "50Gi" }
