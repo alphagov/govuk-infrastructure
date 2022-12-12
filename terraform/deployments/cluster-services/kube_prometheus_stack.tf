@@ -29,7 +29,7 @@ resource "helm_release" "prometheus_oauth2_proxy" {
   name             = "prometheus-oauth2-proxy"
   repository       = "https://oauth2-proxy.github.io/manifests"
   chart            = "oauth2-proxy"
-  version          = "6.2.1" # TODO: Dependabot or equivalent so this doesn't get neglected.
+  version          = "6.5.0" # TODO: Dependabot or equivalent so this doesn't get neglected.
   namespace        = local.monitoring_ns
   create_namespace = true
 
@@ -85,7 +85,7 @@ resource "helm_release" "alertmanager_oauth2_proxy" {
   name             = "alertmanager-oauth2-proxy"
   repository       = "https://oauth2-proxy.github.io/manifests"
   chart            = "oauth2-proxy"
-  version          = "6.2.1" # TODO: Dependabot or equivalent so this doesn't get neglected.
+  version          = "6.5.0" # TODO: Dependabot or equivalent so this doesn't get neglected.
   namespace        = local.monitoring_ns
   create_namespace = true
 
@@ -135,12 +135,13 @@ resource "helm_release" "alertmanager_oauth2_proxy" {
     ])
   })]
 }
+
 resource "helm_release" "kube_prometheus_stack" {
   depends_on       = [helm_release.dex]
   name             = "kube-prometheus-stack"
   repository       = "https://prometheus-community.github.io/helm-charts"
   chart            = "kube-prometheus-stack"
-  version          = "39.7.0" # TODO: Dependabot or equivalent so this doesn't get neglected.
+  version          = "42.3.0" # TODO: Dependabot or equivalent so this doesn't get neglected.
   namespace        = local.monitoring_ns
   create_namespace = true
   values = [
@@ -260,9 +261,7 @@ resource "helm_release" "kube_prometheus_stack" {
                 storageClassName = "ebs-sc"
                 accessModes      = ["ReadWriteOnce"]
                 resources = {
-                  requests = {
-                    storage = "10Gi"
-                  }
+                  requests = { storage = "10Gi" }
                 }
               }
             }
@@ -298,9 +297,7 @@ resource "helm_release" "kube_prometheus_stack" {
                 storageClassName = "ebs-sc"
                 accessModes      = ["ReadWriteOnce"]
                 resources = {
-                  requests = {
-                    storage = "50Gi"
-                  }
+                  requests = { storage = "50Gi" }
                 }
               }
             }
@@ -308,9 +305,7 @@ resource "helm_release" "kube_prometheus_stack" {
         }
       }
       kube_state_metrics = {
-        selfMonitor = {
-          enabled = true
-        }
+        selfMonitor = { enabled = true }
       }
     })
   ]
