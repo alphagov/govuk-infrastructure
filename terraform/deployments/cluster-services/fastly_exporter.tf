@@ -1,5 +1,5 @@
 resource "helm_release" "fastly-exporter" {
-  depends_on       = [helm_release.cluster_secrets]
+  depends_on       = [helm_release.kube_prometheus_stack]
   name             = "fastly-exporter"
   repository       = "https://alphagov.github.io/govuk-helm-charts/"
   chart            = "fastly-exporter"
