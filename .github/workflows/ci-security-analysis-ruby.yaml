@@ -1,0 +1,20 @@
+name: Security Analysis Ruby
+
+on:
+  workflow_call:
+
+jobs:
+  security-analysis-ruby:
+    name: Security Analysis Ruby
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
+
+      - name: Run Brakeman
+        run: bundle exec brakeman . --except CheckRenderInline --quiet
