@@ -46,8 +46,8 @@ jobs:
         id: setup-mysql
         if: ${{ inputs.enableMySQL }}
         env:
-          YSQL_IMAGE_TAG: 8.0
-          MMYSQL_PORT: 3306
+          MYSQL_IMAGE_TAG: 8.0
+          MYSQL_PORT: 3306
           MYSQL_PASSWORD: root
           MYSQL_DB: test
         run: |
