@@ -45,25 +45,7 @@ jobs:
       - name: Setup MySQL
         id: setup-mysql
         if: ${{ inputs.enableMySQL }}
-        env:
-          MYSQL_IMAGE_TAG: 8.0
-          MYSQL_PORT: 3306
-          MYSQL_PASSWORD: root
-          MYSQL_DB: test
-        run: |
-          # Stop the MySQL service running on the runner node
-          sudo service mysql stop
-
-          # Start 
-          docker run --name mysql \
-           --rm --detach \
-           --publish "${MYSQL_PORT}:3306" \
-           --env "MYSQL_ROOT_PASSWORD=${MYSQL_PASSWORD}" \
-           mysql:${MYSQL_IMAGE_TAG} \
-           --performance-schema=off --innodb_buffer_pool_size=32M \
-           --innodb-log-buffer-size=8M --key_buffer_size=4M
-
-          echo "db-url=mysql2://root:${MYSQL_PASSWORD}@127.0.0.1:${MYSQL_PORT}/${MYSQL_DB}" >> $GITHUB_OUTPUT
+        uses: alphagov/govuk-infrastructure/.github/actions/setup-mysql@main
 
       - name: Setup Postrges
         id: setup-postgres

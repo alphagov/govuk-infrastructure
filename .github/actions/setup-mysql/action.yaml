@@ -1,0 +1,37 @@
+name: 'Setup MySQL'
+description: 'Create a new MySQL database'
+outputs:
+  db-url:
+    description: "The URL to connect to the database"
+    value: ${{ steps.generate-url.outputs.db-url }}
+runs:
+  using: "composite"
+  steps:
+    - name: Stop MySQL on host
+      shell: bash
+      run: sudo service mysql stop
+
+    - name: Start container
+      env:
+        MYSQL_IMAGE_TAG: 8.0
+        MYSQL_PORT: 3306
+        MYSQL_PASSWORD: root
+        MYSQL_DB: test
+      shell: bash
+      run: |
+        docker run --name mysql \
+         --rm --detach \
+         --publish "${MYSQL_PORT}:3306" \
+         --env "MYSQL_ROOT_PASSWORD=${MYSQL_PASSWORD}" \
+         mysql:${MYSQL_IMAGE_TAG} \
+         --performance-schema=off --innodb_buffer_pool_size=32M \
+         --innodb-log-buffer-size=8M --key_buffer_size=4M
+
+    - name: Generate database URL
+      id: generate-url
+      env:
+        MYSQL_PORT: 3306
+        MYSQL_PASSWORD: root
+        MYSQL_DB: test
+      shell: bash
+      run: echo "db-url=mysql2://root:${MYSQL_PASSWORD}@127.0.0.1:${MYSQL_PORT}/${MYSQL_DB}" >> $GITHUB_OUTPUT
