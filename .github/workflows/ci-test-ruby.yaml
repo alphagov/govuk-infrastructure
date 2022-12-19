@@ -80,15 +80,7 @@ jobs:
 
       - name: Setup Redis
         if: ${{ inputs.enableRedis }}
-        env:
-          REDIS_IMAGE_TAG: 6-alpine
-          REDIS_PORT: 6379
-        run: |
-          # Start container
-          docker run --name redis \
-           --rm --detach \
-           --publish "${REDIS_PORT}:6379" \
-           redis:${REDIS_IMAGE_TAG}
+        uses: alphagov/govuk-infrastructure/.github/actions/setup-redis@main
 
       - name: Checkout repository
         uses: actions/checkout@v3
