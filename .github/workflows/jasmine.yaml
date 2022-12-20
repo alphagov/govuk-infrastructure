@@ -34,9 +34,7 @@ jobs:
 
       - name: Precompile Rails assets
         if: ${{ inputs.useWithRails }}
-        env:
-          RAILS_ENV: test
-        run: bundle exec rails assets:precompile
+        uses: alphagov/govuk-infrastructure/.github/actions/precompile-rails-assets@composite-actions
 
       - name: Run Jasmine
         run: yarn run jasmine-browser-runner runSpecs
