@@ -1,24 +1,17 @@
-name: Run Jasmine
+name: Precompile Rails assets
 
 on:
   workflow_call:
-    inputs:
-      useWithRails:
-        description: 'Enable for use with Rails'
-        required: false
-        default: false
-        type: boolean
 
 jobs:
-  run-jasmine:
-    name: Run Jasmine
+  precompile-assets:
+    name: Precompile Rails assets
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
 
       - name: Setup Ruby
-        if: ${{ inputs.useWithRails }}
         uses: ruby/setup-ruby@v1
         with:
           bundler-cache: true
@@ -32,9 +25,5 @@ jobs:
       - name: Install JavaScript dependencies
         run: yarn install --frozen-lockfile
 
-      - name: Precompile Rails assets
-        if: ${{ inputs.useWithRails }}
+      - name: Precompile assets
         uses: alphagov/govuk-infrastructure/.github/actions/precompile-rails-assets@main
-
-      - name: Run Jasmine
-        run: yarn run jasmine-browser-runner runSpecs
