@@ -1,11 +1,11 @@
-name: Lint Ruby
+name: Run RuboCop
 
 on:
   workflow_call:
 
 jobs:
-  lint-ruby:
-    name: Lint Ruby
+  run-rubocop:
+    name: Run RuboCop
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
