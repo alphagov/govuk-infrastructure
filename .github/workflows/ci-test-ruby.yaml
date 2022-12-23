@@ -87,20 +87,7 @@ jobs:
 
       - name: Setup MongoDB
         if: ${{ inputs.enableMongoDB }}
-        env:
-          MONGODB_PORT: 27017
-          MONGODB_IMAGE_TAG: 2.6
-          MONGODB_DB: ''
-          MONGODB_USERNAME: ''
-          MONGODB_PASSWORD: ''
-        run: |
-          docker run --name mongodb \
-           --rm --detach \
-           --publish "${MONGODB_PORT}:27017" \
-           --env "MONGO_INITDB_DATABASE=${MONGODB_DB}" \
-           --env "MONGO_INITDB_ROOT_USERNAME=${MONGODB_USERNAME}" \
-           --env "MONGO_INITDB_ROOT_PASSWORD=${MONGODB_PASSWORD}" \
-           mongo:${MONGODB_IMAGE_TAG}
+        uses: alphagov/govuk-infrastructure/.github/actions/setup-mongodb@main
 
       - name: Setup Elasticsearch
         if: ${{ inputs.enableElasticsearch }}
