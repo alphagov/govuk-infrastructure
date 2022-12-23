@@ -1,11 +1,17 @@
-name: Lint SCSS
+name: Run Stylelint
 
 on:
   workflow_call:
+    inputs:
+      files:
+        description: 'Files(s) or glob(s) to check'
+        required: false
+        default: 'app/assets/stylesheets/'
+        type: string
 
 jobs:
-  lint-scss:
-    name: Lint SCSS
+  run-stylelint:
+    name: Run Stylelint
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -20,5 +26,5 @@ jobs:
       - name: Install JavaScript dependencies
         run: yarn install --frozen-lockfile
 
-      - name: Run linter
-        run: yarn run lint:scss
+      - name: Run Stylelint
+        run: yarn run stylelint ${{ inputs.files }}
