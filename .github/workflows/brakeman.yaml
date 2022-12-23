@@ -1,11 +1,11 @@
-name: Security Analysis Ruby
+name: Run Brakeman
 
 on:
   workflow_call:
 
 jobs:
-  security-analysis-ruby:
-    name: Security Analysis Ruby
+  run-brakeman:
+    name: Run Brakeman
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
