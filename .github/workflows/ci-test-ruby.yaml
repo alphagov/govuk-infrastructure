@@ -68,22 +68,7 @@ jobs:
       - name: Setup Postrges
         id: setup-postgres
         if: ${{ inputs.enablePostgres }}
-        env:
-          POSTGRES_IMAGE_TAG: 13-alpine
-          POSTGRES_PORT: 5432
-          POSTGRES_USER: root
-          POSTGRES_PASSWORD: root
-          POSTGRES_DB: test
-        run: |
-          docker run --name postgres \
-           --rm --detach \
-           --publish "${POSTGRES_PORT}:${POSTGRES_PORT}" \
-           --env "POSTGRES_USER=${POSTGRES_USER}" \
-           --env "POSTGRES_PASSWORD=${POSTGRES_PASSWORD}" \
-           --env "POSTGRES_DB=${POSTGRES_DB}" \
-           postgres:${POSTGRES_IMAGE_TAG}
-
-          echo "db-url=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@127.0.0.1:${POSTGRES_PORT}/${POSTGRES_DB}" >> $GITHUB_OUTPUT
+        uses: alphagov/govuk-infrastructure/.github/actions/setup-postgres@main
 
       - name: Setup MongoDB
         if: ${{ inputs.enableMongoDB }}
