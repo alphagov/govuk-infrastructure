@@ -104,31 +104,7 @@ jobs:
 
       - name: Setup Elasticsearch
         if: ${{ inputs.enableElasticsearch }}
-        env:
-          ELASTICSEARCH_IMAGE_TAG: 6.7.2
-          ELASTICSEARCH_PORT: 9200
-        run: |
-          sudo swapoff -a
-          sudo sysctl -w vm.swappiness=1
-          sudo sysctl -w fs.file-max=262144
-          sudo sysctl -w vm.max_map_count=262144
-
-          docker network create elastic
-
-          docker run --name="elasticsearch" \
-           --rm --detach \
-           --env "discovery.type=single-node" \
-           --env "bootstrap.memory_lock=true" \
-           --env "ES_JAVA_OPTS=-Xms1g -Xmx1g" \
-           --env "xpack.security.enabled=false" \
-           --env "xpack.license.self_generated.type=basic" \
-           --ulimit "nofile=65536:65536" \
-           --ulimit "memlock=-1:-1" \
-           --publish "${ELASTICSEARCH_PORT}:9200" \
-           --network "elastic" \
-           elasticsearch:${ELASTICSEARCH_IMAGE_TAG}
-
-           sleep 10
+        uses: alphagov/govuk-infrastructure/.github/actions/setup-elasticsearch@main
 
       - name: Setup Redis
         if: ${{ inputs.enableRedis }}
