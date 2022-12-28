@@ -120,19 +120,9 @@ jobs:
          with:
            mongodb-version: 2.6
 
-       - name: Configure sysctl limits
-         if: ${{ inputs.requiresElasticsearch }}
-         run: |
-           sudo swapoff -a
-           sudo sysctl -w vm.swappiness=1
-           sudo sysctl -w fs.file-max=262144
-           sudo sysctl -w vm.max_map_count=262144
-
        - name: Setup Elasticsearch
          if: ${{ inputs.requiresElasticsearch }}
-         uses: elastic/elastic-github-actions/elasticsearch@562b8b6ae4677da97273ff6bc4d630ce96ecbaa5
-         with:
-           stack-version: 6.7.0
+         uses: alphagov/govuk-infrastructure/.github/actions/setup-elasticsearch@main
 
        - name: Setup Redis
          if: ${{ inputs.requiresRedis }}

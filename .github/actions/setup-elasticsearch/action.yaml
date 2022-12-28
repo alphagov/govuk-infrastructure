@@ -1,0 +1,37 @@
+name: 'Setup Elasticsearch'
+description: 'Create a new Elasticsearch instance'
+runs:
+  using: "composite"
+  steps:
+    - name: Configure sysctl limits
+      shell: bash
+      run: |
+        sudo swapoff -a
+        sudo sysctl -w vm.swappiness=1
+        sudo sysctl -w fs.file-max=262144
+        sudo sysctl -w vm.max_map_count=262144
+
+    - name: Create network
+      shell: bash
+      run: docker network create elastic
+
+    - name: Start container
+      env:
+        ELASTICSEARCH_IMAGE_TAG: 6.7.2
+        ELASTICSEARCH_PORT: 9200
+      shell: bash
+      run: |
+        docker run --name="elasticsearch" \
+         --rm --detach \
+         --env "discovery.type=single-node" \
+         --env "bootstrap.memory_lock=true" \
+         --env "ES_JAVA_OPTS=-Xms1g -Xmx1g" \
+         --env "xpack.security.enabled=false" \
+         --env "xpack.license.self_generated.type=basic" \
+         --ulimit "nofile=65536:65536" \
+         --ulimit "memlock=-1:-1" \
+         --publish "${ELASTICSEARCH_PORT}:9200" \
+         --network "elastic" \
+         elasticsearch:${ELASTICSEARCH_IMAGE_TAG}
+         
+         sleep 10
