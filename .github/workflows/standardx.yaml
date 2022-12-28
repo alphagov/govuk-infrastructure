@@ -1,11 +1,17 @@
-name: Lint SCSS
+name: Run Standardx
 
 on:
   workflow_call:
+    inputs:
+      files:
+        description: 'Files(s) or glob(s) to check'
+        required: false
+        default: "'app/assets/javascripts/**/*.js' 'spec/javascripts/**/*.js'"
+        type: string
 
 jobs:
-  lint-scss:
-    name: Lint SCSS
+  run-standardx:
+    name: Run Standardx
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -20,5 +26,5 @@ jobs:
       - name: Install JavaScript dependencies
         run: yarn install --frozen-lockfile
 
-      - name: Run linter
-        run: yarn run lint:scss
+      - name: Run Standardx
+        run: yarn run standardx ${{ inputs.files }}

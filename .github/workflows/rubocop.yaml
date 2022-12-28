@@ -1,11 +1,11 @@
-name: Security Analysis Ruby
+name: Run RuboCop
 
 on:
   workflow_call:
 
 jobs:
-  security-analysis-ruby:
-    name: Security Analysis Ruby
+  run-rubocop:
+    name: Run RuboCop
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -16,5 +16,5 @@ jobs:
         with:
           bundler-cache: true
 
-      - name: Run Brakeman
-        run: bundle exec brakeman . --except CheckRenderInline --quiet
+      - name: Run RuboCop
+        run: bundle exec rubocop --parallel

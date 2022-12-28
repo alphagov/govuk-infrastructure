@@ -1,20 +1,21 @@
-name: Test JavaScript
+name: Run Stylelint
 
 on:
   workflow_call:
+    inputs:
+      files:
+        description: 'Files(s) or glob(s) to check'
+        required: false
+        default: 'app/assets/stylesheets/'
+        type: string
 
 jobs:
-  test-javascript:
-    name: Test JavaScript
+  run-stylelint:
+    name: Run Stylelint
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
-
-      - name: Setup Ruby
-        uses: ruby/setup-ruby@v1
-        with:
-          bundler-cache: true
 
       - name: Setup Node
         uses: actions/setup-node@v3
@@ -25,5 +26,5 @@ jobs:
       - name: Install JavaScript dependencies
         run: yarn install --frozen-lockfile
 
-      - name: Run tests
-        run: yarn run jasmine:ci
+      - name: Run Stylelint
+        run: yarn run stylelint ${{ inputs.files }}
