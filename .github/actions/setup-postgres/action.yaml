@@ -10,7 +10,7 @@ runs:
     - name: Start container
       id: start-container
       env:
-        POSTGRES_IMAGE_TAG: 13-alpine
+        POSTGRES_IMAGE_TAG: 13.7-alpine
         POSTGRES_PORT: 5432
         POSTGRES_USER: root
         POSTGRES_PASSWORD: root
