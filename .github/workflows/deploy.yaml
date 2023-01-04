@@ -47,6 +47,10 @@
 # REUSABLE WORKFLOW
 # -----------------
 
+#
+# WORKFLOW DEPRECATED AND SOON WILL BE REMOVED IN FAVOR OF deploy.yml
+#
+
 name: Deploy
 
 on:

@@ -24,11 +24,6 @@
 
 # REUSABLE WORKFLOW
 # -----------------
-
-#
-# WORKFLOW DEPRECATED AND SOON WILL BE REMOVED IN FAVOR OF publish-rubygems.yml
-#
-
 name: Publish a Rubygem
 
 on:
