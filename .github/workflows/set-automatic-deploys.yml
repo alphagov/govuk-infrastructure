@@ -43,10 +43,6 @@
 # REUSABLE WORKFLOW
 # -----------------
 
-#
-# WORKFLOW DEPRECATED AND SOON WILL BE REMOVED IN FAVOR OF set-automatic-deploys.yml
-#
-
 name: Set automatic deploys
 
 on:

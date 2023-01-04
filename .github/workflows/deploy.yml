@@ -1,23 +1,18 @@
 # USAGE
 # -----
 #
-# name: Set automatic deploys
-#
-# run-name: Set automatic deploys to ${{ inputs.setAutomaticDeploys }} in ${{ inputs.environment }}
+# name: Deploy
 #
 # on:
 #   workflow_dispatch:
 #     inputs:
-#       setAutomaticDeploys:
-#         description: 'Set automatic deploys'
-#         required: false
-#         type: choice
-#         options:
-#         - enabled
-#         - disabled
-#         default: 'enabled'
+#       gitRef:
+#         description: 'Commit, tag or branch name to deploy'
+#         required: true
+#         type: string
+#         default: 'main'
 #       environment:
-#         description: 'Environment'
+#         description: 'Environment to deploy to'
 #         required: true
 #         type: choice
 #         options:
@@ -25,44 +20,50 @@
 #         - staging
 #         - production
 #         default: 'integration'
+#   push:
+#     branches:
+#       - main
+#     paths-ignore:
+#       - "Jenkinsfile"
+#       - ".git**"
+#
 #
 # jobs:
-#   set-automatic-deploys:
-#     name: Set automatic deploys
-#     uses: alphagov/govuk-infrastructure/.github/workflows/set-automatic-deploys.yaml@main
+#   trigger-deploy:
+#     name: Trigger deploy to ${{ github.event.inputs.environment }}
+#     needs: build-and-publish-image
+#     uses: alphagov/govuk-infrastructure/.github/workflows/deploy.yaml@main
 #     with:
-#       automaticDeploysEnabled: ${{ github.event.inputs.setAutomaticDeploys == 'enabled' }}
+#       imageTag: ${{ needs.build-and-publish-image.outputs.imageTag }}
 #       environment: ${{ github.event.inputs.environment }}
 #     secrets:
 #       WEBHOOK_TOKEN: ${{ secrets.GOVUK_ARGO_EVENTS_WEBHOOK_TOKEN }}
 #       WEBHOOK_URL: ${{ secrets.GOVUK_ARGO_EVENTS_WEBHOOK_URL }}
-#       GH_TOKEN: ${{ secrets.GOVUK_CI_GITHUB_API_TOKEN }}
+#       GH_TOKEN: ${{ secrets.GH_TOKEN }}
+#
 
 
 #
 # REUSABLE WORKFLOW
 # -----------------
 
-#
-# WORKFLOW DEPRECATED AND SOON WILL BE REMOVED IN FAVOR OF set-automatic-deploys.yml
-#
-
-name: Set automatic deploys
+name: Deploy
 
 on:
   workflow_call:
     inputs:
-      automaticDeploysEnabled:
-        description: 'Configures whether automatic deployments are enabled'
-        required: true
-        default: true
-        type: boolean
+      imageTag:
+        description: 'An image tag to deploy'
+        required: false
+        default: ${{ github.sha }}
+        type: string
       appName:
+        description: 'Name of the app being deployed'
         required: false
         default: ${{ github.event.repository.name }}
         type: string
       environment:
-        description: 'Environment to modify'
+        description: 'Environment to deploy to'
         required: false
         default: 'integration'
         type: string
@@ -75,9 +76,11 @@ on:
         required: true
 
 jobs:
-  set-automatic-deploys:
-    name: Set automatic deploys
+  update-image-tag:
+    name: Update image tag
     runs-on: ubuntu-latest
+    env:
+      ENVIRONMENT: ${{ inputs.environment || 'integration' }}
     steps:
       - name: Check deploy permissions
         id: deploy-permissions
@@ -89,16 +92,16 @@ jobs:
           TEAM_MEMBERSHIP=$(gh api orgs/alphagov/teams/${GITHUB_TEAM}/memberships/${GITHUB_USER} -q .state || echo "false")
 
           if ! [[ "${TEAM_MEMBERSHIP}" = "active" || "${ENVIRONMENT}" = 'integration' ]]; then
-            echo "::error title=Insufficient permissions to deploy::User ${GITHUB_USER} needs to be a member of the ${GITHUB_TEAM} team"
+            echo '::error title=Insufficient permissions to deploy::User ${{ github.triggering_actor }} needs to be a member of the GOV.UK Production Deploy team'
             exit 1
           fi
 
-      - name: Send webhook
+      - name: Trigger Argo Workflows
         if: steps.deploy-permissions.outcome == 'success'
         env:
-          AUTOMATIC_DEPLOYS_ENABLED: ${{ inputs.automaticDeploysEnabled }}
-          ENVIRONMENT: ${{ inputs.environment }}
+          IMAGE_TAG: ${{ inputs.imageTag }}
           REPO_NAME: ${{ inputs.appName }}
+          MANUAL_DEPLOY: ${{ github.event_name == 'workflow_dispatch' }}
           WEBHOOK_TOKEN: ${{ secrets.WEBHOOK_TOKEN }}
           WEBHOOK_URL: ${{ secrets.WEBHOOK_URL }}
         run: |
@@ -106,5 +109,5 @@ jobs:
           curl -fs \
             -H "Content-Type: application/json" \
             -H "Authorization: Bearer ${WEBHOOK_TOKEN}" \
-            -d "{\"environment\": \"${ENVIRONMENT}\", \"repoName\": \"${REPO_NAME}\", \"automaticDeploysEnabled\": \"${AUTOMATIC_DEPLOYS_ENABLED}\"}" \
-            "${WEBHOOK_URL}/set-automatic-deploys-enabled"
+            -d "{\"environment\": \"${ENVIRONMENT}\", \"repoName\": \"${REPO_NAME}\", \"imageTag\": \"${IMAGE_TAG}\", \"manualDeploy\": \"${MANUAL_DEPLOY}\"}" \
+            "${WEBHOOK_URL}/update-image-tag"
