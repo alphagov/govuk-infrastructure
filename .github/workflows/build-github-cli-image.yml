@@ -1,10 +1,7 @@
 name: Build and publish github-cli image to ECR
 
 on:
-
   workflow_dispatch:
-    branches:
-      - main
     inputs:
       gitRef:
         description: 'Commit, tag or branch name to deploy'
