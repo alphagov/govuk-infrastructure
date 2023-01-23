@@ -1,10 +1,7 @@
 name: Build and publish github-cli image to ECR
 
 on:
-
   workflow_dispatch:
-    branches:
-      - main
     inputs:
       gitRef:
         description: 'Commit, tag or branch name to deploy'
@@ -20,7 +17,7 @@ on:
 
 jobs:
   build-and-push-image:
-    uses: alphagov/govuk-infrastructure/.github/workflows/build-and-push-image.yaml@main
+    uses: alphagov/govuk-infrastructure/.github/workflows/build-and-push-image.yml@main
     with:
       gitRef: ${{ inputs.gitRef || github.ref }}
       ecrRepositoryName: github-cli
