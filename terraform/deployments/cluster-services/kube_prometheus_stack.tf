@@ -269,6 +269,7 @@ resource "helm_release" "kube_prometheus_stack" {
               }
             }
           }
+          externalUrl = "https://${local.alertmanager_host}"
         }
       }
       prometheus = {
@@ -305,6 +306,7 @@ resource "helm_release" "kube_prometheus_stack" {
               }
             }
           }
+          externalUrl = "https://${local.prometheus_host}"
         }
       }
       kube_state_metrics = {
