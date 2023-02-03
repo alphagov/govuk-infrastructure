@@ -127,3 +127,20 @@ variable "secrets_recovery_window_in_days" {
   description = "Set to 0 in non-production environments to allow Terraform to delete and re-create secrets in AWS Secrets Manager."
   default     = 7
 }
+
+variable "ckan_s3_organogram_bucket" {
+  type        = string
+  description = "Bucket for CKAN organogram data"
+}
+
+variable "ckan_service_account_namespace" {
+  type        = string
+  description = "Namespace in which the CKAN service account resides"
+  default     = "datagovuk"
+}
+
+variable "ckan_service_account_name" {
+  type        = string
+  description = "Name of the service account CKAN will use"
+  default     = "ckan"
+}
