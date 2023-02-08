@@ -185,6 +185,10 @@ resource "helm_release" "kube_prometheus_stack" {
             type     = "postgres"
             ssl_mode = "disable"
           }
+          date_formats = {
+            interval_hour = "YYYY-MM-DD HH:mm"
+            interval_day  = "YYYY-MM-DD"
+          }
         }
         envValueFrom = {
           "GF_AUTH_GENERIC_OAUTH_CLIENT_ID" = {
