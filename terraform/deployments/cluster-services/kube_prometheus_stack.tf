@@ -141,7 +141,7 @@ resource "helm_release" "kube_prometheus_stack" {
   name             = "kube-prometheus-stack"
   repository       = "https://prometheus-community.github.io/helm-charts"
   chart            = "kube-prometheus-stack"
-  version          = "42.3.0" # TODO: Dependabot or equivalent so this doesn't get neglected.
+  version          = "45.4.0" # TODO: Dependabot or equivalent so this doesn't get neglected.
   namespace        = local.monitoring_ns
   create_namespace = true
   values = [
