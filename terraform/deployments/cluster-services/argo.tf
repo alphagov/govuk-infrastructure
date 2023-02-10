@@ -111,7 +111,7 @@ resource "helm_release" "argo_cd" {
     }
 
     redis-ha = {
-      enabled = true
+      enabled = var.argo_redis_ha
     }
 
     notifications = {
