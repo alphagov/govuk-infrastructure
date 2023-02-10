@@ -19,3 +19,8 @@ variable "ckan_service_account_name" {
   description = "Name of the service account CKAN will use"
   default     = "ckan"
 }
+
+variable "govuk_environment" {
+  type        = string
+  description = "Acceptable values are test, integration, staging, production"
+}
