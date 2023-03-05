@@ -40,7 +40,7 @@ output "cluster_autoscaler_role_arn" {
 
 output "cluster_id" {
   description = "The name (also known as the ID) of the EKS cluster."
-  value       = module.eks.cluster_id
+  value       = module.eks.cluster_name
 }
 
 output "cluster_endpoint" {

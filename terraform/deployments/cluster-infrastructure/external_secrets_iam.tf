@@ -21,7 +21,7 @@ module "external_secrets_iam_role" {
 
 resource "aws_iam_policy" "external_secrets" {
   name        = "EKSExternalSecrets-${var.cluster_name}"
-  description = "EKS ${local.external_secrets_service_account_name} policy for cluster ${module.eks.cluster_id}"
+  description = "EKS ${local.external_secrets_service_account_name} policy for cluster ${module.eks.cluster_name}"
   policy      = data.aws_iam_policy_document.external_secrets.json
 }
 
