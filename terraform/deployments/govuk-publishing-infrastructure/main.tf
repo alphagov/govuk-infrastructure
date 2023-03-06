@@ -44,3 +44,5 @@ provider "random" {}
 provider "fastly" {
   api_key = "fake"
 }
+
+data "aws_caller_identity" "current" {}
