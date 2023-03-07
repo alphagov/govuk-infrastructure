@@ -11,7 +11,7 @@ resource "helm_release" "cluster_autoscaler" {
   name       = "cluster-autoscaler"
   repository = "https://kubernetes.github.io/autoscaler"
   chart      = "cluster-autoscaler"
-  version    = "9.19.2" # TODO: Dependabot or equivalent so this doesn't get neglected.
+  version    = "9.25.0" # TODO: Dependabot or equivalent so this doesn't get neglected.
   namespace  = "kube-system"
   values = [yamlencode({
     awsRegion = data.aws_region.current.name
