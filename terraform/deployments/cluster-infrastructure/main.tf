@@ -80,11 +80,11 @@ module "eks" {
       name_prefix = var.cluster_name
       # TODO: set iam_role_permissions_boundary
       # TODO: apply provider default_tags to instances; might need to set launch_template_tags.
-      desired_size           = var.workers_size_desired
-      max_size               = var.workers_size_max
-      min_size               = var.workers_size_min
-      instance_types         = var.workers_instance_types
-      disk_size              = var.node_disk_size
+      desired_size               = var.workers_size_desired
+      max_size                   = var.workers_size_max
+      min_size                   = var.workers_size_min
+      instance_types             = var.workers_instance_types
+      disk_size                  = var.node_disk_size
       use_custom_launch_template = false
       update_config              = { max_unavailable = 1 }
       additional_tags = {
