@@ -14,6 +14,9 @@ on:
       - main
     paths:
       - "images/github-cli/Dockerfile"
+  
+  schedule:
+    - cron: '0 0 * * 1'
 
 jobs:
   build-and-push-image:
