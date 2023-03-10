@@ -39,7 +39,7 @@ provider "aws" {
 
 module "eks" {
   source  = "terraform-aws-modules/eks/aws"
-  version = "~> 18.0"
+  version = "~> 19.0"
 
   cluster_name    = var.cluster_name
   cluster_version = var.cluster_version
@@ -47,23 +47,22 @@ module "eks" {
   vpc_id          = data.terraform_remote_state.infra_vpc.outputs.vpc_id
 
   cluster_addons = {
-    coredns    = { resolve_conflicts = "OVERWRITE" }
-    kube-proxy = { resolve_conflicts = "OVERWRITE" }
-    vpc-cni    = { resolve_conflicts = "OVERWRITE" }
+    coredns    = { most_recent = true }
+    kube-proxy = { most_recent = true }
+    vpc-cni    = { most_recent = true }
   }
 
-  cluster_endpoint_private_access        = true
+  cluster_endpoint_public_access         = true
   cloudwatch_log_group_retention_in_days = var.cluster_log_retention_in_days
   cluster_enabled_log_types = [
     "api", "audit", "authenticator", "controllerManager", "scheduler"
   ]
 
-  cluster_encryption_config = [
-    {
-      provider_key_arn = aws_kms_key.eks.arn
-      resources        = ["secrets"]
-    }
-  ]
+  cluster_encryption_config = {
+    provider_key_arn = aws_kms_key.eks.arn
+    resources        = ["secrets"]
+  }
+  create_kms_key = false
 
   # We're just using the cluster primary SG as created by EKS.
   create_cluster_security_group = false
@@ -78,17 +77,16 @@ module "eks" {
 
   eks_managed_node_groups = {
     main = {
-      name = var.cluster_name
+      name_prefix = var.cluster_name
       # TODO: set iam_role_permissions_boundary
       # TODO: apply provider default_tags to instances; might need to set launch_template_tags.
-      desired_size           = var.workers_size_desired
-      max_size               = var.workers_size_max
-      min_size               = var.workers_size_min
-      instance_types         = var.workers_instance_types
-      disk_size              = var.node_disk_size
-      create_launch_template = false
-      launch_template_name   = ""
-      # TODO: specify update_config if needed (are the defaults ok?)
+      desired_size               = var.workers_size_desired
+      max_size                   = var.workers_size_max
+      min_size                   = var.workers_size_min
+      instance_types             = var.workers_instance_types
+      disk_size                  = var.node_disk_size
+      use_custom_launch_template = false
+      update_config              = { max_unavailable = 1 }
       additional_tags = {
         "k8s.io/cluster-autoscaler/enabled"             = "true"
         "k8s.io/cluster-autoscaler/${var.cluster_name}" = "owned"

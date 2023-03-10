@@ -1,5 +1,5 @@
 locals {
-  grafana_db_name         = "grafana-${module.eks.cluster_id}"
+  grafana_db_name         = "grafana-${module.eks.cluster_name}"
   grafana_service_account = "kube-prometheus-stack-grafana"
 }
 
@@ -7,7 +7,7 @@ module "grafana_iam_role" {
   source                        = "terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc"
   version                       = "~> 4.0"
   create_role                   = true
-  role_name                     = "${local.grafana_service_account}-${module.eks.cluster_id}"
+  role_name                     = "${local.grafana_service_account}-${module.eks.cluster_name}"
   role_description              = "Role for Grafana to access AWS data sources. Corresponds to ${local.grafana_service_account} k8s ServiceAccount."
   provider_url                  = module.eks.oidc_provider
   role_policy_arns              = [aws_iam_policy.grafana.arn]
@@ -15,7 +15,7 @@ module "grafana_iam_role" {
 }
 
 resource "aws_iam_policy" "grafana" {
-  name        = "grafana-${module.eks.cluster_id}"
+  name        = "grafana-${module.eks.cluster_name}"
   description = "Allows Grafana to access AWS data sources."
 
   # The argument to jsonencode() was obtained from
@@ -127,7 +127,7 @@ resource "aws_route53_record" "grafana_db" {
 }
 
 resource "aws_secretsmanager_secret" "grafana_db" {
-  name                    = "${module.eks.cluster_id}/grafana/database"
+  name                    = "${module.eks.cluster_name}/grafana/database"
   recovery_window_in_days = var.secrets_recovery_window_in_days
 }
 

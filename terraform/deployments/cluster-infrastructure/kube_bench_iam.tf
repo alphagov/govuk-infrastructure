@@ -1,5 +1,5 @@
 resource "aws_iam_policy" "kube_bench_security_hub" {
-  name        = "kube_bench_security_hub_${module.eks.cluster_id}"
+  name        = "kube_bench_security_hub_${module.eks.cluster_name}"
   description = "Kube-bench integration to AWS Security Hub"
 
   policy = jsonencode({

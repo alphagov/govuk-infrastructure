@@ -33,7 +33,7 @@ module "cluster_autoscaler_iam_role" {
 
 resource "aws_iam_policy" "cluster_autoscaler" {
   name        = "EKSClusterAutoscaler-${var.cluster_name}"
-  description = "EKS cluster-autoscaler policy for cluster ${module.eks.cluster_id}"
+  description = "EKS cluster-autoscaler policy for cluster ${module.eks.cluster_name}"
   policy      = data.aws_iam_policy_document.cluster_autoscaler.json
 }
 
@@ -78,7 +78,7 @@ data "aws_iam_policy_document" "cluster_autoscaler" {
 
     condition {
       test     = "StringEquals"
-      variable = "autoscaling:ResourceTag/k8s.io/cluster-autoscaler/${module.eks.cluster_id}"
+      variable = "autoscaling:ResourceTag/k8s.io/cluster-autoscaler/${module.eks.cluster_name}"
       values   = ["owned"]
     }
 
