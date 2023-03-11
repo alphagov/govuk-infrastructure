@@ -25,7 +25,7 @@ resource "helm_release" "external_dns" {
     domainFilters      = [data.terraform_remote_state.cluster_infrastructure.outputs.external_dns_zone_name]
     interval           = "5m"
     triggerLoopOnEvent = true
-    replicaCount       = var.default_desired_ha_replicas
+    replicaCount       = var.desired_ha_replicas
     # TODO: hook up Prometheus metrics (metrics.enabled, metrics.podAnnotations etc.)
   })]
 }

@@ -154,7 +154,7 @@ resource "helm_release" "kube_prometheus_stack" {
     yamlencode({
       grafana = {
         defaultDashboardsTimezone = "Europe/London"
-        replicas                  = var.default_desired_ha_replicas
+        replicas                  = var.desired_ha_replicas
         ingress = {
           enabled  = true
           hosts    = [local.grafana_host]
@@ -262,11 +262,9 @@ resource "helm_release" "kube_prometheus_stack" {
       }
       alertmanager = {
         alertmanagerSpec = {
-          replicas = var.default_desired_ha_replicas
-          podDisruptionBudget = {
-            enabled = var.default_desired_ha_replicas > 1
-          }
-          podAntiAffinity = var.default_desired_ha_replicas > 1 ? "hard" : ""
+          replicas            = var.desired_ha_replicas
+          podDisruptionBudget = { enabled = var.desired_ha_replicas > 1 }
+          podAntiAffinity     = var.desired_ha_replicas > 1 ? "hard" : ""
           storage = {
             volumeClaimTemplate = {
               spec = {
@@ -313,11 +311,9 @@ resource "helm_release" "kube_prometheus_stack" {
             }]
           }
           serviceMonitorSelectorNilUsesHelmValues = false
-          replicas                                = var.default_desired_ha_replicas
-          podDisruptionBudget = {
-            enabled = var.default_desired_ha_replicas > 1
-          }
-          podAntiAffinity = var.default_desired_ha_replicas > 1 ? "hard" : ""
+          replicas                                = var.desired_ha_replicas
+          podDisruptionBudget                     = { enabled = var.desired_ha_replicas > 1 }
+          podAntiAffinity                         = var.desired_ha_replicas > 1 ? "hard" : ""
           probeNamespaceSelector = {
             matchExpressions = [{
               key      = "no_monitor"

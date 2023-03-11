@@ -37,7 +37,7 @@ resource "helm_release" "argo_cd" {
       # server from upgrading the request after TLS termination.
       extraArgs = ["--insecure"]
 
-      replicas = var.default_desired_ha_replicas
+      replicas = var.desired_ha_replicas
 
       ingress = {
         enabled = true
@@ -99,11 +99,11 @@ resource "helm_release" "argo_cd" {
 
     repoServer = {
       metrics  = local.argo_metrics_config
-      replicas = var.default_desired_ha_replicas
+      replicas = var.desired_ha_replicas
     }
 
     applicationSet = {
-      replicaCount = var.default_desired_ha_replicas
+      replicaCount = var.desired_ha_replicas
     }
 
     dex = {
@@ -215,7 +215,7 @@ resource "helm_release" "argo_workflows" {
         }
       }
       workflowWorkers = 128
-      replicas        = var.default_desired_ha_replicas
+      replicas        = var.desired_ha_replicas
     }
 
     executor = {
@@ -278,7 +278,7 @@ resource "helm_release" "argo_workflows" {
           memory = "512Mi"
         }
       }
-      replicas = var.default_desired_ha_replicas
+      replicas = var.desired_ha_replicas
     }
   })]
 }
@@ -293,7 +293,7 @@ resource "helm_release" "argo_events" {
   values = [yamlencode({
     namespace = local.services_ns
     controller = {
-      replicas = var.default_desired_ha_replicas
+      replicas = var.desired_ha_replicas
     }
     configs = {
       jetstream = {

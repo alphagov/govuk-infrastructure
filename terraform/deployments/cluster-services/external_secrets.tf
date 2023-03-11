@@ -11,7 +11,7 @@ resource "helm_release" "external_secrets" {
   namespace        = local.services_ns
   create_namespace = true
   values = [yamlencode({
-    replicaCount = var.default_desired_ha_replicas
+    replicaCount = var.desired_ha_replicas
     serviceAccount = {
       name = data.terraform_remote_state.cluster_infrastructure.outputs.external_secrets_service_account_name
       annotations = {
@@ -19,10 +19,10 @@ resource "helm_release" "external_secrets" {
       }
     }
     certController = {
-      replicaCount = var.default_desired_ha_replicas
+      replicaCount = var.desired_ha_replicas
     }
     webhook = {
-      replicaCount = var.default_desired_ha_replicas
+      replicaCount = var.desired_ha_replicas
     }
   })]
 }
