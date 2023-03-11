@@ -262,6 +262,9 @@ resource "helm_release" "kube_prometheus_stack" {
       alertmanager = {
         alertmanagerSpec = {
           replicas = var.default_desired_ha_replicas
+          podDisruptionBudget = {
+            enabled = var.default_desired_ha_replicas > 1
+          }
           storage = {
             volumeClaimTemplate = {
               spec = {
@@ -299,6 +302,9 @@ resource "helm_release" "kube_prometheus_stack" {
           podMonitorSelectorNilUsesHelmValues     = false
           serviceMonitorSelectorNilUsesHelmValues = false
           replicas                                = var.default_desired_ha_replicas
+          podDisruptionBudget = {
+            enabled = var.default_desired_ha_replicas > 1
+          }
           storageSpec = {
             volumeClaimTemplate = {
               spec = {
