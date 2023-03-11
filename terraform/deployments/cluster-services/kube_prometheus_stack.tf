@@ -265,6 +265,7 @@ resource "helm_release" "kube_prometheus_stack" {
           podDisruptionBudget = {
             enabled = var.default_desired_ha_replicas > 1
           }
+          podAntiAffinity = var.default_desired_ha_replicas > 1 ? "hard" : ""
           storage = {
             volumeClaimTemplate = {
               spec = {
@@ -305,6 +306,7 @@ resource "helm_release" "kube_prometheus_stack" {
           podDisruptionBudget = {
             enabled = var.default_desired_ha_replicas > 1
           }
+          podAntiAffinity = var.default_desired_ha_replicas > 1 ? "hard" : ""
           storageSpec = {
             volumeClaimTemplate = {
               spec = {
