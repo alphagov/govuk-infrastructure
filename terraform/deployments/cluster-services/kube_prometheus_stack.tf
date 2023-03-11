@@ -1,4 +1,5 @@
-# Installs Prometheus Operator, Prometheus, Prometheus rules, Grafana, Grafana dashboards, and Prometheus CRDs
+# Installs Prometheus Operator, Prometheus, Prometheus rules, Grafana (with
+# some default dashboards) and Prometheus CRDs.
 
 data "aws_secretsmanager_secret" "alertmanager-pagerduty" {
   name = "govuk/alertmanager/pagerduty-routing-key"
@@ -303,13 +304,28 @@ resource "helm_release" "kube_prometheus_stack" {
               values   = []
             }]
           }
-          podMonitorSelectorNilUsesHelmValues     = false
+          podMonitorSelectorNilUsesHelmValues = false
+          serviceMonitorNamespaceSelector = {
+            matchExpressions = [{
+              key      = "no_monitor"
+              operator = "DoesNotExist"
+              values   = []
+            }]
+          }
           serviceMonitorSelectorNilUsesHelmValues = false
           replicas                                = var.default_desired_ha_replicas
           podDisruptionBudget = {
             enabled = var.default_desired_ha_replicas > 1
           }
           podAntiAffinity = var.default_desired_ha_replicas > 1 ? "hard" : ""
+          probeNamespaceSelector = {
+            matchExpressions = [{
+              key      = "no_monitor"
+              operator = "DoesNotExist"
+              values   = []
+            }]
+          }
+          probeSelectorNilUsesHelmValues = false
           retention                      = "90d"
           storageSpec = {
             volumeClaimTemplate = {
