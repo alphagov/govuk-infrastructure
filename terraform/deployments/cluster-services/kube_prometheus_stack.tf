@@ -284,6 +284,9 @@ resource "helm_release" "kube_prometheus_stack" {
         # Match all PrometheusRules cluster-wide. (If an app/team needs a separate
         # Prom instance, it almost certainly needs a separate EKS cluster too.)
         prometheusSpec = {
+          scrapeInterval     = "1m"
+          evaluationInterval = "1m"
+          scrapeTimeout      = "15s"
           ruleNamespaceSelector = {
             matchExpressions = [{
               key      = "no_monitor"
@@ -307,6 +310,7 @@ resource "helm_release" "kube_prometheus_stack" {
             enabled = var.default_desired_ha_replicas > 1
           }
           podAntiAffinity = var.default_desired_ha_replicas > 1 ? "hard" : ""
+          retention                      = "90d"
           storageSpec = {
             volumeClaimTemplate = {
               spec = {
