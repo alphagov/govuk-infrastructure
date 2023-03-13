@@ -1,4 +1,5 @@
-# Installs Prometheus Operator, Prometheus, Prometheus rules, Grafana, Grafana dashboards, and Prometheus CRDs
+# Installs Prometheus Operator, Prometheus, Prometheus rules, Grafana (with
+# some default dashboards) and Prometheus CRDs.
 
 data "aws_secretsmanager_secret" "alertmanager-pagerduty" {
   name = "govuk/alertmanager/pagerduty-routing-key"
@@ -153,7 +154,7 @@ resource "helm_release" "kube_prometheus_stack" {
     yamlencode({
       grafana = {
         defaultDashboardsTimezone = "Europe/London"
-        replicas                  = var.default_desired_ha_replicas
+        replicas                  = var.desired_ha_replicas
         ingress = {
           enabled  = true
           hosts    = [local.grafana_host]
@@ -261,7 +262,9 @@ resource "helm_release" "kube_prometheus_stack" {
       }
       alertmanager = {
         alertmanagerSpec = {
-          replicas = var.default_desired_ha_replicas
+          replicas            = var.desired_ha_replicas
+          podDisruptionBudget = { enabled = var.desired_ha_replicas > 1 }
+          podAntiAffinity     = var.desired_ha_replicas > 1 ? "hard" : ""
           storage = {
             volumeClaimTemplate = {
               spec = {
@@ -280,6 +283,9 @@ resource "helm_release" "kube_prometheus_stack" {
         # Match all PrometheusRules cluster-wide. (If an app/team needs a separate
         # Prom instance, it almost certainly needs a separate EKS cluster too.)
         prometheusSpec = {
+          scrapeInterval     = "1m"
+          evaluationInterval = "1m"
+          scrapeTimeout      = "15s"
           ruleNamespaceSelector = {
             matchExpressions = [{
               key      = "no_monitor"
@@ -296,9 +302,27 @@ resource "helm_release" "kube_prometheus_stack" {
               values   = []
             }]
           }
-          podMonitorSelectorNilUsesHelmValues     = false
+          podMonitorSelectorNilUsesHelmValues = false
+          serviceMonitorNamespaceSelector = {
+            matchExpressions = [{
+              key      = "no_monitor"
+              operator = "DoesNotExist"
+              values   = []
+            }]
+          }
           serviceMonitorSelectorNilUsesHelmValues = false
-          replicas                                = var.default_desired_ha_replicas
+          replicas                                = var.desired_ha_replicas
+          podDisruptionBudget                     = { enabled = var.desired_ha_replicas > 1 }
+          podAntiAffinity                         = var.desired_ha_replicas > 1 ? "hard" : ""
+          probeNamespaceSelector = {
+            matchExpressions = [{
+              key      = "no_monitor"
+              operator = "DoesNotExist"
+              values   = []
+            }]
+          }
+          probeSelectorNilUsesHelmValues = false
+          retention                      = "90d"
           storageSpec = {
             volumeClaimTemplate = {
               spec = {

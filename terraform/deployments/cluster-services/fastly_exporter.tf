@@ -7,6 +7,6 @@ resource "helm_release" "fastly-exporter" {
   namespace        = local.monitoring_ns
   create_namespace = true
   values = [yamlencode({
-    replicaCount = var.default_desired_ha_replicas
+    replicaCount = var.desired_ha_replicas
   })]
 }

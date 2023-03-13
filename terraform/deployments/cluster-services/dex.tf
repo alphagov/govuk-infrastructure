@@ -13,7 +13,7 @@ resource "helm_release" "dex" {
   repository       = "https://charts.dexidp.io"
   version          = "0.9.0" # TODO: Dependabot or equivalent so this doesn't get neglected.
   values = [yamlencode({
-    replicaCount = var.default_desired_ha_replicas
+    replicaCount = var.desired_ha_replicas
     config = {
       issuer = "https://${local.dex_host}"
 

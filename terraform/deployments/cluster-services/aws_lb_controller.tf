@@ -21,7 +21,7 @@ resource "helm_release" "aws_lb_controller" {
         "eks.amazonaws.com/role-arn" = data.terraform_remote_state.cluster_infrastructure.outputs.aws_lb_controller_role_arn
       }
     }
-    replicaCount = var.default_desired_ha_replicas
+    replicaCount = var.desired_ha_replicas
   })]
 }
 

@@ -41,7 +41,7 @@ rds_skip_final_snapshot = true
 
 secrets_recovery_window_in_days = 0
 
-argo_redis_ha               = false
-default_desired_ha_replicas = 1
+argo_redis_ha       = false
+desired_ha_replicas = 1
 
 ckan_s3_organogram_bucket = "datagovuk-integration-ckan-organogram"

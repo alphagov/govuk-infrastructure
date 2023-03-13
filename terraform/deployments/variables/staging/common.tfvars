@@ -31,6 +31,6 @@ www_dns_validation_rdata  = "fnvjfn8tfff6n003cf.fastly-validations.com"
 frontend_memcached_node_type   = "cache.t4g.medium"
 shared_redis_cluster_node_type = "cache.t4g.medium"
 
-default_desired_ha_replicas = 2
+desired_ha_replicas = 2
 
 ckan_s3_organogram_bucket = "datagovuk-staging-ckan-organogram"
