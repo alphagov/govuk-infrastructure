@@ -30,7 +30,7 @@ resource "helm_release" "argo_cd" {
   namespace        = local.services_ns
   create_namespace = true
   repository       = "https://argoproj.github.io/argo-helm"
-  version          = "5.24.4" # TODO: Dependabot or equivalent so this doesn't get neglected.
+  version          = "5.26.1" # TODO: Dependabot or equivalent so this doesn't get neglected.
   values = [yamlencode({
     server = {
       # TLS Termination happens at the ALB, the insecure flag prevents Argo
@@ -131,7 +131,7 @@ resource "helm_release" "argo_bootstrap" {
   namespace        = local.services_ns
   create_namespace = true
   repository       = "https://alphagov.github.io/govuk-helm-charts/"
-  version          = "0.3.1" # TODO: Dependabot or equivalent so this doesn't get neglected.
+  version          = "0.3.2" # TODO: Dependabot or equivalent so this doesn't get neglected.
   values = [yamlencode({
     # TODO: This TF module should not need to know the govuk_environment, since
     # there is only one per AWS account.
@@ -162,7 +162,7 @@ resource "helm_release" "argo_workflows" {
   namespace        = local.services_ns
   create_namespace = true
   repository       = "https://argoproj.github.io/argo-helm"
-  version          = "0.20.8" # TODO: Dependabot or equivalent so this doesn't get neglected.
+  version          = "0.22.13" # TODO: Dependabot or equivalent so this doesn't get neglected.
   values = [yamlencode({
     controller = {
       podSecurityContext = {
@@ -289,25 +289,11 @@ resource "helm_release" "argo_events" {
   namespace        = local.services_ns
   create_namespace = true
   repository       = "https://argoproj.github.io/argo-helm"
-  version          = "2.0.6" # TODO: Dependabot or equivalent so this doesn't get neglected.
+  version          = "2.1.3" # TODO: Dependabot or equivalent so this doesn't get neglected.
   values = [yamlencode({
     namespace = local.services_ns
     controller = {
       replicas = var.desired_ha_replicas
-    }
-    configs = {
-      jetstream = {
-        versions = [
-          {
-            # TODO: Dependabot or similar so this doesn't get neglected.
-            version              = "2.9.8"
-            natsImage            = "nats:2.9.8"
-            metricsExporterImage = "natsio/prometheus-nats-exporter:0.10.1"
-            configReloaderImage  = "natsio/nats-server-config-reloader:0.7.4"
-            startCommand         = "/nats-server"
-          }
-        ]
-      }
     }
   })]
 }
