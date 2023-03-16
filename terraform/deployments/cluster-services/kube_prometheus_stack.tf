@@ -339,6 +339,11 @@ resource "helm_release" "kube_prometheus_stack" {
       }
       kube_state_metrics = {
         selfMonitor = { enabled = true }
+        metricRelabelings = {
+          action      = "labelmap"
+          regex       = "^flask_(.*)"
+          replacement = "${1}"
+        }
       }
     })
   ]
