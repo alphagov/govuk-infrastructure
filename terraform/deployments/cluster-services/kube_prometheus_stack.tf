@@ -152,6 +152,26 @@ resource "helm_release" "kube_prometheus_stack" {
         alertmanager_host = local.alertmanager_host
     }),
     yamlencode({
+      kubeControllerManager = { enabled = false }
+      kubeEtcd              = { enabled = false }
+      kubeScheduler         = { enabled = false }
+      defaultRules = {
+        rules = {
+          kubeApiserverBurnrate  = false
+          kubeApiserverHistogram = false
+          kubeApiserverSlos      = false
+          network                = false
+        }
+        disabled = {
+          KubePodNotReady           = true
+          NodeRAIDDegraded          = true
+          NodeNetworkReceiveErrs    = true
+          NodeNetworkTransmitErrs   = true
+          NodeClockSkewDetected     = true
+          NodeClockNotSynchronising = true
+          NodeRAIDDiskFailure       = true
+        }
+      }
       grafana = {
         defaultDashboardsTimezone = "Europe/London"
         replicas                  = var.desired_ha_replicas
