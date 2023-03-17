@@ -142,7 +142,7 @@ resource "helm_release" "kube_prometheus_stack" {
   name             = "kube-prometheus-stack"
   repository       = "https://prometheus-community.github.io/helm-charts"
   chart            = "kube-prometheus-stack"
-  version          = "45.4.0" # TODO: Dependabot or equivalent so this doesn't get neglected.
+  version          = "45.7.1" # TODO: Dependabot or equivalent so this doesn't get neglected.
   namespace        = local.monitoring_ns
   create_namespace = true
   values = [
@@ -152,6 +152,26 @@ resource "helm_release" "kube_prometheus_stack" {
         alertmanager_host = local.alertmanager_host
     }),
     yamlencode({
+      kubeControllerManager = { enabled = false }
+      kubeEtcd              = { enabled = false }
+      kubeScheduler         = { enabled = false }
+      defaultRules = {
+        rules = {
+          kubeApiserverBurnrate  = false
+          kubeApiserverHistogram = false
+          kubeApiserverSlos      = false
+          network                = false
+        }
+        disabled = {
+          KubePodNotReady           = true
+          NodeRAIDDegraded          = true
+          NodeNetworkReceiveErrs    = true
+          NodeNetworkTransmitErrs   = true
+          NodeClockSkewDetected     = true
+          NodeClockNotSynchronising = true
+          NodeRAIDDiskFailure       = true
+        }
+      }
       grafana = {
         defaultDashboardsTimezone = "Europe/London"
         replicas                  = var.desired_ha_replicas
