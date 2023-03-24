@@ -1,49 +1,31 @@
-# Start here
+# Introduction to GOV.UK infrastructure
 
-This document serves as an introduction to GOV.UK's _new_ infrastructure, and
-the `govuk-infrastructure` repo that you are now viewing.
+## Hosting provider
 
-**Note:** This repository does not currently manage any production
-infrastructure. For the docs for the _current_ infrastructure, please see
-[govuk-aws].
+GOV.UK applications run in containers on a Kubernetes clusters hosted on AWS
+Elastic Kubernetes Service (EKS).
 
-## What is this document for
-
-The goal of this document is to describe briefly the design of GOV.UK's
-infrastructure and point to other documents that will give you the full picture.
-
-This document may contain forward-looking statements regarding future work
-or the expected state of GOV.UK infrastructure. We caution you that such
-statements reflect our current expectations and estimates based on factors
-currently known to us and that the actual state of the infrastructure could
-differ materially.
-
-## What is GOV.UK
-
-GOV.UK is set of services that provides the website www.gov.uk.
-
-## Introduction to GOV.UK infrastructure
-
-### Hosting provider
-
-GOV.UK apps run in containers on AWS Elastic Kubernetes Service (EKS).
+A few things also run on Google Cloud Platform (GCP), such as the static mirror
+of the website.
 
 ### Configuration as code
 
-The `govuk-infrastructure` repository holds the configuration for the AWS
-services that we use to run GOV.UK.
+We use [Terraform] to manage those AWS resources which we don't (yet) manage
+via Kubernetes.
 
-GOV.UK apps and other services (such as databases) used to run in EC2. For
-the old configuration, please see the [govuk-aws] repository.
+This repo holds the Terraform configuration for the EKS clusters and some of
+the other AWS services that we use to run GOV.UK.
 
-We use [Terraform] to manage AWS resources.
+Some GOV.UK services, such as managed databases and the static www mirrors, are
+still managed via the legacy [govuk-aws] and [govuk-aws-data] repositories.
 
-You can create a new GOV.UK k8s environment by following the guidance in
-[here](create-a-new-environment.md)
+There is a playbook for [deploying a new GOV.UK Kubernetes
+environment](create-a-new-environment.md).
 
 ### CI/CD
 
-Tests for govuk-infrastructure happen in GitHub Actions.
+Tests for govuk-infrastructure run in [GitHub Actions](../../../../actions).
 
 [govuk-aws]: https://github.com/alphagov/govuk-aws
+[govuk-aws-data]: https://github.com/alphagov/govuk-aws-data
 [Terraform]: https://www.terraform.io/
