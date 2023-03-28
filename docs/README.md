@@ -24,7 +24,7 @@ environment](create-a-new-environment.md).
 
 ### CI/CD
 
-Tests for govuk-infrastructure run in [GitHub Actions](../../../../actions).
+Tests for govuk-infrastructure run in [GitHub Actions](/alphagov/govuk-infrastructure/actions).
 
 [govuk-aws]: https://github.com/alphagov/govuk-aws
 [govuk-aws-data]: https://github.com/alphagov/govuk-aws-data
