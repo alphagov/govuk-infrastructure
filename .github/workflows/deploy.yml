@@ -102,11 +102,18 @@ jobs:
           IMAGE_TAG: ${{ inputs.imageTag }}
           REPO_NAME: ${{ inputs.appName }}
           MANUAL_DEPLOY: ${{ github.event_name == 'workflow_dispatch' }}
+          PROMOTE_DEPLOYMENT: ${{ github.event_name == 'workflow_run' }}
           WEBHOOK_TOKEN: ${{ secrets.WEBHOOK_TOKEN }}
           WEBHOOK_URL: ${{ secrets.WEBHOOK_URL }}
         run: |
           curl --fail-with-body --silent \
             -H "Content-Type: application/json" \
             -H "Authorization: Bearer ${WEBHOOK_TOKEN}" \
-            -d "{\"environment\": \"${ENVIRONMENT}\", \"repoName\": \"${REPO_NAME}\", \"imageTag\": \"${IMAGE_TAG}\", \"manualDeploy\": \"${MANUAL_DEPLOY}\"}" \
+            -d "{
+              \"environment\": \"${ENVIRONMENT}\",
+              \"repoName\": \"${REPO_NAME}\",
+              \"imageTag\": \"${IMAGE_TAG}\",
+              \"manualDeploy\": \"${MANUAL_DEPLOY}\",
+              \"promoteDeployment\": \"${PROMOTE_DEPLOYMENT}\"
+            }" \
             "${WEBHOOK_URL}/update-image-tag"
