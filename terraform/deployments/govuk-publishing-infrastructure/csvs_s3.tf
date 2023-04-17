@@ -12,6 +12,7 @@ resource "aws_iam_policy" "write_csvs_buckets" {
           "s3:ListBucket",
         ]
         Resource = [
+          aws_s3_bucket.publisher_csvs.arn,
           "arn:aws:s3:::govuk-${var.govuk_environment}-content-data-csvs",
           "arn:aws:s3:::govuk-${var.govuk_environment}-specialist-publisher-csvs",
           "arn:aws:s3:::govuk-${var.govuk_environment}-support-api-csvs",
@@ -28,6 +29,7 @@ resource "aws_iam_policy" "write_csvs_buckets" {
           "s3:GetObject*Attributes",
         ]
         Resource = [
+          "${aws_s3_bucket.publisher_csvs.arn}/*",
           "arn:aws:s3:::govuk-${var.govuk_environment}-content-data-csvs/*",
           "arn:aws:s3:::govuk-${var.govuk_environment}-specialist-publisher-csvs/*",
           "arn:aws:s3:::govuk-${var.govuk_environment}-support-api-csvs/*",
