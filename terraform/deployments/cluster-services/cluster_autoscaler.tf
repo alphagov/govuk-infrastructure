@@ -29,7 +29,9 @@ resource "helm_release" "cluster_autoscaler" {
       enabled     = true
     }
     extraArgs = {
-      balance-similar-node-groups = true
+      balance-similar-node-groups      = true
+      scale-down-utilization-threshold = "0.55"
+      skip-nodes-with-local-storage    = false
     }
     replicaCount = var.desired_ha_replicas
   })]
