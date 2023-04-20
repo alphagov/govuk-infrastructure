@@ -21,7 +21,7 @@ The common column distinguishes between Tags that have been added as part of an 
 
 
 # Tag Policy
-- Below example of a correct local tag definition for the non common **Tag Key** Name. 
+- Below example of a correct local tag definition for the non common **Tag Key** Name.
 ```
 tags = merge(
     local.additional_tags,
@@ -29,7 +29,7 @@ tags = merge(
       Name = "publisher-${var.environment}-${local.workspace}"
     }
 ```
-- Below example of a correct module tag definition for the non common **Tag Key** Name 
+- Below example of a correct module tag definition for the non common **Tag Key** Name
 ```
 tags = merge(
     var.additional_tags,
@@ -52,22 +52,22 @@ locals {
 }
 ```
 
-**IMPORTANT :-** 
-- The **Key** attribute **Name** should start with an Uppercase letter and the rest should be lowercase with no spaces. 
+**IMPORTANT :-**
+- The **Key** attribute **Name** should start with an Uppercase letter and the rest should be lowercase with no spaces.
 - The **Value** attribute should be lowercase and no spaces however hyphens can be used.
 
-**NOTES :-** 
+**NOTES :-**
 - All listed resources from below should be made compliant.
 - Common Tags have been added as **locals** with in the deployment terraform **main** file.
-- This tagging strategy should ideally be replicated to other and new yet to be deployed environments such as **integration**.
+- This tagging strategy should ideally be replicated to other and new yet to be deployed environments such as **integration**
 
-# AWS Resources 
+# AWS Resources
 ## Can be tagged
 The following lists the resources that **should** be tagged:-
 
 - AWS::EC2::SecurityGroup
 - AWS::EC2::Subnet
-- AWS::ECR::Repository 
+- AWS::ECR::Repository
 - AWS::ECS::Cluster
 - AWS::ECS::Service
 - AWS::ECS::TaskDefinition
