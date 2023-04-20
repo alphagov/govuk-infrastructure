@@ -1,5 +1,10 @@
 terraform {
-  backend "s3" {}
+  cloud {
+    organization = "govuk"
+    workspaces {
+      name = "GitHub"
+    }
+  }
 
   required_version = "~> 1.0"
   required_providers {
