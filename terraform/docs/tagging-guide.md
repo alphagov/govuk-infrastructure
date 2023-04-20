@@ -1,5 +1,5 @@
 # Overview
-This document will describe the tagging strategy to be used within Replatforming terraform code which will be used to create resources in the AWS environment infrastructure.
+This document will describe the tagging strategy to be used within govuk-infrastructure Terraform code which will be used to create resources in the AWS environment infrastructure.
 
 Tagging is required so that cost and resource utilisation can be processed, with an added benefit of AWS console **Tag Key** searching.
 

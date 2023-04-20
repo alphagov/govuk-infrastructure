@@ -39,7 +39,7 @@ There are also docs in [terraform/docs/](terraform/docs/) and inline READMEs in 
 
 ## Team
 
-GOV.UK Replatforming team looks after this repo. If you're inside GDS, you can find us in [#govuk-replatforming](https://gds.slack.com/archives/C013F737737) or view our [kanban board](https://trello.com/b/u4FCzm53/).
+[GOV.UK Platform Engineering team](https://github.com/orgs/alphagov/teams/gov-uk-platform-engineering) looks after this repo. If you're inside GDS, you can find us in [#govuk-platform-engineering](https://gds.slack.com/channels/govuk-platform-engineering) or view our [kanban board](https://trello.com/b/u4FCzm53/).
 
 ## Licence
 
