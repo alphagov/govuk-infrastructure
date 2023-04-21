@@ -30,7 +30,7 @@ external_dns_subdomain    = "eks"
 www_dns_validation_rdata  = "8xpwlbcbmg9qjx9d2v.fastly-validations.com"
 
 frontend_memcached_node_type   = "cache.t4g.micro"
-shared_redis_cluster_node_type = "cache.t4g.small"
+shared_redis_cluster_node_type = "cache.t4g.medium"
 
 # Non-production-only access is sufficient to access tools in this cluster.
 github_read_write_team = "alphagov:gov-uk"
