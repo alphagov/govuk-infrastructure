@@ -1,8 +1,18 @@
+data "github_repositories" "govuk_mirrored" {
+  query = "topic:govuk org:alphagov archived:false"
+}
+
+data "github_repository" "govuk_mirrored" {
+  for_each  = toset(data.github_repositories.govuk_mirrored.full_names)
+  full_name = each.key
+}
+
 resource "aws_codecommit_repository" "govuk_repos" {
-  for_each = data.github_repository.govuk
+  for_each = data.github_repository.govuk_mirrored
 
   repository_name = each.value.name
-  default_branch  = "main"
+  description     = each.value.description
+  default_branch  = each.value.default_branch
 }
 
 resource "aws_iam_role" "github_action_mirror_repos_role" {
