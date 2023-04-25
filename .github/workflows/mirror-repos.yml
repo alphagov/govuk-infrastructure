@@ -53,8 +53,11 @@ jobs:
             ${git} reflog expire --expire-unreachable=now --all
             ${git} gc            --prune=now
 
+            echo "List latest tags from ${repo}"
+            LATEST_TAGS=$(${git} for-each-ref --sort=taggerdate --format '%(refname:short)' refs/tags | tail -4000 | tr '\n' ' ')
+
             echo "Pushing latest ${repo} tags to AWS CodeCommit"
-            ${git} push "${aws_remote}" --force "$(git for-each-ref --sort=taggerdate --format '%(refname:short)' refs/tags | tail -4000 | tr '\n' ' ')"
+            ${git} push "${aws_remote}" --force ${LATEST_TAGS}
 
             echo "Pushing all ${repo} repo branches to AWS CodeCommit"
             ${git} push "${aws_remote}" --force --quiet --all 
