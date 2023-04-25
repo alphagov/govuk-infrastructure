@@ -48,12 +48,19 @@ provider "github" {
 #
 
 data "github_repositories" "govuk" {
-  query = "topic:govuk topic:container org:alphagov fork:false archived:false"
+  query = "topic:govuk org:alphagov archived:false"
 }
 
 data "github_repository" "govuk" {
   for_each  = toset(data.github_repositories.govuk.full_names)
   full_name = each.key
+}
+
+locals {
+  deployable_repos = [
+    for r in data.github_repository.govuk : r
+    if !r.fork && contains(r.topics, "container")
+  ]
 }
 
 #
@@ -64,25 +71,25 @@ data "github_repository" "govuk" {
 
 resource "github_actions_organization_secret_repositories" "aws_govuk_ecr_access_key_id" {
   secret_name             = "AWS_GOVUK_ECR_ACCESS_KEY_ID"
-  selected_repository_ids = [for repo in data.github_repository.govuk : repo.repo_id]
+  selected_repository_ids = [for repo in local.deployable_repos : repo.repo_id]
 }
 
 resource "github_actions_organization_secret_repositories" "aws_govuk_ecr_secret_access_key" {
   secret_name             = "AWS_GOVUK_ECR_SECRET_ACCESS_KEY"
-  selected_repository_ids = [for repo in data.github_repository.govuk : repo.repo_id]
+  selected_repository_ids = [for repo in local.deployable_repos : repo.repo_id]
 }
 
 resource "github_actions_organization_secret_repositories" "ci_user_github_api_token" {
   secret_name             = "GOVUK_CI_GITHUB_API_TOKEN"
-  selected_repository_ids = [for repo in data.github_repository.govuk : repo.repo_id]
+  selected_repository_ids = [for repo in local.deployable_repos : repo.repo_id]
 }
 
 resource "github_actions_organization_secret_repositories" "argo_events_webhook_token" {
   secret_name             = "GOVUK_ARGO_EVENTS_WEBHOOK_TOKEN"
-  selected_repository_ids = [for repo in data.github_repository.govuk : repo.repo_id]
+  selected_repository_ids = [for repo in local.deployable_repos : repo.repo_id]
 }
 
 resource "github_actions_organization_secret_repositories" "argo_events_webhook_url" {
   secret_name             = "GOVUK_ARGO_EVENTS_WEBHOOK_URL"
-  selected_repository_ids = [for repo in data.github_repository.govuk : repo.repo_id]
+  selected_repository_ids = [for repo in local.deployable_repos : repo.repo_id]
 }
