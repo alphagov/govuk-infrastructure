@@ -34,6 +34,7 @@ jobs:
 
       - name: Sync repositories
         env:
+          GH_TOKEN: ${{ github.token }}
           GITHUB_REPOS: ${{ steps.get-repos.outputs.github-repos }}
         run: |
           for repo in ${GITHUB_REPOS}; do
@@ -43,18 +44,20 @@ jobs:
             echo "updating"
             git="git --git-dir ${repo}.git"
 
-            github_remote="ssh://git@github.com/alphagov/${repo}"
             aws_remote="https://git-codecommit.${AWS_REGION}.amazonaws.com/v1/repos/${repo}"
 
             echo "Fetching ${repo} from GitHub"
-            ${git} clone --mirror "${github_remote}"
+            gh repo clone "alphagov/${repo}" -- --mirror
 
             echo "Doing some cleanup for ${repo}"
             ${git} reflog expire --expire-unreachable=now --all
             ${git} gc            --prune=now
 
+            echo "List latest tags from ${repo}"
+            LATEST_TAGS=$(${git} for-each-ref --sort=taggerdate --format '%(refname:short)' refs/tags | tail -4000 | tr '\n' ' ')
+
             echo "Pushing latest ${repo} tags to AWS CodeCommit"
-            ${git} push "${aws_remote}" --force "$(git for-each-ref --sort=taggerdate --format '%(refname:short)' refs/tags | tail -4000 | tr '\n' ' ')"
+            ${git} push "${aws_remote}" --force ${LATEST_TAGS}
 
             echo "Pushing all ${repo} repo branches to AWS CodeCommit"
             ${git} push "${aws_remote}" --force --quiet --all 
