@@ -3,6 +3,7 @@ name: "Mirror repositories"
 on:
   schedule:
     - cron:  '0 */2 * * *'
+  workflow_dispatch: {}
 
 env:
   AWS_REGION : eu-west-2
