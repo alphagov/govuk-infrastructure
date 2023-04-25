@@ -25,6 +25,8 @@ jobs:
 
       - name: Get repos
         id: get-repos
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
           GITHUB_REPOS=$(gh search repos --owner alphagov --topic=govuk --archived=false --json=name -L 500 -q '. | map(.name) | join(" ")')
           echo "github-repos=${GITHUB_REPOS}" >> "$GITHUB_OUTPUT"
