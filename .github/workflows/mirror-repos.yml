@@ -1,0 +1,61 @@
+name: "Mirror repositories"
+
+on:
+  schedule:
+    - cron:  '0 */2 * * *'
+
+env:
+  AWS_REGION : eu-west-2
+
+permissions:
+  id-token: write   # This is required for requesting the JWT
+  contents: read
+
+jobs:
+  mirror-repos:
+    runs-on:
+      ubuntu-latest
+    steps:
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          role-to-assume: arn:aws:iam::900804735337:role/github_action_mirror_repos_role
+          aws-region: ${{ env.AWS_REGION }}
+          role-session-name: GitHubActionMirrorRepos
+
+      - name: Get repos
+        id: get-repos
+        run: |
+          GITHUB_REPOS=$(gh search repos --owner alphagov --topic=govuk --archived=false --json=name -L 500 -q '. | map(.name) | join(" ")')
+          echo "github-repos=${GITHUB_REPOS}" >> "$GITHUB_OUTPUT"
+
+      - name: Sync repositories
+        env:
+          GITHUB_REPOS: ${{ steps.get-repos.outputs.github-repos }}
+        run: |
+          for repo in ${GITHUB_REPOS}; do
+            git config --global credential.helper '!aws codecommit credential-helper $@'
+            git config --global credential.UseHttpPath true
+
+            echo "updating"
+            git="git --git-dir ${repo}.git"
+
+            github_remote="ssh://git@github.com/alphagov/${repo}"
+            aws_remote="https://git-codecommit.${AWS_REGION}.amazonaws.com/v1/repos/${repo}"
+
+            echo "Fetching ${repo} from GitHub"
+            ${git} clone --mirror "${github_remote}"
+
+            echo "Doing some cleanup for ${repo}"
+            ${git} reflog expire --expire-unreachable=now --all
+            ${git} gc            --prune=now
+
+            echo "Pushing latest ${repo} tags to AWS CodeCommit"
+            ${git} push "${aws_remote}" --force "$(git for-each-ref --sort=taggerdate --format '%(refname:short)' refs/tags | tail -4000 | tr '\n' ' ')"
+
+            echo "Pushing all ${repo} repo branches to AWS CodeCommit"
+            ${git} push "${aws_remote}" --force --quiet --all 
+
+            echo "Manually pushing ${repo} git heads information to AWS CodeCommit"
+            ${git} push "${aws_remote}" +refs/remotes/origin/*:refs/heads/*
+          done
