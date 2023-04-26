@@ -1,14 +1,5 @@
-data "github_repositories" "govuk_mirrored" {
-  query = "topic:govuk org:alphagov archived:false"
-}
-
-data "github_repository" "govuk_mirrored" {
-  for_each  = toset(data.github_repositories.govuk_mirrored.full_names)
-  full_name = each.key
-}
-
 resource "aws_codecommit_repository" "govuk_repos" {
-  for_each = data.github_repository.govuk_mirrored
+  for_each = data.github_repository.govuk
 
   repository_name = each.value.name
   description     = each.value.description
