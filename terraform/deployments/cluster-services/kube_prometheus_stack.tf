@@ -363,3 +363,26 @@ resource "helm_release" "kube_prometheus_stack" {
     })
   ]
 }
+
+resource "helm_release" "pushgateway" {
+  name             = "prometheus-pushgateway"
+  repository       = "https://prometheus-community.github.io/helm-charts"
+  chart            = "prometheus-pushgateway"
+  version          = "2.1.3" # TODO: Dependabot or equivalent so this doesn't get neglected.
+  namespace        = local.monitoring_ns
+  create_namespace = true
+  values = [
+    yamlencode({
+      resources = {
+        requests = {
+          cpu    = "50m"
+          memory = "256Mi"
+        }
+        limits = {
+          cpu    = "200m"
+          memory = "512Mi"
+        }
+      }
+    })
+  ]
+}
