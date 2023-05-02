@@ -383,6 +383,7 @@ resource "helm_release" "pushgateway" {
           memory = "512Mi"
         }
       }
+      serviceMonitor = { enabled = true }
     })
   ]
 }
