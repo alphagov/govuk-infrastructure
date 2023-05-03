@@ -37,6 +37,7 @@ resource "helm_release" "ebs_csi_driver" {
       parameters        = { type = "gp3" }
       reclaimPolicy     = "Retain"
       volumeBindingMode = "WaitForFirstConsumer"
+      allowVolumeExpansion = true
     }]
   })]
 }
