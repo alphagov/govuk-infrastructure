@@ -349,7 +349,7 @@ resource "helm_release" "kube_prometheus_stack" {
                 storageClassName = "ebs-gp3"
                 accessModes      = ["ReadWriteOnce"]
                 resources = {
-                  requests = { storage = "50Gi" }
+                  requests = { storage = "101Gi" }
                 }
               }
             }
