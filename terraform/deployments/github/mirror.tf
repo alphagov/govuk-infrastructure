@@ -26,11 +26,9 @@ resource "aws_iam_role" "github_action_mirror_repos_role" {
           "StringEquals" : {
             "token.actions.githubusercontent.com:sub" : [
               "repo:alphagov/govuk-infrastructure:ref:refs/heads/main"
-            ]
-          },
-          "StringEquals" : {
+            ],
             "token.actions.githubusercontent.com:aud" : "${one(aws_iam_openid_connect_provider.github_provider.client_id_list)}"
-          }
+          },
         }
       }
     ]
@@ -46,7 +44,6 @@ resource "aws_iam_role_policy" "github_action_mirror_repos_policy" {
     Statement = [
       {
         Action = [
-          "codecommit:GitPull",
           "codecommit:GitPush"
         ]
         Effect   = "Allow"
