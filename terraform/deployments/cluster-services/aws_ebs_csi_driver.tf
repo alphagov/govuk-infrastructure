@@ -33,10 +33,10 @@ resource "helm_release" "ebs_csi_driver" {
         name        = "ebs-gp3"
         annotations = { "storageclass.kubernetes.io/is-default-class" = "true" }
       }
-      provisioner       = "ebs.csi.aws.com"
-      parameters        = { type = "gp3" }
-      reclaimPolicy     = "Retain"
-      volumeBindingMode = "WaitForFirstConsumer"
+      provisioner          = "ebs.csi.aws.com"
+      parameters           = { type = "gp3" }
+      reclaimPolicy        = "Retain"
+      volumeBindingMode    = "WaitForFirstConsumer"
       allowVolumeExpansion = true
     }]
   })]
