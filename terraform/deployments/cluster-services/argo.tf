@@ -19,6 +19,7 @@ resource "kubernetes_namespace" "apps" {
       "app.kubernetes.io/managed-by" = "Terraform"
       # https://kubernetes-sigs.github.io/aws-load-balancer-controller/latest/deploy/pod_readiness_gate/
       "elbv2.k8s.aws/pod-readiness-gate-inject" = "enabled"
+      "pod-security.kubernetes.io/warn" = "baseline"
     }
   }
 }
