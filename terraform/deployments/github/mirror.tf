@@ -44,7 +44,6 @@ resource "aws_iam_role_policy" "github_action_mirror_repos_policy" {
     Statement = [
       {
         Action = [
-          "codecommit:GitPull",
           "codecommit:GitPush"
         ]
         Effect   = "Allow"
