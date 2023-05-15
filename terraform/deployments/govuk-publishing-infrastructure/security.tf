@@ -138,56 +138,6 @@ resource "aws_security_group_rule" "elasticsearch_from_eks_workers" {
   source_security_group_id = data.terraform_remote_state.cluster_infrastructure.outputs.node_security_group_id
 }
 
-resource "aws_security_group_rule" "search_elb_from_eks_workers" {
-  description              = "Search elb requests from EKS nodes"
-  type                     = "ingress"
-  from_port                = 443
-  to_port                  = 443
-  protocol                 = "tcp"
-  security_group_id        = data.terraform_remote_state.infra_security_groups.outputs.sg_search_elb_id
-  source_security_group_id = data.terraform_remote_state.cluster_infrastructure.outputs.node_security_group_id
-}
-
-resource "aws_security_group_rule" "content_store_ec2_from_eks_workers" {
-  description              = "Content Store ELB requests from EKS nodes"
-  type                     = "ingress"
-  from_port                = 443
-  to_port                  = 443
-  protocol                 = "tcp"
-  security_group_id        = data.terraform_remote_state.infra_security_groups.outputs.sg_content-store_internal_elb_id
-  source_security_group_id = data.terraform_remote_state.cluster_infrastructure.outputs.node_security_group_id
-}
-
-resource "aws_security_group_rule" "email_alert_api_ec2_from_eks_workers" {
-  description              = "Email Alert API internal ELB requests from EKS nodes"
-  type                     = "ingress"
-  from_port                = 443
-  to_port                  = 443
-  protocol                 = "tcp"
-  security_group_id        = data.terraform_remote_state.infra_security_groups.outputs.sg_email-alert-api_elb_internal_id
-  source_security_group_id = data.terraform_remote_state.cluster_infrastructure.outputs.node_security_group_id
-}
-
-resource "aws_security_group_rule" "account_api_ec2_from_eks_workers" {
-  description              = "Account API internal ELB requests from EKS nodes"
-  type                     = "ingress"
-  from_port                = 443
-  to_port                  = 443
-  protocol                 = "tcp"
-  security_group_id        = data.terraform_remote_state.infra_security_groups.outputs.sg_account_elb_internal_id
-  source_security_group_id = data.terraform_remote_state.cluster_infrastructure.outputs.node_security_group_id
-}
-
-resource "aws_security_group_rule" "backend_ec2_from_eks_workers" {
-  description              = "Backend apps in EC2 receive requests from EKS nodes"
-  type                     = "ingress"
-  from_port                = 443
-  to_port                  = 443
-  protocol                 = "tcp"
-  security_group_id        = data.terraform_remote_state.infra_security_groups.outputs.sg_backend_elb_internal_id
-  source_security_group_id = data.terraform_remote_state.cluster_infrastructure.outputs.node_security_group_id
-}
-
 resource "aws_security_group_rule" "efs_from_eks_workers" {
   description              = "Shared EFS (Elastic File System) accepts requests from EKS nodes"
   type                     = "ingress"
@@ -206,27 +156,6 @@ resource "aws_security_group_rule" "licensify_frontend_from_eks_workers" {
   protocol                 = "tcp"
   security_group_id        = data.terraform_remote_state.infra_security_groups.outputs.sg_licensify-frontend_internal_lb_id
   source_security_group_id = data.terraform_remote_state.cluster_infrastructure.outputs.node_security_group_id
-}
-
-resource "aws_security_group_rule" "locations_api_from_eks_workers" {
-  description              = "Locations API accepts requests from EKS nodes"
-  type                     = "ingress"
-  from_port                = 443
-  to_port                  = 443
-  protocol                 = "tcp"
-  security_group_id        = data.terraform_remote_state.infra_security_groups.outputs.sg_locations-api_internal_lb_id
-  source_security_group_id = data.terraform_remote_state.cluster_infrastructure.outputs.node_security_group_id
-}
-
-# TODO: Remove after EC2 GOV.UK decommissioned
-resource "aws_security_group_rule" "ec2_www_origin_from_eks_workers" {
-  description       = "EC2 www-origin accepts requests from EKS NAT gateways"
-  type              = "ingress"
-  from_port         = 443
-  to_port           = 443
-  protocol          = "tcp"
-  security_group_id = data.terraform_remote_state.infra_security_groups.outputs.sg_cache_external_elb_id
-  cidr_blocks       = formatlist("%s/32", data.terraform_remote_state.cluster_infrastructure.outputs.public_nat_gateway_ips)
 }
 
 #
