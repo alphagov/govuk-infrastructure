@@ -4,10 +4,6 @@ resource "aws_codecommit_repository" "govuk_repos" {
   repository_name = each.value.name
   description     = each.value.description
   default_branch  = each.value.default_branch
-
-  lifecycle {
-    prevent_destroy = true
-  }
 }
 
 resource "aws_iam_role" "github_action_mirror_repos_role" {
