@@ -44,6 +44,7 @@ locals {
     "github-cli",
     "statsd",
     "govuk-terraform",
+    "search-api-learn-to-rank",
   ]
 }
 
