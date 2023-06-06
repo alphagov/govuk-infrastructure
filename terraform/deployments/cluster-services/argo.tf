@@ -95,26 +95,16 @@ resource "helm_release" "argo_cd" {
       metrics = local.argo_metrics_config
     }
 
-    controller = {
-      metrics = local.argo_metrics_config
-    }
+    controller = { metrics = local.argo_metrics_config }
 
     repoServer = {
       metrics  = local.argo_metrics_config
       replicas = var.desired_ha_replicas
     }
 
-    applicationSet = {
-      replicaCount = var.desired_ha_replicas
-    }
-
-    dex = {
-      enabled = false
-    }
-
-    redis-ha = {
-      enabled = var.argo_redis_ha
-    }
+    applicationSet = { replicaCount = var.desired_ha_replicas }
+    dex            = { enabled = false }
+    redis-ha       = { enabled = var.argo_redis_ha }
 
     notifications = {
       argocdUrl = "https://${local.argo_host}"
@@ -167,9 +157,7 @@ resource "helm_release" "argo_workflows" {
   version          = "0.22.13" # TODO: Dependabot or equivalent so this doesn't get neglected.
   values = [yamlencode({
     controller = {
-      podSecurityContext = {
-        runAsNonRoot = true
-      }
+      podSecurityContext = { runAsNonRoot = true }
       workflowNamespaces = concat([local.services_ns], var.argo_workflows_namespaces)
       workflowDefaults = {
         spec = {
@@ -179,9 +167,7 @@ resource "helm_release" "argo_workflows" {
             secondsAfterSuccess    = 259200
             secondsAfterCompletion = 259200
           }
-          podGC = {
-            strategy = "OnWorkflowSuccess"
-          }
+          podGC = { strategy = "OnWorkflowSuccess" }
           securityContext = {
             runAsNonRoot = true
             runAsUser    = 1001
@@ -234,9 +220,7 @@ resource "helm_release" "argo_workflows" {
     }
 
     workflow = {
-      serviceAccount = {
-        create = true
-      }
+      serviceAccount = { create = true }
     }
 
     server = {
@@ -266,9 +250,7 @@ resource "helm_release" "argo_workflows" {
         }
         redirectUrl = "https://${local.argo_workflows_host}/oauth2/callback"
         scopes      = ["groups"]
-        rbac = {
-          enabled = true
-        }
+        rbac        = { enabled = true }
       }
       resources = {
         requests = {
@@ -293,10 +275,8 @@ resource "helm_release" "argo_events" {
   repository       = "https://argoproj.github.io/argo-helm"
   version          = "2.3.3" # TODO: Dependabot or equivalent so this doesn't get neglected.
   values = [yamlencode({
-    namespace = local.services_ns
-    controller = {
-      replicas = var.desired_ha_replicas
-    }
+    namespace  = local.services_ns
+    controller = { replicas = var.desired_ha_replicas }
     configs = {
       jetstream = {
         versions = [
