@@ -37,6 +37,7 @@ variable "eks_public_subnets" {
 variable "external_dns_subdomain" {
   type        = string
   description = "Subdomain name for a Route53 zone which will be created underneath external_root_zone (e.g. 'eks' to be created underneath staging.govuk.digital), for use by the external-dns addon. external-dns will create records for ALBs/NLBs created by Ingresses and Service[type=LoadBalancer] in this zone."
+  default     = "eks"
 }
 
 variable "publishing_service_domain" {

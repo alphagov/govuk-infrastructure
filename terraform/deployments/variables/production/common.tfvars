@@ -25,9 +25,6 @@ eks_private_subnets = {
 govuk_environment = "production"
 
 publishing_service_domain = "publishing.service.gov.uk"
-external_dns_subdomain    = "eks"
-
-www_dns_validation_rdata = "sb6euj4c7g7s54y1pi.fastly-validations.com"
 
 workers_instance_types         = ["m6i.8xlarge", "m6a.8xlarge"]
 frontend_memcached_node_type   = "cache.r6g.large"
