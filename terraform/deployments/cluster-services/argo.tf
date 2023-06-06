@@ -32,7 +32,7 @@ resource "helm_release" "argo_cd" {
   namespace        = local.services_ns
   create_namespace = true
   repository       = "https://argoproj.github.io/argo-helm"
-  version          = "5.26.1" # TODO: Dependabot or equivalent so this doesn't get neglected.
+  version          = "5.36.0" # TODO: Dependabot or equivalent so this doesn't get neglected.
   values = [yamlencode({
     server = {
       # TLS Termination happens at the ALB, the insecure flag prevents Argo
@@ -291,7 +291,7 @@ resource "helm_release" "argo_events" {
   namespace        = local.services_ns
   create_namespace = true
   repository       = "https://argoproj.github.io/argo-helm"
-  version          = "2.1.3" # TODO: Dependabot or equivalent so this doesn't get neglected.
+  version          = "2.3.3" # TODO: Dependabot or equivalent so this doesn't get neglected.
   values = [yamlencode({
     namespace = local.services_ns
     controller = {
