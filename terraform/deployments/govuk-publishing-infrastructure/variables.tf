@@ -28,20 +28,3 @@ variable "shared_redis_cluster_node_type" {
   type        = string
   description = "Instance type for the shared Redis cluster. t1 and t2 instances are not supported."
 }
-
-variable "www_dns_name" {
-  type        = string
-  description = "Name of the CNAME record to create in the eks.environment.govuk.digital zone, pointing to the CDN. Intended for use when testing Terraform alongside an existing cluster."
-  default     = "www"
-}
-
-variable "www_dns_validation_name" {
-  type        = string
-  description = "The name (hostname part) of the CNAME record to be created for the CDN to validate ownership of the www domain name."
-  default     = "_acme-challenge.www"
-}
-
-variable "www_dns_validation_rdata" {
-  type        = string
-  description = "The record data (contents) of the CNAME record to be created for the CDN to validate ownership of the www domain name."
-}

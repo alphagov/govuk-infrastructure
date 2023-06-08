@@ -25,8 +25,6 @@ eks_private_subnets = {
 govuk_environment = "staging"
 
 publishing_service_domain = "staging.publishing.service.gov.uk"
-external_dns_subdomain    = "eks"
-www_dns_validation_rdata  = "fnvjfn8tfff6n003cf.fastly-validations.com"
 
 frontend_memcached_node_type   = "cache.t4g.medium"
 shared_redis_cluster_node_type = "cache.t4g.medium"
