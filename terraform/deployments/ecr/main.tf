@@ -45,7 +45,7 @@ locals {
     "statsd",
     "govuk-terraform",
     "search-api-learn-to-rank",
-    "content-store-postgresql-branch"
+    "content-store-postgresql-branch",
   ]
 }
 
