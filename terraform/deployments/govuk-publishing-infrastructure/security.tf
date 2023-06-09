@@ -165,7 +165,7 @@ resource "aws_security_group_rule" "licensify_frontend_from_eks_workers" {
 resource "aws_security_group" "eks_ingress_www_origin" {
   name        = "eks_ingress_www_origin"
   vpc_id      = data.terraform_remote_state.infra_vpc.outputs.vpc_id
-  description = "ALBs serving EKS www-origin ingress (and signon ALBs in non-prod environments)."
+  description = "ALBs serving www-origin.eks ingress."
   tags = {
     Name = "eks_ingress_www_origin"
   }
