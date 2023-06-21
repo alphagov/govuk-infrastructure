@@ -30,7 +30,7 @@ resource "helm_release" "prometheus_oauth2_proxy" {
   name             = "prometheus-oauth2-proxy"
   repository       = "https://oauth2-proxy.github.io/manifests"
   chart            = "oauth2-proxy"
-  version          = "6.9.1" # TODO: Dependabot or equivalent so this doesn't get neglected.
+  version          = "6.13.1" # TODO: Dependabot or equivalent so this doesn't get neglected.
   namespace        = local.monitoring_ns
   create_namespace = true
 
@@ -86,7 +86,7 @@ resource "helm_release" "alertmanager_oauth2_proxy" {
   name             = "alertmanager-oauth2-proxy"
   repository       = "https://oauth2-proxy.github.io/manifests"
   chart            = "oauth2-proxy"
-  version          = "6.9.1" # TODO: Dependabot or equivalent so this doesn't get neglected.
+  version          = "6.13.1" # TODO: Dependabot or equivalent so this doesn't get neglected.
   namespace        = local.monitoring_ns
   create_namespace = true
 
@@ -142,7 +142,7 @@ resource "helm_release" "kube_prometheus_stack" {
   name             = "kube-prometheus-stack"
   repository       = "https://prometheus-community.github.io/helm-charts"
   chart            = "kube-prometheus-stack"
-  version          = "45.7.1" # TODO: Dependabot or equivalent so this doesn't get neglected.
+  version          = "47.0.0" # TODO: Dependabot or equivalent so this doesn't get neglected.
   namespace        = local.monitoring_ns
   create_namespace = true
   values = [
@@ -368,7 +368,7 @@ resource "helm_release" "pushgateway" {
   name             = "prometheus-pushgateway"
   repository       = "https://prometheus-community.github.io/helm-charts"
   chart            = "prometheus-pushgateway"
-  version          = "2.1.3" # TODO: Dependabot or equivalent so this doesn't get neglected.
+  version          = "2.3.0" # TODO: Dependabot or equivalent so this doesn't get neglected.
   namespace        = local.monitoring_ns
   create_namespace = true
   values = [
