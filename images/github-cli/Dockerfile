@@ -16,7 +16,7 @@ RUN apt-get update -qq ; \
     echo "deb [arch=${TARGETARCH} signed-by=${keyrings_dir}/githubcli-archive.gpg] ${github_apt_repo} stable main" > /etc/apt/sources.list.d/github-cli.list ; \
     apt-get update -qq ; \
     apt-get install -qy --no-install-recommends \
-        awscli curl gh git jq ; \
+        curl gh git jq libarchive-tools mysql-client postgresql-client ; \
     rm -fr /var/lib/apt/lists/*
 
 ARG yq_package_url=https://github.com/mikefarah/yq/releases/latest/download
@@ -27,6 +27,14 @@ RUN curl -fsSL "${yq_package_url}/${yq_binary}.tar.gz" \
     cp "${yq_binary}" /usr/bin/yq ; \
     rm -fr /tmp/*
 
+ARG awscli_install_dir=/opt
+RUN curl -Ssf "https://awscli.amazonaws.com/awscli-exe-linux-$(uname -m).zip" \
+        | bsdtar -C "${awscli_install_dir}" -xf - \
+          --exclude 'aws_completer' --exclude 'docutils' --exclude 'examples' \
+          --exclude 'install' --exclude 'topics' ; \
+    chmod +x "${awscli_install_dir}/aws/dist/aws"
+ENV PATH=$PATH:$awscli_install_dir/aws/dist
+
 RUN groupadd -g 1001 user ; \
     useradd -mu 1001 -g user user
 WORKDIR /home/user
@@ -36,6 +44,8 @@ USER user
 RUN aws --version ; \
     gh --version ; \
     jq --version ; \
+    mysql --version ; \
+    psql --version ; \
     yq --version
 
 CMD ["/bin/bash"]
