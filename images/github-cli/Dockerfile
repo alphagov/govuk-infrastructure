@@ -8,15 +8,15 @@ ARG github_apt_repo=https://cli.github.com/packages
 ARG keyrings_dir=/usr/share/keyrings
 WORKDIR $keyrings_dir
 # hadolint ignore=DL3020
-ADD ${github_apt_repo}/githubcli-archive-keyring.gpg githubcli-archive.gpg
+ADD ${github_apt_repo}/githubcli-archive-keyring.gpg github.gpg
 # hadolint ignore=DL3008
 RUN apt-get update -qq ; \
     apt-get install -qy --no-install-recommends ca-certificates ; \
-    chmod 644 githubcli-archive.gpg ; \
-    echo "deb [arch=${TARGETARCH} signed-by=${keyrings_dir}/githubcli-archive.gpg] ${github_apt_repo} stable main" > /etc/apt/sources.list.d/github-cli.list ; \
+    chmod 644 github.gpg ; \
+    echo "deb [arch=${TARGETARCH} signed-by=${keyrings_dir}/github.gpg] ${github_apt_repo} stable main" > /etc/apt/sources.list.d/github.list ; \
     apt-get update -qq ; \
     apt-get install -qy --no-install-recommends \
-        curl gh git jq libarchive-tools mysql-client postgresql-client ; \
+        curl gh git jq libarchive-tools mysql-client postgresql-client pv ; \
     rm -fr /var/lib/apt/lists/*
 
 ARG yq_package_url=https://github.com/mikefarah/yq/releases/latest/download
