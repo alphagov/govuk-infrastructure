@@ -28,7 +28,7 @@ force_destroy     = true
 publishing_service_domain = "integration.publishing.service.gov.uk"
 
 frontend_memcached_node_type   = "cache.t4g.micro"
-shared_redis_cluster_node_type = "cache.t4g.medium"
+shared_redis_cluster_node_type = "cache.m6g.large"
 
 # Non-production-only access is sufficient to access tools in this cluster.
 github_read_write_team = "alphagov:gov-uk"
