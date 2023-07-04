@@ -20,25 +20,21 @@ resource "helm_release" "filebeat" {
               add_kubernetes_metadata = {
                 host = "$${NODE_NAME}"
                 matchers = [{
-                  logs_path = {
-                    logs_path = "/var/log/containers/"
-                  }
+                  logs_path = { logs_path = "/var/log/containers/" }
                 }]
               }
             }]
           }
         ]
-        "output.logstash" : {
-          "hosts" : ["$${LOGSTASH_HOST:? LOGSTASH_HOST variable is not set}:$${LOGSTASH_PORT:? LOGSTASH_PORT variable is not set}"]
-          "loadbalance" : true
-          "ssl.enabled" : true
+        "output.logstash" = {
+          hosts         = ["$${LOGSTASH_HOST:? LOGSTASH_HOST variable is not set}:$${LOGSTASH_PORT:? LOGSTASH_PORT variable is not set}"]
+          loadbalance   = true
+          "ssl.enabled" = true
         }
-        "logging.metrics.enabled" : false
-        "http.enabled" : false
-        "logging.level" : "warning"
-        "output.file" : {
-          "enabled" : false
-        }
+        "http.enabled"            = false
+        "logging.metrics.enabled" = false
+        "logging.level"           = "warning"
+        "output.file"             = { "enabled" = false }
       })
     }
     extraEnvs = [
