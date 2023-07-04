@@ -354,7 +354,8 @@ resource "helm_release" "kube_prometheus_stack" {
               }
             }
           }
-          externalUrl = "https://${local.prometheus_host}"
+          externalUrl               = "https://${local.prometheus_host}"
+          enableRemoteWriteReceiver = true
         }
       }
       kube_state_metrics = {
