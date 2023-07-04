@@ -12,33 +12,68 @@ resource "helm_release" "filebeat" {
   values = [yamlencode({
     filebeatConfig = {
       "filebeat.yml" = yamlencode({
+        processors = [
+          {
+            drop_fields = {
+              ignore_missing = true
+              fields = [
+                "agent",
+              ]
+            }
+          },
+        ]
         "filebeat.inputs" = [
           {
             type  = "container"
             paths = ["/var/log/containers/*.log"]
-            processors = [{
-              add_kubernetes_metadata = {
-                host = "$${NODE_NAME}"
-                matchers = [{
-                  logs_path = {
-                    logs_path = "/var/log/containers/"
-                  }
-                }]
-              }
-            }]
+            processors = [
+              {
+                add_kubernetes_metadata = {
+                  host = "$${NODE_NAME}"
+                  matchers = [{
+                    logs_path = { logs_path = "/var/log/containers/" }
+                  }]
+                }
+              },
+              {
+                drop_fields = {
+                  ignore_missing = true
+                  fields = [
+                    "log",
+                    "agent",
+                    "kubernetes.labels.app",
+                    "kubernetes.labels.pod-template-hash",
+                    "kubernetes.namespace_labels",
+                    "kubernetes.namespace_uid",
+                    "kubernetes.node.hostname",
+                    "kubernetes.node.labels.beta_kubernetes_io/arch",
+                    "kubernetes.node.labels.beta_kubernetes_io/instance-type",
+                    "kubernetes.node.labels.beta_kubernetes_io/os",
+                    "kubernetes.node.labels.eks_amazonaws_com/nodegroup",
+                    "kubernetes.node.labels.eks_amazonaws_com/nodegroup-image",
+                    "kubernetes.node.labels.failure-domain_beta_kubernetes_io/region",
+                    "kubernetes.node.labels.failure-domain_beta_kubernetes_io/zone",
+                    "kubernetes.node.labels.k8s_io/cloud-provider-aws",
+                    "kubernetes.node.labels.kubernetes_io/hostname",
+                    "kubernetes.node.labels.topology_ebs_csi_aws_com/zone",
+                    "kubernetes.node.labels.topology_kubernetes_io/region",
+                    "kubernetes.node.uid",
+                    "kubernetes.pod.uid",
+                  ]
+                }
+              },
+            ]
           }
         ]
-        "output.logstash" : {
-          "hosts" : ["$${LOGSTASH_HOST:? LOGSTASH_HOST variable is not set}:$${LOGSTASH_PORT:? LOGSTASH_PORT variable is not set}"]
-          "loadbalance" : true
-          "ssl.enabled" : true
+        "output.logstash" = {
+          hosts         = ["$${LOGSTASH_HOST:? LOGSTASH_HOST variable is not set}:$${LOGSTASH_PORT:? LOGSTASH_PORT variable is not set}"]
+          loadbalance   = true
+          "ssl.enabled" = true
         }
-        "logging.metrics.enabled" : false
-        "http.enabled" : false
-        "logging.level" : "warning"
-        "output.file" : {
-          "enabled" : false
-        }
+        "http.enabled"            = false
+        "logging.metrics.enabled" = false
+        "logging.level"           = "warning"
+        "output.file"             = { "enabled" = false }
       })
     }
     extraEnvs = [
