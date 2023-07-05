@@ -7,6 +7,13 @@
       "matchers":
       - "logs_path":
           "logs_path": "/var/log/containers/"
+  - "drop_event":
+      "when":
+        "or":
+        - "equals":
+            "path": "/healthcheck/live"
+        - "equals":
+            "request_uri": "/readyz"
   - "drop_fields":
       "fields":
       - "log"
