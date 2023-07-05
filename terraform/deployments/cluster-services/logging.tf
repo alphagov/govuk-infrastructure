@@ -40,8 +40,8 @@ resource "helm_release" "filebeat" {
                   ignore_missing = true
                   fields = [
                     "log",
-                    "agent",
-                    "kubernetes.labels.app",
+                    "kubernetes.labels.app", # Prefer app_kubernetes_io/name.
+                    "kubernetes.labels.app_kubernetes_io/managed-by",
                     "kubernetes.labels.pod-template-hash",
                     "kubernetes.namespace_labels",
                     "kubernetes.namespace_uid",
@@ -55,10 +55,12 @@ resource "helm_release" "filebeat" {
                     "kubernetes.node.labels.failure-domain_beta_kubernetes_io/zone",
                     "kubernetes.node.labels.k8s_io/cloud-provider-aws",
                     "kubernetes.node.labels.kubernetes_io/hostname",
+                    "kubernetes.node.labels.kubernetes_io/os",
                     "kubernetes.node.labels.topology_ebs_csi_aws_com/zone",
                     "kubernetes.node.labels.topology_kubernetes_io/region",
                     "kubernetes.node.uid",
                     "kubernetes.pod.uid",
+                    "kubernetes.replicaset",
                   ]
                 }
               },
