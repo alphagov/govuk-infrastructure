@@ -1,45 +1,45 @@
 filebeat.inputs:
-- paths:
-  - /var/log/containers/*.log
-  processors:
-  - add_kubernetes_metadata:
-      host: ${NODE_NAME}
-      matchers:
-      - logs_path:
-          logs_path: /var/log/containers/
-  - drop_event:
-      when:
-        or:
-        - equals:
-            path: /healthcheck/live
-        - equals:
-            request_uri: /readyz
-  - drop_fields:
-      fields:
-      - log
-      - kubernetes.labels.app
-      - kubernetes.labels.app_kubernetes_io/managed-by
-      - kubernetes.labels.pod-template-hash
-      - kubernetes.namespace_labels
-      - kubernetes.namespace_uid
-      - kubernetes.node.hostname
-      - kubernetes.node.labels.beta_kubernetes_io/arch
-      - kubernetes.node.labels.beta_kubernetes_io/instance-type
-      - kubernetes.node.labels.beta_kubernetes_io/os
-      - kubernetes.node.labels.eks_amazonaws_com/nodegroup
-      - kubernetes.node.labels.eks_amazonaws_com/nodegroup-image
-      - kubernetes.node.labels.failure-domain_beta_kubernetes_io/region
-      - kubernetes.node.labels.failure-domain_beta_kubernetes_io/zone
-      - kubernetes.node.labels.k8s_io/cloud-provider-aws
-      - kubernetes.node.labels.kubernetes_io/hostname
-      - kubernetes.node.labels.kubernetes_io/os
-      - kubernetes.node.labels.topology_ebs_csi_aws_com/zone
-      - kubernetes.node.labels.topology_kubernetes_io/region
-      - kubernetes.node.uid
-      - kubernetes.pod.uid
-      - kubernetes.replicaset
-      ignore_missing: true
-  type: container
+  - paths:
+      - /var/log/containers/*.log
+    processors:
+      - add_kubernetes_metadata:
+          host: ${NODE_NAME}
+          matchers:
+            - logs_path:
+                logs_path: /var/log/containers/
+      - drop_event:
+          when:
+            or:
+              - equals:
+                  path: /healthcheck/live
+              - equals:
+                  request_uri: /readyz
+      - drop_fields:
+          fields:
+            - log
+            - kubernetes.labels.app
+            - kubernetes.labels.app_kubernetes_io/managed-by
+            - kubernetes.labels.pod-template-hash
+            - kubernetes.namespace_labels
+            - kubernetes.namespace_uid
+            - kubernetes.node.hostname
+            - kubernetes.node.labels.beta_kubernetes_io/arch
+            - kubernetes.node.labels.beta_kubernetes_io/instance-type
+            - kubernetes.node.labels.beta_kubernetes_io/os
+            - kubernetes.node.labels.eks_amazonaws_com/nodegroup
+            - kubernetes.node.labels.eks_amazonaws_com/nodegroup-image
+            - kubernetes.node.labels.failure-domain_beta_kubernetes_io/region
+            - kubernetes.node.labels.failure-domain_beta_kubernetes_io/zone
+            - kubernetes.node.labels.k8s_io/cloud-provider-aws
+            - kubernetes.node.labels.kubernetes_io/hostname
+            - kubernetes.node.labels.kubernetes_io/os
+            - kubernetes.node.labels.topology_ebs_csi_aws_com/zone
+            - kubernetes.node.labels.topology_kubernetes_io/region
+            - kubernetes.node.uid
+            - kubernetes.pod.uid
+            - kubernetes.replicaset
+          ignore_missing: true
+    type: container
 http.enabled: false
 logging.level: warning
 logging.metrics.enabled: false
@@ -47,12 +47,11 @@ output.file:
   enabled: false
 output.logstash:
   hosts:
-  - ${LOGSTASH_HOST:? LOGSTASH_HOST variable is not set}:${LOGSTASH_PORT:? LOGSTASH_PORT
-    variable is not set}
+    - ${LOGSTASH_HOST:? LOGSTASH_HOST variable is not set}:${LOGSTASH_PORT:? LOGSTASH_PORT variable is not set}
   loadbalance: true
   ssl.enabled: true
 processors:
-- drop_fields:
-    fields:
-    - agent
-    ignore_missing: true
+  - drop_fields:
+      fields:
+        - agent
+      ignore_missing: true
