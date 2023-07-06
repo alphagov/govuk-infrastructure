@@ -1,19 +1,14 @@
 filebeat.inputs:
   - paths:
       - /var/log/containers/*.log
+    exclude_lines:
+      - '"/readyz"'
     processors:
       - add_kubernetes_metadata:
           host: ${NODE_NAME}
           matchers:
             - logs_path:
                 logs_path: /var/log/containers/
-      - drop_event:
-          when:
-            or:
-              - equals:
-                  path: /healthcheck/live
-              - equals:
-                  request_uri: /readyz
       - drop_fields:
           fields:
             - log
