@@ -152,15 +152,17 @@ resource "helm_release" "kube_prometheus_stack" {
         alertmanager_host = local.alertmanager_host
     }),
     yamlencode({
+      kubeApiServer         = { enabled = false }
       kubeControllerManager = { enabled = false }
       kubeEtcd              = { enabled = false }
       kubeScheduler         = { enabled = false }
       defaultRules = {
         rules = {
-          kubeApiserverBurnrate  = false
-          kubeApiserverHistogram = false
-          kubeApiserverSlos      = false
-          network                = false
+          kubeApiserverAvailbility = false
+          kubeApiserverBurnrate    = false
+          kubeApiserverHistogram   = false
+          kubeApiserverSlos        = false
+          network                  = false
         }
         disabled = {
           KubePodNotReady           = true
