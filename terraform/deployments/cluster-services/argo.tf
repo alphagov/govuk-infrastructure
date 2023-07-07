@@ -32,7 +32,7 @@ resource "helm_release" "argo_cd" {
   namespace        = local.services_ns
   create_namespace = true
   repository       = "https://argoproj.github.io/argo-helm"
-  version          = "5.36.14" # TODO: Dependabot or equivalent so this doesn't get neglected.
+  version          = "5.37.1" # TODO: Dependabot or equivalent so this doesn't get neglected.
   values = [yamlencode({
     global = {
       logging = {
@@ -280,7 +280,7 @@ resource "helm_release" "argo_events" {
   namespace        = local.services_ns
   create_namespace = true
   repository       = "https://argoproj.github.io/argo-helm"
-  version          = "2.3.3" # TODO: Dependabot or equivalent so this doesn't get neglected.
+  version          = "2.4.0" # TODO: Dependabot or equivalent so this doesn't get neglected.
   values = [yamlencode({
     namespace  = local.services_ns
     controller = { replicas = var.desired_ha_replicas }
