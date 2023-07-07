@@ -12,6 +12,7 @@ filebeat.inputs:
       - drop_fields:
           ignore_missing: true
           fields:
+            - container.runtime
             - log
             - kubernetes.labels.app
             - kubernetes.labels.app_kubernetes_io/managed-by
@@ -22,6 +23,7 @@ filebeat.inputs:
             - kubernetes.node.labels.beta_kubernetes_io/arch
             - kubernetes.node.labels.beta_kubernetes_io/instance-type
             - kubernetes.node.labels.beta_kubernetes_io/os
+            - kubernetes.node.labels.eks_amazonaws_com/capacityType
             - kubernetes.node.labels.eks_amazonaws_com/nodegroup
             - kubernetes.node.labels.eks_amazonaws_com/nodegroup-image
             - kubernetes.node.labels.failure-domain_beta_kubernetes_io/region
@@ -29,6 +31,7 @@ filebeat.inputs:
             - kubernetes.node.labels.k8s_io/cloud-provider-aws
             - kubernetes.node.labels.kubernetes_io/hostname
             - kubernetes.node.labels.kubernetes_io/os
+            - kubernetes.node.labels.node_kubernetes_io/instance-type
             - kubernetes.node.labels.topology_ebs_csi_aws_com/zone
             - kubernetes.node.labels.topology_kubernetes_io/region
             - kubernetes.node.uid
@@ -48,3 +51,5 @@ processors:
       ignore_missing: true
       fields:
         - agent
+        - host
+        - input
