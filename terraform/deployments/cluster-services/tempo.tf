@@ -49,3 +49,81 @@ resource "aws_iam_policy" "tempo" {
   })
 }
 
+resource "helm_release" "tempo" {
+  depends_on = [module.tempo_iam_role, aws_s3_bucket.tempo]
+  chart      = "tempo-distributed"
+  name       = "tempo"
+  namespace  = local.monitoring_ns
+  repository = "https://grafana.github.io/helm-charts"
+  version    = "1.4.8" # TODO: Dependabot or equivalent so this doesn't get neglected.
+  values = [yamlencode({
+    reportingEnabled = false
+
+    ingester = {
+      persistence = {
+        enabled      = true
+        size         = "30Gi"
+        storageClass = "ebs-gp3"
+      }
+    }
+
+    metricsGenerator = {
+      enabled = true
+      config = {
+        storage = {
+          remote_write = [
+            {
+              url = "${local.prometheus_internal_url}/api/v1/write"
+            }
+          ]
+        }
+      }
+    }
+
+    storage = {
+      trace = {
+        backend = "s3"
+        s3 = {
+          bucket   = aws_s3_bucket.tempo.id
+          region   = aws_s3_bucket.tempo.region
+          endpoint = "s3.dualstack.${aws_s3_bucket.tempo.region}.amazonaws.com"
+        }
+      }
+    }
+
+    serviceAccount = {
+      name = "tempo"
+      annotations = {
+        "eks.amazonaws.com/role-arn" = module.tempo_iam_role.iam_role_arn
+      }
+    }
+
+
+    metaMonitoring = {
+      serviceMonitor = {
+        enabled   = true
+        namespace = local.monitoring_ns
+      }
+    }
+
+    traces = {
+      otlp = {
+        grpc = {
+          enabled = true
+        }
+        http = {
+          enabled = true
+        }
+      }
+    }
+
+    overrides = yamlencode({
+      overrides = {
+        "*" = {
+          ingestion_burst_size_bytes   = 20000000
+          metrics_generator_processors = ["service-graphs", "span-metrics"]
+        }
+      }
+    })
+  })]
+}
