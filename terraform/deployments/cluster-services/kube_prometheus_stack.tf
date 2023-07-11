@@ -280,6 +280,19 @@ resource "helm_release" "kube_prometheus_stack" {
             authType      = "default"
             defaultRegion = data.aws_region.current.name
           }
+          },
+          {
+            name     = "Tempo"
+            type     = "tempo"
+            access   = "proxy"
+            uid      = "tempo"
+            editable = false
+            url      = "http://tempo-query-frontend.${local.monitoring_ns}.svc.cluster.local:3100"
+            jsonData = {
+              serviceMap = {
+                datasourceUid = "prometheus"
+              }
+            }
         }]
       }
       alertmanager = {
