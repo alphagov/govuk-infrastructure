@@ -187,8 +187,9 @@ resource "helm_release" "kube_prometheus_stack" {
         }
         "grafana.ini" = {
           auth = {
-            oauth_auto_login = true
-          },
+            oauth_auto_login                  = true
+            oauth_allow_insecure_email_lookup = true
+          }
           "auth.generic_oauth" = {
             name                  = "GitHub"
             enabled               = true
