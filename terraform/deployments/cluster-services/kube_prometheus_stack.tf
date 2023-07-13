@@ -25,6 +25,8 @@ locals {
   } : { name = k, value = v }]
 }
 
+resource "random_password" "grafana_admin" { length = 24 }
+
 resource "helm_release" "prometheus_oauth2_proxy" {
   depends_on       = [helm_release.dex]
   name             = "prometheus-oauth2-proxy"
@@ -185,10 +187,12 @@ resource "helm_release" "kube_prometheus_stack" {
             "alb.ingress.kubernetes.io/load-balancer-name" = "grafana"
           })
         }
+        adminPassword = random_password.grafana_admin.result
         "grafana.ini" = {
           auth = {
-            oauth_auto_login = true
-          },
+            oauth_auto_login                  = true
+            oauth_allow_insecure_email_lookup = true
+          }
           "auth.generic_oauth" = {
             name                  = "GitHub"
             enabled               = true
