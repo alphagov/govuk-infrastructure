@@ -1,7 +1,7 @@
 govuk_aws_state_bucket              = "govuk-terraform-steppingstone-integration"
 cluster_infrastructure_state_bucket = "govuk-terraform-integration"
 
-cluster_version               = 1.24
+cluster_version               = 1.25
 cluster_log_retention_in_days = 7
 
 eks_control_plane_subnets = {
