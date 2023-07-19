@@ -11,8 +11,8 @@ resource "aws_security_group_rule" "postgres_from_eks_workers" {
 resource "aws_security_group_rule" "redis_from_eks_workers" {
   description              = "Redis accepts requests from EKS nodes"
   type                     = "ingress"
-  from_port                = 5432
-  to_port                  = 5432
+  from_port                = 6379
+  to_port                  = 6379
   protocol                 = "tcp"
   security_group_id        = data.terraform_remote_state.infra_security_groups.outputs.sg_backend-redis_id
   source_security_group_id = data.terraform_remote_state.cluster_infrastructure.outputs.node_security_group_id
