@@ -9,8 +9,8 @@
 #   Description: {source} sends requests to {destination} on {port_name}
 # Omit the port name if it's obvious from the context.
 
-data "aws_prefix_list" "cloudfront" {
-  name = "com.amazonaws.${data.aws_region.current.name}.cloudfront.origin-facing"
+data "aws_ec2_managed_prefix_list" "cloudfront" {
+  name = "com.amazonaws.global.cloudfront.origin-facing"
 }
 
 #
@@ -221,7 +221,7 @@ resource "aws_security_group_rule" "eks_ingress_www_origin_from_cloudfront_https
   from_port         = 443
   to_port           = 443
   protocol          = "tcp"
-  prefix_list_ids   = [data.aws_prefix_list.cloudfront.id]
+  prefix_list_ids   = [data.aws_ec2_managed_prefix_list.cloudfront.id]
   security_group_id = aws_security_group.eks_ingress_www_origin.id
 }
 
