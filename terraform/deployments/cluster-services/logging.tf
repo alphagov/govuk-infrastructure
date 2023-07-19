@@ -9,13 +9,15 @@ resource "helm_release" "filebeat" {
   # TODO: stop using this unmaintained chart by updating to filebeat v8 (final
   # version of the deprecated chart), then switching to the eck-beats operator:
   # https://github.com/elastic/cloud-on-k8s/blob/main/deploy/eck-stack/charts/eck-beats/Chart.yaml
-  version          = "7.17.3" # TODO: Dependabot or equivalent so this doesn't get neglected.
+  version          = "8.5.1" # TODO: Dependabot or equivalent so this doesn't get neglected.
   namespace        = local.services_ns
   create_namespace = true
   values = [yamlencode({
+    daemonset = { secretMounts = [] }
     filebeatConfig = {
       "filebeat.yml" = yamlencode(yamldecode(file("${path.module}/filebeat.yml")))
     }
+    imageTag = "8.8.2" # TODO: Dependabot or equivalent so this doesn't get neglected.
     extraEnvs = [
       {
         name = "LOGSTASH_HOST"
