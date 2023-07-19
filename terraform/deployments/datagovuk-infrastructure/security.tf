@@ -1,7 +1,4 @@
 resource "aws_security_group_rule" "postgres_from_eks_workers" {
-  for_each = merge(data.terraform_remote_state.app_govuk_rds.outputs.sg_rds, {
-    "ckan_primary" = data.terraform_remote_state.infra_security_groups.outputs.sg_ckan_id
-  })
   description              = "Database accepts requests from EKS nodes"
   type                     = "ingress"
   from_port                = 5432
