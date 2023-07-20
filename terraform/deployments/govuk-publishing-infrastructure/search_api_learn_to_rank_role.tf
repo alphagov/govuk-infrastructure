@@ -27,8 +27,8 @@ data "aws_iam_policy_document" "learn_to_rank_job" {
       "s3:DeleteObject"
     ]
     resources = [
-      "arn:aws:s3:::govuk-integration-search-relevancy/*",
-      "arn:aws:s3:::govuk-integration-search-relevancy"
+      "arn:aws:s3:::govuk-${var.govuk_environment}-search-relevancy/*",
+      "arn:aws:s3:::govuk-${var.govuk_environment}-search-relevancy"
     ]
   }
 
@@ -93,8 +93,8 @@ data "aws_iam_policy_document" "learn_to_rank_sagemaker" {
       "s3:DeleteObject"
     ]
     resources = [
-      "arn:aws:s3:::govuk-integration-search-relevancy/*",
-      "arn:aws:s3:::govuk-integration-search-relevancy"
+      "arn:aws:s3:::govuk-${var.govuk_environment}-search-relevancy/*",
+      "arn:aws:s3:::govuk-${var.govuk_environment}-search-relevancy"
     ]
   }
 
