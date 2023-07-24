@@ -31,7 +31,6 @@ GOV.UK apps are deployed by ArgoCD and the config is stored in the
 [app-config](https://github.com/alphagov/govuk-helm-charts/tree/main/charts/app-config)
 helm chart of the [govuk-helm-charts] GitHub repository.
 
-Please see the [GOV.UK k8s manual website](https://govuk-k8s-user-docs.publishing.service.gov.uk/)
-for further details on how to operate the platform.
+See [CI/CD](https://govuk-kubernetes-cluster-user-docs.publishing.service.gov.uk/manage-app/access-ci-cd/) in the GOV.UK Kubernetes cluster docs.
 
 [govuk-helm-charts]: https://github.com/alphagov/govuk-helm-charts
