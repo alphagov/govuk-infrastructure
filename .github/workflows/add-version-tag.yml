@@ -1,0 +1,84 @@
+name: Add version tag
+
+on:
+  workflow_call:
+
+concurrency: ${{ github.workflow }}
+
+jobs:
+  add-version-tag:
+    name: Add version tag
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Find latest version tag
+        id: find-last-tag
+        run: |
+          git fetch --tags --deepen=100
+
+          last_tag=$(git tag --list "v*" --merged HEAD --sort=-committerdate | head -n 1)
+
+          if [ -z "$last_tag" ]; then
+            echo "No previous tag found."
+            exit 1
+          fi
+
+          echo "result=$last_tag" >> "$GITHUB_OUTPUT"
+
+      - name: Calculate version tag
+        id: calculate-tag
+        run: |
+          last_tag="${{ steps.find-last-tag.outputs.result }}"
+
+          # Get the list of merge commits
+          merge_commits=$(git rev-list --merges "$last_tag"..HEAD)
+
+          # Get the hash of the current commit
+          current_commit=$(git rev-parse --verify HEAD)
+
+          # Check if the current commit is in the list of merge commits
+          if ! echo "$merge_commits" | grep -q "$current_commit"; then
+            echo "The current commit is not a merge commit."
+            exit 1
+          fi
+
+          # Count the number of merge commits
+          merge_count=$(echo "$merge_commits" | wc -l)
+
+          # Remove v prefix
+          version=${last_tag#v}
+
+          # Increase the version by the merge count
+          ((version+=merge_count))
+
+          # Construct the new version tag
+          new_tag="v${version}"
+
+          echo "result=$new_tag" >> "$GITHUB_OUTPUT"
+
+      - name: Add git tag
+        uses: actions/github-script@v6
+        with:
+          retries: 3
+          script: |
+            const newTag = '${{steps.calculate-tag.outputs.result}}'
+
+            // Create tag reference
+            await github.rest.git.createRef({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              ref: `refs/tags/${newTag}`,
+              sha: context.sha,
+            });
+
+            // Create an annotated tag, otherwise the ref is only a lightweight tag
+            await github.rest.git.createTag({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              tag: newTag,
+              message: `Automated version tag ${newTag}`,
+              object: context.sha,
+              type: 'commit',
+            });
