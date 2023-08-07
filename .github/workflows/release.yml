@@ -1,13 +1,14 @@
-name: Add version tag
+name: Release
 
 on:
   workflow_call:
-
-concurrency: ${{ github.workflow }}
+    secrets:
+      GH_TOKEN:
+        required: true
 
 jobs:
-  add-version-tag:
-    name: Add version tag
+  release:
+    name: Release
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -18,7 +19,7 @@ jobs:
         run: |
           git fetch --tags --deepen=100
 
-          last_tag=$(git tag --list "v*" --merged HEAD --sort=-committerdate | head -n 1)
+          last_tag=$(git describe --tags --match "v*" --abbrev=0)
 
           if [ -z "$last_tag" ]; then
             echo "No previous tag found."
@@ -27,28 +28,27 @@ jobs:
 
           echo "result=$last_tag" >> "$GITHUB_OUTPUT"
 
-      - name: Calculate version tag
-        id: calculate-tag
+      - name: Check is merge commit
         run: |
-          last_tag="${{ steps.find-last-tag.outputs.result }}"
-
-          # Get the list of merge commits
-          merge_commits=$(git rev-list --merges "$last_tag"..HEAD)
-
-          # Get the hash of the current commit
-          current_commit=$(git rev-parse --verify HEAD)
-
-          # Check if the current commit is in the list of merge commits
-          if ! echo "$merge_commits" | grep -q "$current_commit"; then
+          # Commits with more than 1 parent are merge commits
+          if [[ $(git cat-file -p HEAD | grep -c parent) -le 1 ]]; then
             echo "The current commit is not a merge commit."
             exit 1
           fi
 
-          # Count the number of merge commits
-          merge_count=$(echo "$merge_commits" | wc -l)
+      - name: Calculate new version tag
+        id: calculate-tag
+        run: |
+          last_tag="${{ steps.find-last-tag.outputs.result }}"
 
           # Remove v prefix
           version=${last_tag#v}
+
+          # Get the list of merge commits
+          merge_commits=$(git rev-list --merges "$last_tag"..HEAD)
+
+          # Count the number of merge commits
+          merge_count=$(echo "$merge_commits" | wc -l)
 
           # Increase the version by the merge count
           ((version+=merge_count))
@@ -58,27 +58,19 @@ jobs:
 
           echo "result=$new_tag" >> "$GITHUB_OUTPUT"
 
-      - name: Add git tag
+      - name: Create GitHub Release
         uses: actions/github-script@v6
         with:
           retries: 3
+          github-token: ${{ secrets.GH_TOKEN }}
           script: |
             const newTag = '${{steps.calculate-tag.outputs.result}}'
 
-            // Create tag reference
-            await github.rest.git.createRef({
+            await github.rest.repos.createRelease({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              ref: `refs/tags/${newTag}`,
-              sha: context.sha,
-            });
-
-            // Create an annotated tag, otherwise the ref is only a lightweight tag
-            await github.rest.git.createTag({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              tag: newTag,
-              message: `Automated version tag ${newTag}`,
-              object: context.sha,
-              type: 'commit',
+              tag_name: newTag,
+              name: newTag,
+              target_commitish: context.sha,
+              make_latest: "legacy",
             });
