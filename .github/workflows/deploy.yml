@@ -101,7 +101,6 @@ jobs:
         env:
           IMAGE_TAG: ${{ inputs.imageTag }}
           REPO_NAME: ${{ inputs.appName }}
-          MANUAL_DEPLOY: ${{ github.event_name == 'workflow_dispatch' }}
           PROMOTE_DEPLOYMENT: ${{ github.event_name == 'release' }}
           WEBHOOK_TOKEN: ${{ secrets.WEBHOOK_TOKEN }}
           WEBHOOK_URL: ${{ secrets.WEBHOOK_URL }}
@@ -113,7 +112,6 @@ jobs:
               \"environment\": \"${ENVIRONMENT}\",
               \"repoName\": \"${REPO_NAME}\",
               \"imageTag\": \"${IMAGE_TAG}\",
-              \"manualDeploy\": \"${MANUAL_DEPLOY}\",
               \"promoteDeployment\": \"${PROMOTE_DEPLOYMENT}\"
             }" \
             "${WEBHOOK_URL}/update-image-tag"
