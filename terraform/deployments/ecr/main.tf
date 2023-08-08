@@ -255,6 +255,19 @@ resource "aws_ecr_lifecycle_policy" "ecr_lifecycle_policy" {
       },
       {
         "rulePriority" : 4,
+        "description" : "Keep last 20 images with tag prefix v",
+        "selection" : {
+          "tagStatus" : "tagged",
+          "tagPrefixList" : ["v"],
+          "countType" : "imageCountMoreThan",
+          "countNumber" : 20
+        },
+        "action" : {
+          "type" : "expire"
+        }
+      },
+      {
+        "rulePriority" : 5,
         "description" : "Expire images older than 30 days",
         "selection" : {
           "tagStatus" : "any",
