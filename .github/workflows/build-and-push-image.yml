@@ -80,11 +80,17 @@ jobs:
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           ECR_REPOSITORY: ${{ inputs.ecrRepositoryName }}
+          INPUT_REF: ${{ inputs.gitRef }}
         run: |
           LOCAL_HEAD_SHA="$(git rev-parse HEAD)"
           REMOTE_HEAD_SHA=$(git ls-remote origin HEAD | cut -f 1)
 
-          IMAGE_TAG="release-${LOCAL_HEAD_SHA}"
+          if [[ "${INPUT_REF}" == v* ]]; then
+            IMAGE_TAG="${INPUT_REF}"
+          else
+            IMAGE_TAG="release-${LOCAL_HEAD_SHA}"
+          fi
+
           FULL_IMAGE_TAG_LIST=("${ECR_REGISTRY}/${ECR_REPOSITORY}:${IMAGE_TAG}")
 
           # Add latest tag if most recent commit
