@@ -102,7 +102,7 @@ jobs:
           IMAGE_TAG: ${{ inputs.imageTag }}
           REPO_NAME: ${{ inputs.appName }}
           MANUAL_DEPLOY: ${{ github.event_name == 'workflow_dispatch' }}
-          PROMOTE_DEPLOYMENT: ${{ github.event_name == 'workflow_run' }}
+          PROMOTE_DEPLOYMENT: ${{ github.event_name == 'release' }}
           WEBHOOK_TOKEN: ${{ secrets.WEBHOOK_TOKEN }}
           WEBHOOK_URL: ${{ secrets.WEBHOOK_URL }}
         run: |
