@@ -13,6 +13,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.workflow_run.head_commit.id }}
 
       - name: Find latest version tag
         id: find-last-tag
@@ -71,6 +73,6 @@ jobs:
               repo: context.repo.repo,
               tag_name: newTag,
               name: newTag,
-              target_commitish: context.sha,
+              target_commitish: '${{ github.event.workflow_run.head_commit.id}}',
               make_latest: "legacy",
             });
