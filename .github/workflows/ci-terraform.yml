@@ -42,7 +42,7 @@ jobs:
     - uses: terraform-linters/setup-tflint@v1
       name: Set up TFLint
       with:
-        tflint_version: v0.34.1
+        tflint_version: v0.47.0
 
     - name: terraform fmt
       working-directory: terraform
