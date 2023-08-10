@@ -78,14 +78,10 @@ jobs:
 
     - name: tflint
       run: |
-        STEP_EXIT_STATUS=0
-        TFLINT_PLUGINS="--enable-plugin=aws"
+        cd terraform/deployments
         tflint --version
-        tflint --init $TFLINT_PLUGINS
-        for d in terraform/deployments/*; do
-          echo "$d"
-          set +e
-          tflint --config=tflint.hcl -f compact --module --chdir "$d" $TFLINT_PLUGINS \
+        tflint --init --recursive 
+        tflint --format compact --module --recursive --force \
             --enable-rule=terraform_comment_syntax \
             --enable-rule=terraform_deprecated_index \
             --enable-rule=terraform_required_providers \
@@ -93,8 +89,3 @@ jobs:
             --enable-rule=terraform_typed_variables \
             --enable-rule=terraform_unused_declarations \
             --enable-rule=terraform_unused_required_providers
-          if [[ $? -eq 1 ]]; then STEP_EXIT_STATUS=1; fi  # Don't fail on warnings (status 2).
-          set -e
-          echo -e '\n-------------------------\n'
-        done
-        exit $STEP_EXIT_STATUS
