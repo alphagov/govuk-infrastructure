@@ -84,10 +84,8 @@ jobs:
         tflint --init $TFLINT_PLUGINS
         for d in terraform/deployments/*; do
           echo "$d"
-          cd "$d"
           set +e
-          touch tflint.hcl  # For modules which don't have a tflint.hcl.
-          tflint --config=tflint.hcl -f compact --module . $TFLINT_PLUGINS \
+          tflint --config=tflint.hcl -f compact --module --chdir "$d" $TFLINT_PLUGINS \
             --enable-rule=terraform_comment_syntax \
             --enable-rule=terraform_deprecated_index \
             --enable-rule=terraform_required_providers \
@@ -97,7 +95,6 @@ jobs:
             --enable-rule=terraform_unused_required_providers
           if [[ $? -eq 1 ]]; then STEP_EXIT_STATUS=1; fi  # Don't fail on warnings (status 2).
           set -e
-          cd "$OLDPWD"
           echo -e '\n-------------------------\n'
         done
         exit $STEP_EXIT_STATUS
