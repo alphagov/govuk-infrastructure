@@ -1,0 +1,16 @@
+aws_region                             = "eu-west-1"
+cloudfront_enable                      = true
+cloudfront_create                      = 1
+logging_bucket                         = "govuk-staging-aws-logging.s3.amazonaws.com"
+assets_certificate_arn                 = "arn:aws:acm:us-east-1:696911096973:certificate/642e34ef-71e2-439d-99f7-e79baf9ed482"
+www_certificate_arn                    = "arn:aws:acm:us-east-1:696911096973:certificate/642e34ef-71e2-439d-99f7-e79baf9ed482"
+cloudfront_assets_distribution_aliases = ["assets.staging.publishing.service.gov.uk"]
+cloudfront_www_distribution_aliases    = ["www.staging.publishing.service.gov.uk"]
+www_web_acl_id                         = "arn:aws:wafv2:us-east-1:696911096973:global/webacl/cdn_poc_govuk/8fcb1569-44ff-4dd8-b634-748ca3e2b255"
+assets_web_acl_id                      = ""
+origin_www_domain                      = "www-origin.eks.staging.govuk.digital"
+origin_www_id                          = "WWW Origin"
+origin_assets_domain                   = "assets-origin.eks.staging.govuk.digital"
+origin_assets_id                       = "WWW Assets"
+origin_notify_domain                   = "d1lmz31mme1483.cloudfront.net"
+origin_notify_id                       = "notify alerts"
