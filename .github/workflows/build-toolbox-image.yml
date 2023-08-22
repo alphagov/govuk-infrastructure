@@ -1,4 +1,4 @@
-name: Build and publish github-cli image to ECR
+name: Build and publish toolbox image to ECR
 
 on:
   workflow_dispatch:
@@ -13,7 +13,7 @@ on:
     branches:
       - main
     paths:
-      - "images/github-cli/Dockerfile"
+      - "images/toolbox/Dockerfile"
   
   schedule:
     - cron: '0 0 * * 1'
@@ -23,8 +23,8 @@ jobs:
     uses: alphagov/govuk-infrastructure/.github/workflows/build-and-push-image.yml@main
     with:
       gitRef: ${{ inputs.gitRef || github.ref }}
-      ecrRepositoryName: github-cli
-      dockerfilePath: images/github-cli/Dockerfile
+      ecrRepositoryName: toolbox
+      dockerfilePath: images/toolbox/Dockerfile
     secrets:
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_GOVUK_ECR_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_GOVUK_ECR_SECRET_ACCESS_KEY }}
