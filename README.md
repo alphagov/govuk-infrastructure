@@ -4,6 +4,8 @@
 
 The govuk-infrastructure repo contains Terraform modules for turning up an EKS Kubernetes cluster for GOV.UK.
 
+Also included are reusable workflows for running the code scanning tools Rubocop, Brakeman and the CodeQL Static Application Security Tests (SAST).
+
 ### What's not in this repo
 
 Helm charts for GOV.UK applications are in [alphagov/govuk-helm-charts](https://github.com/alphagov/govuk-helm-charts).
@@ -20,6 +22,16 @@ To install the [currently-used version of Terraform](terraform/.terraform-versio
 brew install tfenv
 cd terraform/
 tfenv install
+```
+
+To use the code scans reusable workflow, add the following job to the jobs section of your CI workflow:
+
+```yaml
+codeql-sast:
+  name: CodeQL SAST scan
+  uses: alphagov/govuk-infrastructure/.github/workflows/codeql-analysis.yml@main
+  permissions:
+    security-events: write
 ```
 
 ## Working on this repo
