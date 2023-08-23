@@ -49,4 +49,4 @@ RUN aws --version ; \
     yq --version
 
 CMD ["/bin/bash"]
-LABEL org.opencontainers.image.source=https://github.com/alphagov/govuk-infrastructure/tree/main/images/github-cli/
+LABEL org.opencontainers.image.source=https://github.com/alphagov/govuk-infrastructure/tree/main/images/toolbox/

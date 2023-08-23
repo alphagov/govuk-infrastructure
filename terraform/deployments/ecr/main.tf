@@ -42,6 +42,7 @@ locals {
 
   extra_repositories = [
     "github-cli",
+    "toolbox",
     "statsd",
     "govuk-terraform",
     "search-api-learn-to-rank",
