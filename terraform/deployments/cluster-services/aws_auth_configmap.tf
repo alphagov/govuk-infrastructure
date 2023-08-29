@@ -10,6 +10,10 @@
 # opposed to using Helm or kubectl or other tooling designed to work with
 # k8s). This is a rare exception to that rule of thumb.
 
+data "aws_iam_roles" "admin" { name_regex = "\\..*-admin$" }
+data "aws_iam_roles" "poweruser" { name_regex = "\\..*-poweruser$" }
+data "aws_iam_roles" "user" { name_regex = "\\..*-user$" }
+
 locals {
   default_configmap_roles = [
     {
@@ -19,37 +23,30 @@ locals {
     },
   ]
 
-  admin_roles_and_arns = data.terraform_remote_state.infra_security.outputs.admin_roles_and_arns
   admin_configmap_roles = [
-    for user, arn in local.admin_roles_and_arns : {
+    for arn in data.aws_iam_roles.admin.arns : {
       rolearn  = arn
-      username = user
+      username = regex("/(.*-admin)$", arn)[0]
       groups   = ["cluster-admins"]
     }
   ]
 
-  ci_planner_username_and_rolearn = {
-    "govuk-ci-concourse" = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/govuk-ci-concourse"
-  }
-
-  readonly_roles_and_arns = merge(data.terraform_remote_state.infra_security.outputs.user_roles_and_arns, local.ci_planner_username_and_rolearn)
-  readonly_configmap_roles = [
-    for user, arn in local.readonly_roles_and_arns : {
-      rolearn  = arn
-      username = user
-      groups   = ["readonly"]
-    }
-  ]
-
-  poweruser_roles_and_arns = data.terraform_remote_state.infra_security.outputs.poweruser_roles_and_arns
   poweruser_configmap_roles = [
-    for user, arn in local.poweruser_roles_and_arns : {
+    for arn in data.aws_iam_roles.poweruser.arns : {
       rolearn  = arn
-      username = user
-      groups   = ["powerusers", "readonly"]
+      username = regex("/(.*-poweruser)$", arn)[0]
+      groups   = ["powerusers"]
     }
   ]
   poweruser_namespaces = [kubernetes_namespace.apps]
+
+  readonly_configmap_roles = [
+    for arn in data.aws_iam_roles.user.arns : {
+      rolearn  = arn
+      username = regex("/(.*-user)$", arn)[0]
+      groups   = ["readonly"]
+    }
+  ]
 }
 
 resource "kubernetes_config_map" "aws_auth" {
@@ -60,14 +57,12 @@ resource "kubernetes_config_map" "aws_auth" {
   }
 
   data = {
-    mapRoles = yamlencode(
-      distinct(concat(
-        local.default_configmap_roles,
-        local.admin_configmap_roles,
-        local.readonly_configmap_roles,
-        local.poweruser_configmap_roles,
-      ))
-    )
+    mapRoles = yamlencode(distinct(concat(
+      local.default_configmap_roles,
+      local.admin_configmap_roles,
+      local.readonly_configmap_roles,
+      local.poweruser_configmap_roles,
+    )))
   }
 }
 
