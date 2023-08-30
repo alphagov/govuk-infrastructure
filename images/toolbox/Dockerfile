@@ -1,3 +1,23 @@
+ARG wget2_tarball="wget2-2.1.0"
+
+FROM public.ecr.aws/lts/ubuntu:22.04_stable AS builder
+SHELL ["/bin/bash", "-euo", "pipefail", "-c"]
+
+RUN apt-get update -qq ; \
+    apt-get install -qy --no-install-recommends ca-certificates \
+        curl gh git jq libarchive-tools mysql-client postgresql-client pv \
+        gcc g++ make libtool gettext pkg-config \
+        zlib1g-dev libnghttp2-dev libbrotli-dev libpsl-dev libidn2-0-dev libpcre2-dev libssl-dev openssl;
+
+ARG wget2_package_url=https://ftp.gnu.org/gnu/wget/
+ARG wget2_tarball
+WORKDIR /tmp
+RUN curl -fsSL "${wget2_package_url}/${wget2_tarball}.tar.gz" \
+        | tar -xzf - ;
+WORKDIR /tmp/$wget2_tarball
+RUN ./configure --disable-dependency-tracking; \
+    make;
+
 FROM public.ecr.aws/lts/ubuntu:22.04_stable
 ARG TARGETARCH
 SHELL ["/bin/bash", "-euo", "pipefail", "-c"]
@@ -16,7 +36,8 @@ RUN apt-get update -qq ; \
     echo "deb [arch=${TARGETARCH} signed-by=${keyrings_dir}/github.gpg] ${github_apt_repo} stable main" > /etc/apt/sources.list.d/github.list ; \
     apt-get update -qq ; \
     apt-get install -qy --no-install-recommends \
-        curl gh git jq libarchive-tools mysql-client postgresql-client pv wget2 ; \
+        curl gh git jq libarchive-tools mysql-client postgresql-client pv \
+        make libtool zlib1g libnghttp2-14 libbrotli1 libpsl5 libidn2-0 libpcre2-8-0 openssl; \
     rm -fr /var/lib/apt/lists/*
 
 ARG yq_package_url=https://github.com/mikefarah/yq/releases/latest/download
@@ -35,8 +56,15 @@ RUN curl -Ssf "https://awscli.amazonaws.com/awscli-exe-linux-$(uname -m).zip" \
     chmod +x "${awscli_install_dir}/aws/dist/aws"
 ENV PATH=$PATH:$awscli_install_dir/aws/dist
 
+ARG wget2_tarball
+COPY --from=builder /tmp/$wget2_tarball /tmp/wget
+WORKDIR /tmp/wget
+RUN make install; \
+    rm -rf /tmp/wget
+
 RUN groupadd -g 1001 user ; \
     useradd -mu 1001 -g user user
+
 WORKDIR /home/user
 USER user
 
@@ -46,6 +74,7 @@ RUN aws --version ; \
     jq --version ; \
     mysql --version ; \
     psql --version ; \
+    wget2 --version ; \
     yq --version
 
 CMD ["/bin/bash"]
