@@ -1,0 +1,15 @@
+name: Run lint:scss
+
+jobs:
+  run-lint-scss:
+    name: Run lint:scss
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup Node
+        uses: alphagov/govuk-infrastructure/.github/actions/setup-node@main
+
+      - name: Run lint:scss
+        run: yarn run lint:scss

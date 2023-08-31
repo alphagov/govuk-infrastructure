@@ -1,0 +1,15 @@
+name: Run lint:js
+
+jobs:
+  run-lint-js:
+    name: Run lint:js
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup Node
+        uses: alphagov/govuk-infrastructure/.github/actions/setup-node@main
+
+      - name: Run lint:js
+        run: yarn run lint:js
