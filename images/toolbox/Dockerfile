@@ -16,7 +16,7 @@ RUN apt-get update -qq ; \
     echo "deb [arch=${TARGETARCH} signed-by=${keyrings_dir}/github.gpg] ${github_apt_repo} stable main" > /etc/apt/sources.list.d/github.list ; \
     apt-get update -qq ; \
     apt-get install -qy --no-install-recommends \
-        curl gh git jq libarchive-tools mysql-client postgresql-client pv wget2 ; \
+        curl file gh git jq libarchive-tools mysql-client postgresql-client pv wget2 ; \
     rm -fr /var/lib/apt/lists/*
 
 ARG yq_package_url=https://github.com/mikefarah/yq/releases/latest/download
