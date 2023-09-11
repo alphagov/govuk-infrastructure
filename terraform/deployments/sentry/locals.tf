@@ -43,6 +43,7 @@ locals {
     "search-admin"             = ["govuk-find-and-view", "replatforming"],
     "search-analytics"         = ["govuk-find-and-view", "replatforming"],
     "search-api"               = ["govuk-find-and-view", "govuk-finding-brexit-team", "replatforming"],
+    "search-api-v2"            = ["govuk-find-and-view", "replatforming"],
     "service-manual-publisher" = ["govuk-publishing", "govuk-publishing-experience", "replatforming"],
     "short-url-manager"        = ["govuk-publishing", "govuk-publishing-experience", "replatforming"],
     "signon"                   = ["govuk-access-and-permissions", "govuk-publishing", "replatforming"],
