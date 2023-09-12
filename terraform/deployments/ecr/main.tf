@@ -42,6 +42,7 @@ locals {
 
   extra_repositories = [
     "github-cli",
+    "mongodb",
     "toolbox",
     "statsd",
     "govuk-terraform",
