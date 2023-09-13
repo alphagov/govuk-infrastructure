@@ -24,8 +24,4 @@ To setup Fastly, log into the Fastly web management [portal](https://manage.fast
 2. Create a pull request in the [GitHub repo](https://github.com/alphagov/govuk-cdn-config-secrets)
    with a new service under `www-eks`. You can use this previous [pull request](https://github.com/alphagov/govuk-cdn-config-secrets/pull/151)
    as example.
-3. The Fastly CDN service is currently configured by running the Jenkins `Deploy_CDN`
-   job in the relevant EC2 Jenkins instance of the particular GOV.UK environment
-   where you want to deploy. You should deploy your changes by running `www-eks`
-   vhost version of that job. Further details on how to deploy deploy CDN changes
-   are available [here](https://docs.publishing.service.gov.uk/manual/cdn.html)
+3. See [how to deploy Fastly](https://docs.publishing.service.gov.uk/manual/cdn.html#deploying-fastly).
