@@ -63,6 +63,44 @@ locals {
   ]
 }
 
+resource "github_team" "govuk_ci_bots" {
+  name        = "GOV.UK CI Bots"
+  privacy     = "closed"
+  description = "Contains the `govuk-ci` user and grants it admin access to all GOV.UK repos"
+}
+
+resource "github_team" "govuk_production_admin" {
+  name        = "GOV.UK Production Admin"
+  privacy     = "closed"
+  description = "https://docs.publishing.service.gov.uk/manual/rules-for-getting-production-access.html"
+}
+
+resource "github_team" "govuk" {
+  name    = "GOV.UK"
+  privacy = "closed"
+}
+
+resource "github_team_repository" "govuk_production_admin_repos" {
+  for_each   = toset(data.github_repositories.govuk.names)
+  repository = each.key
+  team_id    = github_team.govuk_production_admin.id
+  permission = "admin"
+}
+
+resource "github_team_repository" "govuk_ci_bots_repos" {
+  for_each   = toset(data.github_repositories.govuk.names)
+  repository = each.key
+  team_id    = github_team.govuk_ci_bots.id
+  permission = "admin"
+}
+
+resource "github_team_repository" "govuk_repos" {
+  for_each   = toset(data.github_repositories.govuk.names)
+  repository = each.key
+  team_id    = github_team.govuk.id
+  permission = "push"
+}
+
 #
 # Only the list of repositories which will have access to a secret is created/modified
 # here, the secret should have been created in the GitHub UI in advance by a
