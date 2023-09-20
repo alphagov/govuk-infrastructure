@@ -126,7 +126,7 @@ variable "notify_cloudfront_domain" {
 # Set up the backend & provider for each region
 terraform {
   backend "s3" {}
-  required_version = "= 1.3.4"
+  required_version = "~> 1.5"
 }
 
 provider "aws" {
