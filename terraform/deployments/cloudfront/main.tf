@@ -65,16 +65,14 @@ variable "origin_notify_id" {
   default     = ""
 }
 
-variable "www_web_acl_id" {
-  type        = string
-  description = "WAF ACL rules id for the WWW cloudfront distribution"
-  default     = ""
+variable "cloudfront_web_acl_default_allow" {
+  type        = bool
+  description = "True if the WAF ACL attached to the CloudFront distribution should default to allow, false otherwise."
 }
 
-variable "assets_web_acl_id" {
-  type        = string
-  description = "WAF ACL rules id for the assets cloudfront distribution"
-  default     = ""
+variable "cloudfront_web_acl_allow_gds_ips" {
+  type        = bool
+  description = "True if the WAF ACL attached to the CloudFront distribution should have rules added to allow access from GDS IPs."
 }
 
 variable "cloudfront_www_distribution_aliases" {
@@ -133,6 +131,11 @@ provider "aws" {
   region = var.aws_region
 }
 
+provider "aws" {
+  alias  = "global"
+  region = "us-east-1"
+}
+
 provider "archive" {
 }
 
@@ -171,11 +174,153 @@ resource "aws_cloudfront_origin_request_policy" "all-viewer-headers" {
   }
 }
 
+resource "aws_wafv2_web_acl" "cdn_poc_govuk" {
+  provider = aws.global
+  name     = "cdn_poc_govuk"
+  scope    = "CLOUDFRONT"
+
+  default_action {
+    dynamic "allow" {
+      for_each = var.cloudfront_web_acl_default_allow ? [1] : []
+      content {}
+    }
+
+    dynamic "block" {
+      for_each = var.cloudfront_web_acl_default_allow ? [] : [1]
+      content {}
+    }
+  }
+
+  rule {
+    name     = "AWS-AWSManagedRulesAnonymousIpList"
+    priority = 0
+
+    override_action {
+      none {}
+    }
+
+    statement {
+      managed_rule_group_statement {
+        vendor_name = "AWS"
+        name        = "AWSManagedRulesAnonymousIpList"
+      }
+    }
+
+    visibility_config {
+      sampled_requests_enabled   = true
+      cloudwatch_metrics_enabled = true
+      metric_name                = "AWS-AWSManagedRulesAnonymousIpList"
+    }
+  }
+
+  rule {
+    name     = "AWS-AWSManagedRulesAmazonIpReputationList"
+    priority = 1
+
+    override_action {
+      none {}
+    }
+
+    statement {
+      managed_rule_group_statement {
+        vendor_name = "AWS"
+        name        = "AWSManagedRulesAmazonIpReputationList"
+      }
+    }
+
+    visibility_config {
+      sampled_requests_enabled   = true
+      cloudwatch_metrics_enabled = true
+      metric_name                = "AWS-AWSManagedRulesAmazonIpReputationList"
+    }
+  }
+
+  rule {
+    name     = "AWS-AWSManagedRulesCommonRuleSet"
+    priority = 2
+
+    override_action {
+      none {}
+    }
+
+    statement {
+      managed_rule_group_statement {
+        vendor_name = "AWS"
+        name        = "AWSManagedRulesCommonRuleSet"
+      }
+    }
+
+    visibility_config {
+      sampled_requests_enabled   = true
+      cloudwatch_metrics_enabled = true
+      metric_name                = "AWS-AWSManagedRulesCommonRuleSet"
+    }
+  }
+
+  dynamic "rule" {
+    for_each = var.cloudfront_web_acl_allow_gds_ips ? [1] : []
+
+    content {
+      name     = "ALLOW_GDS_IPS"
+      priority = 3
+
+      action {
+        allow {}
+      }
+
+      statement {
+        ip_set_reference_statement {
+          # TODO: This IP set doesn't appear to be defined in Terraform
+          arn = "arn:aws:wafv2:us-east-1:696911096973:global/ipset/cloudfront_cdn_gds/d594f8ed-8e3f-4dd9-a0e1-bb643a07eed5"
+        }
+      }
+
+      visibility_config {
+        sampled_requests_enabled   = true
+        cloudwatch_metrics_enabled = true
+        metric_name                = "ALLOW_GDS_IPS"
+      }
+    }
+  }
+
+  dynamic "rule" {
+    for_each = var.cloudfront_web_acl_allow_gds_ips ? [1] : []
+
+    content {
+      name     = "ALLOW_EC2_EKS"
+      priority = 4
+
+      action {
+        allow {}
+      }
+
+      statement {
+        ip_set_reference_statement {
+          # TODO: This IP set doesn't appear to be defined in Terraform
+          arn = "arn:aws:wafv2:us-east-1:696911096973:global/ipset/EC2_EKS_NAT_Gateways/94286465-8456-489f-aa40-8e23f16d52ad"
+        }
+      }
+
+      visibility_config {
+        sampled_requests_enabled   = true
+        cloudwatch_metrics_enabled = true
+        metric_name                = "ALLOW_EC2_EKS"
+      }
+    }
+  }
+
+  visibility_config {
+    sampled_requests_enabled   = true
+    cloudwatch_metrics_enabled = true
+    metric_name                = "cdn_poc_govuk"
+  }
+}
+
 resource "aws_cloudfront_distribution" "www_distribution" {
   count = var.cloudfront_create
 
   aliases    = var.cloudfront_www_distribution_aliases
-  web_acl_id = var.www_web_acl_id
+  web_acl_id = aws_wafv2_web_acl.cdn_poc_govuk.arn
   origin {
     domain_name = var.origin_www_domain
     origin_id   = var.origin_www_id
@@ -276,7 +421,8 @@ resource "aws_cloudfront_distribution" "www_distribution" {
 }
 
 resource "aws_cloudfront_distribution" "assets_distribution" {
-  count = var.cloudfront_create
+  count      = var.cloudfront_create
+  web_acl_id = aws_wafv2_web_acl.cdn_poc_govuk.arn
   origin {
     domain_name = var.origin_assets_domain
     origin_id   = var.origin_assets_id
