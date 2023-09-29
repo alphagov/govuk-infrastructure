@@ -56,10 +56,20 @@ data "github_repository" "govuk" {
   full_name = each.key
 }
 
+data "github_repository" "govuk_repo_names" {
+  for_each = toset(data.github_repositories.govuk.names)
+  name     = each.key
+}
+
 locals {
   deployable_repos = [
     for r in data.github_repository.govuk : r
     if !r.fork && contains(r.topics, "container")
+  ]
+
+  auto_configurable_repos = [
+    for r in data.github_repository.govuk_repo_names : r
+    if !r.fork && !contains(r.topics, "govuk-sensitive-access")
   ]
 }
 
@@ -81,22 +91,22 @@ resource "github_team" "govuk" {
 }
 
 resource "github_team_repository" "govuk_production_admin_repos" {
-  for_each   = toset(data.github_repositories.govuk.names)
-  repository = each.key
+  for_each   = { for repo in local.auto_configurable_repos : repo.name => repo }
+  repository = each.value.name
   team_id    = github_team.govuk_production_admin.id
   permission = "admin"
 }
 
 resource "github_team_repository" "govuk_ci_bots_repos" {
-  for_each   = toset(data.github_repositories.govuk.names)
-  repository = each.key
+  for_each   = { for repo in local.auto_configurable_repos : repo.name => repo }
+  repository = each.value.name
   team_id    = github_team.govuk_ci_bots.id
   permission = "admin"
 }
 
 resource "github_team_repository" "govuk_repos" {
-  for_each   = toset(data.github_repositories.govuk.names)
-  repository = each.key
+  for_each   = { for repo in local.auto_configurable_repos : repo.name => repo }
+  repository = each.value.name
   team_id    = github_team.govuk.id
   permission = "push"
 }
