@@ -12,6 +12,6 @@ origin_www_domain                      = "www-origin.eks.production.govuk.digita
 origin_www_id                          = "WWW Origin"
 origin_assets_domain                   = "assets-origin.eks.production.govuk.digital"
 origin_assets_id                       = "WWW Assets"
-origin_notify_domain                   = "d159ztsj6bvr2n.cloudfront.net"
+origin_notify_domain                   = "d35wa574vjcy9s.cloudfront.net"
 origin_notify_id                       = "notify alerts"
 
