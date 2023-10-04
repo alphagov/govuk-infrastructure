@@ -10,7 +10,7 @@ repositories with specific tags.
 We anticipate that teams will add GitHub tags to their repositories (similar to
 annotations on Kubernetes resources) to enable platform functionality.
 For instance creating an ECR registry and giving permissions to push to the
-registry might be enabled with the repo tag `dockerised`.
+registry might be enabled with the repo tag `container`.
 
 This module provides similar functionality to the [govuk-saas-config]
 repository, which configures repositories with sensible defaults such as
