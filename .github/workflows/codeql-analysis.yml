@@ -1,0 +1,41 @@
+name: "CodeQL Analysis"
+
+on:
+  workflow_call:
+
+jobs:
+  analyze:
+    name: Analyze
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    timeout-minutes: 120
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Initialize CodeQL
+      uses: github/codeql-action/init@v2
+      with:
+        config: |
+          # initial configurations for CodeQL should be looking for high precision
+          # and high severity issues to ensure developers aren't compromised by false positives.
+
+          query-filters:
+            - include:
+                # alerts should only be raised for security issues to prevent being distracted with none security issues.
+                "tags contain": security
+                # High precision findings give the best likelihood that issues found are true positives.
+                precision:
+                  - high
+                  - very-high
+                # A security severity score of >=7 is classed as high or critical. This is an additional step to
+                # ensure that developers are not distracted by low severity, none issues.
+                # Explanation of security severity scores: https://docs.github.com/en/code-security/code-scanning/managing-code-scanning-alerts/about-code-scanning-alerts#about-security-severity-levels
+                security-severity: /([7-9]|10)\.(\d)+/
+
+    - name: Autobuild
+      uses: github/codeql-action/autobuild@v2
+
+    - name: Perform CodeQL Analysis
+      uses: github/codeql-action/analyze@v2
