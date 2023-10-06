@@ -1,5 +1,8 @@
 alertmanager:
   config:
+    global:
+      resolve_timeout: 5m
+      slack_api_url: ${slack_api_url}
     route:
       receiver: 'null'
       group_wait: 30s
@@ -10,9 +13,36 @@ alertmanager:
       - match:
           severity: page
         receiver: 'pagerduty'
+      - match:
+          alertname: SignonApiUserTokenExpirySoon
+        receiver: 'slack-signon-token-expiry'
+        repeat_interval: 1d
+        active_time_intervals:
+        - inhours
     receivers:
     - name: 'null'
     - name: 'pagerduty'
       pagerduty_configs:
       - routing_key: ${routing_key}
         client_url: "https://${alertmanager_host}/#/alerts?receiver={{ .Receiver | urlquery }}"
+    - name: 'slack-signon-token-expiry'
+      slack_configs:
+      - channel: '#govuk-2ndline-tech'
+        send_resolved: true
+        icon_url: https://avatars3.githubusercontent.com/u/3380462
+        title: |-
+         [{{ .Status | toUpper }}{{ if eq .Status "firing" }}:{{ .Alerts.Firing | len }}{{ end }}] {{ .CommonLabels.alertname }}
+        text: >-
+         *Description:* {{ .CommonAnnotations.description }}
+
+         *Environment:* ${environment}
+
+         *Expiring tokens:*
+
+         {{ range .Alerts -}}
+           • api_user: `{{ .Labels.api_user }}`, application: `{{ .Labels.application }}`
+         {{ end }}
+    time_intervals:
+    - name: inhours
+      time_intervals:
+      - weekdays: ['monday:friday']
