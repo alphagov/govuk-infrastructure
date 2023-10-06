@@ -9,6 +9,15 @@ data "aws_secretsmanager_secret_version" "alertmanager-pagerduty" {
   secret_id = data.aws_secretsmanager_secret.alertmanager-pagerduty.id
 }
 
+data "aws_secretsmanager_secret" "alertmanager-slack" {
+  name = "govuk/slack-webhook-url"
+}
+
+data "aws_secretsmanager_secret_version" "alertmanager-slack" {
+  secret_id = data.aws_secretsmanager_secret.alertmanager-slack.id
+}
+
+
 locals {
   alertmanager_host         = "alertmanager.${local.external_dns_zone_name}"
   grafana_host              = "grafana.${local.external_dns_zone_name}"
@@ -144,14 +153,16 @@ resource "helm_release" "kube_prometheus_stack" {
   name             = "kube-prometheus-stack"
   repository       = "https://prometheus-community.github.io/helm-charts"
   chart            = "kube-prometheus-stack"
-  version          = "47.3.0" # TODO: Dependabot or equivalent so this doesn't get neglected.
+  version          = "47.6.1" # TODO: Dependabot or equivalent so this doesn't get neglected.
   namespace        = local.monitoring_ns
   create_namespace = true
   values = [
     templatefile("${path.module}/templates/alertmanager-config.tpl",
       {
         routing_key       = data.aws_secretsmanager_secret_version.alertmanager-pagerduty.secret_string,
+        slack_api_url     = jsondecode(data.aws_secretsmanager_secret_version.alertmanager-slack.secret_string)["url"],
         alertmanager_host = local.alertmanager_host
+        environment       = var.govuk_environment
     }),
     yamlencode({
       kubeApiServer         = { enabled = false }
