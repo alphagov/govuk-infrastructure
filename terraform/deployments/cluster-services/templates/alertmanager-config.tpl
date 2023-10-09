@@ -17,6 +17,8 @@ alertmanager:
           alertname: SignonApiUserTokenExpirySoon
         receiver: 'slack-signon-token-expiry'
         repeat_interval: 1d
+        group_wait: 12h
+        group_interval: 12h
         active_time_intervals:
         - inhours
     receivers:
