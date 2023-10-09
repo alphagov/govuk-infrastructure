@@ -29,6 +29,7 @@ locals {
     "hmrc-manuals-api"         = ["govuk-publishing-platform"],
     "imminence"                = ["govuk-content-interactions-on-platform", "govuk-find-and-view"],
     "info-frontend"            = ["govuk-find-and-view"],
+    "licensify"                = [],
     "link-checker-api"         = ["govuk-publishing-platform"],
     "local-links-manager"      = ["govuk-content-interactions-on-platform", "govuk-find-and-view"],
     "locations-api"            = ["govuk-content-interactions-on-platform", "govuk-find-and-view"],
@@ -36,6 +37,7 @@ locals {
     "maslow"                   = ["govuk-publishing-experience"],
     "publisher"                = ["govuk-publishing-on-platform"],
     "publishing-api"           = ["govuk-publishing-platform"],
+    "release"                  = [],
     "router"                   = ["govuk-find-and-view"],
     "router-api"               = ["govuk-find-and-view"],
     "search-admin"             = ["govuk-find-and-view"],
@@ -48,6 +50,8 @@ locals {
     "smart-answers"            = ["govuk-find-and-view"],
     "specialist-publisher"     = ["govuk-publishing-experience"],
     "static"                   = ["govuk-find-and-view"],
+    "support"                  = [],
+    "support-api"              = [],
     "transition"               = ["govuk-publishing-platform"]
   }
 }
