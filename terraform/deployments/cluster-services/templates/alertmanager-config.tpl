@@ -39,6 +39,8 @@ alertmanager:
 
          *Environment:* ${environment}
 
+         *Runbook:* {{ .CommonAnnotations.runbook_url }}
+
          *Expiring tokens:*
 
          {{ range .Alerts -}}
