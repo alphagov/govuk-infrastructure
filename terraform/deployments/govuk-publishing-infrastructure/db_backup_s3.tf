@@ -1,5 +1,10 @@
 locals {
   db_backup_service_account_name = "db-backup"
+  env_also_reads_from = {
+    "production"  = "govuk-production-database-backups-replica"
+    "staging"     = "govuk-production-database-backups"
+    "integration" = "govuk-staging-database-backups"
+  }
 }
 
 module "db_backup_iam_role" {
@@ -21,19 +26,23 @@ module "db_backup_iam_role" {
 
 data "aws_iam_policy_document" "db_backup_s3" {
   statement {
+    sid = "Read"
     actions = [
       "s3:GetBucketLocation",
       "s3:ListBucket",
-    ]
-    resources = ["arn:aws:s3:::govuk-${var.govuk_environment}-database-backups"]
-  }
-  statement {
-    actions = [
-      "s3:*MultipartUpload*",
       "s3:GetObject",
-      "s3:PutObject",
       "s3:GetObject*Attributes",
     ]
+    resources = [
+      "arn:aws:s3:::govuk-${var.govuk_environment}-database-backups",
+      "arn:aws:s3:::govuk-${var.govuk_environment}-database-backups/*",
+      "arn:aws:s3:::${local.env_also_reads_from[var.govuk_environment]}",
+      "arn:aws:s3:::${local.env_also_reads_from[var.govuk_environment]}/*",
+    ]
+  }
+  statement {
+    sid       = "Write"
+    actions   = ["s3:*MultipartUpload*", "s3:PutObject"]
     resources = ["arn:aws:s3:::govuk-${var.govuk_environment}-database-backups/*"]
   }
 }
