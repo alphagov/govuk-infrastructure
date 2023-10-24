@@ -1,9 +1,9 @@
 version: 2
 updates:
-  - package-ecosystem: "terraform"
-    directory: "/terraform"
+  - package-ecosystem: terraform
+    directory: /terraform
     schedule:
-      interval: "weekly"
+      interval: weekly
   - package-ecosystem: bundler
     directory: /
     schedule:
@@ -12,5 +12,9 @@ updates:
     ignore:
       - dependency-name: ruby
     directory: /images/
+    schedule:
+      interval: weekly
+  - package-ecosystem: github-actions
+    directory: /
     schedule:
       interval: weekly
