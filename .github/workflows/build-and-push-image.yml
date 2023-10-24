@@ -57,11 +57,10 @@ jobs:
     outputs:
       imageTag: ${{ steps.determine-image-tag.outputs.imageTag }}
     steps:
-      - name: Checkout
-        id: checkout
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           ref: ${{ inputs.gitRef }}
+          show-progress: false
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4.0.1

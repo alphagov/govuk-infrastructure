@@ -9,8 +9,9 @@ jobs:
   tflint:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
-      name: Checkout source code
+    - uses: actions/checkout@v4
+      with:
+        show-progress: false
 
     - name: Determine Terraform version to use
       uses: dflook/terraform-version@4acf4de147e9ea706a8b30e3725fc522cd6ab001

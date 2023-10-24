@@ -15,10 +15,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
+        with:
+          show-progress: false
 
       - name: Setup Ruby
-        if: ${{ inputs.useWithRails }}
+        if: inputs.useWithRails
         uses: ruby/setup-ruby@v1
         with:
           bundler-cache: true
@@ -27,7 +29,7 @@ jobs:
         uses: alphagov/govuk-infrastructure/.github/actions/setup-node@main
 
       - name: Precompile Rails assets
-        if: ${{ inputs.useWithRails }}
+        if: inputs.useWithRails
         uses: alphagov/govuk-infrastructure/.github/actions/precompile-rails-assets@main
 
       - name: Run Jasmine
