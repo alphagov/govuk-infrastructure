@@ -13,7 +13,7 @@ jobs:
       name: Checkout source code
 
     - name: Determine Terraform version to use
-      uses: dflook/terraform-version@4acf4de147e9ea706a8b30e3725fc522cd6ab001
+      uses: dflook/terraform-version@b5f4d2b3779a4c0ea912e20ac75eaf70468cea3c
       id: terraform-version
       with:
         path: terraform
