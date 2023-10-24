@@ -2,9 +2,14 @@
 
 ## What's in this repo
 
-The govuk-infrastructure repo contains Terraform modules for turning up an EKS Kubernetes cluster for GOV.UK.
+The govuk-infrastructure repo contains:
 
-Also included are reusable workflows for running the code scanning tools Rubocop, Brakeman and the CodeQL Static Application Security Tests (SAST).
+- [`terraform/`](terraform/): Terraform modules for turning up an Kubernetes
+  cluster on EKS for GOV.UK.
+- [`images/`](images/): Container image definitions for utilities such as the _toolbox_ image.
+- [`.github/`](.github/): GitHub Actions and workflows used by other GOV.UK
+  repos, for example release automation, test runners and security analysis
+  tools.
 
 ### What's not in this repo
 
@@ -24,24 +29,10 @@ cd terraform/
 tfenv install
 ```
 
-To use the code scans reusable workflow, add the following job to the jobs section of your CI workflow:
+## Pre-commit hooks
 
-```yaml
-codeql-sast:
-  name: CodeQL SAST scan
-  uses: alphagov/govuk-infrastructure/.github/workflows/codeql-analysis.yml@main
-  permissions:
-    security-events: write
-```
-
-## Working on this repo
-
-We have some [recommended pre-commit hooks](.pre-commit-config.yaml). If
-you're making changes to this repo, please [install the pre-commit
-hooks](https://pre-commit.com/#install) on your machine.
-
-See [alphagov/gds-pre-commit](https://github.com/alphagov/gds-pre-commit) for
-more recommendations on using pre-commit.
+We have some [recommended pre-commit hooks](.pre-commit-config.yaml). You need
+to [install `pre-commit`](https://pre-commit.com/#install) for these to run.
 
 ## Documentation
 
