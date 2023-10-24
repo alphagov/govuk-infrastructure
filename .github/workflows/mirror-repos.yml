@@ -18,7 +18,7 @@ jobs:
       ubuntu-latest
     steps:
       - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v2
+        uses: aws-actions/configure-aws-credentials@v4.0.1
         with:
           role-to-assume: arn:aws:iam::900804735337:role/github_action_mirror_repos_role
           aws-region: ${{ env.AWS_REGION }}
