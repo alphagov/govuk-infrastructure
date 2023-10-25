@@ -7,7 +7,9 @@
 #   test:
 #     runs-on: ubuntu-latest
 #     steps:
-#     - uses: actions/checkout@v2
+#     - uses: actions/checkout@v4
+#       with:
+#         show-progress: false
 #     - uses: ruby/setup-ruby@v1
 #       with:
 #         bundler-cache: true
@@ -15,7 +17,7 @@
 #
 #   publish:
 #     needs: test
-#     if: ${{ github.ref == 'refs/heads/main' }}
+#     if: github.ref == 'refs/heads/main'
 #     permissions:
 #       contents: write
 #     uses: alphagov/govuk-infrastructure/.github/workflows/publish-rubygem.yaml@main
@@ -45,6 +47,8 @@ jobs:
       contents: write
     steps:
     - uses: actions/checkout@v4
+      with:
+        show-progress: false
     - uses: ruby/setup-ruby@v1
       with:
         rubygems: latest
@@ -52,7 +56,7 @@ jobs:
     - name: "Determine HEAD of default branch"
       id: fetch_default_branch_head
       run: echo "sha=$(git ls-remote origin HEAD | cut -f 1)" >> "$GITHUB_OUTPUT"
-    - if: ${{ github.sha == steps.fetch_default_branch_head.outputs.sha }}
+    - if: github.sha == steps.fetch_default_branch_head.outputs.sha
       name: "Check if gem needs publishing"
       env:
         GEM_NAME: ${{ inputs.gem_name }}
@@ -73,7 +77,7 @@ jobs:
         else
           echo "Skipping git tagging because tag (v${LOCAL_VERSION}) already exists"
         fi
-    - if: ${{ github.sha != steps.fetch_default_branch_head.outputs.sha }}
+    - if: github.sha != steps.fetch_default_branch_head.outputs.sha
       name: "Skip publish: commit is not HEAD of default branch"
       run: |
         echo "Skipping publish because commit (${GITHUB_SHA}) isn't the HEAD of the default branch (${{ steps.fetch_default_branch_head.outputs.sha }})"

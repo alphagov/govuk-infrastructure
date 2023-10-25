@@ -8,8 +8,9 @@ jobs:
     name: Run RuboCop
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v4
+        with:
+          show-progress: false
 
       - name: Setup Ruby
         uses: ruby/setup-ruby@v1
