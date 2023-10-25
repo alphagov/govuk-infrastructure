@@ -23,6 +23,7 @@ jobs:
           role-to-assume: arn:aws:iam::900804735337:role/github_action_mirror_repos_role
           aws-region: ${{ env.AWS_REGION }}
           role-session-name: GitHubActionMirrorRepos
+          role-duration-seconds: 10800
 
       - name: Get repos
         id: get-repos
