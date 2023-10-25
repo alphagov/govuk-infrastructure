@@ -1,0 +1,30 @@
+name: Build and publish MongoDB image to ECR
+
+on:
+  workflow_dispatch:
+    inputs:
+      gitRef:
+        description: 'Commit, tag or branch name to deploy'
+        required: true
+        type: string
+        default: main
+
+  push:
+    branches:
+      - main
+    paths:
+      - images/mongodb/Dockerfile
+  
+  schedule:
+    - cron: '1 22 * * 1'
+
+jobs:
+  build-and-push-image:
+    uses: alphagov/govuk-infrastructure/.github/workflows/build-and-push-image.yml@main
+    with:
+      gitRef: ${{ inputs.gitRef || github.ref }}
+      ecrRepositoryName: mongodb
+      dockerfilePath: images/mongodb/Dockerfile
+    secrets:
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_GOVUK_ECR_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_GOVUK_ECR_SECRET_ACCESS_KEY }}
