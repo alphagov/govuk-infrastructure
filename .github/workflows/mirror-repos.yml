@@ -1,4 +1,4 @@
-name: "Mirror repositories"
+name: Mirror repositories
 
 on:
   schedule:
@@ -9,7 +9,7 @@ env:
   AWS_REGION : eu-west-2
 
 permissions:
-  id-token: write   # This is required for requesting the JWT
+  id-token: write  # Needed for requesting the JWT.
   contents: read
 
 jobs:
