@@ -21,6 +21,14 @@ alertmanager:
         group_interval: 12h
         active_time_intervals:
         - inhours
+      - match:
+          alertname: MirrorFreshnessAlert
+        receiver: 'slack-mirror-freshness'
+        repeat_interval: 1d
+        group_wait: 12h
+        group_interval: 12h
+        active_time_intervals:
+        - inhours
     receivers:
     - name: 'null'
     - name: 'pagerduty'
@@ -46,6 +54,19 @@ alertmanager:
          {{ range .Alerts -}}
            • api_user: `{{ .Labels.api_user }}`, application: `{{ .Labels.application }}`
          {{ end }}
+    - name: 'slack-mirror-freshness'
+      slack_configs:
+      - channel: '#govuk-platform-engineering'
+        send_resolved: true
+        icon_url: https://avatars3.githubusercontent.com/u/3380462
+        title: |-
+         [{{ .Status | toUpper }}{{ if eq .Status "firing" }}:{{ .Alerts.Firing | len }}{{ end }}] {{ .CommonLabels.alertname }}
+        text: >-
+         *Description:* {{ .CommonAnnotations.description }}
+
+         *Environment:* ${environment}
+
+         *Mirror*: {{ $labels.backend }}
     time_intervals:
     - name: inhours
       time_intervals:
