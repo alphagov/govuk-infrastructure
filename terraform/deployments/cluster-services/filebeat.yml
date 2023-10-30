@@ -11,6 +11,8 @@ filebeat.inputs:
       - /var/log/containers/*.log
     exclude_lines:
       - '"/readyz"'
+      # https://github.com/alphagov/bouncer/issues/461
+      - 'DEPRECATION WARNING.*clear_active_connections'
     processors:
       - add_kubernetes_metadata:
           host: ${NODE_NAME}
