@@ -33,7 +33,7 @@ resource "helm_release" "argo_cd" {
   namespace        = local.services_ns
   create_namespace = true
   repository       = "https://argoproj.github.io/argo-helm"
-  version          = "5.46.8" # TODO: Dependabot or equivalent so this doesn't get neglected.
+  version          = "5.48.1" # TODO: Dependabot or equivalent so this doesn't get neglected.
   values = [yamlencode({
     global = {
       logging = {
@@ -42,11 +42,32 @@ resource "helm_release" "argo_cd" {
       }
     }
 
-    server = {
-      # TLS Termination happens at the ALB, the insecure flag prevents Argo
-      # server from upgrading the request after TLS termination.
-      extraArgs = ["--insecure"]
+    configs = {
+      cm = {
+        url = "https://${local.argo_host}"
+        "oidc.config" = yamlencode({
+          name         = "GitHub"
+          issuer       = "https://${local.dex_host}"
+          clientID     = "$govuk-dex-argocd:clientID"
+          clientSecret = "$govuk-dex-argocd:clientSecret"
+        })
+      }
 
+      # We terminate TLS at the ALB (L7 LB inside the VPC network), so tell
+      # argo-cd-server not to redirect to HTTPS.
+      params = { "server.insecure" = true }
+
+      rbac = {
+        "policy.csv" = <<-EOT
+          g, ${var.github_read_only_team}, role:readonly
+          g, ${var.github_read_write_team}, role:admin
+          EOT
+      }
+    }
+
+    controller = { metrics = local.argo_metrics_config }
+
+    server = {
       replicas = var.desired_ha_replicas
 
       ingress = {
@@ -63,24 +84,6 @@ resource "helm_release" "argo_cd" {
         ingressClassName = "aws-alb"
         hosts            = [local.argo_host]
         https            = true
-      }
-
-      config = {
-        url = "https://${local.argo_host}"
-
-        "oidc.config" = yamlencode({
-          name         = "GitHub"
-          issuer       = "https://${local.dex_host}"
-          clientID     = "$govuk-dex-argocd:clientID"
-          clientSecret = "$govuk-dex-argocd:clientSecret"
-        })
-      }
-
-      rbacConfig = {
-        "policy.csv" = <<-EOT
-          g, ${var.github_read_only_team}, role:readonly
-          g, ${var.github_read_write_team}, role:admin
-          EOT
       }
 
       ingressGrpc = {
@@ -103,14 +106,12 @@ resource "helm_release" "argo_cd" {
       metrics = local.argo_metrics_config
     }
 
-    controller = { metrics = local.argo_metrics_config }
-
     repoServer = {
       metrics  = local.argo_metrics_config
       replicas = var.desired_ha_replicas
     }
 
-    applicationSet = { replicaCount = var.desired_ha_replicas }
+    applicationSet = { replicas = var.desired_ha_replicas }
     dex            = { enabled = false }
     redis-ha       = { enabled = var.argo_redis_ha }
 
