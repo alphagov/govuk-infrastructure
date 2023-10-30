@@ -28,13 +28,13 @@ jobs:
       run: mkdir -p "$TF_PLUGIN_CACHE_DIR"
 
     - name: Cache Terraform plugins
-      uses: actions/cache@v2
+      uses: actions/cache@v3
       with:
         path: ${{ env.TF_PLUGIN_CACHE_DIR }}
         key:
           terraform-plugins-${{ runner.os }}-${{ hashFiles('**/.terraform.lock.hcl') }}
 
-    - uses: actions/cache@v2
+    - uses: actions/cache@v3
       name: Cache TFLint plugins
       with:
         path: ~/.tflint.d/plugins
