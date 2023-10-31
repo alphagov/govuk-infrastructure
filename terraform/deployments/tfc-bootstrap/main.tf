@@ -1,37 +1,9 @@
-terraform {
-  cloud {
-    organization = "govuk"
-    workspaces {
-      name = "tfc-bootstrap"
-    }
-  }
-  required_providers {
-    tfe = {
-      version = "~> 0.44.0"
-    }
-  }
-}
-variable "tfe_token" {
-  description = "(Required) A Terraform cloud API token."
-  sensitive   = true
-  type        = string
-}
-
-provider "tfe" {
-  organization = "govuk"
-  token = var.tfe_token
-}
-
-data "tfe_github_app_installation" "github" {
-  name  = "alphagov"
-}
-
 resource "tfe_workspace" "tfc_bootstrap" {
   name              = "tfc-bootstrap"
   description       = "The tfc-bootsrap module is responsible for initialising teraform cloud."
   terraform_version = "1.4.5"
-  working_directory = "/terraform/deployments/tfc-configuration/"
-  trigger_patterns  = ["/terraform/deployments/tfc-configuration/**/*"]
+  working_directory = "/terraform/deployments/tfc-bootstrap/"
+  trigger_patterns  = ["/terraform/deployments/tfc-bootstrap/**/*"]
   execution_mode    = "local"
   vcs_repo {
     identifier                 = "alphagov/govuk-infrastructure"
