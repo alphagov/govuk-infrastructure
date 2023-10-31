@@ -18,6 +18,23 @@ resource "helm_release" "filebeat" {
       "filebeat.yml" = yamlencode(yamldecode(file("${path.module}/filebeat.yml")))
     }
     imageTag = "8.10.4" # TODO: Dependabot or equivalent so this doesn't get neglected.
+    clusterRoleRules = [
+      {
+        apiGroups = [""]
+        resources = ["namespaces", "nodes", "pods"]
+        verbs     = ["get", "list", "watch"]
+      },
+      {
+        apiGroups = ["apps"]
+        resources = ["replicasets"]
+        verbs     = ["get", "list", "watch"]
+      },
+      {
+        apiGroups = ["batch"]
+        resources = ["jobs"]
+        verbs     = ["get", "list", "watch"]
+      }
+    ]
     extraEnvs = [
       {
         name = "LOGSTASH_HOST"
