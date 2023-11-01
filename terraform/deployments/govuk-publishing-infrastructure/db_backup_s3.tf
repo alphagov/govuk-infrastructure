@@ -13,7 +13,7 @@ module "db_backup_iam_role" {
 
   role_name            = "${local.db_backup_service_account_name}-${data.terraform_remote_state.cluster_infrastructure.outputs.cluster_id}"
   role_description     = "Role for database backup jobs. Corresponds to ${local.db_backup_service_account_name} k8s ServiceAccount."
-  max_session_duration = 14400
+  max_session_duration = 28800
 
   role_policy_arns = { policy = aws_iam_policy.db_backup_s3.arn }
   oidc_providers = {
