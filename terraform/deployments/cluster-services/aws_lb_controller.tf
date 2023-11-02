@@ -14,7 +14,7 @@ resource "helm_release" "aws_lb_controller" {
   create_namespace = true
   values = [yamlencode({
     clusterName      = data.terraform_remote_state.cluster_infrastructure.outputs.cluster_id
-    defaultSSLPolicy = "ELBSecurityPolicy-TLS-1-2-Ext-2018-06" # No TLS 1.0 or 1.1.
+    defaultSSLPolicy = "ELBSecurityPolicy-TLS13-1-2-2021-06" # TLS 1.3, backward compatible with 1.2
     serviceAccount = {
       name = data.terraform_remote_state.cluster_infrastructure.outputs.aws_lb_controller_service_account_name
       annotations = {
