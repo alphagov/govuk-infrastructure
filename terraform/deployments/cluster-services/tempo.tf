@@ -13,40 +13,24 @@ module "tempo_iam_role" {
 
   role_name        = "${local.tempo_service_account}-${local.cluster_name}"
   role_description = "Role for Tempo to access AWS data sources. Corresponds to ${local.tempo_service_account} k8s ServiceAccount."
-  role_policy_arns = {
-    TempoPolicy = aws_iam_policy.tempo.arn
-  }
+  role_policy_arns = { TempoPolicy = aws_iam_policy.tempo.arn }
 
   cluster_service_accounts = {
     "${local.cluster_name}" = ["${local.monitoring_ns}:${local.tempo_service_account}"]
   }
 }
 
+data "aws_iam_policy_document" "tempo" {
+  statement {
+    actions   = ["s3:ListBucket", "s3:?*Object", "s3:?*ObjectTagging"]
+    resources = [aws_s3_bucket.tempo.arn, "${aws_s3_bucket.tempo.arn}/*"]
+  }
+}
+
 resource "aws_iam_policy" "tempo" {
   name        = "tempo-${local.cluster_name}"
   description = "Allows Tempo to access AWS data sources."
-
-  policy = jsonencode({
-    "Version" : "2012-10-17",
-    "Statement" : [
-      {
-        "Sid" : "TempoPermissions",
-        "Effect" : "Allow",
-        "Action" : [
-          "s3:PutObject",
-          "s3:GetObject",
-          "s3:ListBucket",
-          "s3:DeleteObject",
-          "s3:GetObjectTagging",
-          "s3:PutObjectTagging"
-        ],
-        "Resource" : [
-          "${aws_s3_bucket.tempo.arn}/*",
-          "${aws_s3_bucket.tempo.arn}"
-        ]
-      }
-    ]
-  })
+  policy      = data.aws_iam_policy_document.tempo.json
 }
 
 resource "helm_release" "tempo" {
@@ -55,7 +39,7 @@ resource "helm_release" "tempo" {
   name       = "tempo"
   namespace  = local.monitoring_ns
   repository = "https://grafana.github.io/helm-charts"
-  version    = "1.4.8" # TODO: Dependabot or equivalent so this doesn't get neglected.
+  version    = "1.7.0" # TODO: Dependabot or equivalent so this doesn't get neglected.
   values = [yamlencode({
     reportingEnabled = false
 
@@ -71,11 +55,7 @@ resource "helm_release" "tempo" {
       enabled = true
       config = {
         storage = {
-          remote_write = [
-            {
-              url = "${local.prometheus_internal_url}/api/v1/write"
-            }
-          ]
+          remote_write = [{ url = "${local.prometheus_internal_url}/api/v1/write" }]
         }
       }
     }
@@ -98,7 +78,6 @@ resource "helm_release" "tempo" {
       }
     }
 
-
     metaMonitoring = {
       serviceMonitor = {
         enabled   = true
@@ -108,12 +87,8 @@ resource "helm_release" "tempo" {
 
     traces = {
       otlp = {
-        grpc = {
-          enabled = true
-        }
-        http = {
-          enabled = true
-        }
+        grpc = { enabled = true }
+        http = { enabled = true }
       }
     }
 
