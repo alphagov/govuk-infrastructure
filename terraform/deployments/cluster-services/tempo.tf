@@ -39,7 +39,7 @@ resource "helm_release" "tempo" {
   name       = "tempo"
   namespace  = local.monitoring_ns
   repository = "https://grafana.github.io/helm-charts"
-  version    = "1.4.8" # TODO: Dependabot or equivalent so this doesn't get neglected.
+  version    = "1.7.0" # TODO: Dependabot or equivalent so this doesn't get neglected.
   values = [yamlencode({
     reportingEnabled = false
 
