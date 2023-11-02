@@ -14,6 +14,11 @@ alertmanager:
           severity: page
         receiver: 'pagerduty'
       - match:
+          alertname: Watchdog
+        receiver: 'pagerduty'
+        active_time_intervals:
+        - pagerduty_drill
+      - match:
           alertname: SignonApiUserTokenExpirySoon
         receiver: 'slack-signon-token-expiry'
         repeat_interval: 1d
@@ -71,3 +76,10 @@ alertmanager:
     - name: inhours
       time_intervals:
       - weekdays: ['monday:friday']
+    - name: pagerduty_drill
+      time_intervals:
+      - weekdays: ['wednesday']
+        times: 
+        - start_time: 10:00
+          end_time: 10:03
+        location: 'Europe/London'
