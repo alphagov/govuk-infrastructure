@@ -46,7 +46,8 @@ alertmanager:
         send_resolved: true
         icon_url: https://avatars3.githubusercontent.com/u/3380462
         title: |-
-         [{{ .Status | toUpper }}{{ if eq .Status "firing" }}:{{ .Alerts.Firing | len }}{{ end }}] {{ .CommonLabels.alertname }}
+         {{ if eq .CommonLabels.alertname "Watchdog" }}CRITICAL: 'PagerDuty test drill. Developers: escalate this alert. SMT: resolve this alert.'{{ end }}
+         {{ if not eq .CommonLabels.alertname "Watchdog" }}[{{ .Status | toUpper }}{{ if eq .Status "firing" }}:{{ .Alerts.Firing | len }}{{ end }}] {{ .CommonLabels.alertname }}{{ end }}
         text: >-
          *Description:* {{ .CommonAnnotations.description }}
 
