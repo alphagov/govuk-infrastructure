@@ -192,28 +192,6 @@ resource "aws_wafv2_web_acl" "cdn_poc_govuk" {
   }
 
   rule {
-    name     = "AWS-AWSManagedRulesAnonymousIpList"
-    priority = 0
-
-    override_action {
-      none {}
-    }
-
-    statement {
-      managed_rule_group_statement {
-        vendor_name = "AWS"
-        name        = "AWSManagedRulesAnonymousIpList"
-      }
-    }
-
-    visibility_config {
-      sampled_requests_enabled   = true
-      cloudwatch_metrics_enabled = true
-      metric_name                = "AWS-AWSManagedRulesAnonymousIpList"
-    }
-  }
-
-  rule {
     name     = "AWS-AWSManagedRulesAmazonIpReputationList"
     priority = 1
 
