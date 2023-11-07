@@ -147,27 +147,3 @@ resource "helm_release" "alertmanager_oauth2_proxy" {
     ])
   })]
 }
-
-resource "helm_release" "pushgateway" {
-  name             = "prometheus-pushgateway"
-  repository       = "https://prometheus-community.github.io/helm-charts"
-  chart            = "prometheus-pushgateway"
-  version          = "2.4.1" # TODO: Dependabot or equivalent so this doesn't get neglected.
-  namespace        = local.monitoring_ns
-  create_namespace = true
-  values = [
-    yamlencode({
-      resources = {
-        requests = {
-          cpu    = "50m"
-          memory = "256Mi"
-        }
-        limits = {
-          cpu    = "200m"
-          memory = "512Mi"
-        }
-      }
-      serviceMonitor = { enabled = true }
-    })
-  ]
-}
