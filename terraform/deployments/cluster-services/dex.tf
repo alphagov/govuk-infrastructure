@@ -175,7 +175,7 @@ resource "helm_release" "dex" {
         name = "ALERT_MANAGER_CLIENT_ID"
         valueFrom = {
           secretKeyRef = {
-            name = "govuk-dex-alert-manager"
+            name = "govuk-dex-alertmanager"
             key  = "clientID"
           }
         }
@@ -184,7 +184,7 @@ resource "helm_release" "dex" {
         name = "ALERT_MANAGER_CLIENT_SECRET"
         valueFrom = {
           secretKeyRef = {
-            name = "govuk-dex-alert-manager"
+            name = "govuk-dex-alertmanager"
             key  = "clientSecret"
           }
         }
