@@ -2,6 +2,11 @@
 
 locals {
   dex_host = "dex.${local.external_dns_zone_name}"
+  alertmanager_host         = "alertmanager.${local.external_dns_zone_name}"
+  grafana_host              = "grafana.${local.external_dns_zone_name}"
+  prometheus_host           = "prometheus.${local.external_dns_zone_name}"
+  prometheus_internal_url   = "http://kube-prometheus-stack-prometheus:9090"
+  alertmanager_internal_url = "http://kube-prometheus-stack-alertmanager:9093"
 }
 
 resource "helm_release" "dex" {
