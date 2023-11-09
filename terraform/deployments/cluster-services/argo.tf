@@ -10,6 +10,18 @@ locals {
       namespace = local.monitoring_ns
     }
   }
+  argo_environment_banner_background_colors = {
+    test        = "#5694ca"
+    integration = "#ffdd00"
+    staging     = "#f47738"
+    production  = "#d4351c"
+  }
+  argo_environment_banner_foreground_colors = {
+    test        = "#000000"
+    integration = "#000000"
+    staging     = "#000000"
+    production  = "#ffffff"
+  }
 }
 
 resource "kubernetes_namespace" "apps" {
@@ -63,6 +75,16 @@ resource "helm_release" "argo_cd" {
           g, ${var.github_read_write_team}, role:admin
           EOT
       }
+
+      # Adds some hacky custom CSS that inserts an environment banner into the ArgoCD UI to make it
+      # easier to differentiate between environments. May break if there are major changes to the
+      # ArgoCD UI.
+      styles = templatefile("${path.module}/templates/argo-custom-css.tpl", {
+        env_name             = title(var.govuk_environment)
+        env_abbreviation     = upper(substr(var.govuk_environment, 0, 1))
+        env_background_color = local.argo_environment_banner_background_colors[var.govuk_environment]
+        env_foreground_color = local.argo_environment_banner_foreground_colors[var.govuk_environment]
+      })
     }
 
     controller = { metrics = local.argo_metrics_config }
