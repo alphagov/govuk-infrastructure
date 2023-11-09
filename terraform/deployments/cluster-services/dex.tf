@@ -1,7 +1,7 @@
 # Installs and configures Dex, a federated OpenID Connect provider
 
 locals {
-  dex_host = "dex.${local.external_dns_zone_name}"
+  dex_host                  = "dex.${local.external_dns_zone_name}"
   alertmanager_host         = "alertmanager.${local.external_dns_zone_name}"
   grafana_host              = "grafana.${local.external_dns_zone_name}"
   prometheus_host           = "prometheus.${local.external_dns_zone_name}"
