@@ -397,7 +397,11 @@ resource "aws_cloudfront_distribution" "www_distribution" {
   }
 
   tags = {
-    govuk_environment = "${var.govuk_environment}"
+    Product     = "GOV.UK"
+    System      = "Cloudfront"
+    Environment = "${var.govuk_environment}"
+    Owner       = "reliability-engineering@digital.cabinet-office.gov.uk"
+    Name        = "govuk-${var.env}-${var.region}-eks-www"
   }
 }
 
@@ -456,6 +460,10 @@ resource "aws_cloudfront_distribution" "assets_distribution" {
   }
 
   tags = {
-    govuk_environment = "${var.govuk_environment}"
+    Product     = "GOV.UK"
+    System      = "Cloudfront"
+    Environment = "${var.govuk_environment}"
+    Owner       = "reliability-engineering@digital.cabinet-office.gov.uk"
+    Name        = "govuk-${var.env}-${var.region}-eks-assets"
   }
 }

@@ -18,6 +18,10 @@ provider "aws" {
   region = "eu-west-1"
   default_tags {
     tags = {
+      Product              = "GOV.UK"
+      System               = "Elastic Container Registry"
+      Environment          = "${var.govuk_environment}"
+      Owner                = "govuk-replatforming-team@digital.cabinet-office.gov.uk"
       project              = "replatforming"
       repository           = "govuk-infrastructure"
       terraform_deployment = basename(abspath(path.root))

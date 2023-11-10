@@ -28,3 +28,14 @@ variable "shared_redis_cluster_node_type" {
   type        = string
   description = "Instance type for the shared Redis cluster. t1 and t2 instances are not supported."
 }
+
+variable "env" {
+  type        = string
+  description = "Shorthand environment name acceptable values are test, intg, stag, prod"
+}
+
+variable "region" {
+  type        = string
+  description = "AWS region"
+  default     = "eu-west-2"
+}

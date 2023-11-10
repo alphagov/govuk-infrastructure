@@ -75,7 +75,11 @@ resource "aws_acm_certificate" "cluster_public" {
     create_before_destroy = true
   }
   tags = {
-    Name = local.external_dns_zone_name
+    Name        = local.external_dns_zone_name
+    Product     = "GOV.UK"
+    System      = "EKS"
+    Environment = "${var.govuk_environment}"
+    Owner       = "govuk-replatforming-team@digital.cabinet-office.gov.uk"
   }
 }
 

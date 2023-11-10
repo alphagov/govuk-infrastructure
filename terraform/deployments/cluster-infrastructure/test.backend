@@ -1,5 +1,8 @@
+govuk_environment = "test"
 bucket  = "govuk-terraform-test"
 key     = "projects/cluster-infrastructure.tfstate"
 encrypt = true
 region  = "eu-west-1"
+env     = "test"
 dynamodb_table = "terraform-lock"
+env = "test"

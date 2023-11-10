@@ -33,3 +33,6 @@ desired_ha_replicas         = 2
 rds_backup_retention_period = 1
 
 ckan_s3_organogram_bucket = "datagovuk-staging-ckan-organogram"
+
+env    = "stag"
+region = "eu-west-2"

@@ -3,3 +3,5 @@ key     = "projects/ecr.tfstate"
 encrypt = true
 region  = "eu-west-1"
 dynamodb_table = "terraform-lock"
+env = "test"
+env = "test"

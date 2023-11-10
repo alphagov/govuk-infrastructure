@@ -17,6 +17,11 @@ locals {
   services_ns   = data.terraform_remote_state.cluster_infrastructure.outputs.cluster_services_namespace
 
   default_tags = {
+    Product              = "DATA.GOV.UK"
+    System               = "DATA.GOV.UK"
+    Environment          = "${var.govuk_environment}"
+    Owner                = "govuk-replatforming-team@digital.cabinet-office.gov.uk"
+    Name                 = "data-${var.env}-${var.region}-data"
     project              = "replatforming"
     repository           = "govuk-infrastructure"
     terraform_deployment = basename(abspath(path.root))

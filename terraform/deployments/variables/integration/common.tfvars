@@ -44,3 +44,6 @@ argo_redis_ha       = false
 desired_ha_replicas = 1
 
 ckan_s3_organogram_bucket = "datagovuk-integration-ckan-organogram"
+
+env    = "intg"
+region = "eu-west-2"

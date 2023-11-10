@@ -3,3 +3,5 @@ key     = "projects/govuk-publishing-infrastructure.tfstate"
 encrypt = true
 region  = "eu-west-1"
 dynamodb_table = "terraform-lock"
+env = "test"
+env = "test"

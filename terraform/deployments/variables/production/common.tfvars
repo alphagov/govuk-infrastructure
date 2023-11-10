@@ -31,3 +31,6 @@ frontend_memcached_node_type   = "cache.r6g.large"
 shared_redis_cluster_node_type = "cache.r6g.xlarge"
 
 ckan_s3_organogram_bucket = "datagovuk-production-ckan-organogram"
+
+env    = "prod"
+region = "eu-west-2"

@@ -2,8 +2,11 @@ resource "aws_s3_bucket" "search_analytics" {
   bucket        = "govuk-search-analytics-${var.govuk_environment}"
   force_destroy = var.force_destroy
   tags = {
-    Name        = "Search analytics reports for ${var.govuk_environment}"
-    Environment = var.govuk_environment
+    Product     = "GOV.UK"
+    System      = "Search analytics"
+    Environment = "${var.govuk_environment}"
+    Owner       = "govuk-replatforming-team@digital.cabinet-office.gov.uk"
+    Name        = "govuk-${var.env}-${var.region}-search-analytics"
   }
 }
 

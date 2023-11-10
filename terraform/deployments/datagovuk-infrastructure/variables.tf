@@ -29,3 +29,14 @@ variable "govuk_environment" {
   type        = string
   description = "Acceptable values are test, integration, staging, production"
 }
+
+variable "env" {
+  type        = string
+  description = "Shorthand environment name acceptable values are test, intg, stag, prod"
+}
+
+variable "region" {
+  type        = string
+  description = "AWS region"
+  default     = "eu-west-2"
+}

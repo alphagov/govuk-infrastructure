@@ -2,8 +2,11 @@ resource "aws_s3_bucket" "location_api_import_csvs" {
   bucket        = "govuk-${var.govuk_environment}-locations-api-import-csvs"
   force_destroy = var.force_destroy
   tags = {
-    Name        = "CSVs used for importing postcode information into Locations API in ${var.govuk_environment}"
-    Environment = var.govuk_environment
+    Product     = "GOV.UK"
+    System      = "Locations api"
+    Environment = "${var.govuk_environment}"
+    Owner       = "govuk-replatforming-team@digital.cabinet-office.gov.uk"
+    Name        = "govuk-${var.env}-${var.region}-locations-api-import-csvs"
   }
 }
 

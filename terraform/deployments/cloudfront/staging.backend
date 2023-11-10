@@ -2,5 +2,5 @@ bucket  = "govuk-terraform-staging"
 key     = "projects/cdn"
 encrypt = true
 region  = "eu-west-1"
-
+env     = "stag"
 dynamodb_table = "terraform-lock"

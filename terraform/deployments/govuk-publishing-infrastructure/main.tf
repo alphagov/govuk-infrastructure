@@ -26,6 +26,10 @@ locals {
   elasticache_subnets  = data.terraform_remote_state.infra_networking.outputs.private_subnet_elasticache_ids
 
   default_tags = {
+    Product              = "GOV.UK"
+    Environment          = "${var.govuk_environment}"
+    Owner                = "govuk-replatforming-team@digital.cabinet-office.gov.uk"
+    Name                 = "govuk-${var.env}-${var.region}-publishing-infrastructure"
     project              = "replatforming"
     repository           = "govuk-infrastructure"
     terraform_deployment = basename(abspath(path.root))
