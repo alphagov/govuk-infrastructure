@@ -3,8 +3,8 @@ resource "helm_release" "argo_bootstrap" {
   name             = "datagovuk-argo-bootstrap"
   namespace        = local.services_ns
   create_namespace = true
-  repository       = "https://alphagov.github.io/govuk-dgu-charts/"
-  version          = "1.1.0" # TODO: Dependabot or equivalent so this doesn't get neglected.
+  repository       = "https://alphagov.github.io/govuk-ckan-charts/"
+  version          = "1.0.4" # TODO: Dependabot or equivalent so this doesn't get neglected.
   values = [yamlencode({
     environment = var.govuk_environment
   })]
