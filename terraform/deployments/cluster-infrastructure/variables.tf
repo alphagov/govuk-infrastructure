@@ -128,3 +128,8 @@ variable "secrets_recovery_window_in_days" {
   description = "Set to 0 in non-production environments to allow Terraform to delete and re-create secrets in AWS Secrets Manager."
   default     = 7
 }
+
+variable "govuk_environment" {
+  type        = string
+  description = "Acceptable values are test, integration, staging, production"
+}
