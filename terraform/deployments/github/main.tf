@@ -24,6 +24,10 @@ provider "aws" {
 
   default_tags {
     tags = {
+      Product              = "GOV.UK"
+      System               = "Github"
+      Service              = "Source code repository/CI pipeline"
+      Owner                = "govuk-replatforming-team@digital.cabinet-office.gov.uk"
       project              = "replatforming"
       repository           = "govuk-infrastructure"
       terraform_deployment = basename(abspath(path.root))
