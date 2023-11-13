@@ -1,16 +1,14 @@
 terraform {
   cloud {
     organization = "govuk"
-    workspaces {
-      name = "GitHub"
-    }
+    workspaces { name = "GitHub" }
   }
 
   required_version = "~> 1.5"
   required_providers {
     aws = {
       source  = "hashicorp/aws"
-      version = "~> 4.0"
+      version = "~> 5.0"
     }
     github = {
       source  = "integrations/github"
