@@ -9,6 +9,7 @@ resource "aws_codecommit_repository" "govuk_repos" {
 resource "aws_iam_role" "github_action_mirror_repos_role" {
   name = "github_action_mirror_repos_role"
 
+  max_session_duration = 10800
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
     Statement = [
