@@ -48,6 +48,11 @@ locals {
     "govuk-terraform",
     "search-api-learn-to-rank",
     "content-store-postgresql-branch",
+    "licensify/admin",
+    "licensify/backend",
+    "licensify/dummyservices",
+    "licensify/feed",
+    "licensify/frontend",
   ]
 }
 
