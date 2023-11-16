@@ -33,7 +33,7 @@ locals {
     project              = "replatforming"
     repository           = "govuk-infrastructure"
     terraform_deployment = basename(abspath(path.root))
-    
+
   }
 }
 
