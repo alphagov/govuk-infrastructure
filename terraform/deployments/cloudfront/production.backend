@@ -2,5 +2,5 @@ bucket  = "govuk-terraform-production"
 key     = "projects/cdn"
 encrypt = true
 region  = "eu-west-1"
-
+env     = "prod"
 dynamodb_table = "terraform-lock"
