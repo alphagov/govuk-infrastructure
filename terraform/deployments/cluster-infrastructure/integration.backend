@@ -2,4 +2,5 @@ bucket  = "govuk-terraform-integration"
 key     = "projects/cluster-infrastructure.tfstate"
 encrypt = true
 region  = "eu-west-1"
+env     = "intg"
 dynamodb_table = "terraform-lock"
