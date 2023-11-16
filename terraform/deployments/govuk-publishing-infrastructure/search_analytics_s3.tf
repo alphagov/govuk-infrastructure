@@ -7,7 +7,7 @@ resource "aws_s3_bucket" "search_analytics" {
     Service     = "Container hosting"
     Environment = "${var.govuk_environment}"
     Owner       = "govuk-replatforming-team@digital.cabinet-office.gov.uk"
-    Name        = "Search analytics reports for ${var.govuk_environment}"
+    Name        = "govuk-${var.env}-${var.region}-s3-search-analytics"
   }
 }
 

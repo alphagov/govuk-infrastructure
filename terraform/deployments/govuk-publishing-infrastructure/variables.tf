@@ -8,6 +8,16 @@ variable "cluster_infrastructure_state_bucket" {
   description = "Name of the S3 bucket for the cluster-infrastructure module's Terraform state. Must match the name of the bucket specified in the backend config file."
 }
 
+variable "env" {
+  type        = string
+  description = "GOV.UK environment abbreviation for use in naming"
+}
+
+variable "region" {
+  type        = string
+  description = "AWS region"
+}
+
 variable "govuk_environment" {
   type        = string
   description = "GOV.UK environment where resources are being deployed"

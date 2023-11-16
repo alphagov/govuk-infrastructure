@@ -399,6 +399,7 @@ resource "aws_cloudfront_distribution" "www_distribution" {
     Service     = "Content Delivery"
     Environment = "${var.govuk_environment}"
     Owner       = "reliability-engineering@digital.cabinet-office.gov.uk"
+    Name        = "govuk-${var.env}-${var.region}-eks-www"
   }
 }
 
@@ -462,5 +463,6 @@ resource "aws_cloudfront_distribution" "assets_distribution" {
     Service     = "Content Delivery"
     Environment = "${var.govuk_environment}"
     Owner       = "reliability-engineering@digital.cabinet-office.gov.uk"
+    Name        = "govuk-${var.env}-${var.region}-eks-assets"
   }
 }

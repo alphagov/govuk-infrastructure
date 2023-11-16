@@ -17,7 +17,7 @@ resource "aws_security_group" "frontend_memcached" {
     Service     = "Frontend Memcached Security Group"
     Environment = "${var.govuk_environment}"
     Owner       = "govuk-replatforming-team@digital.cabinet-office.gov.uk"
-    Name        = local.frontend_memcached_name
+    Name        = "govuk-${var.env}-${var.region}-memcache-frontend"
   }
 }
 
@@ -39,7 +39,7 @@ resource "aws_elasticache_cluster" "frontend_memcached" {
     Service     = "Frontend Memcached"
     Environment = "${var.govuk_environment}"
     Owner       = "govuk-replatforming-team@digital.cabinet-office.gov.uk"
-    Name        = local.frontend_memcached_name
+    Name        = "govuk-${var.env}-${var.region}-memcache-frontend"
   }
 }
 

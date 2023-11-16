@@ -29,9 +29,11 @@ locals {
     Product              = "GOV.UK"
     Environment          = "${var.govuk_environment}"
     Owner                = "govuk-replatforming-team@digital.cabinet-office.gov.uk"
+    Name                 = "govuk-${var.env}-${var.region}-s3"
     project              = "replatforming"
     repository           = "govuk-infrastructure"
     terraform_deployment = basename(abspath(path.root))
+    
   }
 }
 

@@ -24,6 +24,8 @@ eks_private_subnets = {
   c = { az = "eu-west-1c", cidr = "10.200.32.0/22" }
 }
 
+env               = "test"
+region            = "eu-west-1"
 govuk_environment = "test"
 force_destroy     = true
 

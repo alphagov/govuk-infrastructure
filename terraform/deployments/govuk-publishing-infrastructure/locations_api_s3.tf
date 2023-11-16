@@ -7,7 +7,7 @@ resource "aws_s3_bucket" "location_api_import_csvs" {
     Service     = "Locations api s3"
     Environment = "${var.govuk_environment}"
     Owner       = "govuk-replatforming-team@digital.cabinet-office.gov.uk"
-    Name        = "CSVs used for importing postcode information into Locations API in ${var.govuk_environment}"
+    Name        = "govuk-${var.env}-${var.region}-eks-public"
   }
 }
 

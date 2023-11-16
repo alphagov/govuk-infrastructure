@@ -22,6 +22,8 @@ eks_private_subnets = {
   c = { az = "eu-west-1c", cidr = "10.13.32.0/22" }
 }
 
+env               = "prod"
+region            = "eu-west-1"
 govuk_environment = "production"
 
 publishing_service_domain = "publishing.service.gov.uk"
