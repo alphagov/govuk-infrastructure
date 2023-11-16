@@ -35,7 +35,7 @@ resource "aws_elasticache_replication_group" "shared_redis_cluster" {
   subnet_group_name          = aws_elasticache_subnet_group.shared_redis_cluster.name
   security_group_ids         = [aws_security_group.shared_redis_cluster.id]
   tags = {
-    Name        = govuk-${var.env}-${var.region}-shared-redis
+    Name        = "govuk-${var.env}-${var.region}-shared-redis"
     Product     = "GOV.UK"
     System      = "Shared Redis"
     Service     = "Shared Redis Security Group"
