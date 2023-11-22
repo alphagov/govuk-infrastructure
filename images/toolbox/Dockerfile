@@ -9,14 +9,17 @@ ARG keyrings_dir=/usr/share/keyrings
 WORKDIR $keyrings_dir
 # hadolint ignore=DL3020
 ADD ${github_apt_repo}/githubcli-archive-keyring.gpg github.gpg
+ADD https://pgp.mongodb.com/server-7.0.pub mongodb.gpg
 # hadolint ignore=DL3008
 RUN apt-get update -qq ; \
     apt-get install -qy --no-install-recommends ca-certificates ; \
-    chmod 644 github.gpg ; \
+    chmod 644 github.gpg mongodb.gpg;  \
     echo "deb [arch=${TARGETARCH} signed-by=${keyrings_dir}/github.gpg] ${github_apt_repo} stable main" > /etc/apt/sources.list.d/github.list ; \
+    echo "deb [arch=${TARGETARCH} signed-by=${keyrings_dir}/mongodb.gpg] https://repo.mongodb.org/apt/ubuntu jammy/mongodb-org/7.0 multiverse" > /etc/apt/sources.list.d/mongodb.list ; \
     apt-get update -qq ; \
     apt-get install -qy --no-install-recommends \
-        curl file gh git jq libarchive-tools mysql-client postgresql-client pv wget2 gettext ; \
+        curl file gh git jq libarchive-tools mysql-client postgresql-client \
+        pv wget2 gettext mongodb-mongosh mongodb-database-tools ; \
     rm -fr /var/lib/apt/lists/*
 
 ARG yq_package_url=https://github.com/mikefarah/yq/releases/latest/download
@@ -44,6 +47,8 @@ USER user
 RUN aws --version ; \
     gh --version ; \
     jq --version ; \
+    mongosh --version ; \
+    mongodump --version ; \
     mysql --version ; \
     psql --version ; \
     yq --version
