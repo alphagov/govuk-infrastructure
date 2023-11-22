@@ -54,3 +54,56 @@ module "cluster-infrastructure-integration" {
   ]
 
 }
+module "cluster-infrastructure-staging" {
+  source  = "alexbasista/workspacer/tfe"
+  version = "0.9.0"
+
+  organization      = var.organization
+  workspace_name    = "cluster-infrastructure-staging"
+  workspace_desc    = "The cluster-infrastructure module is responsible for the AWS resources which constitute the EKS cluster."
+  workspace_tags    = ["staging", "cluster-infrastructure", "eks", "aws"]
+  terraform_version = "1.5.2"
+  execution_mode    = "remote" #TODO: Change to remote after state import
+  working_directory = "/terraform/deployments/cluster-infrastructure/"
+  trigger_patterns  = ["/terraform/deployments/cluster-infrastructure/**/*"]
+
+  project_name = "govuk-infrastructure"
+
+  vcs_repo = {
+    identifier     = "alphagov/govuk-infrastructure"
+    branch         = "marc/cluster-infra-int-state" #TODO: Change to main/remove after #1015
+    oauth_token_id = data.tfe_oauth_client.github.oauth_token_id
+  }
+
+  tfvars = {
+    govuk_aws_state_bucket        = "govuk-terraform-steppingstone-staging"
+    cluster_version               = 1.27
+    cluster_log_retention_in_days = 7
+    eks_control_plane_subnets = {
+      a = { az = "eu-west-1a", cidr = "10.12.19.0/28" }
+      b = { az = "eu-west-1b", cidr = "10.12.19.16/28" }
+      c = { az = "eu-west-1c", cidr = "10.12.19.32/28" }
+    }
+
+    eks_public_subnets = {
+      a = { az = "eu-west-1a", cidr = "10.12.20.0/24" }
+      b = { az = "eu-west-1b", cidr = "10.12.21.0/24" }
+      c = { az = "eu-west-1c", cidr = "10.12.22.0/24" }
+    }
+
+    eks_private_subnets = {
+      a = { az = "eu-west-1a", cidr = "10.12.24.0/22" }
+      b = { az = "eu-west-1b", cidr = "10.12.28.0/22" }
+      c = { az = "eu-west-1c", cidr = "10.12.32.0/22" }
+    }
+    publishing_service_domain       = "staging.publishing.service.gov.uk"
+    rds_backup_retention_period     = 1
+  }
+
+  # Variable Sets must already exist
+  variable_set_names = [
+    # "cluster-infrastructure-staging",
+    "aws-credentials-staging"
+  ]
+
+}
