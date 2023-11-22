@@ -38,6 +38,8 @@ RUN curl -Ssf "https://awscli.amazonaws.com/awscli-exe-linux-$(uname -m).zip" \
     chmod +x "${awscli_install_dir}/aws/dist/aws"
 ENV PATH=$PATH:$awscli_install_dir/aws/dist
 
+COPY --from=peakcom/s5cmd:v2.2.2 s5cmd /bin/s5cmd
+
 RUN groupadd -g 1001 user ; \
     useradd -mu 1001 -g user user
 WORKDIR /home/user
@@ -47,10 +49,11 @@ USER user
 RUN aws --version ; \
     gh --version ; \
     jq --version ; \
-    mongosh --version ; \
+    echo -n "mongosh "; mongosh --version ; \
     mongodump --version ; \
     mysql --version ; \
     psql --version ; \
+    echo -n "s5cmd "; s5cmd version ; \
     yq --version
 
 CMD ["/bin/bash"]
