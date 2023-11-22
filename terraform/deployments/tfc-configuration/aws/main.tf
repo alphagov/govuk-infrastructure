@@ -46,6 +46,8 @@ resource "aws_iam_policy" "tfc_policy" {
         "Effect" : "Allow",
         "Resource" : "*",
         "Action" : [
+          "acm:*",
+          "apigateway:*",
           "autoscaling:*",
           "cloudfront:*",
           "cloudwatch:*",
@@ -54,15 +56,18 @@ resource "aws_iam_policy" "tfc_policy" {
           "eks:*",
           "elasticache:*",
           "elasticloadbalancing:*",
+          "elasticfilesystem:*",
           "es:*",
           "events:*",
           "iam:*",
           "kms:*",
+          "lambda:*",
           "logs:*",
           "mq:*",
           "rds:*",
           "route53:*",
           "s3:*",
+          "secretsmanager:*",
           "sns:*",
           "sqs:*",
           "wafv2:*"
@@ -83,10 +88,8 @@ resource "aws_iam_policy" "tfc_policy" {
           "iam:*Login*",
           "iam:*Group*",
           "iam:*PermissionsBoundary*",
-          "iam:*Provider*",
           "iam:*User*",
-          "iam:CreateServiceLinkedRole",
-          "iam:PassRole"
+          "iam:CreateServiceLinkedRole"
         ]
       }
     ]
