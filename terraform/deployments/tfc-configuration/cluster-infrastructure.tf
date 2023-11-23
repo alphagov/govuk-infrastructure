@@ -7,7 +7,7 @@ module "cluster-infrastructure-integration" {
   workspace_desc    = "The cluster-infrastructure module is responsible for the AWS resources which constitute the EKS cluster."
   workspace_tags    = ["integration", "cluster-infrastructure", "eks", "aws"]
   terraform_version = "1.5.2"
-  execution_mode    = "remote" #TODO: Change to remote after state import
+  execution_mode    = "remote"
   working_directory = "/terraform/deployments/cluster-infrastructure/"
   trigger_patterns  = ["/terraform/deployments/cluster-infrastructure/**/*"]
 
@@ -15,7 +15,7 @@ module "cluster-infrastructure-integration" {
 
   vcs_repo = {
     identifier     = "alphagov/govuk-infrastructure"
-    branch         = "marc/cluster-infra-int-state" #TODO: Change to main/remove after #1015
+    branch         = "main"
     oauth_token_id = data.tfe_oauth_client.github.oauth_token_id
   }
 
@@ -49,7 +49,6 @@ module "cluster-infrastructure-integration" {
 
   # Variable Sets must already exist
   variable_set_names = [
-    # "cluster-infrastructure-integration",
     "aws-credentials-integration"
   ]
 
@@ -63,7 +62,7 @@ module "cluster-infrastructure-staging" {
   workspace_desc    = "The cluster-infrastructure module is responsible for the AWS resources which constitute the EKS cluster."
   workspace_tags    = ["staging", "cluster-infrastructure", "eks", "aws"]
   terraform_version = "1.5.2"
-  execution_mode    = "remote" #TODO: Change to remote after state import
+  execution_mode    = "remote"
   working_directory = "/terraform/deployments/cluster-infrastructure/"
   trigger_patterns  = ["/terraform/deployments/cluster-infrastructure/**/*"]
 
@@ -71,7 +70,7 @@ module "cluster-infrastructure-staging" {
 
   vcs_repo = {
     identifier     = "alphagov/govuk-infrastructure"
-    branch         = "marc/cluster-infra-int-state" #TODO: Change to main/remove after #1015
+    branch         = "main"
     oauth_token_id = data.tfe_oauth_client.github.oauth_token_id
   }
 
@@ -102,7 +101,6 @@ module "cluster-infrastructure-staging" {
 
   # Variable Sets must already exist
   variable_set_names = [
-    # "cluster-infrastructure-staging",
     "aws-credentials-staging"
   ]
 
@@ -124,7 +122,7 @@ module "cluster-infrastructure-production" {
 
   vcs_repo = {
     identifier     = "alphagov/govuk-infrastructure"
-    branch         = "marc/cluster-infra-int-state" #TODO: Change to main/remove after #1015
+    branch         = "main"
     oauth_token_id = data.tfe_oauth_client.github.oauth_token_id
   }
 
