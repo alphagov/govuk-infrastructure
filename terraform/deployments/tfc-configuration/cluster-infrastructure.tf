@@ -12,11 +12,15 @@ module "cluster-infrastructure-integration" {
   trigger_patterns  = ["/terraform/deployments/cluster-infrastructure/**/*"]
 
   project_name = "govuk-infrastructure"
-
   vcs_repo = {
     identifier     = "alphagov/govuk-infrastructure"
     branch         = "main"
     oauth_token_id = data.tfe_oauth_client.github.oauth_token_id
+  }
+
+  team_access = {
+    "GOV.UK Non-Production" = "write",
+    "GOV.UK Production"     = "write"
   }
 
   tfvars = {
@@ -74,6 +78,11 @@ module "cluster-infrastructure-staging" {
     oauth_token_id = data.tfe_oauth_client.github.oauth_token_id
   }
 
+  team_access = {
+    "GOV.UK Non-Production" = "write",
+    "GOV.UK Production"     = "write"
+  }
+
   tfvars = {
     govuk_aws_state_bucket        = "govuk-terraform-steppingstone-staging"
     cluster_version               = 1.27
@@ -124,6 +133,9 @@ module "cluster-infrastructure-production" {
     identifier     = "alphagov/govuk-infrastructure"
     branch         = "main"
     oauth_token_id = data.tfe_oauth_client.github.oauth_token_id
+  }
+  team_access = {
+    "GOV.UK Production" = "write"
   }
 
   tfvars = {
