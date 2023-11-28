@@ -27,7 +27,7 @@ govuk_environment = "staging"
 publishing_service_domain = "staging.publishing.service.gov.uk"
 
 frontend_memcached_node_type   = "cache.t4g.medium"
-shared_redis_cluster_node_type = "cache.t4g.medium"
+shared_redis_cluster_node_type = "cache.m6g.large"
 
 desired_ha_replicas         = 2
 rds_backup_retention_period = 1
