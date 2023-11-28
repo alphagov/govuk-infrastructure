@@ -43,23 +43,23 @@ variable "workspace_desc" {
   default     = "Created by Terraform Workspacer module."
 }
 
-variable "agent_pool_id" {
-  type        = string
-  description = "ID of existing Agent Pool to assign to Workspace. Only use if `execution_mode` is set to `agent`."
-  default     = null
-}
+# variable "agent_pool_id" {
+#   type        = string
+#   description = "ID of existing Agent Pool to assign to Workspace. Only use if `execution_mode` is set to `agent`."
+#   default     = null
+# }
 
-variable "allow_destroy_plan" {
-  type        = bool
-  description = "Boolean setting to allow destroy plans on Workspace."
-  default     = true
-}
+# variable "allow_destroy_plan" {
+#   type        = bool
+#   description = "Boolean setting to allow destroy plans on Workspace."
+#   default     = true
+# }
 
-variable "auto_apply" {
-  type        = bool
-  description = "Boolean to automatically run Terraform Apply when a Terraform Plan with changes is successful."
-  default     = false
-}
+# variable "auto_apply" {
+#   type        = bool
+#   description = "Boolean to automatically run Terraform Apply when a Terraform Plan with changes is successful."
+#   default     = false
+# }
 
 variable "execution_mode" {
   type        = string
@@ -72,29 +72,29 @@ variable "execution_mode" {
   }
 }
 
-variable "assessments_enabled" {
-  type        = bool
-  description = "Boolean to enable Health Assessments such as Drift Detection on Workspace."
-  default     = false
-}
+# variable "assessments_enabled" {
+#   type        = bool
+#   description = "Boolean to enable Health Assessments such as Drift Detection on Workspace."
+#   default     = false
+# }
 
-variable "file_triggers_enabled" {
-  type        = bool
-  description = "Boolean to filter Runs triggered via webhook (VCS push) based on `working_directory` and `trigger_prefixes`."
-  default     = true
-}
+# variable "file_triggers_enabled" {
+#   type        = bool
+#   description = "Boolean to filter Runs triggered via webhook (VCS push) based on `working_directory` and `trigger_prefixes`."
+#   default     = true
+# }
 
-variable "global_remote_state" {
-  type        = bool
-  description = "Boolean to allow all Workspaces within the Organization to remotely access the State of this Workspace."
-  default     = false
-}
+# variable "global_remote_state" {
+#   type        = bool
+#   description = "Boolean to allow all Workspaces within the Organization to remotely access the State of this Workspace."
+#   default     = false
+# }
 
-variable "remote_state_consumer_ids" {
-  type        = list(string)
-  description = "List of existing Workspace IDs allowed to remotely access the State of Workspace."
-  default     = null
-}
+# variable "remote_state_consumer_ids" {
+#   type        = list(string)
+#   description = "List of existing Workspace IDs allowed to remotely access the State of Workspace."
+#   default     = null
+# }
 
 variable "queue_all_runs" {
   type        = bool
@@ -102,23 +102,23 @@ variable "queue_all_runs" {
   default     = true
 }
 
-variable "speculative_enabled" {
-  type        = bool
-  description = "Boolean to allow Speculative Plans on Workspace."
-  default     = true
-}
+# variable "speculative_enabled" {
+#   type        = bool
+#   description = "Boolean to allow Speculative Plans on Workspace."
+#   default     = true
+# }
 
-variable "structured_run_output_enabled" {
-  type        = bool
-  description = "Boolean to enable the advanced Run UI. Set to `false` for the traditional console-based Run output."
-  default     = true
-}
+# variable "structured_run_output_enabled" {
+#   type        = bool
+#   description = "Boolean to enable the advanced Run UI. Set to `false` for the traditional console-based Run output."
+#   default     = true
+# }
 
-variable "ssh_key_id" {
-  type        = string
-  description = "SSH private key the Workspace will use for downloading Terraform modules from Git-based module sources. Key must exist in Organization first."
-  default     = null
-}
+# variable "ssh_key_id" {
+#   type        = string
+#   description = "SSH private key the Workspace will use for downloading Terraform modules from Git-based module sources. Key must exist in Organization first."
+#   default     = null
+# }
 
 variable "workspace_tags" {
   type        = list(string)
@@ -132,11 +132,11 @@ variable "terraform_version" {
   default     = null
 }
 
-variable "trigger_prefixes" {
-  type        = list(string)
-  description = "List of paths relative to the root of the VCS repo to filter on when `file_triggers_enabled` is `true`."
-  default     = null
-}
+# variable "trigger_prefixes" {
+#   type        = list(string)
+#   description = "List of paths relative to the root of the VCS repo to filter on when `file_triggers_enabled` is `true`."
+#   default     = null
+# }
 
 variable "trigger_patterns" {
   type        = list(string)
@@ -156,17 +156,17 @@ variable "vcs_repo" {
   default     = {}
 }
 
-variable "tags_regex" {
-  type        = string
-  description = "A regular expression used to trigger a Run in Workspace for matching Git tags. This option conflicts with `trigger_patterns` and `trigger_prefixes`. Should only set this value if the former is not being used."
-  default     = null
-}
+# variable "tags_regex" {
+#   type        = string
+#   description = "A regular expression used to trigger a Run in Workspace for matching Git tags. This option conflicts with `trigger_patterns` and `trigger_prefixes`. Should only set this value if the former is not being used."
+#   default     = null
+# }
 
-variable "force_delete" {
-  type        = bool
-  description = "Boolean to allow deletion of the Workspace if there is a Terraform state that contains resources."
-  default     = null
-}
+# variable "force_delete" {
+#   type        = bool
+#   description = "Boolean to allow deletion of the Workspace if there is a Terraform state that contains resources."
+#   default     = null
+# }
 
 variable "project_name" {
   type        = string
@@ -183,44 +183,44 @@ variable "tfvars" {
   default     = {}
 }
 
-variable "tfvars_sensitive" {
-  type        = any
-  description = "Map of sensitive Terraform variables to add to Workspace."
-  default     = {}
-}
+# variable "tfvars_sensitive" {
+#   type        = any
+#   description = "Map of sensitive Terraform variables to add to Workspace."
+#   default     = {}
+# }
 
-variable "tfvars_ignore_changes" {
-  type        = any
-  description = "Map of Terraform variables to add to Workspace whereby changes made outside of Terraform will be ignored."
-  default     = {}
-}
+# variable "tfvars_ignore_changes" {
+#   type        = any
+#   description = "Map of Terraform variables to add to Workspace whereby changes made outside of Terraform will be ignored."
+#   default     = {}
+# }
 
-variable "envvars" {
-  type        = map(string)
-  description = "Map of Environment variables to add to Workspace."
-  default     = {}
-}
+# variable "envvars" {
+#   type        = map(string)
+#   description = "Map of Environment variables to add to Workspace."
+#   default     = {}
+# }
 
-variable "envvars_sensitive" {
-  type        = map(string)
-  description = "Map of sensitive Environment variables to add to Workspace."
-  default     = {}
-}
+# variable "envvars_sensitive" {
+#   type        = map(string)
+#   description = "Map of sensitive Environment variables to add to Workspace."
+#   default     = {}
+# }
 
-variable "envvars_ignore_changes" {
-  type        = map(string)
-  description = "Map of sensitive Environment variables to add to Workspace whereby changes made outside of Terraform will be ignored."
-  default     = {}
-}
+# variable "envvars_ignore_changes" {
+#   type        = map(string)
+#   description = "Map of sensitive Environment variables to add to Workspace whereby changes made outside of Terraform will be ignored."
+#   default     = {}
+# }
 
 # #------------------------------------------------------------------------------
 # # Team Access
 # #------------------------------------------------------------------------------
-# variable "team_access" {
-#   type        = map(string)
-#   description = "Map of existing Team(s) and built-in permissions to grant on Workspace."
-#   default     = {}
-# }
+variable "team_access" {
+  type        = map(string)
+  description = "Map of existing Team(s) and built-in permissions to grant on Workspace."
+  default     = {}
+}
 
 # variable "custom_team_access" {
 #   type = map(
@@ -273,11 +273,11 @@ variable "envvars_ignore_changes" {
 # #------------------------------------------------------------------------------
 # # Workspace Variable Sets
 # #------------------------------------------------------------------------------
-# variable "variable_set_names" {
-#   type        = list(string)
-#   description = "List of names of existing Variable Sets to add this Workspace into."
-#   default     = []
-# }
+variable "variable_set_names" {
+  type        = list(string)
+  description = "List of names of existing Variable Sets to add this Workspace into."
+  default     = []
+}
 
 # #------------------------------------------------------------------------------
 # # Workspace Policy Sets
