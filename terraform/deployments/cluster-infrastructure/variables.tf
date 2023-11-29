@@ -138,20 +138,14 @@ variable "secrets_recovery_window_in_days" {
 variable "govuk_environment" {
   type        = string
   description = "Acceptable values are test, integration, staging, production"
-
-  default = ""
 }
 
 variable "env" {
   type        = string
   description = "Acceptable values are test, intg, stag, prod"
-  default     = ""
 }
 
 variable "region" {
   type        = string
   description = "AWS region"
-  default     = "eu-west-2"
-
-
 }
