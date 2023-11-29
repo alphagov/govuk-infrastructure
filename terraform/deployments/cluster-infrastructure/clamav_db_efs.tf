@@ -4,7 +4,13 @@ locals {
 
 resource "aws_efs_file_system" "clamav-db" {
   creation_token = local.clamav_db_name
-  tags           = { "Description" = "EFS where Clamav virus signature database is stored" }
+  tags = {
+    Product     = "GOV.UK"
+    System      = "Clamav Database"
+    Environment = "${var.govuk_environment}"
+    Owner       = "govuk-replatforming-team@digital.cabinet-office.gov.uk"
+    Description = "EFS where Clamav virus signature database is stored"
+  }
 }
 
 resource "aws_security_group" "clamav-db" {

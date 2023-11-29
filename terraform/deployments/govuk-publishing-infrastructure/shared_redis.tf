@@ -11,7 +11,13 @@ resource "aws_security_group" "shared_redis_cluster" {
   name        = local.shared_redis_name
   vpc_id      = local.vpc_id
   description = "${local.shared_redis_name} Redis cluster"
-  tags        = { Name = local.shared_redis_name }
+  tags = {
+    Name        = local.shared_redis_name
+    Product     = "GOV.UK"
+    System      = "Shared Redis"
+    Environment = "${var.govuk_environment}"
+    Owner       = "govuk-replatforming-team@digital.cabinet-office.gov.uk"
+  }
 }
 
 resource "aws_elasticache_replication_group" "shared_redis_cluster" {
@@ -26,7 +32,13 @@ resource "aws_elasticache_replication_group" "shared_redis_cluster" {
   engine_version             = "6.x"
   subnet_group_name          = aws_elasticache_subnet_group.shared_redis_cluster.name
   security_group_ids         = [aws_security_group.shared_redis_cluster.id]
-  tags                       = { Name = local.shared_redis_name }
+  tags = {
+    Name        = local.shared_redis_name
+    Product     = "GOV.UK"
+    System      = "Shared Redis"
+    Environment = "${var.govuk_environment}"
+    Owner       = "govuk-replatforming-team@digital.cabinet-office.gov.uk"
+  }
 }
 
 resource "aws_route53_record" "shared_redis_cluster" {

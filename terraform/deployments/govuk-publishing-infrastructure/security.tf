@@ -170,7 +170,11 @@ resource "aws_security_group" "eks_ingress_www_origin" {
   vpc_id      = data.terraform_remote_state.infra_vpc.outputs.vpc_id
   description = "ALBs serving EKS www-origin ingress (and signon ALBs in non-prod environments)."
   tags = {
-    Name = "eks_ingress_www_origin"
+    Product     = "GOV.UK"
+    System      = "EKS Ingress"
+    Environment = "${var.govuk_environment}"
+    Owner       = "govuk-replatforming-team@digital.cabinet-office.gov.uk"
+    Name        = "eks_ingress_www_origin"
   }
 }
 
