@@ -3,5 +3,8 @@ bucket  = "govuk-terraform-staging"
 key     = "projects/cluster-infrastructure.tfstate"
 encrypt = true
 region  = "eu-west-1"
+<<<<<<< HEAD
 env     = "stag"
+=======
+>>>>>>> main
 dynamodb_table = "terraform-lock"
