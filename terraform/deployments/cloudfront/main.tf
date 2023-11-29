@@ -349,7 +349,7 @@ resource "aws_cloudfront_distribution" "www_distribution" {
   }
 
   ordered_cache_behavior {
-    path_pattern           = "/alerts"
+    path_pattern = "/alerts"
 
 
     target_origin_id       = var.origin_notify_id
@@ -359,7 +359,7 @@ resource "aws_cloudfront_distribution" "www_distribution" {
   }
 
   ordered_cache_behavior {
-    path_pattern           = "/alerts/*"
+    path_pattern = "/alerts/*"
 
 
     target_origin_id       = var.origin_notify_id
@@ -402,7 +402,7 @@ resource "aws_cloudfront_distribution" "www_distribution" {
     Environment = "${var.govuk_environment}"
     Owner       = "reliability-engineering@digital.cabinet-office.gov.uk"
 
-    Name        = "govuk-${var.env}-${var.region}-eks-www"
+    Name = "govuk-${var.env}-${var.region}-eks-www"
 
 
   }
@@ -468,7 +468,7 @@ resource "aws_cloudfront_distribution" "assets_distribution" {
     Environment = "${var.govuk_environment}"
     Owner       = "reliability-engineering@digital.cabinet-office.gov.uk"
 
-    Name        = "govuk-${var.env}-${var.region}-eks-assets"
+    Name = "govuk-${var.env}-${var.region}-eks-assets"
 
 
   }

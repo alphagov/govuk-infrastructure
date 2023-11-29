@@ -175,9 +175,9 @@ resource "aws_security_group" "eks_ingress_www_origin" {
     Environment = "${var.govuk_environment}"
     Owner       = "govuk-replatforming-team@digital.cabinet-office.gov.uk"
 
-    Name        = "govuk-${var.env}-${var.region}-eks-ingress"
+    Name = "govuk-${var.env}-${var.region}-eks-ingress"
 
-    Name        = "eks_ingress_www_origin"
+    Name = "eks_ingress_www_origin"
 
   }
 }

@@ -26,9 +26,9 @@ resource "aws_sns_topic" "ecr_scan_topic" {
     Environment = "${var.govuk_environment}"
     Owner       = "govuk-replatforming-team@digital.cabinet-office.gov.uk"
 
-    Name        = "govuk-${var.env}-${var.region}-ecr-scan-topic"
+    Name = "govuk-${var.env}-${var.region}-ecr-scan-topic"
 
-    Name        = "ECR-Scan"
+    Name = "ECR-Scan"
 
   }
 }

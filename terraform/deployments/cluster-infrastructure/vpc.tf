@@ -35,9 +35,9 @@ resource "aws_subnet" "eks_control_plane" {
     Environment = "${var.govuk_environment}"
     Owner       = "govuk-replatforming-team@digital.cabinet-office.gov.uk"
 
-    Name        = "govuk-${var.env}-${var.region}-eks-control-plane"
+    Name = "govuk-${var.env}-${var.region}-eks-control-plane"
 
-    Name        = "${var.cluster_name}-eks-control-plane-${each.key}"
+    Name = "${var.cluster_name}-eks-control-plane-${each.key}"
 
   }
 }
@@ -51,9 +51,9 @@ resource "aws_route_table" "eks_control_plane" {
     Environment = "${var.govuk_environment}"
     Owner       = "govuk-replatforming-team@digital.cabinet-office.gov.uk"
 
-    Name        = "govuk-${var.env}-${var.region}-eks-control-plane"
+    Name = "govuk-${var.env}-${var.region}-eks-control-plane"
 
-    Name        = "${var.cluster_name}-eks-control-plane-${each.key}"
+    Name = "${var.cluster_name}-eks-control-plane-${each.key}"
 
   }
 }
@@ -91,9 +91,9 @@ resource "aws_subnet" "eks_public" {
     Environment = "${var.govuk_environment}"
     Owner       = "govuk-replatforming-team@digital.cabinet-office.gov.uk"
 
-    Name        = "govuk-${var.env}-${var.region}-eks-public"
+    Name = "govuk-${var.env}-${var.region}-eks-public"
 
-    Name        = "${var.cluster_name}-eks-public-${each.key}"
+    Name = "${var.cluster_name}-eks-public-${each.key}"
 
     # https://docs.aws.amazon.com/eks/latest/userguide/alb-ingress.html
     "kubernetes.io/cluster/${var.cluster_name}" = "owned"
@@ -110,9 +110,9 @@ resource "aws_route_table" "eks_public" {
     Environment = "${var.govuk_environment}"
     Owner       = "govuk-replatforming-team@digital.cabinet-office.gov.uk"
 
-    Name        = "govuk-${var.env}-${var.region}-eks-public"
+    Name = "govuk-${var.env}-${var.region}-eks-public"
 
-    Name        = "${var.cluster_name}-eks-public"
+    Name = "${var.cluster_name}-eks-public"
 
   }
 }
@@ -141,9 +141,9 @@ resource "aws_eip" "eks_nat" {
     Environment = "${var.govuk_environment}"
     Owner       = "govuk-replatforming-team@digital.cabinet-office.gov.uk"
 
-    Name        = "govuk-${var.env}-${var.region}-eks-public-nat"
+    Name = "govuk-${var.env}-${var.region}-eks-public-nat"
 
-    Name        = "${var.cluster_name}-eks-nat-${each.key}"
+    Name = "${var.cluster_name}-eks-nat-${each.key}"
 
   }
   # TODO: depends_on = [aws_internet_gateway.gw] once we've imported the IGW from govuk-aws.
@@ -159,10 +159,10 @@ resource "aws_nat_gateway" "eks" {
     Environment = "${var.govuk_environment}"
     Owner       = "govuk-replatforming-team@digital.cabinet-office.gov.uk"
 
-    Name        = "${var.cluster_name}-eks"
-    Name        = "govuk-${var.env}-${var.region}-eks-public-nat"
+    Name = "${var.cluster_name}-eks"
+    Name = "govuk-${var.env}-${var.region}-eks-public-nat"
 
-    Name        = "${var.cluster_name}-eks-${each.key}"
+    Name = "${var.cluster_name}-eks-${each.key}"
 
   }
   # TODO: depends_on = [aws_internet_gateway.gw] once we've imported the IGW from govuk-aws.
@@ -183,9 +183,9 @@ resource "aws_subnet" "eks_private" {
     Environment = "${var.govuk_environment}"
     Owner       = "govuk-replatforming-team@digital.cabinet-office.gov.uk"
 
-    Name        = "govuk-${var.env}-${var.region}-eks-priv"
+    Name = "govuk-${var.env}-${var.region}-eks-priv"
 
-    Name        = "${var.cluster_name}-eks-private-${each.key}"
+    Name = "${var.cluster_name}-eks-private-${each.key}"
 
     # https://docs.aws.amazon.com/eks/latest/userguide/alb-ingress.html
     "kubernetes.io/cluster/${var.cluster_name}" = "owned"
@@ -202,9 +202,9 @@ resource "aws_route_table" "eks_private" {
     Environment = "${var.govuk_environment}"
     Owner       = "govuk-replatforming-team@digital.cabinet-office.gov.uk"
 
-    Name        = "govuk-${var.env}-${var.region}-eks-priv"
+    Name = "govuk-${var.env}-${var.region}-eks-priv"
 
-    Name        = "${var.cluster_name}-eks-private-${each.key}"
+    Name = "${var.cluster_name}-eks-private-${each.key}"
 
   }
 }

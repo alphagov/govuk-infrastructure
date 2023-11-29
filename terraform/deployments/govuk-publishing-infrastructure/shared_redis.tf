@@ -14,14 +14,14 @@ resource "aws_security_group" "shared_redis_cluster" {
   tags = {
 
 
-    Name        = local.shared_redis_name
+    Name = local.shared_redis_name
 
     Product     = "GOV.UK"
     System      = "Shared Redis"
     Environment = "${var.govuk_environment}"
     Owner       = "govuk-replatforming-team@digital.cabinet-office.gov.uk"
 
-    Name        = "govuk-${var.env}-${var.region}-shared-redis"
+    Name = "govuk-${var.env}-${var.region}-shared-redis"
 
 
   }
@@ -42,14 +42,14 @@ resource "aws_elasticache_replication_group" "shared_redis_cluster" {
   tags = {
 
 
-    Name        = local.shared_redis_name
+    Name = local.shared_redis_name
 
     Product     = "GOV.UK"
     System      = "Shared Redis"
     Environment = "${var.govuk_environment}"
     Owner       = "govuk-replatforming-team@digital.cabinet-office.gov.uk"
 
-    Name        = "govuk-${var.env}-${var.region}-shared-redis"
+    Name = "govuk-${var.env}-${var.region}-shared-redis"
 
 
   }
