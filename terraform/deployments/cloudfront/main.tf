@@ -335,8 +335,8 @@ resource "aws_cloudfront_distribution" "www_distribution" {
   }
 
   default_cache_behavior {
-
-
+    allowed_methods          = ["GET", "HEAD", "OPTIONS", "PUT", "POST", "PATCH", "DELETE"]
+    cached_methods           = ["GET", "HEAD"]
     target_origin_id         = var.origin_www_id
     compress                 = "true"
     cache_policy_id          = aws_cloudfront_cache_policy.no-cookies.id
@@ -350,8 +350,8 @@ resource "aws_cloudfront_distribution" "www_distribution" {
 
   ordered_cache_behavior {
     path_pattern = "/alerts"
-
-
+    allowed_methods        = ["GET", "HEAD"]
+    cached_methods         = ["GET", "HEAD"]
     target_origin_id       = var.origin_notify_id
     compress               = "false"
     cache_policy_id        = "4135ea2d-6df8-44a3-9df3-4b5a84be39ad"
@@ -360,8 +360,8 @@ resource "aws_cloudfront_distribution" "www_distribution" {
 
   ordered_cache_behavior {
     path_pattern = "/alerts/*"
-
-
+    allowed_methods        = ["GET", "HEAD"]
+    cached_methods         = ["GET", "HEAD"]
     target_origin_id       = var.origin_notify_id
     compress               = "false"
     cache_policy_id        = "4135ea2d-6df8-44a3-9df3-4b5a84be39ad"
@@ -435,8 +435,8 @@ resource "aws_cloudfront_distribution" "assets_distribution" {
   aliases = var.cloudfront_assets_distribution_aliases
 
   default_cache_behavior {
-
-
+    allowed_methods  = ["GET", "HEAD", "OPTIONS"]
+    cached_methods   = ["GET", "HEAD"]
     target_origin_id = var.origin_assets_id
     cache_policy_id  = "658327ea-f89d-4fab-a63d-7e88639e58f6"
 
