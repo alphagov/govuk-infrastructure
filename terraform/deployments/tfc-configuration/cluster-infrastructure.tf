@@ -25,7 +25,8 @@ module "cluster-infrastructure-integration" {
 
   tfvars = {
     env                           = "intg"
-    region                        = "eu-west-2"
+    region                        = "eu-west-1"
+    govuk_environment             = "Integration"
     govuk_aws_state_bucket        = "govuk-terraform-steppingstone-integration"
     cluster_version               = 1.27
     cluster_log_retention_in_days = 7
@@ -87,7 +88,8 @@ module "cluster-infrastructure-staging" {
 
   tfvars = {
     env                           = "stag"
-    region                        = "eu-west-2"
+    region                        = "eu-west-1"
+    govuk_environment             = "Staging"
     govuk_aws_state_bucket        = "govuk-terraform-steppingstone-staging"
     cluster_version               = 1.27
     cluster_log_retention_in_days = 7
@@ -144,7 +146,8 @@ module "cluster-infrastructure-production" {
 
   tfvars = {
     env                           = "prod"
-    region                        = "eu-west-2"
+    region                        = "eu-west-1"
+    govuk_environment             = "Production"
     govuk_aws_state_bucket        = "govuk-terraform-steppingstone-production"
     cluster_version               = 1.27
     cluster_log_retention_in_days = 7
