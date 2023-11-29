@@ -1,4 +1,6 @@
 module "cluster-infrastructure-integration" {
+  env = "intg"
+  region = "eu-west-2"
   source  = "alexbasista/workspacer/tfe"
   version = "0.9.0"
 
@@ -58,6 +60,8 @@ module "cluster-infrastructure-integration" {
 
 }
 module "cluster-infrastructure-staging" {
+  env = "stag"
+  region = "eu-west-2"
   source  = "alexbasista/workspacer/tfe"
   version = "0.9.0"
 
@@ -115,6 +119,8 @@ module "cluster-infrastructure-staging" {
 
 }
 module "cluster-infrastructure-production" {
+  env = "prod"
+  region = "eu-west-2"
   source  = "alexbasista/workspacer/tfe"
   version = "0.9.0"
 
