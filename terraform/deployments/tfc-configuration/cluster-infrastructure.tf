@@ -1,6 +1,4 @@
 module "cluster-infrastructure-integration" {
-  env     = "intg"
-  region  = "eu-west-2"
   source  = "alexbasista/workspacer/tfe"
   version = "0.9.0"
 
@@ -26,6 +24,8 @@ module "cluster-infrastructure-integration" {
   }
 
   tfvars = {
+    env                           = "intg"
+    region                        = "eu-west-2"
     govuk_aws_state_bucket        = "govuk-terraform-steppingstone-integration"
     cluster_version               = 1.27
     cluster_log_retention_in_days = 7
@@ -60,8 +60,6 @@ module "cluster-infrastructure-integration" {
 
 }
 module "cluster-infrastructure-staging" {
-  env     = "stag"
-  region  = "eu-west-2"
   source  = "alexbasista/workspacer/tfe"
   version = "0.9.0"
 
@@ -88,6 +86,8 @@ module "cluster-infrastructure-staging" {
   }
 
   tfvars = {
+    env                           = "stag"
+    region                        = "eu-west-2"
     govuk_aws_state_bucket        = "govuk-terraform-steppingstone-staging"
     cluster_version               = 1.27
     cluster_log_retention_in_days = 7
@@ -119,8 +119,6 @@ module "cluster-infrastructure-staging" {
 
 }
 module "cluster-infrastructure-production" {
-  env     = "prod"
-  region  = "eu-west-2"
   source  = "alexbasista/workspacer/tfe"
   version = "0.9.0"
 
@@ -145,6 +143,8 @@ module "cluster-infrastructure-production" {
   }
 
   tfvars = {
+    env                           = "prod"
+    region                        = "eu-west-2"
     govuk_aws_state_bucket        = "govuk-terraform-steppingstone-production"
     cluster_version               = 1.27
     cluster_log_retention_in_days = 7
