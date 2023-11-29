@@ -1,7 +1,7 @@
 govuk_aws_state_bucket              = "govuk-terraform-steppingstone-staging"
 cluster_infrastructure_state_bucket = "govuk-terraform-staging"
 
-cluster_version               = 1.26
+cluster_version               = 1.27
 cluster_log_retention_in_days = 7
 
 eks_control_plane_subnets = {
@@ -27,8 +27,9 @@ govuk_environment = "staging"
 publishing_service_domain = "staging.publishing.service.gov.uk"
 
 frontend_memcached_node_type   = "cache.t4g.medium"
-shared_redis_cluster_node_type = "cache.t4g.medium"
+shared_redis_cluster_node_type = "cache.r6g.large"
 
-desired_ha_replicas = 2
+desired_ha_replicas         = 2
+rds_backup_retention_period = 1
 
 ckan_s3_organogram_bucket = "datagovuk-staging-ckan-organogram"

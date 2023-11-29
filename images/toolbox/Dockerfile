@@ -9,14 +9,17 @@ ARG keyrings_dir=/usr/share/keyrings
 WORKDIR $keyrings_dir
 # hadolint ignore=DL3020
 ADD ${github_apt_repo}/githubcli-archive-keyring.gpg github.gpg
+ADD https://pgp.mongodb.com/server-7.0.pub mongodb.gpg
 # hadolint ignore=DL3008
 RUN apt-get update -qq ; \
     apt-get install -qy --no-install-recommends ca-certificates ; \
-    chmod 644 github.gpg ; \
+    chmod 644 github.gpg mongodb.gpg;  \
     echo "deb [arch=${TARGETARCH} signed-by=${keyrings_dir}/github.gpg] ${github_apt_repo} stable main" > /etc/apt/sources.list.d/github.list ; \
+    echo "deb [arch=${TARGETARCH} signed-by=${keyrings_dir}/mongodb.gpg] https://repo.mongodb.org/apt/ubuntu jammy/mongodb-org/7.0 multiverse" > /etc/apt/sources.list.d/mongodb.list ; \
     apt-get update -qq ; \
     apt-get install -qy --no-install-recommends \
-        curl file gh git jq libarchive-tools mysql-client postgresql-client pv wget2 gettext ; \
+        curl file gh git jq libarchive-tools mysql-client postgresql-client \
+        pv wget2 gettext mongodb-mongosh mongodb-database-tools ; \
     rm -fr /var/lib/apt/lists/*
 
 ARG yq_package_url=https://github.com/mikefarah/yq/releases/latest/download
@@ -35,6 +38,8 @@ RUN curl -Ssf "https://awscli.amazonaws.com/awscli-exe-linux-$(uname -m).zip" \
     chmod +x "${awscli_install_dir}/aws/dist/aws"
 ENV PATH=$PATH:$awscli_install_dir/aws/dist
 
+COPY --from=peakcom/s5cmd:v2.2.2 s5cmd /bin/s5cmd
+
 RUN groupadd -g 1001 user ; \
     useradd -mu 1001 -g user user
 WORKDIR /home/user
@@ -44,8 +49,11 @@ USER user
 RUN aws --version ; \
     gh --version ; \
     jq --version ; \
+    echo -n "mongosh "; mongosh --version ; \
+    mongodump --version ; \
     mysql --version ; \
     psql --version ; \
+    echo -n "s5cmd "; s5cmd version ; \
     yq --version
 
 CMD ["/bin/bash"]

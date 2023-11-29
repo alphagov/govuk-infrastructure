@@ -67,16 +67,18 @@ resource "aws_iam_policy" "grafana" {
 
 data "aws_rds_engine_version" "postgresql" {
   engine  = "aurora-postgresql"
-  version = "11"
+  version = "13"
   filter {
     name   = "engine-mode"
     values = ["serverless"]
   }
 }
 
+resource "random_password" "grafana_db" { length = 20 }
+
 module "grafana_db" {
   source  = "terraform-aws-modules/rds-aurora/aws"
-  version = "~> 7.6.0"
+  version = "~> 8.5"
 
   name              = local.grafana_db_name
   database_name     = "grafana"
@@ -87,13 +89,15 @@ module "grafana_db" {
 
   allow_major_version_upgrade = true
 
-  vpc_id                  = data.terraform_remote_state.infra_networking.outputs.vpc_id
-  subnets                 = data.terraform_remote_state.infra_networking.outputs.private_subnet_rds_ids
-  create_security_group   = true
-  allowed_security_groups = [local.node_security_group_id]
-
-  db_parameter_group_name         = aws_db_parameter_group.grafana.id
-  db_cluster_parameter_group_name = aws_rds_cluster_parameter_group.grafana.id
+  vpc_id                 = data.terraform_remote_state.infra_networking.outputs.vpc_id
+  subnets                = data.terraform_remote_state.infra_networking.outputs.private_subnet_rds_ids
+  create_db_subnet_group = true
+  create_security_group  = true
+  security_group_rules = {
+    from_cluster = { source_security_group_id = local.node_security_group_id }
+  }
+  manage_master_user_password = false
+  master_password             = random_password.grafana_db.result
 
   scaling_configuration = {
     auto_pause               = var.grafana_db_auto_pause
@@ -103,18 +107,9 @@ module "grafana_db" {
     timeout_action           = "ForceApplyCapacityChange"
   }
 
-  apply_immediately   = var.rds_apply_immediately
-  skip_final_snapshot = var.rds_skip_final_snapshot
-}
-
-resource "aws_db_parameter_group" "grafana" {
-  name   = "${local.grafana_db_name}-aurora-serverless-postgres11"
-  family = "aurora-postgresql11"
-}
-
-resource "aws_rds_cluster_parameter_group" "grafana" {
-  name   = "${local.grafana_db_name}-aurora-serverless-postgres11-cluster"
-  family = "aurora-postgresql11"
+  apply_immediately       = var.rds_apply_immediately
+  backup_retention_period = var.rds_backup_retention_period
+  skip_final_snapshot     = var.rds_skip_final_snapshot
 }
 
 resource "aws_route53_record" "grafana_db" {
@@ -141,8 +136,4 @@ resource "aws_secretsmanager_secret_version" "grafana_db" {
     "dbname"   = local.grafana_db_name
     "port"     = module.grafana_db.cluster_port
   })
-
-  lifecycle {
-    ignore_changes = [secret_string] # So that password can be rotated in SecretsManager.
-  }
 }

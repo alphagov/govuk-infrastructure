@@ -117,6 +117,12 @@ variable "rds_apply_immediately" {
   default     = false
 }
 
+variable "rds_backup_retention_period" {
+  type        = number
+  description = "Backup retention period for Grafana config database, in days."
+  default     = 7
+}
+
 variable "rds_skip_final_snapshot" {
   type        = bool
   description = "If true, allow deletion of RDS instances via Terraform by removing the requirement for a final snapshot to be taken on deletion. Do not enable this in production."

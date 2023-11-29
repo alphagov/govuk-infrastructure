@@ -5,11 +5,11 @@ terraform {
   required_providers {
     aws = {
       source  = "hashicorp/aws"
-      version = "~> 4.0"
+      version = "~> 5.0"
     }
     github = {
       source  = "integrations/github"
-      version = "~> 4.0"
+      version = "~> 5.0"
     }
   }
 }
@@ -52,6 +52,11 @@ locals {
     "govuk-terraform",
     "search-api-learn-to-rank",
     "content-store-postgresql-branch",
+    "licensify/admin",
+    "licensify/backend",
+    "licensify/dummyservices",
+    "licensify/feed",
+    "licensify/frontend",
   ]
 }
 

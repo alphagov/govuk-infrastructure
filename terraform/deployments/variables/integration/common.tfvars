@@ -1,7 +1,7 @@
 govuk_aws_state_bucket              = "govuk-terraform-steppingstone-integration"
 cluster_infrastructure_state_bucket = "govuk-terraform-integration"
 
-cluster_version               = 1.26
+cluster_version               = 1.27
 cluster_log_retention_in_days = 7
 
 eks_control_plane_subnets = {
@@ -33,9 +33,10 @@ shared_redis_cluster_node_type = "cache.m6g.large"
 # Non-production-only access is sufficient to access tools in this cluster.
 github_read_write_team = "alphagov:gov-uk"
 
-grafana_db_auto_pause   = true
-rds_apply_immediately   = true
-rds_skip_final_snapshot = true
+grafana_db_auto_pause       = true
+rds_apply_immediately       = true
+rds_backup_retention_period = 1
+rds_skip_final_snapshot     = true
 
 secrets_recovery_window_in_days = 0
 
