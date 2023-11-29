@@ -349,7 +349,7 @@ resource "aws_cloudfront_distribution" "www_distribution" {
   }
 
   ordered_cache_behavior {
-    path_pattern = "/alerts"
+    path_pattern           = "/alerts"
     allowed_methods        = ["GET", "HEAD"]
     cached_methods         = ["GET", "HEAD"]
     target_origin_id       = var.origin_notify_id
@@ -359,7 +359,7 @@ resource "aws_cloudfront_distribution" "www_distribution" {
   }
 
   ordered_cache_behavior {
-    path_pattern = "/alerts/*"
+    path_pattern           = "/alerts/*"
     allowed_methods        = ["GET", "HEAD"]
     cached_methods         = ["GET", "HEAD"]
     target_origin_id       = var.origin_notify_id
