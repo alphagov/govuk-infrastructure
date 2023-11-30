@@ -4,7 +4,7 @@ variable "tfc_hostname" {
   description = "The hostname of the TFC or TFE to use with AWS"
 }
 
-variable "tfc_organization_name" {
+variable "organization" {
   type        = string
   default     = "govuk"
   description = "The name of the Terraform Cloud organization"
