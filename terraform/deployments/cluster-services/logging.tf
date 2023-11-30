@@ -1,8 +1,6 @@
 # logging.tf manages Filebeat, which ships logs to Logit.io, a managed ELK stack.
 
 resource "helm_release" "filebeat" {
-  depends_on = [helm_release.cluster_secrets]
-
   name       = "filebeat"
   repository = "https://helm.elastic.co"
   chart      = "filebeat"
