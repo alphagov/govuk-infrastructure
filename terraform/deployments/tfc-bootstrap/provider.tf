@@ -18,6 +18,6 @@ terraform {
 
 provider "tfe" {
   hostname     = var.tfc_hostname
-  organization = var.tfc_organization_name
+  organization = var.organization
 }
 
