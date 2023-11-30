@@ -39,7 +39,6 @@ resource "kubernetes_namespace" "apps" {
 }
 
 resource "helm_release" "argo_cd" {
-  depends_on       = [helm_release.dex]
   chart            = "argo-cd"
   name             = "argo-cd"
   namespace        = local.services_ns
@@ -177,9 +176,6 @@ resource "helm_release" "argo_bootstrap" {
 }
 
 resource "helm_release" "argo_workflows" {
-  # Dex is used to provide SSO facility to Argo-Workflows and there is a bug
-  # where Argo Workflows fail to start if Dex is not present
-  depends_on       = [helm_release.dex]
   chart            = "argo-workflows"
   name             = "argo-workflows"
   namespace        = local.services_ns
