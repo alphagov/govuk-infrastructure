@@ -1,0 +1,45 @@
+name: SNYK security analysis
+
+on:
+  workflow_call:
+
+jobs:
+  sast:
+    permissions:
+      contents: read
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: snyk/actions/setup@master
+      - name: Snyk Code Test
+        continue-on-error: true
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        run: |
+          snyk auth ${{SNYK_TOKEN}}
+          snyk code test --json --severity-threshold=high >> snyk-sast.json
+      - name: Archive SAST results
+        uses: actions/upload-artifacts@v3
+        with:
+          name: snyk-sast-file
+          path: snyk-sast.json
+
+  sca:
+    permissions:
+      contents: read
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: snyk/actions/setup@master
+      - name: Snyk Supply Chain Test
+        continue-on-error: true
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        run: |
+          snyk auth ${{SNYK_TOKEN}}
+          snyk test --json --severity-threshold=high >> snyk-sca.json
+      - name: Archive SCA results
+        uses: actions/upload-artifacts@v3
+        with:
+          name: snyk-sca-file
+          path: snyk-sca.json
