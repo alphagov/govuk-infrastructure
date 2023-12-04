@@ -12,4 +12,3 @@ variable "github_app_pem_file" {
   type        = string
   description = "The private key to sign access token requests."
 }
-
