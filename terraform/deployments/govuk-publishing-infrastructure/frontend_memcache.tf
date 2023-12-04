@@ -12,11 +12,8 @@ resource "aws_security_group" "frontend_memcached" {
   vpc_id      = local.vpc_id
   description = "${local.frontend_memcached_name} memcached instance"
   tags = {
-    Product     = "GOV.UK"
-    System      = "Frontend Memcached"
-    Environment = "${var.govuk_environment}"
-    Owner       = "govuk-platform-engineering@digital.cabinet-office.gov.uk"
-    Name        = local.frontend_memcached_name
+    System = "Frontend Memcached"
+    Name   = local.frontend_memcached_name
   }
 }
 
@@ -33,11 +30,8 @@ resource "aws_elasticache_cluster" "frontend_memcached" {
   subnet_group_name    = aws_elasticache_subnet_group.frontend_memcached.name
   security_group_ids   = [aws_security_group.frontend_memcached.id]
   tags = {
-    Product     = "GOV.UK"
-    System      = "Frontend Memcached"
-    Environment = "${var.govuk_environment}"
-    Owner       = "govuk-platform-engineering@digital.cabinet-office.gov.uk"
-    Name        = local.frontend_memcached_name
+    System = "Frontend Memcached"
+    Name   = local.frontend_memcached_name
   }
 }
 
