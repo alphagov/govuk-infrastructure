@@ -16,7 +16,7 @@ resource "aws_security_group" "shared_redis_cluster" {
     Product     = "GOV.UK"
     System      = "Shared Redis"
     Environment = "${var.govuk_environment}"
-    Owner       = "govuk-replatforming-team@digital.cabinet-office.gov.uk"
+    Owner       = "govuk-platform-engineering@digital.cabinet-office.gov.uk"
   }
 }
 
@@ -37,7 +37,7 @@ resource "aws_elasticache_replication_group" "shared_redis_cluster" {
     Product     = "GOV.UK"
     System      = "Shared Redis"
     Environment = "${var.govuk_environment}"
-    Owner       = "govuk-replatforming-team@digital.cabinet-office.gov.uk"
+    Owner       = "govuk-platform-engineering@digital.cabinet-office.gov.uk"
   }
 }
 

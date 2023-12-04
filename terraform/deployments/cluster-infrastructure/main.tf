@@ -37,7 +37,7 @@ provider "aws" {
       Product              = "GOV.UK"
       System               = "EKS Cluster"
       Environment          = "${var.govuk_environment}"
-      Owner                = "govuk-replatforming-team@digital.cabinet-office.gov.uk"
+      Owner                = "govuk-platform-engineering@digital.cabinet-office.gov.uk"
       cluster              = var.cluster_name
       project              = "replatforming"
       repository           = "govuk-infrastructure"

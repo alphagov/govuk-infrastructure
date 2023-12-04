@@ -24,7 +24,7 @@ resource "aws_sns_topic" "ecr_scan_topic" {
     Product     = "GOV.UK"
     System      = "ECR Scan"
     Environment = "${var.govuk_environment}"
-    Owner       = "govuk-replatforming-team@digital.cabinet-office.gov.uk"
+    Owner       = "govuk-platform-engineering@digital.cabinet-office.gov.uk"
     Name        = "ECR-Scan"
   }
 }

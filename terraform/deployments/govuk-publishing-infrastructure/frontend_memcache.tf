@@ -15,7 +15,7 @@ resource "aws_security_group" "frontend_memcached" {
     Product     = "GOV.UK"
     System      = "Frontend Memcached"
     Environment = "${var.govuk_environment}"
-    Owner       = "govuk-replatforming-team@digital.cabinet-office.gov.uk"
+    Owner       = "govuk-platform-engineering@digital.cabinet-office.gov.uk"
     Name        = local.frontend_memcached_name
   }
 }
@@ -36,7 +36,7 @@ resource "aws_elasticache_cluster" "frontend_memcached" {
     Product     = "GOV.UK"
     System      = "Frontend Memcached"
     Environment = "${var.govuk_environment}"
-    Owner       = "govuk-replatforming-team@digital.cabinet-office.gov.uk"
+    Owner       = "govuk-platform-engineering@digital.cabinet-office.gov.uk"
     Name        = local.frontend_memcached_name
   }
 }

@@ -5,7 +5,7 @@ resource "aws_s3_bucket" "search_analytics" {
     Product     = "GOV.UK"
     System      = "Search analytics"
     Environment = "${var.govuk_environment}"
-    Owner       = "govuk-replatforming-team@digital.cabinet-office.gov.uk"
+    Owner       = "govuk-platform-engineering@digital.cabinet-office.gov.uk"
     Name        = "Search analytics reports for ${var.govuk_environment}"
   }
 }

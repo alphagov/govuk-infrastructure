@@ -5,7 +5,7 @@ resource "aws_s3_bucket" "app_assets" {
     Product     = "GOV.UK"
     System      = "App assets"
     Environment = "${var.govuk_environment}"
-    Owner       = "govuk-replatforming-team@digital.cabinet-office.gov.uk"
+    Owner       = "govuk-platform-engineering@digital.cabinet-office.gov.uk"
     Name        = "App static assets for ${var.govuk_environment}"
   }
 }

@@ -183,7 +183,7 @@ resource "aws_security_group" "eks_ingress_www_origin" {
     Product     = "GOV.UK"
     System      = "EKS Ingress"
     Environment = "${var.govuk_environment}"
-    Owner       = "govuk-replatforming-team@digital.cabinet-office.gov.uk"
+    Owner       = "govuk-platform-engineering@digital.cabinet-office.gov.uk"
     Name        = "eks_ingress_www_origin"
   }
 }
