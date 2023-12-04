@@ -71,16 +71,8 @@ resource "aws_acm_certificate" "cluster_public" {
   domain_name               = "*.${local.external_dns_zone_name}"
   subject_alternative_names = ["*.${var.publishing_service_domain}"]
   validation_method         = "DNS"
-  lifecycle {
-    create_before_destroy = true
-  }
-  tags = {
-    Name        = local.external_dns_zone_name
-    Product     = "GOV.UK"
-    System      = "EKS"
-    Environment = "${var.govuk_environment}"
-    Owner       = "govuk-platform-engineering@digital.cabinet-office.gov.uk"
-  }
+  lifecycle { create_before_destroy = true }
+  tags = { Name = local.external_dns_zone_name }
 }
 
 # See

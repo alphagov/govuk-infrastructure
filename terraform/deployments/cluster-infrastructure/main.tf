@@ -35,11 +35,10 @@ provider "aws" {
   default_tags {
     tags = {
       Product              = "GOV.UK"
-      System               = "EKS Cluster"
+      System               = "EKS cluster infrastructure"
       Environment          = "${var.govuk_environment}"
       Owner                = "govuk-platform-engineering@digital.cabinet-office.gov.uk"
       cluster              = var.cluster_name
-      project              = "replatforming"
       repository           = "govuk-infrastructure"
       terraform_deployment = basename(abspath(path.root))
     }
