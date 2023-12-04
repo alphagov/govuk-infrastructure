@@ -44,6 +44,7 @@ locals {
     "search-analytics"         = ["govuk-find-and-view"],
     "search-api"               = ["govuk-find-and-view"],
     "search-api-v2"            = ["govuk-find-and-view"],
+    "search-v2-evaluator"      = ["govuk-find-and-view"],
     "service-manual-publisher" = ["govuk-publishing-experience"],
     "short-url-manager"        = ["govuk-publishing-experience"],
     "signon"                   = ["govuk-access-and-permissions"],
