@@ -105,6 +105,16 @@ resource "aws_security_group_rule" "shared_docdb_from_eks_workers" {
   source_security_group_id = data.terraform_remote_state.cluster_infrastructure.outputs.node_security_group_id
 }
 
+resource "aws_security_group_rule" "licensify_docdb_from_eks_workers" {
+  description              = "Licensify DocumentDB accepts requests from EKS nodes"
+  type                     = "ingress"
+  from_port                = 27017
+  to_port                  = 27017
+  protocol                 = "tcp"
+  security_group_id        = data.terraform_remote_state.infra_security_groups.outputs.sg_licensify_documentdb_id
+  source_security_group_id = data.terraform_remote_state.cluster_infrastructure.outputs.node_security_group_id
+}
+
 resource "aws_security_group_rule" "postgres_from_eks_workers" {
   for_each = merge(data.terraform_remote_state.app_govuk_rds.outputs.sg_rds, {
     "transition_primary" = data.terraform_remote_state.infra_security_groups.outputs.sg_transition-postgresql-primary_id
