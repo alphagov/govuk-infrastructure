@@ -19,12 +19,13 @@ module "cluster-infrastructure-integration" {
   }
 
   team_access = {
-    "GOV.UK Non-Production" = "write",
+    "GOV.UK Non-Production" = "write"
     "GOV.UK Production"     = "write"
   }
 
   tfvars = {
     govuk_aws_state_bucket        = "govuk-terraform-steppingstone-integration"
+    govuk_environment             = "integration"
     cluster_version               = 1.27
     cluster_log_retention_in_days = 7
     eks_control_plane_subnets = {
@@ -50,11 +51,8 @@ module "cluster-infrastructure-integration" {
     rds_skip_final_snapshot         = true
     secrets_recovery_window_in_days = 0
   }
-
   # Variable Sets must already exist
-  variable_set_names = [
-    "aws-credentials-integration"
-  ]
+  variable_set_names = ["aws-credentials-integration"]
 
 }
 module "cluster-infrastructure-staging" {
@@ -79,12 +77,13 @@ module "cluster-infrastructure-staging" {
   }
 
   team_access = {
-    "GOV.UK Non-Production" = "write",
+    "GOV.UK Non-Production" = "write"
     "GOV.UK Production"     = "write"
   }
 
   tfvars = {
     govuk_aws_state_bucket        = "govuk-terraform-steppingstone-staging"
+    govuk_environment             = "staging"
     cluster_version               = 1.27
     cluster_log_retention_in_days = 7
     eks_control_plane_subnets = {
@@ -92,13 +91,11 @@ module "cluster-infrastructure-staging" {
       b = { az = "eu-west-1b", cidr = "10.12.19.16/28" }
       c = { az = "eu-west-1c", cidr = "10.12.19.32/28" }
     }
-
     eks_public_subnets = {
       a = { az = "eu-west-1a", cidr = "10.12.20.0/24" }
       b = { az = "eu-west-1b", cidr = "10.12.21.0/24" }
       c = { az = "eu-west-1c", cidr = "10.12.22.0/24" }
     }
-
     eks_private_subnets = {
       a = { az = "eu-west-1a", cidr = "10.12.24.0/22" }
       b = { az = "eu-west-1b", cidr = "10.12.28.0/22" }
@@ -107,11 +104,8 @@ module "cluster-infrastructure-staging" {
     publishing_service_domain   = "staging.publishing.service.gov.uk"
     rds_backup_retention_period = 1
   }
-
   # Variable Sets must already exist
-  variable_set_names = [
-    "aws-credentials-staging"
-  ]
+  variable_set_names = ["aws-credentials-staging"]
 
 }
 module "cluster-infrastructure-production" {
@@ -134,12 +128,11 @@ module "cluster-infrastructure-production" {
     branch         = "main"
     oauth_token_id = data.tfe_oauth_client.github.oauth_token_id
   }
-  team_access = {
-    "GOV.UK Production" = "write"
-  }
+  team_access = { "GOV.UK Production" = "write" }
 
   tfvars = {
     govuk_aws_state_bucket        = "govuk-terraform-steppingstone-production"
+    govuk_environment             = "production"
     cluster_version               = 1.27
     cluster_log_retention_in_days = 7
     eks_control_plane_subnets = {
@@ -147,13 +140,11 @@ module "cluster-infrastructure-production" {
       b = { az = "eu-west-1b", cidr = "10.13.19.16/28" }
       c = { az = "eu-west-1c", cidr = "10.13.19.32/28" }
     }
-
     eks_public_subnets = {
       a = { az = "eu-west-1a", cidr = "10.13.20.0/24" }
       b = { az = "eu-west-1b", cidr = "10.13.21.0/24" }
       c = { az = "eu-west-1c", cidr = "10.13.22.0/24" }
     }
-
     eks_private_subnets = {
       a = { az = "eu-west-1a", cidr = "10.13.24.0/22" }
       b = { az = "eu-west-1b", cidr = "10.13.28.0/22" }
@@ -162,10 +153,6 @@ module "cluster-infrastructure-production" {
     publishing_service_domain = "publishing.service.gov.uk"
     workers_instance_types    = ["m6i.8xlarge", "m6a.8xlarge"]
   }
-
   # Variable Sets must already exist
-  variable_set_names = [
-    "aws-credentials-production"
-  ]
-
+  variable_set_names = ["aws-credentials-production"]
 }
