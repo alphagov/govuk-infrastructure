@@ -20,13 +20,7 @@ resource "aws_ecr_registry_scanning_configuration" "ecr_scan" {
 
 resource "aws_sns_topic" "ecr_scan_topic" {
   name = "ecr_scan_topic"
-  tags = {
-    Product     = "GOV.UK"
-    System      = "ECR Scan"
-    Environment = "${var.govuk_environment}"
-    Owner       = "govuk-replatforming-team@digital.cabinet-office.gov.uk"
-    Name        = "ECR-Scan"
-  }
+  tags = { Name = "ecr_scan_topic" }
 }
 
 resource "aws_sns_topic_policy" "ecr_scan_topic_policy" {

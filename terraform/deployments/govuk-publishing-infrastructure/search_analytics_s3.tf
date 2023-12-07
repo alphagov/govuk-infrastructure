@@ -2,11 +2,8 @@ resource "aws_s3_bucket" "search_analytics" {
   bucket        = "govuk-search-analytics-${var.govuk_environment}"
   force_destroy = var.force_destroy
   tags = {
-    Product     = "GOV.UK"
-    System      = "Search analytics"
-    Environment = "${var.govuk_environment}"
-    Owner       = "govuk-replatforming-team@digital.cabinet-office.gov.uk"
-    Name        = "Search analytics reports for ${var.govuk_environment}"
+    System = "Search"
+    Name   = "Search analytics reports for ${var.govuk_environment}"
   }
 }
 
@@ -22,7 +19,7 @@ resource "aws_s3_bucket_policy" "search_analytics" {
 
 resource "aws_iam_role" "search_analytics_github_action_role" {
   name = "search_analytics_github_action_role"
-
+  # TODO(#1011): use iam_policy_document.
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
     Statement = [
@@ -63,10 +60,7 @@ data "aws_iam_policy_document" "search_analytics" {
       type        = "AWS"
       identifiers = [data.terraform_remote_state.cluster_infrastructure.outputs.worker_iam_role_arn]
     }
-    actions = [
-      "s3:GetObject",
-      "s3:PutObject",
-    ]
+    actions   = ["s3:GetObject", "s3:PutObject"]
     resources = ["${aws_s3_bucket.search_analytics.arn}/*"]
   }
   statement {
@@ -75,9 +69,7 @@ data "aws_iam_policy_document" "search_analytics" {
       type        = "AWS"
       identifiers = [aws_iam_role.search_analytics_github_action_role.arn]
     }
-    actions = [
-      "s3:PutObject",
-    ]
+    actions   = ["s3:PutObject"]
     resources = ["${aws_s3_bucket.search_analytics.arn}/*"]
   }
 }

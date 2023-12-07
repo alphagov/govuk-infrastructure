@@ -29,25 +29,13 @@ resource "aws_subnet" "eks_control_plane" {
   vpc_id            = data.terraform_remote_state.infra_vpc.outputs.vpc_id
   cidr_block        = each.value.cidr
   availability_zone = each.value.az
-  tags = {
-    Product     = "GOV.UK"
-    System      = "EKS Control Plane VPC"
-    Environment = "${var.govuk_environment}"
-    Owner       = "govuk-replatforming-team@digital.cabinet-office.gov.uk"
-    Name        = "${var.cluster_name}-eks-control-plane-${each.key}"
-  }
+  tags              = { Name = "${var.cluster_name}-eks-control-plane-${each.key}" }
 }
 
 resource "aws_route_table" "eks_control_plane" {
   for_each = var.eks_control_plane_subnets
   vpc_id   = data.terraform_remote_state.infra_vpc.outputs.vpc_id
-  tags = {
-    Product     = "GOV.UK"
-    System      = "EKS Control Plane Subnet"
-    Environment = "${var.govuk_environment}"
-    Owner       = "govuk-replatforming-team@digital.cabinet-office.gov.uk"
-    Name        = "${var.cluster_name}-eks-control-plane-${each.key}"
-  }
+  tags     = { Name = "${var.cluster_name}-eks-control-plane-${each.key}" }
 }
 
 
@@ -78,11 +66,7 @@ resource "aws_subnet" "eks_public" {
   cidr_block        = each.value.cidr
   availability_zone = each.value.az
   tags = {
-    Product     = "GOV.UK"
-    System      = "EKS Public Subnet"
-    Environment = "${var.govuk_environment}"
-    Owner       = "govuk-replatforming-team@digital.cabinet-office.gov.uk"
-    Name        = "${var.cluster_name}-eks-public-${each.key}"
+    Name = "${var.cluster_name}-eks-public-${each.key}"
     # https://docs.aws.amazon.com/eks/latest/userguide/alb-ingress.html
     "kubernetes.io/cluster/${var.cluster_name}" = "owned"
     "kubernetes.io/role/elb"                    = "1"
@@ -92,13 +76,7 @@ resource "aws_subnet" "eks_public" {
 
 resource "aws_route_table" "eks_public" {
   vpc_id = data.terraform_remote_state.infra_vpc.outputs.vpc_id
-  tags = {
-    Product     = "GOV.UK"
-    System      = "EKS Public VPC"
-    Environment = "${var.govuk_environment}"
-    Owner       = "govuk-replatforming-team@digital.cabinet-office.gov.uk"
-    Name        = "${var.cluster_name}-eks-public"
-  }
+  tags   = { Name = "${var.cluster_name}-eks-public" }
 }
 
 resource "aws_route_table_association" "eks_public" {
@@ -111,21 +89,13 @@ resource "aws_route" "public_internet_gateway" {
   route_table_id         = aws_route_table.eks_public.id
   destination_cidr_block = "0.0.0.0/0"
   gateway_id             = data.terraform_remote_state.infra_vpc.outputs.internet_gateway_id
-  timeouts {
-    create = local.route_create_timeout
-  }
+  timeouts { create = local.route_create_timeout }
 }
 
 resource "aws_eip" "eks_nat" {
   for_each = var.eks_public_subnets
   vpc      = true
-  tags = {
-    Product     = "GOV.UK"
-    System      = "EKS NAT Public Subnet"
-    Environment = "${var.govuk_environment}"
-    Owner       = "govuk-replatforming-team@digital.cabinet-office.gov.uk"
-    Name        = "${var.cluster_name}-eks-nat-${each.key}"
-  }
+  tags     = { Name = "${var.cluster_name}-eks-nat-${each.key}" }
   # TODO: depends_on = [aws_internet_gateway.gw] once we've imported the IGW from govuk-aws.
 }
 
@@ -133,13 +103,7 @@ resource "aws_nat_gateway" "eks" {
   for_each      = var.eks_public_subnets
   allocation_id = aws_eip.eks_nat[each.key].id
   subnet_id     = aws_subnet.eks_public[each.key].id
-  tags = {
-    Product     = "GOV.UK"
-    System      = "EKS NAT Gateway"
-    Environment = "${var.govuk_environment}"
-    Owner       = "govuk-replatforming-team@digital.cabinet-office.gov.uk"
-    Name        = "${var.cluster_name}-eks-${each.key}"
-  }
+  tags          = { Name = "${var.cluster_name}-eks-${each.key}" }
   # TODO: depends_on = [aws_internet_gateway.gw] once we've imported the IGW from govuk-aws.
 }
 
@@ -153,11 +117,7 @@ resource "aws_subnet" "eks_private" {
   cidr_block        = each.value.cidr
   availability_zone = each.value.az
   tags = {
-    Product     = "GOV.UK"
-    System      = "EKS Private Subnet"
-    Environment = "${var.govuk_environment}"
-    Owner       = "govuk-replatforming-team@digital.cabinet-office.gov.uk"
-    Name        = "${var.cluster_name}-eks-private-${each.key}"
+    Name = "${var.cluster_name}-eks-private-${each.key}"
     # https://docs.aws.amazon.com/eks/latest/userguide/alb-ingress.html
     "kubernetes.io/cluster/${var.cluster_name}" = "owned"
     "kubernetes.io/role/internal-elb"           = "1"
@@ -167,13 +127,7 @@ resource "aws_subnet" "eks_private" {
 resource "aws_route_table" "eks_private" {
   for_each = var.eks_private_subnets
   vpc_id   = data.terraform_remote_state.infra_vpc.outputs.vpc_id
-  tags = {
-    Product     = "GOV.UK"
-    System      = "EKS Private VPC"
-    Environment = "${var.govuk_environment}"
-    Owner       = "govuk-replatforming-team@digital.cabinet-office.gov.uk"
-    Name        = "${var.cluster_name}-eks-private-${each.key}"
-  }
+  tags     = { Name = "${var.cluster_name}-eks-private-${each.key}" }
 }
 
 resource "aws_route_table_association" "eks_private" {
@@ -187,7 +141,5 @@ resource "aws_route" "eks_private_nat" {
   route_table_id         = aws_route_table.eks_private[each.key].id
   destination_cidr_block = "0.0.0.0/0"
   nat_gateway_id         = aws_nat_gateway.eks[each.key].id
-  timeouts {
-    create = local.route_create_timeout
-  }
+  timeouts { create = local.route_create_timeout }
 }

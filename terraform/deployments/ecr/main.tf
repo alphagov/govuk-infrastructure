@@ -21,8 +21,7 @@ provider "aws" {
       Product              = "GOV.UK"
       System               = "Elastic Container Registry"
       Environment          = "${var.govuk_environment}"
-      Owner                = "govuk-replatforming-team@digital.cabinet-office.gov.uk"
-      project              = "replatforming"
+      Owner                = "govuk-platform-engineering@digital.cabinet-office.gov.uk"
       repository           = "govuk-infrastructure"
       terraform_deployment = basename(abspath(path.root))
     }
@@ -63,11 +62,8 @@ locals {
 resource "aws_ecr_repository" "repositories" {
   for_each             = toset(local.repositories)
   name                 = each.key
-  image_tag_mutability = "MUTABLE" # TODO: consider not allowing mutable tags.
-
-  image_scanning_configuration {
-    scan_on_push = true
-  }
+  image_tag_mutability = "MUTABLE" # To support a movable `latest` for developer convenience.
+  image_scanning_configuration { scan_on_push = true }
 }
 
 resource "aws_iam_user" "concourse_ecr_user" {
@@ -81,6 +77,7 @@ resource "aws_iam_user" "github_ecr_user" {
 
 resource "aws_iam_role" "push_to_ecr" {
   name = "push_to_ecr"
+  # TODO(#1011): use aws_iam_policy_document.
   assume_role_policy = jsonencode({
     "Version" : "2012-10-17",
     "Statement" : [
@@ -100,9 +97,7 @@ data "aws_region" "current" {}
 
 data "aws_iam_policy_document" "push_to_ecr" {
   statement {
-    actions = [
-      "ecr:GetAuthorizationToken",
-    ]
+    actions   = ["ecr:GetAuthorizationToken"]
     resources = ["*"]
   }
 

@@ -2,11 +2,8 @@ resource "aws_s3_bucket" "location_api_import_csvs" {
   bucket        = "govuk-${var.govuk_environment}-locations-api-import-csvs"
   force_destroy = var.force_destroy
   tags = {
-    Product     = "GOV.UK"
-    System      = "Locations api"
-    Environment = "${var.govuk_environment}"
-    Owner       = "govuk-replatforming-team@digital.cabinet-office.gov.uk"
-    Name        = "CSVs used for importing postcode information into Locations API in ${var.govuk_environment}"
+    System = "Locations API"
+    Name   = "CSVs for importing postcode information into Locations API"
   }
 }
 
@@ -38,10 +35,7 @@ data "aws_iam_policy_document" "location_api_import_csvs" {
       type        = "AWS"
       identifiers = [data.terraform_remote_state.cluster_infrastructure.outputs.worker_iam_role_arn]
     }
-    actions = [
-      "s3:GetObject",
-      "s3:PutObject",
-    ]
+    actions   = ["s3:GetObject", "s3:PutObject"]
     resources = ["${aws_s3_bucket.location_api_import_csvs.arn}/*"]
   }
 }

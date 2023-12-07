@@ -2,11 +2,8 @@ resource "aws_s3_bucket" "app_assets" {
   bucket        = "govuk-app-assets-${var.govuk_environment}"
   force_destroy = var.force_destroy
   tags = {
-    Product     = "GOV.UK"
-    System      = "App assets"
-    Environment = "${var.govuk_environment}"
-    Owner       = "govuk-replatforming-team@digital.cabinet-office.gov.uk"
-    Name        = "App static assets for ${var.govuk_environment}"
+    System = "Static serving"
+    Name   = "App static assets for ${var.govuk_environment}"
   }
 }
 
@@ -47,10 +44,7 @@ data "aws_iam_policy_document" "app_assets" {
       type        = "AWS"
       identifiers = [data.terraform_remote_state.cluster_infrastructure.outputs.worker_iam_role_arn]
     }
-    actions = [
-      "s3:GetObject",
-      "s3:PutObject",
-    ]
+    actions   = ["s3:GetObject", "s3:PutObject"]
     resources = ["${aws_s3_bucket.app_assets.arn}/*"]
   }
 }

@@ -1,3 +1,4 @@
+# TODO: move this out of cluster-infrastructure; it doesn't belong.
 locals {
   clamav_db_name = "clamav-db-${var.cluster_name}"
 }
@@ -5,10 +6,6 @@ locals {
 resource "aws_efs_file_system" "clamav-db" {
   creation_token = local.clamav_db_name
   tags = {
-    Product     = "GOV.UK"
-    System      = "Clamav Database"
-    Environment = "${var.govuk_environment}"
-    Owner       = "govuk-replatforming-team@digital.cabinet-office.gov.uk"
     Description = "EFS where Clamav virus signature database is stored"
   }
 }
