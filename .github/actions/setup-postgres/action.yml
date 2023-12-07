@@ -1,36 +1,53 @@
-name: 'Setup Postgres'
-description: 'Create a new Postgres database'
+# See
+# https://github.com/docker-library/docs/blob/master/postgres/README.md#environment-variables
+# for full details of the parameters.
+
+name: Set up Postgres
+description: Start a Postgres server container.
+
+inputs:
+  POSTGRES_IMAGE_TAG:
+    description: Container image tag for the desired version of Postgres
+    default: 13-alpine
+    required: false
+  POSTGRES_USER:
+    description: Username of Postgres superuser to create
+    default: postgres
+    required: false
+  POSTGRES_PASSWORD:
+    description: Intial password to set for Postgres superuser
+    default: postgres
+    required: false
+  POSTGRES_PORT:
+    description: IP port number for Postgres to bind to
+    default: "5432"
+    required: false
+  POSTGRES_DB:
+    description: Name of default database to create
+    default: postgres
+    required: false
+
 outputs:
   db-url:
-    description: "The URL to connect to the database"
+    description: URL (connection string) for the database.
     value: ${{ steps.generate-url.outputs.db-url }}
+
 runs:
-  using: "composite"
+  using: composite
   steps:
     - name: Start container
       id: start-container
-      env:
-        POSTGRES_IMAGE_TAG: 13.7-alpine
-        POSTGRES_PORT: 5432
-        POSTGRES_USER: root
-        POSTGRES_PASSWORD: root
-        POSTGRES_DB: test
       shell: bash
       run: |
-        docker run --name postgres \
+        docker run --name "postgres-${{ inputs.POSTGRES_PORT }}" \
          --rm --detach \
-         --publish "${POSTGRES_PORT}:${POSTGRES_PORT}" \
-         --env "POSTGRES_USER=${POSTGRES_USER}" \
-         --env "POSTGRES_PASSWORD=${POSTGRES_PASSWORD}" \
-         --env "POSTGRES_DB=${POSTGRES_DB}" \
-         postgres:${POSTGRES_IMAGE_TAG}
+         --publish "${{ inputs.POSTGRES_PORT }}:${{ inputs.POSTGRES_PORT }}" \
+         --env "POSTGRES_USER=${{ inputs.POSTGRES_USER }}" \
+         --env "POSTGRES_PASSWORD=${{ inputs.POSTGRES_PASSWORD }}" \
+         --env "POSTGRES_DB=${{ inputs.POSTGRES_DB }}" \
+         postgres:${{ inputs.POSTGRES_IMAGE_TAG }}
 
     - name: Generate database URL
       id: generate-url
-      env:
-        POSTGRES_PORT: 5432
-        POSTGRES_USER: root
-        POSTGRES_PASSWORD: root
-        POSTGRES_DB: test
       shell: bash
-      run: echo "db-url=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@127.0.0.1:${POSTGRES_PORT}/${POSTGRES_DB}" >> $GITHUB_OUTPUT
+      run: echo "db-url=postgresql://${{ inputs.POSTGRES_USER }}:${{ inputs.POSTGRES_PASSWORD }}@127.0.0.1:${{ inputs.POSTGRES_PORT }}/${{ inputs.POSTGRES_DB }}" >> "$GITHUB_OUTPUT"
