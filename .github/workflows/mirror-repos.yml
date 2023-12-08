@@ -30,7 +30,7 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          GITHUB_REPOS=$(gh search repos --owner alphagov --topic=govuk --archived=false --json=name -L 500 -q '. | map(.name) | join(" ")')
+          GITHUB_REPOS=$(gh search repos --owner alphagov --topic=govuk --archived=false --json=name -L 500 -q '[.[].name] | unique | join(" ")')
           echo "github-repos=${GITHUB_REPOS}" >> "$GITHUB_OUTPUT"
 
       - name: Sync repositories
