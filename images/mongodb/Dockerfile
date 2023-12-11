@@ -1,7 +1,7 @@
 FROM public.ecr.aws/lts/ubuntu:22.04_stable
 SHELL ["/bin/bash", "-euo", "pipefail", "-c"]
 
-ENV MONGO_VERSION 2.4.14
+ENV MONGO_VERSION 2.6.12
 ARG mongo_tarball="mongodb-linux-x86_64-$MONGO_VERSION.tgz"
 ARG mongo_url="https://fastdl.mongodb.org/linux/$mongo_tarball"
 
@@ -11,7 +11,7 @@ RUN apt-get update; \
     rm -rf /var/lib/apt/lists/*;
 WORKDIR /tmp
 RUN curl -SsfO "$mongo_url"; \
-    sha256sum -c <(echo "20d319db0396702744aadb18815fd99f37806bbf80afdc078f08af8058b2c7d4  $mongo_tarball"); \
+    sha256sum -c <(echo "6d6415ac068825d1aed23f9482080ce3551bfac828d9570be1d72990d5f441b0  $mongo_tarball"); \
     tar -xf "$mongo_tarball" -C /usr/local --strip-components=1; \
     rm -f "$mongo_tarball";
 
