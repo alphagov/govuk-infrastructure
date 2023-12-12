@@ -17,7 +17,7 @@ RUN curl -SsfO "$mongo_url"; \
 
 WORKDIR /data/configdb
 WORKDIR /data/db
-RUN useradd -Ur mongodb -d /data; \
+RUN useradd -Ur mongodb -u 999 -d /data; \
     chown -R mongodb:mongodb /data;
 USER mongodb
 VOLUME /data/db /data/configdb
