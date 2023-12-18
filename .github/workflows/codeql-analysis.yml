@@ -16,7 +16,7 @@ jobs:
         show-progress: false
 
     - name: Initialize CodeQL
-      uses: github/codeql-action/init@v2
+      uses: github/codeql-action/init@v3
       with:
         config: |
           # initial configurations for CodeQL should be looking for high precision
@@ -36,7 +36,7 @@ jobs:
                 security-severity: /([7-9]|10)\.(\d)+/
 
     - name: Autobuild
-      uses: github/codeql-action/autobuild@v2
+      uses: github/codeql-action/autobuild@v3
 
     - name: Perform CodeQL Analysis
-      uses: github/codeql-action/analyze@v2
+      uses: github/codeql-action/analyze@v3
