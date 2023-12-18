@@ -107,6 +107,15 @@ resource "aws_nat_gateway" "eks" {
   # TODO: depends_on = [aws_internet_gateway.gw] once we've imported the IGW from govuk-aws.
 }
 
+# Should be skipped on Integration
+resource "aws_nat_gateway" "eks_licensify" {
+  for_each      = var.eks_licensify_gateways
+  allocation_id = each.value.eip
+  subnet_id     = aws_subnet.eks_public[each.key].id
+  tags          = { Name = "${var.cluster_name}-eks-licensify-${each.key}" }
+  # TODO: depends_on = [aws_internet_gateway.gw] once we've imported the IGW from govuk-aws.
+}
+
 
 # Private subnets and associated resources. The private subnets contain the
 # worker nodes and the pods.

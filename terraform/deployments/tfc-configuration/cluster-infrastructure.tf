@@ -33,6 +33,8 @@ module "cluster-infrastructure-integration" {
       b = { az = "eu-west-1b", cidr = "10.1.19.16/28" }
       c = { az = "eu-west-1c", cidr = "10.1.19.32/28" }
     }
+    # Intentionally empty in Integration
+    eks_licensify_gateways = {} 
     eks_public_subnets = {
       a = { az = "eu-west-1a", cidr = "10.1.20.0/24" }
       b = { az = "eu-west-1b", cidr = "10.1.21.0/24" }
@@ -91,6 +93,11 @@ module "cluster-infrastructure-staging" {
       b = { az = "eu-west-1b", cidr = "10.12.19.16/28" }
       c = { az = "eu-west-1c", cidr = "10.12.19.32/28" }
     }
+    eks_licensify_gateways = {
+      a = { az = "eu-west-1a", cidr = "10.12.20.0/24", eip = "eipalloc-0c15477b55906cc2c" }
+      b = { az = "eu-west-1b", cidr = "10.12.21.0/24", eip = "eipalloc-0a08b03e7bb1202df" }
+      c = { az = "eu-west-1c", cidr = "10.12.22.0/24", eip = "eipalloc-0eb4541bf8dc33dc6" }
+    }
     eks_public_subnets = {
       a = { az = "eu-west-1a", cidr = "10.12.20.0/24" }
       b = { az = "eu-west-1b", cidr = "10.12.21.0/24" }
@@ -140,6 +147,8 @@ module "cluster-infrastructure-production" {
       b = { az = "eu-west-1b", cidr = "10.13.19.16/28" }
       c = { az = "eu-west-1c", cidr = "10.13.19.32/28" }
     }
+    # TODO: Set up in Production when Ready.
+    eks_licensify_gateways = {} 
     eks_public_subnets = {
       a = { az = "eu-west-1a", cidr = "10.13.20.0/24" }
       b = { az = "eu-west-1b", cidr = "10.13.21.0/24" }
