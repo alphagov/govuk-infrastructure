@@ -11,8 +11,8 @@ eks_control_plane_subnets = {
 }
 
 eks_licensify_gateways = {
-  b = { az = "eu-west-1b", cidr = "10.13.21.0/24", eip = "eipalloc-0d5465010fda7ba1d" }
   a = { az = "eu-west-1a", cidr = "10.13.20.0/24", eip = "eipalloc-054c895a7e019c1f3" }
+  b = { az = "eu-west-1b", cidr = "10.13.21.0/24", eip = "eipalloc-0d5465010fda7ba1d" }
   c = { az = "eu-west-1c", cidr = "10.13.22.0/24", eip = "eipalloc-083611260a167ea49" }
 }
 
