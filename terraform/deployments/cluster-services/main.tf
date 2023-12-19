@@ -61,7 +61,7 @@ locals {
     "alb.ingress.kubernetes.io/target-type"  = "ip"
     "alb.ingress.kubernetes.io/listen-ports" = jsonencode([{ HTTP = 80 }, { HTTPS = 443 }])
     "alb.ingress.kubernetes.io/ssl-redirect" = "443"
-    "alb.ingress.kubernetes.io/ssl-policy"   = "ELBSecurityPolicy-TLS-1-2-Ext-2018-06" # No TLS 1.0 or 1.1.
+    "alb.ingress.kubernetes.io/ssl-policy"   = "ELBSecurityPolicy-TLS13-1-2-2021-06"
   }
   dex_host                = "dex.${local.external_dns_zone_name}"
   prometheus_internal_url = "http://kube-prometheus-stack-prometheus:9090"
