@@ -18,6 +18,9 @@ on:
         required: false
         type: string
         default: ${{ github.sha }}
+      additionalImageTags:
+        required: false
+        type: string
     secrets:
       AWS_ACCESS_KEY_ID:
         required: true
@@ -60,6 +63,7 @@ jobs:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           ECR_REPOSITORY: ${{ inputs.ecrRepositoryName }}
           INPUT_REF: ${{ inputs.gitRef }}
+          ADDITIONAL_IMAGE_TAGS: ${{ inputs.additionalImageTags }}
         run: |
           LOCAL_HEAD_SHA="$(git rev-parse HEAD)"
           REMOTE_HEAD_SHA=$(git ls-remote origin HEAD | cut -f 1)
@@ -78,6 +82,13 @@ jobs:
             FULL_IMAGE_TAG_LIST+=("${ECR_REGISTRY}/${ECR_REPOSITORY}:latest")
           else
             echo "Local commit is different to the repository HEAD so skipping the latest tag (local: ${LOCAL_HEAD_SHA} remote: ${REMOTE_HEAD_SHA})"
+          fi
+
+          if [ -n "${ADDITIONAL_IMAGE_TAGS}" ]; then
+            arr=("${ADDITIONAL_IMAGE_TAGS}")
+            for tag in ${arr[@]}; do
+              FULL_IMAGE_TAG_LIST+=("${ECR_REGISTRY}/${ECR_REPOSITORY}:${tag}")
+            done
           fi
 
           echo "imageTag=${IMAGE_TAG}" >> $GITHUB_OUTPUT
