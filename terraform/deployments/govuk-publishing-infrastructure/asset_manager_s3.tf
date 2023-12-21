@@ -29,6 +29,6 @@ resource "aws_iam_policy" "asset_manager_s3" {
 }
 
 resource "aws_iam_role_policy_attachment" "asset_manager_s3" {
-  role       = data.terraform_remote_state.cluster_infrastructure.outputs.worker_iam_role_name
+  role       = data.tfe_outputs.cluster_infrastructure.nonsensitive_values.worker_iam_role_name
   policy_arn = aws_iam_policy.asset_manager_s3.arn
 }

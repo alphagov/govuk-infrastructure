@@ -49,7 +49,7 @@ data "aws_iam_policy_document" "search_analytics" {
     sid = "EKSNodesCanList"
     principals {
       type        = "AWS"
-      identifiers = [data.terraform_remote_state.cluster_infrastructure.outputs.worker_iam_role_arn]
+      identifiers = [data.tfe_outputs.cluster_infrastructure.nonsensitive_values.worker_iam_role_arn]
     }
     actions   = ["s3:ListBucket"]
     resources = [aws_s3_bucket.search_analytics.arn]
@@ -58,7 +58,7 @@ data "aws_iam_policy_document" "search_analytics" {
     sid = "EKSNodesCanReadAndWrite"
     principals {
       type        = "AWS"
-      identifiers = [data.terraform_remote_state.cluster_infrastructure.outputs.worker_iam_role_arn]
+      identifiers = [data.tfe_outputs.cluster_infrastructure.nonsensitive_values.worker_iam_role_arn]
     }
     actions   = ["s3:GetObject", "s3:PutObject"]
     resources = ["${aws_s3_bucket.search_analytics.arn}/*"]

@@ -6,12 +6,12 @@ module "learn_to_rank_job_iam_role" {
   source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
   version = "~> 5.20"
 
-  role_name        = "${local.learn_to_rank_service_account_name}-${data.terraform_remote_state.cluster_infrastructure.outputs.cluster_id}"
+  role_name        = "${local.learn_to_rank_service_account_name}-${data.tfe_outputs.cluster_infrastructure.nonsensitive_values.cluster_id}"
   role_description = "Role for the Search API Learn to rank job. Corresponds to ${local.learn_to_rank_service_account_name} k8s ServiceAccount."
 
   oidc_providers = {
     main = {
-      provider_arn               = data.terraform_remote_state.cluster_infrastructure.outputs.cluster_oidc_provider_arn
+      provider_arn               = data.tfe_outputs.cluster_infrastructure.nonsensitive_values.cluster_oidc_provider_arn
       namespace_service_accounts = ["apps:${local.learn_to_rank_service_account_name}"]
     }
   }
