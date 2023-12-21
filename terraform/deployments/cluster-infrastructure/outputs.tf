@@ -127,5 +127,5 @@ output "public_nat_gateway_ips" {
 }
 
 output "public_licensify_gateway_ips" {
-  value = [for eip in aws_eip.eks_licensify : eip.public_ip]
+  value = [for eip in data.aws_eip.eks_licensify : eip.public_ip]
 }

@@ -107,6 +107,11 @@ resource "aws_nat_gateway" "eks" {
   # TODO: depends_on = [aws_internet_gateway.gw] once we've imported the IGW from govuk-aws.
 }
 
+data "aws_eip" "eks_licensify" {
+  for_each = var.eks_licensify_gateways
+  id       = each.value.eip
+}
+
 # Should be skipped on Integration
 resource "aws_nat_gateway" "eks_licensify" {
   for_each      = var.eks_licensify_gateways
