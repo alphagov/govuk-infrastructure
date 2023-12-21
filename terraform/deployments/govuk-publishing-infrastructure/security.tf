@@ -202,7 +202,7 @@ resource "aws_security_group_rule" "eks_ingress_www_origin_from_eks_nat" {
   from_port         = 443
   to_port           = 443
   protocol          = "tcp"
-  cidr_blocks       = formatlist("%s/32", data.terraform_remote_state.cluster_infrastructure.outputs.public_nat_gateway_ips)
+  cidr_blocks       = formatlist("%s/32", merge(data.terraform_remote_state.cluster_infrastructure.outputs.public_nat_gateway_ips, data.terraform_remote_state.cluster_infrastructure.outputs.public_licensify_gateway_ips))
   security_group_id = aws_security_group.eks_ingress_www_origin.id
 }
 
