@@ -2,6 +2,9 @@ name: SNYK security analysis
 
 on:
   workflow_call:
+    secrets:
+      SNYK_TOKEN:
+        required: true
 
 jobs:
   sast:
