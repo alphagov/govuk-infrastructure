@@ -26,6 +26,7 @@ locals {
     "frontend"                 = ["govuk-find-and-view"],
     "government-frontend"      = ["govuk-find-and-view"],
     "govspeak-preview"         = ["govuk-publishing-platform"],
+    "govuk-sli-collector"      = ["govuk-publishing-platform"],
     "hmrc-manuals-api"         = ["govuk-publishing-platform"],
     "imminence"                = ["govuk-content-interactions-on-platform", "govuk-find-and-view"],
     "info-frontend"            = ["govuk-find-and-view"],
