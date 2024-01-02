@@ -49,7 +49,7 @@ resource "aws_route" "eks_control_plane_nat" {
   for_each               = var.eks_control_plane_subnets
   route_table_id         = aws_route_table.eks_control_plane[each.key].id
   destination_cidr_block = "0.0.0.0/0"
-  nat_gateway_id         = aws_nat_gateway.eks_licensify[each.key].id
+  nat_gateway_id         = length(var.eks_licensify_gateways) == 0 ? aws_nat_gateway.eks[each.key].id : aws_nat_gateway.eks_licensify[each.key].id
   timeouts {
     create = local.route_create_timeout
   }
@@ -154,6 +154,6 @@ resource "aws_route" "eks_private_nat" {
   for_each               = var.eks_private_subnets
   route_table_id         = aws_route_table.eks_private[each.key].id
   destination_cidr_block = "0.0.0.0/0"
-  nat_gateway_id         = aws_nat_gateway.eks_licensify[each.key].id
+  nat_gateway_id         = length(var.eks_licensify_gateways) == 0 ? aws_nat_gateway.eks[each.key].id : aws_nat_gateway.eks_licensify[each.key].id
   timeouts { create = local.route_create_timeout }
 }
