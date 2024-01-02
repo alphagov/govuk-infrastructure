@@ -15,6 +15,10 @@ terraform {
       source  = "fastly/fastly"
       version = "~> 2.1"
     }
+    tfe = {
+      source = "hashicorp/tfe"
+      version = "0.51.1"
+    }
   }
 }
 
@@ -45,6 +49,10 @@ provider "random" {}
 # an API key is needed but 'fake' seems to work.
 provider "fastly" {
   api_key = "fake"
+}
+
+# This will use credentials provided by `terraform login`
+provider "tfe" {
 }
 
 data "aws_caller_identity" "current" {}
