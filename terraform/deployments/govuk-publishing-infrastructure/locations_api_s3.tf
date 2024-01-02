@@ -24,7 +24,7 @@ data "aws_iam_policy_document" "location_api_import_csvs" {
     sid = "EKSNodesCanList"
     principals {
       type        = "AWS"
-      identifiers = [data.terraform_remote_state.cluster_infrastructure.outputs.worker_iam_role_arn]
+      identifiers = [data.tfe_outputs.cluster_infrastructure.nonsensitive_values.worker_iam_role_arn]
     }
     actions   = ["s3:ListBucket"]
     resources = [aws_s3_bucket.location_api_import_csvs.arn]
@@ -33,7 +33,7 @@ data "aws_iam_policy_document" "location_api_import_csvs" {
     sid = "EKSNodesCanWrite"
     principals {
       type        = "AWS"
-      identifiers = [data.terraform_remote_state.cluster_infrastructure.outputs.worker_iam_role_arn]
+      identifiers = [data.tfe_outputs.cluster_infrastructure.nonsensitive_values.worker_iam_role_arn]
     }
     actions   = ["s3:GetObject", "s3:PutObject"]
     resources = ["${aws_s3_bucket.location_api_import_csvs.arn}/*"]

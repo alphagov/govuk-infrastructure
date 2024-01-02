@@ -42,6 +42,6 @@ resource "aws_iam_policy" "write_csvs_buckets" {
 
 # TODO: consider IRSA (pod identity) rather than granting to nodes.
 resource "aws_iam_role_policy_attachment" "write_csvs_buckets" {
-  role       = data.terraform_remote_state.cluster_infrastructure.outputs.worker_iam_role_name
+  role       = data.tfe_outputs.cluster_infrastructure.nonsensitive_values.worker_iam_role_name
   policy_arn = aws_iam_policy.write_csvs_buckets.arn
 }

@@ -11,14 +11,14 @@ module "db_backup_iam_role" {
   source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
   version = "~> 5.20"
 
-  role_name            = "${local.db_backup_service_account_name}-${data.terraform_remote_state.cluster_infrastructure.outputs.cluster_id}"
+  role_name            = "${local.db_backup_service_account_name}-${data.tfe_outputs.cluster_infrastructure.nonsensitive_values.cluster_id}"
   role_description     = "Role for database backup jobs. Corresponds to ${local.db_backup_service_account_name} k8s ServiceAccount."
   max_session_duration = 28800
 
   role_policy_arns = { policy = aws_iam_policy.db_backup_s3.arn }
   oidc_providers = {
     main = {
-      provider_arn               = data.terraform_remote_state.cluster_infrastructure.outputs.cluster_oidc_provider_arn
+      provider_arn               = data.tfe_outputs.cluster_infrastructure.nonsensitive_values.cluster_oidc_provider_arn
       namespace_service_accounts = ["apps:${local.db_backup_service_account_name}"]
     }
   }
