@@ -20,7 +20,6 @@ WORKDIR /data/db
 RUN useradd -Ur mongodb -u 999 -d /data; \
     chown -R mongodb:mongodb /data;
 USER mongodb
-VOLUME /data/db /data/configdb
 EXPOSE 27017
 ENTRYPOINT ["mongod"]
 LABEL org.opencontainers.image.source=https://github.com/alphagov/govuk-infrastructure/tree/main/images/mongodb/
