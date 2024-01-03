@@ -5,4 +5,4 @@
 .PHONY: all image
 
 image:
-	docker build -t mongo:2.6 --platform linux/amd64 .
+	docker build -t mongodb:2.6 --platform linux/amd64 .
