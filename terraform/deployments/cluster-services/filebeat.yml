@@ -53,6 +53,7 @@ output.file.enabled: false
 output.logstash:
   loadbalance: true
   ssl.enabled: true
+  compression_level: 1
   hosts:
     - ${LOGSTASH_HOST:? LOGSTASH_HOST not set}:${LOGSTASH_PORT:? LOGSTASH_PORT not set}
 processors:
