@@ -47,6 +47,7 @@ locals {
     "github-cli",
     "mongodb",
     "toolbox",
+    "clamav",
     "statsd",
     "govuk-terraform",
     "search-api-learn-to-rank",
