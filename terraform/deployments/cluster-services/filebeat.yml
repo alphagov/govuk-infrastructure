@@ -24,6 +24,7 @@ filebeat.inputs:
             - container.runtime
             - log
             - kubernetes.labels.app
+            - kubernetes.labels.app_kubernetes_io/instance
             - kubernetes.labels.app_kubernetes_io/managed-by
             - kubernetes.labels.pod-template-hash
             - kubernetes.namespace_labels
@@ -38,6 +39,7 @@ filebeat.inputs:
             - kubernetes.node.labels.failure-domain_beta_kubernetes_io/region
             - kubernetes.node.labels.failure-domain_beta_kubernetes_io/zone
             - kubernetes.node.labels.k8s_io/cloud-provider-aws
+            - kubernetes.node.labels.kubernetes_io/arch
             - kubernetes.node.labels.kubernetes_io/hostname
             - kubernetes.node.labels.kubernetes_io/os
             - kubernetes.node.labels.node_kubernetes_io/instance-type
