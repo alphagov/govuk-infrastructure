@@ -1,6 +1,6 @@
 FROM clamav/clamav-debian:1.2
 
-COPY "./scripts/unprivileged-entrypoint.sh" "/unpriv-init"
+COPY "./images/clamav/scripts/unprivileged-entrypoint.sh" "/unpriv-init"
 
 RUN chown -R clamav:clamav /var/lib/clamav
 RUN chown -R clamav:clamav /unpriv-init
