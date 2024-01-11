@@ -18,6 +18,12 @@ filebeat.inputs:
           host: ${NODE_NAME}
           matchers:
             - logs_path.logs_path: /var/log/containers/
+      - replace:
+          ignore_missing: true
+          fields:
+            - field: "kubernetes.node.name"
+              pattern: "\\.[a-z0-9-]+\\.compute\\.internal"
+              replacement: ""
       - drop_fields:
           ignore_missing: true
           fields:
@@ -26,6 +32,7 @@ filebeat.inputs:
             - kubernetes.labels.app
             - kubernetes.labels.app_kubernetes_io/instance
             - kubernetes.labels.app_kubernetes_io/managed-by
+            - kubernetes.labels.helm_sh/chart
             - kubernetes.labels.pod-template-hash
             - kubernetes.namespace_labels
             - kubernetes.namespace_uid
