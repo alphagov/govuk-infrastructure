@@ -210,6 +210,18 @@ resource "aws_iam_user_policy" "github_ecr_user_policy" {
           "ecr:CompleteLayerUpload"
         ],
         "Resource" : ["*"],
+      },
+      {
+        "Sid" : "ContainerSigningKey",
+        "Effect" : "Allow",
+        "Action" : [
+          "kms:DescribeKey",
+          "kms:GetPublicKey",
+          "kms:Sign"
+        ],
+        "Resource" : [
+          aws_kms_key.container_signing_key.arn
+        ]
       }
     ]
   })
