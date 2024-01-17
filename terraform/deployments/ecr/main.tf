@@ -215,6 +215,7 @@ resource "aws_iam_user_policy" "github_ecr_user_policy" {
         "Sid" : "ContainerSigningKey",
         "Effect" : "Allow",
         "Action" : [
+          "kms:DescribeKey",
           "kms:GetPublicKey",
           "kms:Sign"
         ],
