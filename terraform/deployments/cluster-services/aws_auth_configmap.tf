@@ -38,7 +38,6 @@ locals {
       groups   = ["powerusers"]
     }
   ]
-  poweruser_namespaces = [kubernetes_namespace.apps]
 
   readonly_configmap_roles = [
     for arn in data.aws_iam_roles.user.arns : {
@@ -55,7 +54,6 @@ resource "kubernetes_config_map" "aws_auth" {
     namespace = "kube-system"
     labels    = { "app.kubernetes.io/managed-by" = "Terraform" }
   }
-
   data = {
     mapRoles = yamlencode(distinct(concat(
       local.default_configmap_roles,
@@ -67,9 +65,7 @@ resource "kubernetes_config_map" "aws_auth" {
 }
 
 resource "kubernetes_cluster_role_binding" "cluster_admins" {
-  metadata {
-    name = "cluster-admins"
-  }
+  metadata { name = "cluster-admins" }
   role_ref {
     api_group = "rbac.authorization.k8s.io"
     kind      = "ClusterRole"
@@ -83,9 +79,7 @@ resource "kubernetes_cluster_role_binding" "cluster_admins" {
 }
 
 resource "kubernetes_cluster_role_binding" "cluster_readonly" {
-  metadata {
-    name = "cluster-readonly"
-  }
+  metadata { name = "cluster-readonly" }
   role_ref {
     api_group = "rbac.authorization.k8s.io"
     kind      = "ClusterRole"
@@ -99,10 +93,7 @@ resource "kubernetes_cluster_role_binding" "cluster_readonly" {
 }
 
 resource "kubernetes_cluster_role" "read_crs_and_crbs" {
-  metadata {
-    name = "read-crs-and-crbs"
-  }
-
+  metadata { name = "read-crs-and-crbs" }
   rule {
     api_groups = ["rbac.authorization.k8s.io"]
     resources  = ["clusterrolebindings", "clusterroles"]
@@ -111,9 +102,7 @@ resource "kubernetes_cluster_role" "read_crs_and_crbs" {
 }
 
 resource "kubernetes_cluster_role_binding" "read_crs_and_crbs" {
-  metadata {
-    name = "read-crs-and-crbs"
-  }
+  metadata { name = "read-crs-and-crbs" }
   role_ref {
     api_group = "rbac.authorization.k8s.io"
     kind      = "ClusterRole"
@@ -127,9 +116,7 @@ resource "kubernetes_cluster_role_binding" "read_crs_and_crbs" {
 }
 
 resource "kubernetes_cluster_role" "poweruser" {
-  metadata {
-    name = "poweruser"
-  }
+  metadata { name = "poweruser" }
   rule {
     api_groups = ["*"]
     resources  = ["*"]
@@ -138,7 +125,7 @@ resource "kubernetes_cluster_role" "poweruser" {
 }
 
 resource "kubernetes_role_binding" "poweruser" {
-  for_each = toset([for ns in local.poweruser_namespaces : ns.metadata[0].name])
+  for_each = toset([kubernetes_namespace.apps.metadata[0].name, "datagovuk"])
 
   metadata {
     name      = "poweruser-${each.key}"
