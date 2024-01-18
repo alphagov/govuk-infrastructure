@@ -54,7 +54,6 @@ resource "kubernetes_config_map" "aws_auth" {
     namespace = "kube-system"
     labels    = { "app.kubernetes.io/managed-by" = "Terraform" }
   }
-
   data = {
     mapRoles = yamlencode(distinct(concat(
       local.default_configmap_roles,
@@ -66,9 +65,7 @@ resource "kubernetes_config_map" "aws_auth" {
 }
 
 resource "kubernetes_cluster_role_binding" "cluster_admins" {
-  metadata {
-    name = "cluster-admins"
-  }
+  metadata { name = "cluster-admins" }
   role_ref {
     api_group = "rbac.authorization.k8s.io"
     kind      = "ClusterRole"
@@ -82,9 +79,7 @@ resource "kubernetes_cluster_role_binding" "cluster_admins" {
 }
 
 resource "kubernetes_cluster_role_binding" "cluster_readonly" {
-  metadata {
-    name = "cluster-readonly"
-  }
+  metadata { name = "cluster-readonly" }
   role_ref {
     api_group = "rbac.authorization.k8s.io"
     kind      = "ClusterRole"
@@ -98,10 +93,7 @@ resource "kubernetes_cluster_role_binding" "cluster_readonly" {
 }
 
 resource "kubernetes_cluster_role" "read_crs_and_crbs" {
-  metadata {
-    name = "read-crs-and-crbs"
-  }
-
+  metadata { name = "read-crs-and-crbs" }
   rule {
     api_groups = ["rbac.authorization.k8s.io"]
     resources  = ["clusterrolebindings", "clusterroles"]
@@ -110,9 +102,7 @@ resource "kubernetes_cluster_role" "read_crs_and_crbs" {
 }
 
 resource "kubernetes_cluster_role_binding" "read_crs_and_crbs" {
-  metadata {
-    name = "read-crs-and-crbs"
-  }
+  metadata { name = "read-crs-and-crbs" }
   role_ref {
     api_group = "rbac.authorization.k8s.io"
     kind      = "ClusterRole"
@@ -126,9 +116,7 @@ resource "kubernetes_cluster_role_binding" "read_crs_and_crbs" {
 }
 
 resource "kubernetes_cluster_role" "poweruser" {
-  metadata {
-    name = "poweruser"
-  }
+  metadata { name = "poweruser" }
   rule {
     api_groups = ["*"]
     resources  = ["*"]
