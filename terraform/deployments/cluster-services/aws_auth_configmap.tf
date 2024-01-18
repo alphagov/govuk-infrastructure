@@ -38,7 +38,6 @@ locals {
       groups   = ["powerusers"]
     }
   ]
-  poweruser_namespaces = [kubernetes_namespace.apps]
 
   readonly_configmap_roles = [
     for arn in data.aws_iam_roles.user.arns : {
@@ -138,7 +137,7 @@ resource "kubernetes_cluster_role" "poweruser" {
 }
 
 resource "kubernetes_role_binding" "poweruser" {
-  for_each = toset([for ns in local.poweruser_namespaces : ns.metadata[0].name])
+  for_each = toset([kubernetes_namespace.apps.metadata[0].name, "datagovuk"])
 
   metadata {
     name      = "poweruser-${each.key}"
