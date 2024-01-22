@@ -13,7 +13,7 @@ jobs:
           show-progress: false
 
       - name: Review changes to repository supply chain
-        uses: actions/dependency-review-action@v3
+        uses: actions/dependency-review-action@v4
         with:
           fail-on-severity: critical
 
@@ -27,7 +27,7 @@ jobs:
           show-progress: false
 
       - name: Review changes to repository supply chain
-        uses: actions/dependency-review-action@v3
+        uses: actions/dependency-review-action@v4
         with:
           fail-on-severity: critical
           base-ref: refs/heads/main~1
