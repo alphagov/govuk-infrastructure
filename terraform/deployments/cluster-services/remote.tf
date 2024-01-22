@@ -3,11 +3,12 @@ data "aws_region" "current" {}
 data "aws_caller_identity" "current" {}
 
 data "terraform_remote_state" "cluster_infrastructure" {
-  backend   = "s3"
+  backend   = "remote"
   workspace = terraform.workspace
   config = {
-    bucket = var.cluster_infrastructure_state_bucket
-    key    = "projects/cluster-infrastructure.tfstate"
-    region = data.aws_region.current.name
+    organization = "govuk"
+    workspaces = {
+      name = "cluster-infrastructure-${var.govuk_environment}"
+    }
   }
 }
