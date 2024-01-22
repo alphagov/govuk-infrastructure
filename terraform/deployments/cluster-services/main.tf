@@ -7,7 +7,14 @@
 # See https://github.com/alphagov/govuk-infrastructure/blob/main/docs/architecture/decisions/0003-split-terraform-state-into-separate-aws-cluster-and-kubernetes-resource-phases.md
 
 terraform {
-  backend "s3" {}
+  #backend "s3" {}
+
+  cloud {
+    organization = "govuk"
+    workspaces {
+      tags = ["cluster-services", "eks", "aws"]
+    }
+  }
 
   required_version = "~> 1.5"
   required_providers {
@@ -28,34 +35,45 @@ terraform {
   }
 }
 
-provider "kubernetes" {
-  host                   = data.terraform_remote_state.cluster_infrastructure.outputs.cluster_endpoint
-  cluster_ca_certificate = base64decode(data.terraform_remote_state.cluster_infrastructure.outputs.cluster_certificate_authority_data)
-  exec {
-    api_version = "client.authentication.k8s.io/v1"
-    command     = "aws"
-    args        = ["eks", "get-token", "--cluster-name", data.terraform_remote_state.cluster_infrastructure.outputs.cluster_id]
+provider "aws" {
+  region = "eu-west-1"
+  default_tags {
+    tags = {
+      Product              = "GOV.UK"
+      System               = "EKS cluster services"
+      Environment          = "${var.govuk_environment}"
+      Owner                = "govuk-platform-engineering@digital.cabinet-office.gov.uk"
+      cluster              = "govuk"
+      repository           = "govuk-infrastructure"
+      terraform_deployment = basename(abspath(path.root))
+    }
   }
+}
+
+data "aws_eks_cluster_auth" "cluster_token" {
+  name = "govuk"
+}
+
+provider "kubernetes" {
+  host                   = data.tfe_outputs.cluster_infrastructure.nonsensitive_values.cluster_endpoint
+  cluster_ca_certificate = base64decode(data.tfe_outputs.cluster_infrastructure.nonsensitive_values.cluster_certificate_authority_data)
+  token                  = data.aws_eks_cluster_auth.cluster_token.token
 }
 
 provider "helm" {
   # TODO: If/when TF makes provider configs a first-class language object,
   # reuse the identical config from above.
   kubernetes {
-    host                   = data.terraform_remote_state.cluster_infrastructure.outputs.cluster_endpoint
-    cluster_ca_certificate = base64decode(data.terraform_remote_state.cluster_infrastructure.outputs.cluster_certificate_authority_data)
-    exec {
-      api_version = "client.authentication.k8s.io/v1"
-      command     = "aws"
-      args        = ["eks", "get-token", "--cluster-name", data.terraform_remote_state.cluster_infrastructure.outputs.cluster_id]
-    }
+    host                   = data.tfe_outputs.cluster_infrastructure.nonsensitive_values.cluster_endpoint
+    cluster_ca_certificate = base64decode(data.tfe_outputs.cluster_infrastructure.nonsensitive_values.cluster_certificate_authority_data)
+    token                  = data.aws_eks_cluster_auth.cluster_token.token
   }
 }
 
 locals {
-  monitoring_ns          = data.terraform_remote_state.cluster_infrastructure.outputs.monitoring_namespace
-  services_ns            = data.terraform_remote_state.cluster_infrastructure.outputs.cluster_services_namespace
-  external_dns_zone_name = data.terraform_remote_state.cluster_infrastructure.outputs.external_dns_zone_name
+  monitoring_ns          = data.tfe_outputs.cluster_infrastructure.nonsensitive_values.monitoring_namespace
+  services_ns            = data.tfe_outputs.cluster_infrastructure.nonsensitive_values.cluster_services_namespace
+  external_dns_zone_name = data.tfe_outputs.cluster_infrastructure.nonsensitive_values.external_dns_zone_name
   alb_ingress_annotations = {
     "alb.ingress.kubernetes.io/scheme"       = "internet-facing"
     "alb.ingress.kubernetes.io/target-type"  = "ip"

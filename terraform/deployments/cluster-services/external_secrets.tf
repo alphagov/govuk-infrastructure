@@ -14,7 +14,7 @@ resource "helm_release" "cluster_secret_store" {
   namespace  = local.services_ns
   values = [yamlencode({
     awsRegion          = data.aws_region.current.name
-    serviceAccountName = data.terraform_remote_state.cluster_infrastructure.outputs.external_secrets_service_account_name
+    serviceAccountName = data.tfe_outputs.cluster_infrastructure.nonsensitive_values.external_secrets_service_account_name
   })]
 }
 
