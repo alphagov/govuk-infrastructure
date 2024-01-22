@@ -10,7 +10,7 @@ resource "tfe_variable" "vars" {
 
   variable_set_id = tfe_variable_set.set.id
   key             = each.key
-  value           = try(tostring(each.value), "nostring") == "nostring" ? replace(jsonencode(each.value), ":", "=") : tostring(each.value)
+  value           = try(tostring(each.value), replace(jsonencode(each.value), ":", "="))
   hcl             = try(tostring(each.value), "nostring") == "nostring" ? true : false
   category        = "terraform"
 }
