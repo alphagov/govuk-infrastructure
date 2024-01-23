@@ -154,7 +154,11 @@ resource "kubernetes_role_binding" "poweruser" {
 }
 
 resource "kubernetes_role" "licensing" {
-  metadata { name = "licensing" }
+  metadata {
+    name      = "licensing"
+    namespace = "licensify"
+  }
+
   rule {
     api_groups = [""]
     resources  = ["pods", "pods/logs", "deployments", "replicasets", "events"]
