@@ -13,6 +13,7 @@
 data "aws_iam_roles" "admin" { name_regex = "\\..*-admin$" }
 data "aws_iam_roles" "poweruser" { name_regex = "\\..*-poweruser$" }
 data "aws_iam_roles" "user" { name_regex = "\\..*-user$" }
+data "aws_iam_roles" "licensinguser" { name_regex = "\\..*-licensinguser$" }
 
 locals {
   default_configmap_roles = [
@@ -40,7 +41,7 @@ locals {
   ]
 
   readonly_configmap_roles = [
-    for arn in data.aws_iam_roles.user.arns : {
+    for arn in concat(data.aws_iam_roles.user.arns, data.aws_iam_roles.licensinguser.arns) : {
       rolearn  = arn
       username = regex("/(.*-user)$", arn)[0]
       groups   = ["readonly"]
