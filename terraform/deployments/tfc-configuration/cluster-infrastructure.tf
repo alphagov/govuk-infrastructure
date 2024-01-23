@@ -6,7 +6,7 @@ module "cluster-infrastructure-integration" {
   workspace_name      = "cluster-infrastructure-integration"
   workspace_desc      = "The cluster-infrastructure module is responsible for the AWS resources which constitute the EKS cluster."
   workspace_tags      = ["integration", "cluster-infrastructure", "eks", "aws"]
-  terraform_version   = "1.5.2"
+  terraform_version   = "1.7.0"
   execution_mode      = "remote"
   working_directory   = "/terraform/deployments/cluster-infrastructure/"
   trigger_patterns    = ["/terraform/deployments/cluster-infrastructure/**/*"]
@@ -38,7 +38,7 @@ module "cluster-infrastructure-staging" {
   workspace_name      = "cluster-infrastructure-staging"
   workspace_desc      = "The cluster-infrastructure module is responsible for the AWS resources which constitute the EKS cluster."
   workspace_tags      = ["staging", "cluster-infrastructure", "eks", "aws"]
-  terraform_version   = "1.5.2"
+  terraform_version   = "1.7.0"
   execution_mode      = "remote"
   working_directory   = "/terraform/deployments/cluster-infrastructure/"
   trigger_patterns    = ["/terraform/deployments/cluster-infrastructure/**/*"]
@@ -72,7 +72,7 @@ module "cluster-infrastructure-production" {
   workspace_name      = "cluster-infrastructure-production"
   workspace_desc      = "The cluster-infrastructure module is responsible for the AWS resources which constitute the EKS cluster."
   workspace_tags      = ["production", "cluster-infrastructure", "eks", "aws"]
-  terraform_version   = "1.5.2"
+  terraform_version   = "1.7.0"
   execution_mode      = "remote"
   working_directory   = "/terraform/deployments/cluster-infrastructure/"
   trigger_patterns    = ["/terraform/deployments/cluster-infrastructure/**/*"]
