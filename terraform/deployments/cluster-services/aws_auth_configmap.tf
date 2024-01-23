@@ -41,10 +41,18 @@ locals {
   ]
 
   readonly_configmap_roles = [
-    for arn in setunion(data.aws_iam_roles.user.arns, data.aws_iam_roles.licensinguser.arns) : {
+    for arn in data.aws_iam_roles.user.arns : {
       rolearn  = arn
-      username = regex("/(.*-(user|licensinguser))$", arn)[0]
+      username = regex("/(.*-user)$", arn)[0]
       groups   = ["readonly"]
+    }
+  ]
+
+  licensing_configmap_roles = [
+    for arn in data.aws_iam_roles.licensinguser.arns : {
+      rolearn  = arn
+      username = regex("/(.*-licensinguser)$", arn)[0]
+      groups   = ["licensing"]
     }
   ]
 }
@@ -61,6 +69,7 @@ resource "kubernetes_config_map" "aws_auth" {
       local.admin_configmap_roles,
       local.readonly_configmap_roles,
       local.poweruser_configmap_roles,
+      local.licensing_configmap_roles,
     )))
   }
 }
@@ -140,6 +149,38 @@ resource "kubernetes_role_binding" "poweruser" {
   subject {
     kind      = "Group"
     name      = "powerusers"
+    api_group = "rbac.authorization.k8s.io"
+  }
+}
+
+resource "kubernetes_role" "licensing" {
+  metadata { name = "licensing" }
+  rule {
+    api_groups = [""]
+    resources  = ["pods", "pods/logs", "deployments", "replicasets", "events"]
+    verbs      = ["get", "list", "watch"]
+  }
+
+  rule {
+    api_groups = [""]
+    resources  = ["pods/exec"]
+    verbs      = ["create"]
+  }
+}
+
+resource "kubernetes_role_binding" "licensing" {
+  metadata {
+    name      = "licensing"
+    namespace = "licensify"
+  }
+  role_ref {
+    api_group = "rbac.authorization.k8s.io"
+    kind      = "Role"
+    name      = "licensing"
+  }
+  subject {
+    kind      = "Group"
+    name      = "licensing"
     api_group = "rbac.authorization.k8s.io"
   }
 }
