@@ -10,7 +10,7 @@
 # opposed to using Helm or kubectl or other tooling designed to work with
 # k8s). This is a rare exception to that rule of thumb.
 
-data "aws_iam_roles" "admin" { name_regex = "(terraform-cloud$|\\..*-admin$)" }
+data "aws_iam_roles" "admin" { name_regex = "(^terraform-cloud$|\\..*-admin$)" }
 data "aws_iam_roles" "poweruser" { name_regex = "\\..*-poweruser$" }
 data "aws_iam_roles" "user" { name_regex = "\\..*-user$" }
 data "aws_iam_roles" "licensinguser" { name_regex = "\\..*-licensinguser$" }
