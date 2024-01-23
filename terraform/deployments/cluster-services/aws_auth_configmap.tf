@@ -10,14 +10,14 @@
 # opposed to using Helm or kubectl or other tooling designed to work with
 # k8s). This is a rare exception to that rule of thumb.
 
-data "aws_iam_roles" "admin" { name_regex = "\\..*-admin$" }
+data "aws_iam_roles" "admin" { name_regex = "(terraform-cloud|\\..*-admin$)" }
 data "aws_iam_roles" "poweruser" { name_regex = "\\..*-poweruser$" }
 data "aws_iam_roles" "user" { name_regex = "\\..*-user$" }
 
 locals {
   default_configmap_roles = [
     {
-      rolearn  = data.tfe_outputs.cluster_infrastructure.values.worker_iam_role_arn
+      rolearn  = data.tfe_outputs.cluster_infrastructure.nonsensitive_values.worker_iam_role_arn
       username = "system:node:{{EC2PrivateDNSName}}"
       groups   = ["system:bootstrappers", "system:nodes"]
     },
@@ -26,7 +26,7 @@ locals {
   admin_configmap_roles = [
     for arn in data.aws_iam_roles.admin.arns : {
       rolearn  = arn
-      username = regex("/(.*-admin)$", arn)[0]
+      username = regex("/(terraform-cloud|.*-admin)$", arn)[0]
       groups   = ["cluster-admins"]
     }
   ]
