@@ -160,8 +160,8 @@ resource "kubernetes_role" "licensing" {
   }
 
   rule {
-    api_groups = [""]
-    resources  = ["pods", "pods/logs", "deployments", "replicasets", "events"]
+    api_groups = ["", "apps"]
+    resources  = ["pods", "pods/log", "deployments", "replicasets", "events"]
     verbs      = ["get", "list", "watch"]
   }
 
