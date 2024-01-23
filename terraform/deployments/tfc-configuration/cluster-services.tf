@@ -26,6 +26,6 @@ module "cluster-services-integration" {
   variable_set_names = [
     "aws-credentials-integration",
     "common",
-    "integration-common"
+    "common-integration"
   ]
 }

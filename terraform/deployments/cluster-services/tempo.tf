@@ -1,6 +1,6 @@
 locals {
   tempo_service_account = "tempo"
-  cluster_name          = data.terraform_remote_state.cluster_infrastructure.outputs.cluster_id
+  cluster_name          = data.tfe_outputs.cluster_infrastructure.nonsensitive_values.cluster_id
 }
 
 resource "aws_s3_bucket" "tempo" {

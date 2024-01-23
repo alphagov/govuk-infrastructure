@@ -2,14 +2,15 @@ module "cluster-infrastructure-integration" {
   source  = "alexbasista/workspacer/tfe"
   version = "0.9.0"
 
-  organization      = var.organization
-  workspace_name    = "cluster-infrastructure-integration"
-  workspace_desc    = "The cluster-infrastructure module is responsible for the AWS resources which constitute the EKS cluster."
-  workspace_tags    = ["integration", "cluster-infrastructure", "eks", "aws"]
-  terraform_version = "1.5.2"
-  execution_mode    = "remote"
-  working_directory = "/terraform/deployments/cluster-infrastructure/"
-  trigger_patterns  = ["/terraform/deployments/cluster-infrastructure/**/*"]
+  organization        = var.organization
+  workspace_name      = "cluster-infrastructure-integration"
+  workspace_desc      = "The cluster-infrastructure module is responsible for the AWS resources which constitute the EKS cluster."
+  workspace_tags      = ["integration", "cluster-infrastructure", "eks", "aws"]
+  terraform_version   = "1.5.2"
+  execution_mode      = "remote"
+  working_directory   = "/terraform/deployments/cluster-infrastructure/"
+  trigger_patterns    = ["/terraform/deployments/cluster-infrastructure/**/*"]
+  global_remote_state = true
 
   project_name = "govuk-infrastructure"
   vcs_repo = {
@@ -61,14 +62,15 @@ module "cluster-infrastructure-staging" {
   source  = "alexbasista/workspacer/tfe"
   version = "0.9.0"
 
-  organization      = var.organization
-  workspace_name    = "cluster-infrastructure-staging"
-  workspace_desc    = "The cluster-infrastructure module is responsible for the AWS resources which constitute the EKS cluster."
-  workspace_tags    = ["staging", "cluster-infrastructure", "eks", "aws"]
-  terraform_version = "1.5.2"
-  execution_mode    = "remote"
-  working_directory = "/terraform/deployments/cluster-infrastructure/"
-  trigger_patterns  = ["/terraform/deployments/cluster-infrastructure/**/*"]
+  organization        = var.organization
+  workspace_name      = "cluster-infrastructure-staging"
+  workspace_desc      = "The cluster-infrastructure module is responsible for the AWS resources which constitute the EKS cluster."
+  workspace_tags      = ["staging", "cluster-infrastructure", "eks", "aws"]
+  terraform_version   = "1.5.2"
+  execution_mode      = "remote"
+  working_directory   = "/terraform/deployments/cluster-infrastructure/"
+  trigger_patterns    = ["/terraform/deployments/cluster-infrastructure/**/*"]
+  global_remote_state = true
 
   project_name = "govuk-infrastructure"
 
@@ -119,14 +121,15 @@ module "cluster-infrastructure-production" {
   source  = "alexbasista/workspacer/tfe"
   version = "0.9.0"
 
-  organization      = var.organization
-  workspace_name    = "cluster-infrastructure-production"
-  workspace_desc    = "The cluster-infrastructure module is responsible for the AWS resources which constitute the EKS cluster."
-  workspace_tags    = ["production", "cluster-infrastructure", "eks", "aws"]
-  terraform_version = "1.5.2"
-  execution_mode    = "remote"
-  working_directory = "/terraform/deployments/cluster-infrastructure/"
-  trigger_patterns  = ["/terraform/deployments/cluster-infrastructure/**/*"]
+  organization        = var.organization
+  workspace_name      = "cluster-infrastructure-production"
+  workspace_desc      = "The cluster-infrastructure module is responsible for the AWS resources which constitute the EKS cluster."
+  workspace_tags      = ["production", "cluster-infrastructure", "eks", "aws"]
+  terraform_version   = "1.5.2"
+  execution_mode      = "remote"
+  working_directory   = "/terraform/deployments/cluster-infrastructure/"
+  trigger_patterns    = ["/terraform/deployments/cluster-infrastructure/**/*"]
+  global_remote_state = true
 
   project_name = "govuk-infrastructure"
 

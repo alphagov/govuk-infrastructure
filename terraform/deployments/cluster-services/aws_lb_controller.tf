@@ -13,12 +13,12 @@ resource "helm_release" "aws_lb_controller" {
   namespace        = local.services_ns
   create_namespace = true
   values = [yamlencode({
-    clusterName      = data.terraform_remote_state.cluster_infrastructure.outputs.cluster_id
+    clusterName      = data.tfe_outputs.cluster_infrastructure.nonsensitive_values.cluster_id
     defaultSSLPolicy = "ELBSecurityPolicy-TLS13-1-2-2021-06" # TLS 1.3, backward compatible with 1.2
     serviceAccount = {
-      name = data.terraform_remote_state.cluster_infrastructure.outputs.aws_lb_controller_service_account_name
+      name = data.tfe_outputs.cluster_infrastructure.nonsensitive_values.aws_lb_controller_service_account_name
       annotations = {
-        "eks.amazonaws.com/role-arn" = data.terraform_remote_state.cluster_infrastructure.outputs.aws_lb_controller_role_arn
+        "eks.amazonaws.com/role-arn" = data.tfe_outputs.cluster_infrastructure.nonsensitive_values.aws_lb_controller_role_arn
       }
     }
     replicaCount = var.desired_ha_replicas
