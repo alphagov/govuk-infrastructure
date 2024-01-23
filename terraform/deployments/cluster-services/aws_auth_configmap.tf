@@ -41,7 +41,7 @@ locals {
   ]
 
   readonly_configmap_roles = [
-    for arn in concat(data.aws_iam_roles.user.arns, data.aws_iam_roles.licensinguser.arns) : {
+    for arn in setunion(data.aws_iam_roles.user.arns, data.aws_iam_roles.licensinguser.arns) : {
       rolearn  = arn
       username = regex("/(.*-user)$", arn)[0]
       groups   = ["readonly"]
