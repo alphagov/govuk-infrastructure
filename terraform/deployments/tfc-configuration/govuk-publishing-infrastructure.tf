@@ -51,8 +51,7 @@ module "govuk-publishing-infrastructure-staging" {
   }
 
   team_access = {
-    "GOV.UK Non-Production" = "write"
-    "GOV.UK Production"     = "write"
+    "GOV.UK Production" = "write"
   }
 
   variable_set_names = [
