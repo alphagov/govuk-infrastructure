@@ -65,26 +65,6 @@ resource "aws_security_group_rule" "frontend_memcached_from_eks_workers" {
 # Rules added to external security groups managed by govuk-aws
 #
 
-resource "aws_security_group_rule" "mongodb_from_eks_workers" {
-  description              = "Shared MongoDB accepts requests from EKS nodes"
-  type                     = "ingress"
-  from_port                = 27017
-  to_port                  = 27017
-  protocol                 = "tcp"
-  security_group_id        = data.terraform_remote_state.infra_security_groups.outputs.sg_mongo_id
-  source_security_group_id = data.tfe_outputs.cluster_infrastructure.nonsensitive_values.node_security_group_id
-}
-
-resource "aws_security_group_rule" "router_mongodb_from_eks_workers" {
-  description              = "Router MongoDB accepts requests from EKS nodes"
-  type                     = "ingress"
-  from_port                = 27017
-  to_port                  = 27017
-  protocol                 = "tcp"
-  security_group_id        = data.terraform_remote_state.infra_security_groups.outputs.sg_router-backend_id
-  source_security_group_id = data.tfe_outputs.cluster_infrastructure.nonsensitive_values.node_security_group_id
-}
-
 resource "aws_security_group_rule" "rabbitmq_from_eks_workers" {
   description              = "RabbitMQ accepts AMQP requests from EKS nodes"
   type                     = "ingress"
