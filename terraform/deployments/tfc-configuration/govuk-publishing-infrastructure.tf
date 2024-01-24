@@ -14,7 +14,7 @@ module "govuk-publishing-infrastructure-integration" {
   project_name = "govuk-infrastructure"
   vcs_repo = {
     identifier     = "alphagov/govuk-infrastructure"
-    branch         = "samsimpson1/tfc"
+    branch         = "main"
     oauth_token_id = data.tfe_oauth_client.github.oauth_token_id
   }
 
@@ -46,7 +46,7 @@ module "govuk-publishing-infrastructure-staging" {
   project_name = "govuk-infrastructure"
   vcs_repo = {
     identifier     = "alphagov/govuk-infrastructure"
-    branch         = "samsimpson1/tfc"
+    branch         = "main"
     oauth_token_id = data.tfe_oauth_client.github.oauth_token_id
   }
 
@@ -78,12 +78,12 @@ module "govuk-publishing-infrastructure-production" {
   project_name = "govuk-infrastructure"
   vcs_repo = {
     identifier     = "alphagov/govuk-infrastructure"
-    branch         = "samsimpson1/tfc"
+    branch         = "main"
     oauth_token_id = data.tfe_oauth_client.github.oauth_token_id
   }
 
   team_access = {
-    "GOV.UK Production"     = "write"
+    "GOV.UK Production" = "write"
   }
 
   variable_set_names = [
