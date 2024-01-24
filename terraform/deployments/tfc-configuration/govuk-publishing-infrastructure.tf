@@ -1,15 +1,15 @@
-module "cluster-services-integration" {
+module "govuk-publishing-infrastructure-integration" {
   source  = "alexbasista/workspacer/tfe"
   version = "0.9.0"
 
   organization      = var.organization
-  workspace_name    = "cluster-services-integration"
-  workspace_desc    = "The cluster-services module is responsible for the AWS resources which constitute the EKS cluster."
-  workspace_tags    = ["integration", "cluster-services", "eks", "aws"]
+  workspace_name    = "govuk-publishing-infrastructure-integration"
+  workspace_desc    = "This module manages AWS resources which are specific to GOV.UK Publishing."
+  workspace_tags    = ["integration", "govuk-publishing-infrastructure", "eks", "aws"]
   terraform_version = "1.7.0"
   execution_mode    = "remote"
-  working_directory = "/terraform/deployments/cluster-services/"
-  trigger_patterns  = ["/terraform/deployments/cluster-services/**/*"]
+  working_directory = "/terraform/deployments/govuk-publishing-infrastructure/"
+  trigger_patterns  = ["/terraform/deployments/govuk-publishing-infrastructure/**/*"]
 
   project_name = "govuk-infrastructure"
   vcs_repo = {
@@ -30,18 +30,18 @@ module "cluster-services-integration" {
   ]
 }
 
-module "cluster-services-staging" {
+module "govuk-publishing-infrastructure-staging" {
   source  = "alexbasista/workspacer/tfe"
   version = "0.9.0"
 
   organization      = var.organization
-  workspace_name    = "cluster-services-staging"
-  workspace_desc    = "The cluster-services module is responsible for the AWS resources which constitute the EKS cluster."
-  workspace_tags    = ["staging", "cluster-services", "eks", "aws"]
+  workspace_name    = "govuk-publishing-infrastructure-staging"
+  workspace_desc    = "This module manages AWS resources which are specific to GOV.UK Publishing."
+  workspace_tags    = ["staging", "govuk-publishing-infrastructure", "eks", "aws"]
   terraform_version = "1.7.0"
   execution_mode    = "remote"
-  working_directory = "/terraform/deployments/cluster-services/"
-  trigger_patterns  = ["/terraform/deployments/cluster-services/**/*"]
+  working_directory = "/terraform/deployments/govuk-publishing-infrastructure/"
+  trigger_patterns  = ["/terraform/deployments/govuk-publishing-infrastructure/**/*"]
 
   project_name = "govuk-infrastructure"
   vcs_repo = {
@@ -61,18 +61,18 @@ module "cluster-services-staging" {
   ]
 }
 
-module "cluster-services-production" {
+module "govuk-publishing-infrastructure-production" {
   source  = "alexbasista/workspacer/tfe"
   version = "0.9.0"
 
   organization      = var.organization
-  workspace_name    = "cluster-services-production"
-  workspace_desc    = "The cluster-services module is responsible for the AWS resources which constitute the EKS cluster."
-  workspace_tags    = ["production", "cluster-services", "eks", "aws"]
+  workspace_name    = "govuk-publishing-infrastructure-production"
+  workspace_desc    = "This module manages AWS resources which are specific to GOV.UK Publishing."
+  workspace_tags    = ["production", "govuk-publishing-infrastructure", "eks", "aws"]
   terraform_version = "1.7.0"
   execution_mode    = "remote"
-  working_directory = "/terraform/deployments/cluster-services/"
-  trigger_patterns  = ["/terraform/deployments/cluster-services/**/*"]
+  working_directory = "/terraform/deployments/govuk-publishing-infrastructure/"
+  trigger_patterns  = ["/terraform/deployments/govuk-publishing-infrastructure/**/*"]
 
   project_name = "govuk-infrastructure"
   vcs_repo = {
