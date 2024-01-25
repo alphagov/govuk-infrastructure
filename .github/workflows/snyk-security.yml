@@ -15,12 +15,7 @@ jobs:
         continue-on-error: true
         run: |
           snyk auth ${{ secrets.SNYK_TOKEN }}
-          snyk code test --json --severity-threshold=high >> snyk-sast.json
-      - name: Archive SAST results
-        uses: actions/upload-artifact@v4
-        with:
-          name: snyk-sast-file
-          path: snyk-sast.json
+          snyk code test --severity-threshold=high
 
   sca:
     permissions:
@@ -33,9 +28,4 @@ jobs:
         continue-on-error: true
         run: |
           snyk auth ${{ secrets.SNYK_TOKEN }}
-          snyk test --json --severity-threshold=high >> snyk-sca.json
-      - name: Archive SCA results
-        uses: actions/upload-artifact@v4
-        with:
-          name: snyk-sca-file
-          path: snyk-sca.json
+          snyk test --severity-threshold=high
