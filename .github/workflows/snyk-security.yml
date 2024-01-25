@@ -10,17 +10,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: snyk/actions/setup@master
-      - name: Snyk Code Test
-        continue-on-error: true
-        run: |
-          snyk auth ${{ secrets.SNYK_TOKEN }}
-          snyk code test --json --severity-threshold=high >> snyk-sast.json
-      - name: Archive SAST results
-        uses: actions/upload-artifact@v4
+      - uses: snyk/actions/node@master
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         with:
-          name: snyk-sast-file
-          path: snyk-sast.json
+          args: --severity-threshold=high
+          json: true
 
   sca:
     permissions:
