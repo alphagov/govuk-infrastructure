@@ -1,5 +1,0 @@
-bucket  = "govuk-terraform-staging"
-key     = "projects/cluster-infrastructure.tfstate"
-encrypt = true
-region  = "eu-west-1"
-dynamodb_table = "terraform-lock"
