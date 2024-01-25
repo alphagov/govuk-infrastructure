@@ -1,5 +1,12 @@
 terraform {
-  backend "s3" {}
+  #backend "s3" {}
+
+  cloud {
+    organization = "govuk"
+    workspaces {
+      tags = ["ecr", "eks", "aws"]
+    }
+  }
 
   required_version = "~> 1.5"
   required_providers {

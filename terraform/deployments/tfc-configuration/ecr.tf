@@ -16,7 +16,7 @@ module "ecr-production" {
 
   vcs_repo = {
     identifier     = "alphagov/govuk-infrastructure"
-    branch         = "main"
+    branch         = "samsimpson1/tfc"
     oauth_token_id = data.tfe_oauth_client.github.oauth_token_id
   }
   team_access = { "GOV.UK Production" = "write" }
