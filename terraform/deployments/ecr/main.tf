@@ -35,9 +35,17 @@ provider "aws" {
   }
 }
 
-# NOTE: Uses GITHUB_TOKEN env var, an OAuth / Personal Access Token, for auth
+data "aws_secretsmanager_secret" "github-token" {
+  name = "govuk/terraform-cloud/github-token"
+}
+
+data "aws_secretsmanager_secret_version" "github-token" {
+  secret_id = data.aws_secretsmanager_secret.github-token.id
+}
+
 provider "github" {
   owner = "alphagov"
+  token = data.aws_secretsmanager_secret_version.github-token.secret_string
 }
 
 data "github_repositories" "govuk" {
