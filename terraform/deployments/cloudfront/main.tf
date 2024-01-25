@@ -123,7 +123,13 @@ variable "notify_cloudfront_domain" {
 
 # Set up the backend & provider for each region
 terraform {
-  backend "s3" {}
+  #backend "s3" {}
+  cloud {
+    organization = "govuk"
+    workspaces {
+      tags = ["cloudfront", "eks", "aws"]
+    }
+  }
   required_version = "~> 1.5"
 }
 
