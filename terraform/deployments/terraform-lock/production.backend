@@ -1,4 +1,0 @@
-bucket  = "govuk-terraform-production"
-key     = "projects/terraform-lock.tfstate"
-encrypt = true
-region  = "eu-west-1"
