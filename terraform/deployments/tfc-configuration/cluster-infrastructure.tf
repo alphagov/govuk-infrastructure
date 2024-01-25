@@ -30,6 +30,7 @@ module "cluster-infrastructure-integration" {
     "common-integration"
   ]
 }
+
 module "cluster-infrastructure-staging" {
   source  = "alexbasista/workspacer/tfe"
   version = "0.9.0"
