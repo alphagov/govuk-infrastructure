@@ -1,0 +1,83 @@
+  [
+    {
+      "name": "eventType",
+      "type": "STRING",
+      "mode": "REQUIRED"
+    },
+    {
+      "name": "userPseudoId",
+      "type": "STRING",
+      "mode": "REQUIRED"
+    },
+    {
+      "name": "eventTime",
+      "type": "STRING",
+      "mode": "REQUIRED"
+    },
+    {
+      "name": "tagIds",
+      "type": "STRING",
+      "mode": "REPEATED"
+    },
+    {
+      "name": "attributionToken",
+      "type": "STRING",
+      "mode": "NULLABLE"
+    },
+    {
+      "name": "documents",
+      "type": "RECORD",
+      "mode": "REPEATED",
+      "fields": [
+        {
+          "name": "id",
+          "type": "STRING",
+          "mode": "NULLABLE"
+        },
+        {
+          "name": "name",
+          "type": "STRING",
+          "mode": "NULLABLE"
+        }
+      ]
+    },
+    {
+      "name": "userInfo",
+      "type": "RECORD",
+      "mode": "NULLABLE",
+      "fields": [
+        {
+          "name": "userId",
+          "type": "STRING",
+          "mode": "NULLABLE"
+        },
+        {
+          "name": "userAgent",
+          "type": "STRING",
+          "mode": "NULLABLE"
+        }
+      ]
+    },
+    {
+      "name": "pageInfo",
+      "type": "RECORD",
+      "mode": "NULLABLE",
+      "fields": [
+        {
+          "name": "uri",
+          "type": "STRING",
+          "mode": "NULLABLE"
+        },
+        {
+          "name": "referrerUri",
+          "type": "STRING",
+          "mode": "NULLABLE"
+        },
+        {
+          "name": "pageviewId",
+          "type": "STRING",
+          "mode": "NULLABLE"
+        }
+      ]
+    }
+  ]

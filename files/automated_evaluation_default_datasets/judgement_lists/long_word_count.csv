@@ -1,0 +1,141 @@
+query,link,score_description,score
+tell hmrc no amount is due,/pay-paye-tax/tell-hmrc-no-payment-due,3 perfect,3
+tell hmrc no amount is due,/pay-corporation-tax/tell-hmrc-no-payment-due,3 perfect,3
+tell hmrc no amount is due,/pay-paye-tax,2 good,2
+tell hmrc no amount is due,/pay-corporation-tax,2 good,2
+claim tax relief on union fees,/tax-relief-for-employees/professional-fees-and-subscriptions,3 perfect,3
+find out about payments taken from my universal credit,/guidance/find-out-about-money-taken-off-your-universal-credit-payment,3 perfect,3
+find out about payments taken from my universal credit,/universal-credit/what-youll-get,2 good,2
+find out about payments taken from my universal credit,/universal-credit,2 good,2
+money taken off my universal credit,/guidance/find-out-about-money-taken-off-your-universal-credit-payment,3 perfect,3
+money taken off my universal credit,/universal-credit/what-youll-get,2 good,2
+money taken off my universal credit,/universal-credit,2 good,2
+find out about money taken off my universal credit,/guidance/find-out-about-money-taken-off-your-universal-credit-payment,3 perfect,3
+find out about money taken off my universal credit,/universal-credit/what-youll-get,2 good,2
+find out about money taken off my universal credit,/universal-credit,2 good,2
+early years child development training,,,
+the government of the russian federation,,,
+transport behaviour choice intervention report,,,
+register with a linking code,,,
+extra help for cost of living,,,
+patriality visa with english grandfather,,,
+• asl.4857 – declaration of withdrawal template,,,
+changing a phone number on line,,,
+download the gov.uk id check app,,,
+talent management system europe and recruitment,,,
+find out about money taken off my universal credit payments,,,
+tell hmrc you're stopping self-employment,,,
+how to make a complaint,,,
+"""parliamentary under secretary of state""",,,
+free bank account for 17yr with debit card,,,
+letter to waverley borough council,,,
+updating my gov.uk contact details,,,
+obtaining birth details from the ministry of defence,,,
+nationally significant infrastructure projects reform action plan,,,
+what am i entitled to,,,
+where to send old passport,,,
+sign in to your uk visa application,,,
+how to claim tax back,/claim-tax-refund,3 perfect,3
+how to claim tax back,/cost-of-living,0 bad,0
+how to claim tax back,/guidance/cost-of-living-payment,0 bad,0
+how to claim tax back,/check-national-insurance-record,0 bad,0
+how to claim tax back,/tax-free-childcare,0 bad,0
+how to claim tax back,/vehicle-tax-refund,2 good,2
+how much do i owe,,,
+find out about money taken off my universal credit payment,/guidance/find-out-about-money-taken-off-your-universal-credit-payment,3 perfect,3
+find out about money taken off my universal credit payment,/universal-credit/what-youll-get,2 good,2
+find out about money taken off my universal credit payment,/universal-credit,2 good,2
+move to the uk if you're coming from ukraine,,,
+report a person who is not safe to drive,,,
+find out if someone has died,,,
+modern slavery human rights labor rights construction environmental sustainability,,,
+careesr in health and social care,,,
+war pensions rates for 2023/2024,,,
+pay your cooperation tax bill,/pay-corporation-tax,3 perfect,3
+uk government ghg conversion factors for company reporting,,,
+free council housing repair assessment,,,
+leave to remain renewal application form,,,
+you may need to use a second qr code to link the app,,,
+how to apply from the uk for a norwegian pension,,,
+pay your corperation tax bill,/pay-corporation-tax,3 perfect,3
+care homes with certificate of sponsorship,,,
+how to apply for ni,/apply-national-insurance-number,3 perfect,3
+"creative industries mapping document, prepared",,,
+how to repay your tax credits,/tax-credits-overpayments/repay-your-tax-credits,3 perfect,3
+mr t miller v isle of wight council,,,
+6 problems with running payroll,,,
+how to get an authorisation code self assessment income tax,/guidance/how-to-get-an-agent-code-for-corporation-tax-or-self-assessment,3 perfect,3
+is there a limit on money gifts,,,
+send details to support your vat reclaim,,,
+what benefits of free to apply,,,
+sign in to my application,/sign-in-visa,3 perfect,3
+personal tax account pay as you earn,/income-tax/how-you-pay-income-tax,3 perfect,3
+personal tax account pay as you earn,/personal-tax-account,2 good,2
+apply for vat group treatment,,,
+pay your coporation tax bill,/pay-corporation-tax,3 perfect,3
+government of the russian federation,,,
+"evidence that your sponsor is not, or will not be, in breach of uk immigration laws at the time of y",,,
+prudential regulation authority (solvency ii) insurance,,,
+tell hmrc about unpaid tax from previous years,/government/publications/hmrc-your-guide-to-making-a-disclosure/your-guide-to-making-a-disclosure,3 perfect,3
+check the status of an application you have already made,,,
+status of my visa application,,,
+how to get a utr number,,,
+you may need to use a second qr code,,,
+department of health and social care,,,
+working from home tax allowance,/tax-relief-for-employees/working-at-home,3 perfect,3
+200 pounds alternative fuel payment,,,
+tier 2 visa sponsorship jobs,,,
+how much is my council tax,/council-tax-bands,3 perfect,3
+money taken from my universal credit,,,
+where do i send my old passport,,,
+address to send old passport,,,
+download the gov.uk id check,,,
+road traffic estimates in great britain,,,
+how do i get a utr number,,,
+care homes with visa sponsorship,,,
+pay your tax bill by debit or corporate credit card,/pay-corporation-tax/debit-or-credit-card,3 perfect,3
+de register as self employed,,,
+careers in health and social care,,,
+list of tier 2 sponsors,,,
+how to repay tax credits,/tax-credits-overpayments/repay-your-tax-credits,3 perfect,3
+register and maintain a trust,,,
+download gov.uk id check app,,,
+find and compare schools in england,,,
+apply for transfer of residence tax relief,/tax-sell-home,3 perfect,3
+check if a vehicle is insured,,,
+sick pay for self employed,,,
+state pension from april 2023,,,
+check if my car is insured,,,
+ind out about money taken off your universal credit payments,,,
+violence against women and girls,,,
+link gov uk id check,,,
+capital gains tax payment for property disposals,/capital-gains-tax,3 perfect,3
+capital gains tax payment for property disposals,/report-and-pay-your-capital-gains-tax,3 perfect,3
+register of licenced sponsor workers,,,
+how to track my visa application,,,
+register of licenced sponsors: workers,,,
+civil service pay remit guidance,,,
+renew indefinite leave to remain,,,
+view your customs financial accounts,,,
+working from home during covid,,,
+how to get utr number,,,
+change bank details for state pension,,,
+apply to visit or stay in uk,,,
+special controls for disabled use,,,
+health and safety at work,,,
+head of central bank digital currency,,,
+registration as a british citizen,,,
+check if car is insured,,,
+change bank details for child benefit,,,
+health and safety at work act 1974,,,
+social security and child support web chat,,,
+how to change bank details,,,
+how to register a trust,,,
+how to find my national insurance number,,,
+teacher trial mr andrew nicolaides,,,
+working on a student visa,,,
+life in the uk test result,,,
+indefinite leave to remain renewal,,,
+how to find national insurance number,,,
+how to change phone number,,,
+take a private plate off a vehicle,,,

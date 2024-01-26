@@ -1,0 +1,45 @@
+query,link,score_description,score
+apply for ni,/apply-national-insurance-number,3 perfect,3
+apply for ni number,/apply-national-insurance-number,3 perfect,3
+bro,/biometric-residence-permits,3 perfect,3
+caz,/clean-air-zones,3 perfect,3
+cds,/government/collections/customs-declaration-service,3 perfect,3
+col,/cost-of-living,3 perfect,3
+col payments,/guidance/cost-of-living-payment,3 perfect,3
+cos,/uk-visa-sponsorship-employers/certificates-of-sponsorship,3 perfect,3
+cpd,/mot-tester-training-assessments,3 perfect,3
+ctf,/child-trust-funds,3 perfect,3
+daf,/government/publications/early-years-funding-2023-to-2024/early-years-entitlements-local-authority-funding-operational-guide-2023-to-2024,3 perfect,3
+daf payment,/government/publications/early-years-funding-2023-to-2024/early-years-entitlements-local-authority-funding-operational-guide-2023-to-2024,3 perfect,3
+dwp,/government/organisations/department-for-work-pensions,3 perfect,3
+eu ss,/settled-status-eu-citizens-families,3 perfect,3
+hs,/guidance/using-the-harmonised-system-and-product-specific-rules-for-trade-between-the-uk-and-eu,3 perfect,3
+hs code,/guidance/using-the-harmonised-system-and-product-specific-rules-for-trade-between-the-uk-and-eu,3 perfect,3
+hs codes,/guidance/using-the-harmonised-system-and-product-specific-rules-for-trade-between-the-uk-and-eu,3 perfect,3
+ilr,/government/collections/individualised-learner-record-ilr,2 good,2
+ilr,/indefinite-leave-to-remain,3 perfect,3
+ni,/national-insurance,3 perfect,3
+ni number,/national-insurance/your-national-insurance-number,3 perfect,3
+ni number,/national-insurance,3 perfect,3
+ni record,/check-national-insurance-record,3 perfect,3
+nic,/national-insurance,2 good,2
+pay corp tax,/pay-corporation-tax,3 perfect,3
+poa,/power-of-attorney,3 perfect,3
+prs,/guidance/mot-testing-guide/abbreviations-and-definitions,2 good,2
+psw,/graduate-visa,3 perfect,3
+self cert,/taking-sick-leave,3 perfect,3
+contact vi,/contact-ukvi-inside-outside-uk,3 perfect,3
+corona,/coronavirus,3 perfect,3
+crypto tax,/guidance/check-if-you-need-to-pay-tax-when-you-sell-cryptoassets,3 perfect,3
+pay as,/log-in-register-hmrc-online-services,3 perfect,3
+pay as you,/log-in-register-hmrc-online-services,3 perfect,3
+bike tax,/vehicle-tax,3 perfect,3
+tax bike,/vehicle-tax,3 perfect,3
+lpoa,/power-of-attorney,3 perfect,3
+adrp,/government/publications/universal-credit-landlord-request-for-a-managed-payment-or-rent-arrears-deduction,3 perfect,3
+appren,/apply-apprenticeship,3 perfect,3
+poa,/government/publications/poa-rules,1 okay,1
+poa,/government/publications/poa-other-related-documents,1 okay,1
+dla for children,/disability-living-allowance-children,3 perfect,3
+dla for children,/dla-disability-living-allowance-benefit,1 okay,1
+dla for children,/government/publications/disability-living-allowance-for-children-claim-form,2 good,2
