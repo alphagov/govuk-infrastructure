@@ -66,7 +66,7 @@ locals {
     "statsd",
     "govuk-terraform",
     "search-api-learn-to-rank",
-    "licensify-admin",
+    "licensify-backend",
     "licensify-feed",
     "licensify-frontend",
   ]
