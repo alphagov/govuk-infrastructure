@@ -93,10 +93,16 @@ resource "aws_route" "public_internet_gateway" {
 }
 
 resource "aws_eip" "eks_nat" {
-  for_each = length(var.eks_licensify_gateways) == 0 ? var.eks_public_subnets : {}
-  vpc      = true
+  for_each = length(var.eks_licensify_gateways) == 0 ? var.eks_public_subnets : var.eks_licensify_gateways
+  domain   = "vpc"
   tags     = { Name = "${var.cluster_name}-eks-nat-${each.key}" }
   # TODO: depends_on = [aws_internet_gateway.gw] once we've imported the IGW from govuk-aws.
+}
+
+import {
+  for_each = var.eks_licensify_gateways
+  to       = aws_eip.eks_nat[each.key]
+  id       = each.value.eip
 }
 
 resource "aws_nat_gateway" "eks" {
@@ -105,11 +111,6 @@ resource "aws_nat_gateway" "eks" {
   subnet_id     = aws_subnet.eks_public[each.key].id
   tags          = { Name = "${var.cluster_name}-eks-${each.key}" }
   # TODO: depends_on = [aws_internet_gateway.gw] once we've imported the IGW from govuk-aws.
-}
-
-data "aws_eip" "eks_licensify" {
-  for_each = var.eks_licensify_gateways
-  id       = each.value.eip
 }
 
 # Should be skipped on Integration

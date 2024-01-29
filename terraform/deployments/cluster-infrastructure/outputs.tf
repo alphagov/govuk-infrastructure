@@ -125,7 +125,3 @@ output "clamav_db_efs_id" {
 output "public_nat_gateway_ips" {
   value = [for eip in aws_eip.eks_nat : eip.public_ip]
 }
-
-output "public_licensify_gateway_ips" {
-  value = [for eip in data.aws_eip.eks_licensify : eip.public_ip]
-}
