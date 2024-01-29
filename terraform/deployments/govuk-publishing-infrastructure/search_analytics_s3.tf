@@ -17,29 +17,36 @@ resource "aws_s3_bucket_policy" "search_analytics" {
   policy = data.aws_iam_policy_document.search_analytics.json
 }
 
-resource "aws_iam_role" "search_analytics_github_action_role" {
-  name = "search_analytics_github_action_role"
-  # TODO(#1011): use iam_policy_document.
-  assume_role_policy = jsonencode({
-    Version = "2012-10-17"
-    Statement = [
-      {
-        "Effect" : "Allow",
-        "Principal" : {
-          "Federated" : "${aws_iam_openid_connect_provider.github_provider.arn}"
-        },
-        "Action" : "sts:AssumeRoleWithWebIdentity",
-        "Condition" : {
-          "StringEquals" : {
-            "token.actions.githubusercontent.com:sub" : [
-              "repo:alphagov/search-analytics:ref:refs/heads/main"
-            ],
-            "token.actions.githubusercontent.com:aud" : "${one(aws_iam_openid_connect_provider.github_provider.client_id_list)}"
-          },
-        }
-      }
+data "aws_iam_policy_document" "search_analytics_github_action_role" {
+  statement {
+    effect = "Allow"
+
+    principals {
+      identifiers = [aws_iam_openid_connect_provider.github_provider.arn]
+      type        = "Federated"
+    }
+
+    actions = [
+      "sts:AssumeRoleWithWebIdentity"
     ]
-  })
+
+    condition {
+      test     = "StringEquals"
+      variable = "token.actions.githubusercontent.com:sub"
+      values   = ["repo:alphagov/search-analytics:ref:refs/heads/main"]
+    }
+
+    condition {
+      test     = "StringEquals"
+      variable = "token.actions.githubusercontent.com:aud"
+      values   = [one(aws_iam_openid_connect_provider.github_provider.client_id_list)]
+    }
+  }
+}
+
+resource "aws_iam_role" "search_analytics_github_action_role" {
+  name               = "search_analytics_github_action_role"
+  assume_role_policy = data.aws_iam_policy_document.search_analytics_github_action_role.json
 }
 
 # TODO: instead of granting write access to nodes, use IRSA (IAM Roles for
@@ -51,7 +58,9 @@ data "aws_iam_policy_document" "search_analytics" {
       type        = "AWS"
       identifiers = [data.tfe_outputs.cluster_infrastructure.nonsensitive_values.worker_iam_role_arn]
     }
-    actions   = ["s3:ListBucket"]
+    actions = [
+      "s3:ListBucket"
+    ]
     resources = [aws_s3_bucket.search_analytics.arn]
   }
   statement {
@@ -60,7 +69,10 @@ data "aws_iam_policy_document" "search_analytics" {
       type        = "AWS"
       identifiers = [data.tfe_outputs.cluster_infrastructure.nonsensitive_values.worker_iam_role_arn]
     }
-    actions   = ["s3:GetObject", "s3:PutObject"]
+    actions = [
+      "s3:GetObject",
+      "s3:PutObject"
+    ]
     resources = ["${aws_s3_bucket.search_analytics.arn}/*"]
   }
   statement {
@@ -69,7 +81,9 @@ data "aws_iam_policy_document" "search_analytics" {
       type        = "AWS"
       identifiers = [aws_iam_role.search_analytics_github_action_role.arn]
     }
-    actions   = ["s3:PutObject"]
+    actions = [
+      "s3:PutObject"
+    ]
     resources = ["${aws_s3_bucket.search_analytics.arn}/*"]
   }
 }

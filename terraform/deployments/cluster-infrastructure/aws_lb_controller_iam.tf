@@ -28,5 +28,5 @@ resource "aws_iam_policy" "aws_lb_controller" {
   # https://raw.githubusercontent.com/kubernetes-sigs/aws-load-balancer-controller/v2.6.2/docs/install/iam_policy.json,
   # which is Apache-licensed:
   # https://raw.githubusercontent.com/kubernetes-sigs/aws-load-balancer-controller/main/LICENSE
-  policy = jsonencode(jsondecode(file("${path.module}/aws_lb_controller_iam_policy.json")))
+  policy = data.aws_iam_policy_document.aws_lb_controller.json
 }
