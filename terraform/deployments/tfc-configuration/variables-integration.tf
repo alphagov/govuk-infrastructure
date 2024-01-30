@@ -15,8 +15,6 @@ module "variable-set-integration" {
       c = { az = "eu-west-1c", cidr = "10.1.19.32/28" }
     }
 
-    eks_licensify_gateways = {}
-
     eks_public_subnets = {
       a = { az = "eu-west-1a", cidr = "10.1.20.0/24" }
       b = { az = "eu-west-1b", cidr = "10.1.21.0/24" }
