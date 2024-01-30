@@ -186,16 +186,9 @@ resource "aws_security_group_rule" "eks_ingress_www_origin_from_eks_nat" {
   security_group_id = aws_security_group.eks_ingress_www_origin.id
 }
 
-resource "aws_security_group_rule" "eks_ingress_www_origin_from_eks_licensify_nat" {
-  count = var.govuk_environment == "integration" ? 0 : 1
-
-  description       = "EKS ingress www-origin accepts requests from EKS Licensing NAT gateways"
-  type              = "ingress"
-  from_port         = 443
-  to_port           = 443
-  protocol          = "tcp"
-  cidr_blocks       = formatlist("%s/32", data.tfe_outputs.cluster_infrastructure.nonsensitive_values.public_nat_gateway_ips)
-  security_group_id = aws_security_group.eks_ingress_www_origin.id
+moved {
+  from = aws_security_group_rule.eks_ingress_www_origin_from_eks_licensify_nat
+  to   = aws_security_group_rule.eks_ingress_www_origin_from_eks_nat
 }
 
 resource "aws_security_group_rule" "eks_ingress_www_origin_from_office_and_fastly_http" {
