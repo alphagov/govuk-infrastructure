@@ -186,11 +186,6 @@ resource "aws_security_group_rule" "eks_ingress_www_origin_from_eks_nat" {
   security_group_id = aws_security_group.eks_ingress_www_origin.id
 }
 
-moved {
-  from = aws_security_group_rule.eks_ingress_www_origin_from_eks_licensify_nat
-  to   = aws_security_group_rule.eks_ingress_www_origin_from_eks_nat
-}
-
 resource "aws_security_group_rule" "eks_ingress_www_origin_from_office_and_fastly_http" {
   description       = "EKS ingress www-origin accepts requests from office and Fastly"
   type              = "ingress"
