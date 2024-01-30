@@ -49,7 +49,7 @@ resource "aws_route" "eks_control_plane_nat" {
   for_each               = var.eks_control_plane_subnets
   route_table_id         = aws_route_table.eks_control_plane[each.key].id
   destination_cidr_block = "0.0.0.0/0"
-  nat_gateway_id         = length(var.eks_licensify_gateways) == 0 ? aws_nat_gateway.eks[each.key].id : aws_nat_gateway.eks_licensify[each.key].id
+  nat_gateway_id         = aws_nat_gateway.eks[each.key].id
   timeouts {
     create = local.route_create_timeout
   }
@@ -99,29 +99,18 @@ resource "aws_eip" "eks_nat" {
   # TODO: depends_on = [aws_internet_gateway.gw] once we've imported the IGW from govuk-aws.
 }
 
-import {
-  for_each = var.eks_licensify_gateways
-  to       = aws_eip.eks_nat[each.key]
-  id       = each.value.eip
-}
-
 resource "aws_nat_gateway" "eks" {
-  for_each      = length(var.eks_licensify_gateways) == 0 ? var.eks_public_subnets : {}
+  for_each      = length(var.eks_licensify_gateways) == 0 ? var.eks_public_subnets : var.eks_licensify_gateways
   allocation_id = aws_eip.eks_nat[each.key].id
   subnet_id     = aws_subnet.eks_public[each.key].id
   tags          = { Name = "${var.cluster_name}-eks-${each.key}" }
   # TODO: depends_on = [aws_internet_gateway.gw] once we've imported the IGW from govuk-aws.
 }
 
-# Should be skipped on Integration
-resource "aws_nat_gateway" "eks_licensify" {
-  for_each      = var.eks_licensify_gateways
-  allocation_id = each.value.eip
-  subnet_id     = aws_subnet.eks_public[each.key].id
-  tags          = { Name = "${var.cluster_name}-eks-licensify-${each.key}" }
-  # TODO: depends_on = [aws_internet_gateway.gw] once we've imported the IGW from govuk-aws.
+moved {
+  from = aws_nat_gateway.eks_licensify
+  to   = aws_nat_gateway.eks
 }
-
 
 # Private subnets and associated resources. The private subnets contain the
 # worker nodes and the pods.
@@ -155,6 +144,6 @@ resource "aws_route" "eks_private_nat" {
   for_each               = var.eks_private_subnets
   route_table_id         = aws_route_table.eks_private[each.key].id
   destination_cidr_block = "0.0.0.0/0"
-  nat_gateway_id         = length(var.eks_licensify_gateways) == 0 ? aws_nat_gateway.eks[each.key].id : aws_nat_gateway.eks_licensify[each.key].id
+  nat_gateway_id         = aws_nat_gateway.eks[each.key].id
   timeouts { create = local.route_create_timeout }
 }
