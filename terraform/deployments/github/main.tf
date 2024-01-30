@@ -141,3 +141,8 @@ resource "github_actions_organization_secret_repositories" "argo_events_webhook_
   secret_name             = "GOVUK_ARGO_EVENTS_WEBHOOK_URL"
   selected_repository_ids = [for repo in local.deployable_repos : repo.repo_id]
 }
+
+resource "github_dependabot_organization_secret_repositories" "ci_user_github_api_token_dependabot" {
+  secret_name             = "GOVUK_CI_GITHUB_API_TOKEN"
+  selected_repository_ids = [for repo in local.deployable_repos : repo.repo_id]
+}
