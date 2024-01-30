@@ -99,12 +99,6 @@ resource "aws_eip" "eks_nat" {
   # TODO: depends_on = [aws_internet_gateway.gw] once we've imported the IGW from govuk-aws.
 }
 
-import {
-  for_each = var.eks_licensify_gateways
-  to       = aws_eip.eks_nat[each.key]
-  id       = each.value.eip
-}
-
 resource "aws_nat_gateway" "eks" {
   for_each      = length(var.eks_licensify_gateways) == 0 ? var.eks_public_subnets : {}
   allocation_id = aws_eip.eks_nat[each.key].id
