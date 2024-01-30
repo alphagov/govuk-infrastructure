@@ -24,11 +24,6 @@ variable "eks_control_plane_subnets" {
   description = "Map of {subnet_name: {az=<az>, cidr=<cidr>}} for the public subnets for the EKS cluster's apiserver."
 }
 
-variable "eks_licensify_gateways" {
-  type        = map(object({ az = string, cidr = string, eip = string }))
-  description = "Map of {subnet_name: {az=<az>, cidr=<cidr>, eip=<eip>}} for the NAT Gateways needed for use by Licensify Traffic in the EKS cluster.."
-}
-
 variable "eks_private_subnets" {
   type        = map(object({ az = string, cidr = string }))
   description = "Map of {subnet_name: {az=<az>, cidr=<cidr>}} for the private subnets for the EKS cluster's nodes and pods."
