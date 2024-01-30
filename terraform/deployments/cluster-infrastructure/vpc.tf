@@ -107,11 +107,6 @@ resource "aws_nat_gateway" "eks" {
   # TODO: depends_on = [aws_internet_gateway.gw] once we've imported the IGW from govuk-aws.
 }
 
-moved {
-  from = aws_nat_gateway.eks_licensify
-  to   = aws_nat_gateway.eks
-}
-
 # Private subnets and associated resources. The private subnets contain the
 # worker nodes and the pods.
 
