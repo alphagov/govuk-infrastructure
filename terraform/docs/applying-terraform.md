@@ -31,10 +31,9 @@ workspace which manages the other Terraform module workspaces.
    having to copy images between registries), so this module is not deployed
    per-environment.
 4. [`cluster-infrastructure`](../deployments/cluster-infrastructure): creates the AWS resources for the cluster.
-5. Delete the `aws-auth` configmap by running `gds aws govuk-${ENV?}-admin -- aws eks update-kubeconfig --name govuk && kubectl -n kube-system delete cm aws-auth`. This is a workaround for the problem that one of the AWS-managed EKS addons creates a default aws-auth configmap which then either needs to be imported into Terraform or deleted.
-6. [`govuk-publishing-infrastructure`](../deployments/govuk-publishing-infrastructure): creates AWS resources specific to the GOV.UK apps where we are not yet
+5. [`govuk-publishing-infrastructure`](../deployments/govuk-publishing-infrastructure): creates AWS resources specific to the GOV.UK apps where we are not yet
 able to manage those resources via Kubernetes.
-7. [`cluster-services`](../deployments/cluster-services): deploys the base services into the cluster.
+6. [`cluster-services`](../deployments/cluster-services): deploys the base services into the cluster.
 
 ### Bootstrapping Terraform Cloud
 
