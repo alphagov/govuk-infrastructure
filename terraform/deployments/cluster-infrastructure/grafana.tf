@@ -14,55 +14,63 @@ module "grafana_iam_role" {
   oidc_fully_qualified_subjects = ["system:serviceaccount:${local.monitoring_namespace}:${local.grafana_service_account}"]
 }
 
+data "aws_iam_policy_document" "grafana" {
+  statement {
+    sid    = "AllowReadingMetricsFromCloudWatch"
+    effect = "Allow"
+    actions = [
+      "cloudwatch:DescribeAlarmsForMetric",
+      "cloudwatch:DescribeAlarmHistory",
+      "cloudwatch:DescribeAlarms",
+      "cloudwatch:ListMetrics",
+      "cloudwatch:GetMetricData",
+      "cloudwatch:GetInsightRuleReport"
+    ]
+    resources = ["*"]
+  }
+
+  statement {
+    sid    = "AllowReadingLogsFromCloudWatch"
+    effect = "Allow"
+    actions = [
+      "logs:DescribeLogGroups",
+      "logs:GetLogGroupFields",
+      "logs:StartQuery",
+      "logs:StopQuery",
+      "logs:GetQueryResults",
+      "logs:GetLogEvents"
+    ]
+    resources = ["*"]
+  }
+
+  statement {
+    sid    = "AllowReadingTagsInstancesRegionsFromEC2"
+    effect = "Allow"
+    actions = [
+      "ec2:DescribeTags",
+      "ec2:DescribeInstances",
+      "ec2:DescribeRegions"
+    ]
+    resources = ["*"]
+  }
+
+  statement {
+    sid    = "AllowReadingResourcesForTags"
+    effect = "Allow"
+    actions = [
+      "tag:GetResources"
+    ]
+    resources = ["*"]
+  }
+}
+
 resource "aws_iam_policy" "grafana" {
   name        = "grafana-${module.eks.cluster_name}"
   description = "Allows Grafana to access AWS data sources."
 
-  # The argument to jsonencode() was obtained from
+  # Values was obtained from
   # https://grafana.com/docs/grafana/latest/datasources/aws-cloudwatch/ (v8.4).
-  policy = jsonencode({
-    "Version" : "2012-10-17",
-    "Statement" : [
-      {
-        "Sid" : "AllowReadingMetricsFromCloudWatch",
-        "Effect" : "Allow",
-        "Action" : [
-          "cloudwatch:DescribeAlarmsForMetric",
-          "cloudwatch:DescribeAlarmHistory",
-          "cloudwatch:DescribeAlarms",
-          "cloudwatch:ListMetrics",
-          "cloudwatch:GetMetricData",
-          "cloudwatch:GetInsightRuleReport"
-        ],
-        "Resource" : "*"
-      },
-      {
-        "Sid" : "AllowReadingLogsFromCloudWatch",
-        "Effect" : "Allow",
-        "Action" : [
-          "logs:DescribeLogGroups",
-          "logs:GetLogGroupFields",
-          "logs:StartQuery",
-          "logs:StopQuery",
-          "logs:GetQueryResults",
-          "logs:GetLogEvents"
-        ],
-        "Resource" : "*"
-      },
-      {
-        "Sid" : "AllowReadingTagsInstancesRegionsFromEC2",
-        "Effect" : "Allow",
-        "Action" : ["ec2:DescribeTags", "ec2:DescribeInstances", "ec2:DescribeRegions"],
-        "Resource" : "*"
-      },
-      {
-        "Sid" : "AllowReadingResourcesForTags",
-        "Effect" : "Allow",
-        "Action" : "tag:GetResources",
-        "Resource" : "*"
-      }
-    ]
-  })
+  policy = data.aws_iam_policy_document.grafana.json
 }
 
 data "aws_rds_engine_version" "postgresql" {

@@ -1,21 +1,19 @@
+data "aws_iam_policy_document" "transition_s3" {
+  statement {
+    effect = "Allow"
+    actions = [
+      "s3:GetBucketLocation",
+      "s3:ListBucket",
+      "s3:GetObject"
+    ]
+    resources = ["arn:aws:s3:::govuk-${var.govuk_environment}-transition-fastly-logs*"]
+  }
+}
+
 resource "aws_iam_policy" "transition_s3" {
   name        = "transition_s3"
   description = "Read the processed CDN request logs for transitioned site redirects."
-
-  policy = jsonencode({
-    Version = "2012-10-17"
-    Statement = [
-      {
-        Effect = "Allow"
-        Action = [
-          "s3:GetBucketLocation",
-          "s3:ListBucket",
-          "s3:GetObject",
-        ]
-        Resource = "arn:aws:s3:::govuk-${var.govuk_environment}-transition-fastly-logs*"
-      }
-    ]
-  })
+  policy      = data.aws_iam_policy_document.transition_s3.json
 }
 
 # TODO: consider IRSA (pod identity) rather than granting to nodes.

@@ -88,21 +88,20 @@ resource "aws_iam_user" "github_ecr_user" {
   tags = { "Description" = "GitHub Actions publishes images to ECR." }
 }
 
+data "aws_iam_policy_document" "concourse_ecr_user_assume_role" {
+  statement {
+    effect  = "Allow"
+    actions = ["sts:AssumeRole"]
+    principals {
+      identifiers = [aws_iam_user.concourse_ecr_user.arn]
+      type        = "AWS"
+    }
+  }
+}
+
 resource "aws_iam_role" "push_to_ecr" {
-  name = "push_to_ecr"
-  # TODO(#1011): use aws_iam_policy_document.
-  assume_role_policy = jsonencode({
-    "Version" : "2012-10-17",
-    "Statement" : [
-      {
-        "Effect" : "Allow",
-        "Action" : "sts:AssumeRole",
-        "Principal" : {
-          "AWS" : aws_iam_user.concourse_ecr_user.arn
-        }
-      }
-    ]
-  })
+  name               = "push_to_ecr"
+  assume_role_policy = data.aws_iam_policy_document.concourse_ecr_user_assume_role.json
 }
 
 data "aws_caller_identity" "current" {}
@@ -138,105 +137,107 @@ resource "aws_iam_role_policy_attachment" "push_to_ecr" {
   policy_arn = aws_iam_policy.push_to_ecr.arn
 }
 
+data "aws_iam_policy_document" "allow_cross_account_pull_from_ecr" {
+  statement {
+    sid    = "AllowCrossAccountPull"
+    effect = "Allow"
+    actions = [
+      "ecr:GetDownloadUrlForLayer",
+      "ecr:BatchCheckLayerAvailability",
+      "ecr:BatchGetImage"
+    ]
+    principals {
+      identifiers = var.puller_arns
+      type        = "AWS"
+    }
+  }
+}
+
 resource "aws_ecr_repository_policy" "pull_from_ecr" {
   for_each   = toset([for repo in local.repositories : aws_ecr_repository.repositories[repo].name])
   repository = each.key
-  policy = jsonencode({
-    "Version" : "2008-10-17",
-    "Statement" : [
-      {
-        "Sid" : "AllowCrossAccountPull",
-        "Effect" : "Allow",
-        "Principal" : { "AWS" : var.puller_arns },
-        "Action" : [
-          "ecr:GetDownloadUrlForLayer",
-          "ecr:BatchCheckLayerAvailability",
-          "ecr:BatchGetImage"
-        ]
-      }
-    ]
-  })
+  policy     = data.aws_iam_policy_document.allow_cross_account_pull_from_ecr.json
+}
+
+data "aws_iam_policy_document" "assume_pull_from_ecr_role" {
+  statement {
+    effect  = "Allow"
+    actions = ["sts:AssumeRole"]
+    principals {
+      identifiers = var.puller_arns
+      type        = "AWS"
+    }
+  }
 }
 
 resource "aws_iam_role" "pull_from_ecr" {
-  name = "pull_from_ecr"
-  assume_role_policy = jsonencode({
-    "Version" : "2012-10-17",
-    "Statement" : [
-      {
-        "Effect" : "Allow",
-        "Action" : "sts:AssumeRole",
-        "Principal" : {
-          "AWS" : var.puller_arns
-        }
-      }
+  name               = "pull_from_ecr"
+  assume_role_policy = data.aws_iam_policy_document.assume_pull_from_ecr_role.json
+}
+
+data "aws_iam_policy_document" "pull_from_ecr" {
+  statement {
+    sid    = "AllowECRPull"
+    effect = "Allow"
+    actions = [
+      "ecr:GetDownloadUrlForLayer",
+      "ecr:BatchCheckLayerAvailability",
+      "ecr:BatchGetImage",
+      "ecr:List*",
+      "ecr:Describe*"
     ]
-  })
+    resources = ["*"]
+  }
+
+  statement {
+    sid    = "AllowECRToken"
+    effect = "Allow"
+    actions = [
+      "ecr:GetAuthorizationToken"
+    ]
+    resources = ["*"]
+  }
 }
 
 resource "aws_iam_policy" "pull_from_ecr" {
-  name = "pull_from_ecr"
-  policy = jsonencode({
-    "Version" : "2012-10-17",
-    "Statement" : [
-      {
-        "Sid" : "AllowECRPull",
-        "Effect" : "Allow",
-        "Resource" : ["*"],
-        "Action" : [
-          "ecr:GetDownloadUrlForLayer",
-          "ecr:BatchCheckLayerAvailability",
-          "ecr:BatchGetImage",
-          "ecr:List*",
-          "ecr:Describe*"
-        ]
-      },
-      {
-        "Sid" : "AllowECRToken",
-        "Effect" : "Allow",
-        "Resource" : ["*"],
-        "Action" : ["ecr:GetAuthorizationToken"]
-      }
+  name   = "pull_from_ecr"
+  policy = data.aws_iam_policy_document.pull_from_ecr.json
+}
+
+data "aws_iam_policy_document" "github_ecr_user_policy" {
+  statement {
+    sid    = "AllowPush"
+    effect = "Allow"
+    actions = [
+      "ecr:GetDownloadUrlForLayer",
+      "ecr:BatchGetImage",
+      "ecr:BatchCheckLayerAvailability",
+      "ecr:DescribeImages",
+      "ecr:PutImage",
+      "ecr:InitiateLayerUpload",
+      "ecr:UploadLayerPart",
+      "ecr:GetAuthorizationToken",
+      "ecr:CompleteLayerUpload"
     ]
-  })
+    resources = ["*"]
+  }
+
+  statement {
+    sid    = "ContainerSigningKey"
+    effect = "Allow"
+    actions = [
+      "kms:DescribeKey",
+      "kms:GetPublicKey",
+      "kms:Sign"
+    ]
+    resources = ["aws_kms_key.container_signing_key.arn"]
+  }
 }
 
 resource "aws_iam_user_policy" "github_ecr_user_policy" {
-  name = "github_ecr_user_policy"
-  user = aws_iam_user.github_ecr_user.name
-  policy = jsonencode({
-    "Version" : "2012-10-17",
-    "Statement" : [
-      {
-        "Sid" : "AllowPush",
-        "Effect" : "Allow",
-        "Action" : [
-          "ecr:GetDownloadUrlForLayer",
-          "ecr:BatchGetImage",
-          "ecr:BatchCheckLayerAvailability",
-          "ecr:DescribeImages",
-          "ecr:PutImage",
-          "ecr:InitiateLayerUpload",
-          "ecr:UploadLayerPart",
-          "ecr:GetAuthorizationToken",
-          "ecr:CompleteLayerUpload"
-        ],
-        "Resource" : ["*"],
-      },
-      {
-        "Sid" : "ContainerSigningKey",
-        "Effect" : "Allow",
-        "Action" : [
-          "kms:DescribeKey",
-          "kms:GetPublicKey",
-          "kms:Sign"
-        ],
-        "Resource" : [
-          aws_kms_key.container_signing_key.arn
-        ]
-      }
-    ]
-  })
+  name   = "github_ecr_user_policy"
+  user   = aws_iam_user.github_ecr_user.name
+  policy = data.aws_iam_policy_document.github_ecr_user_policy.json
 }
 
 resource "aws_ecr_lifecycle_policy" "ecr_lifecycle_policy" {
