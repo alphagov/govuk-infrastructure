@@ -350,8 +350,6 @@ resource "aws_cloudfront_distribution" "www_distribution" {
 
     viewer_protocol_policy = "redirect-to-https"
     min_ttl                = 0
-    default_ttl            = 86400
-    max_ttl                = 31536000
   }
 
   ordered_cache_behavior {
@@ -445,8 +443,6 @@ resource "aws_cloudfront_distribution" "assets_distribution" {
 
     viewer_protocol_policy = "redirect-to-https"
     min_ttl                = 0
-    default_ttl            = 86400
-    max_ttl                = 31536000
   }
 
   price_class = "PriceClass_All"

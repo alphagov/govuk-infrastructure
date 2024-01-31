@@ -1,0 +1,54 @@
+{
+  "Statement": [
+      {
+          "Action": [
+              "acm:*",
+              "apigateway:*",
+              "autoscaling:*",
+              "cloudfront:*",
+              "cloudwatch:*",
+              "ec2:*",
+              "ecr:*",
+              "eks:*",
+              "elasticache:*",
+              "elasticloadbalancing:*",
+              "elasticfilesystem:*",
+              "es:*",
+              "events:*",
+              "iam:*",
+              "kms:*",
+              "lambda:*",
+              "logs:*",
+              "mq:*",
+              "rds:*",
+              "route53:*",
+              "s3:*",
+              "secretsmanager:*",
+              "sns:*",
+              "sqs:*",
+              "wafv2:*"
+          ],
+          "Effect": "Allow",
+          "Resource": "*"
+      },
+      {
+          "Action": [
+              "aws-marketplace:*",
+              "aws-marketplace-management:*",
+              "aws-portal:*",
+              "budgets:*",
+              "config:*",
+              "directconnect:*",
+              "ec2:*Purchase*",
+              "ec2:*ReservedInstances*",
+              "iam:*Login*",
+              "iam:*Group*",
+              "iam:*PermissionsBoundary*",
+              "iam:CreateServiceLinkedRole"
+          ],
+          "Effect": "Deny",
+          "Resource": "*"
+      }
+  ],
+  "Version": "2012-10-17"
+}

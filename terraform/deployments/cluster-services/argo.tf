@@ -27,8 +27,12 @@ locals {
 resource "kubernetes_namespace" "apps" {
   metadata {
     name = var.apps_namespace
+    annotations = {
+      "argocd.argoproj.io/sync-options" = "ServerSideApply=true"
+    }
     labels = {
-      "app.kubernetes.io/managed-by" = "Terraform"
+      "app.kubernetes.io/managed-by"  = "Terraform"
+      "argocd.argoproj.io/managed-by" = "cluster-services"
       # https://kubernetes-sigs.github.io/aws-load-balancer-controller/latest/deploy/pod_readiness_gate/
       "elbv2.k8s.aws/pod-readiness-gate-inject" = "enabled"
       "pod-security.kubernetes.io/audit"        = "restricted"
