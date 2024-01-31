@@ -23,7 +23,7 @@ start for your branch.
 When turning up from scratch, deploy the root modules in this order:
 
 1. [`tfc-bootstrap`](../deployments/tfc-bootstrap): bootstraps Terraform Cloud and creates `tfc-configuration`
-workspace which is used to manage the other Terraform module workspaces.
+workspace which manages the other Terraform module workspaces.
 2. [`tfc-configuration`](../deployments/tfc-configuration): creates TFC workspaces for each terraform module and environment.
 3. [`ecr`](../deployments/ecr) (test and production accounts only): creates the ECR container registry from
    which the cluster pull container images. There is a single registry for all
