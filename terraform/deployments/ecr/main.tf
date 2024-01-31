@@ -230,7 +230,7 @@ data "aws_iam_policy_document" "github_ecr_user_policy" {
       "kms:GetPublicKey",
       "kms:Sign"
     ]
-    resources = ["aws_kms_key.container_signing_key.arn"]
+    resources = [aws_kms_key.container_signing_key.arn]
   }
 }
 
