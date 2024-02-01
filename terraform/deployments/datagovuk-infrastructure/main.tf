@@ -19,7 +19,7 @@ locals {
   default_tags = {
     Product              = "DATA.GOV.UK"
     System               = "DATA.GOV.UK"
-    Environment          = "${var.govuk_environment}"
+    Environment          = var.govuk_environment
     Owner                = "govuk-platform-engineering@digital.cabinet-office.gov.uk"
     project              = "replatforming"
     repository           = "govuk-infrastructure"

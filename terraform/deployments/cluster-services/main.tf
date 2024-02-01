@@ -41,7 +41,7 @@ provider "aws" {
     tags = {
       Product              = "GOV.UK"
       System               = "EKS cluster services"
-      Environment          = "${var.govuk_environment}"
+      Environment          = var.govuk_environment
       Owner                = "govuk-platform-engineering@digital.cabinet-office.gov.uk"
       cluster              = "govuk"
       repository           = "govuk-infrastructure"
