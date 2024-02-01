@@ -25,6 +25,3 @@ jobs:
       gitRef: ${{ inputs.gitRef || github.ref }}
       ecrRepositoryName: toolbox
       dockerfilePath: images/toolbox/Dockerfile
-    secrets:
-      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_GOVUK_ECR_ACCESS_KEY_ID }}
-      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_GOVUK_ECR_SECRET_ACCESS_KEY }}
