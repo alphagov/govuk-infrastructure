@@ -403,7 +403,7 @@ resource "aws_cloudfront_distribution" "www_distribution" {
   tags = {
     Product     = "GOV.UK"
     System      = "Cloudfront"
-    Environment = "${var.govuk_environment}"
+    Environment = var.govuk_environment
     Owner       = "reliability-engineering@digital.cabinet-office.gov.uk"
   }
 }
@@ -463,7 +463,7 @@ resource "aws_cloudfront_distribution" "assets_distribution" {
   tags = {
     Product     = "GOV.UK"
     System      = "Cloudfront"
-    Environment = "${var.govuk_environment}"
+    Environment = var.govuk_environment
     Owner       = "reliability-engineering@digital.cabinet-office.gov.uk"
   }
 }
