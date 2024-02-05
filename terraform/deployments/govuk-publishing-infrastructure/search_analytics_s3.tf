@@ -4,6 +4,7 @@ resource "aws_s3_bucket" "search_analytics" {
   tags = {
     System = "Search"
     Name   = "Search analytics reports for ${var.govuk_environment}"
+    Owner  = "#dev-notifications-ai-govuk"
   }
 }
 

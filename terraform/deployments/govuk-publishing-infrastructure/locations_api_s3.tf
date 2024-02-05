@@ -4,6 +4,7 @@ resource "aws_s3_bucket" "location_api_import_csvs" {
   tags = {
     System = "Locations API"
     Name   = "CSVs for importing postcode information into Locations API"
+    Owner  = "#tech-content-interactions-on-platform-govuk"
   }
 }
 
