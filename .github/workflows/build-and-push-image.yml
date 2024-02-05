@@ -18,13 +18,6 @@ on:
         required: false
         type: string
         default: ${{ github.sha }}
-    # These secrets are not required, but taking them 
-    # prevents workflows that specify them from breaking
-    secrets:
-      AWS_ACCESS_KEY_ID:
-        required: false
-      AWS_SECRET_ACCESS_KEY:
-        required: false
     outputs:
       imageTag:
         description: "The image tag for the built image"
