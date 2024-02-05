@@ -77,6 +77,10 @@ resource "aws_iam_policy" "learn_to_rank_job" {
   name        = "learn_to_rank_job"
   description = "Allow access to resources needed to train and deploy Sagemaker model"
   policy      = data.aws_iam_policy_document.learn_to_rank_job.json
+
+  tags = {
+    Owner = "#dev-notifications-ai-govuk"
+  }
 }
 
 resource "aws_iam_role_policy_attachment" "learn_to_rank_job" {
@@ -135,12 +139,20 @@ data "aws_iam_policy_document" "learn_to_rank_sagemaker_assume_role_policy" {
 resource "aws_iam_role" "learn_to_rank_sagemaker" {
   name               = "learn-to-rank-sagemaker"
   assume_role_policy = data.aws_iam_policy_document.learn_to_rank_sagemaker_assume_role_policy.json
+
+  tags = {
+    Owner = "#dev-notifications-ai-govuk"
+  }
 }
 
 resource "aws_iam_policy" "learn_to_rank_sagemaker" {
   name        = "learn_to_rank_sagemaker"
   description = "Permissions for sagemaker to train a model"
   policy      = data.aws_iam_policy_document.learn_to_rank_sagemaker.json
+
+  tags = {
+    Owner = "#dev-notifications-ai-govuk"
+  }
 }
 
 resource "aws_iam_role_policy_attachment" "learn_to_rank_sagemaker" {
