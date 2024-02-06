@@ -38,7 +38,7 @@ resource "aws_sns_topic_subscription" "ecr_sns_subscription" {
 resource "aws_cloudwatch_event_rule" "event_rule" {
   name        = "vuln-findings"
   description = "A CloudWatch Event Rule that triggers when each ECR vulnerability image scan is completed. actions using AWS Lambda OR SNS."
-  state = "ENABLED"
+  state       = "ENABLED"
   event_pattern = jsonencode({
     "source" : ["aws.ecr"],
     "detail-type" : ["ECR Image Scan"],
