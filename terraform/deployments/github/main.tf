@@ -117,16 +117,6 @@ resource "github_team_repository" "govuk_repos" {
 # GitHub Admin.
 #
 
-resource "github_actions_organization_secret_repositories" "aws_govuk_ecr_access_key_id" {
-  secret_name             = "AWS_GOVUK_ECR_ACCESS_KEY_ID"
-  selected_repository_ids = [for repo in local.deployable_repos : repo.repo_id]
-}
-
-resource "github_actions_organization_secret_repositories" "aws_govuk_ecr_secret_access_key" {
-  secret_name             = "AWS_GOVUK_ECR_SECRET_ACCESS_KEY"
-  selected_repository_ids = [for repo in local.deployable_repos : repo.repo_id]
-}
-
 resource "github_actions_organization_secret_repositories" "ci_user_github_api_token" {
   secret_name             = "GOVUK_CI_GITHUB_API_TOKEN"
   selected_repository_ids = [for repo in local.deployable_repos : repo.repo_id]
