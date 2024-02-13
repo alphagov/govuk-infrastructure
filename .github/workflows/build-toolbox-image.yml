@@ -25,3 +25,6 @@ jobs:
       gitRef: ${{ inputs.gitRef || github.ref }}
       ecrRepositoryName: toolbox
       dockerfilePath: images/toolbox/Dockerfile
+    permissions:
+      id-token: write
+      contents: read
