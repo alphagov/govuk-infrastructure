@@ -1,4 +1,4 @@
-name: Build and publish toolbox image to ECR
+name: Build and push toolbox image to ECR
 
 on:
   workflow_dispatch:
@@ -16,7 +16,7 @@ on:
       - "images/toolbox/Dockerfile"
   
   schedule:
-    - cron: '0 0 * * 1'
+    - cron: '8 2 * * 1'
 
 jobs:
   build-and-push-image:
@@ -25,3 +25,6 @@ jobs:
       gitRef: ${{ inputs.gitRef || github.ref }}
       ecrRepositoryName: toolbox
       dockerfilePath: images/toolbox/Dockerfile
+    permissions:
+      id-token: write
+      contents: read

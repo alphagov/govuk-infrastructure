@@ -1,4 +1,4 @@
-name: Build and publish MongoDB image to ECR
+name: Build and push MongoDB image to ECR
 
 on:
   workflow_dispatch:
@@ -16,7 +16,7 @@ on:
       - images/mongodb/Dockerfile
   
   schedule:
-    - cron: '1 22 * * 1'
+    - cron: '28 3 * * 1'
 
 jobs:
   build-and-push-image:
@@ -25,3 +25,6 @@ jobs:
       gitRef: ${{ inputs.gitRef || github.ref }}
       ecrRepositoryName: mongodb
       dockerfilePath: images/mongodb/Dockerfile
+    permissions:
+      id-token: write
+      contents: read

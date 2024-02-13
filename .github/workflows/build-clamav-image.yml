@@ -1,4 +1,4 @@
-name: Build and publish clamav image to ECR
+name: Build and push ClamAV image to ECR
 
 on:
   workflow_dispatch:
@@ -16,7 +16,7 @@ on:
       - "images/clamav/**"
   
   schedule:
-    - cron: '0 0 * * 1'
+    - cron: '19 2 * * 1'
 
 jobs:
   build-and-push-image:
@@ -25,3 +25,6 @@ jobs:
       gitRef: ${{ inputs.gitRef || github.ref }}
       ecrRepositoryName: clamav
       dockerfilePath: images/clamav/Dockerfile
+    permissions:
+      id-token: write
+      contents: read
