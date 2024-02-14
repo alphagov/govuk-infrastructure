@@ -48,7 +48,7 @@ resource "helm_release" "argo_cd" {
   namespace        = local.services_ns
   create_namespace = true
   repository       = "https://argoproj.github.io/argo-helm"
-  version          = "5.53.6" # TODO: Dependabot or equivalent so this doesn't get neglected.
+  version          = "6.0.13" # TODO: Dependabot or equivalent so this doesn't get neglected.
   values = [yamlencode({
     global = {
       logging = {
@@ -107,8 +107,8 @@ resource "helm_release" "argo_cd" {
         }
         labels           = {}
         ingressClassName = "aws-alb"
-        hosts            = [local.argo_host]
-        https            = true
+        hostname         = local.argo_host
+        tls              = true
       }
 
       ingressGrpc = {
@@ -124,8 +124,8 @@ resource "helm_release" "argo_cd" {
         }
         labels           = {}
         ingressClassName = "aws-alb"
-        hosts            = [local.argo_host]
-        https            = true
+        hostname         = local.argo_host
+        tls              = true
       }
 
       metrics = local.argo_metrics_config
