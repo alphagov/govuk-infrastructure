@@ -98,7 +98,6 @@ resource "aws_security_group_rule" "licensify_docdb_from_eks_workers" {
 resource "aws_security_group_rule" "postgres_from_eks_workers" {
   for_each = merge(data.terraform_remote_state.app_govuk_rds.outputs.sg_rds, {
     "transition_primary" = data.terraform_remote_state.infra_security_groups.outputs.sg_transition-postgresql-primary_id
-    "transition_standby" = data.terraform_remote_state.infra_security_groups.outputs.sg_transition-postgresql-standby_id
     "content_data_api"   = data.terraform_remote_state.infra_security_groups.outputs.sg_content-data-api-postgresql-primary_id
   })
   description              = "Database accepts requests from EKS nodes"
@@ -138,16 +137,6 @@ resource "aws_security_group_rule" "efs_from_eks_workers" {
   to_port                  = 2049
   protocol                 = "tcp"
   security_group_id        = data.terraform_remote_state.infra_security_groups.outputs.sg_asset-master-efs_id
-  source_security_group_id = data.tfe_outputs.cluster_infrastructure.nonsensitive_values.node_security_group_id
-}
-
-resource "aws_security_group_rule" "licensify_frontend_from_eks_workers" {
-  description              = "Licensify Frontend accepts requests from EKS nodes"
-  type                     = "ingress"
-  from_port                = 443
-  to_port                  = 443
-  protocol                 = "tcp"
-  security_group_id        = data.terraform_remote_state.infra_security_groups.outputs.sg_licensify-frontend_internal_lb_id
   source_security_group_id = data.tfe_outputs.cluster_infrastructure.nonsensitive_values.node_security_group_id
 }
 
