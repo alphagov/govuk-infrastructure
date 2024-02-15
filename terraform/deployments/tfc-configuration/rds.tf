@@ -36,7 +36,7 @@ module "rds-staging" {
   version = "0.9.0"
 
   organization      = var.organization
-  workspace_name    = "rds-integration"
+  workspace_name    = "rds-staging"
   workspace_desc    = "This module manages AWS resources for creating RDS databases."
   workspace_tags    = ["staging", "rds", "eks", "aws"]
   terraform_version = "1.7.0"
