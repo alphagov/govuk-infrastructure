@@ -39,6 +39,7 @@ module "variable-set-integration" {
     github_read_write_team = "alphagov:gov-uk"
 
     grafana_db_auto_pause       = true
+    maintenance_window          = "Sun:04:00-Sun:06:00"
     rds_apply_immediately       = true
     rds_backup_retention_period = 1
     rds_skip_final_snapshot     = true
