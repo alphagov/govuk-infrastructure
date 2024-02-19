@@ -118,7 +118,7 @@ module "variable-set-rds-production" {
 
         name              = "account-api"
         allocated_storage = 100
-        instance_class    = "db.m6g.large"
+        instance_class    = "db.t4g.medium"
 
         performance_insights_enabled = true
 
@@ -387,7 +387,7 @@ module "variable-set-rds-production" {
 
         name              = "local-links-manager"
         allocated_storage = 100
-        instance_class    = "db.m6g.large"
+        instance_class    = "db.t4g.medium"
 
         performance_insights_enabled = true
 
