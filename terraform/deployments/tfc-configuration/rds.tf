@@ -62,3 +62,35 @@ module "rds-staging" {
     "rds-staging"
   ]
 }
+
+module "rds-production" {
+  source  = "alexbasista/workspacer/tfe"
+  version = "0.9.0"
+
+  organization      = var.organization
+  workspace_name    = "rds-production"
+  workspace_desc    = "This module manages AWS resources for creating RDS databases."
+  workspace_tags    = ["production", "rds", "eks", "aws"]
+  terraform_version = "1.7.0"
+  execution_mode    = "remote"
+  working_directory = "/terraform/deployments/rds/"
+  trigger_patterns  = ["/terraform/deployments/rds/**/*"]
+
+  project_name = "govuk-infrastructure"
+  vcs_repo = {
+    identifier     = "alphagov/govuk-infrastructure"
+    branch         = "main"
+    oauth_token_id = data.tfe_oauth_client.github.oauth_token_id
+  }
+
+  team_access = {
+    "GOV.UK Production" = "write"
+  }
+
+  variable_set_names = [
+    "aws-credentials-production",
+    "common",
+    "common-production",
+    "rds-production"
+  ]
+}
