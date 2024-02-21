@@ -187,6 +187,32 @@ module "variable-set-rds-integration" {
         freestoragespace_threshold = 10737418240
       }
 
+      content_data_api = {
+        engine         = "postgres"
+        engine_version = "13.3"
+        engine_params = {
+          work_mem                             = { value = "GREATEST({DBInstanceClassMemory/${1024 * 16}},65536)" }
+          autovacuum_max_workers               = { value = 1, apply_method = "pending-reboot" }
+          maintenance_work_mem                 = { value = "GREATEST({DBInstanceClassMemory/${1024 * 3}},65536)" }
+          "rds.force_autovacuum_logging_level" = { value = "log" }
+          log_autovacuum_min_duration          = { value = 10000 }
+          log_min_duration_statement           = { value = "10000" }
+          log_statement                        = { value = "all" }
+          deadlock_timeout                     = { value = 2500 }
+          log_lock_waits                       = { value = true }
+        }
+        engine_params_family = "postgres13"
+
+        name              = "blue-content-data-api-postgresql-primary"
+        allocated_storage = 400
+        instance_class    = "db.m6g.large"
+
+        performance_insights_enabled = false
+
+        cpuutilization_threshold   = 80
+        freestoragespace_threshold = 536870912000
+      }
+
       content_publisher = {
         engine         = "postgres"
         engine_version = "13"
