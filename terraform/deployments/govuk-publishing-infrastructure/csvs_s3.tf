@@ -8,6 +8,7 @@ data "aws_iam_policy_document" "write_csvs_buckets" {
     resources = [
       aws_s3_bucket.publisher_csvs.arn,
       "arn:aws:s3:::govuk-${var.govuk_environment}-content-data-csvs",
+      "arn:aws:s3:::govuk-${var.govuk_environment}-content-data-siteimprove-sitemaps",
       "arn:aws:s3:::govuk-${var.govuk_environment}-specialist-publisher-csvs",
       "arn:aws:s3:::govuk-${var.govuk_environment}-support-api-csvs",
       "arn:aws:s3:::govuk-${var.govuk_environment}-whitehall-csvs"
@@ -26,6 +27,7 @@ data "aws_iam_policy_document" "write_csvs_buckets" {
     resources = [
       "${aws_s3_bucket.publisher_csvs.arn}/*",
       "arn:aws:s3:::govuk-${var.govuk_environment}-content-data-csvs/*",
+      "arn:aws:s3:::govuk-${var.govuk_environment}-content-data-siteimprove-sitemaps",
       "arn:aws:s3:::govuk-${var.govuk_environment}-specialist-publisher-csvs/*",
       "arn:aws:s3:::govuk-${var.govuk_environment}-support-api-csvs/*",
       "arn:aws:s3:::govuk-${var.govuk_environment}-whitehall-csvs/*"
