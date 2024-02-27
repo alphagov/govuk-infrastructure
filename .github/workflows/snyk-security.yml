@@ -4,7 +4,7 @@ on:
   workflow_call:
     inputs:
       skip_sca:
-        description: 'Skip Software Component Analysis'
+        description: "Skip Software Component Analysis"
         required: false
         default: false
         type: boolean
@@ -13,6 +13,8 @@ jobs:
   sast:
     permissions:
       contents: read
+      security-events: write
+      actions: read
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -34,11 +36,17 @@ jobs:
         continue-on-error: true
         run: |
           snyk auth ${{ secrets.SNYK_TOKEN }}
-          snyk code test --severity-threshold=high
+          snyk code test --severity-threshold=high --sarif >> snyk-sast.sarif
+      - name: Upload result to Github Code Scanning
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: snyk-sast.sarif
 
   sca:
     permissions:
       contents: read
+      security-events: write
+      actions: read
     runs-on: ubuntu-latest
     if: ${{ ! inputs.skip_sca }}
     steps:
@@ -60,4 +68,8 @@ jobs:
       - name: Snyk Supply Chain Test
         run: |
           snyk auth ${{ secrets.SNYK_TOKEN }}
-          snyk test --severity-threshold=high --all-projects --detection-depth=1
+          snyk test --severity-threshold=high --all-projects --detection-depth=1 --sarif >> snyk-sca.sarif
+      - name: Upload result to Github Code Scanning
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: snyk-sca.sarif
