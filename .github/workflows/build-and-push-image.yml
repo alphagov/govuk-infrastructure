@@ -11,7 +11,7 @@ on:
         required: false
         type: string
         default: Dockerfile
-      additionalBuildArgs:
+      buildArgs:
         required: false
         type: string
       gitRef:
@@ -51,6 +51,9 @@ jobs:
         with:
           mask-password: 'true'
 
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
       - name: Determine image tag
         id: determine-image-tag
         env:
@@ -67,57 +70,26 @@ jobs:
             IMAGE_TAG="release-${LOCAL_HEAD_SHA}"
           fi
 
-          FULL_IMAGE_TAG_LIST=("${ECR_REGISTRY}/${ECR_REPOSITORY}:${IMAGE_TAG}")
+          FULL_IMAGE_TAG_LIST="${ECR_REGISTRY}/${ECR_REPOSITORY}:${IMAGE_TAG}"
 
           # Add latest tag if most recent commit
           if [ "${REMOTE_HEAD_SHA}" = "${LOCAL_HEAD_SHA}" ]; then
             echo "Local commit is the same as the repository HEAD so adding the latest tag (commit: ${REMOTE_HEAD_SHA})"
-            FULL_IMAGE_TAG_LIST+=("${ECR_REGISTRY}/${ECR_REPOSITORY}:latest")
+            FULL_IMAGE_TAG_LIST+=",${ECR_REGISTRY}/${ECR_REPOSITORY}:latest"
           else
             echo "Local commit is different to the repository HEAD so skipping the latest tag (local: ${LOCAL_HEAD_SHA} remote: ${REMOTE_HEAD_SHA})"
           fi
 
           echo "imageTag=${IMAGE_TAG}" >> $GITHUB_OUTPUT
-          echo "fullImageTagList=${FULL_IMAGE_TAG_LIST[@]}" >> $GITHUB_OUTPUT
+          echo "fullImageTagList=${FULL_IMAGE_TAG_LIST}" >> $GITHUB_OUTPUT
 
-      - name: Check for existing image
-        id: existing-image
-        env:
-          ECR_REPOSITORY: ${{ inputs.ecrRepositoryName }}
-          IMAGE_TAG: ${{ steps.determine-image-tag.outputs.imageTag }}
-        run: |
-          check_image_in_ecr() {
-            aws ecr describe-images --repository-name="${1}" --image-ids=imageTag="${2}" 2> /dev/null
-          }
-
-          if check_image_in_ecr "${ECR_REPOSITORY}" "${IMAGE_TAG}"; then
-            echo "Found existing image in ${ECR_REPOSITORY} with the tag ${IMAGE_TAG}. Will not build image again."
-            echo "present=true" >> $GITHUB_OUTPUT
-          else
-            echo "present=false" >> $GITHUB_OUTPUT
-          fi
-
-      - name: Build image
-        if: steps.existing-image.outputs.present == 'false'
-        id: build-image
-        env:
-          FULL_IMAGE_TAG_LIST: ${{ steps.determine-image-tag.outputs.fullImageTagList }}
-          DOCKER_BUILDKIT: "1"
-        run: |
-          set -x
-
-          docker_tag_flags=()
-          for tag in $FULL_IMAGE_TAG_LIST; do
-            docker_tag_flags+=(-t "${tag}")
-          done
-
-          docker build ${docker_tag_flags[@]} ${{ inputs.additionalBuildArgs }} -f ${{ inputs.dockerfilePath }} .
-
-      - name: Push image
-        if: steps.build-image.conclusion == 'success'
-        id: push-image
-        env:
-          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          ECR_REPOSITORY: ${{ inputs.ecrRepositoryName }}
-        run: |
-          docker push --all-tags "${ECR_REGISTRY}/${ECR_REPOSITORY}"
+      - name: Build and push
+        uses: docker/build-push-action@v5
+        with:
+          file: ${{ inputs.dockerfilepath }}
+          build-args: ${{ inputs.buildArgs }}
+          context: .
+          push: true
+          tags: ${{ steps.determine-image-tag.outputs.fullImageTagList }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
