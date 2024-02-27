@@ -62,7 +62,7 @@ jobs:
             ${{ steps.login-ecr.outputs.registry }}/${{ inputs.ecrRepositoryName }}
           tags: |
             type=raw,priority=500,value=${{ inputs.gitRef }},enable=${{ startsWith(inputs.gitRef, 'v') }}
-            type=sha,priority=300,enable=${{ !startsWith(inputs.gitRef, 'v') }}
+            type=sha,priority=300,prefix=,format=long,enable=${{ !startsWith(inputs.gitRef, 'v') }}
 
       - name: Build and push
         uses: docker/build-push-action@v5
