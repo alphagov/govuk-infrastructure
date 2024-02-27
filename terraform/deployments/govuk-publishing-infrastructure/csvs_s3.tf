@@ -19,6 +19,7 @@ data "aws_iam_policy_document" "write_csvs_buckets" {
     effect = "Allow"
     actions = [
       "s3:*MultipartUpload*",
+      "s3:*PutObject*",
       "s3:*Object",
       "s3:*ObjectAcl",
       "s3:*ObjectVersion",
