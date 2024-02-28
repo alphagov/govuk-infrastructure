@@ -48,7 +48,7 @@ resource "helm_release" "argo_cd" {
   namespace        = local.services_ns
   create_namespace = true
   repository       = "https://argoproj.github.io/argo-helm"
-  version          = "6.0.13" # TODO: Dependabot or equivalent so this doesn't get neglected.
+  version          = "6.4.1" # TODO: Dependabot or equivalent so this doesn't get neglected.
   values = [yamlencode({
     global = {
       logging = {
