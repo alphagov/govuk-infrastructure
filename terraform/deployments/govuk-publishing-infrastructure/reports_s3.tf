@@ -7,6 +7,10 @@ resource "aws_s3_bucket" "publisher_csvs" {
   }
 }
 
+# TODO: the govuk-publishing-api-event-log-* buckets don't seem to be defined
+# in alphagov/govuk-aws; define them somewhere appropriate (this module would
+# do for now) and import them.
+
 data "aws_iam_policy_document" "write_reports_to_s3" {
   statement {
     actions = ["s3:GetBucketLocation", "s3:ListBucket"]
@@ -17,6 +21,7 @@ data "aws_iam_policy_document" "write_reports_to_s3" {
       "arn:aws:s3:::govuk-${var.govuk_environment}-specialist-publisher-csvs",
       "arn:aws:s3:::govuk-${var.govuk_environment}-support-api-csvs",
       "arn:aws:s3:::govuk-${var.govuk_environment}-whitehall-csvs",
+      "arn:aws:s3:::govuk-publishing-api-event-log-${var.govuk_environment}",
     ]
   }
 
@@ -35,6 +40,7 @@ data "aws_iam_policy_document" "write_reports_to_s3" {
       "arn:aws:s3:::govuk-${var.govuk_environment}-specialist-publisher-csvs/*",
       "arn:aws:s3:::govuk-${var.govuk_environment}-support-api-csvs/*",
       "arn:aws:s3:::govuk-${var.govuk_environment}-whitehall-csvs/*",
+      "arn:aws:s3:::govuk-publishing-api-event-log-${var.govuk_environment}",
     ]
   }
 }
