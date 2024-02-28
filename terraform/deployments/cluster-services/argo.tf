@@ -257,7 +257,7 @@ resource "helm_release" "argo_workflows" {
     }
 
     server = {
-      authMode = ["client", "sso"]
+      authModes = ["client", "sso"]
       ingress = {
         enabled = true
         annotations = {
