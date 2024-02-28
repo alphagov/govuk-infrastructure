@@ -6,7 +6,7 @@ module "rds-integration" {
   workspace_name    = "rds-integration"
   workspace_desc    = "This module manages AWS resources for creating RDS databases."
   workspace_tags    = ["integration", "rds", "eks", "aws"]
-  terraform_version = "1.7.0"
+  terraform_version = var.terraform_version
   execution_mode    = "remote"
   working_directory = "/terraform/deployments/rds/"
   trigger_patterns  = ["/terraform/deployments/rds/**/*"]
@@ -39,7 +39,7 @@ module "rds-staging" {
   workspace_name    = "rds-staging"
   workspace_desc    = "This module manages AWS resources for creating RDS databases."
   workspace_tags    = ["staging", "rds", "eks", "aws"]
-  terraform_version = "1.7.0"
+  terraform_version = var.terraform_version
   execution_mode    = "remote"
   working_directory = "/terraform/deployments/rds/"
   trigger_patterns  = ["/terraform/deployments/rds/**/*"]
@@ -71,7 +71,7 @@ module "rds-production" {
   workspace_name    = "rds-production"
   workspace_desc    = "This module manages AWS resources for creating RDS databases."
   workspace_tags    = ["production", "rds", "eks", "aws"]
-  terraform_version = "1.7.0"
+  terraform_version = var.terraform_version
   execution_mode    = "remote"
   working_directory = "/terraform/deployments/rds/"
   trigger_patterns  = ["/terraform/deployments/rds/**/*"]

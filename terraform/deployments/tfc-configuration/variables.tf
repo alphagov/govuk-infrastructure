@@ -128,8 +128,8 @@ variable "workspace_tags" {
 
 variable "terraform_version" {
   type        = string
-  description = "Version of Terraform to use for this Workspace."
-  default     = null
+  description = "Version constraint for Terraform for this workspace."
+  default     = "~> 1.7.0"
 }
 
 # variable "trigger_prefixes" {
