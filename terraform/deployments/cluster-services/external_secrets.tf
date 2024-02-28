@@ -12,6 +12,7 @@ resource "helm_release" "cluster_secret_store" {
   chart      = "cluster-secret-store"
   version    = "0.1.1" # TODO: Dependabot or equivalent so this doesn't get neglected.
   namespace  = local.services_ns
+  timeout    = var.helm_timeout_seconds
   values = [yamlencode({
     awsRegion          = data.aws_region.current.name
     serviceAccountName = data.tfe_outputs.cluster_infrastructure.nonsensitive_values.external_secrets_service_account_name
@@ -34,4 +35,5 @@ resource "helm_release" "cluster_secrets" {
   namespace  = local.services_ns
   repository = "https://alphagov.github.io/govuk-helm-charts/"
   version    = "0.9.5" # TODO: Dependabot or equivalent so this doesn't get neglected.
+  timeout    = var.helm_timeout_seconds
 }

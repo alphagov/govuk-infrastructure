@@ -10,6 +10,7 @@ resource "helm_release" "filebeat" {
   version          = "8.5.1"
   namespace        = local.services_ns
   create_namespace = true
+  timeout          = var.helm_timeout_seconds
   values = [yamlencode({
     daemonset = { secretMounts = [] }
     filebeatConfig = {

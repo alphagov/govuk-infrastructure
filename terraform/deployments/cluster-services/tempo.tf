@@ -40,6 +40,7 @@ resource "helm_release" "tempo" {
   namespace  = local.monitoring_ns
   repository = "https://grafana.github.io/helm-charts"
   version    = "1.7.0" # TODO: Dependabot or equivalent so this doesn't get neglected.
+  timeout    = var.helm_timeout_seconds
   values = [yamlencode({
     reportingEnabled = false
 

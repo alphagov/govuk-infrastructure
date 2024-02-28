@@ -13,6 +13,7 @@ resource "helm_release" "kubescape" {
   create_namespace = true
   repository       = "https://armosec.github.io/armo-helm/"
   version          = "1.7.18"
+  timeout          = var.helm_timeout_seconds
   set {
     name  = "clusterName"
     value = "govuk-${var.govuk_environment}"
