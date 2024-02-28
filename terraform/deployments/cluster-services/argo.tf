@@ -185,7 +185,7 @@ resource "helm_release" "argo_workflows" {
   namespace        = local.services_ns
   create_namespace = true
   repository       = "https://argoproj.github.io/argo-helm"
-  version          = "0.22.13" # TODO: Dependabot or equivalent so this doesn't get neglected.
+  version          = "0.40.11" # TODO: Dependabot or equivalent so this doesn't get neglected.
   values = [yamlencode({
     controller = {
       podSecurityContext = { runAsNonRoot = true }
@@ -222,7 +222,6 @@ resource "helm_release" "argo_workflows" {
           })
         }
       }
-      containerRuntimeExecutor = "emissary"
       resources = {
         requests = {
           cpu    = "500m"
@@ -255,7 +254,7 @@ resource "helm_release" "argo_workflows" {
     }
 
     server = {
-      extraArgs = ["--auth-mode=client", "--auth-mode=sso"]
+      authMode = ["client", "sso"]
       ingress = {
         enabled = true
         annotations = {
@@ -270,7 +269,8 @@ resource "helm_release" "argo_workflows" {
         hosts            = [local.argo_workflows_host]
       }
       sso = {
-        issuer = "https://${local.dex_host}"
+        enabled = true
+        issuer  = "https://${local.dex_host}"
         clientId = {
           name = "govuk-dex-argo-workflows"
           key  = "clientID"
