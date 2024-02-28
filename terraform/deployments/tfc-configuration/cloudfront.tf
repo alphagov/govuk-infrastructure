@@ -1,6 +1,6 @@
 module "cloudfront-staging" {
   source  = "alexbasista/workspacer/tfe"
-  version = "0.9.0"
+  version = "0.10.0"
 
   organization        = var.organization
   workspace_name      = "cloudfront-staging"
@@ -33,7 +33,7 @@ module "cloudfront-staging" {
 
 module "cloudfront-production" {
   source  = "alexbasista/workspacer/tfe"
-  version = "0.9.0"
+  version = "0.10.0"
 
   organization        = var.organization
   workspace_name      = "cloudfront-production"
