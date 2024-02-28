@@ -12,6 +12,7 @@ resource "helm_release" "aws_lb_controller" {
   version          = "1.4.4" # TODO: Dependabot or equivalent so this doesn't get neglected.
   namespace        = local.services_ns
   create_namespace = true
+  timeout          = var.helm_timeout_seconds
   values = [yamlencode({
     clusterName      = data.tfe_outputs.cluster_infrastructure.nonsensitive_values.cluster_id
     defaultSSLPolicy = "ELBSecurityPolicy-TLS13-1-2-2021-06" # TLS 1.3, backward compatible with 1.2
@@ -30,4 +31,5 @@ resource "helm_release" "aws_lb_ingress_class" {
   repository = "https://alphagov.github.io/govuk-helm-charts/"
   chart      = "ingress-class"
   version    = "0.1.1" # TODO: Dependabot or equivalent so this doesn't get neglected.
+  timeout    = var.helm_timeout_seconds
 }

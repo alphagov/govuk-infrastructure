@@ -28,6 +28,12 @@ variable "github_read_only_team" {
   default     = "alphagov:gov-uk"
 }
 
+variable "helm_timeout_seconds" {
+  type        = number
+  description = "Timeout for helm install/upgrade operations."
+  default     = "1200"
+}
+
 variable "govuk_aws_state_bucket" {
   type        = string
   description = "Name of the S3 bucket used for govuk-aws's Terraform state."

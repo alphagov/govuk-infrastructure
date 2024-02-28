@@ -49,6 +49,7 @@ resource "helm_release" "argo_cd" {
   create_namespace = true
   repository       = "https://argoproj.github.io/argo-helm"
   version          = "6.4.1" # TODO: Dependabot or equivalent so this doesn't get neglected.
+  timeout          = var.helm_timeout_seconds
   values = [yamlencode({
     global = {
       logging = {
@@ -158,6 +159,7 @@ resource "helm_release" "argo_bootstrap" {
   create_namespace = true
   repository       = "https://alphagov.github.io/govuk-helm-charts/"
   version          = "0.3.2" # TODO: Dependabot or equivalent so this doesn't get neglected.
+  timeout          = var.helm_timeout_seconds
   values = [yamlencode({
     # TODO: This TF module should not need to know the govuk_environment, since
     # there is only one per AWS account.
@@ -186,6 +188,7 @@ resource "helm_release" "argo_workflows" {
   create_namespace = true
   repository       = "https://argoproj.github.io/argo-helm"
   version          = "0.40.11" # TODO: Dependabot or equivalent so this doesn't get neglected.
+  timeout          = var.helm_timeout_seconds
   values = [yamlencode({
     controller = {
       podSecurityContext = { runAsNonRoot = true }
@@ -305,6 +308,7 @@ resource "helm_release" "argo_events" {
   create_namespace = true
   repository       = "https://argoproj.github.io/argo-helm"
   version          = "2.4.0" # TODO: Dependabot or equivalent so this doesn't get neglected.
+  timeout          = var.helm_timeout_seconds
   values = [yamlencode({
     namespace  = local.services_ns
     controller = { replicas = var.desired_ha_replicas }
