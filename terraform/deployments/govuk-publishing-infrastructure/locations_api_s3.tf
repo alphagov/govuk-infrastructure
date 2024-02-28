@@ -17,8 +17,6 @@ resource "aws_s3_bucket_policy" "location_api_import_csvs" {
   policy = data.aws_iam_policy_document.location_api_import_csvs.json
 }
 
-# TODO: instead of granting write access to nodes, use IRSA (IAM Roles for
-# Service Accounts aka pod identity) so that only locations-api can write.
 data "aws_iam_policy_document" "location_api_import_csvs" {
   statement {
     sid = "EKSNodesCanList"

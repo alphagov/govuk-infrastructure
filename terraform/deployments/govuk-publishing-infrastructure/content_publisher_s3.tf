@@ -1,15 +1,10 @@
 data "aws_iam_policy_document" "content_publisher_s3" {
   statement {
-    effect = "Allow"
-    actions = [
-      "s3:GetBucketLocation",
-      "s3:ListBucket",
-    ]
+    actions   = ["s3:GetBucketLocation", "s3:ListBucket"]
     resources = [data.terraform_remote_state.infra_content_publisher.outputs.activestorage_s3_bucket_arn]
   }
 
   statement {
-    effect = "Allow"
     actions = [
       "s3:*MultipartUpload*",
       "s3:*Object",

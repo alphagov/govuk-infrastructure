@@ -18,7 +18,7 @@ resource "aws_s3_bucket_policy" "app_assets" {
 }
 
 # TODO: instead of granting write access to nodes, use IRSA (IAM Roles for
-# Service Accounts aka pod identity) so that only ArgoCD can write.
+# Service Accounts aka pod identity) so that only Argo CD can write.
 data "aws_iam_policy_document" "app_assets" {
   statement {
     sid = "PublicCanReadButNotList"
