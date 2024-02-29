@@ -195,6 +195,8 @@ resource "helm_release" "argo_workflows" {
       workflowNamespaces = concat([local.services_ns], var.argo_workflows_namespaces)
       workflowDefaults = {
         spec = {
+          # The default service account is managed by argo-services in govuk-helm-charts
+          serviceAccountName    = "argo-workflow-default"
           activeDeadlineSeconds = 7200
           ttlStrategy = {
             secondsAfterFailure    = 259200
