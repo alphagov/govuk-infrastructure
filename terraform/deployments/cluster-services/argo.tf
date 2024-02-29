@@ -253,7 +253,8 @@ resource "helm_release" "argo_workflows" {
     }
 
     workflow = {
-      serviceAccount = { create = true }
+      serviceAccount = { create = false }
+      rbac           = { create = false }
     }
 
     server = {
