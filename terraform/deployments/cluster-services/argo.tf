@@ -2,7 +2,6 @@
 locals {
   argo_host           = "argo.${local.external_dns_zone_name}"
   argo_workflows_host = "argo-workflows.${local.external_dns_zone_name}"
-  argo_events_host    = "argo-events.${local.external_dns_zone_name}"
   argo_metrics_config = {
     enabled = true
     serviceMonitor = {
@@ -152,7 +151,7 @@ resource "helm_release" "argo_cd" {
 
 resource "helm_release" "argo_bootstrap" {
   # Relies on CRDs
-  depends_on       = [helm_release.argo_cd, helm_release.argo_events]
+  depends_on       = [helm_release.argo_cd]
   chart            = "argo-bootstrap"
   name             = "argo-bootstrap"
   namespace        = local.services_ns
@@ -167,7 +166,6 @@ resource "helm_release" "argo_bootstrap" {
     govukEnvironment = var.govuk_environment
     argocdUrl        = "https://${local.argo_host}"
     argoWorkflowsUrl = "https://${local.argo_workflows_host}"
-    argoEventsHost   = local.argo_events_host
     rbacTeams = {
       read_only  = var.github_read_only_team
       read_write = var.github_read_write_team
@@ -300,34 +298,6 @@ resource "helm_release" "argo_workflows" {
         }
       }
       replicas = var.desired_ha_replicas
-    }
-  })]
-}
-
-resource "helm_release" "argo_events" {
-  chart            = "argo-events"
-  name             = "argo-events"
-  namespace        = local.services_ns
-  create_namespace = true
-  repository       = "https://argoproj.github.io/argo-helm"
-  version          = "2.4.0" # TODO: Dependabot or equivalent so this doesn't get neglected.
-  timeout          = var.helm_timeout_seconds
-  values = [yamlencode({
-    namespace  = local.services_ns
-    controller = { replicas = var.desired_ha_replicas }
-    configs = {
-      jetstream = {
-        versions = [
-          {
-            # TODO: Dependabot or similar so this doesn't get neglected.
-            version              = "2.9.8"
-            natsImage            = "nats:2.9.8"
-            metricsExporterImage = "natsio/prometheus-nats-exporter:0.10.1"
-            configReloaderImage  = "natsio/nats-server-config-reloader:0.7.4"
-            startCommand         = "/nats-server"
-          }
-        ]
-      }
     }
   })]
 }
