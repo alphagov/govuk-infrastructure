@@ -28,4 +28,4 @@ jobs:
         continue-on-error: true
         run: |
           snyk auth ${{ secrets.SNYK_TOKEN }}
-          snyk test --severity-threshold=high
+          snyk test --severity-threshold=high --all-projects --detection-depth=1
