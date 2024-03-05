@@ -29,7 +29,6 @@ locals {
     "govuk-sli-collector"      = ["govuk-publishing-platform"],
     "hmrc-manuals-api"         = ["govuk-publishing-platform"],
     "imminence"                = ["govuk-content-interactions-on-platform", "govuk-find-and-view"],
-    "info-frontend"            = ["govuk-find-and-view"],
     "licensify"                = [],
     "link-checker-api"         = ["govuk-publishing-platform"],
     "local-links-manager"      = ["govuk-content-interactions-on-platform", "govuk-find-and-view"],
