@@ -18,15 +18,13 @@ jobs:
 
       - name: Find latest version tag
         id: find-last-tag
-        shell: bash
         run: |
-          last_tag=$(
-            git ls-remote -q --exit-code --tags --sort=-version:refname origin 'v*' |
-            head -1 | grep -Eo 'v[0-9]+'
-          )
+          git fetch --tags --deepen=100
 
-          if [[ ! "$last_tag" =~ ^v[0-9]*$ ]]; then
-            echo "No valid previous tag found. last_tag=$last_tag"
+          last_tag=$(git describe --tags --match "v*" --abbrev=0)
+
+          if [ -z "$last_tag" ]; then
+            echo "No previous tag found."
             exit 1
           fi
 
