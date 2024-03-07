@@ -19,12 +19,13 @@ def import_user_events_vertex(request):
     request_json = request.get_json(silent=True)
     event_type = request_json.get("event_type") # `view-item` or `search`
 
-    def yesterday():
+    def datedelta(days):
         from datetime import datetime, timedelta
-        yesterday = datetime.now() - timedelta(days=1)
+        yesterday = datetime.now() - timedelta(days=days)
         return yesterday.strftime('%Y-%m-%d')
 
-    source_date = yesterday() if request_json.get("date") is None else request_json.get("date")
+    delta_days = 0 if "intraday" in event_type else 1
+    source_date = datedelta(days=delta_days) if request_json.get("date") is None else request_json.get("date")
     source_date_datetime = datetime.strptime(source_date, '%Y-%m-%d')
     source_date = date_pb2.Date(year= source_date_datetime.year, month = source_date_datetime.month, day=source_date_datetime.day)
 
