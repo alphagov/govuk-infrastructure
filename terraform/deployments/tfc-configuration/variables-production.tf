@@ -6,7 +6,7 @@ module "variable-set-production" {
     govuk_aws_state_bucket              = "govuk-terraform-steppingstone-production"
     cluster_infrastructure_state_bucket = "govuk-terraform-production"
 
-    cluster_version               = 1.28
+    cluster_version               = 1.29
     cluster_log_retention_in_days = 7
 
     eks_control_plane_subnets = {
