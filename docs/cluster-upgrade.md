@@ -12,9 +12,11 @@ Once an upgrade is done you cannot downgrade a cluster anymore, you will have to
 
 ## Step by step procedure
 
-1. Make sure the control plane version is the same as the nodegroup, it should already be the case. If not, applying the cluster-infrastructure terraform project should solve this.
-1. Increment cluster_version to the version you are upgrading to in terraform/deployment/variables/<ENV>/common.tfvars 
-1. Plan and apply the cluster-infrastructure terraform project, it should take about half an hour for the control plane, and another half hour for the nodegroup.
-1. During the upgrade monitor the health of the running apps to make sure there is no interruption of service.
-1. Upgrade the cluster add-ons. See the docs for each addon under [EKS Addons](https://docs.aws.amazon.com/eks/latest/userguide/eks-add-ons.html) for Amazon's recommended addon versions to use for a given cluster version. Modify `cluster_addon_versions` accordingly.
-1. Plan and apply the cluster-infrastructure terraform project as before. 
+1. Make sure the control plane version is the same as the nodegroup, it should already be the case. If not, applying a new run in the  `cluster-infrastructure-<ENV>` workspace in Terraform Cloud will solve this.
+2. In the AWS EKS console choose 'Update cluster version' and select the version you wish to update to
+3. Upgrade the cluster add-ons. See the docs for each addon under [EKS Addons](https://docs.aws.amazon.com/eks/latest/userguide/eks-add-ons.html) for Amazon's recommended addon versions to use for a given cluster version.
+4. Upgrade the node group by selecting the 'Compute' tab in the AWS EKS console and select 'Update now'. Run `kubectl get nodes` to verify that the upgrade has completed successfully.
+5. In the ArgoCD console delete the `release` app and verify that it is re-created
+6. Increment cluster_version to the version you are upgrading to in terraform/tfc-configuration/variables-<ENV>.tf 
+7. Plan and apply a new run in the `tfc-configuration` workspace in Terraform Cloud. This will update the variable sets to the new cluster_version 
+8. Plan and apply a new run in the `cluster-infrastructure-<ENV>` workspace in Terraform Cloud.
