@@ -11,5 +11,5 @@ resource "aws_vpc_security_group_ingress_rule" "rds" {
   to_port     = 5432
   ip_protocol = "tcp"
 
-  referenced_security_group_id = data.terraform_remote_state.cluster_infrastructure.outputs.node_security_group_id
+  referenced_security_group_id = data.tfe_outputs.cluster_infrastructure.nonsensitive_values.node_security_group_id
 }

@@ -1,5 +1,10 @@
 terraform {
-  backend "s3" {}
+  cloud {
+    organization = "govuk"
+    workspaces {
+      tags = ["datagovuk-infrastructure", "eks", "aws"]
+    }
+  }
 
   required_version = "~> 1.5"
   required_providers {
@@ -15,10 +20,9 @@ terraform {
 }
 
 locals {
-  cluster_name  = data.terraform_remote_state.cluster_infrastructure.outputs.cluster_id
-  cluster_id    = data.terraform_remote_state.cluster_infrastructure.outputs.cluster_id
-  oidc_provider = data.terraform_remote_state.cluster_infrastructure.outputs.cluster_oidc_provider
-  services_ns   = data.terraform_remote_state.cluster_infrastructure.outputs.cluster_services_namespace
+  cluster_id    = data.tfe_outputs.cluster_infrastructure.nonsensitive_values.cluster_id
+  services_ns   = data.tfe_outputs.cluster_infrastructure.nonsensitive_values.cluster_services_namespace
+  oidc_provider = data.tfe_outputs.cluster_infrastructure.nonsensitive_values.cluster_oidc_provider
 
   default_tags = {
     Product              = "DATA.GOV.UK"
@@ -36,17 +40,17 @@ provider "aws" {
   default_tags { tags = local.default_tags }
 }
 
+data "aws_eks_cluster_auth" "cluster_token" {
+  name = "govuk"
+}
+
 provider "helm" {
   # TODO: If/when TF makes provider configs a first-class language object,
   # reuse the identical config from above.
   kubernetes {
-    host                   = data.terraform_remote_state.cluster_infrastructure.outputs.cluster_endpoint
-    cluster_ca_certificate = base64decode(data.terraform_remote_state.cluster_infrastructure.outputs.cluster_certificate_authority_data)
-    exec {
-      api_version = "client.authentication.k8s.io/v1"
-      command     = "aws"
-      args        = ["eks", "get-token", "--cluster-name", data.terraform_remote_state.cluster_infrastructure.outputs.cluster_id]
-    }
+    host                   = data.tfe_outputs.cluster_infrastructure.nonsensitive_values.cluster_endpoint
+    cluster_ca_certificate = base64decode(data.tfe_outputs.cluster_infrastructure.nonsensitive_values.cluster_certificate_authority_data)
+    token                  = data.aws_eks_cluster_auth.cluster_token.token
   }
 }
 
