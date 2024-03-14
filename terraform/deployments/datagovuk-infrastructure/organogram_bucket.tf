@@ -32,7 +32,7 @@ resource "aws_s3_bucket_versioning" "datagovuk_organogram" {
 
 resource "aws_s3_bucket_logging" "datagovuk_organogram" {
   bucket        = aws_s3_bucket.datagovuk-organogram.id
-  target_bucket = data.terraform_remote_state.infra_monitoring.outputs.aws_logging_bucket_id
+  target_bucket = "govuk-${var.govuk_environment}-aws-logging"
   target_prefix = "s3/datagovuk-${var.govuk_environment}-ckan-organogram/"
 }
 
