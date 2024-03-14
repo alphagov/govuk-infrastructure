@@ -8,10 +8,9 @@
 #
 # jobs:
 #   autorelease:
-#     permissions:
-#       contents: write
-#       pull-requests: write
 #     uses: alphagov/govuk-infrastructure/.github/workflows/autorelease-rubygem.yml@main
+#     secrets:
+#       GH_TOKEN: ${{ secrets.GOVUK_CI_GITHUB_API_TOKEN }}
 
 name: Auto-release Rubygem
 
@@ -22,19 +21,20 @@ on:
         required: false
         type: string
         default: ${{ github.event.repository.name }}
+    secrets:
+      GH_TOKEN:
+        required: true
 
 jobs:
   release:
     name: Release Gem
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
-      pull-requests: write
     steps:
     - uses: actions/checkout@v4
       with:
         fetch-depth: 0
         show-progress: false
+        token: ${{ secrets.GH_TOKEN }}
     - uses: ruby/setup-ruby@v1
       with:
         rubygems: latest
@@ -46,7 +46,7 @@ jobs:
       name: "Auto-release rubygem"
       env:
         GEM_NAME: ${{ inputs.gem_name }}
-        GH_TOKEN: ${{ github.token }}
+        GH_TOKEN: ${{ secrets.GH_TOKEN }}
       run: |
         set -euo pipefail
 
