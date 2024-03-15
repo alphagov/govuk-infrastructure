@@ -12,19 +12,19 @@ terraform {
   required_providers {
     aws = {
       source  = "hashicorp/aws"
-      version = "~> 5.21.0"
+      version = "~> 5.41.0"
     }
     google = {
       source  = "hashicorp/google"
-      version = "~> 5.1.0"
+      version = "~> 5.20.0"
     }
     restapi = {
       source  = "Mastercard/restapi"
-      version = "~> 1.18.2"
+      version = "~> 1.19.1"
     }
     archive = {
       source  = "hashicorp/archive"
-      version = "~> 2.4.0"
+      version = "~> 2.4.2"
     }
   }
 
