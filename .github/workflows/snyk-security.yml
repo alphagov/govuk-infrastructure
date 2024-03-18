@@ -10,7 +10,20 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
+      - id: get-date
+        run: echo "date=$(/bin/date -u "+%Y%m%d")" >> $GITHUB_OUTPUT
+        shell: bash
+
+      - uses: actions/cache@v4
+        id: cache
+        with:
+          path: /usr/local/bin/snyk*
+          key: snyk-${{ runner.os }}-${{ steps.get-date.outputs.date }}
+
       - uses: snyk/actions/setup@master
+        if: steps.cache.outputs.cache-hit != 'true'
+
       - name: Snyk Code Test
         continue-on-error: true
         run: |
@@ -23,7 +36,20 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
+      - id: get-date
+        run: echo "date=$(/bin/date -u "+%Y%m%d")" >> $GITHUB_OUTPUT
+        shell: bash
+
+      - uses: actions/cache@v4
+        id: cache
+        with:
+          path: /usr/local/bin/snyk*
+          key: snyk-${{ runner.os }}-${{ steps.get-date.outputs.date }}
+
       - uses: snyk/actions/setup@master
+        if: steps.cache.outputs.cache-hit != 'true'
+
       - name: Snyk Supply Chain Test
         run: |
           snyk auth ${{ secrets.SNYK_TOKEN }}
