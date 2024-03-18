@@ -199,7 +199,7 @@ resource "google_cloud_scheduler_job" "daily_transfer_search" {
 resource "google_cloud_scheduler_job" "intraday_transfer_view_item" {
   name        = "transfer_ga4_intraday_to_bq_view_item_intraday"
   description = "transfer view-item intraday ga4 bq data to vertex tables within bq"
-  schedule    = "0 0 31 12 *" # manual trigger only
+  schedule    = "50 05,11,17,23 * * *" # manual trigger only
   time_zone   = "Europe/London"
   http_target {
     http_method = "POST"
@@ -219,7 +219,7 @@ resource "google_cloud_scheduler_job" "intraday_transfer_view_item" {
 resource "google_cloud_scheduler_job" "intraday_transfer_search" {
   name        = "transfer_ga4_intraday_to_bq_search_intraday"
   description = "transfer search intraday ga4 bq data to vertex tables within bq"
-  schedule    = "0 0 31 12 *" # manual trigger only
+  schedule    = "45 05,11,17,23 * * *" # manual trigger only
   time_zone   = "Europe/London"
   http_target {
     http_method = "POST"
@@ -345,7 +345,7 @@ resource "google_cloud_scheduler_job" "daily_transfer_bq_view_item_to_vertex" {
 resource "google_cloud_scheduler_job" "daily_transfer_bq_search_intraday_to_vertex" {
   name        = "transfer_search_intraday_event_to_vertex_datastore"
   description = "transfer search intraday vertex bq data to vertex datastore"
-  schedule    = "0 0 31 12 *" # manual trigger only
+  schedule    = "50 05,11,17,23 * * *" # manual trigger only
   time_zone   = "Europe/London"
   http_target {
     http_method = "POST"
@@ -365,7 +365,7 @@ resource "google_cloud_scheduler_job" "daily_transfer_bq_search_intraday_to_vert
 resource "google_cloud_scheduler_job" "daily_transfer_bq_view_item_intraday_to_vertex" {
   name        = "transfer_view_item_intraday_to_vertex_datastore"
   description = "transfer view item intraday vertex bq data to vertex datastore"
-  schedule    = "0 0 31 12 *" # manual trigger only
+  schedule    = "55 05,11,17,23 * * *" # manual trigger only
   time_zone   = "Europe/London"
   http_target {
     http_method = "POST"
