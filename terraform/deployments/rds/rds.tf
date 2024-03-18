@@ -78,25 +78,21 @@ resource "aws_db_event_subscription" "subscription" {
   event_categories = ["availability", "deletion", "failure", "low storage"]
 }
 
-# Alarm if free storage space is below the threshold (we use 10GiB for most of our databases) for 60s
+# Alarm if free storage space is below threshold (typically 10 GiB) for 10m.
 resource "aws_cloudwatch_metric_alarm" "rds_freestoragespace" {
-  for_each = var.databases
+  for_each   = var.databases
+  dimensions = { DBInstanceIdentifier = aws_db_instance.instance[each.key].id }
 
   alarm_name          = "${each.value.name}-rds-freestoragespace"
   comparison_operator = "LessThanThreshold"
-  evaluation_periods  = "2"
+  evaluation_periods  = "10"
   metric_name         = "FreeStorageSpace"
   namespace           = "AWS/RDS"
   period              = "60"
-  statistic           = "Average"
+  statistic           = "Minimum"
   threshold           = each.value.freestoragespace_threshold
-  actions_enabled     = true
   alarm_actions       = [data.terraform_remote_state.infra_monitoring.outputs.sns_topic_cloudwatch_alarms_arn]
-  alarm_description   = "This metric monitors the amount of available storage space."
-
-  dimensions = {
-    DBInstanceIdentifier = aws_db_instance.instance[each.key].id
-  }
+  alarm_description   = "Available storage space on ${each.value.name} is too low."
 }
 
 data "aws_route53_zone" "internal" {
