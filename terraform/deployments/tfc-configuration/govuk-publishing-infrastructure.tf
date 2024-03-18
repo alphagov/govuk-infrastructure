@@ -1,6 +1,6 @@
 module "govuk-publishing-infrastructure-integration" {
   source  = "alexbasista/workspacer/tfe"
-  version = "0.9.0"
+  version = "0.10.0"
 
   organization      = var.organization
   workspace_name    = "govuk-publishing-infrastructure-integration"
@@ -32,7 +32,7 @@ module "govuk-publishing-infrastructure-integration" {
 
 module "govuk-publishing-infrastructure-staging" {
   source  = "alexbasista/workspacer/tfe"
-  version = "0.9.0"
+  version = "0.10.0"
 
   organization      = var.organization
   workspace_name    = "govuk-publishing-infrastructure-staging"
@@ -63,7 +63,7 @@ module "govuk-publishing-infrastructure-staging" {
 
 module "govuk-publishing-infrastructure-production" {
   source  = "alexbasista/workspacer/tfe"
-  version = "0.9.0"
+  version = "0.10.0"
 
   organization      = var.organization
   workspace_name    = "govuk-publishing-infrastructure-production"

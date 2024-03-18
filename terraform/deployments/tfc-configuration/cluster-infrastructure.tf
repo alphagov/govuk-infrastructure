@@ -1,6 +1,6 @@
 module "cluster-infrastructure-integration" {
   source  = "alexbasista/workspacer/tfe"
-  version = "0.9.0"
+  version = "0.10.0"
 
   organization        = var.organization
   workspace_name      = "cluster-infrastructure-integration"
@@ -33,7 +33,7 @@ module "cluster-infrastructure-integration" {
 
 module "cluster-infrastructure-staging" {
   source  = "alexbasista/workspacer/tfe"
-  version = "0.9.0"
+  version = "0.10.0"
 
   organization        = var.organization
   workspace_name      = "cluster-infrastructure-staging"
@@ -66,7 +66,7 @@ module "cluster-infrastructure-staging" {
 
 module "cluster-infrastructure-production" {
   source  = "alexbasista/workspacer/tfe"
-  version = "0.9.0"
+  version = "0.10.0"
 
   organization        = var.organization
   workspace_name      = "cluster-infrastructure-production"
