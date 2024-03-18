@@ -211,7 +211,7 @@ module "variable-set-rds-staging" {
           log_min_duration_statement           = { value = "10000" }
           log_statement                        = { value = "all" }
           deadlock_timeout                     = { value = 2500 }
-          log_lock_waits                       = { value = true }
+          log_lock_waits                       = { value = 1 }
         }
         engine_params_family = "postgres13"
 
