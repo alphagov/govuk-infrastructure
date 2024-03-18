@@ -41,7 +41,7 @@ jobs:
         bundler-cache: true
     - name: "Determine HEAD of default branch"
       id: fetch_default_branch_head
-      run: echo "sha=$(git ls-remote origin HEAD | cut -f 1)" >> "$GITHUB_OUTPUT"
+      run: echo "sha=$(git rev-parse origin/HEAD)" >> "$GITHUB_OUTPUT"
     - if: github.sha == steps.fetch_default_branch_head.outputs.sha
       name: "Auto-release rubygem"
       env:
@@ -78,7 +78,7 @@ jobs:
 
         find . -type f -iname version.rb -exec sed -i "s/$CURR_VERSION/$NEXT_VERSION/g" {} \;
 
-        printf "# v$NEXT_VERSION\n\n* Update dependencies\n\n" | cat - CHANGELOG.md > NEW_CHANGELOG.md
+        printf "# $NEXT_VERSION\n\n* Update dependencies\n\n" | cat - CHANGELOG.md > NEW_CHANGELOG.md
         mv NEW_CHANGELOG.md CHANGELOG.md
 
         git config --global user.name "GOV.UK Continuous Integration User"
