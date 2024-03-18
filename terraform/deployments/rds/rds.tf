@@ -100,23 +100,24 @@ data "aws_route53_zone" "internal" {
   private_zone = true
 }
 
-# internal_domain_name is ${var.stackname}.${internal_root_domain_name}
+# DEPRECATED: "Internal" domain is blue.<environment>.govuk-internal.digital.
 resource "aws_route53_record" "database_internal_domain_name" {
   for_each = var.databases
 
   zone_id = data.aws_route53_zone.internal.zone_id
-  name    = "${each.value.name}-${each.value.engine}.${var.internal_domain_name}"
+  name    = "${each.value.name}-${each.value.engine}.blue"
   type    = "CNAME"
   ttl     = 300
   records = [aws_db_instance.instance[each.key].address]
 }
 
+# "Internal root" domain is <environment>.govuk-internal.digital.
 resource "aws_route53_record" "database_internal_root_domain_name" {
   for_each = var.databases
 
   zone_id = data.terraform_remote_state.infra_root_dns_zones.outputs.internal_root_zone_id
-  name    = "${each.value.name}-${each.value.engine}.${data.terraform_remote_state.infra_root_dns_zones.outputs.internal_root_domain_name}"
+  name    = "${each.value.name}-${each.value.engine}"
   type    = "CNAME"
   ttl     = 300
-  records = [aws_route53_record.database_internal_domain_name[each.key].fqdn]
+  records = [aws_db_instance.instance[each.key].address]
 }
