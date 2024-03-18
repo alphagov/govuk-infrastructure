@@ -6,7 +6,7 @@ module "ecr-production" {
   workspace_name      = "ecr-production"
   workspace_desc      = "The ecr module is responsible for the AWS resources which constitute the EKS cluster."
   workspace_tags      = ["production", "ecr", "eks", "aws"]
-  terraform_version   = "1.7.0"
+  terraform_version   = var.terraform_version
   execution_mode      = "remote"
   working_directory   = "/terraform/deployments/ecr/"
   trigger_patterns    = ["/terraform/deployments/ecr/**/*"]

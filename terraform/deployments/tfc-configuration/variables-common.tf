@@ -4,6 +4,9 @@ module "variable-set-common" {
   name     = "common"
   priority = false
   tfvars = {
-    dex_github_orgs_teams = [{ name = "alphagov", teams = ["gov-uk", "gov-uk-production-deploy"] }]
+    dex_github_orgs_teams = [{
+      name  = "alphagov"
+      teams = ["gov-uk", "gov-uk-production-deploy"]
+    }]
   }
 }

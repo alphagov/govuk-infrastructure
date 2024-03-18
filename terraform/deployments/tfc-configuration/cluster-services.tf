@@ -6,7 +6,7 @@ module "cluster-services-integration" {
   workspace_name    = "cluster-services-integration"
   workspace_desc    = "The cluster-services module is responsible for the AWS resources which constitute the EKS cluster."
   workspace_tags    = ["integration", "cluster-services", "eks", "aws"]
-  terraform_version = "1.7.0"
+  terraform_version = var.terraform_version
   execution_mode    = "remote"
   working_directory = "/terraform/deployments/cluster-services/"
   trigger_patterns  = ["/terraform/deployments/cluster-services/**/*"]
@@ -38,7 +38,7 @@ module "cluster-services-staging" {
   workspace_name    = "cluster-services-staging"
   workspace_desc    = "The cluster-services module is responsible for the AWS resources which constitute the EKS cluster."
   workspace_tags    = ["staging", "cluster-services", "eks", "aws"]
-  terraform_version = "1.7.0"
+  terraform_version = var.terraform_version
   execution_mode    = "remote"
   working_directory = "/terraform/deployments/cluster-services/"
   trigger_patterns  = ["/terraform/deployments/cluster-services/**/*"]
@@ -69,7 +69,7 @@ module "cluster-services-production" {
   workspace_name    = "cluster-services-production"
   workspace_desc    = "The cluster-services module is responsible for the AWS resources which constitute the EKS cluster."
   workspace_tags    = ["production", "cluster-services", "eks", "aws"]
-  terraform_version = "1.7.0"
+  terraform_version = var.terraform_version
   execution_mode    = "remote"
   working_directory = "/terraform/deployments/cluster-services/"
   trigger_patterns  = ["/terraform/deployments/cluster-services/**/*"]

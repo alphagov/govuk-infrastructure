@@ -6,7 +6,7 @@ module "govuk-publishing-infrastructure-integration" {
   workspace_name    = "govuk-publishing-infrastructure-integration"
   workspace_desc    = "This module manages AWS resources which are specific to GOV.UK Publishing."
   workspace_tags    = ["integration", "govuk-publishing-infrastructure", "eks", "aws"]
-  terraform_version = "1.7.0"
+  terraform_version = var.terraform_version
   execution_mode    = "remote"
   working_directory = "/terraform/deployments/govuk-publishing-infrastructure/"
   trigger_patterns  = ["/terraform/deployments/govuk-publishing-infrastructure/**/*"]
@@ -38,7 +38,7 @@ module "govuk-publishing-infrastructure-staging" {
   workspace_name    = "govuk-publishing-infrastructure-staging"
   workspace_desc    = "This module manages AWS resources which are specific to GOV.UK Publishing."
   workspace_tags    = ["staging", "govuk-publishing-infrastructure", "eks", "aws"]
-  terraform_version = "1.7.0"
+  terraform_version = var.terraform_version
   execution_mode    = "remote"
   working_directory = "/terraform/deployments/govuk-publishing-infrastructure/"
   trigger_patterns  = ["/terraform/deployments/govuk-publishing-infrastructure/**/*"]
@@ -69,7 +69,7 @@ module "govuk-publishing-infrastructure-production" {
   workspace_name    = "govuk-publishing-infrastructure-production"
   workspace_desc    = "This module manages AWS resources which are specific to GOV.UK Publishing."
   workspace_tags    = ["production", "govuk-publishing-infrastructure", "eks", "aws"]
-  terraform_version = "1.7.0"
+  terraform_version = var.terraform_version
   execution_mode    = "remote"
   working_directory = "/terraform/deployments/govuk-publishing-infrastructure/"
   trigger_patterns  = ["/terraform/deployments/govuk-publishing-infrastructure/**/*"]
