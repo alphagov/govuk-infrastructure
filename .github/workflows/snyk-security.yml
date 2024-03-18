@@ -2,6 +2,12 @@ name: SNYK security analysis
 
 on:
   workflow_call:
+    inputs:
+      skip_sca:
+        description: 'Skip Software Component Analysis'
+        required: false
+        default: false
+        type: boolean
 
 jobs:
   sast:
@@ -34,6 +40,7 @@ jobs:
     permissions:
       contents: read
     runs-on: ubuntu-latest
+    if: ${{ ! inputs.skip_sca }}
     steps:
       - uses: actions/checkout@v4
 
