@@ -107,8 +107,3 @@ variable "internal_zone_name" {
   type        = string
   description = "The name of the Route53 zone that contains internal records"
 }
-
-variable "internal_domain_name" {
-  type        = string
-  description = "The domain name of the internal DNS records, it could be different from the zone name"
-}
