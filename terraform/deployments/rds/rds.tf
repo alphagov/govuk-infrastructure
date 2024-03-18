@@ -78,27 +78,6 @@ resource "aws_db_event_subscription" "subscription" {
   event_categories = ["availability", "deletion", "failure", "low storage"]
 }
 
-# Alarm if average CPU utilisation is above the threshold (we use 80% for most of our databases) for 60s
-resource "aws_cloudwatch_metric_alarm" "rds_cpuutilization" {
-  for_each = var.databases
-
-  alarm_name          = "${each.value.name}-rds-cpuutilization"
-  comparison_operator = "GreaterThanOrEqualToThreshold"
-  evaluation_periods  = "2"
-  metric_name         = "CPUUtilization"
-  namespace           = "AWS/RDS"
-  period              = "60"
-  statistic           = "Average"
-  threshold           = each.value.cpuutilization_threshold
-  actions_enabled     = true
-  alarm_actions       = [data.terraform_remote_state.infra_monitoring.outputs.sns_topic_cloudwatch_alarms_arn]
-  alarm_description   = "This metric monitors the percentage of CPU utilization."
-
-  dimensions = {
-    DBInstanceIdentifier = aws_db_instance.instance[each.key].id
-  }
-}
-
 # Alarm if free storage space is below the threshold (we use 10GiB for most of our databases) for 60s
 resource "aws_cloudwatch_metric_alarm" "rds_freestoragespace" {
   for_each = var.databases
