@@ -73,8 +73,6 @@ module "variable-set-rds-staging" {
 
   name = "rds-staging"
   tfvars = {
-    internal_zone_name      = "staging.govuk-internal.digital"
-    internal_domain_name    = "blue.staging.govuk-internal.digital"
     backup_retention_period = 0
     skip_final_snapshot     = true
     multi_az                = false
@@ -97,7 +95,6 @@ module "variable-set-rds-staging" {
 
         performance_insights_enabled = true
 
-        cpuutilization_threshold   = 80
         freestoragespace_threshold = 10737418240
       }
 
@@ -119,7 +116,6 @@ module "variable-set-rds-staging" {
 
         performance_insights_enabled = false
 
-        cpuutilization_threshold   = 80
         freestoragespace_threshold = 10737418240
       }
 
@@ -140,7 +136,6 @@ module "variable-set-rds-staging" {
 
         performance_insights_enabled = true
 
-        cpuutilization_threshold   = 80
         freestoragespace_threshold = 10737418240
       }
 
@@ -158,7 +153,6 @@ module "variable-set-rds-staging" {
 
         performance_insights_enabled = false
 
-        cpuutilization_threshold   = 80
         freestoragespace_threshold = 10737418240
       }
 
@@ -176,7 +170,6 @@ module "variable-set-rds-staging" {
 
         performance_insights_enabled = false
 
-        cpuutilization_threshold   = 80
         freestoragespace_threshold = 10737418240
       }
 
@@ -197,7 +190,6 @@ module "variable-set-rds-staging" {
 
         performance_insights_enabled = false
 
-        cpuutilization_threshold   = 80
         freestoragespace_threshold = 10737418240
       }
 
@@ -223,7 +215,6 @@ module "variable-set-rds-staging" {
 
         performance_insights_enabled = false
 
-        cpuutilization_threshold   = 80
         freestoragespace_threshold = 536870912000
       }
 
@@ -244,7 +235,6 @@ module "variable-set-rds-staging" {
 
         performance_insights_enabled = false
 
-        cpuutilization_threshold   = 80
         freestoragespace_threshold = 10737418240
       }
 
@@ -265,7 +255,6 @@ module "variable-set-rds-staging" {
 
         performance_insights_enabled = true
 
-        cpuutilization_threshold   = 80
         freestoragespace_threshold = 10737418240
       }
 
@@ -286,7 +275,6 @@ module "variable-set-rds-staging" {
 
         performance_insights_enabled = false
 
-        cpuutilization_threshold   = 80
         freestoragespace_threshold = 10737418240
       }
 
@@ -307,7 +295,6 @@ module "variable-set-rds-staging" {
 
         performance_insights_enabled = true
 
-        cpuutilization_threshold   = 80
         freestoragespace_threshold = 10737418240
       }
 
@@ -328,7 +315,6 @@ module "variable-set-rds-staging" {
 
         performance_insights_enabled = true
 
-        cpuutilization_threshold   = 80
         freestoragespace_threshold = 10737418240
       }
 
@@ -350,7 +336,6 @@ module "variable-set-rds-staging" {
 
         performance_insights_enabled = false
 
-        cpuutilization_threshold   = 80
         freestoragespace_threshold = 10737418240
       }
 
@@ -371,7 +356,6 @@ module "variable-set-rds-staging" {
 
         performance_insights_enabled = false
 
-        cpuutilization_threshold   = 80
         freestoragespace_threshold = 10737418240
       }
 
@@ -392,7 +376,6 @@ module "variable-set-rds-staging" {
 
         performance_insights_enabled = false
 
-        cpuutilization_threshold   = 80
         freestoragespace_threshold = 10737418240
       }
 
@@ -413,7 +396,6 @@ module "variable-set-rds-staging" {
 
         performance_insights_enabled = true
 
-        cpuutilization_threshold   = 80
         freestoragespace_threshold = 10737418240
       }
 
@@ -437,7 +419,6 @@ module "variable-set-rds-staging" {
 
         performance_insights_enabled = true
 
-        cpuutilization_threshold   = 80
         freestoragespace_threshold = 10737418240
       }
 
@@ -455,7 +436,6 @@ module "variable-set-rds-staging" {
 
         performance_insights_enabled = false
 
-        cpuutilization_threshold   = 80
         freestoragespace_threshold = 10737418240
       }
 
@@ -473,7 +453,6 @@ module "variable-set-rds-staging" {
 
         performance_insights_enabled = false
 
-        cpuutilization_threshold   = 80
         freestoragespace_threshold = 10737418240
       }
 
@@ -494,7 +473,6 @@ module "variable-set-rds-staging" {
 
         performance_insights_enabled = false
 
-        cpuutilization_threshold   = 80
         freestoragespace_threshold = 10737418240
       }
 
@@ -512,7 +490,6 @@ module "variable-set-rds-staging" {
 
         performance_insights_enabled = true
 
-        cpuutilization_threshold   = 80
         freestoragespace_threshold = 10737418240
       }
 
@@ -533,7 +510,6 @@ module "variable-set-rds-staging" {
 
         performance_insights_enabled = true
 
-        cpuutilization_threshold   = 80
         freestoragespace_threshold = 10737418240
       }
 
@@ -551,7 +527,6 @@ module "variable-set-rds-staging" {
 
         performance_insights_enabled = true
 
-        cpuutilization_threshold   = 80
         freestoragespace_threshold = 10737418240
       }
     }
