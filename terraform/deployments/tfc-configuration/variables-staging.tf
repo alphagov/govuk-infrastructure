@@ -9,6 +9,8 @@ module "variable-set-staging" {
     cluster_version               = 1.29
     cluster_log_retention_in_days = 7
 
+    vpc_cidr = "10.12.0.0/16"
+
     eks_control_plane_subnets = {
       a = { az = "eu-west-1a", cidr = "10.12.19.0/28" }
       b = { az = "eu-west-1b", cidr = "10.12.19.16/28" }
