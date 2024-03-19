@@ -102,8 +102,3 @@ variable "terraform_delete_rds_timeout" {
   description = "Set the timeout time for AWS RDS deletion."
   default     = "2h"
 }
-
-variable "internal_zone_name" {
-  type        = string
-  description = "The name of the Route53 zone that contains internal records"
-}

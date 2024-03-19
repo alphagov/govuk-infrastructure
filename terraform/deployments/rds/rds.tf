@@ -95,29 +95,17 @@ resource "aws_cloudwatch_metric_alarm" "rds_freestoragespace" {
   alarm_description   = "Available storage space on ${each.value.name} RDS is too low."
 }
 
-data "aws_route53_zone" "internal" {
-  name         = var.internal_zone_name
-  private_zone = true
-}
-
-# DEPRECATED: "Internal" domain is blue.<environment>.govuk-internal.digital.
-resource "aws_route53_record" "database_internal_domain_name" {
+resource "aws_route53_record" "instance_cname" {
   for_each = var.databases
 
-  zone_id = data.aws_route53_zone.internal.zone_id
-  name    = "${each.value.name}-${each.value.engine}.blue"
-  type    = "CNAME"
-  ttl     = 300
-  records = [aws_db_instance.instance[each.key].address]
-}
-
-# "Internal root" domain is <environment>.govuk-internal.digital.
-resource "aws_route53_record" "database_internal_root_domain_name" {
-  for_each = var.databases
-
+  # Zone is <environment>.govuk-internal.digital.
   zone_id = data.terraform_remote_state.infra_root_dns_zones.outputs.internal_root_zone_id
   name    = "${each.value.name}-${each.value.engine}"
   type    = "CNAME"
   ttl     = 300
   records = [aws_db_instance.instance[each.key].address]
+}
+moved { # TODO(sengi): clean up moved block once applied.
+  from = aws_route53_record.database_internal_root_domain_name
+  to   = aws_route53_record.instance_cname
 }
