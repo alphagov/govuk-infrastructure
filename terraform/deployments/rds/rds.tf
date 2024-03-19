@@ -6,10 +6,10 @@ resource "random_string" "database_password" {
 }
 
 resource "aws_db_subnet_group" "subnet_group" {
-  name       = "${var.stackname}-govuk-rds-subnet"
+  name       = "blue-govuk-rds-subnet"
   subnet_ids = data.terraform_remote_state.infra_networking.outputs.private_subnet_rds_ids
 
-  tags = { Name = "${var.stackname}-govuk-rds-subnet" }
+  tags = { Name = "blue-govuk-rds-subnet" }
 }
 
 resource "aws_db_parameter_group" "engine_params" {
@@ -66,7 +66,7 @@ resource "aws_db_instance" "instance" {
   final_snapshot_identifier = "${each.value.name}-final-snapshot"
   skip_final_snapshot       = var.skip_final_snapshot
 
-  tags = { Name = "${var.stackname}-govuk-rds-${each.value.name}-${each.value.engine}" }
+  tags = { Name = "blue-govuk-rds-${each.value.name}-${each.value.engine}" }
 }
 
 resource "aws_db_event_subscription" "subscription" {

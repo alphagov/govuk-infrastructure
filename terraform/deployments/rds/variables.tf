@@ -9,39 +9,9 @@ variable "aws_region" {
   default     = "eu-west-1"
 }
 
-variable "stackname" {
-  type        = string
-  description = "Stackname"
-  default     = "blue"
-}
-
 variable "govuk_aws_state_bucket" {
   type        = string
   description = "Bucket where govuk-aws state is stored"
-}
-
-variable "remote_state_infra_monitoring_key_stack" {
-  type        = string
-  description = "Override path to infra_monitoring remote state"
-  default     = "govuk"
-}
-
-variable "remote_state_infra_networking_key_stack" {
-  type        = string
-  description = "Override path to infra_networking remote state"
-  default     = "govuk"
-}
-
-variable "remote_state_infra_root_dns_zones_key_stack" {
-  type        = string
-  description = "Override path to infra_root_dns_zones remote state"
-  default     = "govuk"
-}
-
-variable "remote_state_infra_vpc_key_stack" {
-  type        = string
-  description = "Override path to infra_vpc remote state"
-  default     = "govuk"
 }
 
 variable "databases" {
