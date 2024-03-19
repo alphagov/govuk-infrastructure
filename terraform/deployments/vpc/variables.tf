@@ -9,12 +9,6 @@ variable "aws_region" {
   default     = "eu-west-1"
 }
 
-variable "stackname" {
-  type        = string
-  description = "Stackname"
-  default     = ""
-}
-
 variable "vpc_cidr" {
   type        = string
   description = "VPC IP address range, represented as a CIDR block"
