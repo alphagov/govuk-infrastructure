@@ -105,7 +105,3 @@ resource "aws_route53_record" "instance_cname" {
   ttl     = 300
   records = [aws_db_instance.instance[each.key].address]
 }
-moved { # TODO(sengi): clean up moved block once applied.
-  from = aws_route53_record.database_internal_root_domain_name
-  to   = aws_route53_record.instance_cname
-}
