@@ -14,7 +14,7 @@ module "vpc-integration" {
   project_name = "govuk-infrastructure"
   vcs_repo = {
     identifier     = "alphagov/govuk-infrastructure"
-    branch         = "samsimpson1/govuk-aws"
+    branch         = "main"
     oauth_token_id = data.tfe_oauth_client.github.oauth_token_id
   }
 
@@ -46,7 +46,7 @@ module "vpc-staging" {
   project_name = "govuk-infrastructure"
   vcs_repo = {
     identifier     = "alphagov/govuk-infrastructure"
-    branch         = "samsimpson1/govuk-aws"
+    branch         = "main"
     oauth_token_id = data.tfe_oauth_client.github.oauth_token_id
   }
 
@@ -77,7 +77,7 @@ module "vpc-production" {
   project_name = "govuk-infrastructure"
   vcs_repo = {
     identifier     = "alphagov/govuk-infrastructure"
-    branch         = "samsimpson1/govuk-aws"
+    branch         = "main"
     oauth_token_id = data.tfe_oauth_client.github.oauth_token_id
   }
 
