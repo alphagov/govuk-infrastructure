@@ -100,8 +100,6 @@ module "variable-set-rds-production" {
 
   name = "rds-production"
   tfvars = {
-    internal_zone_name      = "production.govuk-internal.digital"
-    internal_domain_name    = "blue.production.govuk-internal.digital"
     backup_retention_period = 7
     skip_final_snapshot     = false
     multi_az                = true
@@ -116,16 +114,12 @@ module "variable-set-rds-production" {
           deadlock_timeout           = { value = 2500 }
           log_lock_waits             = { value = 1 }
         }
-        engine_params_family = "postgres13"
-
-        name              = "account-api"
-        allocated_storage = 100
-        instance_class    = "db.t4g.medium"
-
+        engine_params_family         = "postgres13"
+        name                         = "account-api"
+        allocated_storage            = 100
+        instance_class               = "db.t4g.medium"
         performance_insights_enabled = true
-
-        cpuutilization_threshold   = 80
-        freestoragespace_threshold = 10737418240
+        freestoragespace_threshold   = 10737418240
       }
 
       authenticating_proxy = {
@@ -138,16 +132,12 @@ module "variable-set-rds-production" {
           log_lock_waits             = { value = 1 }
           password_encryption        = { value = "md5" }
         }
-        engine_params_family = "postgres14"
-
-        name              = "authenticating-proxy"
-        allocated_storage = 100
-        instance_class    = "db.t4g.small"
-
+        engine_params_family         = "postgres14"
+        name                         = "authenticating-proxy"
+        allocated_storage            = 100
+        instance_class               = "db.t4g.small"
         performance_insights_enabled = false
-
-        cpuutilization_threshold   = 80
-        freestoragespace_threshold = 10737418240
+        freestoragespace_threshold   = 10737418240
       }
 
       ckan = {
@@ -159,16 +149,12 @@ module "variable-set-rds-production" {
           deadlock_timeout           = { value = 2500 }
           log_lock_waits             = { value = 1 }
         }
-        engine_params_family = "postgres13"
-
-        name              = "ckan"
-        allocated_storage = 1000
-        instance_class    = "db.m6g.2xlarge"
-
+        engine_params_family         = "postgres13"
+        name                         = "ckan"
+        allocated_storage            = 1000
+        instance_class               = "db.m6g.2xlarge"
         performance_insights_enabled = true
-
-        cpuutilization_threshold   = 80
-        freestoragespace_threshold = 10737418240
+        freestoragespace_threshold   = 10737418240
       }
 
       collections_publisher = {
@@ -177,16 +163,12 @@ module "variable-set-rds-production" {
         engine_params = {
           max_allowed_packet = { value = 1073741824 }
         }
-        engine_params_family = "mysql8.0"
-
-        name              = "collections-publisher"
-        allocated_storage = 100
-        instance_class    = "db.t4g.medium"
-
+        engine_params_family         = "mysql8.0"
+        name                         = "collections-publisher"
+        allocated_storage            = 100
+        instance_class               = "db.t4g.medium"
         performance_insights_enabled = true
-
-        cpuutilization_threshold   = 80
-        freestoragespace_threshold = 10737418240
+        freestoragespace_threshold   = 10737418240
       }
 
       contacts_admin = {
@@ -195,16 +177,12 @@ module "variable-set-rds-production" {
         engine_params = {
           max_allowed_packet = { value = 1073741824 }
         }
-        engine_params_family = "mysql8.0"
-
-        name              = "contacts-admin"
-        allocated_storage = 100
-        instance_class    = "db.t4g.medium"
-
+        engine_params_family         = "mysql8.0"
+        name                         = "contacts-admin"
+        allocated_storage            = 100
+        instance_class               = "db.t4g.medium"
         performance_insights_enabled = true
-
-        cpuutilization_threshold   = 80
-        freestoragespace_threshold = 10737418240
+        freestoragespace_threshold   = 10737418240
       }
 
       content_data_admin = {
@@ -216,16 +194,12 @@ module "variable-set-rds-production" {
           deadlock_timeout           = { value = 2500 }
           log_lock_waits             = { value = 1 }
         }
-        engine_params_family = "postgres13"
-
-        name              = "content-data-admin"
-        allocated_storage = 100
-        instance_class    = "db.t4g.medium"
-
+        engine_params_family         = "postgres13"
+        name                         = "content-data-admin"
+        allocated_storage            = 100
+        instance_class               = "db.t4g.medium"
         performance_insights_enabled = true
-
-        cpuutilization_threshold   = 80
-        freestoragespace_threshold = 10737418240
+        freestoragespace_threshold   = 10737418240
       }
 
       content_data_api = {
@@ -242,16 +216,12 @@ module "variable-set-rds-production" {
           deadlock_timeout                     = { value = 2500 }
           log_lock_waits                       = { value = 1 }
         }
-        engine_params_family = "postgres13"
-
-        name              = "blue-content-data-api-postgresql-primary"
-        allocated_storage = 1024
-        instance_class    = "db.m6g.large"
-
+        engine_params_family         = "postgres13"
+        name                         = "blue-content-data-api-postgresql-primary"
+        allocated_storage            = 1024
+        instance_class               = "db.m6g.large"
         performance_insights_enabled = false
-
-        cpuutilization_threshold   = 80
-        freestoragespace_threshold = 536870912000
+        freestoragespace_threshold   = 536870912000
       }
 
       content_publisher = {
@@ -263,16 +233,12 @@ module "variable-set-rds-production" {
           deadlock_timeout           = { value = 2500 }
           log_lock_waits             = { value = 1 }
         }
-        engine_params_family = "postgres13"
-
-        name              = "content-publisher"
-        allocated_storage = 100
-        instance_class    = "db.t4g.medium"
-
+        engine_params_family         = "postgres13"
+        name                         = "content-publisher"
+        allocated_storage            = 100
+        instance_class               = "db.t4g.medium"
         performance_insights_enabled = true
-
-        cpuutilization_threshold   = 80
-        freestoragespace_threshold = 10737418240
+        freestoragespace_threshold   = 10737418240
       }
 
       content_store = {
@@ -284,16 +250,12 @@ module "variable-set-rds-production" {
           deadlock_timeout           = { value = 2500 }
           log_lock_waits             = { value = 1 }
         }
-        engine_params_family = "postgres14"
-
-        name              = "content-store"
-        allocated_storage = 1000
-        instance_class    = "db.m6g.2xlarge"
-
+        engine_params_family         = "postgres14"
+        name                         = "content-store"
+        allocated_storage            = 1000
+        instance_class               = "db.m6g.2xlarge"
         performance_insights_enabled = true
-
-        cpuutilization_threshold   = 80
-        freestoragespace_threshold = 10737418240
+        freestoragespace_threshold   = 10737418240
       }
 
       content_tagger = {
@@ -305,16 +267,12 @@ module "variable-set-rds-production" {
           deadlock_timeout           = { value = 2500 }
           log_lock_waits             = { value = 1 }
         }
-        engine_params_family = "postgres13"
-
-        name              = "content-tagger"
-        allocated_storage = 100
-        instance_class    = "db.t4g.medium"
-
+        engine_params_family         = "postgres13"
+        name                         = "content-tagger"
+        allocated_storage            = 100
+        instance_class               = "db.t4g.medium"
         performance_insights_enabled = true
-
-        cpuutilization_threshold   = 80
-        freestoragespace_threshold = 10737418240
+        freestoragespace_threshold   = 10737418240
       }
 
       draft_content_store = {
@@ -326,16 +284,12 @@ module "variable-set-rds-production" {
           deadlock_timeout           = { value = 2500 }
           log_lock_waits             = { value = 1 }
         }
-        engine_params_family = "postgres14"
-
-        name              = "draft-content-store"
-        allocated_storage = 1000
-        instance_class    = "db.m6g.2xlarge"
-
+        engine_params_family         = "postgres14"
+        name                         = "draft-content-store"
+        allocated_storage            = 1000
+        instance_class               = "db.m6g.2xlarge"
         performance_insights_enabled = true
-
-        cpuutilization_threshold   = 80
-        freestoragespace_threshold = 10737418240
+        freestoragespace_threshold   = 10737418240
       }
 
       email_alert_api = {
@@ -347,16 +301,12 @@ module "variable-set-rds-production" {
           deadlock_timeout           = { value = 2500 }
           log_lock_waits             = { value = 1 }
         }
-        engine_params_family = "postgres13"
-
-        name              = "email-alert-api"
-        allocated_storage = 4500
-        instance_class    = "db.m7g.2xlarge"
-
+        engine_params_family         = "postgres13"
+        name                         = "email-alert-api"
+        allocated_storage            = 4500
+        instance_class               = "db.m7g.2xlarge"
         performance_insights_enabled = true
-
-        cpuutilization_threshold   = 80
-        freestoragespace_threshold = 10737418240
+        freestoragespace_threshold   = 10737418240
       }
 
       imminence = {
@@ -369,16 +319,12 @@ module "variable-set-rds-production" {
           log_lock_waits             = { value = 1 }
           password_encryption        = { value = "md5" }
         }
-        engine_params_family = "postgres14"
-
-        name              = "imminence"
-        allocated_storage = 100
-        instance_class    = "db.m6g.large"
-
+        engine_params_family         = "postgres14"
+        name                         = "imminence"
+        allocated_storage            = 100
+        instance_class               = "db.m6g.large"
         performance_insights_enabled = true
-
-        cpuutilization_threshold   = 80
-        freestoragespace_threshold = 10737418240
+        freestoragespace_threshold   = 10737418240
       }
 
       link_checker_api = {
@@ -390,16 +336,12 @@ module "variable-set-rds-production" {
           deadlock_timeout           = { value = 2500 }
           log_lock_waits             = { value = 1 }
         }
-        engine_params_family = "postgres13"
-
-        name              = "link-checker-api"
-        allocated_storage = 100
-        instance_class    = "db.t4g.large"
-
+        engine_params_family         = "postgres13"
+        name                         = "link-checker-api"
+        allocated_storage            = 100
+        instance_class               = "db.t4g.large"
         performance_insights_enabled = true
-
-        cpuutilization_threshold   = 80
-        freestoragespace_threshold = 10737418240
+        freestoragespace_threshold   = 10737418240
       }
 
       local_links_manager = {
@@ -411,16 +353,12 @@ module "variable-set-rds-production" {
           deadlock_timeout           = { value = 2500 }
           log_lock_waits             = { value = 1 }
         }
-        engine_params_family = "postgres13"
-
-        name              = "local-links-manager"
-        allocated_storage = 100
-        instance_class    = "db.t4g.medium"
-
+        engine_params_family         = "postgres13"
+        name                         = "local-links-manager"
+        allocated_storage            = 100
+        instance_class               = "db.t4g.medium"
         performance_insights_enabled = true
-
-        cpuutilization_threshold   = 80
-        freestoragespace_threshold = 10737418240
+        freestoragespace_threshold   = 10737418240
       }
 
       locations_api = {
@@ -432,16 +370,12 @@ module "variable-set-rds-production" {
           deadlock_timeout           = { value = 2500 }
           log_lock_waits             = { value = 1 }
         }
-        engine_params_family = "postgres13"
-
-        name              = "locations-api"
-        allocated_storage = 1000
-        instance_class    = "db.m6g.large"
-
+        engine_params_family         = "postgres13"
+        name                         = "locations-api"
+        allocated_storage            = 1000
+        instance_class               = "db.m6g.large"
         performance_insights_enabled = true
-
-        cpuutilization_threshold   = 80
-        freestoragespace_threshold = 10737418240
+        freestoragespace_threshold   = 10737418240
       }
 
       publishing_api = {
@@ -453,16 +387,12 @@ module "variable-set-rds-production" {
           deadlock_timeout           = { value = 2500 }
           log_lock_waits             = { value = 1 }
         }
-        engine_params_family = "postgres13"
-
-        name              = "publishing-api"
-        allocated_storage = 1000
-        instance_class    = "db.m6g.4xlarge"
-
+        engine_params_family         = "postgres13"
+        name                         = "publishing-api"
+        allocated_storage            = 1000
+        instance_class               = "db.m6g.4xlarge"
         performance_insights_enabled = true
-
-        cpuutilization_threshold   = 80
-        freestoragespace_threshold = 10737418240
+        freestoragespace_threshold   = 10737418240
       }
 
       release = {
@@ -471,16 +401,12 @@ module "variable-set-rds-production" {
         engine_params = {
           max_allowed_packet = { value = 1073741824 }
         }
-        engine_params_family = "mysql8.0"
-
-        name              = "release"
-        allocated_storage = 100
-        instance_class    = "db.t4g.small"
-
+        engine_params_family         = "mysql8.0"
+        name                         = "release"
+        allocated_storage            = 100
+        instance_class               = "db.t4g.small"
         performance_insights_enabled = false
-
-        cpuutilization_threshold   = 80
-        freestoragespace_threshold = 10737418240
+        freestoragespace_threshold   = 10737418240
       }
 
       search_admin = {
@@ -489,16 +415,12 @@ module "variable-set-rds-production" {
         engine_params = {
           max_allowed_packet = { value = 1073741824 }
         }
-        engine_params_family = "mysql8.0"
-
-        name              = "search-admin"
-        allocated_storage = 100
-        instance_class    = "db.t4g.small"
-
+        engine_params_family         = "mysql8.0"
+        name                         = "search-admin"
+        allocated_storage            = 100
+        instance_class               = "db.t4g.small"
         performance_insights_enabled = false
-
-        cpuutilization_threshold   = 80
-        freestoragespace_threshold = 10737418240
+        freestoragespace_threshold   = 10737418240
       }
 
       service_manual_publisher = {
@@ -510,16 +432,12 @@ module "variable-set-rds-production" {
           deadlock_timeout           = { value = 2500 }
           log_lock_waits             = { value = 1 }
         }
-        engine_params_family = "postgres13"
-
-        name              = "service-manual-publisher"
-        allocated_storage = 100
-        instance_class    = "db.t4g.medium"
-
+        engine_params_family         = "postgres13"
+        name                         = "service-manual-publisher"
+        allocated_storage            = 100
+        instance_class               = "db.t4g.medium"
         performance_insights_enabled = true
-
-        cpuutilization_threshold   = 80
-        freestoragespace_threshold = 10737418240
+        freestoragespace_threshold   = 10737418240
       }
 
       signon = {
@@ -528,16 +446,12 @@ module "variable-set-rds-production" {
         engine_params = {
           max_allowed_packet = { value = 1073741824 }
         }
-        engine_params_family = "mysql8.0"
-
-        name              = "signon"
-        allocated_storage = 100
-        instance_class    = "db.t4g.large"
-
+        engine_params_family         = "mysql8.0"
+        name                         = "signon"
+        allocated_storage            = 100
+        instance_class               = "db.t4g.large"
         performance_insights_enabled = true
-
-        cpuutilization_threshold   = 80
-        freestoragespace_threshold = 10737418240
+        freestoragespace_threshold   = 10737418240
       }
 
       support_api = {
@@ -549,16 +463,12 @@ module "variable-set-rds-production" {
           deadlock_timeout           = { value = 2500 }
           log_lock_waits             = { value = 1 }
         }
-        engine_params_family = "postgres13"
-
-        name              = "support-api"
-        allocated_storage = 200
-        instance_class    = "db.t4g.medium"
-
+        engine_params_family         = "postgres13"
+        name                         = "support-api"
+        allocated_storage            = 200
+        instance_class               = "db.t4g.medium"
         performance_insights_enabled = true
-
-        cpuutilization_threshold   = 80
-        freestoragespace_threshold = 10737418240
+        freestoragespace_threshold   = 10737418240
       }
 
       whitehall = {
@@ -567,16 +477,12 @@ module "variable-set-rds-production" {
         engine_params = {
           max_allowed_packet = { value = 1073741824 }
         }
-        engine_params_family = "mysql8.0"
-
-        name              = "whitehall"
-        allocated_storage = 300
-        instance_class    = "db.m7g.xlarge"
-
+        engine_params_family         = "mysql8.0"
+        name                         = "whitehall"
+        allocated_storage            = 300
+        instance_class               = "db.m7g.xlarge"
         performance_insights_enabled = true
-
-        cpuutilization_threshold   = 80
-        freestoragespace_threshold = 10737418240
+        freestoragespace_threshold   = 10737418240
       }
     }
   }
