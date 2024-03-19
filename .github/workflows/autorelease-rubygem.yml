@@ -61,8 +61,8 @@ jobs:
           exit 0
         fi
 
-        if ! grep -qR --include "version.rb" $CURR_VERSION; then
-          echo "Can't find a version.rb containing the string '$CURR_VERSION'. Exiting."
+        if ! grep -qR --include "version.rb" --include "*.gemspec" $CURR_VERSION; then
+          echo "Can't find version.rb or *.gemspec containing the string '$CURR_VERSION'. Exiting."
           exit 0
         fi
 
@@ -76,7 +76,7 @@ jobs:
           exit 0
         fi
 
-        find . -type f -iname version.rb -exec sed -i "s/$CURR_VERSION/$NEXT_VERSION/g" {} \;
+        find . -type f \( -iname version.rb -o -iname *.gemspec \) -exec sed -i "s/$CURR_VERSION/$NEXT_VERSION/g" {} \;
 
         printf "# $NEXT_VERSION\n\n* Update dependencies\n\n" | cat - CHANGELOG.md > NEW_CHANGELOG.md
         mv NEW_CHANGELOG.md CHANGELOG.md
