@@ -66,7 +66,7 @@ resource "aws_db_instance" "instance" {
   final_snapshot_identifier = "${each.value.name}-final-snapshot"
   skip_final_snapshot       = var.skip_final_snapshot
 
-  tags = { Name = "blue-govuk-rds-${each.value.name}-${each.value.engine}" }
+  tags = { Name = "govuk-rds-${each.value.name}-${each.value.engine}" }
 }
 
 resource "aws_db_event_subscription" "subscription" {
