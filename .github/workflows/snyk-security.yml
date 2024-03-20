@@ -38,6 +38,7 @@ jobs:
           snyk auth ${{ secrets.SNYK_TOKEN }}
           snyk code test --severity-threshold=high --sarif >> snyk-sast.sarif
       - name: Upload result to Github Code Scanning
+        if: always()
         uses: github/codeql-action/upload-sarif@v3
         with:
           sarif_file: snyk-sast.sarif
@@ -70,6 +71,7 @@ jobs:
           snyk auth ${{ secrets.SNYK_TOKEN }}
           snyk test --severity-threshold=high --all-projects --detection-depth=1 --sarif >> snyk-sca.sarif
       - name: Upload result to Github Code Scanning
+        if: always()
         uses: github/codeql-action/upload-sarif@v3
         with:
           sarif_file: snyk-sca.sarif
