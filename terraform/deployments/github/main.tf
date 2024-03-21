@@ -111,6 +111,28 @@ resource "github_team_repository" "govuk_repos" {
   permission = "push"
 }
 
+resource "github_branch_protection" "govuk_repos" {
+  for_each       = { for repo in local.auto_configurable_repos : repo.name => repo }
+  repository_id  = each.value.name
+  pattern        = "main"
+  enforce_admins = true
+  required_pull_request_reviews {
+    required_approving_review_count = 1
+  }
+
+  # TODO: handle differing status check requirements
+  required_status_checks {
+    contexts = [
+      "Lint SCSS / Run Stylelint",
+      "Security Analysis / Run Brakeman",
+      "Lint Ruby / Run RuboCop",
+      "Lint JavaScript / Run Standardx",
+      "Test JavaScript / Run Jasmine",
+      "Test Ruby / Run RSpec"
+    ]
+  }
+}
+
 #
 # Only the list of repositories which will have access to a secret is created/modified
 # here, the secret should have been created in the GitHub UI in advance by a
