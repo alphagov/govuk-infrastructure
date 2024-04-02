@@ -55,3 +55,5 @@ provider "helm" {
 }
 
 provider "fastly" { api_key = "test" }
+
+data "fastly_ip_ranges" "fastly" {}

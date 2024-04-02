@@ -1,5 +1,3 @@
-data "fastly_ip_ranges" "fastly" {}
-
 data "aws_iam_policy_document" "s3_fastly_read_policy_doc" {
   statement {
     sid     = "S3FastlyReadBucket"
