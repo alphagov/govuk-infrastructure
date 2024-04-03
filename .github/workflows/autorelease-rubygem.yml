@@ -86,6 +86,7 @@ jobs:
 
         git checkout -b $BRANCH
         git add .
+        git reset -- vendor/bundle
         git commit -m "$PR_TITLE"
         git push origin $BRANCH
 
