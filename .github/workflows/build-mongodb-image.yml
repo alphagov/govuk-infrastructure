@@ -25,6 +25,8 @@ jobs:
       gitRef: ${{ inputs.gitRef || github.ref }}
       ecrRepositoryName: mongodb
       dockerfilePath: images/mongodb/Dockerfile
+      pushToGHCR: true
     permissions:
       id-token: write
       contents: read
+      packages: write
