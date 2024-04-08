@@ -77,7 +77,11 @@ module "eks" {
   create_node_security_group    = false
 
   eks_managed_node_group_defaults = {
-    ami_type              = "AL2_x86_64"
+    ami_type = (
+      var.govuk_environment == "integration"
+      ? "AL2023_x86_64_STANDARD"
+      : "AL2_x86_64"
+    )
     capacity_type         = var.workers_default_capacity_type
     subnet_ids            = [for s in aws_subnet.eks_private : s.id]
     create_security_group = false
