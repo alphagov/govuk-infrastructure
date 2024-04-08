@@ -28,6 +28,45 @@ locals {
   secrets_prefix             = "govuk"
   monitoring_namespace       = "monitoring"
   node_security_group_id     = module.eks.cluster_primary_security_group_id
+
+  main_managed_node_group = {
+    main = {
+      name_prefix = var.cluster_name
+      # TODO: set iam_role_permissions_boundary
+      # TODO: apply provider default_tags to instances; might need to set launch_template_tags.
+      desired_size               = var.workers_size_desired
+      max_size                   = var.workers_size_max
+      min_size                   = var.workers_size_min
+      instance_types             = var.workers_instance_types
+      disk_size                  = var.node_disk_size
+      use_custom_launch_template = false
+      update_config              = { max_unavailable = 1 }
+      additional_tags = {
+        "k8s.io/cluster-autoscaler/enabled"             = "true"
+        "k8s.io/cluster-autoscaler/${var.cluster_name}" = "owned"
+      }
+    }
+  }
+
+  arm_managed_node_group = {
+    arm = {
+      ami_type                   = "AL2_ARM_64"
+      name_prefix                = var.cluster_name
+      desired_size               = var.arm_workers_size_desired
+      max_size                   = var.arm_workers_size_max
+      min_size                   = var.arm_workers_size_min
+      instance_types             = var.arm_workers_instance_types
+      disk_size                  = var.node_disk_size
+      use_custom_launch_template = false
+      update_config              = { max_unavailable = 1 }
+      additional_tags = {
+        "k8s.io/cluster-autoscaler/enabled"             = "true"
+        "k8s.io/cluster-autoscaler/${var.cluster_name}" = "owned"
+      }
+    }
+  }
+
+  eks_managed_node_groups = merge(local.main_managed_node_group, var.enable_arm_workers ? local.arm_managed_node_group : {})
 }
 
 provider "aws" {
@@ -87,24 +126,8 @@ module "eks" {
     create_security_group = false
   }
 
-  eks_managed_node_groups = {
-    main = {
-      name_prefix = var.cluster_name
-      # TODO: set iam_role_permissions_boundary
-      # TODO: apply provider default_tags to instances; might need to set launch_template_tags.
-      desired_size               = var.workers_size_desired
-      max_size                   = var.workers_size_max
-      min_size                   = var.workers_size_min
-      instance_types             = var.workers_instance_types
-      disk_size                  = var.node_disk_size
-      use_custom_launch_template = false
-      update_config              = { max_unavailable = 1 }
-      additional_tags = {
-        "k8s.io/cluster-autoscaler/enabled"             = "true"
-        "k8s.io/cluster-autoscaler/${var.cluster_name}" = "owned"
-      }
-    }
-  }
+  # Moved Node Groups Config to Locals section to add conditional node groups.
+  eks_managed_node_groups = local.eks_managed_node_groups
 }
 
 # Allow us to connect to nodes using AWS Systems Manager Session Manager.
