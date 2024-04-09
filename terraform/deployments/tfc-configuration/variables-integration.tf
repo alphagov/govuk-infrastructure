@@ -29,8 +29,9 @@ module "variable-set-integration" {
       c = { az = "eu-west-1c", cidr = "10.1.32.0/22" }
     }
 
-    govuk_environment = "integration"
-    force_destroy     = true
+    govuk_environment  = "integration"
+    force_destroy      = true
+    enable_arm_workers = true
 
     publishing_service_domain = "integration.publishing.service.gov.uk"
 
