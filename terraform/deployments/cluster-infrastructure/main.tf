@@ -50,7 +50,7 @@ locals {
 
   arm_managed_node_group = {
     arm = {
-      ami_type                   = "AL2_ARM_64"
+      ami_type                   = "AL2023_ARM_64_STANDARD"
       name_prefix                = var.cluster_name
       desired_size               = var.arm_workers_size_desired
       max_size                   = var.arm_workers_size_max
