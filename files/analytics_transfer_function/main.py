@@ -64,7 +64,7 @@ def function_analytics_events_transfer(request):
                         'search' AS eventType,
                         ga.user_pseudo_id AS userPseudoId,
                         FORMAT_TIMESTAMP("%FT%TZ",TIMESTAMP_MICROS(ga.event_timestamp)) AS eventTime,
-                        (SELECT value.string_value FROM UNNEST(event_params) WHERE key = 'search_term') AS searchQuery,
+                        (SELECT COALESCE(value.string_value,SAFE_CAST(value.int_value AS STRING),SAFE_CAST(value.double_value AS STRING),SAFE_CAST(value.float_value AS STRING)) FROM UNNEST(event_params) WHERE key = 'search_term') AS searchQuery,
                         safe_cast(regexp_extract((SELECT value.string_value FROM UNNEST(event_params) WHERE key = 'page_location'), "page=(\\\\d+)" ) as int64)-1 as `offset`,
                         regexp_extract((SELECT value.string_value FROM UNNEST(event_params) WHERE key = 'page_location'), "order=([a-zA-Z\\\\-]+)" ) as orderBy,
                         ARRAY_TO_STRING(regexp_extract_all((SELECT value.string_value FROM UNNEST(event_params) WHERE key = 'page_location'), "((?:level_one_taxon|level_two_taxon|content_purpose_supergroup%5B%5D|public_timestamp%5Bfrom%5D|public_timestamp%5Bto%5D)=(?:%20&%20|[^&])*)" ), "&") as filter,
