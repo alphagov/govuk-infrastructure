@@ -26,3 +26,8 @@ resource "aws_s3_bucket_lifecycle_configuration" "attachments" {
     status = "Enabled"
   }
 }
+
+import {
+  to = aws_s3_bucket.attachments
+  id = "govuk-attachments-${var.govuk_environment}"
+}
