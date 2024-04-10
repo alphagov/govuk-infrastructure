@@ -10,21 +10,16 @@ resource "aws_iam_openid_connect_provider" "tfc_provider" {
 
 data "aws_iam_policy_document" "tfc_role" {
   statement {
-    effect = "Allow"
-
     principals {
       identifiers = [aws_iam_openid_connect_provider.tfc_provider.arn]
       type        = "Federated"
     }
-
     actions = ["sts:AssumeRoleWithWebIdentity"]
-
     condition {
       test     = "StringEquals"
       variable = "${var.tfc_hostname}:aud"
       values   = [one(aws_iam_openid_connect_provider.tfc_provider.client_id_list)]
     }
-
     condition {
       test     = "StringLike"
       variable = "${var.tfc_hostname}:sub"
@@ -34,18 +29,14 @@ data "aws_iam_policy_document" "tfc_role" {
 }
 
 resource "aws_iam_role" "tfc_role" {
-  name = "terraform-cloud"
-
+  name                = "terraform-cloud"
   assume_role_policy  = data.aws_iam_policy_document.tfc_role.json
   managed_policy_arns = [aws_iam_policy.tfc_policy.arn]
 }
 
 data "aws_iam_policy_document" "tfc_policy" {
   statement {
-    effect = "Allow"
-
     resources = ["*"]
-
     actions = [
       "acm:*",
       "apigateway:*",
@@ -136,8 +127,7 @@ data "aws_iam_policy_document" "tfc_policy" {
 resource "aws_iam_policy" "tfc_policy" {
   name        = "terraform-cloud-run"
   description = "Permissions to allow Terraform Cloud to plan and apply"
-
-  policy = data.aws_iam_policy_document.tfc_policy.json
+  policy      = data.aws_iam_policy_document.tfc_policy.json
 }
 
 resource "tfe_variable_set" "variable_set" {
