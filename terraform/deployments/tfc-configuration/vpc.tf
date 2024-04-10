@@ -2,14 +2,14 @@ module "vpc-integration" {
   source  = "alexbasista/workspacer/tfe"
   version = "0.9.0"
 
-  organization      = var.organization
-  workspace_name    = "vpc-integration"
-  workspace_desc    = "The vpc module is responsible for the AWS resources which constitute the EKS cluster."
-  workspace_tags    = ["integration", "vpc", "eks", "aws"]
-  terraform_version = "1.7.0"
-  execution_mode    = "remote"
-  working_directory = "/terraform/deployments/vpc/"
-  trigger_patterns  = ["/terraform/deployments/vpc/**/*"]
+  organization        = var.organization
+  workspace_name      = "vpc-integration"
+  workspace_desc      = "The vpc module is responsible for the AWS resources which constitute the EKS cluster."
+  workspace_tags      = ["integration", "vpc", "eks", "aws"]
+  terraform_version   = "1.7.0"
+  execution_mode      = "remote"
+  working_directory   = "/terraform/deployments/vpc/"
+  trigger_patterns    = ["/terraform/deployments/vpc/**/*"]
   global_remote_state = true
 
   project_name = "govuk-infrastructure"
@@ -35,14 +35,14 @@ module "vpc-staging" {
   source  = "alexbasista/workspacer/tfe"
   version = "0.9.0"
 
-  organization      = var.organization
-  workspace_name    = "vpc-staging"
-  workspace_desc    = "The vpc module is responsible for the AWS resources which constitute the EKS cluster."
-  workspace_tags    = ["staging", "vpc", "eks", "aws"]
-  terraform_version = "1.7.0"
-  execution_mode    = "remote"
-  working_directory = "/terraform/deployments/vpc/"
-  trigger_patterns  = ["/terraform/deployments/vpc/**/*"]
+  organization        = var.organization
+  workspace_name      = "vpc-staging"
+  workspace_desc      = "The vpc module is responsible for the AWS resources which constitute the EKS cluster."
+  workspace_tags      = ["staging", "vpc", "eks", "aws"]
+  terraform_version   = "1.7.0"
+  execution_mode      = "remote"
+  working_directory   = "/terraform/deployments/vpc/"
+  trigger_patterns    = ["/terraform/deployments/vpc/**/*"]
   global_remote_state = true
 
   project_name = "govuk-infrastructure"
@@ -67,14 +67,14 @@ module "vpc-production" {
   source  = "alexbasista/workspacer/tfe"
   version = "0.9.0"
 
-  organization      = var.organization
-  workspace_name    = "vpc-production"
-  workspace_desc    = "The vpc module is responsible for the AWS resources which constitute the EKS cluster."
-  workspace_tags    = ["production", "vpc", "eks", "aws"]
-  terraform_version = "1.7.0"
-  execution_mode    = "remote"
-  working_directory = "/terraform/deployments/vpc/"
-  trigger_patterns  = ["/terraform/deployments/vpc/**/*"]
+  organization        = var.organization
+  workspace_name      = "vpc-production"
+  workspace_desc      = "The vpc module is responsible for the AWS resources which constitute the EKS cluster."
+  workspace_tags      = ["production", "vpc", "eks", "aws"]
+  terraform_version   = "1.7.0"
+  execution_mode      = "remote"
+  working_directory   = "/terraform/deployments/vpc/"
+  trigger_patterns    = ["/terraform/deployments/vpc/**/*"]
   global_remote_state = true
 
   project_name = "govuk-infrastructure"
