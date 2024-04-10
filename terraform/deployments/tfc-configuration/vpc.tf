@@ -10,6 +10,7 @@ module "vpc-integration" {
   execution_mode    = "remote"
   working_directory = "/terraform/deployments/vpc/"
   trigger_patterns  = ["/terraform/deployments/vpc/**/*"]
+  global_remote_state = true
 
   project_name = "govuk-infrastructure"
   vcs_repo = {
@@ -42,6 +43,7 @@ module "vpc-staging" {
   execution_mode    = "remote"
   working_directory = "/terraform/deployments/vpc/"
   trigger_patterns  = ["/terraform/deployments/vpc/**/*"]
+  global_remote_state = true
 
   project_name = "govuk-infrastructure"
   vcs_repo = {
@@ -73,6 +75,7 @@ module "vpc-production" {
   execution_mode    = "remote"
   working_directory = "/terraform/deployments/vpc/"
   trigger_patterns  = ["/terraform/deployments/vpc/**/*"]
+  global_remote_state = true
 
   project_name = "govuk-infrastructure"
   vcs_repo = {
