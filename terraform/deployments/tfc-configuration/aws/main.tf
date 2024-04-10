@@ -60,7 +60,24 @@ data "aws_iam_policy_document" "tfc_policy" {
       "elasticfilesystem:*",
       "es:*",
       "events:*",
-      "iam:*",
+      "iam:*InstanceProfile*",
+      "iam:*CloudFrontPublicKey*",
+      "iam:*OpenIDConnectProvider*",
+      "iam:*Policy",
+      "iam:*PolicyVersion",
+      "iam:*RolePolicies",
+      "iam:*RoleTags",
+      "iam:*Roles",
+      "iam:*ServerCertificate*",
+      "iam:*ServiceLinkedRole*",
+      "iam:*SigningCertificate*",
+      "iam:CreateRole",
+      "iam:DeleteRole",
+      "iam:GetRole",
+      "iam:TagRole",
+      "iam:UntagRole",
+      "iam:UpdateRole",
+      "iam:SetDefaultPolicyVersion",
       "kms:*",
       "lambda:*",
       "logs:*",
@@ -74,12 +91,30 @@ data "aws_iam_policy_document" "tfc_policy" {
       "wafv2:*"
     ]
   }
-
   statement {
-    effect = "Deny"
-
+    actions   = ["iam:PassRole"]
     resources = ["*"]
-
+    condition {
+      test     = "StringEquals"
+      variable = "iam:PassedToService"
+      values   = ["eks.amazonaws.com"]
+    }
+  }
+  statement {
+    actions = ["iam:PassRole"]
+    resources = [
+      "arn:aws:iam::*:role/service-role/AWSGlueServiceRole*",
+      "arn:aws:iam::*:role/AWSGlueServiceRole*",
+    ]
+    condition {
+      test     = "StringEquals"
+      variable = "iam:PassedToService"
+      values   = ["glue.amazonaws.com"]
+    }
+  }
+  statement {
+    effect    = "Deny"
+    resources = ["*"]
     actions = [
       "aws-marketplace:*",
       "aws-marketplace-management:*",
@@ -93,7 +128,7 @@ data "aws_iam_policy_document" "tfc_policy" {
       "iam:*Group*",
       "iam:*PermissionsBoundary*",
       "iam:*User*",
-      "iam:CreateServiceLinkedRole"
+      "iam:CreateServiceLinkedRole",
     ]
   }
 }
