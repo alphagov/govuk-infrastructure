@@ -34,13 +34,25 @@ locals {
       name_prefix = var.cluster_name
       # TODO: set iam_role_permissions_boundary
       # TODO: apply provider default_tags to instances; might need to set launch_template_tags.
-      desired_size               = var.workers_size_desired
-      max_size                   = var.workers_size_max
-      min_size                   = var.workers_size_min
-      instance_types             = var.workers_instance_types
+      desired_size   = var.workers_size_desired
+      max_size       = var.workers_size_max
+      min_size       = var.workers_size_min
+      instance_types = var.workers_instance_types
+      update_config  = { max_unavailable = 1 }
+      # TODO(#1201): remove disk_size and use_custom_launch_template after AL2023 rollout.
+      use_custom_launch_template = var.govuk_environment == "integration"
       disk_size                  = var.node_disk_size
-      use_custom_launch_template = var.govuk_environment == "integration" # TODO(#1201): remove with AL2023 rollout.
-      update_config              = { max_unavailable = 1 }
+      block_device_mappings = {
+        xvda = {
+          device_name = "/dev/xvda"
+          ebs = {
+            volume_size           = var.node_disk_size
+            volume_type           = "gp3"
+            encrypted             = true
+            delete_on_termination = true
+          }
+        }
+      }
       additional_tags = {
         "k8s.io/cluster-autoscaler/enabled"             = "true"
         "k8s.io/cluster-autoscaler/${var.cluster_name}" = "owned"
@@ -50,15 +62,14 @@ locals {
 
   arm_managed_node_group = {
     arm = {
-      ami_type                   = "AL2023_ARM_64_STANDARD"
-      name_prefix                = var.cluster_name
-      desired_size               = var.arm_workers_size_desired
-      max_size                   = var.arm_workers_size_max
-      min_size                   = var.arm_workers_size_min
-      instance_types             = var.arm_workers_instance_types
-      disk_size                  = var.node_disk_size
-      use_custom_launch_template = var.govuk_environment == "integration" # TODO(#1201): remove with AL2023 rollout.
-      update_config              = { max_unavailable = 1 }
+      ami_type              = "AL2023_ARM_64_STANDARD"
+      name_prefix           = var.cluster_name
+      desired_size          = var.arm_workers_size_desired
+      max_size              = var.arm_workers_size_max
+      min_size              = var.arm_workers_size_min
+      instance_types        = var.arm_workers_instance_types
+      update_config         = { max_unavailable = 1 }
+      block_device_mappings = local.main_managed_node_group.main.block_device_mappings
       additional_tags = {
         "k8s.io/cluster-autoscaler/enabled"             = "true"
         "k8s.io/cluster-autoscaler/${var.cluster_name}" = "owned"
