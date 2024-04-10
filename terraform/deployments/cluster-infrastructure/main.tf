@@ -39,7 +39,7 @@ locals {
       min_size                   = var.workers_size_min
       instance_types             = var.workers_instance_types
       disk_size                  = var.node_disk_size
-      use_custom_launch_template = false
+      use_custom_launch_template = var.govuk_environment == "integration" # TODO(#1201): remove with AL2023 rollout.
       update_config              = { max_unavailable = 1 }
       additional_tags = {
         "k8s.io/cluster-autoscaler/enabled"             = "true"
@@ -57,7 +57,7 @@ locals {
       min_size                   = var.arm_workers_size_min
       instance_types             = var.arm_workers_instance_types
       disk_size                  = var.node_disk_size
-      use_custom_launch_template = false
+      use_custom_launch_template = var.govuk_environment == "integration" # TODO(#1201): remove with AL2023 rollout.
       update_config              = { max_unavailable = 1 }
       additional_tags = {
         "k8s.io/cluster-autoscaler/enabled"             = "true"
