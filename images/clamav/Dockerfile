@@ -1,4 +1,4 @@
-FROM --platform=$TARGETPLATFORM clamav/clamav-debian:1.2
+FROM --platform=$TARGETPLATFORM clamav/clamav-debian:1.3
 
 COPY "./images/clamav/scripts/unprivileged-entrypoint.sh" "/unpriv-init"
 
