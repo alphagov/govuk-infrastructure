@@ -1,6 +1,6 @@
 resource "tfe_workspace" "tfc_bootstrap" {
   name              = "tfc-bootstrap"
-  description       = "The tfc-bootsrap module is responsible for initialising Terraform Cloud."
+  description       = "The tfc-bootstrap module is responsible for initialising Terraform Cloud."
   working_directory = "/terraform/deployments/tfc-bootstrap/"
   trigger_patterns  = ["/terraform/deployments/tfc-bootstrap/**/*"]
   vcs_repo {
