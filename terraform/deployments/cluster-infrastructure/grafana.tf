@@ -1,11 +1,6 @@
 locals {
   grafana_db_name         = "grafana-${module.eks.cluster_name}"
   grafana_service_account = "kube-prometheus-stack-grafana"
-  grafana_db_backup_window = {
-    "integration" = "mon:00:35-mon:01:05"
-    "staging"     = "fri:04:03-fri:05:03"
-    "production"  = "wed:22:11-wed:23:11"
-  }
 }
 
 module "grafana_iam_role" {
@@ -123,7 +118,6 @@ module "grafana_db" {
   apply_immediately       = var.rds_apply_immediately
   backup_retention_period = var.rds_backup_retention_period
   skip_final_snapshot     = var.rds_skip_final_snapshot
-  preferred_backup_window = lookup(local.grafana_db_backup_window, var.govuk_environment, "sun:05:00-sun:06:00")
 }
 
 resource "aws_route53_record" "grafana_db" {
