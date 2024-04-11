@@ -1,6 +1,6 @@
 module "datagovuk-infrastructure-integration" {
   source  = "alexbasista/workspacer/tfe"
-  version = "0.9.0"
+  version = "0.10.0"
 
   organization      = var.organization
   workspace_name    = "datagovuk-infrastructure-integration"
@@ -32,7 +32,7 @@ module "datagovuk-infrastructure-integration" {
 
 module "datagovuk-infrastructure-staging" {
   source  = "alexbasista/workspacer/tfe"
-  version = "0.9.0"
+  version = "0.10.0"
 
   organization      = var.organization
   workspace_name    = "datagovuk-infrastructure-staging"
@@ -63,7 +63,7 @@ module "datagovuk-infrastructure-staging" {
 
 module "datagovuk-infrastructure-production" {
   source  = "alexbasista/workspacer/tfe"
-  version = "0.9.0"
+  version = "0.10.0"
 
   organization      = var.organization
   workspace_name    = "datagovuk-infrastructure-production"
