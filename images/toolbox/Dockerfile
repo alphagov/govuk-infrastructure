@@ -1,4 +1,4 @@
-FROM public.ecr.aws/lts/ubuntu:22.04_stable
+FROM public.ecr.aws/lts/ubuntu:22.04
 ARG TARGETARCH
 SHELL ["/bin/bash", "-euo", "pipefail", "-c"]
 
