@@ -1,7 +1,7 @@
 
 module "ckan_iam_role" {
   source                        = "terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc"
-  version                       = "~> 4.0"
+  version                       = "~> 5.0"
   create_role                   = true
   role_name                     = "${var.ckan_service_account_name}-${local.cluster_id}"
   role_description              = "Role for CKAN S3 access. Corresponds to ${var.ckan_service_account_namespace}/${var.ckan_service_account_name} k8s ServiceAccount."
