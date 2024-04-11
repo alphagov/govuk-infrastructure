@@ -6,6 +6,10 @@ on:
 jobs:
   run-brakeman:
     name: Run Brakeman
+    permissions:
+      contents: read
+      security-events: write
+      actions: read
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -17,4 +21,10 @@ jobs:
           bundler-cache: true
 
       - name: Run Brakeman
-        run: bundle exec brakeman . --except CheckRenderInline --quiet
+        run: bundle exec brakeman . --except CheckRenderInline --quiet -f sarif >> brakeman.sarif
+
+      - name: Upload result to Github Code Scanning
+        if: always()
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: brakeman.sarif
