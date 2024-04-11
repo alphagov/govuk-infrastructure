@@ -10,21 +10,16 @@ resource "aws_iam_openid_connect_provider" "tfc_provider" {
 
 data "aws_iam_policy_document" "tfc_role" {
   statement {
-    effect = "Allow"
-
     principals {
       identifiers = [aws_iam_openid_connect_provider.tfc_provider.arn]
       type        = "Federated"
     }
-
     actions = ["sts:AssumeRoleWithWebIdentity"]
-
     condition {
       test     = "StringEquals"
       variable = "${var.tfc_hostname}:aud"
       values   = [one(aws_iam_openid_connect_provider.tfc_provider.client_id_list)]
     }
-
     condition {
       test     = "StringLike"
       variable = "${var.tfc_hostname}:sub"
@@ -34,18 +29,14 @@ data "aws_iam_policy_document" "tfc_role" {
 }
 
 resource "aws_iam_role" "tfc_role" {
-  name = "terraform-cloud"
-
+  name                = "terraform-cloud"
   assume_role_policy  = data.aws_iam_policy_document.tfc_role.json
   managed_policy_arns = [aws_iam_policy.tfc_policy.arn]
 }
 
 data "aws_iam_policy_document" "tfc_policy" {
   statement {
-    effect = "Allow"
-
     resources = ["*"]
-
     actions = [
       "acm:*",
       "apigateway:*",
@@ -60,7 +51,24 @@ data "aws_iam_policy_document" "tfc_policy" {
       "elasticfilesystem:*",
       "es:*",
       "events:*",
-      "iam:*",
+      "iam:*InstanceProfile*",
+      "iam:*CloudFrontPublicKey*",
+      "iam:*OpenIDConnectProvider*",
+      "iam:*Policy",
+      "iam:*PolicyVersion",
+      "iam:*RolePolicies",
+      "iam:*RoleTags",
+      "iam:*Roles",
+      "iam:*ServerCertificate*",
+      "iam:*ServiceLinkedRole*",
+      "iam:*SigningCertificate*",
+      "iam:CreateRole",
+      "iam:DeleteRole",
+      "iam:GetRole",
+      "iam:TagRole",
+      "iam:UntagRole",
+      "iam:UpdateRole",
+      "iam:SetDefaultPolicyVersion",
       "kms:*",
       "lambda:*",
       "logs:*",
@@ -74,12 +82,30 @@ data "aws_iam_policy_document" "tfc_policy" {
       "wafv2:*"
     ]
   }
-
   statement {
-    effect = "Deny"
-
+    actions   = ["iam:PassRole"]
     resources = ["*"]
-
+    condition {
+      test     = "StringEquals"
+      variable = "iam:PassedToService"
+      values   = ["eks.amazonaws.com"]
+    }
+  }
+  statement {
+    actions = ["iam:PassRole"]
+    resources = [
+      "arn:aws:iam::*:role/service-role/AWSGlueServiceRole*",
+      "arn:aws:iam::*:role/AWSGlueServiceRole*",
+    ]
+    condition {
+      test     = "StringEquals"
+      variable = "iam:PassedToService"
+      values   = ["glue.amazonaws.com"]
+    }
+  }
+  statement {
+    effect    = "Deny"
+    resources = ["*"]
     actions = [
       "aws-marketplace:*",
       "aws-marketplace-management:*",
@@ -93,7 +119,7 @@ data "aws_iam_policy_document" "tfc_policy" {
       "iam:*Group*",
       "iam:*PermissionsBoundary*",
       "iam:*User*",
-      "iam:CreateServiceLinkedRole"
+      "iam:CreateServiceLinkedRole",
     ]
   }
 }
@@ -101,8 +127,7 @@ data "aws_iam_policy_document" "tfc_policy" {
 resource "aws_iam_policy" "tfc_policy" {
   name        = "terraform-cloud-run"
   description = "Permissions to allow Terraform Cloud to plan and apply"
-
-  policy = data.aws_iam_policy_document.tfc_policy.json
+  policy      = data.aws_iam_policy_document.tfc_policy.json
 }
 
 resource "tfe_variable_set" "variable_set" {

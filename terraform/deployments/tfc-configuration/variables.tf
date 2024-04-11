@@ -16,6 +16,7 @@ variable "organization" {
 variable "token" {
   type        = string
   description = "Account token"
+  sensitive   = true
 }
 
 #------------------------------------------------------------------------------
