@@ -86,7 +86,7 @@ resource "random_password" "grafana_db" { length = 20 }
 
 module "grafana_db" {
   source  = "terraform-aws-modules/rds-aurora/aws"
-  version = "~> 8.5"
+  version = "~> 9.0"
 
   name              = local.grafana_db_name
   database_name     = "grafana"
