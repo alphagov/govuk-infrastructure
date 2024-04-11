@@ -1,4 +1,4 @@
-FROM public.ecr.aws/lts/ubuntu:22.04_stable
+FROM public.ecr.aws/lts/ubuntu:22.04
 SHELL ["/bin/bash", "-euo", "pipefail", "-c"]
 
 ENV MONGO_VERSION 2.6.12
