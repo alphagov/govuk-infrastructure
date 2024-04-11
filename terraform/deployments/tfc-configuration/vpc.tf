@@ -1,6 +1,6 @@
 module "vpc-integration" {
   source  = "alexbasista/workspacer/tfe"
-  version = "0.9.0"
+  version = "0.10.0"
 
   organization        = var.organization
   workspace_name      = "vpc-integration"
@@ -33,7 +33,7 @@ module "vpc-integration" {
 
 module "vpc-staging" {
   source  = "alexbasista/workspacer/tfe"
-  version = "0.9.0"
+  version = "0.10.0"
 
   organization        = var.organization
   workspace_name      = "vpc-staging"
@@ -65,7 +65,7 @@ module "vpc-staging" {
 
 module "vpc-production" {
   source  = "alexbasista/workspacer/tfe"
-  version = "0.9.0"
+  version = "0.10.0"
 
   organization        = var.organization
   workspace_name      = "vpc-production"

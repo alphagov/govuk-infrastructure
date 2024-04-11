@@ -16,7 +16,7 @@ resource "tfe_project" "tfc_configuration" {
 
 module "tfc-configuration" {
   source  = "alexbasista/workspacer/tfe"
-  version = "0.9.0"
+  version = "0.10.0"
 
   organization      = var.organization
   workspace_name    = "tfc-configuration"
