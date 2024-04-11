@@ -1,13 +1,17 @@
 resource "tfe_workspace" "tfc_bootstrap" {
   name              = "tfc-bootstrap"
-  description       = "The tfc-bootsrap module is responsible for initialising teraform cloud."
+  description       = "The tfc-bootsrap module is responsible for initialising Terraform Cloud."
   working_directory = "/terraform/deployments/tfc-bootstrap/"
   trigger_patterns  = ["/terraform/deployments/tfc-bootstrap/**/*"]
-  execution_mode    = "local"
   vcs_repo {
     identifier     = "alphagov/govuk-infrastructure"
     oauth_token_id = data.tfe_oauth_client.github.oauth_token_id
   }
+}
+
+resource "tfe_workspace_settings" "tfc_bootstrap" {
+  workspace_id   = tfe_workspace.tfc_bootstrap.id
+  execution_mode = "local"
 }
 
 resource "tfe_project" "tfc_configuration" {
