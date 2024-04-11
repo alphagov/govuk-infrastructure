@@ -104,7 +104,7 @@ jobs:
         run: |
           mkdir -p /tmp/digests
           digest="${{steps.build-image.outputs.digest }}"
-          touch "/tmp/digests/${baseDigest#sha256:}"
+          touch "/tmp/digests/${digest#sha256:}"
 
       - id: upload-digests
         uses: actions/upload-artifact@v4
