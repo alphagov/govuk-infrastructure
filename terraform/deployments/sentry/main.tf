@@ -8,4 +8,7 @@ resource "sentry_project" "govuk" {
   slug  = "app-${each.key}"
 
   platform = "ruby"
+
+  default_rules = false
+  default_key   = true
 }
