@@ -18,6 +18,7 @@ locals {
     "content-tagger"           = [],
     "datagovuk_find"           = ["govuk-datagovuk"],
     "datagovuk_publish"        = ["govuk-datagovuk"],
+    "govuk-chat"               = [],
     "email-alert-api"          = ["govuk-content-interactions-on-platform", "govuk-find-and-view"],
     "email-alert-frontend"     = ["govuk-content-interactions-on-platform", "govuk-find-and-view"],
     "email-alert-service"      = ["govuk-content-interactions-on-platform", "govuk-find-and-view"],
