@@ -12,10 +12,10 @@ locals {
     defaultTargetType  = "ip"
     ingressClass       = "aws-alb"
     ingressClassConfig = { default = true }
-    ingressClassParams = { spec = { loadBalancerAttributes = {
+    ingressClassParams = { spec = { loadBalancerAttributes = [
       # TODO: factor out ALB attributes that are common to all of our ingresses.
       # https://docs.aws.amazon.com/elasticloadbalancing/latest/application/application-load-balancers.html#load-balancer-attributes
-    } } }
+    ] } }
     podDisruptionBudget = var.desired_ha_replicas > 1 ? { minAvailable = 1 } : {}
     replicaCount        = var.desired_ha_replicas
     region              = data.aws_region.current.name
