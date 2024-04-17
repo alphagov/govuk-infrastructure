@@ -4,7 +4,7 @@ resource "aws_s3_bucket" "content_publisher_activestorage" {
 
 resource "aws_s3_bucket_replication_configuration" "content_publisher_activestorage" {
   bucket = aws_s3_bucket.content_publisher_activestorage.id
-  role   = ""
+  role   = aws_iam_role.content_publisher_activestorage_replication_role.arn
 
   rule {
     id = "govuk-content-publisher-activestorage-replication-whole-bucket-rule"
