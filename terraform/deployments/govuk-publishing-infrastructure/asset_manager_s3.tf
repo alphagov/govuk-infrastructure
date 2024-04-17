@@ -2,30 +2,15 @@ resource "aws_s3_bucket" "assets" {
   bucket = "govuk-assets-${var.govuk_environment}"
 }
 
-import {
-  to = aws_s3_bucket.assets
-  id = "govuk-assets-${var.govuk_environment}"
-}
-
 resource "aws_s3_bucket_versioning" "assets" {
   bucket = aws_s3_bucket.assets.id
   versioning_configuration { status = "Enabled" }
-}
-
-import {
-  to = aws_s3_bucket_versioning.assets
-  id = "govuk-assets-${var.govuk_environment}"
 }
 
 resource "aws_s3_bucket_logging" "assets" {
   bucket        = aws_s3_bucket.assets.id
   target_bucket = "govuk-${var.govuk_environment}-aws-logging"
   target_prefix = "s3/govuk-assets-${var.govuk_environment}/"
-}
-
-import {
-  to = aws_s3_bucket_logging.assets
-  id = "govuk-assets-${var.govuk_environment}"
 }
 
 data "aws_iam_policy_document" "asset_manager_s3" {

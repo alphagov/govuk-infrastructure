@@ -14,13 +14,3 @@ resource "aws_s3_bucket_lifecycle_configuration" "athena_query_results" {
     }
   }
 }
-
-import {
-  to = aws_s3_bucket.athena_query_results
-  id = "govuk-${var.govuk_environment}-athena-query-results"
-}
-
-import {
-  to = aws_s3_bucket_lifecycle_configuration.athena_query_results
-  id = "govuk-${var.govuk_environment}-athena-query-results"
-}

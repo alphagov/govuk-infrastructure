@@ -54,23 +54,6 @@ resource "aws_iam_role_policy_attachment" "content_publisher_activestorage_repli
   policy_arn = aws_iam_policy.content_publisher_activestorage_replication_policy.arn
 }
 
-# Imports (temporary)
-
-import {
-  to = aws_iam_role.content_publisher_activestorage_replication_role
-  id = "govuk-content-publisher-activestorage-replication-role"
-}
-
-import {
-  to = aws_iam_policy.content_publisher_activestorage_replication_policy
-  id = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:policy/govuk-${var.govuk_environment}-content-publisher-activestorage-replication-policy"
-}
-
-import {
-  to = aws_iam_role_policy_attachment.content_publisher_activestorage_replication_policy
-  id = "govuk-content-publisher-activestorage-replication-role/arn:aws:iam::${data.aws_caller_identity.current.account_id}:policy/govuk-${var.govuk_environment}-content-publisher-activestorage-replication-policy"
-}
-
 # App access role/policy
 
 data "aws_iam_policy_document" "content_publisher_s3" {
