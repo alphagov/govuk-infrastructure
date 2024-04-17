@@ -1,30 +1,69 @@
-data "aws_iam_policy_document" "content_publisher_s3" {
-  statement {
-    actions   = ["s3:GetBucketLocation", "s3:ListBucket"]
-    resources = [data.terraform_remote_state.infra_content_publisher.outputs.activestorage_s3_bucket_arn]
-  }
+resource "aws_s3_bucket" "content_publisher_activestorage" {
+  bucket = "govuk-${var.govuk_environment}-content-publisher-activestorage"
+}
 
-  statement {
-    actions = [
-      "s3:*MultipartUpload*",
-      "s3:*Object",
-      "s3:*ObjectAcl",
-      "s3:*ObjectVersion",
-      "s3:GetObject*Attributes"
-    ]
-    resources = ["${data.terraform_remote_state.infra_content_publisher.outputs.activestorage_s3_bucket_arn}/*"]
+resource "aws_s3_bucket_replication_configuration" "content_publisher_activestorage" {
+  bucket = aws_s3_bucket.content_publisher_activestorage.id
+  role   = ""
+
+  rule {
+    id = "govuk-content-publisher-activestorage-replication-whole-bucket-rule"
+    # Enabled in all envs except integration
+    status = var.govuk_environment == "integration" ? "Disabled" : "Enabled"
+
+    destination {
+      bucket        = aws_s3_bucket.content_publisher_activestorage_replica.arn
+      storage_class = "STANDARD"
+    }
   }
 }
 
-resource "aws_iam_policy" "content_publisher_s3" {
-  name        = "content_publisher_s3"
-  description = "Read and write to this environment's content-publisher-activestorage bucket."
-
-  policy = data.aws_iam_policy_document.content_publisher_s3.json
+resource "aws_s3_bucket_logging" "content_publisher_activestorage" {
+  bucket        = aws_s3_bucket.content_publisher_activestorage.id
+  target_bucket = "govuk-${var.govuk_environment}-aws-logging"
+  target_prefix = "s3/govuk-${var.govuk_environment}-content-publisher-activestorage/"
 }
 
-# TODO: consider IRSA (pod identity) rather than granting to nodes.
-resource "aws_iam_role_policy_attachment" "content_publisher_s3" {
-  role       = data.tfe_outputs.cluster_infrastructure.nonsensitive_values.worker_iam_role_name
-  policy_arn = aws_iam_policy.content_publisher_s3.arn
+resource "aws_s3_bucket_versioning" "content_publisher_activestorage" {
+  bucket = aws_s3_bucket.content_publisher_activestorage.id
+  versioning_configuration { status = "Enabled" }
+}
+
+resource "aws_s3_bucket" "content_publisher_activestorage_replica" {
+  bucket   = "govuk-${var.govuk_environment}-content-publisher-activestorage-replica"
+  provider = aws.replica
+}
+
+resource "aws_s3_bucket_versioning" "content_publisher_activestorage_replica" {
+  bucket = aws_s3_bucket.content_publisher_activestorage_replica.id
+  versioning_configuration { status = "Enabled" }
+}
+
+resource "aws_s3_bucket_lifecycle_configuration" "content_publisher_activestorage_replica" {
+  bucket = aws_s3_bucket.content_publisher_activestorage_replica.id
+  rule {
+    id = "whole_bucket_lifecycle_rule_integration"
+    # Only enable in integration
+    status = var.govuk_environment == "integration" ? "Enabled" : "Disabled"
+
+    expiration {
+      days = 7
+    }
+
+    noncurrent_version_expiration {
+      noncurrent_days = 1
+    }
+  }
+}
+
+# Imports (temporary)
+
+import {
+  to = aws_s3_bucket.content_publisher_activestorage
+  id = "govuk-${var.govuk_environment}-content-publisher-activestorage"
+}
+
+import {
+  to = aws_s3_bucket.content_publisher_activestorage_replica
+  id = "govuk-${var.govuk_environment}-content-publisher-activestorage-replica"
 }
