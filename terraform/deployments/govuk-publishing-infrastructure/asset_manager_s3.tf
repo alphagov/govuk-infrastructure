@@ -1,7 +1,37 @@
+resource "aws_s3_bucket" "assets" {
+  bucket = "govuk-assets-${var.govuk_environment}"
+}
+
+import {
+  to = aws_s3_bucket.assets
+  id = "govuk-assets-${var.govuk_environment}"
+}
+
+resource "aws_s3_bucket_versioning" "assets" {
+  bucket = aws_s3_bucket.assets.id
+  versioning_configuration { status = "Enabled" }
+}
+
+import {
+  to = aws_s3_bucket_versioning.assets
+  id = "govuk-assets-${var.govuk_environment}"
+}
+
+resource "aws_s3_bucket_logging" "assets" {
+  bucket        = aws_s3_bucket.assets.id
+  target_bucket = "govuk-${var.govuk_environment}-aws-logging"
+  target_prefix = "s3/govuk-assets-${var.govuk_environment}/"
+}
+
+import {
+  to = aws_s3_bucket_logging.assets
+  id = "govuk-assets-${var.govuk_environment}"
+}
+
 data "aws_iam_policy_document" "asset_manager_s3" {
   statement {
     actions   = ["s3:GetBucketLocation", "s3:ListBucket"]
-    resources = [data.terraform_remote_state.infra_assets.outputs.asset_manager_bucket_arn]
+    resources = [aws_s3_bucket.assets.arn]
   }
 
   statement {
@@ -12,7 +42,7 @@ data "aws_iam_policy_document" "asset_manager_s3" {
       "s3:*ObjectVersion",
       "s3:GetObject*Attributes"
     ]
-    resources = ["${data.terraform_remote_state.infra_assets.outputs.asset_manager_bucket_arn}/*"]
+    resources = ["${aws_s3_bucket.assets.arn}/*"]
 
   }
 }

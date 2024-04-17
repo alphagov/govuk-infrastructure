@@ -50,6 +50,12 @@ provider "aws" {
   default_tags { tags = local.default_tags }
 }
 
+provider "aws" {
+  region = "eu-west-2"
+  alias  = "replica"
+  default_tags { tags = local.default_tags }
+}
+
 provider "random" {}
 
 # used by the fastly ip ranges provider.
