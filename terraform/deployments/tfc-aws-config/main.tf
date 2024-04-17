@@ -88,7 +88,10 @@ data "aws_iam_policy_document" "tfc_policy" {
     condition {
       test     = "StringEquals"
       variable = "iam:PassedToService"
-      values   = ["eks.amazonaws.com"]
+      values = [
+        "eks.amazonaws.com",
+        "s3.amazonaws.com"
+      ]
     }
   }
   statement {
