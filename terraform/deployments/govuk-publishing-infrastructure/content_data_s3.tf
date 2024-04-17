@@ -25,23 +25,3 @@ resource "aws_s3_bucket_lifecycle_configuration" "content_data_csvs" {
     }
   }
 }
-
-import {
-  to = aws_s3_bucket_lifecycle_configuration.content_data_csvs
-  id = "govuk-${var.govuk_environment}-content-data-csvs"
-}
-
-import {
-  to = aws_s3_bucket.content_data_csvs
-  id = "govuk-${var.govuk_environment}-content-data-csvs"
-}
-
-import {
-  to = aws_s3_bucket_logging.content_data_csvs
-  id = "govuk-${var.govuk_environment}-content-data-csvs"
-}
-
-import {
-  to = aws_s3_bucket_acl.content_data_csvs
-  id = "govuk-${var.govuk_environment}-content-data-csvs"
-}
