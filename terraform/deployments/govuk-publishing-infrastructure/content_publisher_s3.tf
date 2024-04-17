@@ -35,12 +35,15 @@ resource "aws_s3_bucket" "content_publisher_activestorage_replica" {
 }
 
 resource "aws_s3_bucket_versioning" "content_publisher_activestorage_replica" {
-  bucket = aws_s3_bucket.content_publisher_activestorage_replica.id
+  bucket   = aws_s3_bucket.content_publisher_activestorage_replica.id
+  provider = aws.replica
   versioning_configuration { status = "Enabled" }
 }
 
 resource "aws_s3_bucket_lifecycle_configuration" "content_publisher_activestorage_replica" {
-  bucket = aws_s3_bucket.content_publisher_activestorage_replica.id
+  bucket   = aws_s3_bucket.content_publisher_activestorage_replica.id
+  provider = aws.replica
+
   rule {
     id = "whole_bucket_lifecycle_rule_integration"
     # Only enable in integration
