@@ -2,11 +2,6 @@ resource "aws_s3_bucket" "content_data_csvs" {
   bucket = "govuk-${var.govuk_environment}-content-data-csvs"
 }
 
-import {
-  to = aws_s3_bucket.content_data_csvs
-  id = "govuk-${var.govuk_environment}-content-data-csvs"
-}
-
 resource "aws_s3_bucket_acl" "content_data_csvs" {
   bucket = aws_s3_bucket.content_data_csvs.id
   acl    = "public-read"
@@ -29,4 +24,24 @@ resource "aws_s3_bucket_lifecycle_configuration" "content_data_csvs" {
       days = 7
     }
   }
+}
+
+import {
+  to = aws_s3_bucket_lifecycle_configuration.content_data_csvs
+  id = "govuk-${var.govuk_environment}-content-data-csvs"
+}
+
+import {
+  to = aws_s3_bucket.content_data_csvs
+  id = "govuk-${var.govuk_environment}-content-data-csvs"
+}
+
+import {
+  to = aws_s3_bucket_logging.content_data_csvs
+  id = "govuk-${var.govuk_environment}-content-data-csvs"
+}
+
+import {
+  to = aws_s3_bucket_acl.content_data_csvs
+  id = "govuk-${var.govuk_environment}-content-data-csvs"
 }
