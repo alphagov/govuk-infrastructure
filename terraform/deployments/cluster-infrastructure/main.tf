@@ -27,7 +27,6 @@ locals {
   cluster_services_namespace = "cluster-services"
   secrets_prefix             = "govuk"
   monitoring_namespace       = "monitoring"
-  node_security_group_id     = module.eks.cluster_primary_security_group_id
 
   main_managed_node_group = {
     main = {
@@ -102,6 +101,53 @@ provider "aws" {
   }
 }
 
+data "aws_iam_policy_document" "node_assumerole" {
+  statement {
+    actions = ["sts:AssumeRole"]
+    principals {
+      type        = "Service"
+      identifiers = ["ec2.amazonaws.com"]
+    }
+  }
+}
+
+resource "aws_iam_role" "node" {
+  description           = "EKS managed node group IAM role"
+  assume_role_policy    = data.aws_iam_policy_document.node_assumerole.json
+  force_detach_policies = true
+}
+moved {
+  from = module.eks.module.eks_managed_node_group["main"].aws_iam_role.this[0]
+  to   = aws_iam_role.node
+}
+
+resource "aws_iam_role_policy_attachment" "node" {
+  for_each = toset([
+    "AmazonEKSWorkerNodePolicy",
+    "AmazonEC2ContainerRegistryReadOnly",
+    "AmazonEKS_CNI_Policy",
+    "AmazonSSMManagedInstanceCore",
+  ])
+  policy_arn = "arn:aws:iam::aws:policy/${each.key}"
+  role       = aws_iam_role.node.name
+}
+moved {
+  from = module.eks.module.eks_managed_node_group["main"].aws_iam_role_policy_attachment.this["arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy"]
+  to   = aws_iam_role_policy_attachment.node["AmazonEKSWorkerNodePolicy"]
+}
+moved {
+  from = module.eks.module.eks_managed_node_group["main"].aws_iam_role_policy_attachment.this["arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly"]
+  to   = aws_iam_role_policy_attachment.node["AmazonEC2ContainerRegistryReadOnly"]
+}
+moved {
+  from = module.eks.module.eks_managed_node_group["main"].aws_iam_role_policy_attachment.this["arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy"]
+  to   = aws_iam_role_policy_attachment.node["AmazonEKS_CNI_Policy"]
+}
+moved {
+  from = aws_iam_role_policy_attachment.node_ssm["main"]
+  to   = aws_iam_role_policy_attachment.node["AmazonSSMManagedInstanceCore"]
+}
+
 module "eks" {
   source  = "terraform-aws-modules/eks/aws"
   version = "~> 19.0"
@@ -142,17 +188,11 @@ module "eks" {
     capacity_type         = var.workers_default_capacity_type
     subnet_ids            = [for s in aws_subnet.eks_private : s.id]
     create_security_group = false
+    create_iam_role       = false
+    iam_role_arn          = aws_iam_role.node.arn
   }
 
-  # Moved Node Groups Config to Locals section to add conditional node groups.
   eks_managed_node_groups = local.eks_managed_node_groups
-}
-
-# Allow us to connect to nodes using AWS Systems Manager Session Manager.
-resource "aws_iam_role_policy_attachment" "node_ssm" {
-  for_each   = module.eks.eks_managed_node_groups
-  role       = each.value.iam_role_name
-  policy_arn = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
 }
 
 resource "aws_kms_key" "eks" {

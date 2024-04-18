@@ -102,7 +102,7 @@ module "grafana_db" {
   create_db_subnet_group = true
   create_security_group  = true
   security_group_rules = {
-    from_cluster = { source_security_group_id = local.node_security_group_id }
+    from_cluster = { source_security_group_id = module.eks.cluster_primary_security_group_id }
   }
   manage_master_user_password = false
   master_password             = random_password.grafana_db.result

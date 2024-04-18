@@ -23,7 +23,7 @@ resource "aws_security_group_rule" "clamav_db_from_eks_workers" {
   to_port                  = 2049
   protocol                 = "tcp"
   security_group_id        = aws_security_group.clamav-db.id
-  source_security_group_id = local.node_security_group_id
+  source_security_group_id = module.eks.cluster_primary_security_group_id
 }
 
 resource "aws_efs_mount_target" "clamav-db-mount-targets" {
