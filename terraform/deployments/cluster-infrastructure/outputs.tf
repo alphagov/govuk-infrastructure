@@ -125,3 +125,15 @@ output "clamav_db_efs_id" {
 output "public_nat_gateway_ips" {
   value = [for eip in aws_eip.eks_nat : eip.public_ip]
 }
+
+output "private_subnets" {
+  value = [for sn in aws_subnet.eks_private : sn.id]
+}
+
+output "public_subnets" {
+  value = [for sn in aws_subnet.eks_public : sn.id]
+}
+
+output "control_plane_subnets" {
+  value = [for sn in aws_subnet.eks_control_plane : sn.id]
+}
