@@ -70,11 +70,13 @@ locals {
       update_config         = { max_unavailable = 1 }
       block_device_mappings = local.main_managed_node_group.main.block_device_mappings
 
-      taint = {
-        key    = "kubernetes.io/arch"
-        value  = "arm64"
-        effect = "NO_SCHEDULE"
-      }
+      taints = [
+        {
+          key    = "kubernetes.io/arch"
+          value  = "arm64"
+          effect = "NO_SCHEDULE"
+        }
+      ]
 
       additional_tags = {
         "k8s.io/cluster-autoscaler/enabled"             = "true"
