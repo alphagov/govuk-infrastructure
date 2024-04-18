@@ -1,129 +1,4 @@
-/**
-* ## Project: infra-cloudfront
-*
-*/
-
-variable "aws_region" {
-  type        = string
-  description = "AWS region where primary s3 bucket is located"
-  default     = "eu-west-1"
-}
-
-variable "govuk_environment" {
-  type        = string
-  description = "AWS Environment"
-}
-
-variable "cloudfront_create" {
-  description = "Create Cloudfront resources."
-  default     = 0
-}
-
-variable "cloudfront_enable" {
-  description = "Enable Cloudfront distributions."
-  default     = false
-}
-
-variable "logging_bucket" {
-  description = "Logging S3 bucket"
-  default     = false
-}
-
-variable "origin_www_domain" {
-  type        = string
-  description = "Domain for the www origin"
-  default     = ""
-}
-
-variable "origin_www_id" {
-  type        = string
-  description = "Id for the www origin"
-  default     = ""
-}
-
-variable "origin_assets_domain" {
-  type        = string
-  description = "Domain for the assets origin"
-  default     = ""
-}
-
-variable "origin_assets_id" {
-  type        = string
-  description = "Id for assets origin"
-  default     = ""
-}
-
-variable "origin_notify_domain" {
-  type        = string
-  description = "Domain for the notify origin"
-  default     = ""
-}
-
-variable "origin_notify_id" {
-  type        = string
-  description = "Id for the notify origin"
-  default     = ""
-}
-
-variable "cloudfront_web_acl_default_allow" {
-  type        = bool
-  description = "True if the WAF ACL attached to the CloudFront distribution should default to allow, false otherwise."
-}
-
-variable "cloudfront_web_acl_allow_gds_ips" {
-  type        = bool
-  description = "True if the WAF ACL attached to the CloudFront distribution should have rules added to allow access from GDS IPs."
-}
-
-variable "cloudfront_www_distribution_aliases" {
-  type        = list(any)
-  description = "Extra CNAMEs (alternate domain names), if any, for the WWW CloudFront distribution."
-  default     = []
-}
-
-variable "cloudfront_www_certificate_domain" {
-  type        = string
-  description = "The domain of the WWW CloudFront certificate to look up."
-  default     = ""
-}
-
-variable "www_certificate_arn" {
-  type        = string
-  description = "The WWW CloudFront certificate"
-  default     = ""
-}
-
-variable "cloudfront_assets_distribution_aliases" {
-  type        = list(any)
-  description = "Extra CNAMEs (alternate domain names), if any, for the Assets CloudFront distribution."
-  default     = []
-}
-
-variable "cloudfront_assets_certificate_domain" {
-  type        = string
-  description = "The domain of the Assets CloudFront certificate to look up."
-  default     = ""
-}
-
-variable "assets_certificate_arn" {
-  type        = string
-  description = "The Assets CloudFront certificate"
-  default     = ""
-}
-
-variable "notify_cloudfront_domain" {
-  type        = string
-  description = "The domain of the Notify CloudFront to proxy /alerts requests to."
-  default     = ""
-}
-
-
-# Resources
-# --------------------------------------------------------------
-
-# Set up the backend & provider for each region
 terraform {
-  #backend "s3" {}
   cloud {
     organization = "govuk"
     workspaces {
@@ -131,10 +6,30 @@ terraform {
     }
   }
   required_version = "~> 1.5"
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 5.0"
+    }
+    archive = {
+      source  = "hashicorp/archive"
+      version = "~> 2.0"
+    }
+  }
 }
 
 provider "aws" {
   region = var.aws_region
+  default_tags {
+    tags = {
+      Product              = "GOV.UK"
+      System               = "CloudFront"
+      Environment          = var.govuk_environment
+      Owner                = "govuk-platform-engineering@digital.cabinet-office.gov.uk"
+      repository           = "govuk-infrastructure"
+      terraform_deployment = basename(abspath(path.root))
+    }
+  }
 }
 
 provider "aws" {
@@ -142,12 +37,7 @@ provider "aws" {
   region = "us-east-1"
 }
 
-provider "archive" {
-}
-
-#
-# CloudFront
-#
+provider "archive" {}
 
 resource "aws_cloudfront_cache_policy" "no-cookies" {
   name        = "no-cookies"
@@ -304,7 +194,7 @@ resource "aws_wafv2_web_acl" "cdn_poc_govuk" {
 }
 
 resource "aws_cloudfront_distribution" "www_distribution" {
-  count = var.cloudfront_create
+  count = var.cloudfront_create ? 1 : 0
 
   aliases    = var.cloudfront_www_distribution_aliases
   web_acl_id = aws_wafv2_web_acl.cdn_poc_govuk.arn
@@ -336,7 +226,7 @@ resource "aws_cloudfront_distribution" "www_distribution" {
 
   logging_config {
     include_cookies = false
-    bucket          = var.logging_bucket
+    bucket          = "govuk-${var.govuk_environment}-aws-logging.s3.amazonaws.com"
     prefix          = "cloudfront/"
   }
 
@@ -383,7 +273,7 @@ resource "aws_cloudfront_distribution" "www_distribution" {
   viewer_certificate {
     acm_certificate_arn      = var.www_certificate_arn
     ssl_support_method       = "sni-only"
-    minimum_protocol_version = "TLSv1.1_2016"
+    minimum_protocol_version = "TLSv1.2_2021"
   }
 
   custom_error_response {
@@ -399,17 +289,10 @@ resource "aws_cloudfront_distribution" "www_distribution" {
     response_page_path    = "/error/503.html"
     error_caching_min_ttl = 300
   }
-
-  tags = {
-    Product     = "GOV.UK"
-    System      = "Cloudfront"
-    Environment = var.govuk_environment
-    Owner       = "reliability-engineering@digital.cabinet-office.gov.uk"
-  }
 }
 
 resource "aws_cloudfront_distribution" "assets_distribution" {
-  count      = var.cloudfront_create
+  count      = var.cloudfront_create ? 1 : 0
   web_acl_id = aws_wafv2_web_acl.cdn_poc_govuk.arn
   origin {
     domain_name = var.origin_assets_domain
@@ -428,7 +311,7 @@ resource "aws_cloudfront_distribution" "assets_distribution" {
 
   logging_config {
     include_cookies = false
-    bucket          = var.logging_bucket
+    bucket          = "govuk-${var.govuk_environment}-aws-logging.s3.amazonaws.com"
     prefix          = "cloudfront/"
   }
 
@@ -457,13 +340,6 @@ resource "aws_cloudfront_distribution" "assets_distribution" {
   viewer_certificate {
     acm_certificate_arn      = var.assets_certificate_arn
     ssl_support_method       = "sni-only"
-    minimum_protocol_version = "TLSv1.1_2016"
-  }
-
-  tags = {
-    Product     = "GOV.UK"
-    System      = "Cloudfront"
-    Environment = var.govuk_environment
-    Owner       = "reliability-engineering@digital.cabinet-office.gov.uk"
+    minimum_protocol_version = "TLSv1.2_2021"
   }
 }
