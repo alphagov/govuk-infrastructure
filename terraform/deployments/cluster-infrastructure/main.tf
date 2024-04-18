@@ -112,7 +112,9 @@ data "aws_iam_policy_document" "node_assumerole" {
 }
 
 resource "aws_iam_role" "node" {
-  assume_role_policy = data.aws_iam_policy_document.node_assumerole.json
+  description           = "EKS managed node group IAM role"
+  assume_role_policy    = data.aws_iam_policy_document.node_assumerole.json
+  force_detach_policies = true
 }
 moved {
   from = module.eks.module.eks_managed_node_group["main"].aws_iam_role.this[0]
