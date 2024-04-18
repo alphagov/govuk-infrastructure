@@ -15,6 +15,11 @@ data "tfe_outputs" "cluster_infrastructure" {
   workspace    = "cluster-infrastructure-${var.govuk_environment}"
 }
 
+data "tfe_outputs" "vpc" {
+  organization = "govuk"
+  workspace    = "vpc-${var.govuk_environment}"
+}
+
 data "terraform_remote_state" "infra_assets" {
   backend = "s3"
   config = {
