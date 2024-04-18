@@ -1,6 +1,4 @@
 terraform {
-  #backend "s3" {}
-
   cloud {
     organization = "govuk"
     workspaces {
