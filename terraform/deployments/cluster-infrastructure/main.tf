@@ -116,10 +116,6 @@ resource "aws_iam_role" "node" {
   assume_role_policy    = data.aws_iam_policy_document.node_assumerole.json
   force_detach_policies = true
 }
-moved {
-  from = module.eks.module.eks_managed_node_group["main"].aws_iam_role.this[0]
-  to   = aws_iam_role.node
-}
 
 resource "aws_iam_role_policy_attachment" "node" {
   for_each = toset([
@@ -130,22 +126,6 @@ resource "aws_iam_role_policy_attachment" "node" {
   ])
   policy_arn = "arn:aws:iam::aws:policy/${each.key}"
   role       = aws_iam_role.node.name
-}
-moved {
-  from = module.eks.module.eks_managed_node_group["main"].aws_iam_role_policy_attachment.this["arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy"]
-  to   = aws_iam_role_policy_attachment.node["AmazonEKSWorkerNodePolicy"]
-}
-moved {
-  from = module.eks.module.eks_managed_node_group["main"].aws_iam_role_policy_attachment.this["arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly"]
-  to   = aws_iam_role_policy_attachment.node["AmazonEC2ContainerRegistryReadOnly"]
-}
-moved {
-  from = module.eks.module.eks_managed_node_group["main"].aws_iam_role_policy_attachment.this["arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy"]
-  to   = aws_iam_role_policy_attachment.node["AmazonEKS_CNI_Policy"]
-}
-moved {
-  from = aws_iam_role_policy_attachment.node_ssm["main"]
-  to   = aws_iam_role_policy_attachment.node["AmazonSSMManagedInstanceCore"]
 }
 
 module "eks" {
