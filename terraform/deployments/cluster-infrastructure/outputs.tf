@@ -25,7 +25,7 @@ output "control_plane_security_group_id" {
 
 output "node_security_group_id" {
   description = "ID of the security group which contains the worker nodes. May or may not be the same as control_plane_security_group_id."
-  value       = local.node_security_group_id
+  value       = module.eks.cluster_primary_security_group_id
 }
 
 output "cluster_autoscaler_service_account_name" {

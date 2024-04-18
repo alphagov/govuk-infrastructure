@@ -27,7 +27,6 @@ locals {
   cluster_services_namespace = "cluster-services"
   secrets_prefix             = "govuk"
   monitoring_namespace       = "monitoring"
-  node_security_group_id     = module.eks.cluster_primary_security_group_id
 
   main_managed_node_group = {
     main = {
@@ -144,7 +143,6 @@ module "eks" {
     create_security_group = false
   }
 
-  # Moved Node Groups Config to Locals section to add conditional node groups.
   eks_managed_node_groups = local.eks_managed_node_groups
 }
 
