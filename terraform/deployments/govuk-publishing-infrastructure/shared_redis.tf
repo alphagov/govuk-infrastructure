@@ -9,7 +9,7 @@ resource "aws_elasticache_subnet_group" "shared_redis_cluster" {
 
 resource "aws_security_group" "shared_redis_cluster" {
   name        = local.shared_redis_name
-  vpc_id      = local.vpc_id
+  vpc_id      = data.tfe_outputs.vpc.nonsensitive_values.id
   description = "${local.shared_redis_name} Redis cluster"
   tags = {
     Name   = local.shared_redis_name
