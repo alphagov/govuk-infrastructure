@@ -1,18 +1,10 @@
-# GOV.UK Failover CloudFront CDN
+# CloudFront secondary CDN configuration for GOV.UK
 
-This module configures the CloudFront CDN to be used for failover in the event of a Fastly outage.
+The `cloudfront` module configures the AWS CloudFront content distribution
+network (CDN) to serve www.gov.uk and assets.publishing.service.gov.uk, so
+that:
 
-## Applying Terraform
-
-1. Configure Terraform
-    ```shell
-    gds aws govuk-<environment>-poweruser -- terraform init -backend-config <environment>.backend -upgrade -reconfigure
-    ```
-2. Plan Terraform
-    ```shell
-    gds aws govuk-<environment>-poweruser -- terraform plan -var-file ../variables/common.tfvars -var-file ../variables/<environment>/common.tfvars -var-file ../variables/<environment>/cloudfront.tfvars
-    ```
-3. Apply Terraform
-    ```shell
-    gds aws govuk-<environment>-poweruser -- terraform apply -var-file ../variables/common.tfvars -var-file ../variables/<environment>/common.tfvars -var-file ../variables/<environment>/cloudfront.tfvars
-    ```
+- in the unlikely event of a prolonged outage of our primary CDN, we have the
+  option to switch over to CloudFront
+- more importantly, we have a second source for our CDN service for
+  competitiveness and to reduce vendor lock-in
