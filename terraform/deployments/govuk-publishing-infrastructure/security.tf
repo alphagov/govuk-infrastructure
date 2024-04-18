@@ -146,7 +146,7 @@ resource "aws_security_group_rule" "efs_from_eks_workers" {
 
 resource "aws_security_group" "eks_ingress_www_origin" {
   name        = "eks_ingress_www_origin"
-  vpc_id      = data.terraform_remote_state.infra_vpc.outputs.vpc_id
+  vpc_id      = data.tfe_outputs.vpc.nonsensitive_values.id
   description = "ALBs serving EKS www-origin ingress (and signon ALBs in non-prod environments)."
   tags = {
     System = "Frontend"

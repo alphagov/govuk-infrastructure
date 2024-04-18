@@ -9,7 +9,7 @@ resource "aws_elasticache_subnet_group" "frontend_memcached" {
 
 resource "aws_security_group" "frontend_memcached" {
   name        = local.frontend_memcached_name
-  vpc_id      = local.vpc_id
+  vpc_id      = data.tfe_outputs.vpc.nonsensitive_values.id
   description = "${local.frontend_memcached_name} memcached instance"
   tags = {
     System = "Frontend Memcached"

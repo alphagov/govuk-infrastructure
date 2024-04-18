@@ -20,24 +20,6 @@ data "tfe_outputs" "vpc" {
   workspace    = "vpc-${var.govuk_environment}"
 }
 
-data "terraform_remote_state" "infra_assets" {
-  backend = "s3"
-  config = {
-    bucket = var.govuk_aws_state_bucket
-    key    = "govuk/infra-assets.tfstate"
-    region = data.aws_region.current.name
-  }
-}
-
-data "terraform_remote_state" "infra_content_publisher" {
-  backend = "s3"
-  config = {
-    bucket = var.govuk_aws_state_bucket
-    key    = "govuk/infra-content-publisher.tfstate"
-    region = data.aws_region.current.name
-  }
-}
-
 data "terraform_remote_state" "infra_networking" {
   backend = "s3"
   config = {
@@ -65,15 +47,6 @@ data "terraform_remote_state" "infra_security_groups" {
   }
 }
 
-data "terraform_remote_state" "infra_vpc" {
-  backend = "s3"
-  config = {
-    bucket = var.govuk_aws_state_bucket
-    key    = "govuk/infra-vpc.tfstate"
-    region = data.aws_region.current.name
-  }
-}
-
 data "terraform_remote_state" "app_govuk_rds" {
   backend = "s3"
 
@@ -81,12 +54,6 @@ data "terraform_remote_state" "app_govuk_rds" {
     bucket = var.govuk_aws_state_bucket
     key    = "blue/app-govuk-rds.tfstate"
     region = data.aws_region.current.name
-  }
-
-  # TODO: hack because govuk-aws/app-govuk-rds is not terraformed in `test`.
-  # `test` still uses a single postgres instance for many apps.
-  defaults = {
-    sg_rds = {}
   }
 }
 
