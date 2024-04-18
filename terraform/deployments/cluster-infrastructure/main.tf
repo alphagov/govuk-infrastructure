@@ -69,13 +69,13 @@ locals {
       instance_types        = var.arm_workers_instance_types
       update_config         = { max_unavailable = 1 }
       block_device_mappings = local.main_managed_node_group.main.block_device_mappings
-
-      taint = {
-        key    = "kubernetes.io/arch"
-        value  = "arm64"
-        effect = "NO_SCHEDULE"
+      taints = {
+        arch = {
+          key    = "kubernetes.io/arch"
+          value  = "arm64"
+          effect = "NO_SCHEDULE"
+        }
       }
-
       additional_tags = {
         "k8s.io/cluster-autoscaler/enabled"             = "true"
         "k8s.io/cluster-autoscaler/${var.cluster_name}" = "owned"
