@@ -71,7 +71,7 @@ locals {
       block_device_mappings = local.main_managed_node_group.main.block_device_mappings
       taints = {
         arch = {
-          key    = "kubernetes.io/arch"
+          key    = "arch"
           value  = "arm64"
           effect = "NO_SCHEDULE"
         }
