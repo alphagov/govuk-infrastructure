@@ -101,6 +101,31 @@ provider "aws" {
   }
 }
 
+data "aws_iam_policy_document" "node_assumerole" {
+  statement {
+    actions = ["sts:AssumeRole"]
+    principals {
+      type        = "Service"
+      identifiers = ["ec2.amazonaws.com"]
+    }
+  }
+}
+
+resource "aws_iam_role" "node" {
+  assume_role_policy = data.aws_iam_policy_document.node_assumerole.json
+}
+
+resource "aws_iam_role_policy_attachment" "node" {
+  for_each = toset([
+    "AmazonEKSWorkerNodePolicy",
+    "AmazonEC2ContainerRegistryReadOnly",
+    "AmazonEKS_CNI_Policy",
+    "AmazonSSMManagedInstanceCore",
+  ])
+  policy_arn = "arn:aws:iam::aws:policy/${each.key}"
+  role       = aws_iam_role.node.name
+}
+
 module "eks" {
   source  = "terraform-aws-modules/eks/aws"
   version = "~> 19.0"
@@ -141,16 +166,11 @@ module "eks" {
     capacity_type         = var.workers_default_capacity_type
     subnet_ids            = [for s in aws_subnet.eks_private : s.id]
     create_security_group = false
+    create_iam_role       = false
+    iam_role_arn          = aws_iam_role.node.arn
   }
 
   eks_managed_node_groups = local.eks_managed_node_groups
-}
-
-# Allow us to connect to nodes using AWS Systems Manager Session Manager.
-resource "aws_iam_role_policy_attachment" "node_ssm" {
-  for_each   = module.eks.eks_managed_node_groups
-  role       = each.value.iam_role_name
-  policy_arn = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
 }
 
 resource "aws_kms_key" "eks" {

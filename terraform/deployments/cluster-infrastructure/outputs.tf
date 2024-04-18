@@ -5,12 +5,12 @@ output "cluster_certificate_authority_data" {
 
 output "worker_iam_role_arn" {
   description = "IAM role ARN for EKS worker node groups"
-  value       = module.eks.eks_managed_node_groups["main"].iam_role_arn
+  value       = aws_iam_role.node.arn
 }
 
 output "worker_iam_role_name" {
   description = "IAM role name for EKS worker node groups"
-  value       = module.eks.eks_managed_node_groups["main"].iam_role_name
+  value       = aws_iam_role.node.name
 }
 
 output "aws_ebs_csi_driver_iam_role_arn" {

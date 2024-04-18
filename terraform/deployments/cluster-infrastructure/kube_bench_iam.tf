@@ -18,6 +18,6 @@ resource "aws_iam_policy" "kube_bench_security_hub" {
 }
 
 resource "aws_iam_role_policy_attachment" "kube_bench_security_hub" {
-  role       = module.eks.eks_managed_node_groups["main"].iam_role_name
+  role       = aws_iam_role.node.name
   policy_arn = aws_iam_policy.kube_bench_security_hub.arn
 }
