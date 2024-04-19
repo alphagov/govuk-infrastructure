@@ -138,7 +138,6 @@ resource "helm_release" "argo_cd" {
 
     applicationSet = { replicas = var.desired_ha_replicas }
     dex            = { enabled = false }
-    redis-ha       = { enabled = var.argo_redis_ha }
 
     notifications = {
       argocdUrl = "https://${local.argo_host}"
