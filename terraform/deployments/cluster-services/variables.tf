@@ -10,12 +10,6 @@ variable "argo_workflows_namespaces" {
   default     = ["apps"]
 }
 
-variable "argo_redis_ha" {
-  type        = bool
-  description = "Whether to run high-availability (3 replicas) Redis for ArgoCD, instead of 1 replica."
-  default     = true
-}
-
 variable "github_read_write_team" {
   type        = string
   description = "Name of the GitHub team that should have read-write access to Dex SSO-enabled applications"

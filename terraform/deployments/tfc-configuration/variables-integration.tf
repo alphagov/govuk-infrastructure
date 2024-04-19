@@ -49,7 +49,6 @@ module "variable-set-integration" {
 
     secrets_recovery_window_in_days = 0
 
-    argo_redis_ha       = false
     desired_ha_replicas = 1
 
     ckan_s3_organogram_bucket = "datagovuk-integration-ckan-organogram"
