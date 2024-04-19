@@ -38,7 +38,7 @@ locals {
       instance_types = var.workers_instance_types
       update_config  = { max_unavailable = 1 }
       # TODO(#1201): remove disk_size and use_custom_launch_template after AL2023 rollout.
-      use_custom_launch_template = var.govuk_environment == "integration"
+      use_custom_launch_template = var.govuk_environment != "production"
       disk_size                  = var.node_disk_size
       block_device_mappings = {
         xvda = {
@@ -160,7 +160,7 @@ module "eks" {
 
   eks_managed_node_group_defaults = {
     ami_type = (
-      var.govuk_environment == "integration"
+      var.govuk_environment != "production"
       ? "AL2023_x86_64_STANDARD"
       : "AL2_x86_64"
     )
