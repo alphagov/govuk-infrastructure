@@ -1,8 +1,8 @@
 resource "random_string" "database_password" {
   for_each = var.databases
 
-  length = 32
-  lower  = true
+  length  = 32
+  special = false
 }
 
 resource "aws_db_subnet_group" "subnet_group" {
