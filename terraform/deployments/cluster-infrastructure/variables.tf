@@ -149,25 +149,25 @@ variable "grafana_db_seconds_until_auto_pause" {
 
 variable "chat_db_min_capacity" {
   type        = number
-  description = "Minimum capacity of the Grafana RDS Aurora Serverless database."
+  description = "Minimum capacity of the Chat RDS Aurora Serverless database."
   default     = 2
 }
 
 variable "chat_db_max_capacity" {
   type        = number
-  description = "Maximum capacity of the Grafana RDS Aurora Serverless database."
+  description = "Maximum capacity of the Chat RDS Aurora Serverless database."
   default     = 8
 }
 
 variable "chat_db_auto_pause" {
   type        = bool
-  description = "Whether to auto-scale the Grafana RDS database to zero when it's idle. Takes 30s to start up again when traffic arrives. Best avoided in production."
+  description = "Whether to auto-scale the Chat RDS database to zero when it's idle. Takes 30s to start up again when traffic arrives. Best avoided in production."
   default     = false
 }
 
 variable "chat_db_seconds_until_auto_pause" {
   type        = number
-  description = "The timeout after which an idle Grafana RDS instance gets scaled down to zero, if chat_db_auto_pause is true."
+  description = "The timeout after which an idle Chat RDS instance gets scaled down to zero, if chat_db_auto_pause is true."
   default     = 7200
 }
 
