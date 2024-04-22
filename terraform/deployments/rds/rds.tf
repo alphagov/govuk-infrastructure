@@ -3,6 +3,7 @@ resource "random_string" "database_password" {
 
   length  = 32
   special = false
+  lifecycle { ignore_changes = [length, special] }
 }
 
 resource "aws_db_subnet_group" "subnet_group" {
