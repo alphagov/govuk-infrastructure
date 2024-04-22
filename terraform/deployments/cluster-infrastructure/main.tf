@@ -129,7 +129,7 @@ resource "aws_iam_role_policy_attachment" "node" {
 
 module "eks" {
   source  = "terraform-aws-modules/eks/aws"
-  version = "~> 19.0"
+  version = "~> 20.0"
 
   cluster_name    = var.cluster_name
   cluster_version = var.cluster_version
@@ -152,11 +152,14 @@ module "eks" {
     provider_key_arn = aws_kms_key.eks.arn
     resources        = ["secrets"]
   }
-  create_kms_key = false
+  create_kms_key                = false
+  kms_key_enable_default_policy = false
 
   # We're just using the cluster primary SG as created by EKS.
   create_cluster_security_group = false
   create_node_security_group    = false
+
+  authentication_mode = "CONFIG_MAP"
 
   eks_managed_node_group_defaults = {
     ami_type = (
