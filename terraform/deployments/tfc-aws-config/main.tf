@@ -73,6 +73,7 @@ data "aws_iam_policy_document" "tfc_policy" {
       "lambda:*",
       "logs:*",
       "mq:*",
+      "pi:*", # Performance Insights
       "rds:*",
       "route53:*",
       "s3:*",
@@ -90,7 +91,7 @@ data "aws_iam_policy_document" "tfc_policy" {
       variable = "iam:PassedToService"
       values = [
         "eks.amazonaws.com",
-        "s3.amazonaws.com"
+        "s3.amazonaws.com",
       ]
     }
   }
@@ -105,6 +106,10 @@ data "aws_iam_policy_document" "tfc_policy" {
       variable = "iam:PassedToService"
       values   = ["glue.amazonaws.com"]
     }
+  }
+  statement {
+    actions   = ["iam:PassRole"]
+    resources = ["arn:aws:iam::*:role/rds-monitoring-role"]
   }
   statement {
     effect    = "Deny"
