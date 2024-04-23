@@ -1,5 +1,13 @@
 data "google_project" "project" {}
 
+resource "google_project_service" "enable" {
+  for_each = toset([
+    "cloudresourcemanager.googleapis.com",
+    "iamcredentials.googleapis.com"
+  ])
+  service = each.key
+}
+
 resource "google_iam_workload_identity_pool" "tfc" {
   workload_identity_pool_id = "terraform-cloud-${var.govuk_environment}"
   display_name              = "Terraform Cloud (${var.govuk_environment})"
