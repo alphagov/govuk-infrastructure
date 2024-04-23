@@ -139,7 +139,7 @@ resource "aws_iam_policy" "tfc_policy" {
 }
 
 resource "tfe_variable_set" "variable_set" {
-  name = "aws-credentials-${var.aws_environment}"
+  name = "aws-credentials-${var.govuk_environment}"
 }
 
 resource "tfe_variable" "tfc_var_aws_provider_auth" {
