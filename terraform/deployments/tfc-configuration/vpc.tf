@@ -26,6 +26,7 @@ module "vpc-integration" {
 
   variable_set_names = [
     "aws-credentials-integration",
+    "gcp-credentials-integration",
     "common",
     "common-integration"
   ]
