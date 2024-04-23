@@ -21,6 +21,10 @@ terraform {
       source  = "hashicorp/tls"
       version = "~> 4.0"
     }
+    google = {
+      source  = "hashicorp/google"
+      version = "~> 5.26"
+    }
   }
 }
 
@@ -30,11 +34,23 @@ provider "aws" {
     tags = {
       Product              = "GOV.UK"
       System               = "Terraform Cloud"
-      Environment          = var.aws_environment
+      Environment          = var.govuk_environment
       Owner                = "govuk-platform-engineering@digital.cabinet-office.gov.uk"
       repository           = "govuk-infrastructure"
       terraform_deployment = basename(abspath(path.root))
     }
+  }
+}
+
+provider "google" {
+  project = "govuk-${var.govuk_environment}"
+  default_labels = {
+    Product              = "GOV.UK"
+    System               = "Terraform Cloud"
+    Environment          = var.govuk_environment
+    Owner                = "govuk-platform-engineering@digital.cabinet-office.gov.uk"
+    repository           = "govuk-infrastructure"
+    terraform_deployment = basename(abspath(path.root))
   }
 }
 
