@@ -61,3 +61,11 @@ resource "tfe_variable" "tfc_var_gcp_run_service_account_email" {
   description     = "The service account email TFC will use with authenticating with GCP"
   variable_set_id = tfe_variable_set.gcp_variable_set.id
 }
+
+resource "tfe_variable" "tfc_var_gcp_workload_provider_name" {
+  key             = "TFC_GCP_WORKLOAD_PROVIDER_NAME"
+  value           = google_iam_workload_identity_pool_provider.tfc.name
+  category        = "env"
+  description     = "Name of the identity pool provider to use when authenticating with GCP"
+  variable_set_id = tfe_variable_set.gcp_variable_set.id
+}
