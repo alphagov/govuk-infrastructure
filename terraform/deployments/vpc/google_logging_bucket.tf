@@ -31,5 +31,5 @@ resource "google_storage_bucket_acl" "google_logging" {
 
 import {
   to = google_storage_bucket.google_logging
-  id = "${data.google_project.project.id}/govuk-${var.govuk_environment}-gcp-logging"
+  id = "govuk-${var.govuk_environment}-gcp-logging"
 }

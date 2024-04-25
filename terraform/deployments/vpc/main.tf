@@ -29,7 +29,6 @@ provider "aws" {
 }
 
 provider "google" {
-  project = "govuk-${var.govuk_environment}"
   default_labels = {
     Product              = "GOV.UK"
     System               = "Terraform Cloud"
