@@ -1,3 +1,7 @@
+locals {
+  google_project = var.govuk_environment == "staging" ? "govuk-staging-160211" : "govuk-${var.govuk_environment}"
+}
+
 data "google_project" "project" {}
 
 resource "google_project_service" "enable" {
@@ -31,8 +35,8 @@ resource "google_service_account" "tfc" {
 }
 
 resource "google_project_iam_binding" "tfc" {
-  project = "govuk-${var.govuk_environment}"
-  role    = "roles/editor"
+  project = local.google_project
+  role    = "roles/owner"
   members = ["serviceAccount:${google_service_account.tfc.email}"]
 }
 
@@ -75,5 +79,13 @@ resource "tfe_variable" "tfc_var_gcp_workload_provider_name" {
   value           = google_iam_workload_identity_pool_provider.tfc.name
   category        = "env"
   description     = "Name of the identity pool provider to use when authenticating with GCP"
+  variable_set_id = tfe_variable_set.gcp_variable_set.id
+}
+
+resource "tfe_variable" "tfc_var_gcp_project" {
+  key             = "GOOGLE_PROJECT"
+  value           = local.google_project
+  category        = "env"
+  description     = "Name of the GCP project to use"
   variable_set_id = tfe_variable_set.gcp_variable_set.id
 }

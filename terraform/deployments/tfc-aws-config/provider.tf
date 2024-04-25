@@ -43,7 +43,8 @@ provider "aws" {
 }
 
 provider "google" {
-  project = "govuk-${var.govuk_environment}"
+  # Staging has a non-standard project ID
+  project = local.google_project
   default_labels = {
     Product              = "GOV.UK"
     System               = "Terraform Cloud"
