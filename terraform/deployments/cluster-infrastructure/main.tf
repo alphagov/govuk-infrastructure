@@ -37,9 +37,6 @@ locals {
       min_size       = var.workers_size_min
       instance_types = var.workers_instance_types
       update_config  = { max_unavailable = 1 }
-      # TODO(#1201): remove disk_size and use_custom_launch_template after AL2023 rollout.
-      use_custom_launch_template = var.govuk_environment != "production"
-      disk_size                  = var.node_disk_size
       block_device_mappings = {
         xvda = {
           device_name = "/dev/xvda"
@@ -159,11 +156,7 @@ module "eks" {
   create_node_security_group    = false
 
   eks_managed_node_group_defaults = {
-    ami_type = (
-      var.govuk_environment != "production"
-      ? "AL2023_x86_64_STANDARD"
-      : "AL2_x86_64"
-    )
+    ami_type              = "AL2023_x86_64_STANDARD"
     capacity_type         = var.workers_default_capacity_type
     subnet_ids            = [for s in aws_subnet.eks_private : s.id]
     create_security_group = false
