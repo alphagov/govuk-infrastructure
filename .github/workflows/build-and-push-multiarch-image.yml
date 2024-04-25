@@ -39,6 +39,7 @@ jobs:
     runs-on: ${{ matrix.runner }}
     outputs:
       imageTag: ${{ steps.meta.outputs.version }}
+      localSha: ${{ steps.local-head.outputs.sha }}
     permissions:
       id-token: write
       contents: read
@@ -81,12 +82,8 @@ jobs:
 
       - uses: docker/setup-buildx-action@v3
 
-      - name: Calculate Image Tags
-        id: calculate-image-tags
-        run: |
-          CREATED_DATE="$(date -u +'%Y-%m-%dT%H:%M:%SZ')"
-          echo "createdDate=${CREATED_DATE}" >> $GITHUB_OUTPUT
-          echo "sha=$(git rev-parse HEAD)" >> $GITHUB_OUTPUT
+      - run: echo "sha=$(git rev-parse HEAD)" >> $GITHUB_OUTPUT
+        id: local-head
 
       - name: Generate Image Metadata
         id: meta
@@ -96,10 +93,9 @@ jobs:
             ${{ steps.login-ecr.outputs.registry }}/${{ inputs.ecrRepositoryName }}
           labels: |
             org.opencontainers.image.vendor=GDS
-            org.opencontainers.image.created=${{ steps.calculate-image-tags.outputs.createdDate }}
           tags: |
             type=raw,priority=500,value=${{ inputs.gitRef }},enable=${{ startsWith(inputs.gitRef, 'v') }}
-            type=raw,priority=400,value=${{ steps.calculate-image-tags.outputs.sha }},enable=${{ !startsWith(inputs.gitRef, 'v') }}
+            type=raw,priority=400,value=${{ steps.local-head.outputs.sha }},enable=${{ !startsWith(inputs.gitRef, 'v') }}
 
       - id: build-image
         uses: docker/build-push-action@v5
@@ -166,11 +162,8 @@ jobs:
 
       - uses: docker/setup-buildx-action@v3
 
-      - name: Calculate Image Tags
-        id: calculate-image-tags
-        run: |
-          CREATED_DATE="$(date -u +'%Y-%m-%dT%H:%M:%SZ')"
-          echo "createdDate=${CREATED_DATE}" >> $GITHUB_OUTPUT
+      - run: echo "sha=$(git rev-parse HEAD)" >> $GITHUB_OUTPUT
+        id: local-head
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4.0.1
@@ -193,10 +186,9 @@ jobs:
             ${{ steps.login-ecr.outputs.registry }}/${{ inputs.ecrRepositoryName }}
           labels: |
             org.opencontainers.image.vendor=GDS
-            org.opencontainers.image.created=${{ steps.calculate-image-tags.outputs.createdDate }}
           tags: |
             type=raw,priority=500,value=${{ inputs.gitRef }},enable=${{ startsWith(inputs.gitRef, 'v') }}
-            type=raw,priority=400,value=${{ steps.calculate-image-tags.outputs.sha }},enable=${{ !startsWith(inputs.gitRef, 'v') }}
+            type=raw,priority=400,value=${{ needs.build-and-push-image.outputs.localSha }},enable=${{ !startsWith(inputs.gitRef, 'v') }}
 
       - name: Create Manifest Lists
         working-directory: /tmp/digests
