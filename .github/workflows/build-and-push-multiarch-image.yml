@@ -100,8 +100,6 @@ jobs:
           tags: |
             type=raw,priority=500,value=${{ inputs.gitRef }},enable=${{ startsWith(inputs.gitRef, 'v') }}
             type=raw,priority=400,value=${{ steps.calculate-image-tags.outputs.sha }},enable=${{ !startsWith(inputs.gitRef, 'v') }}
-            type=sha,enable=true,format=short
-            type=sha,enable=true,priority=100,format=long
 
       - id: build-image
         uses: docker/build-push-action@v5
@@ -199,8 +197,6 @@ jobs:
           tags: |
             type=raw,priority=500,value=${{ inputs.gitRef }},enable=${{ startsWith(inputs.gitRef, 'v') }}
             type=raw,priority=400,value=${{ steps.calculate-image-tags.outputs.sha }},enable=${{ !startsWith(inputs.gitRef, 'v') }}
-            type=sha,enable=true,format=short
-            type=sha,enable=true,priority=100,format=long
 
       - name: Create Manifest Lists
         working-directory: /tmp/digests
