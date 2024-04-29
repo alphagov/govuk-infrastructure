@@ -96,7 +96,7 @@ resource "aws_security_group_rule" "licensify_docdb_from_eks_workers" {
 }
 
 resource "aws_security_group_rule" "postgres_from_eks_workers" {
-  for_each = merge(data.terraform_remote_state.app_govuk_rds.outputs.sg_rds, {
+  for_each = merge(data.tfe_outputs.rds.nonsensitive_values.sg_rds, {
     "transition_primary" = data.terraform_remote_state.infra_security_groups.outputs.sg_transition-postgresql-primary_id
     "content_data_api"   = data.terraform_remote_state.infra_security_groups.outputs.sg_content-data-api-postgresql-primary_id
   })
@@ -110,7 +110,7 @@ resource "aws_security_group_rule" "postgres_from_eks_workers" {
 }
 
 resource "aws_security_group_rule" "mysql_from_eks_workers" {
-  for_each                 = data.terraform_remote_state.app_govuk_rds.outputs.sg_rds
+  for_each                 = data.tfe_outputs.rds.nonsensitive_values.sg_rds
   description              = "Database accepts requests from EKS nodes"
   type                     = "ingress"
   from_port                = 3306

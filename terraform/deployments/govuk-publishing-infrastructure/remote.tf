@@ -5,6 +5,11 @@ data "tfe_outputs" "cluster_infrastructure" {
   workspace    = "cluster-infrastructure-${var.govuk_environment}"
 }
 
+data "tfe_outputs" "rds" {
+  organization = "govuk"
+  workspace    = "rds-${var.govuk_environment}"
+}
+
 data "tfe_outputs" "vpc" {
   organization = "govuk"
   workspace    = "vpc-${var.govuk_environment}"
@@ -33,16 +38,6 @@ data "terraform_remote_state" "infra_security_groups" {
   config = {
     bucket = var.govuk_aws_state_bucket
     key    = "govuk/infra-security-groups.tfstate"
-    region = data.aws_region.current.name
-  }
-}
-
-data "terraform_remote_state" "app_govuk_rds" {
-  backend = "s3"
-
-  config = {
-    bucket = var.govuk_aws_state_bucket
-    key    = "blue/app-govuk-rds.tfstate"
     region = data.aws_region.current.name
   }
 }
