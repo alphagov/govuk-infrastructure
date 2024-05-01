@@ -106,3 +106,14 @@ resource "aws_route53_record" "instance_cname" {
   ttl     = 300
   records = [aws_db_instance.instance[each.key].address]
 }
+
+resource "aws_secretsmanager_secret" "database_passwords" {
+  name = "rds-admin-passwords"
+}
+
+resource "aws_secretsmanager_secret_version" "database_passwords" {
+  secret_id = aws_secretsmanager_secret.database_passwords.id
+  secret_string = jsonencode(
+    { for k, v in random_string.database_password : k => v.result }
+  )
+}
