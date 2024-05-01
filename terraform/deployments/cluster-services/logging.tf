@@ -12,11 +12,19 @@ resource "helm_release" "filebeat" {
   create_namespace = true
   timeout          = var.helm_timeout_seconds
   values = [yamlencode({
-    daemonset = { secretMounts = [] }
+    daemonset = {
+      secretMounts = []
+      tolerations = [{ # TODO: remove once we no longer run amd64 (Intel) nodes.
+        key      = "arch"
+        operator = "Equal"
+        value    = "arm64"
+        effect   = "NoSchedule"
+      }]
+    }
     filebeatConfig = {
       "filebeat.yml" = yamlencode(yamldecode(file("${path.module}/filebeat.yml")))
     }
-    imageTag = "8.11.3" # TODO: Dependabot or equivalent so this doesn't get neglected.
+    imageTag = "8.13.2" # TODO: Dependabot or equivalent so this doesn't get neglected.
     clusterRoleRules = [
       {
         apiGroups = [""]
