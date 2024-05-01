@@ -15,13 +15,6 @@ locals {
   discovery_engine_serving_config_path   = "${google_discovery_engine_data_store.govuk_content.name}/servingConfigs/default_search"
 }
 
-# This is currently managed by our custom RESTAPI module, moving to a first party resource
-# TODO: This block can be deleted once successfully applied in all environments
-import {
-  id = "projects/${var.gcp_project_id}/locations/global/collections/default_collection/dataStores/govuk_content"
-  to = google_discovery_engine_data_store.govuk_content
-}
-
 resource "google_discovery_engine_data_store" "govuk_content" {
   data_store_id = "govuk_content"
   display_name  = "govuk_content"
