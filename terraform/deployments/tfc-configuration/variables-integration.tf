@@ -33,10 +33,6 @@ module "variable-set-integration" {
     force_destroy      = true
     enable_arm_workers = true
 
-    workers_size_min     = 3
-    workers_size_desired = 3
-    workers_size_max     = 5
-
     publishing_service_domain = "integration.publishing.service.gov.uk"
 
     frontend_memcached_node_type   = "cache.t4g.micro"

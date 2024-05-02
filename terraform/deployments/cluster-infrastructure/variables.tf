@@ -72,19 +72,19 @@ variable "arm_workers_default_capacity_type" {
 variable "arm_workers_size_desired" {
   type        = number
   description = "Desired capacity of ARM-based managed node autoscale group."
-  default     = 1
+  default     = 6
 }
 
 variable "arm_workers_size_min" {
   type        = number
   description = "Min capacity of ARM-based managed node autoscale group."
-  default     = 1
+  default     = 3
 }
 
 variable "arm_workers_size_max" {
   type        = number
   description = "Max capacity of ARM-based managed node autoscale group."
-  default     = 3
+  default     = 12
 }
 
 variable "workers_instance_types" {
