@@ -5,7 +5,6 @@ module "govuk_content_discovery_engine" {
   source = "../modules/google_discovery_engine_restapi"
 
   datastore_id = "govuk_content"
-  engine_id    = "govuk"
 }
 
 # TODO: These IDs/paths are semi-hardcoded here as there aren't first party resources/data sources
@@ -23,6 +22,36 @@ resource "google_discovery_engine_data_store" "govuk_content" {
   industry_vertical = "GENERIC"
   content_config    = "CONTENT_REQUIRED" # == "unstructured" datastore
   solution_types    = ["SOLUTION_TYPE_SEARCH"]
+}
+
+# TODO: Remove after change has been applied in all environments
+import {
+  id = "global/default_collection/govuk"
+  to = google_discovery_engine_search_engine.govuk
+}
+
+resource "google_discovery_engine_search_engine" "govuk" {
+  engine_id    = "govuk"
+  display_name = "GOV.UK Site Search"
+
+  location      = google_discovery_engine_data_store.govuk_content.location
+  collection_id = "default_collection"
+
+  # TODO: The engine was originally created before this field existed. It now defaults to "GENERIC",
+  # but while migrating to the first party resource we need to force it to a blank string so it
+  # doesn't get replaced.
+  industry_vertical = ""
+
+  data_store_ids = [google_discovery_engine_data_store.govuk_content.data_store_id]
+
+  search_engine_config {
+    search_tier    = "SEARCH_TIER_STANDARD"
+    search_add_ons = []
+  }
+
+  common_config {
+    company_name = "GOV.UK"
+  }
 }
 
 resource "aws_secretsmanager_secret" "discovery_engine_configuration" {
