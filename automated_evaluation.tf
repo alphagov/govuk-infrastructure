@@ -54,7 +54,7 @@ resource "google_cloudfunctions2_function" "automated_evaluation" {
 resource "google_cloud_scheduler_job" "daily_search_evaluation" {
   name             = "daily_search_evaluation"
   description      = "daily evaluation of search against judgement lists"
-  schedule         = "0 17 * * *"
+  schedule         = "0 07 * * *"
   time_zone        = "Europe/London"
   attempt_deadline = "1800s"
   http_target {
