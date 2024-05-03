@@ -4,7 +4,7 @@ module "cloudfront-staging" {
 
   organization        = var.organization
   workspace_name      = "cloudfront-staging"
-  workspace_desc      = "The cloudfront module is responsible for the AWS resources which constitute the EKS cluster."
+  workspace_desc      = "This module manages resources for the failover CDN in Cloudfront"
   workspace_tags      = ["staging", "cloudfront", "eks", "aws"]
   terraform_version   = var.terraform_version
   execution_mode      = "remote"
@@ -37,7 +37,7 @@ module "cloudfront-production" {
 
   organization        = var.organization
   workspace_name      = "cloudfront-production"
-  workspace_desc      = "The cloudfront module is responsible for the AWS resources which constitute the EKS cluster."
+  workspace_desc      = "This module manages resources for the failover CDN in Cloudfront"
   workspace_tags      = ["production", "cloudfront", "eks", "aws"]
   terraform_version   = var.terraform_version
   execution_mode      = "remote"
