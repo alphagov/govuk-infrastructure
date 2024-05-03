@@ -4,7 +4,7 @@ module "cluster-services-integration" {
 
   organization      = var.organization
   workspace_name    = "cluster-services-integration"
-  workspace_desc    = "The cluster-services module is responsible for the AWS resources which constitute the EKS cluster."
+  workspace_desc    = "This module manages resources for services that run on top of the EKS cluster and are required by apps running on the cluster"
   workspace_tags    = ["integration", "cluster-services", "eks", "aws"]
   terraform_version = var.terraform_version
   execution_mode    = "remote"
@@ -36,7 +36,7 @@ module "cluster-services-staging" {
 
   organization      = var.organization
   workspace_name    = "cluster-services-staging"
-  workspace_desc    = "The cluster-services module is responsible for the AWS resources which constitute the EKS cluster."
+  workspace_desc    = "This module manages resources for services that run on top of the EKS cluster and are required by apps running on the cluster"
   workspace_tags    = ["staging", "cluster-services", "eks", "aws"]
   terraform_version = var.terraform_version
   execution_mode    = "remote"
@@ -67,7 +67,7 @@ module "cluster-services-production" {
 
   organization      = var.organization
   workspace_name    = "cluster-services-production"
-  workspace_desc    = "The cluster-services module is responsible for the AWS resources which constitute the EKS cluster."
+  workspace_desc    = "This module manages resources for services that run on top of the EKS cluster and are required by apps running on the cluster"
   workspace_tags    = ["production", "cluster-services", "eks", "aws"]
   terraform_version = var.terraform_version
   execution_mode    = "remote"

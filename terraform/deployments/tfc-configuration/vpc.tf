@@ -4,7 +4,7 @@ module "vpc-integration" {
 
   organization        = var.organization
   workspace_name      = "vpc-integration"
-  workspace_desc      = "The vpc module is responsible for the AWS resources which constitute the EKS cluster."
+  workspace_desc      = "This module manages foundational cloud resources that are required by most other modules (VPC, DNS zones)"
   workspace_tags      = ["integration", "vpc", "eks", "aws"]
   terraform_version   = "1.7.0"
   execution_mode      = "remote"
@@ -38,7 +38,7 @@ module "vpc-staging" {
 
   organization        = var.organization
   workspace_name      = "vpc-staging"
-  workspace_desc      = "The vpc module is responsible for the AWS resources which constitute the EKS cluster."
+  workspace_desc      = "This module manages foundational cloud resources that are required by most other modules (VPC, DNS zones)"
   workspace_tags      = ["staging", "vpc", "eks", "aws"]
   terraform_version   = "1.7.0"
   execution_mode      = "remote"
@@ -71,7 +71,7 @@ module "vpc-production" {
 
   organization        = var.organization
   workspace_name      = "vpc-production"
-  workspace_desc      = "The vpc module is responsible for the AWS resources which constitute the EKS cluster."
+  workspace_desc      = "This module manages foundational cloud resources that are required by most other modules (VPC, DNS zones)"
   workspace_tags      = ["production", "vpc", "eks", "aws"]
   terraform_version   = "1.7.0"
   execution_mode      = "remote"

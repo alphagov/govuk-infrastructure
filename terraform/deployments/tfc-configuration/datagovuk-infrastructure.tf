@@ -4,7 +4,7 @@ module "datagovuk-infrastructure-integration" {
 
   organization      = var.organization
   workspace_name    = "datagovuk-infrastructure-integration"
-  workspace_desc    = "The datagovuk-infrastructure module is responsible for the AWS resources which constitute the EKS cluster."
+  workspace_desc    = "This module manages resources to run data.gov.uk on the GOV.UK EKS cluster"
   workspace_tags    = ["integration", "datagovuk-infrastructure", "eks", "aws"]
   terraform_version = "1.7.0"
   execution_mode    = "remote"
@@ -36,7 +36,7 @@ module "datagovuk-infrastructure-staging" {
 
   organization      = var.organization
   workspace_name    = "datagovuk-infrastructure-staging"
-  workspace_desc    = "The datagovuk-infrastructure module is responsible for the AWS resources which constitute the EKS cluster."
+  workspace_desc    = "This module manages resources to run data.gov.uk on the GOV.UK EKS cluster"
   workspace_tags    = ["staging", "datagovuk-infrastructure", "eks", "aws"]
   terraform_version = "1.7.0"
   execution_mode    = "remote"
@@ -67,7 +67,7 @@ module "datagovuk-infrastructure-production" {
 
   organization      = var.organization
   workspace_name    = "datagovuk-infrastructure-production"
-  workspace_desc    = "The datagovuk-infrastructure module is responsible for the AWS resources which constitute the EKS cluster."
+  workspace_desc    = "This module manages resources to run data.gov.uk on the GOV.UK EKS cluster"
   workspace_tags    = ["production", "datagovuk-infrastructure", "eks", "aws"]
   terraform_version = "1.7.0"
   execution_mode    = "remote"
