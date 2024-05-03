@@ -471,6 +471,22 @@ module "variable-set-rds-production" {
         freestoragespace_threshold   = 10737418240
       }
 
+      transition = {
+        engine = "postgres"
+        engine_version = "13"
+        engine_params = {
+          log_min_duration_statement = { value = 10000 }
+          log_statement = { value = "all" }
+          deadlock_timeout = { value = 2500 }
+          log_lock_waits = { value = 1 }
+          engine_params_family = "postgres13"
+          name = "blue-transition-postgresql-primary"
+          allocated_storage = 120
+          instance_class = "db.m5.large" # TODO: downsize this after migration if required
+          performance_insights_enabled = true
+        }
+      }
+
       whitehall = {
         engine         = "mysql"
         engine_version = "8.0"
