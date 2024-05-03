@@ -481,9 +481,9 @@ module "variable-set-rds-production" {
           log_lock_waits             = { value = 1 }
         }
         engine_params_family         = "postgres13"
-        name                         = "blue-transition-postgresql-primary"
+        name                         = "transition"
         allocated_storage            = 120
-        instance_class               = "db.m5.large" # TODO: downsize this after migration if required
+        instance_class               = "db.m6g.large" # TODO: downsize this after migration if required
         performance_insights_enabled = true
         freestoragespace_threshold   = 10737418240
       }
