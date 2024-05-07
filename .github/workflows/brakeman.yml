@@ -21,6 +21,7 @@ jobs:
           bundler-cache: true
 
       - name: Run Brakeman
+        continue-on-error: true
         run: bundle exec brakeman . --except CheckRenderInline --quiet -f sarif >> brakeman.sarif
 
       - name: Upload result to Github Code Scanning
