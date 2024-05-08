@@ -187,6 +187,7 @@ jobs:
           labels: |
             org.opencontainers.image.vendor=GDS
           tags: |
+            type=raw,value=latest,enable=${{ github.ref == format('refs/heads/{0}', 'main') }}
             type=raw,priority=500,value=${{ inputs.gitRef }},enable=${{ startsWith(inputs.gitRef, 'v') }}
             type=raw,priority=400,value=${{ needs.build-and-push-image.outputs.localSha }},enable=${{ !startsWith(inputs.gitRef, 'v') }}
 
