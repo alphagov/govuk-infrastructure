@@ -24,12 +24,6 @@ resource "google_discovery_engine_data_store" "govuk_content" {
   solution_types    = ["SOLUTION_TYPE_SEARCH"]
 }
 
-# TODO: Remove after change has been applied in all environments
-import {
-  id = "global/default_collection/govuk"
-  to = google_discovery_engine_search_engine.govuk
-}
-
 resource "google_discovery_engine_search_engine" "govuk" {
   engine_id    = "govuk"
   display_name = "GOV.UK Site Search"
@@ -38,8 +32,7 @@ resource "google_discovery_engine_search_engine" "govuk" {
   collection_id = "default_collection"
 
   # TODO: The engine was originally created before this field existed. It now defaults to "GENERIC",
-  # but while migrating to the first party resource we need to force it to a blank string so it
-  # doesn't get replaced.
+  # but setting that explicitly causes it to be replaced. This is a workaround to avoid that.
   industry_vertical = ""
 
   data_store_ids = [google_discovery_engine_data_store.govuk_content.data_store_id]
