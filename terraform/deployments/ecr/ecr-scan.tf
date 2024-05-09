@@ -44,11 +44,7 @@ resource "aws_cloudwatch_event_rule" "event_rule" {
     "detail-type" : ["ECR Image Scan"],
     "detail" : {
       "finding-severity-counts" : {
-        "HIGH" : [
-          {
-            "numeric" : [">", 0]
-          }
-        ]
+        "CRITICAL" : [{ "numeric" : [">", 0] }]
       }
     }
   })
