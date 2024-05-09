@@ -88,16 +88,14 @@ resource "aws_ecr_lifecycle_policy" "ecr_lifecycle_policy" {
     "rules" : [
       {
         "rulePriority" : 1,
-        "description" : "Keep last 100 images with tag prefix deployed-to",
+        "description" : "Keep last 20 images with tag prefix deployed-to",
         "selection" : {
           "tagStatus" : "tagged",
           "tagPrefixList" : ["deployed-to"],
           "countType" : "imageCountMoreThan",
-          "countNumber" : 100
+          "countNumber" : 20
         },
-        "action" : {
-          "type" : "expire"
-        }
+        "action" : { "type" : "expire" }
       },
       {
         "rulePriority" : 2,
@@ -108,22 +106,7 @@ resource "aws_ecr_lifecycle_policy" "ecr_lifecycle_policy" {
           "countUnit" : "days",
           "countNumber" : 1
         },
-        "action" : {
-          "type" : "expire"
-        }
-      },
-      {
-        "rulePriority" : 3,
-        "description" : "Keep last 20 images with tag prefix release-",
-        "selection" : {
-          "tagStatus" : "tagged",
-          "tagPrefixList" : ["release-"],
-          "countType" : "imageCountMoreThan",
-          "countNumber" : 20
-        },
-        "action" : {
-          "type" : "expire"
-        }
+        "action" : { "type" : "expire" }
       },
       {
         "rulePriority" : 4,
@@ -134,9 +117,7 @@ resource "aws_ecr_lifecycle_policy" "ecr_lifecycle_policy" {
           "countType" : "imageCountMoreThan",
           "countNumber" : 20
         },
-        "action" : {
-          "type" : "expire"
-        }
+        "action" : { "type" : "expire" }
       },
       {
         "rulePriority" : 5,
@@ -147,9 +128,7 @@ resource "aws_ecr_lifecycle_policy" "ecr_lifecycle_policy" {
           "countUnit" : "days",
           "countNumber" : 30
         },
-        "action" : {
-          "type" : "expire"
-        }
+        "action" : { "type" : "expire" }
       }
     ]
   })
