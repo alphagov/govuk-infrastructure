@@ -74,11 +74,6 @@ resource "kubernetes_config_map" "aws_auth" {
   }
 }
 
-import {
-  to = kubernetes_config_map.aws_auth
-  id = "kube-system/aws-auth"
-}
-
 resource "kubernetes_cluster_role_binding" "cluster_admins" {
   metadata { name = "cluster-admins" }
   role_ref {

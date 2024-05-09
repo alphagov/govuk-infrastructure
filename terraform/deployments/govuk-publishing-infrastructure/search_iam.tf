@@ -29,11 +29,6 @@ resource "aws_iam_policy" "search_relevancy_bucket_access" {
   description = "Allows reading and writing of the search relevancy bucket"
 }
 
-import {
-  to = aws_iam_policy.search_relevancy_bucket_access
-  id = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:policy/govuk-${var.govuk_environment}-search-relevancy-bucket-access-policy"
-}
-
 resource "aws_iam_role_policy_attachment" "search_relevancy_s3_eks_policy_attachment" {
   role       = data.tfe_outputs.cluster_infrastructure.nonsensitive_values.worker_iam_role_name
   policy_arn = aws_iam_policy.search_relevancy_bucket_access.arn
@@ -66,11 +61,6 @@ resource "aws_iam_policy" "sitemaps_bucket_access" {
   description = "Allows reading and writing of the sitemaps bucket"
 }
 
-import {
-  to = aws_iam_policy.sitemaps_bucket_access
-  id = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:policy/govuk-${var.govuk_environment}-sitemaps-bucket-access-policy"
-}
-
 resource "aws_iam_role_policy_attachment" "sitemaps_s3_eks_policy_attachment" {
   role       = data.tfe_outputs.cluster_infrastructure.nonsensitive_values.worker_iam_role_name
   policy_arn = aws_iam_policy.sitemaps_bucket_access.arn
@@ -91,11 +81,6 @@ resource "aws_iam_policy" "use_sagemaker" {
   name        = "govuk-${var.govuk_environment}-search-use-sagemaker-policy"
   policy      = data.aws_iam_policy_document.use_sagemaker.json
   description = "Allows invoking and describing SageMaker endpoints"
-}
-
-import {
-  to = aws_iam_policy.use_sagemaker
-  id = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:policy/govuk-${var.govuk_environment}-search-use-sagemaker-policy"
 }
 
 resource "aws_iam_role_policy_attachment" "search_api_sagemaker_attachment" {

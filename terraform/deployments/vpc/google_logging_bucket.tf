@@ -28,8 +28,3 @@ resource "google_storage_bucket_acl" "google_logging" {
     "WRITER:group-cloud-storage-analytics@google.com",
   ]
 }
-
-import {
-  to = google_storage_bucket.google_logging
-  id = "govuk-${var.govuk_environment}-gcp-logging"
-}
