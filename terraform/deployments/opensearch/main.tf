@@ -163,11 +163,14 @@ CONFIG
 }
 
 resource "aws_secretsmanager_secret" "opensearch_passwords" {
-  name = "opensearch-admin-passwords"
+  name = "govuk/chat/opensearch"
 }
 
 resource "aws_secretsmanager_secret_version" "opensearch_passwords" {
-  secret_id     = aws_secretsmanager_secret.opensearch_passwords.id
-  secret_string = random_password.password.result
+  secret_id = aws_secretsmanager_secret.opensearch_passwords.id
+  secret_string = jsonencode({
+    username = local.master_user
+    password = random_password.password.result
+  })
 }
 
