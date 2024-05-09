@@ -124,12 +124,7 @@ resource "github_team_repository" "govuk_repos" {
 
 resource "github_actions_organization_secret_repositories" "ci_user_github_api_token" {
   secret_name             = "GOVUK_CI_GITHUB_API_TOKEN"
-  selected_repository_ids = [for repo in local.deployable_repos : repo.repo_id]
-}
-
-resource "github_actions_organization_secret_repositories" "gems_github_api_token" {
-  secret_name             = "GOVUK_CI_GITHUB_API_TOKEN"
-  selected_repository_ids = [for repo in local.gems : repo.repo_id]
+  selected_repository_ids = [for repo in concat(local.deployable_repos, local.gems) : repo.repo_id]
 }
 
 resource "github_actions_organization_secret_repositories" "argo_events_webhook_token" {
