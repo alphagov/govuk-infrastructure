@@ -19,9 +19,9 @@ provider "aws" {
 }
 
 locals {
-  domain        = "${var.service}-engine"
-  subnet_ids    = data.terraform_remote_state.infra_networking.outputs.private_subnet_rds_ids
-  master_user   = "${var.service}-masteruser"
+  domain      = "${var.service}-engine"
+  subnet_ids  = data.terraform_remote_state.infra_networking.outputs.private_subnet_rds_ids
+  master_user = "${var.service}-masteruser"
 }
 
 resource "random_password" "password" {
