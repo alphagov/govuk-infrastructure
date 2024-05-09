@@ -57,12 +57,9 @@ locals {
   )
 
   extra_repositories = [
-    "github-cli",
     "mongodb",
     "toolbox",
     "clamav",
-    "statsd",
-    "govuk-terraform",
     "search-api-learn-to-rank",
     "licensify-backend",
     "licensify-feed",
