@@ -52,7 +52,7 @@ resource "aws_db_instance" "instance" {
   monitoring_role_arn     = data.terraform_remote_state.infra_monitoring.outputs.rds_enhanced_monitoring_role_arn
   vpc_security_group_ids  = [aws_security_group.rds[each.key].id]
   ca_cert_identifier      = "rds-ca-rsa2048-g1"
-  apply_immediately       = true #var.govuk_environment != "production"
+  apply_immediately       = var.govuk_environment != "production"
 
   performance_insights_enabled          = each.value.performance_insights_enabled
   performance_insights_retention_period = each.value.performance_insights_enabled ? 7 : 0
