@@ -163,7 +163,7 @@ CONFIG
 }
 
 resource "aws_secretsmanager_secret" "opensearch_passwords" {
-  name = "govuk/chat/opensearch"
+  name = "govuk/govuk-chat/opensearch"
 }
 
 resource "aws_secretsmanager_secret_version" "opensearch_passwords" {
