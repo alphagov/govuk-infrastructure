@@ -101,7 +101,7 @@ resource "aws_opensearch_domain" "opensearch" {
 
   advanced_security_options {
     enabled                        = var.security_options_enabled
-    anonymous_auth_enabled         = true
+    anonymous_auth_enabled         = false
     internal_user_database_enabled = true
     master_user_options {
       master_user_name     = local.master_user
