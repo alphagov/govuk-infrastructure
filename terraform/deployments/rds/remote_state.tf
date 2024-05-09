@@ -33,3 +33,8 @@ data "terraform_remote_state" "infra_vpc" {
     region = var.aws_region
   }
 }
+
+data "tfe_outputs" "cluster_infrastructure" {
+  organization = "govuk"
+  workspace    = "cluster-infrastructure-${var.govuk_environment}"
+}
