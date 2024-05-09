@@ -12,7 +12,7 @@ module "govuk_content_discovery_engine" {
 # available for them yet.
 locals {
   discovery_engine_datastore_branch_path = "${google_discovery_engine_data_store.govuk_content.name}/branches/default_branch"
-  discovery_engine_serving_config_path   = "${google_discovery_engine_data_store.govuk_content.name}/servingConfigs/default_search"
+  discovery_engine_serving_config_path   = "${google_discovery_engine_search_engine.govuk.name}/servingConfigs/default_search"
 }
 
 resource "google_discovery_engine_data_store" "govuk_content" {
