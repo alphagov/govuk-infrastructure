@@ -162,10 +162,15 @@ resource "aws_opensearch_domain" "opensearch" {
 CONFIG
 }
 
-resource "aws_ssm_parameter" "opensearch_master_user" {
-  name        = "/service/${var.service}/MASTER_USER"
-  description = "opensearch_password for ${var.service} domain"
-  type        = "SecureString"
-  value       = "${local.master_user},${random_password.password.result}"
+resource "aws_secretsmanager_secret" "opensearch_passwords" {
+  name = "govuk/chat/opensearch"
+}
+
+resource "aws_secretsmanager_secret_version" "opensearch_passwords" {
+  secret_id = aws_secretsmanager_secret.opensearch_passwords.id
+  secret_string = jsonencode({
+    username = local.master_user
+    password = random_password.password.result
+  })
 }
 
