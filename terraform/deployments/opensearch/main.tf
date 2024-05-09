@@ -169,11 +169,3 @@ resource "aws_ssm_parameter" "opensearch_master_user" {
   value       = "${local.master_user},${random_password.password.result}"
 }
 
-resource "aws_route53_record" "opensearch_domain_record" {
-  zone_id = data.terraform_remote_state.infra_root_dns_zones.outputs.internal_root_zone_id
-  name    = local.custom_domain
-  type    = "CNAME"
-  ttl     = "300"
-
-  records = [aws_opensearch_domain.opensearch.endpoint]
-}
