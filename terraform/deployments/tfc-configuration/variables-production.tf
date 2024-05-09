@@ -70,11 +70,7 @@ module "variable-set-ecr-production" {
 
   name = "ecr-production"
   tfvars = {
-    emails = [
-      # TODO: manage this via a mailing list so as not to introduce toil.
-      "nadeem.sabri@digital.cabinet-office.gov.uk",
-      "chris.banks@digital.cabinet-office.gov.uk",
-    ]
+    emails = ["govuk-platform-engineering+ecr-inspector@digital.cabinet-office.gov.uk"]
   }
 }
 

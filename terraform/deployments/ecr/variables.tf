@@ -5,8 +5,7 @@ variable "puller_arns" {
 
 variable "emails" {
   type    = list(string)
-  default = [] # TODO: Set emails in tfvars.
-
+  default = []
 }
 
 variable "govuk_environment" {
