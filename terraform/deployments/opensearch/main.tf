@@ -101,7 +101,7 @@ resource "aws_opensearch_domain" "opensearch" {
 
   advanced_security_options {
     enabled                        = var.security_options_enabled
-    anonymous_auth_enabled         = true
+    anonymous_auth_enabled         = false
     internal_user_database_enabled = true
     master_user_options {
       master_user_name     = local.master_user
@@ -163,7 +163,7 @@ CONFIG
 }
 
 resource "aws_secretsmanager_secret" "opensearch_passwords" {
-  name = "govuk/chat/opensearch"
+  name = "govuk/govuk-chat/opensearch"
 }
 
 resource "aws_secretsmanager_secret_version" "opensearch_passwords" {
