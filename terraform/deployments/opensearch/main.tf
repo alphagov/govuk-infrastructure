@@ -14,11 +14,14 @@ terraform {
   }
 }
 
+provider "aws" {
+  region = var.aws_region
+}
+
 locals {
-  domain        = "${var.service}-engine"
-  custom_domain = "${local.domain}.${data.aws_route53_zone.opensearch.name}"
-  subnet_ids    = data.terraform_remote_state.infra_networking.outputs.private_subnet_rds_ids
-  master_user   = "${var.service}-masteruser"
+  domain      = "${var.service}-engine"
+  subnet_ids  = data.terraform_remote_state.infra_networking.outputs.private_subnet_rds_ids
+  master_user = "${var.service}-masteruser"
 }
 
 resource "random_password" "password" {
@@ -113,10 +116,6 @@ resource "aws_opensearch_domain" "opensearch" {
   domain_endpoint_options {
     enforce_https       = true
     tls_security_policy = "Policy-Min-TLS-1-2-2019-07"
-
-    custom_endpoint_enabled         = true
-    custom_endpoint                 = local.custom_domain
-    custom_endpoint_certificate_arn = data.aws_acm_certificate.opensearch.arn
   }
 
   ebs_options {
@@ -170,11 +169,3 @@ resource "aws_ssm_parameter" "opensearch_master_user" {
   value       = "${local.master_user},${random_password.password.result}"
 }
 
-resource "aws_route53_record" "opensearch_domain_record" {
-  zone_id = data.terraform_remote_state.infra_root_dns_zones.outputs.internal_root_zone_id
-  name    = local.custom_domain
-  type    = "CNAME"
-  ttl     = "300"
-
-  records = [aws_opensearch_domain.opensearch.endpoint]
-}
