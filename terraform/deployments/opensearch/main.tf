@@ -20,7 +20,6 @@ provider "aws" {
 
 locals {
   domain        = "${var.service}-engine"
-  custom_domain = "${local.domain}.${data.aws_route53_zone.opensearch.name}"
   subnet_ids    = data.terraform_remote_state.infra_networking.outputs.private_subnet_rds_ids
   master_user   = "${var.service}-masteruser"
 }
@@ -117,10 +116,6 @@ resource "aws_opensearch_domain" "opensearch" {
   domain_endpoint_options {
     enforce_https       = true
     tls_security_policy = "Policy-Min-TLS-1-2-2019-07"
-
-    custom_endpoint_enabled         = true
-    custom_endpoint                 = local.custom_domain
-    custom_endpoint_certificate_arn = data.aws_acm_certificate.opensearch.arn
   }
 
   ebs_options {
