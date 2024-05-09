@@ -14,6 +14,10 @@ terraform {
   }
 }
 
+provider "aws" {
+  region = var.aws_region
+}
+
 locals {
   domain        = "${var.service}-engine"
   custom_domain = "${local.domain}.${data.aws_route53_zone.opensearch.name}"
