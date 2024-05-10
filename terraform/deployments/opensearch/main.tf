@@ -163,12 +163,14 @@ CONFIG
 }
 
 resource "aws_secretsmanager_secret" "opensearch_passwords" {
-  name = "govuk/govuk-chat/opensearch"
+  description = "OpenSearch credentials for the GovUK Chat OpenSearch domain"
+  name        = "govuk/govuk-chat/opensearch"
 }
 
 resource "aws_secretsmanager_secret_version" "opensearch_passwords" {
   secret_id = aws_secretsmanager_secret.opensearch_passwords.id
   secret_string = jsonencode({
+    url      = aws_opensearch_domain.opensearch.endpoint
     username = local.master_user
     password = random_password.password.result
   })
