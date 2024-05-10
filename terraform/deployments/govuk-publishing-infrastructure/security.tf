@@ -96,7 +96,7 @@ resource "aws_security_group_rule" "licensify_docdb_from_eks_workers" {
 }
 
 # Remove once the content-data-api RDS instance has been migrated to govuk-infrastructure
-resource "aws_security_group_rule" "postgres_from_eks_workers" {
+/*resource "aws_security_group_rule" "postgres_from_eks_workers" {
   for_each                 = { "content_data_api" = data.terraform_remote_state.infra_security_groups.outputs.sg_content-data-api-postgresql-primary_id }
   description              = "Database accepts requests from EKS nodes"
   type                     = "ingress"
@@ -105,7 +105,7 @@ resource "aws_security_group_rule" "postgres_from_eks_workers" {
   protocol                 = "tcp"
   security_group_id        = each.value
   source_security_group_id = data.tfe_outputs.cluster_infrastructure.nonsensitive_values.node_security_group_id
-}
+}*/
 
 resource "aws_security_group_rule" "elasticsearch_from_eks_workers" {
   description              = "ElasticSearch accepts requests from EKS nodes (for example Licence Finder queries ES directly)."
