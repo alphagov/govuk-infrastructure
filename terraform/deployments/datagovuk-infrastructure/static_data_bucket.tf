@@ -43,15 +43,3 @@ resource "aws_s3_bucket_policy" "govuk_datagovuk_static_read_policy" {
   bucket = aws_s3_bucket.datagovuk_static.id
   policy = data.aws_iam_policy_document.datagovuk_static.json
 }
-
-// Imports (temporary)
-
-import {
-  to = aws_s3_bucket.datagovuk_static
-  id = "datagovuk-${var.govuk_environment}-ckan-static-data"
-}
-
-import {
-  to = aws_s3_bucket_policy.govuk_datagovuk_static_read_policy
-  id = "datagovuk-${var.govuk_environment}-ckan-static-data"
-}

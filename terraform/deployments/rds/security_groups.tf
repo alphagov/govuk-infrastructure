@@ -33,15 +33,3 @@ resource "aws_security_group_rule" "postgres" {
   source_security_group_id = data.tfe_outputs.cluster_infrastructure.nonsensitive_values.node_security_group_id
 
 }
-
-import {
-  for_each = { for name, data in var.databases : name => data if data.engine == "mysql" }
-  to       = aws_security_group_rule.mysql[each.key]
-  id       = "${aws_security_group.rds[each.key].id}_ingress_tcp_3306_3306_${data.tfe_outputs.cluster_infrastructure.nonsensitive_values.node_security_group_id}"
-}
-
-import {
-  for_each = { for name, data in var.databases : name => data if data.engine == "postgres" }
-  to       = aws_security_group_rule.postgres[each.key]
-  id       = "${aws_security_group.rds[each.key].id}_ingress_tcp_5432_5432_${data.tfe_outputs.cluster_infrastructure.nonsensitive_values.node_security_group_id}"
-}

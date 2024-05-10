@@ -95,26 +95,13 @@ resource "aws_security_group_rule" "licensify_docdb_from_eks_workers" {
   source_security_group_id = data.tfe_outputs.cluster_infrastructure.nonsensitive_values.node_security_group_id
 }
 
+# Remove once the content-data-api RDS instance has been migrated to govuk-infrastructure
 resource "aws_security_group_rule" "postgres_from_eks_workers" {
-  for_each = merge(data.tfe_outputs.rds.nonsensitive_values.sg_rds, {
-    "transition_primary" = data.terraform_remote_state.infra_security_groups.outputs.sg_transition-postgresql-primary_id
-    "content_data_api"   = data.terraform_remote_state.infra_security_groups.outputs.sg_content-data-api-postgresql-primary_id
-  })
+  for_each                 = { "content_data_api" = data.terraform_remote_state.infra_security_groups.outputs.sg_content-data-api-postgresql-primary_id }
   description              = "Database accepts requests from EKS nodes"
   type                     = "ingress"
   from_port                = 5432
   to_port                  = 5432
-  protocol                 = "tcp"
-  security_group_id        = each.value
-  source_security_group_id = data.tfe_outputs.cluster_infrastructure.nonsensitive_values.node_security_group_id
-}
-
-resource "aws_security_group_rule" "mysql_from_eks_workers" {
-  for_each                 = data.tfe_outputs.rds.nonsensitive_values.sg_rds
-  description              = "Database accepts requests from EKS nodes"
-  type                     = "ingress"
-  from_port                = 3306
-  to_port                  = 3306
   protocol                 = "tcp"
   security_group_id        = each.value
   source_security_group_id = data.tfe_outputs.cluster_infrastructure.nonsensitive_values.node_security_group_id

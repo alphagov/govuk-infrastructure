@@ -44,22 +44,3 @@ resource "aws_route53_record" "assets_efs" {
   records = [aws_efs_file_system.assets_efs.dns_name]
   ttl     = 300
 }
-
-# Imports (temporary)
-
-data "aws_efs_file_system" "assets_efs_import" {
-  tags = {
-    #The names aren't consistent across envs, but the description is for some reason
-    Description = "Asset Manager and Whitehall attachments are stored here temporarily for malware scanning before being transferred to S3."
-  }
-}
-
-import {
-  to = aws_efs_file_system.assets_efs
-  id = data.aws_efs_file_system.assets_efs_import.file_system_id
-}
-
-import {
-  to = aws_route53_record.assets_efs
-  id = "${data.aws_route53_zone.internal.zone_id}_assets.${data.aws_route53_zone.internal.name}_CNAME"
-}
