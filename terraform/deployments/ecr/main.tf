@@ -58,6 +58,7 @@ locals {
 
   extra_repositories = [
     "mongodb",
+    "imminence",
     "toolbox",
     "clamav",
     "search-api-learn-to-rank",
