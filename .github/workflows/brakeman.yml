@@ -20,14 +20,15 @@ jobs:
         with:
           bundler-cache: true
 
-      - name: Run Brakeman
+      - name: Run Brakeman SARIF
         continue-on-error: true
-        run: |
-          if [ "${{ github.repository_visibility }}" == 'public' ]; then
-            bundle exec brakeman . --except CheckRenderInline --quiet -f sarif >> brakeman.sarif
-          else
-            bundle exec brakeman . --except CheckRenderInline --quiet -f json >> brakeman.json
-          fi
+        if: ${{ github.repository_visibility == 'public' }}
+        run: bundle exec brakeman . --except CheckRenderInline --quiet -f sarif >> brakeman.sarif
+
+      - name: Run Brakeman JSON
+        continue-on-error: true
+        if: ${{ github.repository_visibility == 'private' }}
+        run: bundle exec brakeman . --except CheckRenderInline --quiet -f json >> brakeman.json
 
       - name: Check if SARIF file exists
         id: sarif_check
