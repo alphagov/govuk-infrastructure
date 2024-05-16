@@ -11,3 +11,10 @@ jobs:
         show-progress: false
     - name: actionlint
       uses: raven-actions/actionlint@ea4eb57846a36a6faefbdc2d9ac873da9057c1bb  # 1.0.3
+      with:
+        # TODO: move -ignores inline or to actionlint.yml once
+        #       https://www.github.com/rhysd/actionlint/issues/237 and/or
+        #       https://www.github.com/rhysd/actionlint/issues/217 is fixed.
+        # TODO: remove this -ignore once
+        #       https://www.github.com/rhysd/actionlint/issues/77 is fixed.
+        flags: '-ignore "property .runner. is not defined in object type"'
