@@ -136,6 +136,23 @@ module "variable-set-rds-production" {
         freestoragespace_threshold   = 10737418240
       }
 
+      chat = {
+        engine         = "postgres"
+        engine_version = "16"
+        engine_params = {
+          log_min_duration_statement = { value = 10000 }
+          log_statement              = { value = "all" }
+          deadlock_timeout           = { value = 2500 }
+          log_lock_waits             = { value = 1 }
+        }
+        engine_params_family         = "postgres16"
+        name                         = "chat"
+        allocated_storage            = 100
+        instance_class               = "db.t4g.small"
+        performance_insights_enabled = false
+        freestoragespace_threshold   = 10737418240
+      }
+
       ckan = {
         engine         = "postgres"
         engine_version = "13"
