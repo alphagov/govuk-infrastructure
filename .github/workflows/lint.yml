@@ -9,12 +9,18 @@ jobs:
     - uses: actions/checkout@v4
       with:
         show-progress: false
-    - name: actionlint
-      uses: raven-actions/actionlint@ea4eb57846a36a6faefbdc2d9ac873da9057c1bb  # 1.0.3
-      with:
+    - id: install
+      env:
+        VERSION: '1.7.0'
+      run: bash <(curl https://raw.githubusercontent.com/rhysd/actionlint/b6b7a2901eb4fa4bae2e6d8f9b6edd1a37b3cca7/scripts/download-actionlint.bash) "$VERSION" .
+    - name: Run actionlint
+      env:
+        ACTIONLINT: '${{ steps.install.outputs.executable }}'
+      run: |
         # TODO: move -ignores inline or to actionlint.yml once
         #       https://www.github.com/rhysd/actionlint/issues/237 and/or
         #       https://www.github.com/rhysd/actionlint/issues/217 is fixed.
-        # TODO: remove this -ignore once
+        # TODO: remove -ignore "property .runner. is not defined" once
         #       https://www.github.com/rhysd/actionlint/issues/77 is fixed.
-        flags: '-ignore "property .runner. is not defined in object type"'
+        "$ACTIONLINT" -color \
+          -ignore "property .runner. is not defined"
