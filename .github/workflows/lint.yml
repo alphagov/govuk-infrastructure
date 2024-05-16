@@ -1,7 +1,7 @@
 name: Lint GitHub Actions
 on:
   push:
-    paths: ['.github/workflows/**', '.github/actions/**']
+    paths: ['.github/workflows/**', '.github/actions/**', '.github/actionlint.yml']
 jobs:
   actionlint:
     runs-on: ubuntu-latest
