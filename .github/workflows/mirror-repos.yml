@@ -38,6 +38,7 @@ jobs:
           GH_TOKEN: ${{ github.token }}
           GITHUB_REPOS: ${{ steps.get-repos.outputs.github-repos }}
         run: |
+          # shellcheck disable=SC2086 # Intentional word-splitting on $GITHUB_REPOS.
           for repo in ${GITHUB_REPOS}; do
             git config --global credential.helper '!aws codecommit credential-helper $@'
             git config --global credential.UseHttpPath true

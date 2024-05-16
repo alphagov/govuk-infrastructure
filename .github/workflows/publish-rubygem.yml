@@ -1,31 +1,3 @@
-# USAGE
-# -----
-#
-# on: [push, pull_request]
-#
-# jobs:
-#   test:
-#     runs-on: ubuntu-latest
-#     steps:
-#     - uses: actions/checkout@v4
-#       with:
-#         show-progress: false
-#     - uses: ruby/setup-ruby@v1
-#       with:
-#         bundler-cache: true
-#     - run: bundle exec rake
-#
-#   publish:
-#     needs: test
-#     if: github.ref == 'refs/heads/main'
-#     permissions:
-#       contents: write
-#     uses: alphagov/govuk-infrastructure/.github/workflows/publish-rubygem.yaml@main
-#     secrets:
-#       GEM_HOST_API_KEY: ${{ secrets.ALPHAGOV_RUBYGEMS_API_KEY }}
-
-# REUSABLE WORKFLOW
-# -----------------
 name: Publish a Rubygem
 
 on:
@@ -62,22 +34,22 @@ jobs:
         GEM_NAME: ${{ inputs.gem_name }}
         GEM_HOST_API_KEY: ${{ secrets.GEM_HOST_API_KEY }}
       run: |
-        LOCAL_VERSION=$(ruby -e "puts eval(File.read('$GEM_NAME.gemspec')).version")
-        REMOTE_VERSION=$(gem list --exact --remote $GEM_NAME)
-        if [ "$REMOTE_VERSION" != "$GEM_NAME (${LOCAL_VERSION})" ]; then
-          gem build ${GEM_NAME}.gemspec
-          gem push "${GEM_NAME}-${LOCAL_VERSION}.gem"
+        local_version=$(ruby -r rubygems -e "puts Gem::Specification::load('$GEM_NAME.gemspec').version")
+        remote_version=$(gem list --exact --remote "$GEM_NAME")
+        if [[ "$remote_version" != "$GEM_NAME (${local_version})" ]]; then
+          gem build "${GEM_NAME}.gemspec"
+          gem push "${GEM_NAME}-${local_version}.gem"
         else
-          echo "Skipping gem publish because version (${LOCAL_VERSION}) is already published"
+          echo "::notice title=Gem version already published::Skipping gem publish because version (${local_version}) is already published"
         fi
 
-        if ! git ls-remote --tags --exit-code origin v${LOCAL_VERSION}; then
-          git tag v${LOCAL_VERSION}
+        if ! git ls-remote --tags --exit-code origin "v${local_version}"; then
+          git tag "v${local_version}"
           git push --tags
         else
-          echo "Skipping git tagging because tag (v${LOCAL_VERSION}) already exists"
+          echo "::notice title=Tag already exists::Skipping git tagging because tag (v${local_version}) already exists"
         fi
     - if: github.sha != steps.fetch_default_branch_head.outputs.sha
       name: "Skip publish: commit is not HEAD of default branch"
       run: |
-        echo "Skipping publish because commit (${GITHUB_SHA}) isn't the HEAD of the default branch (${{ steps.fetch_default_branch_head.outputs.sha }})"
+        echo "Skipping publish because commit ($GITHUB_SHA) isn't the HEAD of the default branch ($DEFAULT_BRANCH_HEAD_SHA)" >> "$GITHUB_JOB_SUMMARY"
