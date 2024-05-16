@@ -17,6 +17,7 @@ jobs:
       env:
         ACTIONLINT: '${{ steps.install.outputs.executable }}'
       run: |
+        echo "::add-matcher::.github/actionlint-matcher.json"
         # TODO: move -ignores inline or to actionlint.yml once
         #       https://www.github.com/rhysd/actionlint/issues/237 and/or
         #       https://www.github.com/rhysd/actionlint/issues/217 is fixed.
