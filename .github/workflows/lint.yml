@@ -1,0 +1,13 @@
+name: Lint GitHub Actions
+on:
+  push:
+    paths: ['.github/workflows/**', '.github/actions/**']
+jobs:
+  actionlint:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        show-progress: false
+    - name: actionlint
+      uses: raven-actions/actionlint@ea4eb57846a36a6faefbdc2d9ac873da9057c1bb  # 1.0.3
