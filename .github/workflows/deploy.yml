@@ -16,7 +16,7 @@ on:
       environment:
         description: 'Environment to deploy to'
         required: false
-        default: 'integration'
+        default: integration
         type: string
     secrets:
       WEBHOOK_TOKEN:
@@ -39,11 +39,12 @@ jobs:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
           GITHUB_TEAM: gov-uk-production-deploy
           GITHUB_USER: ${{ github.triggering_actor }}
+          TRIGGERING_ACTOR: ${{ github.triggering_actor }}
         run: |
-          TEAM_MEMBERSHIP=$(gh api orgs/alphagov/teams/${GITHUB_TEAM}/memberships/${GITHUB_USER} -q .state || echo "false")
+          TEAM_MEMBERSHIP=$(gh api "orgs/alphagov/teams/$GITHUB_TEAM/memberships/$GITHUB_USER" -q .state || echo false)
 
-          if ! [[ "${TEAM_MEMBERSHIP}" = "active" || "${ENVIRONMENT}" = 'integration' ]]; then
-            echo '::error title=Insufficient permissions to deploy::User ${{ github.triggering_actor }} needs to be a member of the GOV.UK Production Deploy team'
+          if ! [[ "$TEAM_MEMBERSHIP" = active || "$ENVIRONMENT" = integration ]]; then
+            echo "::error title=Insufficient permissions to deploy::User $TRIGGERING_ACTOR needs to be a member of the GOV.UK Production Deploy team"
             exit 1
           fi
 
