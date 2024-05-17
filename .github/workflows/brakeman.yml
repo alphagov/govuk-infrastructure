@@ -27,7 +27,7 @@ jobs:
 
       - name: Run Brakeman JSON
         continue-on-error: true
-        if: ${{ github.repository_visibility == 'private' }}
+        if: ${{ github.repository_visibility == 'private' || github.repository_visibility == 'internal' }}
         run: bundle exec brakeman . --except CheckRenderInline --quiet -f json >> brakeman.json
 
       - name: Check if SARIF file exists
