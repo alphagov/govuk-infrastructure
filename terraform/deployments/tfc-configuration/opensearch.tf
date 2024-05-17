@@ -38,7 +38,7 @@ module "opensearch-integration" {
     ebs_enabled              = true
     ebs_volume_size          = 45
     service                  = "chat"
-    instance_type            = "m6g.large.search"
+    instance_type            = "m6g.2xlarge.search"
     instance_count           = 3
     dedicated_master_enabled = true
     dedicated_master_count   = 3
