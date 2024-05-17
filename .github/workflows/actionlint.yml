@@ -24,4 +24,5 @@ jobs:
         # TODO: remove -ignore "property .runner. is not defined" once
         #       https://www.github.com/rhysd/actionlint/issues/77 is fixed.
         "$ACTIONLINT" -color \
-          -ignore "property .runner. is not defined"
+          -ignore "property .runner. is not defined" \
+          -ignore "property .repository_visibility. is not defined"
