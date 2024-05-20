@@ -1,12 +1,12 @@
 module "vpc-integration" {
   source  = "alexbasista/workspacer/tfe"
-  version = "0.10.0"
+  version = "~>0.10.0"
 
   organization        = var.organization
   workspace_name      = "vpc-integration"
   workspace_desc      = "This module manages foundational cloud resources that are required by most other modules (VPC, DNS zones)"
   workspace_tags      = ["integration", "vpc", "eks", "aws"]
-  terraform_version   = "1.7.0"
+  terraform_version   = var.terraform_version
   execution_mode      = "remote"
   working_directory   = "/terraform/deployments/vpc/"
   trigger_patterns    = ["/terraform/deployments/vpc/**/*"]
@@ -34,13 +34,13 @@ module "vpc-integration" {
 
 module "vpc-staging" {
   source  = "alexbasista/workspacer/tfe"
-  version = "0.10.0"
+  version = "~>0.10.0"
 
   organization        = var.organization
   workspace_name      = "vpc-staging"
   workspace_desc      = "This module manages foundational cloud resources that are required by most other modules (VPC, DNS zones)"
   workspace_tags      = ["staging", "vpc", "eks", "aws"]
-  terraform_version   = "1.7.0"
+  terraform_version   = var.terraform_version
   execution_mode      = "remote"
   working_directory   = "/terraform/deployments/vpc/"
   trigger_patterns    = ["/terraform/deployments/vpc/**/*"]
@@ -67,13 +67,13 @@ module "vpc-staging" {
 
 module "vpc-production" {
   source  = "alexbasista/workspacer/tfe"
-  version = "0.10.0"
+  version = "~>0.10.0"
 
   organization        = var.organization
   workspace_name      = "vpc-production"
   workspace_desc      = "This module manages foundational cloud resources that are required by most other modules (VPC, DNS zones)"
   workspace_tags      = ["production", "vpc", "eks", "aws"]
-  terraform_version   = "1.7.0"
+  terraform_version   = var.terraform_version
   execution_mode      = "remote"
   working_directory   = "/terraform/deployments/vpc/"
   trigger_patterns    = ["/terraform/deployments/vpc/**/*"]
