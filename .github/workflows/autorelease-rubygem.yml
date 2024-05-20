@@ -1,17 +1,3 @@
-# USAGE
-# -----
-#
-# on:
-#   workflow_dispatch: {}
-#   schedule:
-#     - cron: '00 13 * * 2'
-#
-# jobs:
-#   autorelease:
-#     uses: alphagov/govuk-infrastructure/.github/workflows/autorelease-rubygem.yml@main
-#     secrets:
-#       GH_TOKEN: ${{ secrets.GOVUK_CI_GITHUB_API_TOKEN }}
-
 name: Auto-release Rubygem
 
 on:
@@ -42,6 +28,7 @@ jobs:
     - name: "Determine HEAD of default branch"
       id: fetch_default_branch_head
       run: echo "sha=$(git ls-remote origin HEAD | cut -f 1)" >> "$GITHUB_OUTPUT"
+
     - if: github.sha == steps.fetch_default_branch_head.outputs.sha
       name: "Auto-release rubygem"
       env:
@@ -50,47 +37,52 @@ jobs:
       run: |
         set -euo pipefail
 
-        CURR_VERSION=$(ruby -e "puts eval(File.read('$GEM_NAME.gemspec')).version")
-        NEXT_VERSION=$(echo $CURR_VERSION | cut -d . -f1).$(echo $CURR_VERSION | cut -d . -f2).$(( $(echo $CURR_VERSION | cut -d . -f3) + 1 ))
-        BRANCH="release-$NEXT_VERSION"
-        PR_TITLE="Release v$NEXT_VERSION"
-        PR_DESCRIPTION="This is an automated PR to bump the version number to $NEXT_VERSION. This is a patch-level bump, as the only changes since v$CURR_VERSION are dependency updates made by Dependabot."
+        curr_ver=$(ruby -r rubygems -e "puts Gem::Specification::load('$GEM_NAME.gemspec').version")
+        IFS=. read -ra ver_parts <<< "$curr_ver"
+        (( ver_parts[2]++ ))  # Increment the patch version.
+        next_ver=$(printf "%d.%d.%d" "${ver_parts[@]}")
+        branch="release-$next_ver"
+        pr_title="Release v$next_ver"
+        pr_desc="This is an automated PR to bump the version number to $next_ver. This is a patch-level bump, as the only changes since v$curr_ver are dependency updates made by Dependabot."
 
-        if ! [ -f CHANGELOG.md ]; then
-          echo "CHANGELOG.md does not exist. Exiting."
+        if ! [[ -r CHANGELOG.md ]]; then
+          echo "CHANGELOG.md not found or not readable. Exiting."
           exit 0
         fi
 
-        if ! grep -qR --include "version.rb" --include "*.gemspec" $CURR_VERSION; then
-          echo "Can't find version.rb or *.gemspec containing the string '$CURR_VERSION'. Exiting."
+        if ! grep -qR --include "version.rb" --include "*.gemspec" "$curr_ver"; then
+          echo "Can't find version.rb or *.gemspec containing the string '$curr_ver'. Exiting."
           exit 0
         fi
 
-        if git ls-remote --exit-code origin refs/heads/$BRANCH > /dev/null; then
-          echo "Branch 'release-$NEXT_VERSION' already exists on the remote. Exiting."
+        if git ls-remote --exit-code origin "refs/heads/$branch" > /dev/null; then
+          echo "Branch 'release-$next_ver' already exists on the remote. Exiting."
           exit 0
         fi
 
-        if [ "$(git log v$CURR_VERSION..main --no-merges --format=format:%an | sort | uniq)" != "dependabot[bot]" ]; then
+        if [ "$(git log "v$curr_ver..main" --no-merges --format=format:%an | sort | uniq)" != "dependabot[bot]" ]; then
           echo "Gem has no unreleased changes, or those changes include commits from users other than Dependabot. Exiting."
           exit 0
         fi
 
-        find . -type f \( -iname version.rb -o -iname *.gemspec \) -exec sed -i "s/$CURR_VERSION/$NEXT_VERSION/g" {} \;
+        curr_ver_regex=$(printf "%d\\\.%d\\\.%d" "${ver_parts[@]}")
+        find . -type f \( -iname version.rb -o -iname "*.gemspec" \) -exec sed -i "s/$curr_ver_regex/$next_ver/g" {} \;
 
-        printf "# $NEXT_VERSION\n\n* Update dependencies\n\n" | cat - CHANGELOG.md > NEW_CHANGELOG.md
+        printf "# %s\n\n* Update dependencies\n\n" "$next_ver" > NEW_CHANGELOG.md
+        cat CHANGELOG.md >> NEW_CHANGELOG.md
         mv NEW_CHANGELOG.md CHANGELOG.md
 
         git config --global user.name "GOV.UK Continuous Integration User"
         git config --global user.email "govuk-ci@users.noreply.github.com"
 
-        git checkout -b $BRANCH
+        git checkout -b "$branch"
         git add .
         git reset -- vendor/bundle
-        git commit -m "$PR_TITLE"
-        git push origin $BRANCH
+        git commit -m "$pr_title"
+        git push origin "$branch"
 
-        gh pr create -H $BRANCH --title "$PR_TITLE" --body "$PR_DESCRIPTION"
+        gh pr create -H "$branch" --title "$pr_title" --body "$pr_desc"
+
     - if: github.sha != steps.fetch_default_branch_head.outputs.sha
       name: "Skip release: commit is not HEAD of default branch"
       run: |

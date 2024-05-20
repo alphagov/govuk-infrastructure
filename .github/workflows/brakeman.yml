@@ -20,34 +20,20 @@ jobs:
         with:
           bundler-cache: true
 
-      - name: Run Brakeman SARIF
+      - name: Run Brakeman
         continue-on-error: true
-        if: ${{ github.repository_visibility == 'public' }}
-        run: bundle exec brakeman . --except CheckRenderInline --quiet -f sarif >> brakeman.sarif
-
-      - name: Run Brakeman JSON
-        continue-on-error: true
-        if: ${{ github.repository_visibility == 'private' || github.repository_visibility == 'internal' }}
-        run: bundle exec brakeman . --except CheckRenderInline --quiet -f json >> brakeman.json
-
-      - name: Check if SARIF file exists
-        id: sarif_check
         run: |
-          if [ -f brakeman.sarif ]; then
-            echo "sarif_exists=true" >> $GITHUB_OUTPUT
-          else
-            echo "sarif_exists=false" >> $GITHUB_OUTPUT
-          fi
+          bundle exec brakeman . --except CheckRenderInline --quiet \
+            -o brakeman.json -o brakeman.sarif
 
-      - name: Upload SARIF to Github Code Scanning
-        if: steps.sarif_check.outputs.sarif_exists == 'true'
+      - name: Upload SARIF to GitHub
+        if: github.repository_visibility == 'public'
         uses: github/codeql-action/upload-sarif@v3
         with:
           sarif_file: brakeman.sarif
 
-      - name: Upload JSON result as artifact
-        if: steps.sarif_check.outputs.sarif_exists == 'false'
-        uses: actions/upload-artifact@v2
+      - name: Upload JSON results
+        uses: actions/upload-artifact@v4
         with:
           name: brakeman-json
           path: brakeman.json

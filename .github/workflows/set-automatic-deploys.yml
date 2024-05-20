@@ -6,7 +6,6 @@ on:
       automaticDeploysEnabled:
         description: 'Configures whether automatic deployments are enabled'
         required: true
-        default: true
         type: boolean
       appName:
         required: false
@@ -37,9 +36,9 @@ jobs:
           GITHUB_TEAM: gov-uk-production-deploy
           GITHUB_USER: ${{ github.triggering_actor }}
         run: |
-          TEAM_MEMBERSHIP=$(gh api orgs/alphagov/teams/${GITHUB_TEAM}/memberships/${GITHUB_USER} -q .state || echo "false")
+          TEAM_MEMBERSHIP=$(gh api "orgs/alphagov/teams/${GITHUB_TEAM}/memberships/${GITHUB_USER}" -q .state || echo false)
 
-          if ! [[ "${TEAM_MEMBERSHIP}" = "active" || "${ENVIRONMENT}" = 'integration' ]]; then
+          if ! [[ "${TEAM_MEMBERSHIP}" = active || "${ENVIRONMENT}" = integration ]]; then
             echo "::error title=Insufficient permissions to deploy::User ${GITHUB_USER} needs to be a member of the ${GITHUB_TEAM} team"
             exit 1
           fi
