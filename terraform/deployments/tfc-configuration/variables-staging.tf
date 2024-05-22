@@ -68,6 +68,22 @@ module "variable-set-cloudfront-staging" {
   }
 }
 
+module "variable-set-chat-staging" {
+  source = "./variable-set"
+
+  name = "chat-staging"
+
+  tfvars = {
+    chat_redis_cluster_apply_immediately          = true
+    chat_redis_cluster_automatic_failover_enabled = false
+    chat_redis_cluster_engine_version             = "6.x"
+    chat_redis_cluster_multi_az_enabled           = false
+    chat_redis_cluster_node_type                  = "cache.r6g.xlarge"
+    chat_redis_cluster_num_cache_clusters         = "1"
+    chat_redis_cluster_parameter_group_name       = "default.redis6.x"
+  }
+}
+
 module "variable-set-rds-staging" {
   source = "./variable-set"
 
