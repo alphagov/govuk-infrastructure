@@ -14,7 +14,6 @@ resource "aws_security_group" "chat_redis_cluster" {
   description = "GOV.UK Chat Redis cluster"
   tags = {
     Name   = local.chat_redis_name
-    System = "Sidekiq"
   }
 }
 
@@ -32,7 +31,6 @@ resource "aws_elasticache_replication_group" "chat_redis_cluster" {
   security_group_ids         = [aws_security_group.chat_redis_cluster.id]
   tags = {
     Name   = local.chat_redis_name
-    System = "Sidekiq"
   }
 }
 
