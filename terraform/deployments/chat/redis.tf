@@ -13,7 +13,7 @@ resource "aws_security_group" "chat_redis_cluster" {
   vpc_id      = data.tfe_outputs.vpc.nonsensitive_values.id
   description = "GOV.UK Chat Redis cluster"
   tags = {
-    Name   = local.chat_redis_name
+    Name = local.chat_redis_name
   }
 }
 
@@ -30,7 +30,7 @@ resource "aws_elasticache_replication_group" "chat_redis_cluster" {
   subnet_group_name          = aws_elasticache_subnet_group.chat_redis_cluster.name
   security_group_ids         = [aws_security_group.chat_redis_cluster.id]
   tags = {
-    Name   = local.chat_redis_name
+    Name = local.chat_redis_name
   }
 }
 
