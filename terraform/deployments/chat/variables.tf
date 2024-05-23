@@ -1,6 +1,3 @@
-variable "engine_version" {
-  type = string
-}
 variable "aws_region" {
   type        = string
   description = "AWS region"
