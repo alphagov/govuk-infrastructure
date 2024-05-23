@@ -20,7 +20,7 @@ resource "aws_security_group" "chat_redis_cluster" {
 resource "aws_elasticache_replication_group" "chat_redis_cluster" {
   apply_immediately          = var.chat_redis_cluster_apply_immediately
   replication_group_id       = local.chat_redis_name
-  description                = "Redis for Sidekiq queues"
+  description                = "Redis for GOV.UK Chat"
   node_type                  = var.chat_redis_cluster_node_type
   num_cache_clusters         = var.chat_redis_cluster_num_cache_clusters
   automatic_failover_enabled = var.chat_redis_cluster_automatic_failover_enabled
