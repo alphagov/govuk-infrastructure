@@ -103,7 +103,7 @@ module "variable-set-chat-production" {
     chat_redis_cluster_multi_az_enabled           = true
     chat_redis_cluster_node_type                  = "cache.r6g.xlarge"
     chat_redis_cluster_num_cache_clusters         = "2"
-    chat_redis_cluster_parameter_group_name       = "default.redis6.x"
+    chat_redis_cluster_parameter_group_name       = "default.redis7"
   }
 }
 
