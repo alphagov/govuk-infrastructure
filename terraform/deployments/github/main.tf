@@ -144,10 +144,10 @@ resource "github_actions_organization_secret_repositories" "argo_events_webhook_
 
 resource "github_actions_organization_secret_repositories" "pact_broker_password" {
   secret_name             = "GOVUK_PACT_BROKER_PASSWORD"
-  selected_repository_ids = [for repo in concat(local.deployable_repos, local.pact_publishers) : repo.repo_id]
+  selected_repository_ids = [for repo in local.pact_publishers : repo.repo_id]
 }
 
 resource "github_actions_organization_secret_repositories" "pact_broker_username" {
   secret_name             = "GOVUK_PACT_BROKER_USERNAME"
-  selected_repository_ids = [for repo in concat(local.deployable_repos, local.pact_publishers) : repo.repo_id]
+  selected_repository_ids = [for repo in local.pact_publishers : repo.repo_id]
 }
