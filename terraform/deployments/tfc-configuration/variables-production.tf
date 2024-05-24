@@ -107,6 +107,29 @@ module "variable-set-chat-production" {
   }
 }
 
+module "variable-set-opensearch-production" {
+  source = "./variable-set"
+
+  name = "opensearch-production"
+
+  tfvars = {
+    hosted_zone_name         = "chat"
+    engine_version           = "2.11"
+    security_options_enabled = true
+    volume_type              = "gp3"
+    throughput               = 250
+    ebs_enabled              = true
+    ebs_volume_size          = 45
+    service                  = "chat"
+    instance_type            = "m6g.2xlarge.search"
+    instance_count           = 3
+    dedicated_master_enabled = true
+    dedicated_master_count   = 3
+    dedicated_master_type    = "m6g.large.search"
+    zone_awareness_enabled   = true
+  }
+}
+
 module "variable-set-rds-production" {
   source = "./variable-set"
 
