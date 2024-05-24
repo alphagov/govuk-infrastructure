@@ -84,6 +84,29 @@ module "variable-set-chat-staging" {
   }
 }
 
+module "variable-set-opensearch-staging" {
+  source = "./variable-set"
+
+  name = "opensearch-staging"
+
+  tfvars = {
+    hosted_zone_name         = "chat"
+    engine_version           = "2.11"
+    security_options_enabled = true
+    volume_type              = "gp3"
+    throughput               = 250
+    ebs_enabled              = true
+    ebs_volume_size          = 45
+    service                  = "chat"
+    instance_type            = "m6g.2xlarge.search"
+    instance_count           = 3
+    dedicated_master_enabled = true
+    dedicated_master_count   = 3
+    dedicated_master_type    = "m6g.large.search"
+    zone_awareness_enabled   = true
+  }
+}
+
 module "variable-set-rds-staging" {
   source = "./variable-set"
 
