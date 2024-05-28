@@ -76,6 +76,11 @@ locals {
     for r in data.github_repository.govuk : r
     if !r.fork && contains(r.topics, "gem")
   ]
+
+  pact_publishers = [
+    for r in data.github_repository.govuk : r
+    if !r.fork && contains(r.topics, "pact-publisher")
+  ]
 }
 
 resource "github_team" "govuk_ci_bots" {
@@ -135,4 +140,14 @@ resource "github_actions_organization_secret_repositories" "argo_events_webhook_
 resource "github_actions_organization_secret_repositories" "argo_events_webhook_url" {
   secret_name             = "GOVUK_ARGO_EVENTS_WEBHOOK_URL"
   selected_repository_ids = [for repo in local.deployable_repos : repo.repo_id]
+}
+
+resource "github_actions_organization_secret_repositories" "pact_broker_password" {
+  secret_name             = "GOVUK_PACT_BROKER_PASSWORD"
+  selected_repository_ids = [for repo in local.pact_publishers : repo.repo_id]
+}
+
+resource "github_actions_organization_secret_repositories" "pact_broker_username" {
+  secret_name             = "GOVUK_PACT_BROKER_USERNAME"
+  selected_repository_ids = [for repo in local.pact_publishers : repo.repo_id]
 }
