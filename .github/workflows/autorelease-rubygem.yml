@@ -38,9 +38,10 @@ jobs:
         set -euo pipefail
 
         curr_ver=$(ruby -r rubygems -e "puts Gem::Specification::load('$GEM_NAME.gemspec').version")
-        IFS=. read -ra ver_parts <<< "$curr_ver"
-        (( ver_parts[2]++ ))  # Increment the patch version.
-        next_ver=$(printf "%d.%d.%d" "${ver_parts[@]}")
+        major=$(echo "$curr_ver" | cut -d . -f1)
+        minor=$(echo "$curr_ver" | cut -d . -f2)
+        patch=$(echo "$curr_ver" | cut -d . -f3)
+        next_ver="$major.$minor.$((patch + 1))" # Increment the patch version
         branch="release-$next_ver"
         pr_title="Release v$next_ver"
         pr_desc="This is an automated PR to bump the version number to $next_ver. This is a patch-level bump, as the only changes since v$curr_ver are dependency updates made by Dependabot."
