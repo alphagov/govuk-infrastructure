@@ -14,7 +14,7 @@ jobs:
         show-progress: false
 
     - name: Determine Terraform version to use
-      uses: dflook/terraform-version@fddf858c28a7d454135c9973c7445d33a31f936e
+      uses: dflook/terraform-version@33f9a69ab2950c83a6d3a8626f35075481a64ca0
       id: terraform-version
       with:
         path: terraform
