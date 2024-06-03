@@ -1,0 +1,58 @@
+name: Publish an NPM package
+
+on:
+  workflow_call:
+    inputs:
+      package_name:
+        required: false
+        type: string
+        default: ${{ github.event.repository.name }}
+      deploy_to_github_pages:
+        required: false
+        type: boolean
+        default: true
+    secrets:
+      NODE_AUTH_TOKEN:
+        required: true
+
+jobs:
+  publish:
+    name: Publish package
+    runs-on: ubuntu-latest
+    if: ${{ github.ref == 'refs/heads/main' }}
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+          cache: npm
+          registry-url: "https://registry.npmjs.org"
+      - run: npm ci
+      - run: npm run build
+      - name: Deploy to GitHub Pages
+        if: ${{ inputs.deploy_to_github_pages }}
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          branch: gh-pages
+          folder: examples
+      - name: Establish version
+        env:
+          PACKAGE_NAME: ${{ inputs.package_name }}
+        run: |
+          LOCAL=$(node -p "require('./package.json').version")
+          echo "local=${LOCAL}" >> "$GITHUB_OUTPUT"
+          echo "remote=$(npm view "$PACKAGE_NAME" version)" >> "$GITHUB_OUTPUT"
+          if git ls-remote --tags --exit-code origin "${LOCAL}"; then
+            echo "tagged=yes" >> "$GITHUB_OUTPUT"
+          fi
+        id: version
+      - name: Tag version
+        if: ${{ steps.version.outputs.tagged != 'yes' }}
+        run: git tag ${{ steps.version.outputs.local }} && git push --tags
+      - name: Release to NPM
+        if: ${{ steps.version.outputs.local != steps.version.outputs.remote }}
+        run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NODE_AUTH_TOKEN }}
