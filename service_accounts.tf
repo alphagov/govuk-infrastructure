@@ -10,22 +10,13 @@ resource "google_service_account_key" "api" {
   service_account_id = google_service_account.api.id
 }
 
-resource "google_project_iam_custom_role" "api_read" {
-  role_id     = "search_api_v2_read"
-  title       = "search-api-v2 (read only)"
-  description = "Enables read-only access to the search-api-v2 Rails app"
+resource "google_project_iam_custom_role" "api" {
+  role_id     = "search_api_v2"
+  title       = "search-api-v2"
+  description = "Provides the required permissions for Search API v2 to access Discovery Engine"
 
   permissions = [
     "discoveryengine.servingConfigs.search",
-  ]
-}
-
-resource "google_project_iam_custom_role" "api_write" {
-  role_id     = "search_api_v2_write"
-  title       = "search-api-v2 (write only)"
-  description = "Enabled write-only access to the search-api-v2 Document Sync Worker"
-
-  permissions = [
     "discoveryengine.dataStores.get",
     "discoveryengine.documents.create",
     "discoveryengine.documents.delete",
@@ -37,18 +28,9 @@ resource "google_project_iam_custom_role" "api_write" {
   ]
 }
 
-resource "google_project_iam_binding" "api_read" {
+resource "google_project_iam_binding" "api" {
   project = var.gcp_project_id
-  role    = google_project_iam_custom_role.api_read.id
-
-  members = [
-    google_service_account.api.member
-  ]
-}
-
-resource "google_project_iam_binding" "api_write" {
-  project = var.gcp_project_id
-  role    = google_project_iam_custom_role.api_write.id
+  role    = google_project_iam_custom_role.api.role_id
 
   members = [
     google_service_account.api.member
