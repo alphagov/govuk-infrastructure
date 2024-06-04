@@ -30,7 +30,7 @@ resource "google_project_iam_custom_role" "api" {
 
 resource "google_project_iam_binding" "api" {
   project = var.gcp_project_id
-  role    = google_project_iam_custom_role.api.role_id
+  role    = google_project_iam_custom_role.api.id
 
   members = [
     google_service_account.api.member
