@@ -18,3 +18,8 @@ output "prototype_service_account_key" {
   value       = base64decode(google_service_account_key.prototype.private_key)
   sensitive   = true
 }
+
+output "prototype_discovery_engine_serving_config_path" {
+  description = "The full path of the default serving config for the UI prototype's engine"
+  value       = local.prototype_discovery_engine_serving_config_path
+}
