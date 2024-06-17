@@ -6,7 +6,7 @@ module "variable-set-integration" {
     govuk_aws_state_bucket              = "govuk-terraform-steppingstone-integration"
     cluster_infrastructure_state_bucket = "govuk-terraform-integration"
 
-    cluster_version               = 1.30
+    cluster_version               = "1.30"
     cluster_log_retention_in_days = 7
 
     vpc_cidr = "10.1.0.0/16"
