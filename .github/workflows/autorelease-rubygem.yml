@@ -61,8 +61,13 @@ jobs:
           exit 0
         fi
 
+        if [ -z "$(git log "v$curr_ver..main" --no-merges --format=format:%an)" ]; then
+          echo "Gem has no unreleased changes. Exiting."
+          exit 0
+        fi
+
         if [ "$(git log "v$curr_ver..main" --no-merges --format=format:%an | sort | uniq)" != "dependabot[bot]" ]; then
-          echo "Gem has no unreleased changes, or those changes include commits from users other than Dependabot. Exiting."
+          echo "Gem has unreleased changes from users other than Dependabot. Exiting."
           exit 0
         fi
 
