@@ -100,7 +100,7 @@ jobs:
             type=raw,priority=400,value=${{ steps.local-head.outputs.sha }},enable=${{ !startsWith(inputs.gitRef, 'v') }}
 
       - id: build-image
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         with:
           file: ${{ inputs.dockerfilepath }}
           context: .
