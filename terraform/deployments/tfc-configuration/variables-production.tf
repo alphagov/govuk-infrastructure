@@ -6,7 +6,7 @@ module "variable-set-production" {
     govuk_aws_state_bucket              = "govuk-terraform-steppingstone-production"
     cluster_infrastructure_state_bucket = "govuk-terraform-production"
 
-    cluster_version               = 1.29
+    cluster_version               = 1.30
     cluster_log_retention_in_days = 7
 
     vpc_cidr = "10.13.0.0/16"
