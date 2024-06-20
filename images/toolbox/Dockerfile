@@ -1,4 +1,4 @@
-FROM --platform=$TARGETPLATFORM public.ecr.aws/lts/ubuntu:22.04
+FROM --platform=$TARGETPLATFORM public.ecr.aws/lts/ubuntu:24.04
 ARG TARGETARCH
 SHELL ["/bin/bash", "-euo", "pipefail", "-c"]
 
@@ -18,8 +18,9 @@ RUN apt-get update -qq ; \
     echo "deb [arch=${TARGETARCH} signed-by=${keyrings_dir}/mongodb.gpg] https://repo.mongodb.org/apt/ubuntu jammy/mongodb-org/7.0 multiverse" > /etc/apt/sources.list.d/mongodb.list ; \
     apt-get update -qq ; \
     apt-get install -qy --no-install-recommends \
-        curl file gh git jq libarchive-tools mysql-client netcat postgresql-client \
-        pv wget2 gettext mongodb-mongosh mongodb-database-tools redis-tools ; \
+        curl file gh git jq libarchive-tools mysql-client netcat-openbsd \
+        postgresql-client pv wget2 gettext mongodb-mongosh \
+        mongodb-database-tools redis-tools ; \
     rm -fr /var/lib/apt/lists/*
 
 ARG yq_package_url=https://github.com/mikefarah/yq/releases/latest/download
