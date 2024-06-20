@@ -22,11 +22,7 @@ data "aws_iam_policy_document" "ecr_role_permissions" {
     resources = ["*"]
   }
   statement {
-    actions = [
-      "kms:DescribeKey",
-      "kms:GetPublicKey",
-      "kms:Sign"
-    ]
+    actions   = ["kms:DescribeKey", "kms:GetPublicKey", "kms:Sign"]
     resources = [aws_kms_key.container_signing_key.arn]
   }
 }
