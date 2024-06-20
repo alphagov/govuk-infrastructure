@@ -41,12 +41,6 @@ provider "github" {
   }
 }
 
-#
-# Gives repositories access to push OCI images to GOV.UK Production AWS ECR
-# NOTE: AWS_GOVUK_ECR_ACCESS_KEY_ID and AWS_GOVUK_ECR_SECRET_ACCESS_KEY are
-# manually created.
-#
-
 data "github_repositories" "govuk" {
   query = "topic:govuk org:alphagov archived:false"
 }
