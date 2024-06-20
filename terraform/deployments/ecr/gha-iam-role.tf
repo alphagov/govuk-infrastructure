@@ -7,6 +7,7 @@ data "aws_iam_openid_connect_provider" "github_oidc" {
 }
 
 data "aws_iam_policy_document" "ecr_role_permissions" {
+  for_each = toset(local.repositories)
   statement {
     actions = [
       "ecr:GetDownloadUrlForLayer",
@@ -19,7 +20,7 @@ data "aws_iam_policy_document" "ecr_role_permissions" {
       "ecr:GetAuthorizationToken",
       "ecr:CompleteLayerUpload"
     ]
-    resources = ["*"]
+    resources = ["arn:aws:ecr:eu-west-1:172025368201:repository/${each.key}"]
   }
   statement {
     actions   = ["kms:DescribeKey", "kms:GetPublicKey", "kms:Sign"]
@@ -28,6 +29,7 @@ data "aws_iam_policy_document" "ecr_role_permissions" {
 }
 
 data "aws_iam_policy_document" "ecr_role_trust" {
+  for_each = toset(local.repositories)
   statement {
     actions = ["sts:AssumeRoleWithWebIdentity"]
     principals {
@@ -42,19 +44,21 @@ data "aws_iam_policy_document" "ecr_role_trust" {
     condition {
       test     = "StringLike"
       variable = "token.actions.githubusercontent.com:sub"
-      values   = [for repo in local.repositories : "repo:alphagov/${repo}"]
+      values   = ["repo:alphagov/${each.key}"]
     }
   }
 }
 
 resource "aws_iam_role" "ecr_role" {
-  name                 = "github_action_ecr_push"
+  for_each             = toset(local.repositories)
+  name                 = "github_action_ecr_push_${each.key}"
   max_session_duration = 10800
-  assume_role_policy   = data.aws_iam_policy_document.ecr_role_trust.json
+  assume_role_policy   = data.aws_iam_policy_document.ecr_role_trust[each.key].json
 }
 
 resource "aws_iam_role_policy" "ecr_role" {
-  name   = "github_action_ecr_push_policy"
-  role   = aws_iam_role.ecr_role.id
-  policy = data.aws_iam_policy_document.ecr_role_permissions.json
+  for_each = toset(local.repositories)
+  name     = "github_action_ecr_push_${each.key}"
+  role     = aws_iam_role.ecr_role[each.key].id
+  policy   = data.aws_iam_policy_document.ecr_role_permissions[each.key].json
 }
