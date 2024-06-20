@@ -31,6 +31,7 @@ variable "zone_awareness_enabled" {
   type    = bool
   default = false
 }
+variable "snapshot_bucket_arns" { type = list(string) }
 variable "engine_version" {
   type = string
 }
