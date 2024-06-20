@@ -97,14 +97,14 @@ locals {
     "travel-advice-publisher" : ["travel-advice-publisher"]
     "whitehall" : ["whitehall"]
   }
-  repositories = keys(local.ecr_repos_by_github_repo)
+  repositories = toset(flatten(concat(values(local.ecr_repos_by_github_repo))))
 }
 
 data "aws_caller_identity" "current" {}
 data "aws_region" "current" {}
 
 resource "aws_ecr_repository" "repositories" {
-  for_each             = toset(local.repositories)
+  for_each             = local.repositories
   name                 = each.key
   image_tag_mutability = "MUTABLE" # To support a movable `latest` for developer convenience.
   image_scanning_configuration { scan_on_push = true }
