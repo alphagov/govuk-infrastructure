@@ -7,7 +7,7 @@ data "aws_iam_openid_connect_provider" "github_oidc" {
 }
 
 data "aws_iam_policy_document" "ecr_role_permissions" {
-  for_each = toset(local.repositories)
+  for_each = local.ecr_repos_by_github_repo
   statement {
     actions = [
       "ecr:GetDownloadUrlForLayer",
@@ -20,10 +20,10 @@ data "aws_iam_policy_document" "ecr_role_permissions" {
       "ecr:GetAuthorizationToken",
       "ecr:CompleteLayerUpload"
     ]
-    resources = [
-      "arn:aws:ecr:eu-west-1:172025368201:repository/${each.key}",
-      "arn:aws:ecr:eu-west-1:172025368201:repository/${each.key}/*",
-    ]
+    resources = flatten([for ecr_repo in each.value : [
+      "arn:aws:ecr:eu-west-1:172025368201:repository/${ecr_repo}",
+      "arn:aws:ecr:eu-west-1:172025368201:repository/${ecr_repo}/*",
+    ]])
   }
   statement {
     actions   = ["kms:DescribeKey", "kms:GetPublicKey", "kms:Sign"]
@@ -32,7 +32,7 @@ data "aws_iam_policy_document" "ecr_role_permissions" {
 }
 
 data "aws_iam_policy_document" "ecr_role_trust" {
-  for_each = toset(local.repositories)
+  for_each = local.ecr_repos_by_github_repo
   statement {
     actions = ["sts:AssumeRoleWithWebIdentity"]
     principals {
@@ -53,14 +53,14 @@ data "aws_iam_policy_document" "ecr_role_trust" {
 }
 
 resource "aws_iam_role" "ecr_role" {
-  for_each             = toset(local.repositories)
+  for_each             = local.ecr_repos_by_github_repo
   name                 = "github_action_ecr_push_${each.key}"
   max_session_duration = 10800
   assume_role_policy   = data.aws_iam_policy_document.ecr_role_trust[each.key].json
 }
 
 resource "aws_iam_role_policy" "ecr_role" {
-  for_each = toset(local.repositories)
+  for_each = local.ecr_repos_by_github_repo
   name     = "github_action_ecr_push_${each.key}"
   role     = aws_iam_role.ecr_role[each.key].id
   policy   = data.aws_iam_policy_document.ecr_role_permissions[each.key].json
