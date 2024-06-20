@@ -46,7 +46,7 @@ data "aws_iam_policy_document" "ecr_role_trust" {
     condition {
       test     = "StringLike"
       variable = "token.actions.githubusercontent.com:sub"
-      values   = ["repo:alphagov/*"]
+      values   = [for repo in local.repositories : "repo:alphagov/${repo}"]
     }
   }
 }
