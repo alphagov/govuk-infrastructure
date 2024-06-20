@@ -20,7 +20,10 @@ data "aws_iam_policy_document" "ecr_role_permissions" {
       "ecr:GetAuthorizationToken",
       "ecr:CompleteLayerUpload"
     ]
-    resources = ["arn:aws:ecr:eu-west-1:172025368201:repository/${each.key}"]
+    resources = [
+      "arn:aws:ecr:eu-west-1:172025368201:repository/${each.key}",
+      "arn:aws:ecr:eu-west-1:172025368201:repository/${each.key}/*",
+    ]
   }
   statement {
     actions   = ["kms:DescribeKey", "kms:GetPublicKey", "kms:Sign"]
