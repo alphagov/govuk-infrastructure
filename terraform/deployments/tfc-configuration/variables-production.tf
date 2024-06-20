@@ -127,6 +127,9 @@ module "variable-set-opensearch-production" {
     dedicated_master_count   = 3
     dedicated_master_type    = "m6g.large.search"
     zone_awareness_enabled   = true
+    snapshot_bucket_arns = [
+      "arn:aws:s3:::govuk-production-chat-opensearch-snapshots"
+    ]
   }
 }
 
