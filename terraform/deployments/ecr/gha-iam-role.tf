@@ -7,6 +7,7 @@ data "aws_iam_openid_connect_provider" "github_oidc" {
 }
 
 data "aws_iam_policy_document" "ecr_role_permissions" {
+  for_each = local.ecr_repos_by_github_repo
   statement {
     actions = [
       "ecr:GetDownloadUrlForLayer",
@@ -19,19 +20,19 @@ data "aws_iam_policy_document" "ecr_role_permissions" {
       "ecr:GetAuthorizationToken",
       "ecr:CompleteLayerUpload"
     ]
-    resources = ["*"]
+    resources = flatten([for ecr_repo in each.value : [
+      "arn:aws:ecr:eu-west-1:172025368201:repository/${ecr_repo}",
+      "arn:aws:ecr:eu-west-1:172025368201:repository/${ecr_repo}/*",
+    ]])
   }
   statement {
-    actions = [
-      "kms:DescribeKey",
-      "kms:GetPublicKey",
-      "kms:Sign"
-    ]
+    actions   = ["kms:DescribeKey", "kms:GetPublicKey", "kms:Sign"]
     resources = [aws_kms_key.container_signing_key.arn]
   }
 }
 
 data "aws_iam_policy_document" "ecr_role_trust" {
+  for_each = local.ecr_repos_by_github_repo
   statement {
     actions = ["sts:AssumeRoleWithWebIdentity"]
     principals {
@@ -46,19 +47,21 @@ data "aws_iam_policy_document" "ecr_role_trust" {
     condition {
       test     = "StringLike"
       variable = "token.actions.githubusercontent.com:sub"
-      values   = ["repo:alphagov/*"]
+      values   = ["repo:alphagov/${each.key}"]
     }
   }
 }
 
 resource "aws_iam_role" "ecr_role" {
-  name                 = "github_action_ecr_push"
+  for_each             = local.ecr_repos_by_github_repo
+  name                 = "github_action_ecr_push_${each.key}"
   max_session_duration = 10800
-  assume_role_policy   = data.aws_iam_policy_document.ecr_role_trust.json
+  assume_role_policy   = data.aws_iam_policy_document.ecr_role_trust[each.key].json
 }
 
 resource "aws_iam_role_policy" "ecr_role" {
-  name   = "github_action_ecr_push_policy"
-  role   = aws_iam_role.ecr_role.id
-  policy = data.aws_iam_policy_document.ecr_role_permissions.json
+  for_each = local.ecr_repos_by_github_repo
+  name     = "github_action_ecr_push_${each.key}"
+  role     = aws_iam_role.ecr_role[each.key].id
+  policy   = data.aws_iam_policy_document.ecr_role_permissions[each.key].json
 }
