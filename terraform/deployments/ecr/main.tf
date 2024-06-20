@@ -1,13 +1,20 @@
 terraform {
-  required_version = "~> 1.5"
   cloud {
     organization = "govuk"
-    workspaces { tags = ["ecr", "eks", "aws"] }
+    workspaces {
+      tags = ["ecr", "eks", "aws"]
+    }
   }
+
+  required_version = "~> 1.5"
   required_providers {
     aws = {
       source  = "hashicorp/aws"
       version = "~> 5.0"
+    }
+    github = {
+      source  = "integrations/github"
+      version = "~> 6.0"
     }
   }
 }
@@ -26,78 +33,39 @@ provider "aws" {
   }
 }
 
+data "aws_secretsmanager_secret" "github-token" {
+  name = "govuk/terraform-cloud/github-token"
+}
+
+data "aws_secretsmanager_secret_version" "github-token" {
+  secret_id = data.aws_secretsmanager_secret.github-token.id
+}
+
+provider "github" {
+  owner = "alphagov"
+  token = data.aws_secretsmanager_secret_version.github-token.secret_string
+}
+
+data "github_repositories" "govuk" {
+  query = "org:alphagov topic:container topic:govuk fork:false archived:false"
+}
+
 locals {
-  # ecr_repos_by_github_repo is a map of GitHub repo name to a list of ECR
-  # repos where the GitHub repo has permission to push images.
-  #
-  # TODO: rename the oddball images like "licensify-frontend" so that they are
-  # prefixed with their Git repo name, for example "licensify/frontend", then
-  # turn this back into a simple list. Or, even better, stop pushing images to
-  # ECR from GitHub Actions altogether and just configure ECR to be a
-  # pull-through cache for ghcr.io.
-  ecr_repos_by_github_repo = {
-    "account-api" : ["account-api"]
-    "asset-manager" : ["asset-manager"]
-    "authenticating-proxy" : ["authenticating-proxy"]
-    "bouncer" : ["bouncer"]
-    "collections" : ["collections"]
-    "collections-publisher" : ["collections-publisher"]
-    "contacts-admin" : ["contacts-admin"]
-    "content-data-admin" : ["content-data-admin"]
-    "content-data-api" : ["content-data-api"]
-    "content-publisher" : ["content-publisher"]
-    "content-store" : ["content-store"]
-    "content-tagger" : ["content-tagger"]
-    "email-alert-api" : ["email-alert-api"]
-    "email-alert-frontend" : ["email-alert-frontend"]
-    "email-alert-service" : ["email-alert-service"]
-    "feedback" : ["feedback"]
-    "finder-frontend" : ["finder-frontend"]
-    "frontend" : ["frontend"]
-    "government-frontend" : ["government-frontend"]
-    "govuk-chat" : ["govuk-chat"]
-    "govuk-dependency-checker" : ["govuk-dependency-checker"]
-    "govuk-developer-docs" : ["govuk-developer-docs"]
-    "govuk-exporter" : ["govuk-exporter"]
-    "govuk-fastly" : ["govuk-fastly"]
-    "govuk-infrastructure" : ["govuk-infrastructure", "clamav", "mongodb", "toolbox"]
-    "govuk-mirror" : ["govuk-mirror"]
-    "govuk-replatform-test-app" : ["govuk-replatform-test-app"]
-    "govuk-ruby-images" : ["govuk-ruby-images"]
-    "govuk-sli-collector" : ["govuk-sli-collector"]
-    "hmrc-manuals-api" : ["hmrc-manuals-api"]
-    "licensify" : ["licensify", "licensify-backend", "licensify-feed", "licensify-frontend"]
-    "link-checker-api" : ["link-checker-api"]
-    "local-links-manager" : ["local-links-manager"]
-    "locations-api" : ["locations-api"]
-    "manuals-publisher" : ["manuals-publisher"]
-    "maslow" : ["maslow"]
-    "places-manager" : ["places-manager"]
-    "publisher" : ["publisher"]
-    "publishing-api" : ["publishing-api"]
-    "release" : ["release"]
-    "router" : ["router"]
-    "router-api" : ["router-api"]
-    "search-admin" : ["search-admin"]
-    "search-api" : ["search-api"]
-    "search-api-learn-to-rank" : ["search-api-learn-to-rank"]
-    "search-api-v2" : ["search-api-v2"]
-    "search-v2-evaluator" : ["search-v2-evaluator"]
-    "service-manual-publisher" : ["service-manual-publisher"]
-    "short-url-manager" : ["short-url-manager"]
-    "signon" : ["signon"]
-    "smart-answers" : ["smart-answers"]
-    "smokey" : ["smokey"]
-    "special-route-publisher" : ["special-route-publisher"]
-    "specialist-publisher" : ["specialist-publisher"]
-    "static" : ["static"]
-    "support" : ["support"]
-    "support-api" : ["support-api"]
-    "transition" : ["transition"]
-    "travel-advice-publisher" : ["travel-advice-publisher"]
-    "whitehall" : ["whitehall"]
-  }
-  repositories = keys(local.ecr_repos_by_github_repo)
+  repositories = concat(
+    local.extra_repositories,
+    data.github_repositories.govuk.names
+  )
+
+  extra_repositories = [
+    "mongodb",
+    "imminence",
+    "toolbox",
+    "clamav",
+    "search-api-learn-to-rank",
+    "licensify-backend",
+    "licensify-feed",
+    "licensify-frontend",
+  ]
 }
 
 data "aws_caller_identity" "current" {}
