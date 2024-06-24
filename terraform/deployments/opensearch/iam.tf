@@ -17,7 +17,7 @@ data "aws_iam_policy_document" "opensearch_snapshot_assume_role" {
 data "aws_iam_policy_document" "opensearch_snapshot" {
   statement {
     actions   = ["s3:ListBucket"]
-    resources = var.snapshot_bucket_arns
+    resources = local.snapshot_bucket_arns
   }
   statement {
     actions = [
@@ -25,7 +25,7 @@ data "aws_iam_policy_document" "opensearch_snapshot" {
       "s3:PutObject",
       "s3:DeleteObject",
     ]
-    resources = formatlist("%s/*", var.snapshot_bucket_arns)
+    resources = formatlist("%s/*", local.snapshot_bucket_arns)
   }
 }
 
