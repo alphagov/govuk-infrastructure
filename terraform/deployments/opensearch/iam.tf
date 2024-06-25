@@ -1,4 +1,18 @@
 # IAM roles required for manual snapshot process
+locals {
+  snapshot_bucket_arns = {
+    production = ["arn:aws:s3:::govuk-production-chat-opensearch-snapshots"]
+    staging = [
+      "arn:aws:s3:::govuk-production-chat-opensearch-snapshots",
+      "arn:aws:s3:::govuk-staging-chat-opensearch-snapshots",
+    ]
+    integration = [
+      "arn:aws:s3:::govuk-staging-chat-opensearch-snapshots",
+      "arn:aws:s3:::govuk-integration-chat-opensearch-snapshots",
+    ]
+  }[var.govuk_environment]
+}
+
 resource "aws_iam_role" "opensearch_snapshot" {
   name               = "govuk-${var.govuk_environment}-${var.service}-opensearch-snapshot-role"
   assume_role_policy = data.aws_iam_policy_document.opensearch_snapshot_assume_role.json
@@ -17,7 +31,7 @@ data "aws_iam_policy_document" "opensearch_snapshot_assume_role" {
 data "aws_iam_policy_document" "opensearch_snapshot" {
   statement {
     actions   = ["s3:ListBucket"]
-    resources = var.snapshot_bucket_arns
+    resources = local.snapshot_bucket_arns
   }
   statement {
     actions = [
@@ -25,7 +39,7 @@ data "aws_iam_policy_document" "opensearch_snapshot" {
       "s3:PutObject",
       "s3:DeleteObject",
     ]
-    resources = formatlist("%s/*", var.snapshot_bucket_arns)
+    resources = formatlist("%s/*", local.snapshot_bucket_arns)
   }
 }
 
