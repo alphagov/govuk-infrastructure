@@ -16,7 +16,7 @@ data "aws_iam_policy_document" "opensearch_snapshot_assume_role" {
 
 resource "aws_iam_policy" "opensearch_snapshot" {
   name   = "govuk-${var.govuk_environment}-${var.service}-opensearch-snapshot-bucket-policy"
-  policy = templatefile(iam_policy.tftpl, { BucketArns = replace(local.snapshot_bucket_arns, "/*", ""), BucketWildArns = local.snapshot_bucket_arns })
+  policy = templatefile("iam_policy.tftpl", { BucketArns = replace(local.snapshot_bucket_arns, "/*", ""), BucketWildArns = local.snapshot_bucket_arns })
 }
 
 resource "aws_iam_policy_attachment" "opensearch_snapshot" {
