@@ -14,24 +14,9 @@ data "aws_iam_policy_document" "opensearch_snapshot_assume_role" {
   }
 }
 
-data "aws_iam_policy_document" "opensearch_snapshot" {
-  statement {
-    actions   = ["s3:ListBucket"]
-    resources = local.snapshot_bucket_arns
-  }
-  statement {
-    actions = [
-      "s3:GetObject",
-      "s3:PutObject",
-      "s3:DeleteObject",
-    ]
-    resources = formatlist("%s/*", local.snapshot_bucket_arns)
-  }
-}
-
 resource "aws_iam_policy" "opensearch_snapshot" {
   name   = "govuk-${var.govuk_environment}-${var.service}-opensearch-snapshot-bucket-policy"
-  policy = data.aws_iam_policy_document.opensearch_snapshot.json
+  policy = templatefile(iam_policy.tftpl, { BucketArns = replace(local.snapshot_bucket_arns, "/*", ""), BucketWildArns = local.snapshot_bucket_arns })
 }
 
 resource "aws_iam_policy_attachment" "opensearch_snapshot" {
