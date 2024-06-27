@@ -1,3 +1,6 @@
+# TODO: remove self-hosted-runner name validation workaround once we're able to
+# use standard names provided by GitHub (likely once the GitHub-hosted ARM
+# runners feature exits beta and becomes GA).
 self-hosted-runner:
   labels:
-    - arm64-runner  # Not actually self-hosted.
+    - ubuntu-24.04-arm  # Not actually self-hosted.
