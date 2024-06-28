@@ -1,0 +1,27 @@
+# This reusable action exists only to reduce toil by representing GOV.UK's
+# global config for rhysd/actionlint in a single place so we don't have to
+# change it in N repos every time we update.
+name: Run actionlint
+description: Lint GitHub Actions YAML files with rhysd/actionlint.
+runs:
+  using: composite
+  steps:
+    - id: install
+      shell: bash
+      env:
+        VERSION: '1.7.1'
+      run: bash <(curl https://raw.githubusercontent.com/rhysd/actionlint/4f6274a8e0f4f4d2057aa9ae07660f61aa29c5f3/scripts/download-actionlint.bash) "$VERSION" .
+    - name: Run actionlint
+      shell: bash
+      env:
+        ACTIONLINT: '${{ steps.install.outputs.executable }}'
+      run: |
+        echo "::add-matcher::.github/actionlint-matcher.json"
+        # TODO: move non-global ignores inline or to in-tree actionlint.yml once
+        #       https://www.github.com/rhysd/actionlint/issues/237 and/or
+        #       https://www.github.com/rhysd/actionlint/issues/217 is fixed.
+        # TODO: remove -ignore "property .runner. is not defined" once
+        #       https://www.github.com/rhysd/actionlint/issues/77 is fixed.
+        "$ACTIONLINT" -color \
+          -ignore "property .runner. is not defined" \
+          -ignore "property .repository_visibility. is not defined"
