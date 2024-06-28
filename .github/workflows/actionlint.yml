@@ -11,8 +11,8 @@ jobs:
         show-progress: false
     - id: install
       env:
-        VERSION: '1.7.0'
-      run: bash <(curl https://raw.githubusercontent.com/rhysd/actionlint/b6b7a2901eb4fa4bae2e6d8f9b6edd1a37b3cca7/scripts/download-actionlint.bash) "$VERSION" .
+        VERSION: '1.7.1'
+      run: bash <(curl https://raw.githubusercontent.com/rhysd/actionlint/4f6274a8e0f4f4d2057aa9ae07660f61aa29c5f3/scripts/download-actionlint.bash) "$VERSION" .
     - name: Run actionlint
       env:
         ACTIONLINT: '${{ steps.install.outputs.executable }}'
