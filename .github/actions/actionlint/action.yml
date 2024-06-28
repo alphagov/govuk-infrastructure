@@ -9,8 +9,8 @@ runs:
     - id: install
       shell: bash
       env:
-        VERSION: '1.7.1'
-      run: bash <(curl https://raw.githubusercontent.com/rhysd/actionlint/4f6274a8e0f4f4d2057aa9ae07660f61aa29c5f3/scripts/download-actionlint.bash) "$VERSION" .
+        ACTIONLINT_SHA: 4f6274a8e0f4f4d2057aa9ae07660f61aa29c5f3  # v1.7.1
+      run: bash <(curl "https://raw.githubusercontent.com/rhysd/actionlint/$ACTIONLINT_SHA/scripts/download-actionlint.bash")
     - name: Run actionlint
       shell: bash
       env:
