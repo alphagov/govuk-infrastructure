@@ -1,0 +1,38 @@
+name: Gem Bump Checker
+
+on:
+  workflow_call:
+    secrets:
+      GH_TOKEN:
+        required: true
+
+jobs:
+  check-files:
+    if: ${{ github.event.pull_request.user.login != 'dependabot[bot]' }}
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+        show-progress: false
+        token: ${{ secrets.GH_TOKEN }}
+
+    - name: Check for version and changelog updates
+      env:
+        GH_TOKEN: ${{ secrets.GH_TOKEN }}
+      run: |
+        BASE_REF=$(git ls-remote origin HEAD | cut -f 1)
+        HEAD_REF=$(git rev-parse HEAD)
+        MODIFIED_FILES=$(git diff --name-only "$BASE_REF".."$HEAD_REF")
+
+        if ! echo "$MODIFIED_FILES" | grep 'version.rb' && \
+           ! echo "$MODIFIED_FILES" | grep '\.gemspec$'; then
+          echo "Error: Either version.rb or a .gemspec file must be modified with each pull request to bump the gem version."
+          exit 1
+        fi
+
+        if ! echo "$MODIFIED_FILES" | grep 'CHANGELOG.md'; then
+          echo "Error: CHANGELOG.md must be updated with each pull request."
+          exit 1
+        fi
