@@ -39,3 +39,8 @@ data "terraform_remote_state" "infra_networking" {
     region = var.aws_region
   }
 }
+
+data "aws_acm_certificate" "govuk_internal" {
+  domain   = "*.${var.govuk_environment}.govuk-internal.digital"
+  statuses = ["ISSUED"]
+}
