@@ -114,8 +114,11 @@ resource "aws_opensearch_domain" "opensearch" {
   }
 
   domain_endpoint_options {
-    enforce_https       = true
-    tls_security_policy = "Policy-Min-TLS-1-2-2019-07"
+    enforce_https                   = true
+    tls_security_policy             = "Policy-Min-TLS-1-2-2019-07"
+    custom_endpoint_enabled         = true
+    custom_endpoint                 = "chat-opensearch.${var.govuk_environment}.govuk-internal.digital"
+    custom_endpoint_certificate_arn = data.aws_acm_certificate.govuk_internal.arn
   }
 
   ebs_options {
@@ -176,3 +179,10 @@ resource "aws_secretsmanager_secret_version" "opensearch_passwords" {
   })
 }
 
+resource "aws_route53_record" "service_record" {
+  zone_id = data.terraform_remote_state.infra_root_dns_zones.outputs.internal_root_zone_id
+  name    = "chat-opensearch.${var.govuk_environment}.govuk-internal.digital"
+  type    = "CNAME"
+  ttl     = 300
+  records = [aws_opensearch_domain.opensearch.endpoint]
+}
