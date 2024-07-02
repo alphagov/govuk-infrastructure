@@ -12,14 +12,6 @@ on:
 jobs:
   run-standardx:
     name: Run Standardx
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          show-progress: false
-
-      - name: Setup Node
-        uses: alphagov/govuk-infrastructure/.github/actions/setup-node@main
-
-      - name: Run Standardx
-        run: yarn run standardx ${{ inputs.files }}
+    uses: alphagov/govuk-infrastructure/.github/workflows/node-script.yml@main
+    with:
+      script: yarn run standardx ${{ inputs.files }}
