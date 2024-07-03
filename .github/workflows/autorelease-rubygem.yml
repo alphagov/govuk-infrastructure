@@ -71,8 +71,7 @@ jobs:
           exit 0
         fi
 
-        curr_ver_regex=$(printf "%d\\\.%d\\\.%d" "${ver_parts[@]}")
-        find . -type f \( -iname version.rb -o -iname "*.gemspec" \) -exec sed -i "s/$curr_ver_regex/$next_ver/g" {} \;
+        find . -type f \( -iname "version.rb" -o -iname "*.gemspec" \) -exec sed -i "0,/$curr_ver/s//${next_ver}/" {} \;
 
         printf "# %s\n\n* Update dependencies\n\n" "$next_ver" > NEW_CHANGELOG.md
         cat CHANGELOG.md >> NEW_CHANGELOG.md
