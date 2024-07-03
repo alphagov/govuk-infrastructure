@@ -6,23 +6,7 @@ jobs:
   actionlint:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v4
-      with:
-        show-progress: false
-    - id: install
-      env:
-        VERSION: '1.7.0'
-      run: bash <(curl https://raw.githubusercontent.com/rhysd/actionlint/b6b7a2901eb4fa4bae2e6d8f9b6edd1a37b3cca7/scripts/download-actionlint.bash) "$VERSION" .
-    - name: Run actionlint
-      env:
-        ACTIONLINT: '${{ steps.install.outputs.executable }}'
-      run: |
-        echo "::add-matcher::.github/actionlint-matcher.json"
-        # TODO: move -ignores inline or to actionlint.yml once
-        #       https://www.github.com/rhysd/actionlint/issues/237 and/or
-        #       https://www.github.com/rhysd/actionlint/issues/217 is fixed.
-        # TODO: remove -ignore "property .runner. is not defined" once
-        #       https://www.github.com/rhysd/actionlint/issues/77 is fixed.
-        "$ACTIONLINT" -color \
-          -ignore "property .runner. is not defined" \
-          -ignore "property .repository_visibility. is not defined"
+      - uses: actions/checkout@v4
+        with:
+          show-progress: false
+      - uses: alphagov/govuk-infrastructure/.github/actions/actionlint@main
