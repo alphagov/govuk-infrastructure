@@ -5,6 +5,11 @@ on:
     secrets:
       GH_TOKEN:
         required: true
+    inputs:
+      ignored_files:
+        description: 'JSON string of files or directories to be ignored'
+        required: false
+        type: string
 
 jobs:
   check-files:
@@ -21,10 +26,41 @@ jobs:
     - name: Check for version and changelog updates
       env:
         GH_TOKEN: ${{ secrets.GH_TOKEN }}
+        IGNORED_FILES_JSON: ${{ inputs.ignored_files }}
       run: |
+        echo "Debug: Starting script"
         BASE_REF=$(git ls-remote origin HEAD | cut -f 1)
+        echo "Debug: BASE_REF=$BASE_REF"
         HEAD_REF=$(git rev-parse HEAD)
+        echo "Debug: HEAD_REF=$HEAD_REF"
         MODIFIED_FILES=$(git diff --name-only "$BASE_REF".."$HEAD_REF")
+        echo "Debug: MODIFIED_FILES=$MODIFIED_FILES"
+
+        if [ -n "$IGNORED_FILES_JSON" ]; then
+          echo "Debug: IGNORED_FILES_JSON=$IGNORED_FILES_JSON"
+          # Remove leading and trailing quotes from JSON string and convert to newline-separated list
+          IGNORED_FILES=$(echo "$IGNORED_FILES_JSON" | tr -d '[]' | tr ',' '\n' | tr -d '"')
+          echo "Debug: IGNORED_FILES=$IGNORED_FILES"
+          # Iterate over each ignored file/directory
+          for file in $IGNORED_FILES; do
+            echo "Debug: Ignoring file=$file"
+            # Remove trailing slashes from directories for proper matching
+            file=${file%/}
+            if [[ -d $file ]]; then
+              MODIFIED_FILES=$(echo "$MODIFIED_FILES" | grep -v -E "^$file/")
+            else
+              MODIFIED_FILES=$(echo "$MODIFIED_FILES" | grep -v -E "^$file$")
+            fi
+            echo "Debug: MODIFIED_FILES after ignoring $file: $MODIFIED_FILES"
+          done
+        fi
+
+        echo "Debug: Filtered MODIFIED_FILES=$MODIFIED_FILES"
+
+        if [ -z "$(echo "$MODIFIED_FILES" | xargs)" ]; then
+          echo "All modified files are in the ignore list. Exiting gracefully."
+          exit 0
+        fi
 
         if ! echo "$MODIFIED_FILES" | grep 'version.rb' && \
            ! echo "$MODIFIED_FILES" | grep '\.gemspec$'; then
