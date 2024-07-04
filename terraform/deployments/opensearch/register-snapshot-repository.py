@@ -52,7 +52,7 @@ def register_repository(name, role_arn, delete_first=False, read_only=False):
 
     headers = {"Content-Type": "application/json"}
 
-    r = requests.put(url, auth=awsauth, json=payload, headers=headers)
+    r = requests.put(url, auth=awsauth, json=payload, headers=headers, verify=False)
     r.raise_for_status()
     print(r.text)
 
