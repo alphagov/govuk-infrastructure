@@ -113,12 +113,41 @@ resource "aws_iam_role" "node" {
   force_detach_policies = true
 }
 
+data "aws_iam_policy_document" "pull_from_ecr" {
+  statement {
+    actions = [
+      "ecr:GetAuthorizationToken",
+      "ecr:BatchCheckLayerAvailability",
+      "ecr:GetDownloadUrlForLayer",
+      "ecr:GetRepositoryPolicy",
+      "ecr:DescribeRepositories",
+      "ecr:ListImages",
+      "ecr:DescribeImages",
+      "ecr:BatchGetImage",
+      "ecr:BatchImportUpstreamImage",
+      "ecr:GetLifecyclePolicy",
+      "ecr:GetLifecyclePolicyPreview",
+      "ecr:ListTagsForResource",
+      "ecr:DescribeImageScanFindings"
+    ]
+
+    effect    = "Allow"
+    resources = ["*"]
+  }
+}
+
+resource "aws_iam_policy" "pull_from_ecr" {
+  name        = "pull-from-ecr"
+  description = "Policy to allows EKS to pull images from ECR"
+  policy      = data.aws_iam_policy_document.pull_from_ecr.json
+}
+
 resource "aws_iam_role_policy_attachment" "node" {
   for_each = toset([
     "AmazonEKSWorkerNodePolicy",
-    "AmazonEC2ContainerRegistryReadOnly",
     "AmazonEKS_CNI_Policy",
     "AmazonSSMManagedInstanceCore",
+    aws_iam_policy.pull_from_ecr.name,
   ])
   policy_arn = "arn:aws:iam::aws:policy/${each.key}"
   role       = aws_iam_role.node.name
