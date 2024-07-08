@@ -17,6 +17,14 @@ jobs:
     - uses: super-linter/super-linter/slim@v6
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        # TODO: move non-global ignores inline or to in-tree actionlint.yml once
+        #       https://www.github.com/rhysd/actionlint/issues/237 and/or
+        #       https://www.github.com/rhysd/actionlint/issues/217 is fixed.
+        # TODO: remove -ignore "property .runner. is not defined" once
+        #       https://www.github.com/rhysd/actionlint/issues/77 is fixed.
+        GITHUB_ACTIONS_COMMAND_ARGS: >
+          -ignore "property .runner. is not defined"
+          -ignore "property .repository_visibility. is not defined"
         LINTER_RULES_PATH: .
         VALIDATE_BASH: true
         VALIDATE_BASH_EXEC: true
