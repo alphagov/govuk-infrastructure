@@ -16,12 +16,21 @@ runs:
       env:
         ACTIONLINT: '${{ steps.install.outputs.executable }}'
       run: |
-        echo "::add-matcher::.github/actionlint-matcher.json"
+        cat <<'EOF' >actionlint-matcher.json
+          {"problemMatcher": [{
+            "owner": "actionlint",
+            "pattern": [{
+              "regexp": "^(.+?):(\\d+):(\\d+): (.+?) \\[(.+?)\\]$",
+              "file": 1, "line": 2, "column": 3, "message": 4, "code": 5
+            }]
+          }]}
+        EOF
+        echo "::add-matcher::actionlint-matcher.json"
         # TODO: move non-global ignores inline or to in-tree actionlint.yml once
         #       https://www.github.com/rhysd/actionlint/issues/237 and/or
         #       https://www.github.com/rhysd/actionlint/issues/217 is fixed.
         # TODO: remove -ignore "property .runner. is not defined" once
         #       https://www.github.com/rhysd/actionlint/issues/77 is fixed.
-        "$ACTIONLINT" -color \
+        "$ACTIONLINT" -no-color \
           -ignore "property .runner. is not defined" \
           -ignore "property .repository_visibility. is not defined"
