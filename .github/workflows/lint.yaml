@@ -17,6 +17,7 @@ jobs:
     - uses: super-linter/super-linter/slim@v6
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        LINTER_RULES_PATH: .
         VALIDATE_BASH: true
         VALIDATE_BASH_EXEC: true
         VALIDATE_DOCKERFILE_HADOLINT: true
