@@ -11,7 +11,7 @@
     ],
     "packageRules": [
       {
-        "matchDepTypes": ["provider"]
+        "matchDepTypes": ["helm_release", "provider", "tfe_workspace"]
       }
     ]
   }
