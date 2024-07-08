@@ -142,12 +142,16 @@ resource "aws_iam_policy" "pull_from_ecr" {
   policy      = data.aws_iam_policy_document.pull_from_ecr.json
 }
 
+resource "aws_iam_role_policy_attachment" "pull_from_ecr" {
+  policy_arn = aws_iam_policy.pull_from_ecr.arn
+  role       = aws_iam_role.node.name
+}
+
 resource "aws_iam_role_policy_attachment" "node" {
   for_each = toset([
     "AmazonEKSWorkerNodePolicy",
     "AmazonEKS_CNI_Policy",
     "AmazonSSMManagedInstanceCore",
-    aws_iam_policy.pull_from_ecr.name,
   ])
   policy_arn = "arn:aws:iam::aws:policy/${each.key}"
   role       = aws_iam_role.node.name
