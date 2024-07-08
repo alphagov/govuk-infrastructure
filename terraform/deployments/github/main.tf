@@ -128,6 +128,31 @@ resource "github_repository" "govuk_repos" {
   delete_branch_on_merge = true
 }
 
+resource "github_branch_protection" "govuk_repos" {
+  for_each = github_repository.govuk_repos
+
+  repository_id    = each.value.name
+  pattern          = "main"
+  enforce_admins   = true
+  allows_deletions = true
+
+  required_pull_request_reviews {
+    required_approving_review_count = 1
+  }
+
+  required_status_checks {
+    strict = true # This ensures the branch is up to date before merging
+    contexts = [
+      "Lint SCSS / Run Stylelint",
+      "Security Analysis / Run Brakeman",
+      "Lint Ruby / Run RuboCop",
+      "Lint JavaScript / Run Standardx",
+      "Test JavaScript / Run Jasmine",
+      "Test Ruby / Run RSpec"
+    ]
+  }
+}
+
 #
 # Only the list of repositories which will have access to a secret is created/modified
 # here, the secret should have been created in the GitHub UI in advance by a
