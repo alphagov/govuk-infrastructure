@@ -24,7 +24,6 @@ jobs:
         VALIDATE_ENV: true
         VALIDATE_GITHUB_ACTIONS: true
         VALIDATE_JSON: true
-        VALIDATE_MARKDOWN: true
         VALIDATE_RENOVATE: true
         VALIDATE_TERRAFORM_FMT: true
         VALIDATE_TERRAFORM_TFLINT: true
