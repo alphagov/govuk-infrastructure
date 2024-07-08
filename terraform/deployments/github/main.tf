@@ -115,6 +115,19 @@ resource "github_team_repository" "govuk_repos" {
   permission = "push"
 }
 
+resource "github_repository" "govuk_repos" {
+  for_each = { for repo in local.auto_configurable_repos : repo.name => repo }
+
+  name        = each.value.name
+  description = each.value.description
+
+  allow_squash_merge = true
+  allow_merge_commit = false
+  allow_rebase_merge = false
+
+  delete_branch_on_merge = true
+}
+
 #
 # Only the list of repositories which will have access to a secret is created/modified
 # here, the secret should have been created in the GitHub UI in advance by a
