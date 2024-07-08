@@ -14,7 +14,7 @@ jobs:
       with:
         fetch-depth: 0
         show-progress: false
-    - uses: super-linter/super-linter@v6
+    - uses: super-linter/super-linter/slim@v6
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         VALIDATE_BASH: true
