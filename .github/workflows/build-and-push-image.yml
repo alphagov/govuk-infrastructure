@@ -71,7 +71,7 @@ jobs:
         with:
           images: |
             ${{ steps.login-ecr.outputs.registry }}/${{ inputs.ecrRepositoryName }}
-            ghcr.io/${{ github.repository_owner }}/${{ inputs.ecrRepositoryName }}
+            ghcr.io/${{ github.repository_owner }}/govuk/${{ inputs.ecrRepositoryName }}
           tags: |
             type=raw,priority=500,value=${{ inputs.gitRef }},enable=${{ startsWith(inputs.gitRef, 'v') }}
             type=raw,priority=400,value=${{ steps.local-head.outputs.sha }},enable=${{ !startsWith(inputs.gitRef, 'v') }}
