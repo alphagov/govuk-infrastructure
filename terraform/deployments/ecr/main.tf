@@ -80,7 +80,7 @@ resource "aws_ecr_repository" "repositories" {
 
 resource "aws_ecr_repository" "github_repositories" {
   for_each             = toset(local.repositories)
-  name                 = "github/alphagov/${each.key}"
+  name                 = "github/alphagov/govuk/${each.key}"
   image_tag_mutability = "MUTABLE" # To support a movable `latest` for developer convenience.
   image_scanning_configuration { scan_on_push = true }
 }
