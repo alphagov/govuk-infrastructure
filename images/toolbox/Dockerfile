@@ -19,8 +19,8 @@ RUN apt-get update -qq ; \
     apt-get update -qq ; \
     apt-get install -qy --no-install-recommends \
         curl file gh git jq libarchive-tools mysql-client netcat-openbsd \
-        postgresql-client pv wget2 gettext mongodb-mongosh \
-        mongodb-database-tools redis-tools ; \
+        postgresql-client pv wget2 gettext mongodb-mongosh=2.2.10 \
+        mongodb-database-tools=100.9.4 redis-tools ; \
     rm -fr /var/lib/apt/lists/*
 
 ARG yq_package_url=https://github.com/mikefarah/yq/releases/latest/download
