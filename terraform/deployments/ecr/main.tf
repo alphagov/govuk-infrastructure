@@ -65,6 +65,7 @@ locals {
     "licensify-backend",
     "licensify-feed",
     "licensify-frontend",
+    "govuk-fastly-diff-generator",
   ]
 }
 
