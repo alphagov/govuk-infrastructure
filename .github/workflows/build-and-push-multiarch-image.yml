@@ -50,19 +50,6 @@ jobs:
           ref: ${{ inputs.gitRef }}
           show-progress: false
 
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          role-to-assume: "arn:aws:iam::172025368201:role/github_action_ecr_push"
-          aws-region: eu-west-1
-          role-session-name: ecr-push
-
-      - name: Login to Amazon ECR
-        id: login-ecr
-        uses: aws-actions/amazon-ecr-login@v2
-        with:
-          mask-password: 'true'
-
       - name: Login to GitHub Container Registry
         uses: docker/login-action@v3
         with:
@@ -80,7 +67,6 @@ jobs:
         uses: docker/metadata-action@v5
         with:
           images: |
-            ${{ steps.login-ecr.outputs.registry }}/${{ inputs.ecrRepositoryName }}
             ghcr.io/${{ github.repository_owner }}/govuk/${{ inputs.ecrRepositoryName }}
           labels: |
             org.opencontainers.image.vendor=GDS
@@ -98,7 +84,7 @@ jobs:
           provenance: false
           build-args: ${{ inputs.buildArgs }}
           labels: ${{ steps.meta.outputs.labels }}
-          outputs: type=image,name=${{ steps.login-ecr.outputs.registry }}/${{ inputs.ecrRepositoryName }},push-by-digest=true,name-canonical=true,push=true
+          outputs: type=image,name=ghcr.io/${{ github.repository_owner }}/govuk/${{ inputs.ecrRepositoryName }},push-by-digest=true,name-canonical=true,push=true
           cache-from: type=gha,scope=build-${{ inputs.ecrRepositoryName }}-${{ matrix.arch }}
           cache-to: type=gha,scope=build-${{ inputs.ecrRepositoryName }}-${{ matrix.arch }},mode=max
 
@@ -140,19 +126,6 @@ jobs:
       - run: echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
         id: local-head
 
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          role-to-assume: "arn:aws:iam::172025368201:role/github_action_ecr_push"
-          aws-region: eu-west-1
-          role-session-name: ecr-push
-
-      - name: Login to Amazon ECR
-        id: login-ecr
-        uses: aws-actions/amazon-ecr-login@v2
-        with:
-          mask-password: 'true'
-
       - name: Login to GitHub Container Registry
         uses: docker/login-action@v3
         with:
@@ -165,7 +138,6 @@ jobs:
         uses: docker/metadata-action@v5
         with:
           images: |
-            ${{ steps.login-ecr.outputs.registry }}/${{ inputs.ecrRepositoryName }}
             ghcr.io/${{ github.repository_owner }}/govuk/${{ inputs.ecrRepositoryName }}
           labels: |
             org.opencontainers.image.vendor=GDS
@@ -176,7 +148,7 @@ jobs:
 
       - name: Create Manifest Lists
         env:
-          IMAGEREF_PREFIX: '${{ steps.login-ecr.outputs.registry }}/${{ inputs.ecrRepositoryName }}'
+          IMAGEREF_PREFIX: 'ghcr.io/${{ github.repository_owner }}/govuk/${{ inputs.ecrRepositoryName }}'
         working-directory: /tmp/digests
         run: |
           tag_args=$(jq -cr '.tags | map("-t " + .) | join(" ")' <<< "$DOCKER_METADATA_OUTPUT_JSON")
@@ -186,6 +158,6 @@ jobs:
 
       - name: Inspect Images
         env:
-          IMAGEREF: '${{ steps.login-ecr.outputs.registry }}/${{ inputs.ecrRepositoryName }}:${{ steps.meta.outputs.version }}'
+          IMAGEREF: 'ghcr.io/${{ github.repository_owner }}/govuk/${{ inputs.ecrRepositoryName }}:${{ steps.meta.outputs.version }}'
         run: |
           docker buildx imagetools inspect "$IMAGEREF"
