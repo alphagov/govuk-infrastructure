@@ -16,7 +16,7 @@ data "aws_iam_policy_document" "allow_cross_account_pull_from_ecr" {
 }
 
 resource "aws_ecr_repository_policy" "pull_from_ecr" {
-  for_each = toset([for repo in local.repositories : aws_ecr_repository.github_repositories[repo].name])
+  for_each   = toset([for repo in local.repositories : aws_ecr_repository.github_repositories[repo].name])
   repository = each.key
   policy     = data.aws_iam_policy_document.allow_cross_account_pull_from_ecr.json
 }

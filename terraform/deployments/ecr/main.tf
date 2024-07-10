@@ -85,7 +85,7 @@ resource "aws_ecr_pull_through_cache_rule" "github" {
 }
 
 resource "aws_ecr_lifecycle_policy" "ecr_lifecycle_policy" {
-  for_each = toset([for repo in local.repositories : aws_ecr_repository.github_repositories[repo].name])
+  for_each   = toset([for repo in local.repositories : aws_ecr_repository.github_repositories[repo].name])
   repository = each.key
 
   policy = jsonencode({
