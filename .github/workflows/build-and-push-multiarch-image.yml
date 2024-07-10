@@ -11,6 +11,10 @@ on:
         required: false
         type: string
         default: Dockerfile
+      context:
+        required: false
+        type: string
+        default: .
       buildArgs:
         required: false
         type: string
@@ -78,7 +82,7 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           file: ${{ inputs.dockerfilepath }}
-          context: .
+          context: ${{ inputs.context }}
           platforms: "linux/${{ matrix.arch }}"
           load: true
           provenance: false
