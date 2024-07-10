@@ -32,7 +32,7 @@ data "aws_iam_policy_document" "gha_image_attestation_trust" {
     condition {
       test     = "StringLike"
       variable = "token.actions.githubusercontent.com:sub"
-      values   = ["repo:alphagov/govuk-ruby-images"]
+      values   = ["repo:alphagov/govuk-ruby-images:ref:refs/heads/main"]
     }
   }
 }
