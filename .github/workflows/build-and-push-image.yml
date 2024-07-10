@@ -3,10 +3,6 @@ name: Build and push image
 on:
   workflow_call:
     inputs:
-      ecrRepositoryName:
-        required: false
-        type: string
-        default: ${{ github.event.repository.name }}
       imageName:
         required: false
         type: string
@@ -61,7 +57,7 @@ jobs:
         uses: docker/metadata-action@v5
         with:
           images: |
-            ghcr.io/${{ github.repository_owner }}/govuk/${{ inputs.ecrRepositoryName || inputs.imageName }}
+            ghcr.io/${{ github.repository_owner }}/govuk/${{ inputs.imageName }}
           tags: |
             type=raw,priority=500,value=${{ inputs.gitRef }},enable=${{ startsWith(inputs.gitRef, 'v') }}
             type=raw,priority=400,value=${{ steps.local-head.outputs.sha }},enable=${{ !startsWith(inputs.gitRef, 'v') }}
