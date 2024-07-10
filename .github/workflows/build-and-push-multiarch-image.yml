@@ -7,6 +7,10 @@ on:
         required: false
         type: string
         default: ${{ github.event.repository.name }}
+      imageName:
+        required: false
+        type: string
+        default: ${{ github.event.repository.name }}
       dockerfilePath:
         required: false
         type: string
@@ -29,7 +33,7 @@ on:
 
 jobs:
   build-and-push-image:
-    name: Build and push image for ${{ inputs.ecrRepositoryName }}
+    name: Build and push image for ${{ inputs.ecrRepositoryName || inputs.imageName }}
     strategy:
       matrix:
         arch:
@@ -71,7 +75,7 @@ jobs:
         uses: docker/metadata-action@v5
         with:
           images: |
-            ghcr.io/${{ github.repository_owner }}/govuk/${{ inputs.ecrRepositoryName }}
+            ghcr.io/${{ github.repository_owner }}/govuk/${{ inputs.ecrRepositoryName || inputs.imageName }}
           labels: |
             org.opencontainers.image.vendor=GDS
           tags: |
@@ -88,9 +92,9 @@ jobs:
           provenance: false
           build-args: ${{ inputs.buildArgs }}
           labels: ${{ steps.meta.outputs.labels }}
-          outputs: type=image,name=ghcr.io/${{ github.repository_owner }}/govuk/${{ inputs.ecrRepositoryName }},push-by-digest=true,name-canonical=true,push=true
-          cache-from: type=gha,scope=build-${{ inputs.ecrRepositoryName }}-${{ matrix.arch }}
-          cache-to: type=gha,scope=build-${{ inputs.ecrRepositoryName }}-${{ matrix.arch }},mode=max
+          outputs: type=image,name=ghcr.io/${{ github.repository_owner }}/govuk/${{ inputs.ecrRepositoryName || inputs.imageName }},push-by-digest=true,name-canonical=true,push=true
+          cache-from: type=gha,scope=build-${{ inputs.ecrRepositoryName || inputs.imageName }}-${{ matrix.arch }}
+          cache-to: type=gha,scope=build-${{ inputs.ecrRepositoryName || inputs.imageName }}-${{ matrix.arch }},mode=max
 
       - id: export-digests
         env:
@@ -102,7 +106,7 @@ jobs:
       - id: upload-digests
         uses: actions/upload-artifact@v4
         with:
-          name: digests-${{ inputs.ecrRepositoryName }}-${{ matrix.arch }}
+          name: digests-${{ inputs.ecrRepositoryName || inputs.imageName }}-${{ matrix.arch }}
           path: /tmp/digests/*
           if-no-files-found: error
           retention-days: 1
@@ -122,7 +126,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           path: /tmp/digests
-          pattern: digests-${{ inputs.ecrRepositoryName }}-*
+          pattern: digests-${{ inputs.ecrRepositoryName || inputs.imageName }}-*
           merge-multiple: true
 
       - uses: docker/setup-buildx-action@v3
@@ -142,7 +146,7 @@ jobs:
         uses: docker/metadata-action@v5
         with:
           images: |
-            ghcr.io/${{ github.repository_owner }}/govuk/${{ inputs.ecrRepositoryName }}
+            ghcr.io/${{ github.repository_owner }}/govuk/${{ inputs.ecrRepositoryName || inputs.imageName }}
           labels: |
             org.opencontainers.image.vendor=GDS
           tags: |
@@ -152,7 +156,7 @@ jobs:
 
       - name: Create Manifest Lists
         env:
-          IMAGEREF_PREFIX: 'ghcr.io/${{ github.repository_owner }}/govuk/${{ inputs.ecrRepositoryName }}'
+          IMAGEREF_PREFIX: 'ghcr.io/${{ github.repository_owner }}/govuk/${{ inputs.ecrRepositoryName || inputs.imageName }}'
         working-directory: /tmp/digests
         run: |
           tag_args=$(jq -cr '.tags | map("-t " + .) | join(" ")' <<< "$DOCKER_METADATA_OUTPUT_JSON")
@@ -162,6 +166,6 @@ jobs:
 
       - name: Inspect Images
         env:
-          IMAGEREF: 'ghcr.io/${{ github.repository_owner }}/govuk/${{ inputs.ecrRepositoryName }}:${{ steps.meta.outputs.version }}'
+          IMAGEREF: 'ghcr.io/${{ github.repository_owner }}/govuk/${{ inputs.ecrRepositoryName || inputs.imageName }}:${{ steps.meta.outputs.version }}'
         run: |
           docker buildx imagetools inspect "$IMAGEREF"
