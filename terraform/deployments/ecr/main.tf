@@ -71,13 +71,6 @@ locals {
 data "aws_caller_identity" "current" {}
 data "aws_region" "current" {}
 
-resource "aws_ecr_repository" "repositories" {
-  for_each             = toset(local.repositories)
-  name                 = each.key
-  image_tag_mutability = "MUTABLE" # To support a movable `latest` for developer convenience.
-  image_scanning_configuration { scan_on_push = true }
-}
-
 resource "aws_ecr_repository" "github_repositories" {
   for_each             = toset(local.repositories)
   name                 = "github/alphagov/govuk/${each.key}"
@@ -91,16 +84,8 @@ resource "aws_ecr_pull_through_cache_rule" "github" {
   credential_arn        = "arn:aws:secretsmanager:eu-west-1:172025368201:secret:ecr-pullthroughcache/github-packages-udvpiZ"
 }
 
-import {
-  to = aws_ecr_pull_through_cache_rule.github
-  id = "github"
-}
-
 resource "aws_ecr_lifecycle_policy" "ecr_lifecycle_policy" {
-  for_each = toset(concat(
-    [for repo in local.repositories : aws_ecr_repository.repositories[repo].name],
-    [for repo in local.repositories : aws_ecr_repository.github_repositories[repo].name]
-  ))
+  for_each = toset([for repo in local.repositories : aws_ecr_repository.github_repositories[repo].name])
   repository = each.key
 
   policy = jsonencode({
