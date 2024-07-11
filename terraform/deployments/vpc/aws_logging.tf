@@ -130,6 +130,9 @@ resource "aws_s3_bucket_replication_configuration" "aws_logging" {
     filter {
       prefix = "elb/govuk-ckan-public-elb"
     }
+    delete_marker_replication {
+      status = "Enabled"
+    }
   }
 }
 
