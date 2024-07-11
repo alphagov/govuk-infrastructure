@@ -4,7 +4,6 @@ resource "google_storage_bucket" "google_logging" {
   name          = "govuk-${var.govuk_environment}-gcp-logging"
   location      = "eu"
   storage_class = "multi_regional"
-  project       = data.google_project.project.id
 
   versioning {
     enabled = true
