@@ -26,13 +26,13 @@ variable "cluster_log_retention_in_days" {
 }
 
 variable "cyber_slunk_s3_bucket_name" {
-  type = string
+  type        = string
   description = "Bucket to store logs for ingestion by Splunk"
-  default = "central-pipeline-logging-prod-non-cw"
+  default     = "central-pipeline-logging-prod-non-cw"
 }
 
 variable "cyber_slunk_aws_account_id" {
-  type = string
+  type        = string
   description = "Account ID which holds the Splunk log bucket"
-  default = "885513274347"
+  default     = "885513274347"
 }

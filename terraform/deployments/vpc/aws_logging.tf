@@ -4,12 +4,12 @@ data "aws_caller_identity" "current" {}
 
 data "aws_iam_policy_document" "s3_aws_logging" {
   statement {
-    actions = [ "s3:PutObject" ]
-    effect = "Allow"
-    resources = [ "arn:aws:s3:::govuk-${var.govuk_environment}-aws-logging/*" ]
+    actions   = ["s3:PutObject"]
+    effect    = "Allow"
+    resources = ["arn:aws:s3:::govuk-${var.govuk_environment}-aws-logging/*"]
     principals {
-      type = "AWS"
-      identifiers = [ data.aws_elb_service_account.main.arn ]
+      type        = "AWS"
+      identifiers = [data.aws_elb_service_account.main.arn]
     }
   }
 }
@@ -20,8 +20,8 @@ data "aws_iam_policy_document" "s3_govuk_aws_logging_replication_policy" {
       "s3:GetReplicationConfiguration",
       "s3:ListBucket"
     ]
-    effect = "Allow"
-    resources = [ aws_s3_bucket.aws_logging.arn ]
+    effect    = "Allow"
+    resources = [aws_s3_bucket.aws_logging.arn]
   }
   statement {
     actions = [
@@ -29,8 +29,8 @@ data "aws_iam_policy_document" "s3_govuk_aws_logging_replication_policy" {
       "s3:GetObjectVersionAcl",
       "s3:GetObjectVersionTagging"
     ]
-    effect = "Allow"
-    resources = [ "${aws_s3_bucket.aws_logging.arn}/*" ]
+    effect    = "Allow"
+    resources = ["${aws_s3_bucket.aws_logging.arn}/*"]
   }
   statement {
     actions = [
@@ -40,18 +40,18 @@ data "aws_iam_policy_document" "s3_govuk_aws_logging_replication_policy" {
       "s3:GetObjectVersionTagging",
       "s3:ObjectOwnerOverrideToBucketOwner"
     ]
-    effect = "Allow"
-    resources = [ "arn:aws:s3:::${var.cyber_slunk_s3_bucket_name}/*" ]
+    effect    = "Allow"
+    resources = ["arn:aws:s3:::${var.cyber_slunk_s3_bucket_name}/*"]
   }
 }
 
 data "aws_iam_policy_document" "s3_govuk_aws_logging_replication_role" {
   statement {
-    actions = [ "sts:AssumeRole" ]
-    effect = "Allow"
+    actions = ["sts:AssumeRole"]
+    effect  = "Allow"
     principals {
-      type = "Service"
-      identifiers = [ "s3.amazonaws.com" ]
+      type        = "Service"
+      identifiers = ["s3.amazonaws.com"]
     }
   }
 }
@@ -68,7 +68,7 @@ resource "aws_iam_role" "govuk_aws_logging_replication_role" {
 }
 
 resource "aws_iam_role_policy_attachment" "govuk_aws_logging_replication_policy_attachment" {
-  role      = aws_iam_role.govuk_aws_logging_replication_role.name
+  role       = aws_iam_role.govuk_aws_logging_replication_role.name
   policy_arn = aws_iam_policy.govuk_aws_logging_replication_policy.arn
 }
 
@@ -84,14 +84,14 @@ resource "aws_s3_bucket_policy" "aws_logging" {
 
 resource "aws_s3_bucket_acl" "aws_logging" {
   bucket = aws_s3_bucket.aws_logging.id
-  acl = "log-delivery-write"
+  acl    = "log-delivery-write"
 }
 
 resource "aws_s3_bucket_lifecycle_configuration" "aws_logging" {
   bucket = aws_s3_bucket.aws_logging.id
 
   rule {
-    id = "ExpireRule"
+    id     = "ExpireRule"
     status = "Enabled"
 
     expiration {
@@ -113,19 +113,19 @@ resource "aws_s3_bucket_versioning" "aws_logging" {
 
 resource "aws_s3_bucket_replication_configuration" "aws_logging" {
   bucket = aws_s3_bucket.aws_logging.id
-  role = aws_iam_role.govuk_aws_logging_replication_role.arn
+  role   = aws_iam_role.govuk_aws_logging_replication_role.arn
 
   rule {
-    id = "govuk-aws-logging-elb-govuk-public-ckan-rule"
+    id     = "govuk-aws-logging-elb-govuk-public-ckan-rule"
     status = var.govuk_environment == "production" ? "Enabled" : "Disabled"
     destination {
-      bucket = "arn:aws:s3:::${var.cyber_slunk_s3_bucket_name}"
-        storage_class = "STANDARD"
-        account   = var.cyber_slunk_aws_account_id
+      bucket        = "arn:aws:s3:::${var.cyber_slunk_s3_bucket_name}"
+      storage_class = "STANDARD"
+      account       = var.cyber_slunk_aws_account_id
 
-        access_control_translation {
-          owner = "Destination"
-        }
+      access_control_translation {
+        owner = "Destination"
+      }
     }
     filter {
       prefix = "elb/govuk-ckan-public-elb"
