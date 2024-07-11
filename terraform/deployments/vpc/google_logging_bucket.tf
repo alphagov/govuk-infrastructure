@@ -3,8 +3,7 @@ data "google_project" "project" {}
 resource "google_storage_bucket" "google_logging" {
   name          = "govuk-${var.govuk_environment}-gcp-logging"
   location      = "eu"
-  storage_class = "multi_regional"
-  project       = data.google_project.project.id
+  storage_class = "MULTI_REGIONAL"
 
   versioning {
     enabled = true
@@ -16,15 +15,15 @@ resource "google_storage_bucket" "google_logging" {
     }
 
     condition {
-      age = 30
+      age        = 30
+      with_state = "ARCHIVED"
     }
   }
 }
 
-resource "google_storage_bucket_acl" "google_logging" {
+resource "google_storage_bucket_access_control" "google_logging" {
   bucket = google_storage_bucket.google_logging.name
 
-  role_entity = [
-    "WRITER:group-cloud-storage-analytics@google.com",
-  ]
+  role   = "WRITER"
+  entity = "group-cloud-storage-analytics@google.com"
 }
