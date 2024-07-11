@@ -30,11 +30,11 @@ provider "aws" {
 
 provider "google" {
   default_labels = {
-    product              = "GOV.UK"
-    system               = "Terraform Cloud"
+    product              = "gov-uk"
+    system               = "terraform-cloud"
     environment          = var.govuk_environment
-    owner                = "govuk-platform-engineering@digital.cabinet-office.gov.uk"
+    owner                = "govuk-platform-engineering"
     repository           = "govuk-infrastructure"
-    terraform_deployment = basename(abspath(path.root))
+    terraform_deployment = lower(basename(abspath(path.root)))
   }
 }
