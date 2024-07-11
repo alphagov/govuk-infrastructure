@@ -34,10 +34,10 @@ resource "google_service_account" "tfc" {
   account_id = "terraform-cloud-${var.govuk_environment}"
 }
 
-resource "google_project_iam_binding" "tfc" {
+resource "google_project_iam_member" "tfc" {
   project = local.google_project
   role    = "roles/owner"
-  members = ["serviceAccount:${google_service_account.tfc.email}"]
+  member  = "serviceAccount:${google_service_account.tfc.email}"
 }
 
 data "google_iam_policy" "tfc" {
