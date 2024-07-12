@@ -50,20 +50,12 @@ data "github_repository" "govuk" {
   full_name = each.key
 }
 
-data "github_repository" "govuk_repo_names" {
-  for_each = toset(data.github_repositories.govuk.names)
-  name     = each.key
-}
-
 locals {
+  repositories = yamldecode(file("repos.yml"))["repos"]
+
   deployable_repos = [
     for r in data.github_repository.govuk : r
     if !r.fork && contains(r.topics, "container")
-  ]
-
-  auto_configurable_repos = [
-    for r in data.github_repository.govuk_repo_names : r
-    if !r.fork && !contains(r.topics, "govuk-sensitive-access")
   ]
 
   gems = [
@@ -95,43 +87,46 @@ resource "github_team" "govuk" {
 }
 
 resource "github_team_repository" "govuk_production_admin_repos" {
-  for_each   = { for repo in local.auto_configurable_repos : repo.name => repo }
-  repository = each.value.name
+  for_each   = local.repositories
+  repository = each.key
   team_id    = github_team.govuk_production_admin.id
   permission = "admin"
 }
 
 resource "github_team_repository" "govuk_ci_bots_repos" {
-  for_each   = { for repo in local.auto_configurable_repos : repo.name => repo }
-  repository = each.value.name
+  for_each   = local.repositories
+  repository = each.key
   team_id    = github_team.govuk_ci_bots.id
   permission = "admin"
 }
 
 resource "github_team_repository" "govuk_repos" {
-  for_each   = { for repo in local.auto_configurable_repos : repo.name => repo }
-  repository = each.value.name
+  for_each   = local.repositories
+  repository = each.key
   team_id    = github_team.govuk.id
   permission = "push"
 }
 
 resource "github_repository" "govuk_repos" {
-  for_each = { for repo in local.auto_configurable_repos : repo.name => repo }
+  for_each = local.repositories
 
-  name        = each.value.name
-  description = each.value.description
+  name = each.key
 
   allow_squash_merge = true
   allow_merge_commit = false
   allow_rebase_merge = false
 
   delete_branch_on_merge = true
+
+  lifecycle {
+    ignore_changes = [description]
+  }
 }
 
 resource "github_branch_protection" "govuk_repos" {
-  for_each = github_repository.govuk_repos
+  for_each = { for repo_name, repo_details in local.repositories : repo_name => repo_details if try(repo_details["branch_protection"], true) }
 
-  repository_id    = each.value.name
+  repository_id    = github_repository.govuk_repos[each.key].node_id
   pattern          = "main"
   enforce_admins   = true
   allows_deletions = true
@@ -141,15 +136,12 @@ resource "github_branch_protection" "govuk_repos" {
   }
 
   required_status_checks {
-    strict = true # This ensures the branch is up to date before merging
-    contexts = [
-      "Lint SCSS / Run Stylelint",
-      "Security Analysis / Run Brakeman",
-      "Lint Ruby / Run RuboCop",
-      "Lint JavaScript / Run Standardx",
-      "Test JavaScript / Run Jasmine",
-      "Test Ruby / Run RSpec"
-    ]
+    strict = true
+
+    contexts = concat(
+      try(each.value["required_status_check"]["standard_contexts"], []),
+      try(each.value["required_status_check"]["additional_contexts"], [])
+    )
   }
 }
 

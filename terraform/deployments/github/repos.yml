@@ -1,0 +1,629 @@
+access_levels:
+  standard_security_checks: &standard_security_checks
+    - CodeQL SAST scan / Analyze
+    - Dependency Review scan / dependency-review-pr
+  standard_govuk_rails_checks: &standard_govuk_rails_checks
+    - CodeQL SAST scan / Analyze
+    - Dependency Review scan / dependency-review-pr
+    - Lint Ruby / Run RuboCop
+    - Security Analysis / Run Brakeman
+
+repos:
+  accessible-autocomplete-multiselect: {}
+
+  account-api:
+    required_status_checks:
+      standard_contexts: *standard_govuk_rails_checks
+      additional_contexts:
+        - Test Ruby
+        # Status checks missing from here but present in [ci.yml](https://github.com/alphagov/account-api/blob/main/.github/workflows/ci.yml):
+        # - Run Pact tests
+
+  asset-manager:
+    required_status_checks:
+      standard_contexts: *standard_govuk_rails_checks
+      additional_contexts:
+        - Test Ruby
+        # Status checks missing from here but present in [ci.yml](https://github.com/alphagov/asset-manager/blob/main/.github/workflows/ci.yml):
+        # - Run Pact tests
+
+  authenticating-proxy:
+    required_status_checks:
+      standard_contexts: *standard_govuk_rails_checks
+      additional_contexts:
+        - Test Ruby
+
+  bouncer:
+    required_status_checks:
+      standard_contexts: *standard_security_checks
+      additional_contexts:
+        - Test Ruby
+        - Lint Ruby / Run RuboCop
+
+  bulk-changer:
+    required_status_checks:
+      standard_contexts: *standard_security_checks
+
+  bulk-merger:
+  collections:
+    required_status_checks:
+      standard_contexts: *standard_govuk_rails_checks
+      additional_contexts:
+        - Integration tests
+        - Lint JavaScript / Run Standardx
+        - Lint SCSS / Run Stylelint
+        - Test JavaScript / Run Jasmine
+        - Test Ruby / Run RSpec
+        - Lint ERB / Lint ERB
+        # Status checks missing from here but present in [ci.yml](https://github.com/alphagov/collections/blob/main/.github/workflows/ci.yml):
+        # - Run Pact tests
+
+  collections-publisher:
+    required_status_checks:
+      standard_contexts: *standard_govuk_rails_checks
+      additional_contexts:
+        - Lint JavaScript / Run Standardx
+        - Lint SCSS / Run Stylelint
+        - Test Ruby / Run RSpec
+
+  contacts-admin:
+    required_status_checks:
+      standard_contexts: *standard_govuk_rails_checks
+      additional_contexts:
+        - Lint JavaScript / Run Standardx
+        - Lint SCSS / Run Stylelint
+        - Test Ruby / Run RSpec
+
+  content-data-admin:
+    required_status_checks:
+      standard_contexts: *standard_govuk_rails_checks
+      additional_contexts:
+        - Test Ruby
+        - Lint SCSS / Run Stylelint
+        - Lint JavaScript / Run Standardx
+
+  content-data-api:
+    required_status_checks:
+      standard_contexts: *standard_govuk_rails_checks
+      additional_contexts:
+        - Test Ruby / Run RSpec
+
+  content-publisher:
+    required_status_checks:
+      standard_contexts: *standard_govuk_rails_checks
+      additional_contexts:
+        - Lint SCSS / Run Stylelint
+        - Lint JavaScript / Run Standardx
+        - Test JavaScript / Run Jasmine
+        - Test Ruby / Run RSpec
+
+  content-store:
+    required_status_checks:
+      standard_contexts: *standard_govuk_rails_checks
+      additional_contexts:
+        - Test Ruby / Run RSpec
+
+  content-tagger:
+    required_status_checks:
+      standard_contexts: *standard_govuk_rails_checks
+      additional_contexts:
+        - Lint SCSS / Run Stylelint
+        - Lint JavaScript / Run Standardx
+        - Test Ruby / Run RSpec
+
+  data-community-tech-docs:
+    need_production_access_to_merge: false
+    allow_squash_merge: true
+
+  datagovuk-tech-docs:
+    need_production_access_to_merge: false
+    allow_squash_merge: true
+
+  email-alert-api:
+    required_status_checks:
+      standard_contexts: *standard_govuk_rails_checks
+      additional_contexts:
+        - Test Ruby
+        # Status checks missing from here but present in [ci.yml](https://github.com/alphagov/email-alert-api/blob/main/.github/workflows/ci.yml):
+        # - Run Pact tests
+
+  email-alert-frontend:
+    required_status_checks:
+      standard_contexts: *standard_govuk_rails_checks
+      additional_contexts:
+        - Lint SCSS / Run Stylelint
+        - Lint JavaScript / Run Standardx
+        - Test JavaScript / Run Jasmine
+        - Test Ruby / Run RSpec
+
+  email-alert-service:
+    required_status_checks:
+      standard_contexts: *standard_security_checks
+      additional_contexts:
+        - Lint Ruby / Run RuboCop
+        - Test Ruby / Run RSpec
+
+  feedback:
+    required_status_checks:
+      standard_contexts: *standard_govuk_rails_checks
+      additional_contexts:
+        - Lint JavaScript / Run Standardx
+        - Lint SCSS / Run Stylelint
+        - Test JavaScript / Run Jasmine
+        - Test Ruby / Run RSpec
+
+  finder-frontend:
+    required_status_checks:
+      standard_contexts: *standard_govuk_rails_checks
+      additional_contexts:
+        - Integration tests
+        - Lint SCSS / Run Stylelint
+        - Lint JavaScript / Run Standardx
+        - Test JavaScript / Run Jasmine
+        - Test Ruby / Run RSpec
+
+  frontend:
+    required_status_checks:
+      standard_contexts: *standard_govuk_rails_checks
+      additional_contexts:
+        - Lint JavaScript / Run Standardx
+        - Lint SCSS / Run Stylelint
+        - Test JavaScript / Run Jasmine
+        - Test Ruby / Run Minitest
+        # Status checks missing from here but present in [ci.yml](https://github.com/alphagov/frontend/blob/main/.github/workflows/ci.yml):
+        # - Run Pact tests
+
+  gds-api-adapters:
+    required_status_checks:
+      standard_contexts: *standard_security_checks
+      additional_contexts:
+        # Status checks missing from here but present in [ci.yml](https://github.com/alphagov/gds-api-adapters/blob/main/.github/workflows/ci.yml):
+        # - Many different pact tests
+
+  gds-sso:
+    required_status_checks:
+      standard_contexts: *standard_security_checks
+
+  gds_zendesk:
+    required_status_checks:
+      standard_contexts: *standard_security_checks
+
+  github-trello-poster:
+    required_status_checks:
+      standard_contexts: *standard_security_checks
+
+  government-frontend:
+    required_status_checks:
+      standard_contexts: *standard_govuk_rails_checks
+      additional_contexts:
+        - Lint SCSS / Run Stylelint
+        - Lint JavaScript / Run Standardx
+        - Test JavaScript / Run Jasmine
+        - Test Ruby / Run Minitest
+
+  govspeak:
+    required_status_checks:
+      standard_contexts: *standard_security_checks
+
+  govspeak-preview:
+    required_status_checks:
+      standard_contexts: *standard_security_checks
+
+  govuk-aws:
+    required_status_checks:
+      additional_contexts:
+        - Shellcheck
+        - terraform fmt
+
+  govuk-content-api-docs:
+    need_production_access_to_merge: false
+    allow_squash_merge: true
+
+  govuk-dependabot-merger:
+    required_status_checks:
+      standard_contexts: *standard_security_checks
+
+  govuk-dependency-checker:
+    required_status_checks:
+      standard_contexts: *standard_security_checks
+
+  govuk-developer-docs:
+    need_production_access_to_merge: false
+    allow_squash_merge: true
+
+  govuk-dns-tf:
+    up_to_date_branches: true
+
+  govuk-fastly:
+    up_to_date_branches: true
+
+  govuk-fastly-secrets:
+    up_to_date_branches: true
+
+  govuk-infrastructure:
+    up_to_date_branches: true
+
+  govuk-mobile-android-app:
+    allow_squash_merge: true
+
+  govuk-mobile-android-homepage:
+    allow_squash_merge: true
+
+  govuk-mobile-android-onboarding:
+    allow_squash_merge: true
+
+  govuk-mobile-android-services:
+    allow_squash_merge: true
+
+  govuk-mobile-ios-app:
+    allow_squash_merge: true
+
+  govuk-mobile-ios-homepage:
+    allow_squash_merge: true
+
+  govuk-mobile-ios-onboarding:
+    allow_squash_merge: true
+
+  govuk-mobile-ios-services:
+    allow_squash_merge: true
+
+  govuk-mobile-ios-ui-components:
+    allow_squash_merge: true
+
+  govuk-rota-generator:
+    required_status_checks:
+      standard_contexts: *standard_security_checks
+
+  govuk-saas-config:
+    required_status_checks:
+      standard_contexts: *standard_security_checks
+
+  govuk-sli-collector:
+    required_status_checks:
+      standard_contexts: *standard_security_checks
+
+  govuk_ab_testing:
+    required_status_checks:
+      standard_contexts: *standard_security_checks
+
+  govuk_admin_template:
+    required_status_checks:
+      standard_contexts: *standard_security_checks
+
+  govuk_app_config:
+    required_status_checks:
+      standard_contexts: *standard_security_checks
+
+  govuk_document_types:
+    required_status_checks:
+      standard_contexts: *standard_security_checks
+
+  govuk_message_queue_consumer:
+    required_status_checks:
+      standard_contexts: *standard_security_checks
+
+  govuk_personalisation:
+    required_status_checks:
+      standard_contexts: *standard_security_checks
+
+  govuk_publishing_components:
+    required_status_checks:
+      standard_contexts: *standard_security_checks
+
+  govuk_schemas:
+    required_status_checks:
+      standard_contexts: *standard_security_checks
+
+  govuk_sidekiq:
+    required_status_checks:
+      standard_contexts: *standard_security_checks
+
+  govuk_test:
+    required_status_checks:
+      standard_contexts: *standard_security_checks
+
+  hmrc-manuals-api:
+    required_status_checks:
+      standard_contexts: *standard_govuk_rails_checks
+      additional_contexts:
+        - Test Ruby / Run RSpec
+
+  link-checker-api:
+    required_status_checks:
+      standard_contexts: *standard_govuk_rails_checks
+      additional_contexts:
+        - Test Ruby
+        # Status checks missing from here but present in [ci.yml](https://github.com/alphagov/link-checker-api/blob/main/.github/workflows/ci.yml):
+        # - Run Pact tests
+
+  local-links-manager:
+    required_status_checks:
+      standard_contexts: *standard_govuk_rails_checks
+      additional_contexts:
+        - Test Ruby
+        - Lint JavaScript / Run Standardx
+        - Lint SCSS / Run Stylelint
+        - Lint Views
+
+  locations-api:
+    required_status_checks:
+      standard_contexts: *standard_govuk_rails_checks
+      additional_contexts:
+        - Test Ruby
+        # Status checks missing from here but present in [ci.yml](https://github.com/alphagov/locations-api/blob/main/.github/workflows/ci.yml):
+        # - Run Pact tests
+
+  manuals-publisher:
+    required_status_checks:
+      standard_contexts: *standard_govuk_rails_checks
+      additional_contexts:
+        - Integration tests
+        - Lint JavaScript / Run Standardx
+        - Lint SCSS / Run Stylelint
+        - Test JavaScript / Run Jasmine
+        - Test Ruby / Run RSpec
+
+  markdown-toolbar-element:
+    required_status_checks:
+      standard_contexts: *standard_security_checks
+
+  maslow:
+    required_status_checks:
+      standard_contexts: *standard_govuk_rails_checks
+      additional_contexts:
+        - Test Ruby
+        - Lint JavaScript / Run Standardx
+        - Lint SCSS / Run Stylelint
+        - Test JavaScript / Run Jasmine
+
+  miller-columns-element:
+    required_status_checks:
+      standard_contexts: *standard_security_checks
+
+  optic14n:
+    required_status_checks:
+      standard_contexts: *standard_security_checks
+
+  paste-html-to-govspeak:
+    required_status_checks:
+      standard_contexts: *standard_security_checks
+
+  places-manager:
+    required_status_checks:
+      standard_contexts: *standard_govuk_rails_checks
+      additional_contexts:
+        - Integration tests
+        - Test Ruby
+        - Lint Views
+        # Status checks missing from here but present in [ci.yml](https://github.com/alphagov/places-manager/blob/main/.github/workflows/ci.yml):
+        # - Run Pact tests
+
+  plek:
+    required_status_checks:
+      standard_contexts: *standard_security_checks
+
+  publisher:
+    required_status_checks:
+      standard_contexts: *standard_govuk_rails_checks
+      additional_contexts:
+        - Lint JavaScript / Run Standardx
+        - Lint SCSS / Run Stylelint
+        - Test JavaScript / Run Jasmine
+        - Test Ruby / Run Minitest
+
+  publishing-api:
+    required_status_checks:
+      standard_contexts: *standard_govuk_rails_checks
+      additional_contexts:
+        - Check content schemas are built
+        - Test Ruby
+        # Status checks missing from here but present in [ci.yml](https://github.com/alphagov/publishing-api/blob/main/.github/workflows/ci.yml):
+        # - Run Content Store Pact tests
+        # - Run GDS API Adapter Pact tests
+
+  rack-logstasher:
+    required_status_checks:
+      standard_contexts: *standard_security_checks
+
+  rails_translation_manager:
+    required_status_checks:
+      standard_contexts: *standard_security_checks
+
+  release:
+    required_status_checks:
+      standard_contexts: *standard_govuk_rails_checks
+      additional_contexts:
+        - Test Ruby
+        - Lint JavaScript / Run Standardx
+        - Lint SCSS / Run Stylelint
+
+  router:
+    required_status_checks:
+      additional_contexts:
+        - Test Go
+
+  router-api:
+    required_status_checks:
+      standard_contexts: *standard_govuk_rails_checks
+      additional_contexts:
+        - Test Ruby
+
+  rubocop-govuk:
+    required_status_checks:
+      standard_contexts: *standard_security_checks
+
+  seal:
+    required_status_checks:
+      standard_contexts: *standard_security_checks
+
+  search-admin:
+    required_status_checks:
+      standard_contexts: *standard_govuk_rails_checks
+      additional_contexts:
+        - Lint JavaScript / Run Standardx
+        - Lint SCSS / Run Stylelint
+        - Test Ruby / Run RSpec
+
+  search-api:
+    required_status_checks:
+      standard_contexts: *standard_security_checks
+      additional_contexts:
+        - Lint Ruby / Run RuboCop
+        - Test Ruby / Run RSpec
+
+  search-api-v2:
+    required_status_checks:
+      ignore_jenkins: true
+      standard_contexts: *standard_govuk_rails_checks
+      additional_contexts:
+        - Test Ruby
+
+  search-v2-evaluator:
+
+  search-v2-infrastructure:
+    required_status_checks:
+      ignore_jenkins: true
+      additional_contexts:
+        - lint_and_validate
+
+  service-manual-publisher:
+    required_status_checks:
+      standard_contexts: *standard_govuk_rails_checks
+      additional_contexts:
+        - Lint SCSS / Run Stylelint
+        - Lint JavaScript / Run Standardx
+        - Test JavaScript / Run Jasmine
+        - Test Ruby / Run RSpec
+
+  short-url-manager:
+    required_status_checks:
+      standard_contexts: *standard_govuk_rails_checks
+      additional_contexts:
+        - Test Ruby / Run RSpec
+        - Lint SCSS / Run Stylelint
+
+  signon:
+    required_status_checks:
+      standard_contexts: *standard_govuk_rails_checks
+      additional_contexts:
+        - Test Ruby
+        - Lint JavaScript / Run Standardx
+        - Lint SCSS / Run Stylelint
+        - Test JavaScript / Run Jasmine
+
+  siteimprove_api_client:
+    required_status_checks:
+      standard_contexts: *standard_security_checks
+
+  slimmer:
+    required_status_checks:
+      standard_contexts: *standard_security_checks
+
+  smart-answers:
+    allow_squash_merge: true
+    required_status_checks:
+      standard_contexts: *standard_govuk_rails_checks
+      additional_contexts:
+        - Lint JavaScript / Run Standardx
+        - Lint SCSS / Run Stylelint
+        - Test JavaScript / Run Jasmine
+        - Test Ruby / Run Minitest
+
+  smokey:
+    required_status_checks:
+      standard_contexts: *standard_security_checks
+
+  special-route-publisher:
+    required_status_checks:
+      standard_contexts: *standard_security_checks
+
+  specialist-publisher:
+    required_status_checks:
+      standard_contexts: *standard_govuk_rails_checks
+      additional_contexts:
+        - Lint JavaScript / Run Standardx
+        - Lint SCSS / Run Stylelint
+        - Test JavaScript / Run Jasmine
+        - Test Ruby / Run RSpec
+
+  static:
+    required_status_checks:
+      standard_contexts: *standard_govuk_rails_checks
+      additional_contexts:
+        - Test Ruby
+        - Lint JavaScript / Run Standardx
+        - Lint SCSS / Run Stylelint
+        - Test JavaScript / Run Jasmine
+
+  support:
+    required_status_checks:
+      standard_contexts: *standard_govuk_rails_checks
+      additional_contexts:
+        - Test Ruby
+        - Lint JavaScript / Run Standardx
+        - Lint SCSS / Run Stylelint
+
+  support-api:
+    required_status_checks:
+      standard_contexts: *standard_govuk_rails_checks
+      additional_contexts:
+        - Test Ruby
+
+  transition:
+    required_status_checks:
+      standard_contexts: *standard_govuk_rails_checks
+      additional_contexts:
+        - Integration tests
+        - Test Ruby
+        - Test JavaScript / Run Jasmine
+
+  travel-advice-publisher:
+    required_status_checks:
+      standard_contexts: *standard_govuk_rails_checks
+      additional_contexts:
+        - Lint SCSS / Run Stylelint
+        - Lint JavaScript / Run Standardx
+        - Test JavaScript / Run Jasmine
+        - Test Ruby / Run RSpec
+
+  whitehall:
+    required_status_checks:
+      standard_contexts: *standard_govuk_rails_checks
+      additional_contexts:
+        - Test features / Run Cucumber
+        - Lint SCSS / Run Stylelint
+        - Lint JavaScript / Run Standardx
+        - Test JavaScript / Run Jasmine
+        - Test Ruby / Run Minitest
+        - Lint ERB / Run ERB lint
+        - Prettier / Run Prettier
+
+  ckan-mock-harvest-sources: {}
+  ckanext-datagovuk: {}
+  datagovuk_find: {}
+  datagovuk_publish: {}
+  govspeak-visual-editor: {}
+  govuk-analytics-engineering: {}
+  govuk-aws-data: {}
+  govuk-browser-extension: {}
+  govuk-chat: {}
+  govuk-data-science-workshop: {}
+  govuk-dns-ui: {}
+  govuk-docker: {}
+  govuk-exporter: {}
+  govuk-helm-charts: {}
+  govuk-knowledge-graph-gcp: {}
+  govuk-knowledge-graph-search: {}
+  govuk-mirror: {}
+  govuk-mobile-backend: {}
+  govuk-mobile-backend-config: {}
+  govuk-mobile-remote-config: {}
+  govuk-pact-broker: {}
+  govuk-replatform-test-app: {}
+  govuk-rfcs: {}
+  govuk-rota-announcer: {}
+  govuk-ruby-images: {}
+  govuk-s3-mirror: {}
+  govuk-user-reviewer: {}
+  licensify: {}
+  public-asset-checker: {}
