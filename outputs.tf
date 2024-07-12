@@ -13,6 +13,11 @@ output "google_cloud_discovery_engine_serving_config_path" {
   value       = local.discovery_engine_serving_config_path
 }
 
+output "google_cloud_discovery_engine_site_seach_serving_config_path" {
+  description = "The full path of the site search serving config on the engine created by the module (for querying)"
+  value       = local.discovery_engine_site_search_serving_config_path
+}
+
 output "prototype_service_account_key" {
   description = "The key for the prototype service account (to be added to Heroku)"
   value       = base64decode(google_service_account_key.prototype.private_key)
