@@ -430,16 +430,6 @@ import {
 }
 
 import {
-  to = github_repository.govuk_repos["govuk-display-screen"]
-  id = "govuk-display-screen"
-}
-
-import {
-  to = github_branch_protection.govuk_repos["govuk-display-screen"]
-  id = "govuk-display-screen:main"
-}
-
-import {
   to = github_repository.govuk_repos["govuk-dns-tf"]
   id = "govuk-dns-tf"
 }
@@ -545,39 +535,22 @@ import {
 }
 
 import {
-  to = github_branch_protection.govuk_repos["govuk-mobile-android-app"]
-  id = "govuk-mobile-android-app:main"
-}
-
-import {
   to = github_repository.govuk_repos["govuk-mobile-android-homepage"]
   id = "govuk-mobile-android-homepage"
 }
 
-import {
-  to = github_branch_protection.govuk_repos["govuk-mobile-android-homepage"]
-  id = "govuk-mobile-android-homepage:main"
-}
 
 import {
   to = github_repository.govuk_repos["govuk-mobile-android-onboarding"]
   id = "govuk-mobile-android-onboarding"
 }
 
-import {
-  to = github_branch_protection.govuk_repos["govuk-mobile-android-onboarding"]
-  id = "govuk-mobile-android-onboarding:main"
-}
 
 import {
   to = github_repository.govuk_repos["govuk-mobile-android-services"]
   id = "govuk-mobile-android-services"
 }
 
-import {
-  to = github_branch_protection.govuk_repos["govuk-mobile-android-services"]
-  id = "govuk-mobile-android-services:main"
-}
 
 import {
   to = github_repository.govuk_repos["govuk-mobile-backend"]
@@ -604,59 +577,34 @@ import {
   id = "govuk-mobile-ios-app"
 }
 
-import {
-  to = github_branch_protection.govuk_repos["govuk-mobile-ios-app"]
-  id = "govuk-mobile-ios-app:main"
-}
 
 import {
   to = github_repository.govuk_repos["govuk-mobile-ios-homepage"]
   id = "govuk-mobile-ios-homepage"
 }
 
-import {
-  to = github_branch_protection.govuk_repos["govuk-mobile-ios-homepage"]
-  id = "govuk-mobile-ios-homepage:main"
-}
 
 import {
   to = github_repository.govuk_repos["govuk-mobile-ios-onboarding"]
   id = "govuk-mobile-ios-onboarding"
 }
 
-import {
-  to = github_branch_protection.govuk_repos["govuk-mobile-ios-onboarding"]
-  id = "govuk-mobile-ios-onboarding:main"
-}
 
 import {
   to = github_repository.govuk_repos["govuk-mobile-ios-services"]
   id = "govuk-mobile-ios-services"
 }
 
-import {
-  to = github_branch_protection.govuk_repos["govuk-mobile-ios-services"]
-  id = "govuk-mobile-ios-services:main"
-}
 
 import {
   to = github_repository.govuk_repos["govuk-mobile-ios-ui-components"]
   id = "govuk-mobile-ios-ui-components"
 }
 
-import {
-  to = github_branch_protection.govuk_repos["govuk-mobile-ios-ui-components"]
-  id = "govuk-mobile-ios-ui-components:main"
-}
 
 import {
   to = github_repository.govuk_repos["govuk-mobile-remote-config"]
   id = "govuk-mobile-remote-config"
-}
-
-import {
-  to = github_branch_protection.govuk_repos["govuk-mobile-remote-config"]
-  id = "govuk-mobile-remote-config:main"
 }
 
 import {
