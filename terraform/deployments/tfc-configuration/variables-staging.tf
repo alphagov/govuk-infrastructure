@@ -132,6 +132,7 @@ module "variable-set-rds-staging" {
         instance_class               = "db.t4g.medium"
         performance_insights_enabled = true
         freestoragespace_threshold   = 10737418240
+        project                      = "GOV.UK - Web"
       }
 
       authenticating_proxy = {
@@ -150,6 +151,7 @@ module "variable-set-rds-staging" {
         instance_class               = "db.t4g.micro"
         performance_insights_enabled = false
         freestoragespace_threshold   = 10737418240
+        project                      = "GOV.UK - Publishing"
       }
 
       chat = {
@@ -167,6 +169,7 @@ module "variable-set-rds-staging" {
         instance_class               = "db.t4g.small"
         performance_insights_enabled = false
         freestoragespace_threshold   = 10737418240
+        project                      = "GOV.UK - AI"
       }
 
       ckan = {
@@ -184,6 +187,7 @@ module "variable-set-rds-staging" {
         instance_class               = "db.m6g.large"
         performance_insights_enabled = true
         freestoragespace_threshold   = 10737418240
+        project                      = "GOV.UK - DGU"
       }
 
       collections_publisher = {
@@ -198,6 +202,7 @@ module "variable-set-rds-staging" {
         instance_class               = "db.t4g.micro"
         performance_insights_enabled = false
         freestoragespace_threshold   = 10737418240
+        project                      = "GOV.UK - Publishing"
       }
 
       contacts_admin = {
@@ -212,6 +217,7 @@ module "variable-set-rds-staging" {
         instance_class               = "db.t4g.small"
         performance_insights_enabled = false
         freestoragespace_threshold   = 10737418240
+        project                      = "GOV.UK - Publishing"
       }
 
       content_data_admin = {
@@ -229,6 +235,7 @@ module "variable-set-rds-staging" {
         instance_class               = "db.t4g.micro"
         performance_insights_enabled = false
         freestoragespace_threshold   = 10737418240
+        project                      = "GOV.UK - Publishing"
       }
 
       content_data_api = {
@@ -251,6 +258,7 @@ module "variable-set-rds-staging" {
         instance_class               = "db.m6g.large"
         performance_insights_enabled = false
         freestoragespace_threshold   = 536870912000
+        project                      = "GOV.UK - Publishing"
       }
 
       content_publisher = {
@@ -268,6 +276,7 @@ module "variable-set-rds-staging" {
         instance_class               = "db.t4g.small"
         performance_insights_enabled = false
         freestoragespace_threshold   = 10737418240
+        project                      = "GOV.UK - Publishing"
       }
 
       content_store = {
@@ -285,6 +294,7 @@ module "variable-set-rds-staging" {
         instance_class               = "db.m6g.large"
         performance_insights_enabled = true
         freestoragespace_threshold   = 10737418240
+        project                      = "GOV.UK - Publishing"
       }
 
       content_tagger = {
@@ -302,6 +312,7 @@ module "variable-set-rds-staging" {
         instance_class               = "db.t4g.small"
         performance_insights_enabled = false
         freestoragespace_threshold   = 10737418240
+        project                      = "GOV.UK - Publishing"
       }
 
       draft_content_store = {
@@ -319,6 +330,7 @@ module "variable-set-rds-staging" {
         instance_class               = "db.m6g.large"
         performance_insights_enabled = true
         freestoragespace_threshold   = 10737418240
+        project                      = "GOV.UK - Publishing"
       }
 
       email_alert_api = {
@@ -336,6 +348,7 @@ module "variable-set-rds-staging" {
         instance_class               = "db.m6g.xlarge"
         performance_insights_enabled = true
         freestoragespace_threshold   = 10737418240
+        project                      = "GOV.UK - Web"
       }
 
       imminence = {
@@ -354,6 +367,7 @@ module "variable-set-rds-staging" {
         instance_class               = "db.t4g.medium"
         performance_insights_enabled = false
         freestoragespace_threshold   = 10737418240
+        project                      = "GOV.UK - Web"
       }
 
       link_checker_api = {
@@ -371,6 +385,7 @@ module "variable-set-rds-staging" {
         instance_class               = "db.t4g.medium"
         performance_insights_enabled = false
         freestoragespace_threshold   = 10737418240
+        project                      = "GOV.UK - Publishing"
       }
 
       local_links_manager = {
@@ -388,6 +403,7 @@ module "variable-set-rds-staging" {
         instance_class               = "db.t4g.small"
         performance_insights_enabled = false
         freestoragespace_threshold   = 10737418240
+        project                      = "GOV.UK - Web"
       }
 
       locations_api = {
@@ -405,6 +421,7 @@ module "variable-set-rds-staging" {
         instance_class               = "db.m6g.large"
         performance_insights_enabled = true
         freestoragespace_threshold   = 10737418240
+        project                      = "GOV.UK - Web"
       }
 
       publishing_api = {
@@ -425,6 +442,7 @@ module "variable-set-rds-staging" {
         instance_class               = "db.m6g.large"
         performance_insights_enabled = true
         freestoragespace_threshold   = 10737418240
+        project                      = "GOV.UK - Publishing"
       }
 
       release = {
@@ -439,6 +457,7 @@ module "variable-set-rds-staging" {
         instance_class               = "db.t4g.micro"
         performance_insights_enabled = false
         freestoragespace_threshold   = 10737418240
+        project                      = "GOV.UK - Infrastructure"
       }
 
       search_admin = {
@@ -453,6 +472,7 @@ module "variable-set-rds-staging" {
         instance_class               = "db.t4g.micro"
         performance_insights_enabled = false
         freestoragespace_threshold   = 10737418240
+        project                      = "GOV.UK - Search"
       }
 
       service_manual_publisher = {
@@ -470,6 +490,7 @@ module "variable-set-rds-staging" {
         instance_class               = "db.t4g.micro"
         performance_insights_enabled = false
         freestoragespace_threshold   = 10737418240
+        project                      = "GOV.UK - Publishing"
       }
 
       signon = {
@@ -484,6 +505,7 @@ module "variable-set-rds-staging" {
         instance_class               = "db.t4g.medium"
         performance_insights_enabled = true
         freestoragespace_threshold   = 10737418240
+        project                      = "GOV.UK - Publishing"
       }
 
       support_api = {
@@ -501,6 +523,7 @@ module "variable-set-rds-staging" {
         instance_class               = "db.t4g.medium"
         performance_insights_enabled = true
         freestoragespace_threshold   = 10737418240
+        project                      = "GOV.UK - Publishing"
       }
 
       transition = {
@@ -518,6 +541,7 @@ module "variable-set-rds-staging" {
         instance_class               = "db.m6g.large" # TODO: downsize this after migration if required
         performance_insights_enabled = true
         freestoragespace_threshold   = 10737418240
+        project                      = "GOV.UK - Publishing"
       }
 
       whitehall = {
@@ -532,6 +556,7 @@ module "variable-set-rds-staging" {
         instance_class               = "db.m6g.large"
         performance_insights_enabled = true
         freestoragespace_threshold   = 10737418240
+        project                      = "GOV.UK - Publishing"
       }
     }
   }
