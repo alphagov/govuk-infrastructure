@@ -227,7 +227,7 @@ module "variable-set-rds-integration" {
 
       content_data_api = {
         engine         = "postgres"
-        engine_version = "13.13"
+        engine_version = "13"
         engine_params = {
           work_mem                             = { value = "GREATEST({DBInstanceClassMemory/${1024 * 16}},65536)" }
           autovacuum_max_workers               = { value = 1, apply_method = "pending-reboot" }
