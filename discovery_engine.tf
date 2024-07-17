@@ -72,3 +72,17 @@ resource "aws_secretsmanager_secret_version" "discovery_engine_configuration" {
     "DISCOVERY_ENGINE_SERVING_CONFIG"   = local.discovery_engine_serving_config_path
   })
 }
+
+resource "aws_secretsmanager_secret" "discovery_engine_configuration_search_admin" {
+  name                    = "govuk/search-admin/google-cloud-discovery-engine-configuration"
+  recovery_window_in_days = 0 # Force delete to allow re-applying immediately after destroying
+}
+
+resource "aws_secretsmanager_secret_version" "discovery_engine_configuration_search_admin" {
+  secret_id = aws_secretsmanager_secret.discovery_engine_configuration_search_admin.id
+  secret_string = jsonencode({
+    "GOOGLE_CLOUD_CREDENTIALS"        = base64decode(google_service_account_key.search_admin.private_key)
+    "DISCOVERY_ENGINE_ENGINE"         = google_discovery_engine_search_engine.govuk.name
+    "DISCOVERY_ENGINE_SERVING_CONFIG" = local.discovery_engine_site_search_serving_config_path
+  })
+}
