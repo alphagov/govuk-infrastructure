@@ -245,30 +245,43 @@ repos:
 
   govuk-mobile-android-app:
     allow_squash_merge: true
+    branch_protection: false
 
   govuk-mobile-android-homepage:
     allow_squash_merge: true
+    branch_protection: false
 
   govuk-mobile-android-onboarding:
     allow_squash_merge: true
+    branch_protection: false
 
   govuk-mobile-android-services:
     allow_squash_merge: true
+    branch_protection: false
 
   govuk-mobile-ios-app:
     allow_squash_merge: true
+    branch_protection: false
 
   govuk-mobile-ios-homepage:
     allow_squash_merge: true
+    branch_protection: false
 
   govuk-mobile-ios-onboarding:
     allow_squash_merge: true
+    branch_protection: false
 
   govuk-mobile-ios-services:
     allow_squash_merge: true
+    branch_protection: false
 
   govuk-mobile-ios-ui-components:
     allow_squash_merge: true
+    branch_protection: false
+
+  govuk-mobile-service-registry:
+    allow_squash_merge: true
+    branch_protection: false
 
   govuk-rota-generator:
     required_status_checks:
