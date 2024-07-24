@@ -58,7 +58,7 @@ locals {
   arm_managed_node_group = {
     arm = {
       ami_type              = "AL2023_ARM_64_STANDARD"
-      name                  = "${var.cluster_name}-k8s-node-arm"
+      name                  = "${var.cluster_name}-k8s-node"
       desired_size          = var.arm_workers_size_desired
       max_size              = var.arm_workers_size_max
       min_size              = var.arm_workers_size_min
