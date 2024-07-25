@@ -41,6 +41,7 @@ module "variable-set-staging" {
 
     ckan_s3_organogram_bucket = "datagovuk-staging-ckan-organogram"
 
+    licensify_documentdb_instance_count = 1
   }
 }
 
