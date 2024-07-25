@@ -1226,3 +1226,8 @@ import {
   to = github_branch_protection.govuk_repos["whitehall"]
   id = "whitehall:main"
 }
+
+import {
+  to = github_repository.govuk_repos["govuk-crd-library"]
+  id = "govuk-crd-library"
+}

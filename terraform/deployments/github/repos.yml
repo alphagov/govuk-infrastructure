@@ -620,6 +620,7 @@ repos:
   govuk-aws-data: {}
   govuk-browser-extension: {}
   govuk-chat: {}
+  govuk-crd-library: {}
   govuk-data-science-workshop: {}
   govuk-dns-ui: {}
   govuk-docker: {}
