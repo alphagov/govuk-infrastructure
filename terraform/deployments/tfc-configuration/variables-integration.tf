@@ -52,6 +52,8 @@ module "variable-set-integration" {
     desired_ha_replicas = 1
 
     ckan_s3_organogram_bucket = "datagovuk-integration-ckan-organogram"
+
+    licensify_documentdb_instance_count = 1
   }
 }
 
