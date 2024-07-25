@@ -34,3 +34,9 @@ variable "licensify_documentdb_instance_count" {
   default     = 3
   description = "Number of instances to create for the Licensify DocumentDB cluster"
 }
+
+variable "licensify_backup_retention_period" {
+  type        = number
+  default     = 5
+  description = "Number of days to keep Licensify DocumentDB backups for"
+}
