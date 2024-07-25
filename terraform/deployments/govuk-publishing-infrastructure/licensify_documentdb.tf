@@ -57,10 +57,10 @@ resource "aws_docdb_cluster" "licensify_cluster" {
   master_username                 = "master"
   master_password                 = random_password.licensify_documentdb_master.result
   storage_encrypted               = true
-  backup_retention_period         = 1
   kms_key_id                      = data.terraform_remote_state.infra_security.outputs.licensify_documentdb_kms_key_arn
   vpc_security_group_ids          = ["${data.terraform_remote_state.infra_security_groups.outputs.sg_licensify_documentdb_id}"]
   enabled_cloudwatch_logs_exports = ["profiler"]
+  backup_retention_period         = var.licensify_backup_retention_period
 }
 
 import {
