@@ -40,3 +40,15 @@ variable "licensify_backup_retention_period" {
   default     = 5
   description = "Number of days to keep Licensify DocumentDB backups for"
 }
+
+variable "shared_documentdb_instance_count" {
+  type        = number
+  default     = 3
+  description = "Number of days to keep shared DocumentDB backups for"
+}
+
+variable "shared_documentdb_backup_retention_period" {
+  type        = number
+  default     = 5
+  description = "Number of days to keep shared DocumentDB backups for"
+}
