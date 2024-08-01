@@ -72,10 +72,11 @@ data "aws_iam_policy_document" "opensearch_snapshot_bucket_policy" {
         "172025368201", # Production
         "696911096973", # Staging
         "210287912431", # Integration
+        "430354129336", # Test
       ]
     }
-    # This bucket is only for copying the indices from prod to
-    # staging/integration. Backup snapshot of prod are stored separately, so
+    # This bucket is only for copying the indices from prod to staging,
+    # integration and test. Backup snapshot of prod are stored separately, so
     # the (required) put/delete permissions here don't represent a problem.
     actions = [
       "s3:ListBucket",

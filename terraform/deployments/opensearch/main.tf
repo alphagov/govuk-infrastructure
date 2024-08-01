@@ -186,3 +186,13 @@ resource "aws_route53_record" "service_record" {
   ttl     = 300
   records = [aws_opensearch_domain.opensearch.endpoint]
 }
+
+# This CNAME record is for the Test Opensearch snapshot import K8s cronjob:
+resource "aws_route53_record" "test_service_record" {
+  count   = var.govuk_environment == "integration" ? 1 : 0
+  zone_id = data.terraform_remote_state.infra_root_dns_zones.outputs.internal_root_zone_id
+  name    = "chat-opensearch-test.${var.govuk_environment}.govuk-internal.digital"
+  type    = "CNAME"
+  ttl     = 300
+  records = [var.test_opensearch_url]
+}
