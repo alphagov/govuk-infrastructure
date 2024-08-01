@@ -6,7 +6,7 @@ and is to be used to register the required S3 buckets as repositories for the Op
 in Integration, Staging and Production environments, which are run by EKS as cronjobs.
 
 Instructions for running this script:
-$ eval $(gds aws govuk-[integration|staging|production]-admin -e -art 8h)
+$ eval $(gds aws govuk-[test|integration|staging|production]-admin -e -art 8h)
 $ OPENSEARCH_URL=$(aws opensearch describe-domain --domain-name chat-engine | jq -r '.DomainStatus.Endpoints.vpc')
 $ kubectl relay host/$OPENSEARCH_URL 4443:443
 Open https://localhost:4443/_dashboards in a browser and log in
@@ -14,7 +14,7 @@ Map your AWS Role using instructions in Step 1 of https://docs.aws.amazon.com/op
 $ virtualenv venv
 $ source venv/bin/activate
 $ pip install boto3 requests requests-aws4auth
-$ python register-snapshot-repository.py [integration|staging|production]
+$ python register-snapshot-repository.py [test|integration|staging|production]
 """
 
 import os
@@ -23,6 +23,8 @@ import boto3
 import requests
 from requests_aws4auth import AWS4Auth
 
+# Uncomment the next line and comment out the following one if this is for the Test Environment:
+# host = "https://search-chat-engine-test-dofkxncldpkjd7huoyakdenpbi.eu-west-1.es.amazonaws.com/"
 host = 'https://localhost:4443/'
 region = 'eu-west-1'
 service = 'es'
@@ -58,7 +60,10 @@ def register_repository(name, role_arn, delete_first=False, read_only=False):
 
 delete_first = 'DELETE_FIRST' in os.environ
 
-if sys.argv[1] == 'integration':
+if sys.argv[1] == 'test':
+    role_arn = 'arn:aws:iam::430354129336:role/govuk-test-chat-opensearch-snapshot-role'
+    register_repository('govuk-production', role_arn, delete_first=delete_first, read_only=True)
+elif sys.argv[1] == 'integration':
     role_arn = 'arn:aws:iam::210287912431:role/govuk-integration-chat-opensearch-snapshot-role'
     register_repository('govuk-integration', role_arn, delete_first=delete_first)
     register_repository('govuk-staging', role_arn, delete_first=delete_first, read_only=True)
@@ -70,4 +75,4 @@ elif sys.argv[1] == 'production':
     role_arn = 'arn:aws:iam::172025368201:role/govuk-production-chat-opensearch-snapshot-role'
     register_repository('govuk-production', role_arn, delete_first=delete_first)
 else:
-    print('expected one of [integration|staging|production]')
+    print('expected one of [test|integration|staging|production]')
