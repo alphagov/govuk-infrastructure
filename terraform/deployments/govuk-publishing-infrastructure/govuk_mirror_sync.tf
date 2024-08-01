@@ -52,31 +52,6 @@ resource "aws_s3_bucket_lifecycle_configuration" "govuk_mirror" {
   }
 }
 
-import {
-  to = aws_s3_bucket.govuk_mirror
-  id = "govuk-${var.govuk_environment}-mirror"
-}
-
-import {
-  to = aws_s3_bucket_versioning.govuk_mirror
-  id = "govuk-${var.govuk_environment}-mirror"
-}
-
-import {
-  to = aws_s3_bucket_logging.govuk_mirror
-  id = "govuk-${var.govuk_environment}-mirror"
-}
-
-import {
-  to = aws_s3_bucket_cors_configuration.govuk_mirror
-  id = "govuk-${var.govuk_environment}-mirror"
-}
-
-import {
-  to = aws_s3_bucket_lifecycle_configuration.govuk_mirror
-  id = "govuk-${var.govuk_environment}-mirror"
-}
-
 resource "aws_s3_bucket" "govuk_mirror_replica" {
   bucket = "govuk-${var.govuk_environment}-mirror-replica"
 
@@ -114,26 +89,6 @@ resource "aws_s3_bucket_lifecycle_configuration" "govuk_mirror_replica" {
       noncurrent_days = 5
     }
   }
-}
-
-import {
-  to = aws_s3_bucket.govuk_mirror_replica
-  id = "govuk-${var.govuk_environment}-mirror-replica"
-}
-
-import {
-  to = aws_s3_bucket_versioning.govuk_mirror_replica
-  id = "govuk-${var.govuk_environment}-mirror-replica"
-}
-
-import {
-  to = aws_s3_bucket_logging.govuk_mirror_replica
-  id = "govuk-${var.govuk_environment}-mirror-replica"
-}
-
-import {
-  to = aws_s3_bucket_lifecycle_configuration.govuk_mirror_replica
-  id = "govuk-${var.govuk_environment}-mirror-replica"
 }
 
 data "aws_iam_policy_document" "s3_mirror_read_policy" {
@@ -277,16 +232,6 @@ resource "aws_s3_bucket_policy" "govuk_mirror_replica_read_policy" {
   policy = data.aws_iam_policy_document.s3_mirror_replica_read_policy.json
 }
 
-import {
-  to = aws_s3_bucket_policy.govuk_mirror_read_policy
-  id = "govuk-${var.govuk_environment}-mirror"
-}
-
-import {
-  to = aws_s3_bucket_policy.govuk_mirror_replica_read_policy
-  id = "govuk-${var.govuk_environment}-mirror-replica"
-}
-
 resource "aws_s3_bucket_replication_configuration" "govuk_mirror" {
   provider   = aws.replica
   depends_on = [aws_s3_bucket_versioning.govuk_mirror]
@@ -373,16 +318,6 @@ resource "aws_iam_policy_attachment" "govuk_mirror_replication_policy_attachment
   policy_arn = aws_iam_policy.govuk_mirror_replication_policy.arn
 }
 
-import {
-  to = aws_iam_role.govuk_mirror_replication_role
-  id = "govuk-mirror-replication-role"
-}
-
-import {
-  to = aws_iam_policy.govuk_mirror_replication_policy
-  id = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:policy/govuk-${var.govuk_environment}-mirror-buckets-replication-policy"
-}
-
 data "aws_iam_policy_document" "google_replication" {
   statement {
     effect = "Allow"
@@ -445,11 +380,6 @@ resource "aws_iam_policy_attachment" "govuk_mirror_gcp_storage_transfer" {
   name       = "s3-govuk-mirror-replication-policy-attachment"
   roles      = [aws_iam_role.govuk_mirror_gcp_storage_transfer.name]
   policy_arn = aws_iam_policy.govuk_mirror_gcp_storage_transfer.arn
-}
-
-import {
-  to = aws_iam_policy.govuk_mirror_gcp_storage_transfer
-  id = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:policy/govuk-${var.govuk_environment}-mirror-read-policy"
 }
 
 module "govuk_mirror_sync_iam_role" {
