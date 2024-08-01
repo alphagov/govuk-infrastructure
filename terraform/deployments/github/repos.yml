@@ -16,16 +16,22 @@ repos:
       standard_contexts: *standard_govuk_rails_checks
       additional_contexts:
         - Test Ruby
-        # Status checks missing from here but present in [ci.yml](https://github.com/alphagov/account-api/blob/main/.github/workflows/ci.yml):
-        # - Run Pact tests
+        - CodeQL SAST scan / Analyze
+        - Dependency Review scan / dependency-review-pr
+        - Security Analysis / Run Brakeman
+        - Lint Ruby / Run RuboCop
+        - Run Pact tests
 
   asset-manager:
     required_status_checks:
       standard_contexts: *standard_govuk_rails_checks
       additional_contexts:
         - Test Ruby
-        # Status checks missing from here but present in [ci.yml](https://github.com/alphagov/asset-manager/blob/main/.github/workflows/ci.yml):
-        # - Run Pact tests
+        - CodeQL SAST scan / Analyze
+        - Dependency Review scan / dependency-review-pr
+        - Security Analysis / Run Brakeman
+        - Lint Ruby / Run RuboCop
+        - Run Pact tests
 
   authenticating-proxy:
     required_status_checks:
@@ -55,8 +61,11 @@ repos:
         - Test JavaScript / Run Jasmine
         - Test Ruby / Run RSpec
         - Lint ERB / Lint ERB
-        # Status checks missing from here but present in [ci.yml](https://github.com/alphagov/collections/blob/main/.github/workflows/ci.yml):
-        # - Run Pact tests
+        - CodeQL SAST scan / Analyze
+        - Dependency Review scan / dependency-review-pr
+        - Security Analysis / Run Brakeman
+        - Lint Ruby / Run RuboCop
+        - Run Pact tests
 
   collections-publisher:
     required_status_checks:
@@ -124,8 +133,11 @@ repos:
       standard_contexts: *standard_govuk_rails_checks
       additional_contexts:
         - Test Ruby
-        # Status checks missing from here but present in [ci.yml](https://github.com/alphagov/email-alert-api/blob/main/.github/workflows/ci.yml):
-        # - Run Pact tests
+        - CodeQL SAST scan / Analyze
+        - Dependency Review scan / dependency-review-pr
+        - Security Analysis / Run Brakeman
+        - Lint Ruby / Run RuboCop
+        - Run Pact tests
 
   email-alert-frontend:
     required_status_checks:
@@ -170,15 +182,22 @@ repos:
         - Lint SCSS / Run Stylelint
         - Test JavaScript / Run Jasmine
         - Test Ruby / Run Minitest
-        # Status checks missing from here but present in [ci.yml](https://github.com/alphagov/frontend/blob/main/.github/workflows/ci.yml):
-        # - Run Pact tests
+        - CodeQL SAST scan / Analyze
+        - Dependency Review scan / dependency-review-pr
+        - Security Analysis / Run Brakeman
+        - Lint Ruby / Run RuboCop
+        - Run Pact tests
 
   gds-api-adapters:
     required_status_checks:
       standard_contexts: *standard_security_checks
       additional_contexts:
-        # Status checks missing from here but present in [ci.yml](https://github.com/alphagov/gds-api-adapters/blob/main/.github/workflows/ci.yml):
-        # - Many different pact tests
+        - Test Ruby
+        - CodeQL SAST scan / Analyze
+        - Dependency Review scan / dependency-review-pr
+        - Security Analysis / Run Brakeman
+        - Lint Ruby / Run RuboCop
+        - Run Pact tests
 
   gds-sso:
     required_status_checks:
@@ -346,8 +365,11 @@ repos:
       standard_contexts: *standard_govuk_rails_checks
       additional_contexts:
         - Test Ruby
-        # Status checks missing from here but present in [ci.yml](https://github.com/alphagov/link-checker-api/blob/main/.github/workflows/ci.yml):
-        # - Run Pact tests
+        - CodeQL SAST scan / Analyze
+        - Dependency Review scan / dependency-review-pr
+        - Security Analysis / Run Brakeman
+        - Lint Ruby / Run RuboCop
+        - Run Pact tests
 
   local-links-manager:
     required_status_checks:
@@ -363,8 +385,11 @@ repos:
       standard_contexts: *standard_govuk_rails_checks
       additional_contexts:
         - Test Ruby
-        # Status checks missing from here but present in [ci.yml](https://github.com/alphagov/locations-api/blob/main/.github/workflows/ci.yml):
-        # - Run Pact tests
+        - CodeQL SAST scan / Analyze
+        - Dependency Review scan / dependency-review-pr
+        - Security Analysis / Run Brakeman
+        - Lint Ruby / Run RuboCop
+        - Run Pact tests
 
   manuals-publisher:
     required_status_checks:
@@ -408,8 +433,11 @@ repos:
         - Integration tests
         - Test Ruby
         - Lint Views
-        # Status checks missing from here but present in [ci.yml](https://github.com/alphagov/places-manager/blob/main/.github/workflows/ci.yml):
-        # - Run Pact tests
+        - CodeQL SAST scan / Analyze
+        - Dependency Review scan / dependency-review-pr
+        - Security Analysis / Run Brakeman
+        - Lint Ruby / Run RuboCop
+        - Run Pact tests
 
   plek:
     required_status_checks:
@@ -430,9 +458,11 @@ repos:
       additional_contexts:
         - Check content schemas are built
         - Test Ruby
-        # Status checks missing from here but present in [ci.yml](https://github.com/alphagov/publishing-api/blob/main/.github/workflows/ci.yml):
-        # - Run Content Store Pact tests
-        # - Run GDS API Adapter Pact tests
+        - CodeQL SAST scan / Analyze
+        - Dependency Review scan / dependency-review-pr
+        - Security Analysis / Run Brakeman
+        - Lint Ruby / Run RuboCop
+        - Run Pact tests
 
   rack-logstasher:
     required_status_checks:
