@@ -144,8 +144,6 @@ data "aws_iam_policy_document" "s3_mirror_read_policy" {
     resources = [
       "arn:aws:s3:::${aws_s3_bucket.govuk_mirror.id}",
       "arn:aws:s3:::${aws_s3_bucket.govuk_mirror.id}/*",
-      "arn:aws:s3:::${aws_s3_bucket.govuk_mirror_replica.id}",
-      "arn:aws:s3:::${aws_s3_bucket.govuk_mirror_replica.id}/*",
     ]
 
     condition {
@@ -167,8 +165,6 @@ data "aws_iam_policy_document" "s3_mirror_read_policy" {
     resources = [
       "arn:aws:s3:::${aws_s3_bucket.govuk_mirror.id}",
       "arn:aws:s3:::${aws_s3_bucket.govuk_mirror.id}/*",
-      "arn:aws:s3:::${aws_s3_bucket.govuk_mirror_replica.id}",
-      "arn:aws:s3:::${aws_s3_bucket.govuk_mirror_replica.id}/*",
     ]
 
     condition {
@@ -190,6 +186,69 @@ data "aws_iam_policy_document" "s3_mirror_read_policy" {
     resources = [
       "arn:aws:s3:::${aws_s3_bucket.govuk_mirror.id}",
       "arn:aws:s3:::${aws_s3_bucket.govuk_mirror.id}/*",
+    ]
+
+    condition {
+      test     = "IpAddress"
+      variable = "aws:SourceIp"
+      values   = data.tfe_outputs.cluster_infrastructure.nonsensitive_values.public_nat_gateway_ips
+    }
+
+    principals {
+      type        = "AWS"
+      identifiers = ["*"]
+    }
+  }
+}
+
+data "aws_iam_policy_document" "s3_mirror_replica_read_policy" {
+  statement {
+    sid     = "S3FastlyReadBucket"
+    actions = ["s3:GetObject"]
+
+    resources = [
+      "arn:aws:s3:::${aws_s3_bucket.govuk_mirror_replica.id}",
+      "arn:aws:s3:::${aws_s3_bucket.govuk_mirror_replica.id}/*",
+    ]
+
+    condition {
+      test     = "IpAddress"
+      variable = "aws:SourceIp"
+      values   = data.fastly_ip_ranges.fastly.cidr_blocks
+    }
+
+    principals {
+      type        = "AWS"
+      identifiers = ["*"]
+    }
+  }
+
+  statement {
+    sid     = "S3OfficeReadBucket"
+    actions = ["s3:GetObject"]
+
+    resources = [
+      "arn:aws:s3:::${aws_s3_bucket.govuk_mirror_replica.id}",
+      "arn:aws:s3:::${aws_s3_bucket.govuk_mirror_replica.id}/*",
+    ]
+
+    condition {
+      test     = "IpAddress"
+      variable = "aws:SourceIp"
+      values   = data.terraform_remote_state.infra_security_groups.outputs.office_ips
+    }
+
+    principals {
+      type        = "AWS"
+      identifiers = ["*"]
+    }
+  }
+
+  statement {
+    sid     = "S3NATInternalReadBucket"
+    actions = ["s3:GetObject"]
+
+    resources = [
       "arn:aws:s3:::${aws_s3_bucket.govuk_mirror_replica.id}",
       "arn:aws:s3:::${aws_s3_bucket.govuk_mirror_replica.id}/*",
     ]
@@ -215,7 +274,7 @@ resource "aws_s3_bucket_policy" "govuk_mirror_read_policy" {
 
 resource "aws_s3_bucket_policy" "govuk_mirror_replica_read_policy" {
   bucket = aws_s3_bucket.govuk_mirror_replica.id
-  policy = data.aws_iam_policy_document.s3_mirror_read_policy.json
+  policy = data.aws_iam_policy_document.s3_mirror_replica_read_policy.json
 }
 
 import {
