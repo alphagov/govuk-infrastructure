@@ -25,6 +25,7 @@ module "govuk-publishing-infrastructure-integration" {
 
   variable_set_names = [
     "aws-credentials-integration",
+    "gcp-credentials-integration",
     "common",
     "common-integration"
   ]
@@ -56,6 +57,7 @@ module "govuk-publishing-infrastructure-staging" {
 
   variable_set_names = [
     "aws-credentials-staging",
+    "gcp-credentials-staging",
     "common",
     "common-staging"
   ]
@@ -87,6 +89,7 @@ module "govuk-publishing-infrastructure-production" {
 
   variable_set_names = [
     "aws-credentials-production",
+    "gcp-credentials-production",
     "common",
     "common-production"
   ]

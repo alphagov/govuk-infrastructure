@@ -1,3 +1,398 @@
+resource "aws_s3_bucket" "govuk_mirror" {
+  provider = aws.replica
+  bucket   = "govuk-${var.govuk_environment}-mirror"
+
+  tags = {
+    Name = "govuk-${var.govuk_environment}-mirror"
+  }
+}
+
+resource "aws_s3_bucket_versioning" "govuk_mirror" {
+  provider = aws.replica
+  bucket   = aws_s3_bucket.govuk_mirror.id
+  versioning_configuration {
+    status = "Enabled"
+  }
+}
+
+resource "aws_s3_bucket_logging" "govuk_mirror" {
+  provider = aws.replica
+  bucket   = aws_s3_bucket.govuk_mirror.id
+
+  target_bucket = "govuk-${var.govuk_environment}-aws-secondary-logging"
+  target_prefix = "s3/govuk-${var.govuk_environment}-mirror/"
+}
+
+resource "aws_s3_bucket_cors_configuration" "govuk_mirror" {
+  provider = aws.replica
+  bucket   = aws_s3_bucket.govuk_mirror.id
+
+  cors_rule {
+    allowed_headers = ["*"]
+    allowed_methods = ["GET", "HEAD"]
+    allowed_origins = ["*"]
+    max_age_seconds = 3000
+  }
+}
+
+resource "aws_s3_bucket_lifecycle_configuration" "govuk_mirror" {
+  provider = aws.replica
+  bucket   = aws_s3_bucket.govuk_mirror.id
+
+  rule {
+    id = "main"
+
+    filter {}
+
+    status = "Enabled"
+
+    noncurrent_version_expiration {
+      noncurrent_days = 5
+    }
+  }
+}
+
+import {
+  to = aws_s3_bucket.govuk_mirror
+  id = "govuk-${var.govuk_environment}-mirror"
+}
+
+import {
+  to = aws_s3_bucket_versioning.govuk_mirror
+  id = "govuk-${var.govuk_environment}-mirror"
+}
+
+import {
+  to = aws_s3_bucket_logging.govuk_mirror
+  id = "govuk-${var.govuk_environment}-mirror"
+}
+
+import {
+  to = aws_s3_bucket_cors_configuration.govuk_mirror
+  id = "govuk-${var.govuk_environment}-mirror"
+}
+
+import {
+  to = aws_s3_bucket_lifecycle_configuration.govuk_mirror
+  id = "govuk-${var.govuk_environment}-mirror"
+}
+
+resource "aws_s3_bucket" "govuk_mirror_replica" {
+  bucket = "govuk-${var.govuk_environment}-mirror-replica"
+
+  tags = {
+    Name = "govuk-${var.govuk_environment}-mirror-replica"
+  }
+}
+
+resource "aws_s3_bucket_versioning" "govuk_mirror_replica" {
+  bucket = aws_s3_bucket.govuk_mirror_replica.id
+  versioning_configuration {
+    status = "Enabled"
+  }
+}
+
+resource "aws_s3_bucket_logging" "govuk_mirror_replica" {
+  bucket = aws_s3_bucket.govuk_mirror_replica.id
+
+  target_bucket = "govuk-${var.govuk_environment}-aws-logging"
+  target_prefix = "s3/govuk-${var.govuk_environment}-mirror-replica/"
+}
+
+
+resource "aws_s3_bucket_lifecycle_configuration" "govuk_mirror_replica" {
+  bucket = aws_s3_bucket.govuk_mirror_replica.id
+
+  rule {
+    id = "main"
+
+    filter {}
+
+    status = "Enabled"
+
+    noncurrent_version_expiration {
+      noncurrent_days = 5
+    }
+  }
+}
+
+import {
+  to = aws_s3_bucket.govuk_mirror_replica
+  id = "govuk-${var.govuk_environment}-mirror-replica"
+}
+
+import {
+  to = aws_s3_bucket_versioning.govuk_mirror_replica
+  id = "govuk-${var.govuk_environment}-mirror-replica"
+}
+
+import {
+  to = aws_s3_bucket_logging.govuk_mirror_replica
+  id = "govuk-${var.govuk_environment}-mirror-replica"
+}
+
+import {
+  to = aws_s3_bucket_lifecycle_configuration.govuk_mirror_replica
+  id = "govuk-${var.govuk_environment}-mirror-replica"
+}
+
+data "aws_iam_policy_document" "s3_mirror_read_policy" {
+  statement {
+    sid     = "S3FastlyReadBucket"
+    actions = ["s3:GetObject"]
+
+    resources = [
+      "arn:aws:s3:::${aws_s3_bucket.govuk_mirror.id}",
+      "arn:aws:s3:::${aws_s3_bucket.govuk_mirror.id}/*",
+      "arn:aws:s3:::${aws_s3_bucket.govuk_mirror_replica.id}",
+      "arn:aws:s3:::${aws_s3_bucket.govuk_mirror_replica.id}/*",
+    ]
+
+    condition {
+      test     = "IpAddress"
+      variable = "aws:SourceIp"
+      values   = data.fastly_ip_ranges.fastly.cidr_blocks
+    }
+
+    principals {
+      type        = "AWS"
+      identifiers = ["*"]
+    }
+  }
+
+  statement {
+    sid     = "S3OfficeReadBucket"
+    actions = ["s3:GetObject"]
+
+    resources = [
+      "arn:aws:s3:::${aws_s3_bucket.govuk_mirror.id}",
+      "arn:aws:s3:::${aws_s3_bucket.govuk_mirror.id}/*",
+      "arn:aws:s3:::${aws_s3_bucket.govuk_mirror_replica.id}",
+      "arn:aws:s3:::${aws_s3_bucket.govuk_mirror_replica.id}/*",
+    ]
+
+    condition {
+      test     = "IpAddress"
+      variable = "aws:SourceIp"
+      values   = data.terraform_remote_state.infra_security_groups.outputs.office_ips
+    }
+
+    principals {
+      type        = "AWS"
+      identifiers = ["*"]
+    }
+  }
+
+  statement {
+    sid     = "S3NATInternalReadBucket"
+    actions = ["s3:GetObject"]
+
+    resources = [
+      "arn:aws:s3:::${aws_s3_bucket.govuk_mirror.id}",
+      "arn:aws:s3:::${aws_s3_bucket.govuk_mirror.id}/*",
+      "arn:aws:s3:::${aws_s3_bucket.govuk_mirror_replica.id}",
+      "arn:aws:s3:::${aws_s3_bucket.govuk_mirror_replica.id}/*",
+    ]
+
+    condition {
+      test     = "IpAddress"
+      variable = "aws:SourceIp"
+      values   = data.tfe_outputs.cluster_infrastructure.nonsensitive_values.public_nat_gateway_ips
+    }
+
+    principals {
+      type        = "AWS"
+      identifiers = ["*"]
+    }
+  }
+}
+
+resource "aws_s3_bucket_policy" "govuk_mirror_read_policy" {
+  provider = aws.replica
+  bucket   = aws_s3_bucket.govuk_mirror.id
+  policy   = data.aws_iam_policy_document.s3_mirror_read_policy.json
+}
+
+resource "aws_s3_bucket_policy" "govuk_mirror_replica_read_policy" {
+  bucket = aws_s3_bucket.govuk_mirror_replica.id
+  policy = data.aws_iam_policy_document.s3_mirror_read_policy.json
+}
+
+import {
+  to = aws_s3_bucket_policy.govuk_mirror_read_policy
+  id = "govuk-${var.govuk_environment}-mirror"
+}
+
+import {
+  to = aws_s3_bucket_policy.govuk_mirror_replica_read_policy
+  id = "govuk-${var.govuk_environment}-mirror-replica"
+}
+
+resource "aws_s3_bucket_replication_configuration" "govuk_mirror" {
+  provider   = aws.replica
+  depends_on = [aws_s3_bucket_versioning.govuk_mirror]
+
+  role   = aws_iam_role.govuk_mirror_replication_role.arn
+  bucket = aws_s3_bucket.govuk_mirror.id
+
+  rule {
+    id = "govuk-mirror-replication-whole-bucket-rule"
+
+    status = "Enabled"
+
+    destination {
+      bucket        = aws_s3_bucket.govuk_mirror_replica.arn
+      storage_class = "STANDARD"
+    }
+  }
+}
+
+data "aws_iam_policy_document" "assume_role" {
+  statement {
+    effect = "Allow"
+
+    principals {
+      type        = "Service"
+      identifiers = ["s3.amazonaws.com"]
+    }
+
+    actions = ["sts:AssumeRole"]
+  }
+}
+
+data "aws_iam_policy_document" "replication" {
+  statement {
+    effect = "Allow"
+
+    actions = [
+      "s3:GetReplicationConfiguration",
+      "s3:ListBucket",
+    ]
+
+    resources = [aws_s3_bucket.govuk_mirror.arn]
+  }
+
+  statement {
+    effect = "Allow"
+
+    actions = [
+      "s3:GetObjectVersionForReplication",
+      "s3:GetObjectVersionAcl",
+      "s3:GetObjectVersionTagging",
+    ]
+
+    resources = ["${aws_s3_bucket.govuk_mirror.arn}/*"]
+  }
+
+  statement {
+    effect = "Allow"
+
+    actions = [
+      "s3:ReplicateObject",
+      "s3:ReplicateDelete",
+      "s3:ReplicateTags",
+    ]
+
+    resources = ["${aws_s3_bucket.govuk_mirror_replica.arn}/*"]
+  }
+}
+
+resource "aws_iam_role" "govuk_mirror_replication_role" {
+  name               = "govuk-mirror-replication-role"
+  assume_role_policy = data.aws_iam_policy_document.assume_role.json
+}
+
+resource "aws_iam_policy" "govuk_mirror_replication_policy" {
+  name        = "govuk-${var.govuk_environment}-mirror-buckets-replication-policy"
+  policy      = data.aws_iam_policy_document.replication.json
+  description = "Allows replication of the mirror buckets"
+}
+
+resource "aws_iam_policy_attachment" "govuk_mirror_replication_policy_attachment" {
+  name       = "s3-govuk-mirror-replication-policy-attachment"
+  roles      = [aws_iam_role.govuk_mirror_replication_role.name]
+  policy_arn = aws_iam_policy.govuk_mirror_replication_policy.arn
+}
+
+import {
+  to = aws_iam_role.govuk_mirror_replication_role
+  id = "govuk-mirror-replication-role"
+}
+
+import {
+  to = aws_iam_policy.govuk_mirror_replication_policy
+  id = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:policy/govuk-${var.govuk_environment}-mirror-buckets-replication-policy"
+}
+
+data "aws_iam_policy_document" "google_replication" {
+  statement {
+    effect = "Allow"
+
+    actions = [
+      "s3:ListBucket",
+      "s3:GetBucketLocation"
+
+    ]
+
+    resources = [aws_s3_bucket.govuk_mirror.arn]
+  }
+
+  statement {
+    effect = "Allow"
+
+    actions = [
+      "s3:GetObject",
+    ]
+
+    resources = ["${aws_s3_bucket.govuk_mirror.arn}/*"]
+  }
+}
+
+data "google_storage_transfer_project_service_account" "default" {
+}
+
+data "aws_iam_policy_document" "google_federated" {
+  statement {
+    effect = "Allow"
+
+    principals {
+      type        = "Federated"
+      identifiers = ["accounts.google.com"]
+    }
+
+    actions = ["sts:AssumeRoleWithWebIdentity"]
+
+    condition {
+      test     = "StringEquals"
+      variable = "accounts.google.com:sub"
+
+      values = ["${data.google_storage_transfer_project_service_account.default.subject_id}"]
+    }
+  }
+}
+
+resource "aws_iam_role" "govuk_mirror_gcp_storage_transfer" {
+  name               = "govuk-mirror-gcp-storage-transfer"
+  assume_role_policy = data.aws_iam_policy_document.google_federated.json
+}
+
+resource "aws_iam_policy" "govuk_mirror_gcp_storage_transfer" {
+  name        = "govuk-${var.govuk_environment}-mirror-read-policy"
+  policy      = data.aws_iam_policy_document.google_replication.json
+  description = "Allow the listing and reading of the primary govuk mirror bucket"
+}
+
+resource "aws_iam_policy_attachment" "govuk_mirror_gcp_storage_transfer" {
+  name       = "s3-govuk-mirror-replication-policy-attachment"
+  roles      = [aws_iam_role.govuk_mirror_gcp_storage_transfer.name]
+  policy_arn = aws_iam_policy.govuk_mirror_gcp_storage_transfer.arn
+}
+
+import {
+  to = aws_iam_policy.govuk_mirror_gcp_storage_transfer
+  id = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:policy/govuk-${var.govuk_environment}-mirror-read-policy"
+}
+
 module "govuk_mirror_sync_iam_role" {
   source  = "terraform-aws-modules/iam/aws//modules/iam-eks-role"
   version = "~> 5.28"
