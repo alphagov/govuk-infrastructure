@@ -96,6 +96,7 @@ module "variable-set-opensearch-integration" {
     dedicated_master_count   = 3
     dedicated_master_type    = "m6g.large.search"
     zone_awareness_enabled   = true
+    test_opensearch_url      = "search-chat-engine-test-dofkxncldpkjd7huoyakdenpbi.eu-west-1.es.amazonaws.com"
   }
 }
 
