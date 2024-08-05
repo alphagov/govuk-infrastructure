@@ -66,7 +66,7 @@ if sys.argv[1] == 'test':
 elif sys.argv[1] == 'integration':
     role_arn = 'arn:aws:iam::210287912431:role/govuk-integration-chat-opensearch-snapshot-role'
     register_repository('govuk-integration', role_arn, delete_first=delete_first)
-    register_repository('govuk-staging', role_arn, delete_first=delete_first, read_only=True)
+    register_repository('govuk-production', role_arn, delete_first=delete_first, read_only=True)
 elif sys.argv[1] == 'staging':
     role_arn = 'arn:aws:iam::696911096973:role/govuk-staging-chat-opensearch-snapshot-role'
     register_repository('govuk-staging', role_arn, delete_first=delete_first)
