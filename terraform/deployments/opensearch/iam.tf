@@ -7,7 +7,7 @@ locals {
       "arn:aws:s3:::govuk-staging-chat-opensearch-snapshots",
     ]
     integration = [
-      "arn:aws:s3:::govuk-staging-chat-opensearch-snapshots",
+      "arn:aws:s3:::govuk-production-chat-opensearch-snapshots",
       "arn:aws:s3:::govuk-integration-chat-opensearch-snapshots",
     ]
   }[var.govuk_environment]
