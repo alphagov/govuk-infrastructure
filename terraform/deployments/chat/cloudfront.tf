@@ -22,6 +22,7 @@ resource "aws_cloudfront_distribution" "chat_distribution" {
 
   origin {
     domain_name = aws_s3_bucket.origin_service_disabled.bucket_regional_domain_name
+    origin_access_control_id = aws_cloudfront_origin_access_control.default.id
     origin_id   = aws_s3_bucket.origin_service_disabled.id
     custom_origin_config {
       http_port              = 80
@@ -51,6 +52,12 @@ resource "aws_cloudfront_distribution" "chat_distribution" {
 
     viewer_protocol_policy = "redirect-to-https"
     min_ttl                = 0
+    dynamic "function_association" {
+      for_each = var.service_disabled ? [1] : []
+      content {
+        event_type   = "viewer-request"
+        function_arn = aws_cloudfront_function.add_index.arn
+      }
   }
 
   price_class = "PriceClass_All"
@@ -98,4 +105,10 @@ data "aws_iam_policy_document" "origin_service_disabled" {
       }
     }
   }
+}
+
+resource "aws_cloudfront_function" "add_index" {
+  name    = "add_index"
+  runtime = "cloudfront-js-2.0"
+  code    = file("${path.module}/add_index.js")
 }
