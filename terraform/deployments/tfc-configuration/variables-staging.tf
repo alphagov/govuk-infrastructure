@@ -88,12 +88,10 @@ module "variable-set-chat-staging" {
     cloudfront_create                             = "1" 
     cloudfront_enable                             = True
     service_disabled                              = False
-    origin_chat_domain                            = "chat.staging.publishing.service.gov.uk"
-    origin_chat_id                                =
-    origin_service_disabled_domain                =
-    origin_service_disabled_id                    =
-    cloudfront_chat_distribution_aliases          =
-    chat_certificate_arn                          =
+    origin_chat_domain                            = "chat.eks.staging.govuk.digital"
+    origin_chat_id                                = "Chat origin"
+    cloudfront_chat_distribution_aliases          = ["chat.staging.publishing.service.gov.uk"]
+    chat_certificate_arn                          = "arn:aws:acm:us-east-1:696911096973:certificate/642e34ef-71e2-439d-99f7-e79baf9ed482"
   }
 }
 

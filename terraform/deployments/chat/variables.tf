@@ -61,12 +61,6 @@ variable "origin_chat_domain" {
 variable "origin_chat_id" {
   type = string
 }
-variable "origin_service_disabled_domain" {
-  type = string
-}
-variable "origin_service_disabled_id" {
-  type = string
-}
 variable "cloudfront_chat_distribution_aliases" {
   type        = list(any)
   description = "Additional CNAMEs to create for the Chat CloudFront distribution."

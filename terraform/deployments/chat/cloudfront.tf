@@ -21,8 +21,8 @@ resource "aws_cloudfront_distribution" "chat_distribution" {
   }
 
   origin {
-    domain_name = var.origin_service_disabled_domain
-    origin_id   = var.origin_service_disabled_id
+    domain_name = aws_s3_bucket.origin_service_disabled.bucket_regional_domain_name
+    origin_id   = aws_s3_bucket.origin_service_disabled.id
     custom_origin_config {
       http_port              = 80
       https_port             = 443
@@ -68,3 +68,34 @@ resource "aws_cloudfront_distribution" "chat_distribution" {
   }
 }
 
+resource "aws_s3_bucket" "origin_service_disabled" {
+  bucket = "govuk-chat-${var.govuk_environment}"
+}
+
+resource "aws_s3_bucket_policy" "origin_service_disabled" {
+  bucket = aws_s3_bucket.origin_service_disabled.id
+  policy = data.aws_iam_policy_document.origin_service_disabled.json
+}
+
+data "aws_iam_policy_document" "origin_service_disabled" {
+  statement {
+    sid = "AllowCloudFrontServicePrincipal"
+    principals {
+      type = "Service"
+      identifiers = "cloudfront.amazonaws.com"
+    }
+    actions = [
+      "s3:ListBucket",
+      "s3:GetObject",
+    ]
+    resources = [
+      aws_s3_bucket.origin_service_disabled.arn,
+      "${aws_s3_bucket.origin_service_disabled.arn}/*",
+    ]
+    Condition {
+      StringEquals {
+        "${aws.cloudfront_distribution.chat_distribution.id}"
+      }
+    }
+  }
+}
