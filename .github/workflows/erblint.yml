@@ -1,0 +1,21 @@
+name: Run Erb Lint
+
+on:
+  workflow_call:
+
+jobs:
+  run-erblint:
+    name: Run ErbLint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          show-progress: false
+
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
+
+      - name: Run ErbLint
+        run: bundle exec erblint --lint-all
