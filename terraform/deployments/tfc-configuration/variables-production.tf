@@ -104,6 +104,13 @@ module "variable-set-chat-production" {
     chat_redis_cluster_node_type                  = "cache.r6g.xlarge"
     chat_redis_cluster_num_cache_clusters         = "2"
     chat_redis_cluster_parameter_group_name       = "default.redis7"
+    cloudfront_create                             = "1" 
+    cloudfront_enable                             = True
+    service_disabled                              = False
+    origin_chat_domain                            = "chat.eks.production.govuk.digital"
+    origin_chat_id                                = "Chat origin"
+    cloudfront_chat_distribution_aliases          = ["chat.publishing.service.gov.uk"]
+    chat_certificate_arn                          = "arn:aws:acm:us-east-1:172025368201:certificate/ea27535c-f48a-4755-b6ca-c048c880e02d"
   }
 }
 
