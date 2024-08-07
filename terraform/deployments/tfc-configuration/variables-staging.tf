@@ -85,6 +85,15 @@ module "variable-set-chat-staging" {
     chat_redis_cluster_node_type                  = "cache.r6g.xlarge"
     chat_redis_cluster_num_cache_clusters         = "1"
     chat_redis_cluster_parameter_group_name       = "default.redis7"
+    cloudfront_create                             = "1" 
+    cloudfront_enable                             = True
+    service_disabled                              = False
+    origin_chat_domain                            = "chat.staging.publishing.service.gov.uk"
+    origin_chat_id                                =
+    origin_service_disabled_domain                =
+    origin_service_disabled_id                    =
+    cloudfront_chat_distribution_aliases          =
+    chat_certificate_arn                          =
   }
 }
 
