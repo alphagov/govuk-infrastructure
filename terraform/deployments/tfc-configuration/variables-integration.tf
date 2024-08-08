@@ -73,7 +73,7 @@ module "variable-set-chat-integration" {
     chat_redis_cluster_node_type                  = "cache.r6g.xlarge"
     chat_redis_cluster_num_cache_clusters         = "1"
     chat_redis_cluster_parameter_group_name       = "default.redis7"
-    cloudfront_create                             = "1"
+    cloudfront_create                             = 1
     cloudfront_enable                             = true
     service_disabled                              = false
     origin_chat_domain                            = "chat.eks.integration.govuk.digital"
