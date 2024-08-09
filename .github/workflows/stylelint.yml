@@ -12,14 +12,6 @@ on:
 jobs:
   run-stylelint:
     name: Run Stylelint
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          show-progress: false
-
-      - name: Setup Node
-        uses: alphagov/govuk-infrastructure/.github/actions/setup-node@main
-
-      - name: Run Stylelint
-        run: yarn run stylelint ${{ inputs.files }}
+    uses: alphagov/govuk-infrastructure/.github/workflows/node-script.yml@main
+    with:
+      script: yarn run stylelint ${{ inputs.files }}

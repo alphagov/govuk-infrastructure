@@ -1,0 +1,25 @@
+name: Run Node.js Script
+run-name: Run ${{ inputs.script }}
+
+on:
+  workflow_call:
+    inputs:
+      script:
+        description: 'Script to execute (typically `yarn run <script>`)'
+        required: true
+        type: string
+
+jobs:
+  run-script:
+    name: Run Node.js Script
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          show-progress: false
+
+      - name: Setup Node
+        uses: alphagov/govuk-infrastructure/.github/actions/setup-node@main
+
+      - name: Run script
+        run: ${{ inputs.script }}
