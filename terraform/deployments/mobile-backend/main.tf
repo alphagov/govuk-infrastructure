@@ -2,11 +2,11 @@ terraform {
   cloud {
     organization = "govuk"
     workspaces {
-      tags = ["aws"]
+      tags = ["aws", "mobile-backend"]
     }
   }
 
-  required_version = "~> 1.5"
+  required_version = "~> 1.8"
   required_providers {
     aws = {
       source  = "hashicorp/aws"

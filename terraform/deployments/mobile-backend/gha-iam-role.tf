@@ -3,10 +3,10 @@ locals {
 }
 
 data "aws_iam_openid_connect_provider" "github_oidc" {
-  arn = local.github_oidc_arn
+  url = "https://token.actions.githubusercontent.com"
 }
 
-data "aws_iam_policy_document" "gha_image_attestation_role_permissions" {
+data "aws_iam_policy_document" "config_signing_role_permissions" {
   statement {
     actions = [
       "kms:DescribeKey",
@@ -22,7 +22,7 @@ data "aws_iam_policy_document" "gha_image_attestation_trust" {
     actions = ["sts:AssumeRoleWithWebIdentity"]
     principals {
       type        = "Federated"
-      identifiers = [local.github_oidc_arn]
+      identifiers = [data.aws_iam_openid_connect_provider.github_oidc.arn]
     }
     condition {
       test     = "StringEquals"
@@ -30,7 +30,7 @@ data "aws_iam_policy_document" "gha_image_attestation_trust" {
       values   = data.aws_iam_openid_connect_provider.github_oidc.client_id_list
     }
     condition {
-      test     = "StringLike"
+      test     = "StringEquals"
       variable = "token.actions.githubusercontent.com:sub"
       values   = ["repo:alphagov/govuk-mobile-backend-config:ref:refs/heads/main"]
     }

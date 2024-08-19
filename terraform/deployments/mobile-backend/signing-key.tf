@@ -1,4 +1,4 @@
-resource "aws_kms_key" "container_signing_key" {
+resource "aws_kms_key" "config_signing_key" {
   description              = "Key for signing of GOV.UK App mobile backend config"
   key_usage                = "SIGN_VERIFY"
   customer_master_key_spec = "ECC_NIST_P256"
