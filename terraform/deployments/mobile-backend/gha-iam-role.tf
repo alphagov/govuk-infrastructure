@@ -13,7 +13,7 @@ data "aws_iam_policy_document" "config_signing_role_permissions" {
       "kms:GetPublicKey",
       "kms:Sign"
     ]
-    resources = [aws_kms_key.container_signing_key.arn]
+    resources = [aws_kms_key.config_signing_key.arn]
   }
 }
 
@@ -40,11 +40,11 @@ data "aws_iam_policy_document" "gha_image_attestation_trust" {
 resource "aws_iam_role" "gha_image_attestation" {
   name                 = "github_action_image_attestation"
   max_session_duration = 10800
-  assume_role_policy   = data.aws_iam_policy_document.gha_image_attestation_trust.json
+  assume_role_policy   = data.aws_iam_policy_document.config_signing_role_permissions.json
 }
 
 resource "aws_iam_role_policy" "gha_image_attestation" {
   name   = "github_action_image_attestation_policy"
   role   = aws_iam_role.gha_image_attestation.id
-  policy = data.aws_iam_policy_document.gha_image_attestation_role_permissions.json
+  policy = data.aws_iam_policy_document.config_signing_role_permissions.json
 }
