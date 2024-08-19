@@ -6,5 +6,5 @@ resource "aws_kms_key" "config_signing_key" {
 
 resource "aws_kms_alias" "container_signing_key" {
   name          = "alias/container-signing-key"
-  target_key_id = aws_kms_key.container_signing_key.id
+  target_key_id = aws_kms_key.config_signing_key.id
 }
