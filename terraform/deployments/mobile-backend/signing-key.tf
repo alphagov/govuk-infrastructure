@@ -4,7 +4,7 @@ resource "aws_kms_key" "config_signing_key" {
   customer_master_key_spec = "ECC_NIST_P256"
 }
 
-resource "aws_kms_alias" "container_signing_key" {
-  name          = "alias/container-signing-key"
+resource "aws_kms_alias" "config_signing_key" {
+  name          = "alias/config-signing-key"
   target_key_id = aws_kms_key.config_signing_key.id
 }

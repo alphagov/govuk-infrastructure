@@ -1,7 +1,3 @@
-locals {
-  github_oidc_arn = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:oidc-provider/token.actions.githubusercontent.com"
-}
-
 data "aws_iam_openid_connect_provider" "github_oidc" {
   url = "https://token.actions.githubusercontent.com"
 }
@@ -17,7 +13,7 @@ data "aws_iam_policy_document" "config_signing_role_permissions" {
   }
 }
 
-data "aws_iam_policy_document" "gha_image_attestation_trust" {
+data "aws_iam_policy_document" "config_signing_trust" {
   statement {
     actions = ["sts:AssumeRoleWithWebIdentity"]
     principals {
@@ -37,14 +33,14 @@ data "aws_iam_policy_document" "gha_image_attestation_trust" {
   }
 }
 
-resource "aws_iam_role" "gha_image_attestation" {
-  name                 = "github_action_image_attestation"
+resource "aws_iam_role" "config_signing" {
+  name                 = "github_action_config_signing"
   max_session_duration = 10800
   assume_role_policy   = data.aws_iam_policy_document.config_signing_role_permissions.json
 }
 
-resource "aws_iam_role_policy" "gha_image_attestation" {
-  name   = "github_action_image_attestation_policy"
-  role   = aws_iam_role.gha_image_attestation.id
+resource "aws_iam_role_policy" "config_signing" {
+  name   = "github_action_config_signing_policy"
+  role   = aws_iam_role.config_signing.id
   policy = data.aws_iam_policy_document.config_signing_role_permissions.json
 }
