@@ -5,7 +5,7 @@ resource "google_bigquery_dataset" "fastly_logs" {
   storage_billing_model = "PHYSICAL"
 
   access {
-    role          = "roles/bigquery.admin"
+    role          = "OWNER"
     user_by_email = "terraform-cloud-${var.govuk_environment}@${data.google_project.project.project_id}.iam.gserviceaccount.com"
   }
 
