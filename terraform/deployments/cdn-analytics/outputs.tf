@@ -1,5 +1,5 @@
 output "google_project_id" {
-  value = data.google_project.project.number
+  value = data.google_project.project.project_id
 }
 
 output "google_service_account_name" {
