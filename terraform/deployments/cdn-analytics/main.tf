@@ -26,7 +26,7 @@ provider "google" {
 }
 
 resource "google_project_service" "services" {
-  for_each = tomap(
+  for_each = toset(
     [
       "bigquery.googleapis.com",
       "iam.googleapis.com"
