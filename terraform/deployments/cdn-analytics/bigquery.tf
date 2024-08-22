@@ -1,7 +1,7 @@
 resource "google_bigquery_dataset" "fastly_logs" {
   dataset_id = "fastly_logs"
 
-  location = "EU"
+  location = "europe-west2"
 
   access {
     role           = "roles/bigquery.admin"
