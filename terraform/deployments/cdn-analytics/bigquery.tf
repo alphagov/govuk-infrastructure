@@ -1,7 +1,8 @@
 resource "google_bigquery_dataset" "fastly_logs" {
   dataset_id = "fastly_logs"
 
-  location = "europe-west2"
+  location              = "europe-west2"
+  storage_billing_model = "PHYSICAL"
 
   access {
     role           = "roles/bigquery.admin"
@@ -23,6 +24,11 @@ resource "google_bigquery_table" "fastly_logs" {
   dataset_id = google_bigquery_dataset.fastly_logs.dataset_id
   table_id   = "fastly_logs"
 
+  time_partitioning {
+    type          = "DAY"
+    expiration_ms = 604800000 # 7 days
+  }
+
   schema = jsonencode(
     [
       {
@@ -37,13 +43,6 @@ resource "google_bigquery_table" "fastly_logs" {
         "fields"      = []
         "mode"        = ""
         "name"        = "request_received"
-        "type"        = "STRING"
-      },
-      {
-        "description" = ""
-        "fields"      = []
-        "mode"        = ""
-        "name"        = "request_received_timezone"
         "type"        = "STRING"
       },
       {
