@@ -9,6 +9,11 @@ resource "google_bigquery_dataset" "fastly_logs" {
   }
 
   access {
+    role           = "roles/bigquery.admin"
+    group_by_email = "analytics-team@digital.cabinet-office.gov.uk"
+  }
+
+  access {
     role       = "roles/bigquery.dataEditor"
     iam_member = "serviceAccount:${google_service_account.fastly_writer.email}"
   }
