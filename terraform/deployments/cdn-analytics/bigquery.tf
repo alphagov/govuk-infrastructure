@@ -5,6 +5,11 @@ resource "google_bigquery_dataset" "fastly_logs" {
   storage_billing_model = "PHYSICAL"
 
   access {
+    role          = "roles/bigquery.admin"
+    user_by_email = "terraform-cloud-${var.govuk_environment}@${data.google_project.project.project_id}.iam.gserviceaccount.com"
+  }
+
+  access {
     role           = "roles/bigquery.admin"
     group_by_email = "govuk-gcp-access@digital.cabinet-office.gov.uk"
   }
@@ -16,7 +21,7 @@ resource "google_bigquery_dataset" "fastly_logs" {
 
   access {
     role       = "roles/bigquery.dataEditor"
-    iam_member = "serviceAccount:${google_service_account.fastly_writer.email}"
+    user_by_email = google_service_account.fastly_writer.email
   }
 }
 
