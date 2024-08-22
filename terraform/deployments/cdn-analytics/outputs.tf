@@ -1,5 +1,5 @@
 output "google_project_id" {
-  value = data.google_project.project.id
+  value = data.google_project.project.project_id
 }
 
 output "google_service_account_name" {
@@ -7,9 +7,9 @@ output "google_service_account_name" {
 }
 
 output "bigquery_dataset_id" {
-  value = google_bigquery_dataset.fastly_logs.id
+  value = google_bigquery_dataset.fastly_logs.dataset_id
 }
 
 output "bigquery_table_id" {
-  value = google_bigquery_table.fastly_logs.id
+  value = google_bigquery_table.fastly_logs.table_id
 }

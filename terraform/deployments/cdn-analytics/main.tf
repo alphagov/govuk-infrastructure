@@ -25,4 +25,15 @@ provider "google" {
   }
 }
 
+resource "google_project_service" "services" {
+  for_each = toset(
+    [
+      "bigquery.googleapis.com",
+      "iam.googleapis.com"
+    ]
+  )
+
+  service = each.key
+}
+
 data "google_project" "project" {}
