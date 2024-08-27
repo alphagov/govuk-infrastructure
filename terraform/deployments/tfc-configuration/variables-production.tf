@@ -196,7 +196,7 @@ module "variable-set-rds-production" {
         engine_params_family         = "postgres16"
         name                         = "chat"
         allocated_storage            = 100
-        instance_class               = "db.t4g.small"
+        instance_class               = "db.m6g.large"
         performance_insights_enabled = false
         freestoragespace_threshold   = 10737418240
         project                      = "GOV.UK - AI"
