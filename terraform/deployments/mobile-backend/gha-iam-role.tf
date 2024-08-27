@@ -36,7 +36,7 @@ data "aws_iam_policy_document" "config_signing_trust" {
 resource "aws_iam_role" "config_signing" {
   name                 = "github_action_config_signing"
   max_session_duration = 10800
-  assume_role_policy   = data.aws_iam_policy_document.config_signing_role_permissions.json
+  assume_role_policy   = data.aws_iam_policy_document.config_signing_trust.json
 }
 
 resource "aws_iam_role_policy" "config_signing" {
