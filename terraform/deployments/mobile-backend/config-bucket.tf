@@ -1,5 +1,5 @@
 resource "aws_s3_bucket" "mobile_backend_remote_config" {
-  bucket = "mobile-backend-remote-config-${var.govuk_environment}"
+  bucket = "govuk-app-remote-config-${var.govuk_environment}"
 }
 
 resource "aws_s3_bucket_versioning" "mobile_backend_remote_config" {
