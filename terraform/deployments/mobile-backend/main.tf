@@ -12,6 +12,10 @@ terraform {
       source  = "hashicorp/aws"
       version = "~> 5.0"
     }
+    fastly = {
+      source  = "fastly/fastly"
+      version = "~> 5.13"
+    }
   }
 }
 
@@ -29,4 +33,5 @@ provider "aws" {
   }
 }
 
-data "aws_caller_identity" "current" {}
+provider "fastly" { api_key = "test" }
+data "fastly_ip_ranges" "fastly" {}
