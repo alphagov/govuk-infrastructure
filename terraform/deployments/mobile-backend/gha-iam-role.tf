@@ -61,5 +61,5 @@ data "aws_iam_policy_document" "bucket_write_role_permissions" {
 resource "aws_iam_role_policy" "bucket_deployment" {
   name   = "github_action_mobile_backend_bucket_deployment_policy"
   role   = aws_iam_role.github_action_sign_deploy.id
-  policy = data.aws_iam_policy_document.bucket_write_role_permissions
+  policy = data.aws_iam_policy_document.bucket_write_role_permissions.json
 }
