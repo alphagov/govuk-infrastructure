@@ -116,6 +116,11 @@ resource "github_repository" "govuk_repos" {
   allow_merge_commit = false
   allow_rebase_merge = false
 
+  has_issues           = true
+  has_projects         = true
+  has_downloads        = true
+  vulnerability_alerts = true
+
   delete_branch_on_merge = true
 
   lifecycle {
@@ -129,18 +134,27 @@ resource "github_branch_protection" "govuk_repos" {
   repository_id    = github_repository.govuk_repos[each.key].node_id
   pattern          = "main"
   enforce_admins   = true
-  allows_deletions = true
+  allows_deletions = false
 
   required_pull_request_reviews {
     required_approving_review_count = 1
   }
 
+  restrict_pushes {
+    blocks_creations = false
+
+    push_allowances = try(
+      each.value["push_allowances"],
+      ["alphagov/gov-uk-production-admin", "alphagov/gov-uk-production-deploy"]
+    )
+  }
+
   required_status_checks {
-    strict = true
+    strict = false
 
     contexts = concat(
-      try(each.value["required_status_check"]["standard_contexts"], []),
-      try(each.value["required_status_check"]["additional_contexts"], [])
+      try(each.value["required_status_checks"]["standard_contexts"], []),
+      try(each.value["required_status_checks"]["additional_contexts"], [])
     )
   }
 }

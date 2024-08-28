@@ -20,7 +20,6 @@ repos:
         - Dependency Review scan / dependency-review-pr
         - Security Analysis / Run Brakeman
         - Lint Ruby / Run RuboCop
-        - Run Pact tests
 
   asset-manager:
     required_status_checks:
@@ -31,7 +30,6 @@ repos:
         - Dependency Review scan / dependency-review-pr
         - Security Analysis / Run Brakeman
         - Lint Ruby / Run RuboCop
-        - Run Pact tests
 
   authenticating-proxy:
     required_status_checks:
@@ -49,6 +47,8 @@ repos:
   bulk-changer:
     required_status_checks:
       standard_contexts: *standard_security_checks
+      additional_contexts:
+        - Test
 
   bulk-merger:
   collections:
@@ -65,7 +65,6 @@ repos:
         - Dependency Review scan / dependency-review-pr
         - Security Analysis / Run Brakeman
         - Lint Ruby / Run RuboCop
-        - Run Pact tests
 
   collections-publisher:
     required_status_checks:
@@ -123,10 +122,12 @@ repos:
   data-community-tech-docs:
     need_production_access_to_merge: false
     allow_squash_merge: true
+    push_allowances: []
 
   datagovuk-tech-docs:
     need_production_access_to_merge: false
     allow_squash_merge: true
+    push_allowances: []
 
   email-alert-api:
     required_status_checks:
@@ -137,7 +138,6 @@ repos:
         - Dependency Review scan / dependency-review-pr
         - Security Analysis / Run Brakeman
         - Lint Ruby / Run RuboCop
-        - Run Pact tests
 
   email-alert-frontend:
     required_status_checks:
@@ -181,35 +181,31 @@ repos:
         - Lint JavaScript / Run Standardx
         - Lint SCSS / Run Stylelint
         - Test JavaScript / Run Jasmine
-        - Test Ruby / Run Minitest
+        - Test Ruby / Run RSpec
         - CodeQL SAST scan / Analyze
         - Dependency Review scan / dependency-review-pr
         - Security Analysis / Run Brakeman
         - Lint Ruby / Run RuboCop
-        - Run Pact tests
 
   gds-api-adapters:
     required_status_checks:
       standard_contexts: *standard_security_checks
       additional_contexts:
-        - Test Ruby
         - CodeQL SAST scan / Analyze
         - Dependency Review scan / dependency-review-pr
-        - Security Analysis / Run Brakeman
-        - Lint Ruby / Run RuboCop
-        - Run Pact tests
+        - test
 
   gds-sso:
     required_status_checks:
       standard_contexts: *standard_security_checks
+      additional_contexts:
+        - test
 
   gds_zendesk:
     required_status_checks:
       standard_contexts: *standard_security_checks
-
-  github-trello-poster:
-    required_status_checks:
-      standard_contexts: *standard_security_checks
+      additional_contexts:
+        - test
 
   government-frontend:
     required_status_checks:
@@ -223,10 +219,14 @@ repos:
   govspeak:
     required_status_checks:
       standard_contexts: *standard_security_checks
+      additional_contexts:
+        - test
 
   govspeak-preview:
     required_status_checks:
       standard_contexts: *standard_security_checks
+      additional_contexts:
+        - test
 
   govuk-aws:
     required_status_checks:
@@ -237,6 +237,7 @@ repos:
   govuk-content-api-docs:
     need_production_access_to_merge: false
     allow_squash_merge: true
+    push_allowances: []
 
   govuk-dependabot-merger:
     required_status_checks:
@@ -245,13 +246,19 @@ repos:
   govuk-dependency-checker:
     required_status_checks:
       standard_contexts: *standard_security_checks
+      additional_contexts:
+        - Test
 
   govuk-developer-docs:
     need_production_access_to_merge: false
     allow_squash_merge: true
+    push_allowances: []
 
   govuk-dns-tf:
     up_to_date_branches: true
+    required_status_checks:
+      additional_contexts:
+        - test
 
   govuk-fastly:
     up_to_date_branches: true
@@ -305,10 +312,14 @@ repos:
   govuk-rota-generator:
     required_status_checks:
       standard_contexts: *standard_security_checks
+      additional_contexts:
+        - test
 
   govuk-saas-config:
     required_status_checks:
       standard_contexts: *standard_security_checks
+      additional_contexts:
+        - test
 
   govuk-sli-collector:
     required_status_checks:
@@ -317,42 +328,62 @@ repos:
   govuk_ab_testing:
     required_status_checks:
       standard_contexts: *standard_security_checks
+      additional_contexts:
+        - test
 
   govuk_admin_template:
     required_status_checks:
       standard_contexts: *standard_security_checks
+      additional_contexts:
+        - test
 
   govuk_app_config:
     required_status_checks:
       standard_contexts: *standard_security_checks
+      additional_contexts:
+        - test
 
   govuk_document_types:
     required_status_checks:
       standard_contexts: *standard_security_checks
+      additional_contexts:
+        - test
 
   govuk_message_queue_consumer:
     required_status_checks:
       standard_contexts: *standard_security_checks
+      additional_contexts:
+        - test
 
   govuk_personalisation:
     required_status_checks:
       standard_contexts: *standard_security_checks
+      additional_contexts:
+        - test
 
   govuk_publishing_components:
     required_status_checks:
       standard_contexts: *standard_security_checks
+      additional_contexts:
+        - test
 
   govuk_schemas:
     required_status_checks:
       standard_contexts: *standard_security_checks
+      additional_contexts:
+        - test
 
   govuk_sidekiq:
     required_status_checks:
       standard_contexts: *standard_security_checks
+      additional_contexts:
+        - test
 
   govuk_test:
     required_status_checks:
       standard_contexts: *standard_security_checks
+      additional_contexts:
+        - test
 
   hmrc-manuals-api:
     required_status_checks:
@@ -369,7 +400,6 @@ repos:
         - Dependency Review scan / dependency-review-pr
         - Security Analysis / Run Brakeman
         - Lint Ruby / Run RuboCop
-        - Run Pact tests
 
   local-links-manager:
     required_status_checks:
@@ -389,7 +419,6 @@ repos:
         - Dependency Review scan / dependency-review-pr
         - Security Analysis / Run Brakeman
         - Lint Ruby / Run RuboCop
-        - Run Pact tests
 
   manuals-publisher:
     required_status_checks:
@@ -417,14 +446,20 @@ repos:
   miller-columns-element:
     required_status_checks:
       standard_contexts: *standard_security_checks
+      additional_contexts:
+        - test
 
   optic14n:
     required_status_checks:
       standard_contexts: *standard_security_checks
+      additional_contexts:
+        - test
 
   paste-html-to-govspeak:
     required_status_checks:
       standard_contexts: *standard_security_checks
+      additional_contexts:
+        - test
 
   places-manager:
     required_status_checks:
@@ -437,11 +472,12 @@ repos:
         - Dependency Review scan / dependency-review-pr
         - Security Analysis / Run Brakeman
         - Lint Ruby / Run RuboCop
-        - Run Pact tests
 
   plek:
     required_status_checks:
       standard_contexts: *standard_security_checks
+      additional_contexts:
+        - test
 
   publisher:
     required_status_checks:
@@ -462,15 +498,18 @@ repos:
         - Dependency Review scan / dependency-review-pr
         - Security Analysis / Run Brakeman
         - Lint Ruby / Run RuboCop
-        - Run Pact tests
 
   rack-logstasher:
     required_status_checks:
       standard_contexts: *standard_security_checks
+      additional_contexts:
+        - test
 
   rails_translation_manager:
     required_status_checks:
       standard_contexts: *standard_security_checks
+      additional_contexts:
+        - test
 
   release:
     required_status_checks:
@@ -494,10 +533,14 @@ repos:
   rubocop-govuk:
     required_status_checks:
       standard_contexts: *standard_security_checks
+      additional_contexts:
+        - test
 
   seal:
     required_status_checks:
       standard_contexts: *standard_security_checks
+      additional_contexts:
+        - test
 
   search-admin:
     required_status_checks:
@@ -557,10 +600,14 @@ repos:
   siteimprove_api_client:
     required_status_checks:
       standard_contexts: *standard_security_checks
+      additional_contexts:
+        - test
 
   slimmer:
     required_status_checks:
       standard_contexts: *standard_security_checks
+      additional_contexts:
+        - test
 
   smart-answers:
     allow_squash_merge: true
@@ -579,6 +626,8 @@ repos:
   special-route-publisher:
     required_status_checks:
       standard_contexts: *standard_security_checks
+      additional_contexts:
+        - test
 
   specialist-publisher:
     required_status_checks:
@@ -641,33 +690,78 @@ repos:
         - Lint ERB / Run ERB lint
         - Prettier / Run Prettier
 
+  ckanext-datagovuk:
+    required_status_checks:
+      additional_contexts:
+        - test
+
+  datagovuk_find:
+    required_status_checks:
+      additional_contexts:
+        - test
+
+  datagovuk_publish:
+    required_status_checks:
+      additional_contexts:
+        - test
+
+  govuk-browser-extension:
+    required_status_checks:
+      additional_contexts:
+        - Test Extension JS
+
+  govuk-docker:
+    required_status_checks:
+      additional_contexts:
+        - test
+
+  govuk-exporter:
+    required_status_checks:
+      additional_contexts:
+        - Test Go
+
+  govuk-mirror:
+    required_status_checks:
+      additional_contexts:
+        - Test Go
+
+  govuk-replatform-test-app:
+    required_status_checks:
+      additional_contexts:
+        - Test
+
+  govuk-rota-announcer:
+    required_status_checks:
+      additional_contexts:
+        - test
+
+  govuk-user-reviewer:
+    required_status_checks:
+      additional_contexts:
+        - test
+
+  licensify:
+    required_status_checks:
+      additional_contexts:
+        - test
+
   ckan-mock-harvest-sources: {}
-  ckanext-datagovuk: {}
-  datagovuk_find: {}
-  datagovuk_publish: {}
   govspeak-visual-editor: {}
   govuk-analytics-engineering: {}
   govuk-aws-data: {}
-  govuk-browser-extension: {}
   govuk-chat: {}
   govuk-crd-library: {}
   govuk-data-science-workshop: {}
   govuk-dns-ui: {}
-  govuk-docker: {}
-  govuk-exporter: {}
   govuk-helm-charts: {}
   govuk-knowledge-graph-gcp: {}
   govuk-knowledge-graph-search: {}
-  govuk-mirror: {}
   govuk-mobile-backend: {}
   govuk-mobile-backend-config: {}
   govuk-mobile-remote-config: {}
   govuk-pact-broker: {}
-  govuk-replatform-test-app: {}
   govuk-rfcs: {}
-  govuk-rota-announcer: {}
   govuk-ruby-images: {}
   govuk-s3-mirror: {}
-  govuk-user-reviewer: {}
-  licensify: {}
+  github-trello-poster: {}
   public-asset-checker: {}
