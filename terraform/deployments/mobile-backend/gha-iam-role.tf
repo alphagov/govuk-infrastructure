@@ -2,18 +2,7 @@ data "aws_iam_openid_connect_provider" "github_oidc" {
   url = "https://token.actions.githubusercontent.com"
 }
 
-data "aws_iam_policy_document" "config_signing_role_permissions" {
-  statement {
-    actions = [
-      "kms:DescribeKey",
-      "kms:GetPublicKey",
-      "kms:Sign"
-    ]
-    resources = [aws_kms_key.config_signing_key.arn]
-  }
-}
-
-data "aws_iam_policy_document" "config_signing_trust" {
+data "aws_iam_policy_document" "github_action_trust" {
   statement {
     actions = ["sts:AssumeRoleWithWebIdentity"]
     principals {
@@ -33,14 +22,44 @@ data "aws_iam_policy_document" "config_signing_trust" {
   }
 }
 
-resource "aws_iam_role" "config_signing" {
-  name                 = "github_action_config_signing"
+resource "aws_iam_role" "github_action_sign_deploy" {
+  name                 = "github_action_mobile_backend_sign_deploy"
   max_session_duration = 10800
-  assume_role_policy   = data.aws_iam_policy_document.config_signing_trust.json
+  assume_role_policy   = data.aws_iam_policy_document.github_action_trust.json
+}
+
+# Permissions for config signing using KMS
+
+data "aws_iam_policy_document" "config_signing_role_permissions" {
+  statement {
+    actions = [
+      "kms:DescribeKey",
+      "kms:GetPublicKey",
+      "kms:Sign"
+    ]
+    resources = [aws_kms_key.config_signing_key.arn]
+  }
 }
 
 resource "aws_iam_role_policy" "config_signing" {
   name   = "github_action_config_signing_policy"
-  role   = aws_iam_role.config_signing.id
+  role   = aws_iam_role.github_action_sign_deploy.id
   policy = data.aws_iam_policy_document.config_signing_role_permissions.json
+}
+
+# Permissions for deployment of artifacts to the S3 bucket
+
+data "aws_iam_policy_document" "bucket_write_role_permissions" {
+  statement {
+    actions = [
+      "s3:PutObject"
+    ]
+    resources = [aws_s3_bucket.mobile_backend_remote_config.arn]
+  }
+}
+
+resource "aws_iam_role_policy" "bucket_deployment" {
+  name   = "github_action_mobile_backend_bucket_deployment_policy"
+  role   = aws_iam_role.github_action_sign_deploy.id
+  policy = data.aws_iam_policy_document.bucket_write_role_permissions
 }
