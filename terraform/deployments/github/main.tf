@@ -123,6 +123,8 @@ resource "github_repository" "govuk_repos" {
 
   delete_branch_on_merge = true
 
+  homepage_url = try(each.value.homepage_url, null)
+
   lifecycle {
     ignore_changes = [description]
   }
@@ -138,6 +140,8 @@ resource "github_branch_protection" "govuk_repos" {
 
   required_pull_request_reviews {
     required_approving_review_count = 1
+
+    pull_request_bypassers = try(each.value.required_pull_request_reviews.pull_request_bypassers, null)
   }
 
   restrict_pushes {
@@ -150,7 +154,7 @@ resource "github_branch_protection" "govuk_repos" {
   }
 
   required_status_checks {
-    strict = false
+    strict = try(each.value.strict, false)
 
     contexts = concat(
       try(each.value["required_status_checks"]["standard_contexts"], []),
