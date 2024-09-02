@@ -114,10 +114,7 @@ resource "github_repository" "govuk_repos" {
 
   allow_squash_merge = true
   allow_merge_commit = false
-  allow_rebase_merge = false
 
-  has_issues           = true
-  has_projects         = true
   has_downloads        = true
   vulnerability_alerts = true
 
@@ -126,7 +123,20 @@ resource "github_repository" "govuk_repos" {
   homepage_url = try(each.value.homepage_url, null)
 
   lifecycle {
-    ignore_changes = [description]
+    ignore_changes = [
+      description,
+      allow_auto_merge,
+      allow_merge_commit,
+      allow_rebase_merge,
+      allow_squash_merge,
+      allow_update_branch,
+      has_issues,
+      has_projects,
+      has_wiki,
+      squash_merge_commit_title,
+      squash_merge_commit_message,
+      pages
+    ]
   }
 }
 
@@ -160,6 +170,12 @@ resource "github_branch_protection" "govuk_repos" {
       try(each.value["required_status_checks"]["standard_contexts"], []),
       try(each.value["required_status_checks"]["additional_contexts"], [])
     )
+  }
+
+  lifecycle {
+    ignore_changes = [
+      require_conversation_resolution
+    ]
   }
 }
 

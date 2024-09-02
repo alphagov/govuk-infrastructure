@@ -9,8 +9,6 @@ access_levels:
     - Security Analysis / Run Brakeman
 
 repos:
-  accessible-autocomplete-multiselect: {}
-
   account-api:
     required_status_checks:
       standard_contexts: *standard_govuk_rails_checks
@@ -834,10 +832,11 @@ repos:
     homepage_url: "https://govuk-public-asset-checker.herokuapp.com"
 
   govspeak-visual-editor:
-  required_pull_request_reviews:
-    pull_request_bypassers:
-      - "/guilhem-fry"
+    required_pull_request_reviews:
+      pull_request_bypassers:
+        - "alphagov/gov-uk"
 
+  accessible-autocomplete-multiselect: {}
   ckan-mock-harvest-sources: {}
   govuk-analytics-engineering: {}
   govuk-aws-data: {}
