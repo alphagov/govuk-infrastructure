@@ -1231,3 +1231,69 @@ import {
   to = github_repository.govuk_repos["govuk-crd-library"]
   id = "govuk-crd-library"
 }
+
+
+import {
+  to = github_repository.govuk_repos["govuk-knowledge-graph-gcp"]
+  id = "govuk-knowledge-graph-gcp"
+}
+
+import {
+  to = github_repository.govuk_repos["github-trello-poster"]
+  id = "github-trello-poster"
+}
+
+import {
+  to = github_branch_protection.govuk_repos["github-trello-poster"]
+  id = "github-trello-poster:main"
+}
+
+import {
+  to = github_repository.govuk_repos["govuk-dependabot-merger"]
+  id = "govuk-dependabot-merger"
+}
+
+import {
+  to = github_branch_protection.govuk_repos["govuk-dependabot-merger"]
+  id = "govuk-dependabot-merger:main"
+}
+
+import {
+  to = github_repository.govuk_repos["govuk-mobile-service-registry"]
+  id = "govuk-mobile-service-registry"
+}
+
+import {
+  to = github_repository.govuk_repos["markdown-toolbar-element"]
+  id = "markdown-toolbar-element"
+}
+
+import {
+  to = github_team_repository.govuk_production_admin_repos["github-trello-poster"]
+  id = "3279244:github-trello-poster"
+}
+
+import {
+  to = github_team_repository.govuk_production_admin_repos["markdown-toolbar-element"]
+  id = "3279244:markdown-toolbar-element"
+}
+
+import {
+  to = github_team_repository.govuk_repos["github-trello-poster"]
+  id = "3279243:github-trello-poster"
+}
+
+import {
+  to = github_team_repository.govuk_repos["govuk-dependabot-merger"]
+  id = "3279243:govuk-dependabot-merger"
+}
+
+import {
+  to = github_team_repository.govuk_production_admin_repos["govuk-dependabot-merger"]
+  id = "3279244:govuk-dependabot-merger"
+}
+
+import {
+  to = github_team_repository.govuk_repos["markdown-toolbar-element"]
+  id = "3279243:markdown-toolbar-element"
+}

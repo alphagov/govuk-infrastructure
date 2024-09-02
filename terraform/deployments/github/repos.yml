@@ -836,13 +836,23 @@ repos:
       pull_request_bypassers:
         - "alphagov/gov-uk"
 
+  govuk-knowledge-graph-gcp:
+    homepage_url: "https://docs.data-community.publishing.service.gov.uk/tools/govgraph/"
+
+  github-trello-poster:
+    required_status_checks:
+      additional_contexts:
+        - "CodeQL SAST scan / Analyze"
+        - "Dependency Review scan / dependency-review-pr"
+        - "test"
+
   accessible-autocomplete-multiselect: {}
   ckan-mock-harvest-sources: {}
   govuk-analytics-engineering: {}
   govuk-aws-data: {}
   govuk-chat: {}
   govuk-data-science-workshop: {}
-  govuk-knowledge-graph-gcp: {}
+
   govuk-mobile-backend: {}
   govuk-mobile-backend-config: {}
   govuk-mobile-remote-config: {}
@@ -850,4 +860,3 @@ repos:
   govuk-rfcs: {}
   govuk-ruby-images: {}
   govuk-s3-mirror: {}
-  github-trello-poster: {}
