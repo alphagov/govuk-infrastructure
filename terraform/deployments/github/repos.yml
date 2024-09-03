@@ -333,10 +333,6 @@ repos:
     allow_squash_merge: true
     branch_protection: false
 
-  govuk-mobile-service-registry:
-    allow_squash_merge: true
-    branch_protection: false
-
   govuk-rota-generator:
     required_status_checks:
       standard_contexts: *standard_security_checks

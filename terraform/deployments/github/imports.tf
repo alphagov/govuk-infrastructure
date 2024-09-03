@@ -1259,11 +1259,6 @@ import {
 }
 
 import {
-  to = github_repository.govuk_repos["govuk-mobile-service-registry"]
-  id = "govuk-mobile-service-registry"
-}
-
-import {
   to = github_repository.govuk_repos["markdown-toolbar-element"]
   id = "markdown-toolbar-element"
 }
