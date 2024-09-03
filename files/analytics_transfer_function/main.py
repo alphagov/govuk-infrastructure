@@ -55,6 +55,24 @@ def function_analytics_events_transfer(request):
                 WHEN NOT MATCHED THEN 
                 INSERT (_PARTITIONTIME, eventType, userPseudoId, eventTime, documents) VALUES (_PARTITIONTIME, eventType, userPseudoId, eventTime, documents)'''
                         },
+        'view-item-external-link' : {
+        'query' : f'''
+                merge into `{env_project_name}.{env_dataset_name}.view-item-external-link-event` T using (
+                SELECT 
+                TIMESTAMP_TRUNC(TIMESTAMP_MICROS(ga.event_timestamp),DAY) as _PARTITIONTIME,
+                'view-item' AS eventType,
+                ga.user_pseudo_id AS userPseudoId,
+                FORMAT_TIMESTAMP("%FT%TZ",TIMESTAMP_MICROS(ga.event_timestamp)) AS eventTime,
+                (case when (SELECT value.string_value FROM UNNEST(items),UNNEST(item_params) WHERE key = 'item_content_id') is not null then [STRUCT((SELECT value.string_value FROM UNNEST(items),UNNEST(item_params) WHERE key = 'item_content_id') AS id, CAST(NULL as string) as name)] end) AS documents,
+                FROM `{env_analytics_project_name}.analytics_330577055.events_{source_date}` ga
+                WHERE
+                ga.event_name='select_item'
+                AND (SELECT value.string_value FROM UNNEST(event_params) WHERE key = 'outbound') = "true"
+                AND (SELECT value.string_value FROM UNNEST(items),UNNEST(item_params) WHERE key = 'item_content_id') is not null) S
+                on T._PARTITIONTIME = S._PARTITIONTIME and T.eventType = S.eventType and T.userPseudoId = S.userPseudoId and T.eventTime = S.eventTime and to_json_string(T.documents) = to_json_string(S.documents)
+                WHEN NOT MATCHED THEN 
+                INSERT (_PARTITIONTIME, eventType, userPseudoId, eventTime, documents) VALUES (_PARTITIONTIME, eventType, userPseudoId, eventTime, documents)'''
+                        },
         'search': {'query': f'''
                 merge into `{env_project_name}.{env_dataset_name}.search-event` T using (
                 with events AS
@@ -116,6 +134,26 @@ def function_analytics_events_transfer(request):
                 WHERE
                 ga.event_name='page_view' AND
                 params.key='content_id') S
+                on T._PARTITIONTIME = S._PARTITIONTIME and T.eventType = S.eventType and T.userPseudoId = S.userPseudoId and T.eventTime = S.eventTime and to_json_string(T.documents) = to_json_string(S.documents)
+                -- and T.documents.id = S.documents.id and T.documents.name = S.documents.name
+                WHEN NOT MATCHED THEN 
+                INSERT (_PARTITIONTIME, eventType, userPseudoId, eventTime, documents) VALUES (_PARTITIONTIME, eventType, userPseudoId, eventTime, documents)'''
+                        },
+        'view-item-external-link-intraday' : {
+        'query' : f'''
+                merge into `{env_project_name}.{env_dataset_name}.view-item-external-link-intraday-event` T
+                using (
+                SELECT 
+                TIMESTAMP_TRUNC(TIMESTAMP_MICROS(ga.event_timestamp),DAY) as _PARTITIONTIME,
+                'view-item' AS eventType,
+                ga.user_pseudo_id AS userPseudoId,
+                FORMAT_TIMESTAMP("%FT%TZ",TIMESTAMP_MICROS(ga.event_timestamp)) AS eventTime,
+                (case when (SELECT value.string_value FROM UNNEST(items),UNNEST(item_params) WHERE key = 'item_content_id') is not null then [STRUCT((SELECT value.string_value FROM UNNEST(items),UNNEST(item_params) WHERE key = 'item_content_id') AS id, CAST(NULL as string) as name)] end) AS documents,
+                FROM `{env_analytics_project_name}.analytics_330577055.events_intraday_{datedelta(days=0)}` ga
+                WHERE
+                ga.event_name='select_item'
+                AND (SELECT value.string_value FROM UNNEST(event_params) WHERE key = 'outbound') = "true"
+                AND (SELECT value.string_value FROM UNNEST(items),UNNEST(item_params) WHERE key = 'item_content_id') is not null) S
                 on T._PARTITIONTIME = S._PARTITIONTIME and T.eventType = S.eventType and T.userPseudoId = S.userPseudoId and T.eventTime = S.eventTime and to_json_string(T.documents) = to_json_string(S.documents)
                 -- and T.documents.id = S.documents.id and T.documents.name = S.documents.name
                 WHEN NOT MATCHED THEN 

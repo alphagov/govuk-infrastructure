@@ -63,6 +63,17 @@ resource "google_bigquery_table" "view_item_event" {
   }
 }
 
+# ga4 'select_item' events get transformed and inserted into this time-partitioned view-item-external-link-event table defined with a vertex schema
+resource "google_bigquery_table" "view_item_external_link_event" {
+  dataset_id          = google_bigquery_dataset.dataset.dataset_id
+  table_id            = "view-item-external-link-event"
+  schema              = file("./files/view-item-event-schema.json")
+  deletion_protection = false
+  time_partitioning {
+    type = "DAY"
+  }
+}
+
 # ga4 'view_item_list' intraday events get transformed and inserted into this time-partitioned search-intraday-event table defined with a vertex schema
 resource "google_bigquery_table" "search_intraday_event" {
   dataset_id          = google_bigquery_dataset.dataset.dataset_id
@@ -79,6 +90,17 @@ resource "google_bigquery_table" "search_intraday_event" {
 resource "google_bigquery_table" "view_item_intraday_event" {
   dataset_id          = google_bigquery_dataset.dataset.dataset_id
   table_id            = "view-item-intraday-event"
+  schema              = file("./files/view-item-event-schema.json")
+  deletion_protection = false
+  time_partitioning {
+    type = "DAY"
+  }
+}
+
+# ga4 'select_item' intraday events get transformed and inserted into this time-partitioned view-item-external-link-intraday-event table defined with a vertex schema
+resource "google_bigquery_table" "view_item_external_link_intraday_event" {
+  dataset_id          = google_bigquery_dataset.dataset.dataset_id
+  table_id            = "view-item-external-link-intraday-event"
   schema              = file("./files/view-item-event-schema.json")
   deletion_protection = false
   time_partitioning {
@@ -195,6 +217,26 @@ resource "google_cloud_scheduler_job" "daily_transfer_search" {
   }
 }
 
+# scheduler resource that will transfer external link data at midday
+resource "google_cloud_scheduler_job" "daily_transfer_view_item_external_link" {
+  name        = "transfer_ga4_to_bq_view_item_external_link"
+  description = "transfer view item external link ga4 bq data to vertex tables within bq"
+  schedule    = "10 12 * * *"
+  time_zone   = "Europe/London"
+  http_target {
+    http_method = "POST"
+    uri         = google_cloudfunctions2_function.function_analytics_events_transfer.url
+    body        = base64encode("{ \"event_type\" : \"view-item-external-link\", \"date\" : null}")
+    headers = {
+      "Content-Type" = "application/json"
+    }
+    oidc_token {
+      service_account_email = google_service_account.analytics_events_pipeline.email
+      audience              = google_cloudfunctions2_function.function_analytics_events_transfer.url
+    }
+  }
+}
+
 # scheduler resource that will transfer intraday view item data
 resource "google_cloud_scheduler_job" "intraday_transfer_view_item" {
   name        = "transfer_ga4_intraday_to_bq_view_item_intraday"
@@ -225,6 +267,26 @@ resource "google_cloud_scheduler_job" "intraday_transfer_search" {
     http_method = "POST"
     uri         = google_cloudfunctions2_function.function_analytics_events_transfer.url
     body        = base64encode("{ \"event_type\" : \"search-intraday\", \"date\" : null}")
+    headers = {
+      "Content-Type" = "application/json"
+    }
+    oidc_token {
+      service_account_email = google_service_account.analytics_events_pipeline.email
+      audience              = google_cloudfunctions2_function.function_analytics_events_transfer.url
+    }
+  }
+}
+
+# scheduler resource that will transfer intraday view item external link data
+resource "google_cloud_scheduler_job" "intraday_transfer_view_item_external_link" {
+  name        = "transfer_ga4_intraday_to_bq_view_item_external_link_intraday"
+  description = "transfer view-item-external-link intraday ga4 bq data to vertex tables within bq"
+  schedule    = "40 05,11,17,23 * * *"
+  time_zone   = "Europe/London"
+  http_target {
+    http_method = "POST"
+    uri         = google_cloudfunctions2_function.function_analytics_events_transfer.url
+    body        = base64encode("{ \"event_type\" : \"view-item-external-link-intraday\", \"date\" : null}")
     headers = {
       "Content-Type" = "application/json"
     }
@@ -301,7 +363,7 @@ resource "google_cloudfunctions2_function" "import_user_events_vertex" {
   }
 }
 
-# scheduler resource that will transfer `search` vertex bq data - > vertex datastore at 1230
+# scheduler resource that will transfer `search` vertex bq data - > vertex datastore
 resource "google_cloud_scheduler_job" "daily_transfer_bq_search_to_vertex" {
   name        = "transfer_search_event_to_vertex_datastore"
   description = "transfer search vertex bq data to vertex datastore"
@@ -321,7 +383,7 @@ resource "google_cloud_scheduler_job" "daily_transfer_bq_search_to_vertex" {
   }
 }
 
-# scheduler resource that will transfer `view-item` vertex bq data - > vertex datastore at 1200
+# scheduler resource that will transfer `view-item` vertex bq data - > vertex datastore
 resource "google_cloud_scheduler_job" "daily_transfer_bq_view_item_to_vertex" {
   name        = "transfer_view_item_to_vertex_datastore"
   description = "transfer view item vertex bq data to vertex datastore"
@@ -331,6 +393,26 @@ resource "google_cloud_scheduler_job" "daily_transfer_bq_view_item_to_vertex" {
     http_method = "POST"
     uri         = google_cloudfunctions2_function.import_user_events_vertex.url
     body        = base64encode("{ \"event_type\" : \"view-item\", \"date\" : null}")
+    headers = {
+      "Content-Type" = "application/json"
+    }
+    oidc_token {
+      service_account_email = google_service_account.analytics_events_pipeline.email
+      audience              = google_cloudfunctions2_function.import_user_events_vertex.url
+    }
+  }
+}
+
+# scheduler resource that will transfer `view-item` vertex bq data - > vertex datastore
+resource "google_cloud_scheduler_job" "daily_transfer_bq_view_item_external_link_to_vertex" {
+  name        = "transfer_view_item_external_link_to_vertex_datastore"
+  description = "transfer view item external link vertex bq data to vertex datastore"
+  schedule    = "40 12 * * *"
+  time_zone   = "Europe/London"
+  http_target {
+    http_method = "POST"
+    uri         = google_cloudfunctions2_function.import_user_events_vertex.url
+    body        = base64encode("{ \"event_type\" : \"view-item-external-link\", \"date\" : null}")
     headers = {
       "Content-Type" = "application/json"
     }
@@ -371,6 +453,26 @@ resource "google_cloud_scheduler_job" "daily_transfer_bq_view_item_intraday_to_v
     http_method = "POST"
     uri         = google_cloudfunctions2_function.import_user_events_vertex.url
     body        = base64encode("{ \"event_type\" : \"view-item-intraday\", \"date\" : null}")
+    headers = {
+      "Content-Type" = "application/json"
+    }
+    oidc_token {
+      service_account_email = google_service_account.analytics_events_pipeline.email
+      audience              = google_cloudfunctions2_function.import_user_events_vertex.url
+    }
+  }
+}
+
+# scheduler resource that will transfer `view-item-external-link` intraday vertex bq data - > vertex datastore
+resource "google_cloud_scheduler_job" "daily_transfer_bq_view_item_external_link_intraday_to_vertex" {
+  name        = "transfer_view_item_external_link_intraday_to_vertex_datastore"
+  description = "transfer view item external link intraday vertex bq data to vertex datastore"
+  schedule    = "45 05,11,17,23 * * *"
+  time_zone   = "Europe/London"
+  http_target {
+    http_method = "POST"
+    uri         = google_cloudfunctions2_function.import_user_events_vertex.url
+    body        = base64encode("{ \"event_type\" : \"view-item-external-link-intraday\", \"date\" : null}")
     headers = {
       "Content-Type" = "application/json"
     }
