@@ -220,12 +220,6 @@ repos:
       additional_contexts:
         - test
 
-  gds_zendesk:
-    required_status_checks:
-      standard_contexts: *standard_security_checks
-      additional_contexts:
-        - test
-
   government-frontend:
     homepage_url: "https://docs.publishing.service.gov.uk/apps/government-frontend.html"
     required_status_checks:
@@ -848,7 +842,6 @@ repos:
   govuk-aws-data: {}
   govuk-chat: {}
   govuk-data-science-workshop: {}
-
   govuk-mobile-backend: {}
   govuk-mobile-backend-config: {}
   govuk-mobile-remote-config: {}
@@ -856,3 +849,4 @@ repos:
   govuk-rfcs: {}
   govuk-ruby-images: {}
   govuk-s3-mirror: {}
+  gds_zendesk: {}
