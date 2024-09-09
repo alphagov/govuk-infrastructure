@@ -50,20 +50,12 @@ data "github_repository" "govuk" {
   full_name = each.key
 }
 
-data "github_repository" "govuk_repo_names" {
-  for_each = toset(data.github_repositories.govuk.names)
-  name     = each.key
-}
-
 locals {
+  repositories = yamldecode(file("repos.yml"))["repos"]
+
   deployable_repos = [
     for r in data.github_repository.govuk : r
     if !r.fork && contains(r.topics, "container")
-  ]
-
-  auto_configurable_repos = [
-    for r in data.github_repository.govuk_repo_names : r
-    if !r.fork && !contains(r.topics, "govuk-sensitive-access")
   ]
 
   gems = [
@@ -95,24 +87,96 @@ resource "github_team" "govuk" {
 }
 
 resource "github_team_repository" "govuk_production_admin_repos" {
-  for_each   = { for repo in local.auto_configurable_repos : repo.name => repo }
-  repository = each.value.name
+  for_each   = local.repositories
+  repository = each.key
   team_id    = github_team.govuk_production_admin.id
   permission = "admin"
 }
 
 resource "github_team_repository" "govuk_ci_bots_repos" {
-  for_each   = { for repo in local.auto_configurable_repos : repo.name => repo }
-  repository = each.value.name
+  for_each   = local.repositories
+  repository = each.key
   team_id    = github_team.govuk_ci_bots.id
   permission = "admin"
 }
 
 resource "github_team_repository" "govuk_repos" {
-  for_each   = { for repo in local.auto_configurable_repos : repo.name => repo }
-  repository = each.value.name
+  for_each   = local.repositories
+  repository = each.key
   team_id    = github_team.govuk.id
   permission = "push"
+}
+
+resource "github_repository" "govuk_repos" {
+  for_each = local.repositories
+
+  name = each.key
+
+  allow_squash_merge = true
+  allow_merge_commit = false
+
+  has_downloads        = true
+  vulnerability_alerts = true
+
+  delete_branch_on_merge = true
+
+  homepage_url = try(each.value.homepage_url, null)
+
+  lifecycle {
+    ignore_changes = [
+      description,
+      allow_auto_merge,
+      allow_merge_commit,
+      allow_rebase_merge,
+      allow_squash_merge,
+      allow_update_branch,
+      has_issues,
+      has_projects,
+      has_wiki,
+      squash_merge_commit_title,
+      squash_merge_commit_message,
+      pages
+    ]
+  }
+}
+
+resource "github_branch_protection" "govuk_repos" {
+  for_each = { for repo_name, repo_details in local.repositories : repo_name => repo_details if try(repo_details["branch_protection"], true) }
+
+  repository_id    = github_repository.govuk_repos[each.key].node_id
+  pattern          = "main"
+  enforce_admins   = true
+  allows_deletions = false
+
+  required_pull_request_reviews {
+    required_approving_review_count = 1
+
+    pull_request_bypassers = try(each.value.required_pull_request_reviews.pull_request_bypassers, null)
+  }
+
+  restrict_pushes {
+    blocks_creations = false
+
+    push_allowances = try(
+      each.value["push_allowances"],
+      ["alphagov/gov-uk-production-admin", "alphagov/gov-uk-production-deploy"]
+    )
+  }
+
+  required_status_checks {
+    strict = try(each.value.strict, false)
+
+    contexts = concat(
+      try(each.value["required_status_checks"]["standard_contexts"], []),
+      try(each.value["required_status_checks"]["additional_contexts"], [])
+    )
+  }
+
+  lifecycle {
+    ignore_changes = [
+      require_conversation_resolution
+    ]
+  }
 }
 
 #
