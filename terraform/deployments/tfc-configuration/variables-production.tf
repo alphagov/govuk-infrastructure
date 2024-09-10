@@ -99,11 +99,9 @@ module "variable-set-chat-production" {
   tfvars = {
     chat_redis_cluster_apply_immediately          = false
     chat_redis_cluster_automatic_failover_enabled = true
-    chat_redis_cluster_engine_version             = "7.1"
     chat_redis_cluster_multi_az_enabled           = true
     chat_redis_cluster_node_type                  = "cache.r6g.xlarge"
     chat_redis_cluster_num_cache_clusters         = "2"
-    chat_redis_cluster_parameter_group_name       = "default.redis7"
     cloudfront_create                             = 1
     cloudfront_enable                             = true
     service_disabled                              = false

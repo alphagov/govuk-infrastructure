@@ -25,8 +25,8 @@ resource "aws_elasticache_replication_group" "chat_redis_cluster" {
   num_cache_clusters         = var.chat_redis_cluster_num_cache_clusters
   automatic_failover_enabled = var.chat_redis_cluster_automatic_failover_enabled
   multi_az_enabled           = var.chat_redis_cluster_multi_az_enabled
-  parameter_group_name       = var.chat_redis_cluster_parameter_group_name
-  engine_version             = var.chat_redis_cluster_engine_version
+  parameter_group_name       = "default.redis7"
+  engine_version             = "7.1"
   subnet_group_name          = aws_elasticache_subnet_group.chat_redis_cluster.name
   security_group_ids         = [aws_security_group.chat_redis_cluster.id]
   tags = {
