@@ -19,7 +19,7 @@ resource "aws_security_group" "chat_redis_cluster" {
 
 resource "aws_elasticache_parameter_group" "chat_redis_cluster" {
   name   = local.chat_redis_name
-  family = "redis7.1"
+  family = "redis7"
 
   parameter {
     name  = "cluster-enabled"
