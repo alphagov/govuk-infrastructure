@@ -22,11 +22,6 @@ resource "aws_elasticache_parameter_group" "chat_redis_cluster" {
   family = "redis7"
 
   parameter {
-    name  = "cluster-enabled"
-    value = "yes"
-  }
-
-  parameter {
     name  = "maxmemory-policy"
     value = "noeviction"
   }
