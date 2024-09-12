@@ -32,14 +32,6 @@ variable "chat_redis_cluster_multi_az_enabled" {
   type        = bool
   description = "Specifies whether to enable Multi-AZ Support for the replication group."
 }
-variable "chat_redis_cluster_parameter_group_name" {
-  type        = string
-  description = "Name of the parameter group to associate with this replication group. If this argument is omitted, the default cache parameter group for the specified engine is used."
-}
-variable "chat_redis_cluster_engine_version" {
-  type        = string
-  description = "Version number of the cache engine to be used for the cache clusters in this replication group."
-}
 variable "cloudfront_create" {
   description = "Create Cloudfront resources."
   type        = bool
