@@ -87,3 +87,9 @@ resource "aws_secretsmanager_secret_version" "discovery_engine_configuration_sea
     "DISCOVERY_ENGINE_SERVING_CONFIG" = local.discovery_engine_site_search_serving_config_path
   })
 }
+
+# bucket for VAIS related data artifacts e.g. denylist
+resource "google_storage_bucket" "vais_artifacts" {
+  name     = "${var.gcp_project_id}_vais_artifacts"
+  location = var.gcp_region
+}
