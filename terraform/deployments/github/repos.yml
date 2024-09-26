@@ -667,12 +667,6 @@ repos:
     required_status_checks:
       standard_contexts: *standard_security_checks
 
-  special-route-publisher:
-    required_status_checks:
-      standard_contexts: *standard_security_checks
-      additional_contexts:
-        - test
-
   specialist-publisher:
     homepage_url: "https://docs.publishing.service.gov.uk/apps/specialist-publisher.html"
     required_status_checks:
