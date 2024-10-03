@@ -843,7 +843,6 @@ repos:
   govuk-rfcs: {}
   govuk-ruby-images: {}
   govuk-s3-mirror: {}
-  gds_zendesk: {}
   govuk-design-guide: {
     teams: {
       govuk: "maintain"
