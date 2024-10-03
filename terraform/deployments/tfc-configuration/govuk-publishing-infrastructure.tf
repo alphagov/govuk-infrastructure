@@ -27,8 +27,8 @@ module "govuk-publishing-infrastructure-integration" {
     "aws-credentials-integration",
     "gcp-credentials-integration",
     "common",
-    "common-integration",
-    "amazonmq-integration"
+    "common-integration"
+    #"amazonmq-integration"
   ]
 }
 
