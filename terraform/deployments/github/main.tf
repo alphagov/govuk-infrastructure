@@ -90,21 +90,21 @@ resource "github_team_repository" "govuk_production_admin_repos" {
   for_each   = local.repositories
   repository = each.key
   team_id    = github_team.govuk_production_admin.id
-  permission = "admin"
+  permission = try(each.value.teams["govuk_production_admin"], "admin")
 }
 
 resource "github_team_repository" "govuk_ci_bots_repos" {
   for_each   = local.repositories
   repository = each.key
   team_id    = github_team.govuk_ci_bots.id
-  permission = "admin"
+  permission = try(each.value.teams["govuk_ci_bots"], "admin")
 }
 
 resource "github_team_repository" "govuk_repos" {
   for_each   = local.repositories
   repository = each.key
   team_id    = github_team.govuk.id
-  permission = "push"
+  permission = try(each.value.teams["govuk"], "push")
 }
 
 resource "github_repository" "govuk_repos" {
