@@ -333,12 +333,6 @@ repos:
       additional_contexts:
         - test
 
-  govuk-saas-config:
-    required_status_checks:
-      standard_contexts: *standard_security_checks
-      additional_contexts:
-        - test
-
   govuk-sli-collector:
     required_status_checks:
       standard_contexts: *standard_security_checks
