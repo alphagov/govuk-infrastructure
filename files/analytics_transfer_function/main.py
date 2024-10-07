@@ -97,7 +97,9 @@ def function_analytics_events_transfer(request):
                     WHERE
                         (SELECT value.string_value FROM UNNEST(event_params) WHERE key = 'publishing_app') = "search-api" AND
                         EXISTS (SELECT 1 FROM UNNEST(event_params) WHERE key = 'search_term') AND
-                        event_name='view_item_list'
+                        event_name='view_item_list' AND
+                        (((safe_cast(regexp_extract((SELECT value.string_value FROM UNNEST(event_params) WHERE key = 'page_location'), "page=(\\\\d+)" ) as int64)-1) <10) OR
+                        ((safe_cast(regexp_extract((SELECT value.string_value FROM UNNEST(event_params) WHERE key = 'page_location'), "page=(\\\\d+)" ) as int64)-1) IS NULL))
                     GROUP BY eventDate, eventTime,userPseudoId,eventType,searchQuery, `offset`,orderBy, id, item_list_index, filter, ab_test
                 )
                 SELECT 
@@ -183,7 +185,9 @@ def function_analytics_events_transfer(request):
                     WHERE
                         (SELECT value.string_value FROM UNNEST(event_params) WHERE key = 'publishing_app') = "search-api" AND
                         EXISTS (SELECT 1 FROM UNNEST(event_params) WHERE key = 'search_term') AND
-                        event_name='view_item_list'
+                        event_name='view_item_list' AND
+                        (((safe_cast(regexp_extract((SELECT value.string_value FROM UNNEST(event_params) WHERE key = 'page_location'), "page=(\\\\d+)" ) as int64)-1) <10) OR
+                        ((safe_cast(regexp_extract((SELECT value.string_value FROM UNNEST(event_params) WHERE key = 'page_location'), "page=(\\\\d+)" ) as int64)-1) IS NULL))
                     GROUP BY eventDate, eventTime,userPseudoId,eventType,searchQuery, `offset`,orderBy, id, item_list_index, filter, ab_test
                 )
                 SELECT 
