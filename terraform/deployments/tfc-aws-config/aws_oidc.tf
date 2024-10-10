@@ -55,6 +55,7 @@ data "aws_iam_policy_document" "tfc_policy" {
       "iam:*CloudFrontPublicKey*",
       "iam:*OpenIDConnectProvider*",
       "iam:*Policy",
+      "iam:*Policies",
       "iam:*PolicyVersion*",
       "iam:*RolePolicies",
       "iam:*RoleTags",
