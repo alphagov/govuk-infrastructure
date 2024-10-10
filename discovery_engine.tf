@@ -7,7 +7,7 @@ module "govuk_content_discovery_engine" {
   datastore_id        = google_discovery_engine_data_store.govuk_content.data_store_id
   datastore_path      = google_discovery_engine_data_store.govuk_content.name
   engine_id           = google_discovery_engine_search_engine.govuk.engine_id
-  storage_bucket_name = google_storage_bucket.vais_artifacts.name
+  # storage_bucket_name = google_storage_bucket.vais_artifacts.name
 }
 
 # TODO: These IDs/paths are semi-hardcoded here as there aren't first party resources/data sources
