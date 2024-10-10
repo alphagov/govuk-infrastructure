@@ -4,9 +4,9 @@
 module "govuk_content_discovery_engine" {
   source = "../modules/google_discovery_engine_restapi"
 
-  datastore_id        = google_discovery_engine_data_store.govuk_content.data_store_id
-  datastore_path      = google_discovery_engine_data_store.govuk_content.name
-  engine_id           = google_discovery_engine_search_engine.govuk.engine_id
+  datastore_id   = google_discovery_engine_data_store.govuk_content.data_store_id
+  datastore_path = google_discovery_engine_data_store.govuk_content.name
+  engine_id      = google_discovery_engine_search_engine.govuk.engine_id
   # storage_bucket_name = google_storage_bucket.vais_artifacts.name
 }
 
