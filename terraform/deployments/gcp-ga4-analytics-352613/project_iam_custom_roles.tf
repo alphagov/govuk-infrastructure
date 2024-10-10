@@ -1,63 +1,63 @@
 resource "google_project_iam_custom_role" "roles--GDS_BQ_read_access" {
   description = "Created on: 2023-10-27"
   permissions = [
-    "bigquery.datasets.get", 
-    "bigquery.tables.get", 
+    "bigquery.datasets.get",
+    "bigquery.tables.get",
     "bigquery.tables.getData"
-    ]
-  project     = google_project.project.project_id
-  role_id     = "GDS_BQ_read_access"
-  stage       = "GA"
-  title       = "GDS BQ read access"
+  ]
+  project = google_project.project.project_id
+  role_id = "GDS_BQ_read_access"
+  stage   = "GA"
+  title   = "GDS BQ read access"
 }
 
 resource "google_project_iam_custom_role" "roles--GDS_BQ_saved_query_writer" {
   description = "Created on: 2023-11-23"
   permissions = [
-    "bigquery.savedqueries.create", 
-    "bigquery.savedqueries.delete", 
+    "bigquery.savedqueries.create",
+    "bigquery.savedqueries.delete",
     "bigquery.savedqueries.update"
-    ]
-  project     = google_project.project.project_id
-  role_id     = "GDS_BQ_saved_query_writer"
-  stage       = "GA"
-  title       = "GDS BQ saved query writer"
+  ]
+  project = google_project.project.project_id
+  role_id = "GDS_BQ_saved_query_writer"
+  stage   = "GA"
+  title   = "GDS BQ saved query writer"
 }
 
 resource "google_project_iam_custom_role" "roles--GDS_BQ_user" {
   description = "Adds transfers update to the standard BigQuery User role"
   permissions = [
     "bigquery.bireservations.get",
-    "bigquery.capacityCommitments.get", 
-    "bigquery.capacityCommitments.list", 
-    "bigquery.datasets.get", 
-    "bigquery.datasets.getIamPolicy", 
-    "bigquery.jobs.create", 
+    "bigquery.capacityCommitments.get",
+    "bigquery.capacityCommitments.list",
+    "bigquery.datasets.get",
+    "bigquery.datasets.getIamPolicy",
+    "bigquery.jobs.create",
     "bigquery.jobs.get",
-    "bigquery.jobs.list", 
+    "bigquery.jobs.list",
     "bigquery.jobs.listAll",
     "bigquery.jobs.listExecutionMetadata",
-    "bigquery.models.list", 
-    "bigquery.readsessions.create", 
-    "bigquery.readsessions.getData", 
+    "bigquery.models.list",
+    "bigquery.readsessions.create",
+    "bigquery.readsessions.getData",
     "bigquery.reservationAssignments.list",
     "bigquery.reservationAssignments.search",
     "bigquery.reservations.get",
     "bigquery.reservations.list",
-    "bigquery.savedqueries.get", 
-    "bigquery.savedqueries.list", 
-    "bigquery.tables.get", 
+    "bigquery.savedqueries.get",
+    "bigquery.savedqueries.list",
+    "bigquery.tables.get",
     "bigquery.tables.getData",
-    "bigquery.tables.list", 
-    "bigquery.transfers.get", 
-    "bigquery.transfers.update", 
-    "bigquerymigration.translation.translate", 
+    "bigquery.tables.list",
+    "bigquery.transfers.get",
+    "bigquery.transfers.update",
+    "bigquerymigration.translation.translate",
     "resourcemanager.projects.get",
-    ]
-  project     = google_project.project.project_id
-  role_id     = "gds.bigquery.user"
-  stage       = "GA"
-  title       = "GDS BQ user"
+  ]
+  project = google_project.project.project_id
+  role_id = "gds.bigquery.user"
+  stage   = "GA"
+  title   = "GDS BQ user"
 }
 
 resource "google_project_iam_custom_role" "roles--GDS_BQ_editor" {
@@ -116,9 +116,9 @@ resource "google_project_iam_custom_role" "roles--GDS_BQ_editor" {
     "dataform.locations.list",
     "dataform.repositories.create",
     "resourcemanager.projects.get"
-    ]
-  project     = google_project.project.project_id
-  role_id     = "GDS_BQ_editor"
-  stage       = "GA"
-  title       = "GDS BQ editor"
+  ]
+  project = google_project.project.project_id
+  role_id = "GDS_BQ_editor"
+  stage   = "GA"
+  title   = "GDS BQ editor"
 }
