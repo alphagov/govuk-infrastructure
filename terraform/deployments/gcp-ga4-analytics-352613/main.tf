@@ -24,5 +24,3 @@ resource "google_project" "project" {
   folder_id       = "278098142879"
   billing_account = "015C7A-FAF970-B0D375"
 }
-
-data "google_project" "project" {}
