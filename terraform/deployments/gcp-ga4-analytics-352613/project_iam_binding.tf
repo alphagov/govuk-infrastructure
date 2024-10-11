@@ -32,6 +32,7 @@ resource "google_project_iam_binding" "project-gds_bigquery_editor" {
     "serviceAccount:service-177535650450@gcp-sa-dataform.iam.gserviceaccount.com",
     "serviceAccount:ga4-user-admin@ga4-analytics-352613.iam.gserviceaccount.com",
     "serviceAccount:ga-database@ga4-analytics-352613.iam.gserviceaccount.com",
+    "serviceAccount:service-659461823838@gcp-sa-dataform.iam.gserviceaccount.com",
   ]
   depends_on = [
     google_service_account.sa--ga-database,
