@@ -69,6 +69,7 @@ resource "google_project_iam_custom_role" "roles--GDS_BQ_editor" {
     "bigquery.datasets.create",
     "bigquery.datasets.get",
     "bigquery.datasets.getIamPolicy",
+    "bigquery.datasets.update",
     "bigquery.datasets.updateTag",
     "bigquery.jobs.create",
     "bigquery.jobs.get",
