@@ -122,6 +122,20 @@ data "aws_iam_policy_document" "tfc_policy" {
     resources = ["arn:aws:iam::*:user/govuk-*-transition-downloader"]
   }
   statement {
+    actions = ["iam:GetUser"]
+    resources = [
+      "arn:aws:iam::*:user/govuk-*-fastly-logs-writer",
+      "arn:aws:iam::*:user/govuk-*-transition-downloader"
+    ]
+  }
+  statement {
+    actions = [
+      "athena:GetNamedQuery",
+      "athena:ListNamedQueries"
+    ]
+    resources = ["*"]
+  }
+  statement {
     effect    = "Deny"
     resources = ["*"]
     actions = [
