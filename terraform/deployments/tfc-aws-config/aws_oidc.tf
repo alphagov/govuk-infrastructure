@@ -137,7 +137,6 @@ data "aws_iam_policy_document" "tfc_policy" {
       "iam:*Login*",
       "iam:*Group*",
       "iam:*PermissionsBoundary*",
-      "iam:*User*",
       "iam:CreateServiceLinkedRole",
     ]
   }
