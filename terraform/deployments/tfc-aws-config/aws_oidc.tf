@@ -51,6 +51,7 @@ data "aws_iam_policy_document" "tfc_policy" {
       "elasticfilesystem:*",
       "es:*",
       "events:*",
+      "glue:*",
       "iam:*InstanceProfile*",
       "iam:*CloudFrontPublicKey*",
       "iam:*OpenIDConnectProvider*",
