@@ -40,6 +40,7 @@ data "aws_iam_policy_document" "tfc_policy" {
     actions = [
       "acm:*",
       "apigateway:*",
+      "athena:*",
       "autoscaling:*",
       "cloudfront:*",
       "cloudwatch:*",
