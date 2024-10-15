@@ -40,6 +40,7 @@ data "aws_iam_policy_document" "tfc_policy" {
     actions = [
       "acm:*",
       "apigateway:*",
+      "athena:*",
       "autoscaling:*",
       "cloudfront:*",
       "cloudwatch:*",
@@ -118,8 +119,11 @@ data "aws_iam_policy_document" "tfc_policy" {
     resources = ["arn:aws:iam::*:role/AWSLambdaRole-transition-executor"]
   }
   statement {
-    actions   = ["iam:*User"]
-    resources = ["arn:aws:iam::*:user/govuk-*-transition-downloader"]
+    actions = ["iam:*User"]
+    resources = [
+      "arn:aws:iam::*:user/govuk-*-fastly-logs-writer",
+      "arn:aws:iam::*:user/govuk-*-transition-downloader"
+    ]
   }
   statement {
     effect    = "Deny"
@@ -136,7 +140,6 @@ data "aws_iam_policy_document" "tfc_policy" {
       "iam:*Login*",
       "iam:*Group*",
       "iam:*PermissionsBoundary*",
-      "iam:*User*",
       "iam:CreateServiceLinkedRole",
     ]
   }
