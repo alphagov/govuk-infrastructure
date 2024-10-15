@@ -114,6 +114,14 @@ data "aws_iam_policy_document" "tfc_policy" {
     resources = ["arn:aws:iam::*:role/rds-monitoring-role"]
   }
   statement {
+    actions   = ["iam:*Role"]
+    resources = ["arn:aws:iam::*:role/AWSLambdaRole-transition-executor"]
+  }
+  statement {
+    actions   = ["iam:*User"]
+    resources = ["arn:aws:iam::*:user/govuk-*-transition-downloader"]
+  }
+  statement {
     effect    = "Deny"
     resources = ["*"]
     actions = [
