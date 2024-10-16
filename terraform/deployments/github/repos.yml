@@ -837,6 +837,7 @@ repos:
   govuk-rfcs: {}
   govuk-ruby-images: {}
   govuk-s3-mirror: {}
+  govuk-e2e-tests: {}
   govuk-design-guide: {
     teams: {
       govuk: "maintain"

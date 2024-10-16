@@ -209,3 +209,8 @@ resource "github_actions_organization_secret_repositories" "pact_broker_username
   secret_name             = "GOVUK_PACT_BROKER_USERNAME"
   selected_repository_ids = [for repo in local.pact_publishers : repo.repo_id]
 }
+
+import {
+  id = "govuk-e2e-tests"
+  to = github_repository.govuk_repos["govuk-e2e-tests"]
+}
