@@ -62,3 +62,13 @@ variable "search_api_lb_dns_name" {
   type        = string
   description = "The DNS name of the search-api-v2 load balancer"
 }
+
+variable "search_api_domain" {
+  type        = string
+  description = "The domain name of the API gateway"
+}
+
+variable "publishing_certificate_arn" {
+  type        = string
+  description = "The ARN of the publishing certificate"
+}
