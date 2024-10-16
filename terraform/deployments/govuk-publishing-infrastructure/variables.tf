@@ -52,3 +52,23 @@ variable "shared_documentdb_backup_retention_period" {
   default     = 5
   description = "Number of days to keep shared DocumentDB backups for"
 }
+
+variable "search_api_lb_arn" {
+  type        = string
+  description = "The ARN of the search-api-v2 load balancer"
+}
+
+variable "search_api_lb_dns_name" {
+  type        = string
+  description = "The DNS name of the search-api-v2 load balancer"
+}
+
+variable "search_api_domain" {
+  type        = string
+  description = "The domain name of the API gateway"
+}
+
+variable "publishing_certificate_arn" {
+  type        = string
+  description = "The ARN of the publishing certificate"
+}
