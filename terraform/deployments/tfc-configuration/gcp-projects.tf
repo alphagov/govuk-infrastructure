@@ -4,7 +4,7 @@ module "gcp-ga4-analytics" {
 
   organization        = var.organization
   workspace_name      = "gcp-ga4-analytics-352613"
-  workspace_desc      = "BigQuery infrastructure for Data Insight & Analytics"
+  workspace_desc      = "GCP project management for the GA4 production project"
   workspace_tags      = ["production", "ga4-analytics-352613", "gcp"]
   terraform_version   = var.terraform_version
   execution_mode      = "remote"
