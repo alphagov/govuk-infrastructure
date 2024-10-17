@@ -20,8 +20,8 @@ module "gcp-ga4-analytics-352613" {
   }
 
   team_access = {
-    "GOV.UK Production" = "write"
-    "Google Cloud Data Production"     = "write"
+    "GOV.UK Production"            = "write",
+    "Google Cloud Data Production" = "write"
   }
 
   variable_set_names = [
