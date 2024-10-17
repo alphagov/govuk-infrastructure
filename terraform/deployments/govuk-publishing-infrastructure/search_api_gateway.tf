@@ -48,7 +48,12 @@ resource "aws_api_gateway_integration" "search_lb_integration" {
 # Create a deployment for the API Gateway
 resource "aws_api_gateway_deployment" "search_deployment" {
   rest_api_id = aws_api_gateway_rest_api.search_rest_api.id
-  stage_name  = "v0_1" # Version embedded in the published URL
+}
+
+resource "aws_api_gateway_stage" "search_v0_1" {
+  deployment_id = aws_api_gateway_deployment.search_deployment.id
+  rest_api_id   = aws_api_gateway_rest_api.search_rest_api.id
+  stage_name    = "v0_1" # Version embedded in the published URL
 }
 
 # Map API Gateway stages to custom domain
