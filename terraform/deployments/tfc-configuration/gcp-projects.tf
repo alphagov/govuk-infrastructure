@@ -20,7 +20,7 @@ module "gcp-ga4-analytics" {
   }
 
   team_access = {
-    "GOV.UK Production"            = "write",
+    "GOV.UK Production"            = "write"
     "Google Cloud Data Production" = "write"
   }
 
