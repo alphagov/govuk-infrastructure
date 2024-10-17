@@ -1,4 +1,4 @@
-module "gcp-ga4-analytics-352613" {
+module "gcp-ga4-analytics" {
   source  = "alexbasista/workspacer/tfe"
   version = "0.10.0"
 
