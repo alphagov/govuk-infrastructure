@@ -25,8 +25,6 @@ module "gcp-ga4-analytics-352613" {
   }
 
   variable_set_names = [
-    "gcp-credentials-production",
-    "common",
-    "common-integration"
+    "gcp-credentials-production"
   ]
 }
