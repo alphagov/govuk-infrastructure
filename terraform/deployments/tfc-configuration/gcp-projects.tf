@@ -3,7 +3,7 @@ module "gcp-ga4-analytics" {
   version = "0.10.0"
 
   organization        = var.organization
-  workspace_name      = "gcp-ga4-analytics-352613"
+  workspace_name      = "gcp-ga4-analytics"
   workspace_desc      = "GCP project management for the GA4 production project"
   workspace_tags      = ["production", "ga4-analytics-352613", "gcp"]
   terraform_version   = var.terraform_version
