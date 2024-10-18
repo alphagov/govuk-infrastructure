@@ -8,8 +8,6 @@ resource "aws_lb" "search_nlb" {
   load_balancer_type = "network"
   internal           = true
   subnets            = data.terraform_remote_state.infra_networking.outputs.private_subnet_ids
-
-  enforce_security_group_inbound_rules_on_private_link_traffic = "off"
 }
 
 resource "aws_lb_target_group" "search_api_gateway_tg" {
