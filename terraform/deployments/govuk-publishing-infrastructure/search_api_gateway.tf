@@ -3,11 +3,45 @@ resource "aws_api_gateway_domain_name" "search_api_domain" {
   certificate_arn = var.publishing_certificate_arn
 }
 
+resource "aws_lb" "search_nlb" {
+  name               = "search-nlb"
+  load_balancer_type = "network"
+  internal           = true
+  subnets            = data.terraform_remote_state.infra_networking.outputs.private_subnet_ids
+
+  enforce_security_group_inbound_rules_on_private_link_traffic = "off"
+}
+
+resource "aws_lb_target_group" "search_api_gateway_tg" {
+  name        = "search-api-gateway-tg"
+  target_type = "alb"
+  port        = "443"
+  protocol    = "TCP"
+  vpc_id      = data.tfe_outputs.vpc.nonsensitive_values.id
+}
+
+resource "aws_lb_listener" "search_nlb_listener" {
+  load_balancer_arn = aws_lb.search_nlb.arn
+  port              = "443"
+  protocol          = "TCP"
+
+  default_action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.search_api_gateway_tg.arn
+  }
+}
+
+resource "aws_lb_target_group_attachment" "tg_attachment" {
+  target_group_arn = aws_lb_target_group.search_api_gateway_tg.arn
+  target_id        = var.search_api_lb_arn
+  port             = 443
+}
+
 # VPC Link to allow API Gateway to connect to the search load balancer
 resource "aws_api_gateway_vpc_link" "search_vpc_link" {
   name = "search_api_vpc_link"
   target_arns = [
-    var.search_api_lb_arn
+    aws_lb.search_nlb.arn
   ]
 }
 
