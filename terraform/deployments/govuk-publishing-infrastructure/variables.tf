@@ -72,3 +72,8 @@ variable "publishing_certificate_arn" {
   type        = string
   description = "The ARN of the publishing certificate"
 }
+
+variable "search_api_rate_limit" {
+  type        = string
+  description = "The rate limit applied to search API over 5 minutes"
+}
