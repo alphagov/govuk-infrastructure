@@ -113,3 +113,8 @@ resource "aws_cloudfront_function" "add_index" {
   runtime = "cloudfront-js-2.0"
   code    = file("${path.module}/add_index.js")
 }
+
+resource "aws_shield_protection" "chat_shield_protection" {
+  name         = "Chat"
+  resource_arn = aws_cloudfront_distribution.chat_distribution[0].arn
+}
