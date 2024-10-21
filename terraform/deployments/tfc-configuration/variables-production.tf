@@ -586,3 +586,18 @@ module "variable-set-rds-production" {
     }
   }
 }
+
+module "variable-set-amazonmq-production" {
+  source = "./variable-set"
+
+  name = "amazonmq-production"
+  tfvars = {
+    amazonmq_engine_version                       = "3.11.28"
+    amazonmq_deployment_mode                      = "CLUSTER_MULTI_AZ"
+    amazonmq_maintenance_window_start_day_of_week = "WEDNESDAY"
+    amazonmq_maintenance_window_start_time_utc    = "06:00"
+    amazonmq_host_instance_type                   = "mq.m5.xlarge"
+
+    amazonmq_govuk_chat_retry_message_ttl = 300000
+  }
+}

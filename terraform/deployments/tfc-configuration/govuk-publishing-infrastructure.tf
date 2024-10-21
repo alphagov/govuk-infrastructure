@@ -60,7 +60,8 @@ module "govuk-publishing-infrastructure-staging" {
     "aws-credentials-staging",
     "gcp-credentials-staging",
     "common",
-    "common-staging"
+    "common-staging",
+    #"amazonmq-staging"
   ]
 }
 
@@ -92,6 +93,7 @@ module "govuk-publishing-infrastructure-production" {
     "aws-credentials-production",
     "gcp-credentials-production",
     "common",
-    "common-production"
+    "common-production",
+    #"amazonmq-production"
   ]
 }
