@@ -80,6 +80,19 @@ resource "aws_api_gateway_integration" "search_lb_integration" {
 # Create a deployment for the API Gateway
 resource "aws_api_gateway_deployment" "search_deployment" {
   rest_api_id = aws_api_gateway_rest_api.search_rest_api.id
+
+  triggers = {
+    redeployment = sha1(jsonencode([
+      aws_api_gateway_integration.search_lb_integration,
+      aws_api_gateway_method.get_search_method,
+      aws_api_gateway_resource.search_resource,
+      aws_api_gateway_rest_api.search_rest_api,
+    ]))
+  }
+
+  lifecycle {
+    create_before_destroy = true
+  }
 }
 
 resource "aws_api_gateway_stage" "search_v0_1" {
