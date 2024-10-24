@@ -12,9 +12,18 @@
 # sg_rabbitmq_elb_id
 
 resource "aws_security_group" "rabbitmq" {
-  name        = "rabbitmq-access"
-  vpc_id      = data.tfe_outputs.vpc.values.id
+  name        = "govuk_rabbitmq_access"
+  vpc_id      = data.tfe_outputs.vpc.nonsensitive_values.id
   description = "Access to the rabbitmq host from its ELB"
+}
+
+data "aws_security_group" "rabbitmq" {
+  name = "govuk_rabbitmq_access"
+}
+
+import {
+  to = aws_security_group.rabbitmq
+  id = data.aws_security_group.rabbitmq.id
 }
 
 resource "aws_security_group_rule" "rabbitmq_ingress_rabbitmq_elb_amqp" {
@@ -71,7 +80,7 @@ resource "aws_security_group_rule" "rabbitmq_ingress_rabbitmq_epmd" {
 
 resource "aws_security_group" "rabbitmq_elb" {
   name        = "rabbitmq-elb-access"
-  vpc_id      = data.tfe_outputs.vpc.values.id
+  vpc_id      = data.tfe_outputs.vpc.nonsensitive_values.id
   description = "Access the rabbitmq Internal ELB"
 }
 
