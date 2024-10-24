@@ -61,7 +61,7 @@ module "govuk-publishing-infrastructure-staging" {
     "gcp-credentials-staging",
     "common",
     "common-staging",
-    #"amazonmq-staging"
+    "amazonmq-staging"
   ]
 }
 
@@ -94,6 +94,6 @@ module "govuk-publishing-infrastructure-production" {
     "gcp-credentials-production",
     "common",
     "common-production",
-    #"amazonmq-production"
+    "amazonmq-production"
   ]
 }
