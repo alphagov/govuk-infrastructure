@@ -576,7 +576,7 @@ module "variable-set-amazonmq-staging" {
 
   name = "amazonmq-staging"
   tfvars = {
-    amazonmq_engine_version                       = "3.11.28"
+    amazonmq_engine_version                       = "3.13.6"
     amazonmq_deployment_mode                      = "SINGLE_INSTANCE"
     amazonmq_maintenance_window_start_day_of_week = "MONDAY"
     amazonmq_maintenance_window_start_time_utc    = "07:00"

@@ -77,3 +77,39 @@ variable "search_api_rate_limit" {
   type        = string
   description = "The rate limit applied to search API over 5 minutes"
 }
+
+variable "amazonmq_engine_version" {
+  type        = string
+  default     = "3.11.28"
+  description = "Engine version for publishing AmazonMQ cluster"
+}
+
+variable "amazonmq_deployment_mode" {
+  type        = string
+  default     = "SINGLE_INSTANCE"
+  description = "SINGLE_INSTANCE, ACTIVE_STANDBY_MULTI_AZ, or CLUSTER_MULTI_AZ"
+}
+
+variable "amazonmq_maintenance_window_start_day_of_week" {
+  type        = string
+  default     = "MONDAY"
+  description = "Day of week for automated maintenance"
+}
+
+variable "amazonmq_maintenance_window_start_time_utc" {
+  type        = string
+  default     = "07:00"
+  description = "Time to start automated maintenance"
+}
+
+variable "amazonmq_host_instance_type" {
+  type        = string
+  default     = "mq.t3.micro"
+  description = "Instance size for publishing AmazonMQ cluster"
+}
+
+variable "amazonmq_govuk_chat_retry_message_ttl" {
+  type        = number
+  default     = 300000
+  description = "Time in miliseconds before messages in the govuk_chat_retry queue expires and are sent back to the govuk_chat_published_ducoments queue through the dead letter mechanism"
+}
