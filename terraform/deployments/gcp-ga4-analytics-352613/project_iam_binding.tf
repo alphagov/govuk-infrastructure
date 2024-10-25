@@ -4,6 +4,7 @@ resource "google_project_iam_binding" "project-owners" {
 
   members = [
     "group:gcp-ga4-analytics-352613-owners@digital.cabinet-office.gov.uk",
+    "serviceAccount:terraform-cloud-production@govuk-production.iam.gserviceaccount.com"
   ]
 }
 
@@ -62,5 +63,13 @@ resource "google_project_iam_binding" "project-GDS_BQ_read_access" {
     "serviceAccount:data-insights-experimentation@data-insights-experimentation.iam.gserviceaccount.com",
     "serviceAccount:govuk-content-data-ga4@govuk-content-data.iam.gserviceaccount.com",
     "serviceAccount:govuk-looker-poc@govuk-looker-poc.iam.gserviceaccount.com",
+  ]
+}
+
+resource "google_project_iam_binding" "project-GDS_log_alert_writer" {
+  project = google_project.project.project_id
+  role    = "projects/ga4-analytics-352613/roles/GDS_log_alert_writer"
+  members = [
+    "group:govuk-performance-analysts@digital.cabinet-office.gov.uk"
   ]
 }

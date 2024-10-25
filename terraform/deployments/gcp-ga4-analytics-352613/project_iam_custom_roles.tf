@@ -24,6 +24,28 @@ resource "google_project_iam_custom_role" "roles--GDS_BQ_saved_query_writer" {
   title   = "GDS BQ saved query writer"
 }
 
+resource "google_project_iam_custom_role" "roles--GDS_logging_alerts_writer" {
+  description = "Logger access to create alerts"
+  permissions = [
+    "logging.logEntries.create",
+    "logging.logEntries.list",
+    "logging.logMetrics.create",
+    "logging.logMetrics.delete",
+    "logging.logMetrics.get",
+    "logging.logMetrics.list",
+    "logging.logMetrics.update",
+    "monitoring.alertPolicies.create",
+    "monitoring.alertPolicies.delete",
+    "monitoring.alertPolicies.get",
+    "monitoring.alertPolicies.list",
+    "monitoring.alertPolicies.update"
+  ]
+  project = google_project.project.project_id
+  role_id = "GDS_log_alert_writer"
+  stage   = "GA"
+  title   = "GDS log alert writer"
+}
+
 resource "google_project_iam_custom_role" "roles--GDS_BQ_user" {
   description = "Adds transfers update to the standard BigQuery User role"
   permissions = [
