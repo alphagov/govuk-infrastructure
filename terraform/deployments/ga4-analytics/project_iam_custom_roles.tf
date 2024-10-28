@@ -16,7 +16,10 @@ resource "google_project_iam_custom_role" "roles--GDS_BQ_saved_query_writer" {
   permissions = [
     "bigquery.savedqueries.create",
     "bigquery.savedqueries.delete",
-    "bigquery.savedqueries.update"
+    "bigquery.savedqueries.update",
+    "dataform.repositories.create",
+    "dataform.repositories.get",
+    "dataform.repositories.list"
   ]
   project = google_project.project.project_id
   role_id = "GDS_BQ_saved_query_writer"
