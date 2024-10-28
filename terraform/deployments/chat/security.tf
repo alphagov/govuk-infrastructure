@@ -36,3 +36,27 @@ resource "aws_security_group_rule" "chat_redis_cluster_from_any" {
   security_group_id        = aws_security_group.chat_redis_cluster.id
   source_security_group_id = data.tfe_outputs.cluster_infrastructure.nonsensitive_values.node_security_group_id
 }
+
+#
+# Memcached
+#
+
+resource "aws_security_group_rule" "chat_serverless_memcached_to_any_any" {
+  description       = "Serverless Memcached sends requests to anywhere over any protocol"
+  type              = "egress"
+  from_port         = 0
+  to_port           = 0
+  protocol          = -1
+  cidr_blocks       = ["0.0.0.0/0"]
+  security_group_id = aws_security_group.chat_memcached.id
+}
+
+resource "aws_security_group_rule" "chat_serverless_memcached_from_any" {
+  description              = "Serverless Memcached accepts requests from EKS nodes"
+  type                     = "ingress"
+  from_port                = 11211
+  to_port                  = 11211
+  protocol                 = "tcp"
+  security_group_id        = aws_security_group.chat_memcached.id
+  source_security_group_id = data.tfe_outputs.cluster_infrastructure.nonsensitive_values.node_security_group_id
+}
