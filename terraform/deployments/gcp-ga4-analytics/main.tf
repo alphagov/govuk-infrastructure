@@ -1,10 +1,10 @@
 terraform {
-  # cloud {
-  #   organization = "govuk"
-  #   workspaces {
-  #     tags = ["ga4-analytics-352613", "gcp"]
-  #   }
-  # }
+  cloud {
+    organization = "govuk"
+    workspaces {
+      tags = ["ga4-analytics", "gcp"]
+    }
+  }
   required_version = "~> 1.5"
   required_providers {
     google = {
