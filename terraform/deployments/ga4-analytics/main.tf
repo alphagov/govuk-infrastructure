@@ -2,7 +2,7 @@ terraform {
   cloud {
     organization = "govuk"
     workspaces {
-      tags = ["ga4-analytics", "gcp"]
+      tags = ["gcp-ga4-analytics", "gcp", "production"]
     }
   }
   required_version = "~> 1.5"
