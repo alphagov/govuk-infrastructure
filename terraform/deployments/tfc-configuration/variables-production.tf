@@ -109,6 +109,8 @@ module "variable-set-chat-production" {
     origin_chat_id                                = "Chat origin"
     cloudfront_chat_distribution_aliases          = ["chat.publishing.service.gov.uk"]
     chat_certificate_arn                          = "arn:aws:acm:us-east-1:172025368201:certificate/ea27535c-f48a-4755-b6ca-c048c880e02d"
+    waf_cache_rate_warning                        = 2000
+    waf_cache_rate_limit                          = 4000
   }
 }
 
