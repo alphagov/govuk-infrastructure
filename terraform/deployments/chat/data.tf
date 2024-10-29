@@ -32,3 +32,21 @@ data "terraform_remote_state" "infra_root_dns_zones" {
   }
 }
 
+data "aws_wafv2_rule_group" "x_always_block" {
+  name  = "x-always-block_rule_group"
+  scope = "REGIONAL"
+}
+
+data "aws_wafv2_ip_set" "govuk_requesting_ips" {
+  name  = "govuk_requesting_ips"
+  scope = "REGIONAL"
+}
+
+data "aws_wafv2_ip_set" "high_request_rate" {
+  name  = "high_request_rate"
+  scope = "REGIONAL"
+}
+
+data "aws_secretsmanager_secret_version" "fastly_token" {
+  secret_id = "govuk/govuk-chat/fastly-token"
+}
