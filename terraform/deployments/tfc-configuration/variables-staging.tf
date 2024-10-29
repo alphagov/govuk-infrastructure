@@ -90,6 +90,8 @@ module "variable-set-chat-staging" {
     origin_chat_id                                = "Chat origin"
     cloudfront_chat_distribution_aliases          = ["chat.staging.publishing.service.gov.uk"]
     chat_certificate_arn                          = "arn:aws:acm:us-east-1:696911096973:certificate/642e34ef-71e2-439d-99f7-e79baf9ed482"
+    waf_cache_rate_warning                        = 1500
+    waf_cache_rate_limit                          = 2000
   }
 }
 
