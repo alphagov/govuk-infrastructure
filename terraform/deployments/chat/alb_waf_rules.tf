@@ -40,7 +40,7 @@ resource "aws_wafv2_web_acl" "chat_waf_rules" {
   # can help mitigate bots and reduce the risk of a malicious actor discovering
   # a vulnerable application.
   rule {
-    name     = "aws-managed-rules-common-rule-set"
+    name     = "aws-managed-rules-ip-reputation-list"
     priority = 20
 
     override_action {
@@ -69,7 +69,7 @@ resource "aws_wafv2_web_acl" "chat_waf_rules" {
   # application. Blocking the IP addresses of these services can help mitigate bots
   # and evasion of geographic restrictions.
   rule {
-    name     = "aws-managed-rules-common-rule-set"
+    name     = "aws-managed-rules-anonymous-ip-list"
     priority = 30
 
     override_action {
