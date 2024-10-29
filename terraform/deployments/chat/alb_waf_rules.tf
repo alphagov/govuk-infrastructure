@@ -422,3 +422,37 @@ resource "aws_wafv2_web_acl" "chat_waf_rules" {
     sampled_requests_enabled   = true
   }
 }
+
+resource "aws_cloudwatch_log_group" "govuk_chat_waf" {
+  # the name must start with aws-waf-logs
+  # https://docs.aws.amazon.com/waf/latest/developerguide/logging-cw-logs.html#logging-cw-logs-naming
+  name              = "aws-waf-logs-govuk-chat-${var.govuk_environment}"
+  retention_in_days = 30
+}
+
+resource "aws_wafv2_web_acl_logging_configuration" "govuk_chat_waf" {
+  log_destination_configs = [aws_cloudwatch_log_group.govuk_chat_waf.arn]
+  resource_arn            = aws_wafv2_web_acl.chat_waf_rules.arn
+
+  logging_filter {
+    default_behavior = "DROP"
+
+    filter {
+      behavior = "KEEP"
+
+      condition {
+        action_condition {
+          action = "COUNT"
+        }
+      }
+
+      condition {
+        action_condition {
+          action = "BLOCK"
+        }
+      }
+
+      requirement = "MEETS_ANY"
+    }
+  }
+}
