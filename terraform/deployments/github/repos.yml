@@ -832,7 +832,6 @@ repos:
   govuk-data-science-workshop: {}
   govuk-mobile-backend: {}
   govuk-mobile-backend-config: {}
-  govuk-mobile-remote-config: {}
   govuk-pact-broker: {}
   govuk-rfcs: {}
   govuk-ruby-images: {}
