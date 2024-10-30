@@ -23,6 +23,13 @@ resource "aws_wafv2_web_acl" "chat_waf_rules" {
       managed_rule_group_statement {
         name        = "AWSManagedRulesCommonRuleSet"
         vendor_name = "AWS"
+
+        rule_action_override {
+          action_to_use {
+            allow {}
+          }
+          name = "SizeRestrictions_BODY"
+        }
       }
     }
 
