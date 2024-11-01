@@ -103,7 +103,7 @@ resource "aws_s3_bucket_lifecycle_configuration" "backup_main" {
     id     = "non-production"
     status = var.govuk_environment != "production" ? "Enabled" : "Disabled"
     filter {}
-    expiration { days = 2 }
+    expiration { days = 8 }
     noncurrent_version_expiration { noncurrent_days = 1 }
   }
 }
