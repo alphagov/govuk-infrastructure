@@ -30,11 +30,3 @@ resource "aws_elasticache_serverless_cache" "chat_memcached" {
     Name = local.chat_memcached_name
   }
 }
-
-resource "aws_route53_record" "chat_memcached" {
-  zone_id = local.internal_dns_zone_id
-  name    = local.chat_memcached_name
-  type    = "CNAME"
-  ttl     = 300
-  records = [for k, v in aws_elasticache_serverless_cache.chat_memcached.endpoint : v.address]
-}
