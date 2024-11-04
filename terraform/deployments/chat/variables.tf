@@ -62,13 +62,3 @@ variable "chat_certificate_arn" {
   type        = string
   description = "ARN of the TLS cert to use for the Chat CloudFront distribution."
 }
-
-variable "waf_cache_rate_warning" {
-  description = "For the cache ALB. Allows us to configure a warning level to detect what happens if we reduce the limit."
-  type        = number
-}
-
-variable "waf_cache_rate_limit" {
-  description = "For the cache ALB. Number of requests to allow in a 5 minute period before rate limiting is applied."
-  type        = number
-}
