@@ -24,3 +24,9 @@ variable "govuk_environment" {
   type        = string
   description = "Acceptable values are test, integration, staging, production"
 }
+
+variable "datagovuk_namespace" {
+  type        = string
+  description = "Name of the namespace to create for ArgoCD to deploy DGU apps into by default."
+  default     = "datagovuk"
+}
