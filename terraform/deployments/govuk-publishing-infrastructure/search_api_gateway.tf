@@ -55,13 +55,13 @@ resource "aws_api_gateway_rest_api" "search_rest_api" {
 resource "aws_api_gateway_resource" "search_resource" {
   rest_api_id = aws_api_gateway_rest_api.search_rest_api.id
   parent_id   = aws_api_gateway_rest_api.search_rest_api.root_resource_id
-  path_part   = "search.json"
+  path_part   = "{proxy+}"
 }
 
-resource "aws_api_gateway_method" "get_search_method" {
+resource "aws_api_gateway_method" "search_method" {
   rest_api_id   = aws_api_gateway_rest_api.search_rest_api.id
   resource_id   = aws_api_gateway_resource.search_resource.id
-  http_method   = "GET"
+  http_method   = "ANY"
   authorization = "NONE" # We can add API keys or other auth options should we need them
 }
 
@@ -69,8 +69,8 @@ resource "aws_api_gateway_method" "get_search_method" {
 resource "aws_api_gateway_integration" "search_lb_integration" {
   rest_api_id             = aws_api_gateway_rest_api.search_rest_api.id
   resource_id             = aws_api_gateway_resource.search_resource.id
-  http_method             = aws_api_gateway_method.get_search_method.http_method
-  integration_http_method = "GET"
+  http_method             = aws_api_gateway_method.search_method.http_method
+  integration_http_method = "ANY"
   type                    = "HTTP_PROXY"
   connection_type         = "VPC_LINK"
   connection_id           = aws_api_gateway_vpc_link.search_vpc_link.id
@@ -84,7 +84,7 @@ resource "aws_api_gateway_deployment" "search_deployment" {
   triggers = {
     redeployment = sha1(jsonencode([
       aws_api_gateway_integration.search_lb_integration,
-      aws_api_gateway_method.get_search_method,
+      aws_api_gateway_method.search_method,
       aws_api_gateway_resource.search_resource,
       aws_api_gateway_rest_api.search_rest_api,
     ]))
