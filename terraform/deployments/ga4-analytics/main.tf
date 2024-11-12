@@ -2,7 +2,7 @@ terraform {
   cloud {
     organization = "govuk"
     workspaces {
-      tags = ["gcp-ga4-analytics", "gcp", "production"]
+      tags = ["ga4-analytics", "gcp", "production"]
     }
   }
   required_version = "~> 1.5"
@@ -16,6 +16,11 @@ terraform {
 
 provider "google" {
   project = "ga4-analytics-352613"
+}
+
+import {
+  id = "ga4-analytics-352613"
+  to = google_project.project
 }
 
 resource "google_project" "project" {
