@@ -6,5 +6,5 @@ resource "aws_sns_topic" "rds_alerts" {
 resource "aws_sns_topic_subscription" "rds_alerts" {
   topic_arn = aws_sns_topic.rds_alerts.arn
   protocol  = "email"
-  endpoint  = var.zendesk_2nd_line_email_address
+  endpoint  = "govuk-platform-engineering@digital.cabinet-office.gov.uk"
 }

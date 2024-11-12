@@ -72,8 +72,3 @@ variable "terraform_delete_rds_timeout" {
   description = "Set the timeout time for AWS RDS deletion."
   default     = "2h"
 }
-
-variable "zendesk_2nd_line_email_address" {
-  type        = string
-  description = "Email address for 2nd line zendesk queue"
-}
