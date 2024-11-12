@@ -26,15 +26,15 @@ resource "google_project_iam_binding" "project-viewers" {
 
 resource "google_project_iam_binding" "project-gds_bigquery_editor" {
   project = google_project.project.project_id
-  role    = "projects/ga4-analytics-352613/roles/GDS_BQ_editor"
+  role    = google_project_iam_custom_role.roles--gds-bigquery-editor.name
   members = [
     "serviceAccount:firebase-measurement@system.gserviceaccount.com",
     "serviceAccount:search-console-data-export@system.gserviceaccount.com",
     "serviceAccount:service-177535650450@gcp-sa-dataform.iam.gserviceaccount.com",
-    "serviceAccount:ga4-user-admin@ga4-analytics-352613.iam.gserviceaccount.com",
-    "serviceAccount:ga-database@ga4-analytics-352613.iam.gserviceaccount.com",
     "serviceAccount:service-659461823838@gcp-sa-dataform.iam.gserviceaccount.com",
     "serviceAccount:177535650450-compute@developer.gserviceaccount.com",
+    google_service_account.sa--ga-database.email,
+    google_service_account.sa--ga4-user-admin.email,
   ]
   depends_on = [
     google_service_account.sa--ga-database,
@@ -44,16 +44,16 @@ resource "google_project_iam_binding" "project-gds_bigquery_editor" {
 
 resource "google_project_iam_binding" "project-gds_bigquery_user" {
   project = google_project.project.project_id
-  role    = "projects/ga4-analytics-352613/roles/gds.bigquery.user"
+  role    = google_project_iam_custom_role.roles--gds-bigquery-user.name
   members = [
     "domain:digital.cabinet-office.gov.uk",
     "user:arran.gosal@merkle.com",
   ]
 }
 
-resource "google_project_iam_binding" "project-GDS_BQ_read_access" {
+resource "google_project_iam_binding" "project-gds_bigquery_read_access" {
   project = google_project.project.project_id
-  role    = "projects/ga4-analytics-352613/roles/GDS_BQ_read_access"
+  role    = google_project_iam_custom_role.roles--gds-bigquery-read-access.name
   members = [
     "serviceAccount:analytics-events-pipeline@search-api-v2-integration.iam.gserviceaccount.com",
     "serviceAccount:analytics-events-pipeline@search-api-v2-production.iam.gserviceaccount.com",
@@ -66,9 +66,9 @@ resource "google_project_iam_binding" "project-GDS_BQ_read_access" {
   ]
 }
 
-resource "google_project_iam_binding" "project-GDS_log_alert_writer" {
+resource "google_project_iam_binding" "project-gds_log_alert_writer" {
   project = google_project.project.project_id
-  role    = "projects/ga4-analytics-352613/roles/GDS_log_alert_writer"
+  role    = google_project_iam_custom_role.roles--gds-log-alert-writer.name
   members = [
     "group:govuk-performance-analysts@digital.cabinet-office.gov.uk"
   ]

@@ -1,17 +1,15 @@
-resource "google_project_iam_custom_role" "roles--GDS_BQ_read_access" {
+resource "google_project_iam_custom_role" "roles--gds_bigquery_read_access" {
   description = "Created on: 2023-10-27"
   permissions = [
     "bigquery.datasets.get",
     "bigquery.tables.get",
     "bigquery.tables.getData"
   ]
-  project = google_project.project.project_id
   role_id = "GDS_BQ_read_access"
-  stage   = "GA"
   title   = "GDS BQ read access"
 }
 
-resource "google_project_iam_custom_role" "roles--GDS_BQ_saved_query_writer" {
+resource "google_project_iam_custom_role" "roles--gds_bigquery_saved_query_writer" {
   description = "Created on: 2023-11-23"
   permissions = [
     "bigquery.savedqueries.create",
@@ -21,13 +19,11 @@ resource "google_project_iam_custom_role" "roles--GDS_BQ_saved_query_writer" {
     "dataform.repositories.get",
     "dataform.repositories.list"
   ]
-  project = google_project.project.project_id
   role_id = "GDS_BQ_saved_query_writer"
-  stage   = "GA"
   title   = "GDS BQ saved query writer"
 }
 
-resource "google_project_iam_custom_role" "roles--GDS_logging_alerts_writer" {
+resource "google_project_iam_custom_role" "roles--gds_logging_alerts_writer" {
   description = "Logger access to create alerts"
   permissions = [
     "logging.logEntries.create",
@@ -43,13 +39,11 @@ resource "google_project_iam_custom_role" "roles--GDS_logging_alerts_writer" {
     "monitoring.alertPolicies.list",
     "monitoring.alertPolicies.update"
   ]
-  project = google_project.project.project_id
   role_id = "GDS_log_alert_writer"
-  stage   = "GA"
   title   = "GDS log alert writer"
 }
 
-resource "google_project_iam_custom_role" "roles--GDS_BQ_user" {
+resource "google_project_iam_custom_role" "roles--gds_bigquery_user" {
   description = "Adds transfers update to the standard BigQuery User role"
   permissions = [
     "bigquery.bireservations.get",
@@ -79,13 +73,11 @@ resource "google_project_iam_custom_role" "roles--GDS_BQ_user" {
     "bigquerymigration.translation.translate",
     "resourcemanager.projects.get",
   ]
-  project = google_project.project.project_id
   role_id = "gds.bigquery.user"
-  stage   = "GA"
   title   = "GDS BQ user"
 }
 
-resource "google_project_iam_custom_role" "roles--GDS_BQ_editor" {
+resource "google_project_iam_custom_role" "roles--gds_bigquery_editor" {
   description = "Edit access to BQ"
   permissions = [
     "bigquery.capacityCommitments.get",
@@ -143,8 +135,6 @@ resource "google_project_iam_custom_role" "roles--GDS_BQ_editor" {
     "dataform.repositories.create",
     "resourcemanager.projects.get"
   ]
-  project = google_project.project.project_id
   role_id = "GDS_BQ_editor"
-  stage   = "GA"
   title   = "GDS BQ editor"
 }
