@@ -92,7 +92,7 @@ resource "aws_cloudwatch_metric_alarm" "rds_freestoragespace" {
   period              = "60"
   statistic           = "Minimum"
   threshold           = each.value.freestoragespace_threshold
-  alarm_actions       = [data.terraform_remote_state.infra_monitoring.outputs.sns_topic_cloudwatch_alarms_arn]
+  alarm_actions       = [aws_sns_topic.rds_alerts.arn]
   alarm_description   = "Available storage space on ${aws_db_instance.instance[each.key].identifier} RDS is too low."
 }
 
