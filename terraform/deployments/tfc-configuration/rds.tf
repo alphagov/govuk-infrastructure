@@ -28,8 +28,7 @@ module "rds-integration" {
     "aws-credentials-integration",
     "common",
     "common-integration",
-    "rds-integration",
-    "govuk-sensitive-shared"
+    "rds-integration"
   ]
 }
 
@@ -62,8 +61,7 @@ module "rds-staging" {
     "aws-credentials-staging",
     "common",
     "common-staging",
-    "rds-staging",
-    "govuk-sensitive-shared"
+    "rds-staging"
   ]
 }
 
@@ -96,7 +94,6 @@ module "rds-production" {
     "aws-credentials-production",
     "common",
     "common-production",
-    "rds-production",
-    "govuk-sensitive-shared"
+    "rds-production"
   ]
 }
