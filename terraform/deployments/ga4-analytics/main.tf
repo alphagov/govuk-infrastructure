@@ -18,11 +18,6 @@ provider "google" {
   project = "ga4-analytics-352613"
 }
 
-import {
-  id = "ga4-analytics-352613"
-  to = google_project.project
-}
-
 resource "google_project" "project" {
   name            = "GA4 Analytics"
   project_id      = "ga4-analytics-352613"
