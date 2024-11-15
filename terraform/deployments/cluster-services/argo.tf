@@ -308,6 +308,19 @@ resource "helm_release" "argo_workflows" {
           memory = "512Mi"
         }
       }
+      podSecurityContext = {
+        runAsNonRoot = true
+        seccompProfile = {
+          type = "RuntimeDefault"
+        }
+      }
+      securityContext = {
+        readOnlyRootFilesystem   = true
+        allowPrivilegeEscalation = false
+        capabilities = {
+          drop = ["ALL"]
+        }
+      }
       replicas = var.desired_ha_replicas
     }
   })]
