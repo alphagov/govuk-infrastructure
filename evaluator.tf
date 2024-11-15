@@ -1,14 +1,14 @@
 resource "google_bigquery_dataset" "evaluator" {
   dataset_id                 = "search_v2_evaluator"
   location                   = var.gcp_region
-  delete_contents_on_destroy = true
+  delete_contents_on_destroy = false
 }
 
 resource "google_bigquery_table" "evaluator_ratings" {
   dataset_id          = google_bigquery_dataset.evaluator.dataset_id
   table_id            = "evaluator_ratings"
   schema              = file("./files/evaluator-ratings-schema.json")
-  deletion_protection = false
+  deletion_protection = true
 }
 
 resource "google_service_account" "evaluator" {
