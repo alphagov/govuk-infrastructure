@@ -188,7 +188,19 @@ resource "helm_release" "argo_workflows" {
   timeout          = var.helm_timeout_seconds
   values = [yamlencode({
     controller = {
-      podSecurityContext = { runAsNonRoot = true }
+      podSecurityContext = {
+        runAsNonRoot = true
+        seccompProfile = {
+          type = "RuntimeDefault"
+        }
+      }
+      securityContext = {
+        readOnlyRootFilesystem   = true
+        allowPrivilegeEscalation = false
+        capabilities = {
+          drop = ["ALL"]
+        }
+      }
       workflowNamespaces = concat([local.services_ns], var.argo_workflows_namespaces)
       workflowDefaults = {
         spec = {
