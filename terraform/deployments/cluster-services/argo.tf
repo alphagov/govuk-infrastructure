@@ -216,6 +216,11 @@ resource "helm_release" "argo_workflows" {
           securityContext = {
             runAsNonRoot = true
             runAsUser    = 1001
+            runAsGroup   = 1001
+            fsGroup      = 1001
+            seccompProfile = {
+              type = "RuntimeDefault"
+            }
           }
           podSpecPatch = yamlencode({
             containers = [
@@ -259,6 +264,23 @@ resource "helm_release" "argo_workflows" {
         limits = {
           cpu    = "500m"
           memory = "512Mi"
+        }
+      }
+      securityContext = {
+        readOnlyRootFilesystem   = true
+        allowPrivilegeEscalation = false
+        capabilities = {
+          drop = ["ALL"]
+        }
+      }
+    }
+
+    mainContainer = {
+      securityContext = {
+        readOnlyRootFilesystem   = true
+        allowPrivilegeEscalation = false
+        capabilities = {
+          drop = ["ALL"]
         }
       }
     }
