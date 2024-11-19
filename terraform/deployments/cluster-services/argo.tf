@@ -267,7 +267,6 @@ resource "helm_release" "argo_workflows" {
         }
       }
       securityContext = {
-        readOnlyRootFilesystem   = true
         allowPrivilegeEscalation = false
         capabilities = {
           drop = ["ALL"]
@@ -277,7 +276,6 @@ resource "helm_release" "argo_workflows" {
 
     mainContainer = {
       securityContext = {
-        readOnlyRootFilesystem   = true
         allowPrivilegeEscalation = false
         capabilities = {
           drop = ["ALL"]
