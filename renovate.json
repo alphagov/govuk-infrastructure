@@ -6,5 +6,6 @@
   "platformAutomerge": true,
   "pre-commit": {
     "enabled": true
-  }
+  },
+  "enabledManagers": ["pre-commit"]
 }
