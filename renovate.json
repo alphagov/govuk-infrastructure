@@ -4,17 +4,6 @@
     "config:base"
   ],
   "platformAutomerge": true,
-  "terraform":{
-    "commitMessageTopic": "Terraform {{depName}}",
-    "fileMatch": [
-      "\\.tf$"
-    ],
-    "packageRules": [
-      {
-        "matchDepTypes": ["helm_release", "provider", "tfe_workspace"]
-      }
-    ]
-  },
   "pre-commit": {
     "enabled": true
   }
