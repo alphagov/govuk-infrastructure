@@ -14,5 +14,8 @@
         "matchDepTypes": ["helm_release", "provider", "tfe_workspace"]
       }
     ]
+  },
+  "pre-commit": {
+    "enabled": true
   }
 }
