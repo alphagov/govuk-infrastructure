@@ -53,7 +53,8 @@ data "aws_iam_policy_document" "bucket_write_role_permissions" {
   statement {
     actions = [
       "s3:PutObject",
-      "s3:ListBucket"
+      "s3:ListBucket",
+      "s3:DeleteObject"
     ]
     resources = [
       aws_s3_bucket.mobile_backend_remote_config.arn,
