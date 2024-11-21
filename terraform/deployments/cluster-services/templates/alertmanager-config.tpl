@@ -42,7 +42,7 @@ alertmanager:
         client_url: "https://${alertmanager_host}/#/alerts?receiver={{ .Receiver | urlquery }}"
     - name: 'slack-signon-token-expiry'
       slack_configs:
-      - channel: '#govuk-2ndline-tech'
+      - channel: '#govuk-publishing-platform-system-alerts'
         send_resolved: true
         icon_url: https://avatars3.githubusercontent.com/u/3380462
         title: |-
