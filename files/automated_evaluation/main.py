@@ -1,5 +1,5 @@
 ### TO DO
-### RETURN something 
+### RETURN something
 
 import functions_framework
 from ranx import Qrels, Run, evaluate, compare
@@ -25,29 +25,9 @@ def interpolate_specs(i):
     OLD_AGE = (datetime.now()-timedelta(weeks=52)).timestamp()
     ANCIENT_AGE = (datetime.now()-timedelta(weeks=208)).timestamp()
     o=[]
-    for k in i: 
+    for k in i:
        o.append({"condition":k.get('condition').format(FRESH_AGE=FRESH_AGE,RECENT_AGE=RECENT_AGE,OLD_AGE=OLD_AGE,ANCIENT_AGE=ANCIENT_AGE),"boost":k.get('boost')})
     return o
-
-def get_path(node:str='serving_config',project_no:str='',location:str='global',collection:str='default_collection',datastore:str='',branch:str='default_branch',serving_config:str='default_search'):
-  project_path="projects/{0}".format(project_no)
-  location_path=project_path + "/locations/{0}".format(location)
-  collection_path=location_path + "/collections/{0}".format(collection)
-  datastore_path=collection_path + "/dataStores/{0}".format(datastore)
-  branch_path=datastore_path + "/branches/{0}".format(branch)
-  serving_config_path=datastore_path + "/servingConfigs/{0}".format(serving_config)
-  if node=='serving_config':
-    return serving_config_path
-  elif node=='datastore':
-    return datastore_path
-  elif node=='collection':
-    return collection_path
-  elif node=='location':
-    return location_path
-  elif node=='project':
-    return project_path
-
-
 
 def call_vertex_search(identifier:str,query:str,result_count: int,parameters:dict) -> dict:
   try:
@@ -62,8 +42,8 @@ def call_vertex_search(identifier:str,query:str,result_count: int,parameters:dic
     )
     # Make the request
     results=[]
-    page_result= client.search(request=request)  
-    for r_proto in islice(page_result,result_count): 
+    page_result= client.search(request=request)
+    for r_proto in islice(page_result,result_count):
       r = MessageToDict(r_proto._pb)
       results.append(r)
     if len(results)>0:
@@ -91,7 +71,7 @@ def call_vertex_autocomplete(identifier:str,query:str,result_count: int,query_mo
         query_model=query_model,
     )
     # Make the request
-    r_proto = client.complete_query(request=request)   
+    r_proto = client.complete_query(request=request)
     r = MessageToJson(r_proto._pb)
     if len(r)>0:
       r_json=json.loads(r)
@@ -104,7 +84,7 @@ def call_vertex_autocomplete(identifier:str,query:str,result_count: int,query_mo
   except Exception as e:
     print (e)
     return {"querySuggestions":[]}
-  
+
 def call_rest_api(url: str) -> dict:
   try:
     r = requests.get(url)
@@ -115,19 +95,8 @@ def call_rest_api(url: str) -> dict:
   except:
     return {"results":[]}
 
-def validate_url(url: str) -> str:
-  try:
-    r = requests.head(url)
-    status_code=r.status_code
-    print(f'{url} {status_code}')
-    return str(status_code)
-  except:
-    status_code='400'
-    print(f'{url} {status_code}')
-    return(status_code)
-
 def collate_results(query: Union[int, str],identifier,attributes,domain,result_count,type,parameters) -> pd.DataFrame:
-  
+
   if "vertex:search" in type:
     results= call_vertex_search(identifier=identifier,query=query,result_count=result_count,parameters=parameters).get("results", "")
   elif "vertex:autocomplete:document" in type:
@@ -145,11 +114,11 @@ def collate_results(query: Union[int, str],identifier,attributes,domain,result_c
 
     # default sim based on rank order if _index is mapped
     if "_index" in attributes:
-      data = data.assign(sim=np.arange(1,0,(0-(1/len(data))))) 
+      data = data.assign(sim=np.arange(1,0,(0-(1/len(data)))))
 
     # map attributes
     data=data.rename(columns=attributes)
-    
+
     # select required attributes
     data=data[['docno','sim']]
 
@@ -160,7 +129,7 @@ def collate_results(query: Union[int, str],identifier,attributes,domain,result_c
 
     data["docno"]=np.NaN
     data["sim"]=np.NaN
-    
+
   # add query as a column to data, which will be used to merge data to df
   data['query'] = query
 
@@ -204,13 +173,6 @@ def create_candidate_run (candidate,domain,result_count,query_count,requests_df)
 
   return(run)
 
-def validate_judgement_urls(link:str,domain) -> str:
-    
-  # get the results data from the api call
-  results = validate_url('{domain}{link}'.format(domain=domain,link=link))
-
-  return results
-
 def create_subfolders(folder,subfolders):
   if not "gcs://" in folder:
     for subfolder in subfolders:
@@ -239,7 +201,7 @@ def load_json(path: str, project:str) -> str:
     else:
       with open(path, "r") as f:
         return json.loads(f.read())
-      
+
 def save_fig(x, path: str, format: str, project:str) -> None:
     figfile = BytesIO()
     x.savefig(figfile, format=format)
@@ -254,7 +216,7 @@ def save_fig(x, path: str, format: str, project:str) -> None:
 @functions_framework.http
 def automated_evaluation(request):
     config = request.get_json(silent=True)
-    import os 
+    import os
     project = os.environ.get("PROJECT_NAME")
 
     domain=config['domain']
@@ -273,11 +235,11 @@ def automated_evaluation(request):
         print(f'Preparing {query_count} {judgement_name} judgements')
 
         # read judgements data from file
-        judgements_df=pd.read_csv(judgement['url'], sep=',') 
+        judgements_df=pd.read_csv(judgement['url'], sep=',')
 
         # refine to approved columns
         judgements_df=judgements_df.rename(columns=attributes)
-    
+
         # select required attributes
         judgements_df=judgements_df[['query','link','score']].dropna()
 
@@ -299,9 +261,6 @@ def automated_evaluation(request):
 
         # filter qrels to first x query groups
         qrels_df=judgements_df[judgements_df['query'].isin(requests_df['query'])]
-
-
-                
 
         # load qrels df into qrels
         qrels = Qrels.from_df(
