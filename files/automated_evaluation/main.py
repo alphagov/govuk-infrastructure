@@ -59,53 +59,13 @@ def call_vertex_search(identifier:str,query:str,result_count: int,parameters:dic
     print (e)
     return {"results":[]}
 
-
-def call_vertex_autocomplete(identifier:str,query:str,result_count: int,query_model:str) -> dict:
-  try:
-    # Create a client
-    client = discoveryengine_v1beta.SearchServiceClient()
-    # Initialize request argument(s)
-    request = discoveryengine_v1beta.SearchRequest(
-        data_store=identifier,
-        query=query,
-        query_model=query_model,
-    )
-    # Make the request
-    r_proto = client.complete_query(request=request)
-    r = MessageToJson(r_proto._pb)
-    if len(r)>0:
-      r_json=json.loads(r)
-      if len(r_json)>0:
-        return r_json
-      else:
-        return {"querySuggestions":[]}
-    else:
-      return {"querySuggestions":[]}
-  except Exception as e:
-    print (e)
-    return {"querySuggestions":[]}
-
-def call_rest_api(url: str) -> dict:
-  try:
-    r = requests.get(url)
-    if len(r.json())>0:
-      return r.json()
-    else:
-      return {"results":[]}
-  except:
-    return {"results":[]}
-
 def collate_results(query: Union[int, str],identifier,attributes,domain,result_count,type,parameters) -> pd.DataFrame:
 
   if "vertex:search" in type:
     results= call_vertex_search(identifier=identifier,query=query,result_count=result_count,parameters=parameters).get("results", "")
-  elif "vertex:autocomplete:document" in type:
-    results= call_vertex_autocomplete(identifier=identifier,query=query,result_count=result_count,query_model="document").get("querySuggestions", "")
-  elif "vertex:autocomplete:user-event" in type:
-    results= call_vertex_autocomplete(identifier=identifier,query=query,result_count=result_count,query_model="user-event").get("querySuggestions", "")
   else:
-    # get the results data from the api call
-    results = call_rest_api(identifier.format(query=query,result_count=result_count)).get("results", "")
+    print(f'Unsupported type: {type}')
+    results = {"results":[]}
 
   # normalize results into a dataframe
   data = pd.json_normalize(results)
@@ -362,6 +322,3 @@ def automated_evaluation(request):
         print(report)
 
     return 'something'
-
-
-
