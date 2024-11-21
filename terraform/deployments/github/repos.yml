@@ -369,6 +369,13 @@ repos:
       additional_contexts:
         - test
 
+  govuk_content_block_tools:
+    homepage_url: "https://rubygems.org/gems/content_block_tools"
+    required_status_checks:
+      standard_contexts: *standard_security_checks
+      additional_contexts:
+        - test
+
   govuk_personalisation:
     homepage_url: "https://github.com/alphagov/govuk_personalisation"
     required_status_checks:
