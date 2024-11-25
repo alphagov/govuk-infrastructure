@@ -1,0 +1,44 @@
+{
+  "output_folder": "${gcs_output_url}",
+  "domain": "https://www.gov.uk",
+  "query_count": 10,
+  "result_count": 10,
+  "metrics": [
+    "precision@10",
+    "ndcg@10"
+  ],
+  "show_percentages": true,
+  "max_p": 0.01,
+  "judgements": ${jsonencode( [for name in judgement_list_names : {"name":"${name}","url":"${ join("",[ gcs_input_url,name,".csv" ])  }" } ] ) },
+  "candidates": [
+    {
+      "name": "vertex",
+      "identifier": "projects/${gcp_project_number}/locations/global/collections/default_collection/dataStores/govuk_content/servingConfigs/default_search",
+      "type": "vertex:search",
+      "attributes": {
+        "document.structData.link": "docno",
+        "_index": "sim"
+      },
+      "parameters": {
+        "condition_boost_specs": [
+          {
+            "boost": 0.2,
+            "condition": "content_purpose_supergroup: ANY(\"news_and_communications\") AND public_timestamp: IN({FRESH_AGE},*)"
+          },
+          {
+            "boost": 0.05,
+            "condition": "content_purpose_supergroup: ANY(\"news_and_communications\") AND public_timestamp: IN({RECENT_AGE},{FRESH_AGE})"
+          },
+          {
+            "boost": -0.5,
+            "condition": "content_purpose_supergroup: ANY(\"news_and_communications\") AND public_timestamp: IN({ANCIENT_AGE},{OLD_AGE})"
+          },
+          {
+            "boost": -0.75,
+            "condition": "content_purpose_supergroup: ANY(\"news_and_communications\") AND public_timestamp: IN(*,{ANCIENT_AGE})"
+          }
+        ]
+      }
+    }
+  ]
+}

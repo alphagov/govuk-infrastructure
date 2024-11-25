@@ -1,0 +1,193 @@
+query,link,score_description,score
+retirement,/government/case-studies/retirement-calculator,1 okay,1
+contact number,/lost-national-insurance-number,1 okay,1
+northern ireland,/government/collections/moving-goods-into-out-of-or-through-northern-ireland,2 good,2
+northern ireland,/guidance/trading-and-moving-goods-in-and-out-of-northern-ireland,2 good,2
+exporting to ireland,/export-health-certificates/export-pig-meat-from-northern-ireland-to-china-certificate-7006ni,0 bad,0
+exporting to ireland,/export-health-certificates/export-amphibians-to-ireland-8619ehc,1 okay,1
+exporting to ireland,/export-health-certificates/export-live-reptiles-to-ireland-certificate-9045,1 okay,1
+exporting to ireland,/guidance/retail-export-scheme-northern-ireland,0 bad,0
+exporting to ireland,/export-health-certificates,2 good,2
+dla for children,/disability-living-allowance-children,3 perfect,3
+dla for children,/dla-disability-living-allowance-benefit,1 okay,1
+dla for children,/government/publications/disability-living-allowance-for-children-claim-form,2 good,2
+bank holidays,/bank-holidays,3 perfect,3
+bank holidays,/track-passport-application,0 bad,0
+bank holidays,/get-a-passport-urgently,0 bad,0
+bank holidays,/pay-self-assessment-tax-bill,0 bad,0
+bank holidays,/how-to-have-your-benefits-paid,2 good,2
+bank holidays,/child-benefit-payment-dates,2 good,2
+bank holidays,/when-is-your-next-tax-credits-payment,2 good,2
+flooding,/government/organisations/flood-re,1 okay,1
+fire prevention regulations,/government/publications/fire-safety-england-regulations-2022,2 good,2
+levelling up,/government/organisations/department-for-levelling-up-housing-and-communities,3 perfect,3
+appointment,/guidance/public-appointments,1 okay,1
+poa,/government/publications/poa-rules,1 okay,1
+poa,/government/publications/poa-other-related-documents,1 okay,1
+web chat,/government/publications/web-chat-moderation-policy,1 okay,1
+web chat,/guidance/using-chatbots-and-webchat-tools,2 good,2
+self certification,/taking-sick-leave,3 perfect,3
+self certification,/self-assessment-tax-returns,0 bad,0
+self certification,/prove-right-to-work,0 bad,0
+self certification,/guidance/apply-for-a-certificate-or-document-if-self-employed-in-the-eu-eea-or-switzerland-ca3837,0 bad,0
+self certification,/service-standard-reports,1 okay,1
+self certification,/government/publications/secure-by-default-self-certification-of-video-surveillance-systems,1 okay,1
+child trust fund,/government/organisations/hm-revenue-customs/contact/child-trust-fund,1 okay,1
+child trust fund,/child-trust-funds,3 perfect,3
+working from home,/tax-relief-for-employees,3 perfect,3
+working from home,/prove-right-to-work,0 bad,0
+working from home,/check-job-applicant-right-to-work,0 bad,0
+working from home,/order-coronavirus-rapid-lateral-flow-tests,0 bad,0
+working from home,/government/publications/magnox-guidance-on-working-from-home,1 okay,1
+vat registration,/government/publications/vat-application-to-cancel-your-vat-registration-vat7,1 okay,1
+budgeting advance,/budgeting-help-benefits,1 okay,1
+budgeting advance,/universal-credit/other-financial-support,3 perfect,3
+budgeting advance,/guidance/universal-credit-advances,2 good,2
+c79,/guidance/get-your-import-vat-certificates,3 perfect,3
+c79,/government/publications/form-c79-application-related-to-enforcement-of-a-child-arrangement-order,2 good,2
+self employment,/prove-right-to-work,0 bad,0
+self employment,/log-in-register-hmrc-online-services,1 okay,1
+self employment,/government/publications/self-assessment-register-for-self-assessment-and-get-a-tax-return-sa1,1 okay,1
+self employement,/log-in-register-hmrc-online-services,1 okay,1
+self employement,/government/publications/self-assessment-register-for-self-assessment-and-get-a-tax-return-sa1,1 okay,1
+ielts,/guidance/prove-your-english-language-abilities-with-a-secure-english-language-test-selt,3 perfect,3
+ielts,/government/news/ielts-in-ashgabat,1 okay,1
+ielts,/government/news/ielts-opportunity-in-ashgabat,1 okay,1
+ielts,/government/news/ielts-ukvi-sessions-in-ashgabat,1 okay,1
+ielts,/government/news/international-english-language-testing-system-in-ashgabat,1 okay,1
+ielts,/government/publications/international-english-language-testing-system-in-turkmenistan,1 okay,1
+ielts,/employment-tribunal-decisions/mrs-c-nolan-v-ielts-medical-ltd-2200195-2019,1 okay,1
+ielts,/employment-tribunal-decisions/miss-g-mcskimming-v-ielts-medical-ltd-2201350-2019,1 okay,1
+ielts,/employment-tribunal-decisions/mrs-j-maglione-v-ielts-medical-ltd-3328345-2017,1 okay,1
+ielts,/employment-tribunal-decisions/ms-e-benedetto-v-ielts-medical-ltd-2206082-2018,1 okay,1
+ielts,/employment-tribunal-decisions/mr-g-anukwe-v-ielts-ltd-3202507-2018,1 okay,1
+pay as you earn,/check-additional-income-tax,1 okay,1
+pay as you earn,/help-with-childcare-costs,0 bad,0
+budgeting loan,/government/publications/spring-budget-2023,0 bad,0
+budgeting advance,/government/publications/spring-budget-2023,0 bad,0
+change driving test,/guidance/changes-to-hgv-and-bus-driving-tests-from-autumn-2021,1 okay,1
+check your business rate valuation,/guidance/check-and-challenge-your-business-rates-valuation-privacy-notice,1 okay,1
+child maintenance,/government/collections/child-maintenance-facts-and-figures,1 okay,1
+council tax,/government/collections/council-tax-statistics,1 okay,1
+council tax,/government/collections/council-tax-information-letters,1 okay,1
+dartford crossing,/government/publications/dartford-thurrock-river-crossing-charging-scheme-accounts-2021-to-2022,1 okay,1
+drivers license,/government/organisations/driver-and-vehicle-licensing-agency,1 okay,1
+drivers license,/get-vehicle-information-from-dvla,1 okay,1
+dwp,/government/collections/dwp-statistical-summaries,1 okay,1
+dwp,/guidance/provider-referrals-and-payments-prap-system-for-dwp,1 okay,1
+dwp,/government/collections/complaints-about-the-department-for-work-and-pensions,1 okay,1
+email,/government/publications/waste-returns-email-spreadsheet,1 okay,1
+fast track,/government/publications/nhs-continuing-healthcare-fast-track-pathway-tool,1 okay,1
+fast track,/government/publications/form-n181-directions-questionnaire-fast-track-and-multi-track,1 okay,1
+holiday entitlement,/government/publications/holiday-pay-survey,1 okay,1
+ni contributions,/government/collections/national-insurance-contributions-statistics,1 okay,1
+64-8,/government/organisations/hm-revenue-customs/contact/central-agent-authorisation-team,1 okay,1
+64-8,/guidance/2-bus-fare-cap,0 bad,0
+a1,/guidance/a1-installations-environmental-permits,1 okay,1
+access to work,/government/collections/access-to-work-statistics,1 okay,1
+access to work,/government/publications/access-to-work-research-review/feasibility-of-evaluating-the-impact-of-the-access-to-work-programme,1 okay,1
+advance payment,/guidance/land-compensation-manual-section-16-estimates-negotiations-reports-and-advance-payments/part-4-advance-payments,1 okay,1
+agent login,/government/publications/research-with-tax-agents-to-explore-experiences-of-hmrcs-digital-services/research-with-tax-agents-to-explore-experiences-of-hmrcs-digital-services,0 bad,0
+app,/government/collections/app-security-and-privacy,1 okay,1
+apply for universal credit,/government/news/more-people-set-to-benefit-from-free-support-to-help-claim-universal-credit,1 okay,1
+arc,/government/consultations/creating-a-vision-for-the-oxford-cambridge-arc,1 okay,1
+benefit cap,/government/collections/benefit-cap-statistics,1 okay,1
+benefit cap,/government/publications/benefit-cap-evaluation,1 okay,1
+biometric,/government/organisations/biometrics-and-forensics-ethics-group,1 okay,1
+change of circumstances,/government/publications/change-of-personal-circumstances,1 okay,1
+change of circumstances,/government/publications/change-of-personal-circumstances-questionnaire-change-of-nationality,1 okay,1
+checklist,/guidance/school-resource-management-self-assessment-checklist,1 okay,1
+childcare account,/guidance/sign-in-to-your-childcare-provider-account-for-tax-free-childcare,1 okay,1
+childcare accounts,/guidance/sign-in-to-your-childcare-provider-account-for-tax-free-childcare,1 okay,1
+crisis loan,/government/publications/social-fund-alignment-payments-crisis-loans-research,1 okay,1
+cscs,/government/publications/csc-corporate-plan-2019,1 okay,1
+debt,/guidance/government-debt-management-function-gdmf,1 okay,1
+debt management,/government/organisations/uk-debt-management-office,1 okay,1
+defra,/government/collections/defra-spending-over-500,1 okay,1
+dentist,/government/organisations/review-body-on-doctors-and-dentists-remuneration,1 okay,1
+benefits,/benefit-cap,1 okay,1
+benefits,/view-prove-immigration-status,1 okay,1
+benefits,/check-benefits-financial-support,3 perfect,3
+benefits,/benefits-calculators,3 perfect,3
+financial aid,/government/publications/cw1-financial-eligibility-for-legal-aid-clients,0 bad,0
+financial aid,/government/publications/civ-admin-2-clients-change-of-details,0 bad,0
+financial aid,/government/publications/civ-means-4-client-under-16-years-old,0 bad,0
+financial aid,/legal-aid,0 bad,0
+financial aid,/guidance/intervention-and-private-storage-aid-schemes,0 bad,0
+financial aid,/government/publications/criminal-legal-aid-application-forms,0 bad,0
+financial aid,/guidance/civil-legal-aid-means-testing,0 bad,0
+financial aid,/money-property-when-relationship-ends,0 bad,0
+financial aid,/government/publications/civ-means-2-financial-assessment-form-for-legal-aid-clients,0 bad,0
+financial aid,/guidance/international-finance-facility-for-immunisation-iffim,0 bad,0
+financial aid,/government/publications/how-to-note-managing-fiduciary-risk-when-providing-financial-aid,1 okay,1
+financial aid,/government/publications/internal-agreement-on-the-financing-of-community-aid-under-the-multi-annual-financial-framework-in-accordance-with-the-acp-ec-partnership-agreement,0 bad,0
+financial aid,/universal-credit,2 good,2
+financial aid,/guidance/criminal-legal-aid-means-testing,0 bad,0
+financial aid,/government/consultations/legal-aid-financial-eligibility-and-universal-credit,0 bad,0
+financial aid,/government/collections/civil-legal-aid-financial-assessment-forms,0 bad,0
+financial aid,/check-benefits-financial-support,3 perfect,3
+voluntary payments,/guidance/voluntary-payments-donations-to-government,1 okay,1
+voluntary payments,/pay-class-2-national-insurance,1 okay,1
+voluntary payments,/voluntary-national-insurance-contributions,3 perfect,3
+voluntary payments,/pay-voluntary-class-3-national-insurance,3 perfect,3
+voluntary payments,/government/publications/voluntary-scheme-for-branded-medicines-payment-percentage-for-2022,0 bad,0
+voluntary payments,/government/publications/voluntary-scheme-aggregate-net-sales-and-payment-information-february-2022,0 bad,0
+voluntary payments,/government/collections/voluntary-scheme-quarterly-net-sales-and-payment-information,0 bad,0
+voluntary payments,/government/publications/the-2019-voluntary-scheme-for-branded-medicines-pricing-and-access-payment-percentage-for-2023,0 bad,0
+voluntary payments,/national-insurance,2 good,2
+change paper to plastic,/exchange-paper-driving-licence,3 perfect,3
+change paper to plastic,/get-a-passport-urgently,0 bad,0
+change paper to plastic,/change-address-driving-licence,1 okay,1
+change paper to plastic,/guidance/classifying-plastics,0 bad,0
+change paper to plastic,/self-assessment-tax-returns,0 bad,0
+benefits for part time working,/child-benefit-16-19,0 bad,0
+benefits for part time working,/housing-benefit,1 okay,1
+benefits for part time working,/dla-disability-living-allowance-benefit,1 okay,1
+benefits for part time working,/apply-to-come-to-the-uk,0 bad,0
+benefits for part time working,/universal-credit,2 good,2
+benefits for part time working,/browse/benefits/low-income,3 perfect,3
+benefits for part time working,/check-benefits-financial-support,3 perfect,3
+benefits for part time working,/benefits-calculators,3 perfect,3
+unemployed benefits,/benefit-fraud,0 bad,0
+unemployed benefits,/jobseekers-allowance,3 perfect,3
+unemployed benefits,/universal-credit,3 perfect,3
+unemployed benefits,/browse/benefits/looking-for-work,2 good,2
+unemployed benefits,/check-benefits-financial-support,2 good,2
+unemployed benefits,/government/collections/alternative-claimant-count-statistics,1 okay,1
+unemployed benefits,/government/statistics/alternative-claimant-count-statistics-january-2013-to-may-2020,1 okay,1
+unemployed benefits,/government/statistics/alternative-claimant-count-statistics-january-2013-to-august-2020,1 okay,1
+sickness benefits,/benefits-end-of-life,1 okay,1
+sickness benefits,/statutory-sick-pay,3 perfect,3
+sickness benefits,/universal-credit,2 good,2
+sickness benefits,/employment-support-allowance,2 good,2
+sickness benefits,/browse/benefits/unable-to-work,2 good,2
+sickness benefits,/browse/benefits/disability,2 good,2
+sickness benefits,/check-benefits-financial-support,2 good,2
+sickness benefits,/government/publications/statutory-sick-pay-employee-not-entitled-form-for-employers,1 okay,1
+sickness benefits,/incapacity-benefit,1 okay,1
+sickness benefits,/dla-disability-living-allowance-benefit,1 okay,1
+sickness benefits,/government/organisations/department-for-work-pensions,1 okay,1
+sickness benefits,/apply-to-come-to-the-uk,0 bad,0
+sickness benefits,/government/news/fast-tracked-access-to-benefits-for-people-with-terminal-illness-expanded,1 okay,1
+sickness benefits,/student-finance,0 bad,0
+sickness benefits,/industrial-injuries-disablement-benefit,2 good,2
+sickness benefits,/financial-help-disabled,2 good,2
+single parent benefits,/benefit-cap,1 okay,1
+single parent benefits,/guidance/cost-of-living-payment,1 okay,1
+single parent benefits,/how-to-have-your-benefits-paid,0 bad,0
+single parent benefits,/child-maintenance-service,1 okay,1
+single parent benefits,/check-benefits-financial-support,2 good,2
+single parent benefits,/browse/benefits/families,2 good,2
+single parent benefits,/browse/childcare-parenting/financial-help-children,2 good,2
+when are my bins collected,/rubbish-collection-day,3 perfect,3
+when are my bins collected,/log-in-register-hmrc-online-services,0 bad,0
+when are my bins collected,/check-state-pension,0 bad,0
+when are my bins collected,/government/publications/dwp-information-management-policies,0 bad,0
+when are my bins collected,/get-information-about-a-company,0 bad,0
+when are my bins collected,/sign-in-universal-credit,0 bad,0
+when are my bins collected,/check-mot-history,0 bad,0
+state pension calculator,/state-pension,1 okay,1
+state pension calculator,/pension-credit-calculator,1 okay,1
+state pension calculator,/check-state-pension,2 good,2
+financial support,/check-benefits-financial-support,3 perfect,3
+financial support,/get-help-hmrc-extra-support,1 okay,1

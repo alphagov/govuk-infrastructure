@@ -1,0 +1,33 @@
+query,link,score_description,score
+not,/check-mot-history,3 perfect,3
+not,/check-mot-status,3 perfect,3
+not check,/check-mot-history,3 perfect,3
+not check,/check-mot-status,3 perfect,3
+not for profit,,,
+do not pay actions,/guidance/what-will-happen-if-you-do-not-pay-your-tax-bill,3 perfect,3
+do not pay actions,/difficulties-paying-hmrc/if-you-do-not-pay,3 perfect,3
+report a person who is not safe to drive,,,
+no longer self employed,/stop-being-self-employed,3 perfect,3
+no fault divorce,/divorce,2 good,2
+certificate of no impediment,/marriage-abroad,2 good,2
+phone no,/contact-hmrc,3 perfect,3
+contact no,/contact-hmrc,3 perfect,3
+contact no,/contact-ukvi-inside-outside-uk,3 perfect,3
+contact no,/contact-the-dvla,3 perfect,3
+contact no,/contact-jobcentre-plus,3 perfect,3
+contact no,/contact-pension-service,3 perfect,3
+no mot,/report-no-mot,3 perfect,3
+ni no,/national-insurance/your-national-insurance-number,3 perfect,3
+ni no,/national-insurance,3 perfect,3
+tell hmrc no amount is due,/pay-paye-tax/tell-hmrc-no-payment-due,3 perfect,3
+tell hmrc no amount is due,/pay-corporation-tax/tell-hmrc-no-payment-due,3 perfect,3
+tell hmrc no amount is due,/pay-paye-tax,2 good,2
+tell hmrc no amount is due,/pay-corporation-tax,2 good,2
+wills,/search-will-probate,3 perfect,3
+will trust,/guidance/trusts-and-inheritance-tax,2 good,2
+living will,government/publications/make-a-lasting-power-of-attorney/lp12-make-and-register-your-lasting-power-of-attorney-a-guide-web-version,2 good,2
+it,,,
+a rated sponsorship,/uk-visa-sponsorship-employers/your-licence-rating,3 perfect,3
+a rated sponsorship,/uk-visa-sponsorship-employers,3 perfect,3
+form an,/government/publications/become-a-british-citizen-by-naturalisation-form-an,3 perfect,3
+as levels,,,
