@@ -1,5 +1,5 @@
-resource "google_project_iam_custom_role" "roles--gds_bigquery_read_access" {
-  description = "Created on: 2023-10-27"
+resource "google_project_iam_custom_role" "gds_bigquery_read_access" {
+  description = "Permissions to read BigQuery datasets and tables"
   permissions = [
     "bigquery.datasets.get",
     "bigquery.tables.get",
@@ -9,8 +9,8 @@ resource "google_project_iam_custom_role" "roles--gds_bigquery_read_access" {
   title   = "GDS BQ read access"
 }
 
-resource "google_project_iam_custom_role" "roles--gds_bigquery_saved_query_writer" {
-  description = "Created on: 2023-11-23"
+resource "google_project_iam_custom_role" "gds_bigquery_saved_query_writer" {
+  description = "Permissions to create, update and delete BigQuery saved queries"
   permissions = [
     "bigquery.savedqueries.create",
     "bigquery.savedqueries.delete",
@@ -23,8 +23,8 @@ resource "google_project_iam_custom_role" "roles--gds_bigquery_saved_query_write
   title   = "GDS BQ saved query writer"
 }
 
-resource "google_project_iam_custom_role" "roles--gds_logging_alerts_writer" {
-  description = "Logger access to create alerts"
+resource "google_project_iam_custom_role" "gds_logging_alerts_writer" {
+  description = "Permissions to create, update and delete logging alerting policies"
   permissions = [
     "logging.logEntries.create",
     "logging.logEntries.list",
@@ -47,8 +47,8 @@ resource "google_project_iam_custom_role" "roles--gds_logging_alerts_writer" {
   title   = "GDS log alert writer"
 }
 
-resource "google_project_iam_custom_role" "roles--gds_bigquery_user" {
-  description = "Adds transfers update to the standard BigQuery User role"
+resource "google_project_iam_custom_role" "gds_bigquery_user" {
+  description = "Permissions to read and execute BigQuery jobs and queries"
   permissions = [
     "bigquery.bireservations.get",
     "bigquery.capacityCommitments.get",
@@ -81,8 +81,8 @@ resource "google_project_iam_custom_role" "roles--gds_bigquery_user" {
   title   = "GDS BQ user"
 }
 
-resource "google_project_iam_custom_role" "roles--gds_bigquery_editor" {
-  description = "Edit access to BQ"
+resource "google_project_iam_custom_role" "gds_bigquery_editor" {
+  description = "Permissions to create, update and delete BigQuery datasets, tables, models, routines and saved queries"
   permissions = [
     "bigquery.capacityCommitments.get",
     "bigquery.capacityCommitments.list",
