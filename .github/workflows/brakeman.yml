@@ -1,0 +1,39 @@
+name: Run Brakeman
+
+on:
+  workflow_call:
+
+jobs:
+  run-brakeman:
+    name: Run Brakeman
+    permissions:
+      contents: read
+      security-events: write
+      actions: read
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          show-progress: false
+
+      - uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
+
+      - name: Run Brakeman
+        continue-on-error: true
+        run: |
+          bundle exec brakeman . --except CheckRenderInline --quiet \
+            -o brakeman.json -o brakeman.sarif
+
+      - name: Upload SARIF to GitHub
+        if: github.repository_visibility == 'public'
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: brakeman.sarif
+
+      - name: Upload JSON results
+        uses: actions/upload-artifact@v4
+        with:
+          name: brakeman-json
+          path: brakeman.json

@@ -1,0 +1,69 @@
+name: Deploy
+
+on:
+  workflow_call:
+    inputs:
+      imageTag:
+        description: 'An image tag to deploy'
+        required: false
+        default: ${{ github.sha }}
+        type: string
+      appName:
+        description: 'Name of the app being deployed'
+        required: false
+        default: ${{ github.event.repository.name }}
+        type: string
+      environment:
+        description: 'Environment to deploy to'
+        required: false
+        default: integration
+        type: string
+    secrets:
+      WEBHOOK_TOKEN:
+        required: true
+      WEBHOOK_URL:
+        required: true
+      GH_TOKEN:
+        required: true
+
+jobs:
+  update-image-tag:
+    name: Update image tag
+    runs-on: ubuntu-latest
+    env:
+      ENVIRONMENT: ${{ inputs.environment || 'integration' }}
+    steps:
+      - name: Check deploy permissions
+        id: deploy-permissions
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+          GITHUB_TEAM: gov-uk-production-deploy
+          GITHUB_USER: ${{ github.triggering_actor }}
+          TRIGGERING_ACTOR: ${{ github.triggering_actor }}
+        run: |
+          TEAM_MEMBERSHIP=$(gh api "orgs/alphagov/teams/$GITHUB_TEAM/memberships/$GITHUB_USER" -q .state || echo false)
+
+          if ! [[ "$TEAM_MEMBERSHIP" = active || "$ENVIRONMENT" = integration ]]; then
+            echo "::error title=Insufficient permissions to deploy::User $TRIGGERING_ACTOR needs to be a member of the GOV.UK Production Deploy team"
+            exit 1
+          fi
+
+      - name: Trigger Argo Workflows
+        if: steps.deploy-permissions.outcome == 'success'
+        env:
+          IMAGE_TAG: ${{ inputs.imageTag }}
+          REPO_NAME: ${{ inputs.appName }}
+          PROMOTE_DEPLOYMENT: ${{ github.event_name == 'release' }}
+          WEBHOOK_TOKEN: ${{ secrets.WEBHOOK_TOKEN }}
+          WEBHOOK_URL: ${{ secrets.WEBHOOK_URL }}
+        run: |
+          curl --fail-with-body --silent \
+            -H "Content-Type: application/json" \
+            -H "Authorization: Bearer ${WEBHOOK_TOKEN}" \
+            -d "{
+              \"environment\": \"${ENVIRONMENT}\",
+              \"repoName\": \"${REPO_NAME}\",
+              \"imageTag\": \"${IMAGE_TAG}\",
+              \"promoteDeployment\": \"${PROMOTE_DEPLOYMENT}\"
+            }" \
+            "${WEBHOOK_URL}/update-image-tag"

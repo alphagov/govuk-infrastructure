@@ -1,0 +1,25 @@
+name: Run Standardx
+
+on:
+  workflow_call:
+    inputs:
+      files:
+        description: 'Files(s) or glob(s) to check'
+        required: false
+        default: "'app/assets/javascripts/**/*.js' 'spec/javascripts/**/*.js'"
+        type: string
+
+jobs:
+  run-standardx:
+    name: Run Standardx
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          show-progress: false
+
+      - name: Setup Node
+        uses: alphagov/govuk-infrastructure/.github/actions/setup-node@main
+
+      - name: Run Standardx
+        run: yarn run standardx ${{ inputs.files }}

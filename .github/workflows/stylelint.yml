@@ -1,0 +1,25 @@
+name: Run Stylelint
+
+on:
+  workflow_call:
+    inputs:
+      files:
+        description: 'Files(s) or glob(s) to check'
+        required: false
+        default: 'app/assets/stylesheets/'
+        type: string
+
+jobs:
+  run-stylelint:
+    name: Run Stylelint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          show-progress: false
+
+      - name: Setup Node
+        uses: alphagov/govuk-infrastructure/.github/actions/setup-node@main
+
+      - name: Run Stylelint
+        run: yarn run stylelint ${{ inputs.files }}

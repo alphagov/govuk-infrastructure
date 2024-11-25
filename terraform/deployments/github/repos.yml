@@ -1,0 +1,851 @@
+access_levels:
+  standard_security_checks: &standard_security_checks
+    - CodeQL SAST scan / Analyze
+    - Dependency Review scan / dependency-review-pr
+  standard_govuk_rails_checks: &standard_govuk_rails_checks
+    - CodeQL SAST scan / Analyze
+    - Dependency Review scan / dependency-review-pr
+    - Lint Ruby / Run RuboCop
+    - Security Analysis / Run Brakeman
+
+repos:
+  account-api:
+    required_status_checks:
+      standard_contexts: *standard_govuk_rails_checks
+      additional_contexts:
+        - Test Ruby
+        - CodeQL SAST scan / Analyze
+        - Dependency Review scan / dependency-review-pr
+        - Security Analysis / Run Brakeman
+        - Lint Ruby / Run RuboCop
+
+  asset-manager:
+    homepage_url: "https://docs.publishing.service.gov.uk/apps/asset-manager.html"
+    required_status_checks:
+      standard_contexts: *standard_govuk_rails_checks
+      additional_contexts:
+        - Test Ruby
+        - CodeQL SAST scan / Analyze
+        - Dependency Review scan / dependency-review-pr
+        - Security Analysis / Run Brakeman
+        - Lint Ruby / Run RuboCop
+
+  authenticating-proxy:
+    homepage_url: "https://docs.publishing.service.gov.uk/apps/authenticating-proxy.html"
+    required_status_checks:
+      standard_contexts: *standard_govuk_rails_checks
+      additional_contexts:
+        - Test Ruby
+
+  bouncer:
+    homepage_url: "https://docs.publishing.service.gov.uk/apps/bouncer.html"
+    required_status_checks:
+      standard_contexts: *standard_security_checks
+      additional_contexts:
+        - Test Ruby
+        - Lint Ruby / Run RuboCop
+
+  bulk-changer:
+    required_status_checks:
+      standard_contexts: *standard_security_checks
+      additional_contexts:
+        - Test
+
+  bulk-merger:
+
+  collections:
+    homepage_url: "https://docs.publishing.service.gov.uk/apps/collections.html"
+    required_status_checks:
+      standard_contexts: *standard_govuk_rails_checks
+      additional_contexts:
+        - Integration tests
+        - Lint JavaScript / Run Standardx
+        - Lint SCSS / Run Stylelint
+        - Test JavaScript / Run Jasmine
+        - Test Ruby / Run RSpec
+        - Lint ERB / Lint ERB
+        - CodeQL SAST scan / Analyze
+        - Dependency Review scan / dependency-review-pr
+        - Security Analysis / Run Brakeman
+        - Lint Ruby / Run RuboCop
+
+  collections-publisher:
+    homepage_url: "https://docs.publishing.service.gov.uk/apps/collections-publisher.html"
+    required_status_checks:
+      standard_contexts: *standard_govuk_rails_checks
+      additional_contexts:
+        - Lint JavaScript / Run Standardx
+        - Lint SCSS / Run Stylelint
+        - Test Ruby / Run RSpec
+
+  contacts-admin:
+    homepage_url: "https://docs.publishing.service.gov.uk/apps/contacts-admin.html"
+    required_status_checks:
+      standard_contexts: *standard_govuk_rails_checks
+      additional_contexts:
+        - Lint JavaScript / Run Standardx
+        - Lint SCSS / Run Stylelint
+        - Test Ruby / Run RSpec
+
+  content-data-admin:
+    homepage_url: "https://docs.publishing.service.gov.uk/apps/content-data-admin.html"
+    required_status_checks:
+      standard_contexts: *standard_govuk_rails_checks
+      additional_contexts:
+        - Test Ruby
+        - Lint SCSS / Run Stylelint
+        - Lint JavaScript / Run Standardx
+
+  content-data-api:
+    homepage_url: "https://docs.publishing.service.gov.uk/apps/content-performance-manager.html"
+    required_status_checks:
+      standard_contexts: *standard_govuk_rails_checks
+      additional_contexts:
+        - Test Ruby / Run RSpec
+
+  content-publisher:
+    homepage_url: "https://docs.publishing.service.gov.uk/apps/content-publisher.html"
+    required_status_checks:
+      standard_contexts: *standard_govuk_rails_checks
+      additional_contexts:
+        - Lint SCSS / Run Stylelint
+        - Lint JavaScript / Run Standardx
+        - Test JavaScript / Run Jasmine
+        - Test Ruby / Run RSpec
+
+  content-store:
+    homepage_url: "https://docs.publishing.service.gov.uk/apps/content-store.html"
+    required_status_checks:
+      standard_contexts: *standard_govuk_rails_checks
+      additional_contexts:
+        - Test Ruby / Run RSpec
+
+  content-tagger:
+    homepage_url: "https://docs.publishing.service.gov.uk/apps/content-tagger.html"
+    required_status_checks:
+      standard_contexts: *standard_govuk_rails_checks
+      additional_contexts:
+        - Lint SCSS / Run Stylelint
+        - Lint JavaScript / Run Standardx
+        - Test Ruby / Run RSpec
+
+  data-community-tech-docs:
+    homepage_url: "https://docs.data-community.publishing.service.gov.uk/"
+    need_production_access_to_merge: false
+    allow_squash_merge: true
+    push_allowances: []
+
+  datagovuk-tech-docs:
+    homepage_url: "https://guidance.data.gov.uk/"
+    need_production_access_to_merge: false
+    allow_squash_merge: true
+    push_allowances: []
+
+  email-alert-api:
+    homepage_url: "https://docs.publishing.service.gov.uk/apps/email-alert-api.html"
+    required_status_checks:
+      standard_contexts: *standard_govuk_rails_checks
+      additional_contexts:
+        - Test Ruby
+        - CodeQL SAST scan / Analyze
+        - Dependency Review scan / dependency-review-pr
+        - Security Analysis / Run Brakeman
+        - Lint Ruby / Run RuboCop
+
+  email-alert-frontend:
+    homepage_url: "https://docs.publishing.service.gov.uk/apps/email-alert-frontend.html"
+    required_status_checks:
+      standard_contexts: *standard_govuk_rails_checks
+      additional_contexts:
+        - Lint SCSS / Run Stylelint
+        - Lint JavaScript / Run Standardx
+        - Test JavaScript / Run Jasmine
+        - Test Ruby / Run RSpec
+
+  email-alert-service:
+    homepage_url: "https://docs.publishing.service.gov.uk/apps/email-alert-service.html"
+    required_status_checks:
+      standard_contexts: *standard_security_checks
+      additional_contexts:
+        - Lint Ruby / Run RuboCop
+        - Test Ruby / Run RSpec
+
+  feedback:
+    homepage_url: "https://docs.publishing.service.gov.uk/apps/feedback.html"
+    required_status_checks:
+      standard_contexts: *standard_govuk_rails_checks
+      additional_contexts:
+        - Lint JavaScript / Run Standardx
+        - Lint SCSS / Run Stylelint
+        - Test JavaScript / Run Jasmine
+        - Test Ruby / Run RSpec
+
+  finder-frontend:
+    homepage_url: "https://docs.publishing.service.gov.uk/apps/finder-frontend.html"
+    required_status_checks:
+      standard_contexts: *standard_govuk_rails_checks
+      additional_contexts:
+        - Integration tests
+        - Lint SCSS / Run Stylelint
+        - Lint JavaScript / Run Standardx
+        - Test JavaScript / Run Jasmine
+        - Test Ruby / Run RSpec
+
+  frontend:
+    homepage_url: "https://docs.publishing.service.gov.uk/apps/frontend.html"
+    required_status_checks:
+      standard_contexts: *standard_govuk_rails_checks
+      additional_contexts:
+        - Lint JavaScript / Run Standardx
+        - Lint SCSS / Run Stylelint
+        - Test JavaScript / Run Jasmine
+        - Test Ruby / Run RSpec
+        - CodeQL SAST scan / Analyze
+        - Dependency Review scan / dependency-review-pr
+        - Security Analysis / Run Brakeman
+        - Lint Ruby / Run RuboCop
+
+  gds-api-adapters:
+    homepage_url: "http://www.rubydoc.info/github/alphagov/gds-api-adapters"
+    required_status_checks:
+      standard_contexts: *standard_security_checks
+      additional_contexts:
+        - CodeQL SAST scan / Analyze
+        - Dependency Review scan / dependency-review-pr
+        - test
+
+  gds-sso:
+    required_status_checks:
+      standard_contexts: *standard_security_checks
+      additional_contexts:
+        - test
+
+  government-frontend:
+    homepage_url: "https://docs.publishing.service.gov.uk/apps/government-frontend.html"
+    required_status_checks:
+      standard_contexts: *standard_govuk_rails_checks
+      additional_contexts:
+        - Lint SCSS / Run Stylelint
+        - Lint JavaScript / Run Standardx
+        - Test JavaScript / Run Jasmine
+        - Test Ruby / Run Minitest
+
+  govspeak:
+    homepage_url: "http://govspeak-preview.herokuapp.com/"
+    required_status_checks:
+      standard_contexts: *standard_security_checks
+      additional_contexts:
+        - test
+
+  govspeak-preview:
+    homepage_url: "https://govspeak-preview.publishing.service.gov.uk/"
+    required_status_checks:
+      standard_contexts: *standard_security_checks
+      additional_contexts:
+        - test
+
+  govuk-aws:
+    required_status_checks:
+      additional_contexts:
+        - Shellcheck
+        - terraform fmt
+
+  govuk-content-api-docs:
+    homepage_url: "https://content-api.publishing.service.gov.uk"
+    need_production_access_to_merge: false
+    allow_squash_merge: true
+    push_allowances: []
+
+  govuk-dependabot-merger:
+    required_status_checks:
+      standard_contexts: *standard_security_checks
+
+  govuk-dependency-checker:
+    required_status_checks:
+      standard_contexts: *standard_security_checks
+      additional_contexts:
+        - Test
+
+  govuk-developer-docs:
+    homepage_url: "https://docs.publishing.service.gov.uk"
+    need_production_access_to_merge: false
+    allow_squash_merge: true
+    push_allowances: []
+
+  govuk-dns-tf:
+    strict: true
+    up_to_date_branches: true
+    required_status_checks:
+      additional_contexts:
+        - test
+
+  govuk-fastly:
+    strict: true
+    up_to_date_branches: true
+
+  govuk-fastly-secrets:
+    strict: true
+    up_to_date_branches: true
+
+  govuk-infrastructure:
+    strict: true
+    up_to_date_branches: true
+
+  govuk-mobile-android-app:
+    allow_squash_merge: true
+    branch_protection: false
+
+  govuk-mobile-android-homepage:
+    allow_squash_merge: true
+    branch_protection: false
+
+  govuk-mobile-android-onboarding:
+    allow_squash_merge: true
+    branch_protection: false
+
+  govuk-mobile-android-services:
+    allow_squash_merge: true
+    branch_protection: false
+
+  govuk-mobile-ios-app:
+    allow_squash_merge: true
+    branch_protection: false
+
+  govuk-mobile-ios-homepage:
+    allow_squash_merge: true
+    branch_protection: false
+
+  govuk-mobile-ios-onboarding:
+    allow_squash_merge: true
+    branch_protection: false
+
+  govuk-mobile-ios-services:
+    allow_squash_merge: true
+    branch_protection: false
+
+  govuk-mobile-ios-ui-components:
+    allow_squash_merge: true
+    branch_protection: false
+
+  govuk-rota-generator:
+    required_status_checks:
+      standard_contexts: *standard_security_checks
+      additional_contexts:
+        - test
+
+  govuk-sli-collector:
+    required_status_checks:
+      standard_contexts: *standard_security_checks
+
+  govuk_ab_testing:
+    required_status_checks:
+      standard_contexts: *standard_security_checks
+      additional_contexts:
+        - test
+
+  govuk_admin_template:
+    required_status_checks:
+      standard_contexts: *standard_security_checks
+      additional_contexts:
+        - test
+
+  govuk_app_config:
+    homepage_url: "https://rubygems.org/gems/govuk_app_config"
+    required_status_checks:
+      standard_contexts: *standard_security_checks
+      additional_contexts:
+        - test
+
+  govuk_document_types:
+    homepage_url: "https://docs.publishing.service.gov.uk/document-types.html"
+    required_status_checks:
+      standard_contexts: *standard_security_checks
+      additional_contexts:
+        - test
+
+  govuk_message_queue_consumer:
+    required_status_checks:
+      standard_contexts: *standard_security_checks
+      additional_contexts:
+        - test
+
+  govuk_content_block_tools:
+    homepage_url: "https://rubygems.org/gems/content_block_tools"
+    required_status_checks:
+      standard_contexts: *standard_security_checks
+      additional_contexts:
+        - test
+
+  govuk_personalisation:
+    homepage_url: "https://github.com/alphagov/govuk_personalisation"
+    required_status_checks:
+      standard_contexts: *standard_security_checks
+      additional_contexts:
+        - test
+
+  govuk_publishing_components:
+    homepage_url: "https://components.publishing.service.gov.uk"
+    required_status_checks:
+      standard_contexts: *standard_security_checks
+      additional_contexts:
+        - test
+
+  govuk_schemas:
+    homepage_url: "http://www.rubydoc.info/github/alphagov/govuk_schemas"
+    required_status_checks:
+      standard_contexts: *standard_security_checks
+      additional_contexts:
+        - test
+
+  govuk_sidekiq:
+    required_status_checks:
+      standard_contexts: *standard_security_checks
+      additional_contexts:
+        - test
+
+  govuk_test:
+    required_status_checks:
+      standard_contexts: *standard_security_checks
+      additional_contexts:
+        - test
+
+  hmrc-manuals-api:
+    homepage_url: "https://docs.publishing.service.gov.uk/apps/hmrc-manuals-api.html"
+    required_status_checks:
+      standard_contexts: *standard_govuk_rails_checks
+      additional_contexts:
+        - Test Ruby / Run RSpec
+
+  link-checker-api:
+    homepage_url: "https://docs.publishing.service.gov.uk/apps/link-checker-api.html"
+    required_status_checks:
+      standard_contexts: *standard_govuk_rails_checks
+      additional_contexts:
+        - Test Ruby
+        - CodeQL SAST scan / Analyze
+        - Dependency Review scan / dependency-review-pr
+        - Security Analysis / Run Brakeman
+        - Lint Ruby / Run RuboCop
+
+  local-links-manager:
+    homepage_url: "https://docs.publishing.service.gov.uk/apps/local-links-manager.html"
+    required_status_checks:
+      standard_contexts: *standard_govuk_rails_checks
+      additional_contexts:
+        - Test Ruby
+        - Lint JavaScript / Run Standardx
+        - Lint SCSS / Run Stylelint
+        - Lint Views
+
+  locations-api:
+    required_status_checks:
+      standard_contexts: *standard_govuk_rails_checks
+      additional_contexts:
+        - Test Ruby
+        - CodeQL SAST scan / Analyze
+        - Dependency Review scan / dependency-review-pr
+        - Security Analysis / Run Brakeman
+        - Lint Ruby / Run RuboCop
+
+  manuals-publisher:
+    homepage_url: "https://docs.publishing.service.gov.uk/apps/manuals-publisher.html"
+    required_status_checks:
+      standard_contexts: *standard_govuk_rails_checks
+      additional_contexts:
+        - Integration tests
+        - Lint JavaScript / Run Standardx
+        - Lint SCSS / Run Stylelint
+        - Test JavaScript / Run Jasmine
+        - Test Ruby / Run RSpec
+
+  markdown-toolbar-element:
+    homepage_url: "https://alphagov.github.io/markdown-toolbar-element"
+    required_status_checks:
+      standard_contexts: *standard_security_checks
+
+  maslow:
+    homepage_url: "https://docs.publishing.service.gov.uk/apps/maslow.html"
+    required_status_checks:
+      standard_contexts: *standard_govuk_rails_checks
+      additional_contexts:
+        - Test Ruby
+        - Lint JavaScript / Run Standardx
+        - Lint SCSS / Run Stylelint
+        - Test JavaScript / Run Jasmine
+
+  miller-columns-element:
+    homepage_url: "https://alphagov.github.io/miller-columns-element/"
+    required_status_checks:
+      standard_contexts: *standard_security_checks
+      additional_contexts:
+        - test
+
+  optic14n:
+    required_status_checks:
+      standard_contexts: *standard_security_checks
+      additional_contexts:
+        - test
+
+  paste-html-to-govspeak:
+    homepage_url: "https://alphagov.github.io/paste-html-to-govspeak/"
+    required_status_checks:
+      standard_contexts: *standard_security_checks
+      additional_contexts:
+        - test
+
+  places-manager:
+    homepage_url: "https://docs.publishing.service.gov.uk/apps/imminence.html"
+    required_status_checks:
+      standard_contexts: *standard_govuk_rails_checks
+      additional_contexts:
+        - Integration tests
+        - Test Ruby
+        - Lint Views
+        - CodeQL SAST scan / Analyze
+        - Dependency Review scan / dependency-review-pr
+        - Security Analysis / Run Brakeman
+        - Lint Ruby / Run RuboCop
+
+  plek:
+    required_status_checks:
+      standard_contexts: *standard_security_checks
+      additional_contexts:
+        - test
+
+  publisher:
+    homepage_url: "https://docs.publishing.service.gov.uk/apps/publisher.html"
+    required_status_checks:
+      standard_contexts: *standard_govuk_rails_checks
+      additional_contexts:
+        - Lint JavaScript / Run Standardx
+        - Lint SCSS / Run Stylelint
+        - Test JavaScript / Run Jasmine
+        - Test Ruby / Run Minitest
+
+  publishing-api:
+    homepage_url: "https://docs.publishing.service.gov.uk/apps/publishing-api.html"
+    required_status_checks:
+      standard_contexts: *standard_govuk_rails_checks
+      additional_contexts:
+        - Check content schemas are built
+        - Test Ruby
+        - CodeQL SAST scan / Analyze
+        - Dependency Review scan / dependency-review-pr
+        - Security Analysis / Run Brakeman
+        - Lint Ruby / Run RuboCop
+
+  rack-logstasher:
+    homepage_url: "https://rubygems.org/gems/rack-logstasher"
+    required_status_checks:
+      standard_contexts: *standard_security_checks
+      additional_contexts:
+        - test
+
+  rails_translation_manager:
+    required_status_checks:
+      standard_contexts: *standard_security_checks
+      additional_contexts:
+        - test
+
+  release:
+    homepage_url: "https://docs.publishing.service.gov.uk/repos/release.html"
+    required_status_checks:
+      standard_contexts: *standard_govuk_rails_checks
+      additional_contexts:
+        - Test Ruby
+        - Lint JavaScript / Run Standardx
+        - Lint SCSS / Run Stylelint
+
+  router:
+    homepage_url: "https://docs.publishing.service.gov.uk/repos/router.html"
+    required_status_checks:
+      additional_contexts:
+        - Test Go
+
+  router-api:
+    homepage_url: "https://docs.publishing.service.gov.uk/repos/router-api.html"
+    required_status_checks:
+      standard_contexts: *standard_govuk_rails_checks
+      additional_contexts:
+        - Test Ruby
+
+  rubocop-govuk:
+    required_status_checks:
+      standard_contexts: *standard_security_checks
+      additional_contexts:
+        - test
+
+  seal:
+    required_status_checks:
+      standard_contexts: *standard_security_checks
+      additional_contexts:
+        - test
+
+  search-admin:
+    homepage_url: "https://docs.publishing.service.gov.uk/apps/search-admin.html"
+    required_status_checks:
+      standard_contexts: *standard_govuk_rails_checks
+      additional_contexts:
+        - Lint JavaScript / Run Standardx
+        - Lint SCSS / Run Stylelint
+        - Test Ruby / Run RSpec
+
+  search-api:
+    homepage_url: "https://docs.publishing.service.gov.uk/apps/search-api.html"
+    required_status_checks:
+      standard_contexts: *standard_security_checks
+      additional_contexts:
+        - Lint Ruby / Run RuboCop
+        - Test Ruby / Run RSpec
+
+  search-api-v2:
+    required_status_checks:
+      ignore_jenkins: true
+      standard_contexts: *standard_govuk_rails_checks
+      additional_contexts:
+        - Test Ruby
+
+  search-v2-evaluator:
+
+  search-v2-infrastructure:
+    required_status_checks:
+      ignore_jenkins: true
+      additional_contexts:
+        - lint_and_validate
+
+  service-manual-publisher:
+    homepage_url: "https://docs.publishing.service.gov.uk/apps/service-manual-publisher.html"
+    required_status_checks:
+      standard_contexts: *standard_govuk_rails_checks
+      additional_contexts:
+        - Lint SCSS / Run Stylelint
+        - Lint JavaScript / Run Standardx
+        - Test JavaScript / Run Jasmine
+        - Test Ruby / Run RSpec
+
+  short-url-manager:
+    homepage_url: "https://docs.publishing.service.gov.uk/apps/short-url-manager.html"
+    required_status_checks:
+      standard_contexts: *standard_govuk_rails_checks
+      additional_contexts:
+        - Test Ruby / Run RSpec
+        - Lint SCSS / Run Stylelint
+
+  signon:
+    homepage_url: "https://docs.publishing.service.gov.uk/apps/signon.html"
+    required_status_checks:
+      standard_contexts: *standard_govuk_rails_checks
+      additional_contexts:
+        - Test Ruby
+        - Lint JavaScript / Run Standardx
+        - Lint SCSS / Run Stylelint
+        - Test JavaScript / Run Jasmine
+
+  siteimprove_api_client:
+    required_status_checks:
+      standard_contexts: *standard_security_checks
+      additional_contexts:
+        - test
+
+  slimmer:
+    required_status_checks:
+      standard_contexts: *standard_security_checks
+      additional_contexts:
+        - test
+
+  smart-answers:
+    homepage_url: "https://docs.publishing.service.gov.uk/apps/smart-answers.html"
+    allow_squash_merge: true
+    required_status_checks:
+      standard_contexts: *standard_govuk_rails_checks
+      additional_contexts:
+        - Lint JavaScript / Run Standardx
+        - Lint SCSS / Run Stylelint
+        - Test JavaScript / Run Jasmine
+        - Test Ruby / Run Minitest
+
+  smokey:
+    required_status_checks:
+      standard_contexts: *standard_security_checks
+
+  specialist-publisher:
+    homepage_url: "https://docs.publishing.service.gov.uk/apps/specialist-publisher.html"
+    required_status_checks:
+      standard_contexts: *standard_govuk_rails_checks
+      additional_contexts:
+        - Lint JavaScript / Run Standardx
+        - Lint SCSS / Run Stylelint
+        - Test JavaScript / Run Jasmine
+        - Test Ruby / Run RSpec
+
+  static:
+    homepage_url: "https://docs.publishing.service.gov.uk/apps/static.html"
+    required_status_checks:
+      standard_contexts: *standard_govuk_rails_checks
+      additional_contexts:
+        - Test Ruby
+        - Lint JavaScript / Run Standardx
+        - Lint SCSS / Run Stylelint
+        - Test JavaScript / Run Jasmine
+
+  support:
+    homepage_url: "https://docs.publishing.service.gov.uk/apps/support.html"
+    required_status_checks:
+      standard_contexts: *standard_govuk_rails_checks
+      additional_contexts:
+        - Test Ruby
+        - Lint JavaScript / Run Standardx
+        - Lint SCSS / Run Stylelint
+
+  support-api:
+    homepage_url: "https://docs.publishing.service.gov.uk/apps/support-api.html"
+    required_status_checks:
+      standard_contexts: *standard_govuk_rails_checks
+      additional_contexts:
+        - Test Ruby
+
+  transition:
+    homepage_url: "https://docs.publishing.service.gov.uk/apps/transition.html"
+    required_status_checks:
+      standard_contexts: *standard_govuk_rails_checks
+      additional_contexts:
+        - Integration tests
+        - Test Ruby
+        - Test JavaScript / Run Jasmine
+
+  travel-advice-publisher:
+    homepage_url: "https://docs.publishing.service.gov.uk/apps/travel-advice-publisher.html"
+    required_status_checks:
+      standard_contexts: *standard_govuk_rails_checks
+      additional_contexts:
+        - Lint SCSS / Run Stylelint
+        - Lint JavaScript / Run Standardx
+        - Test JavaScript / Run Jasmine
+        - Test Ruby / Run RSpec
+
+  whitehall:
+    homepage_url: "https://docs.publishing.service.gov.uk/apps/whitehall.html"
+    required_status_checks:
+      standard_contexts: *standard_govuk_rails_checks
+      additional_contexts:
+        - Test features / Run Cucumber
+        - Lint SCSS / Run Stylelint
+        - Lint JavaScript / Run Standardx
+        - Test JavaScript / Run Jasmine
+        - Test Ruby / Run Minitest
+        - Lint ERB / Run ERB lint
+        - Prettier / Run Prettier
+
+  ckanext-datagovuk:
+    required_status_checks:
+      additional_contexts:
+        - test
+
+  datagovuk_find:
+    required_status_checks:
+      additional_contexts:
+        - test
+
+  datagovuk_publish:
+    homepage_url: "https://docs.publishing.service.gov.uk/apps/datagovuk_publish.html"
+    required_status_checks:
+      additional_contexts:
+        - test
+
+  govuk-browser-extension:
+    required_status_checks:
+      additional_contexts:
+        - Test Extension JS
+
+  govuk-docker:
+    required_status_checks:
+      additional_contexts:
+        - test
+
+  govuk-exporter:
+    required_status_checks:
+      additional_contexts:
+        - Test Go
+
+  govuk-mirror:
+    required_status_checks:
+      additional_contexts:
+        - Test Go
+
+  govuk-replatform-test-app:
+    required_status_checks:
+      additional_contexts:
+        - Test
+
+  govuk-rota-announcer:
+    required_status_checks:
+      additional_contexts:
+        - test
+
+  govuk-user-reviewer:
+    homepage_url: "https://github.com/alphagov/govuk-rfcs/pull/75"
+    required_status_checks:
+      additional_contexts:
+        - test
+
+  licensify:
+    required_status_checks:
+      additional_contexts:
+        - test
+
+  govuk-crd-library:
+    homepage_url: "https://alphagov.github.io/govuk-crd-library/"
+
+  govuk-dns-ui:
+    homepage_url: "https://dns.publishing.service.gov.uk"
+
+  govuk-helm-charts:
+    homepage_url: "https://www.gov.uk/"
+    required_pull_request_reviews:
+      pull_request_bypassers:
+        - "/govuk-ci"
+
+  govuk-knowledge-graph-search:
+    homepage_url: "https://docs.data-community.publishing.service.gov.uk/tools/govsearch/"
+    required_pull_request_reviews:
+      pull_request_bypassers:
+        - "/guilhem-fry"
+        - "/nacnudus"
+        - "/somme"
+
+  public-asset-checker:
+    homepage_url: "https://govuk-public-asset-checker.herokuapp.com"
+
+  govspeak-visual-editor:
+    required_pull_request_reviews:
+      pull_request_bypassers:
+        - "alphagov/gov-uk"
+
+  govuk-knowledge-graph-gcp:
+    homepage_url: "https://docs.data-community.publishing.service.gov.uk/tools/govgraph/"
+
+  github-trello-poster:
+    required_status_checks:
+      additional_contexts:
+        - "CodeQL SAST scan / Analyze"
+        - "Dependency Review scan / dependency-review-pr"
+        - "test"
+
+  accessible-autocomplete-multiselect: {}
+  ckan-mock-harvest-sources: {}
+  govuk-analytics-engineering: {}
+  govuk-aws-data: {}
+  govuk-chat: {}
+  govuk-data-science-workshop: {}
+  govuk-mobile-backend: {}
+  govuk-mobile-backend-config: {}
+  govuk-pact-broker: {}
+  govuk-rfcs: {}
+  govuk-ruby-images: {}
+  govuk-s3-mirror: {}
+  govuk-e2e-tests: {}
+  govuk-design-guide: {
+    teams: {
+      govuk: "maintain"
+    }
+  }

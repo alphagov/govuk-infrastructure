@@ -1,0 +1,36 @@
+name: Run Jasmine
+
+on:
+  workflow_call:
+    inputs:
+      useWithRails:
+        description: 'Enable for use with Rails'
+        required: false
+        default: false
+        type: boolean
+
+jobs:
+  run-jasmine:
+    name: Run Jasmine
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          show-progress: false
+
+      - name: Setup Ruby
+        if: inputs.useWithRails
+        uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
+
+      - name: Setup Node
+        uses: alphagov/govuk-infrastructure/.github/actions/setup-node@main
+
+      - name: Precompile Rails assets
+        if: inputs.useWithRails
+        uses: alphagov/govuk-infrastructure/.github/actions/precompile-rails-assets@main
+
+      - name: Run Jasmine
+        run: yarn run jasmine-browser-runner runSpecs

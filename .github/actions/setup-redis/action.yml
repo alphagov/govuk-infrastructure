@@ -1,0 +1,16 @@
+name: 'Setup Redis'
+description: 'Create new Redis database'
+runs:
+  using: "composite"
+  steps:
+    - name: Start Redis container
+      env:
+        REDIS_IMAGE_TAG: 6-alpine
+        REDIS_PORT: 6379
+      shell: bash
+      run: |
+        # Start container
+        docker run --name redis \
+         --rm --detach \
+         --publish "${REDIS_PORT}:6379" \
+         redis:${REDIS_IMAGE_TAG}

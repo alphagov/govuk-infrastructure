@@ -1,0 +1,69 @@
+name: Mirror repositories
+
+on:
+  schedule:
+    - cron:  '30 9,12,15,18 * * 1-5'
+  workflow_dispatch: {}
+
+env:
+  AWS_REGION : eu-west-2
+
+permissions:
+  id-token: write  # Needed for requesting the JWT.
+  contents: read
+
+jobs:
+  mirror-repos:
+    runs-on:
+      ubuntu-latest
+    steps:
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@e3dd6a429d7300a6a4c196c26e071d42e0343502  # v4.0.2
+        with:
+          role-to-assume: arn:aws:iam::900804735337:role/github_action_mirror_repos_role
+          aws-region: ${{ env.AWS_REGION }}
+          role-session-name: GitHubActionMirrorRepos
+          role-duration-seconds: 10800
+
+      - name: Get repos
+        id: get-repos
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          GITHUB_REPOS=$(gh search repos --owner alphagov --topic=govuk --archived=false --json=name -L 500 -q '[.[].name] | unique | join(" ")')
+          echo "github-repos=${GITHUB_REPOS}" >> "$GITHUB_OUTPUT"
+
+      - name: Sync repositories
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GITHUB_REPOS: ${{ steps.get-repos.outputs.github-repos }}
+        run: |
+          # shellcheck disable=SC2086 # Intentional word-splitting on $GITHUB_REPOS.
+          for repo in ${GITHUB_REPOS}; do
+            git config --global credential.helper '!aws codecommit credential-helper $@'
+            git config --global credential.UseHttpPath true
+
+            echo "updating"
+            git="git --git-dir ${repo}.git"
+
+            aws_remote="https://git-codecommit.${AWS_REGION}.amazonaws.com/v1/repos/${repo}"
+
+            echo "Fetching ${repo} from GitHub"
+            gh repo clone "alphagov/${repo}" -- --mirror
+
+            echo "Doing some cleanup for ${repo}"
+            ${git} reflog expire --expire-unreachable=now --all
+            ${git} gc            --prune=now
+
+            echo "List latest tags from ${repo}"
+            LATEST_TAGS=$(${git} for-each-ref --sort=taggerdate --format '%(refname:short)' refs/tags | tail -4000 | tr '\n' ' ')
+
+            echo "Pushing latest ${repo} tags to AWS CodeCommit"
+            ${git} push "${aws_remote}" --force ${LATEST_TAGS}
+
+            echo "Pushing all ${repo} repo branches to AWS CodeCommit"
+            ${git} push "${aws_remote}" --force --quiet --all 
+
+            echo "Manually pushing ${repo} git heads information to AWS CodeCommit"
+            ${git} push "${aws_remote}" +refs/remotes/origin/*:refs/heads/*
+          done
