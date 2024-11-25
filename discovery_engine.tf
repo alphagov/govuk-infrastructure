@@ -69,6 +69,7 @@ resource "aws_secretsmanager_secret_version" "discovery_engine_configuration" {
   secret_id = aws_secretsmanager_secret.discovery_engine_configuration.id
   secret_string = jsonencode({
     "GOOGLE_CLOUD_CREDENTIALS"          = base64decode(google_service_account_key.api.private_key)
+    "GOOGLE_CLOUD_PROJECT_ID"           = var.gcp_project_id
     "DISCOVERY_ENGINE_DATASTORE_BRANCH" = local.discovery_engine_datastore_branch_path,
     "DISCOVERY_ENGINE_DATASTORE"        = google_discovery_engine_data_store.govuk_content.name,
     "DISCOVERY_ENGINE_SERVING_CONFIG"   = local.discovery_engine_serving_config_path
