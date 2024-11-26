@@ -1,0 +1,191 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://www.gov.uk/govuk_content_metadata_discoveryengine.json",
+  "title": "Vertex Schema for GOV.UK",
+  "description": "GOV.UK content object representation as stored in Google Vertex AI Enterprise Search",
+  "type": "object",
+  "properties": {
+    "content_id": {
+      "description": "Unique content ID from the Publishing API (for debugging/retrieving single objects)",
+      "type": "string",
+      "format": "uuid",
+      "retrievable": true
+    },
+    "title": {
+      "description": "The main title (shown in search results)",
+      "type": "string",
+      "keyPropertyMapping": "title",
+      "retrievable": true
+    },
+    "description": {
+      "description": "A short description (shown in search results)",
+      "type": "string",
+      "keyPropertyMapping": "description",
+      "retrievable": true
+    },
+    "additional_searchable_text": {
+      "$comment": "We've decided not to use this as structured fields don't contribute enough to relevance. Vertex does not support removing a field from the schema (as of Jan 2024) so it stays here.",
+      "description": "Additional textual content such as keywords that should be searchable but don't form part of the main body of content",
+      "type": "string",
+      "searchable": true
+    },
+    "link": {
+      "description": "URI reference either as a relative path for GOV.UK content, or as an absolute URL for external content (used to link to the content from search results)",
+      "type": "string",
+      "format": "uri-reference",
+      "retrievable": true,
+      "indexable": true
+    },
+    "url": {
+      "description": "Absolute URL including protocol and host even for content on GOV.UK proper (used for Vertex to incorporate popularity/event signals)",
+      "type": "string",
+      "format": "url",
+      "keyPropertyMapping": "uri"
+    },
+    "public_timestamp": {
+      "description": "Unix timestamp of when this object was last updated (for sorting/filtering/boosting)",
+      "type": "integer",
+      "retrievable": true,
+      "indexable": true
+    },
+    "public_timestamp_datetime": {
+      "description": "RFC3339 timestamp of when this object was last updated (for boosting and displaying)",
+      "type": "datetime",
+      "retrievable": true,
+      "indexable": true
+    },
+    "document_type": {
+      "description": "The source document type (for boosting)",
+      "type": "string",
+      "indexable": true,
+      "retrievable": true
+    },
+    "content_purpose_supergroup": {
+      "description": "The content purpose supergroup (for filtering/boosting)",
+      "type": "string",
+      "indexable": true,
+      "retrievable": true
+    },
+    "part_of_taxonomy_tree": {
+      "description": "A list of GOV.UK taxon IDs that this content object is tagged to (for filtering)",
+      "type": "array",
+      "items": {
+        "type": "string",
+        "keyPropertyMapping": "category",
+        "format": "uuid"
+      }
+    },
+    "is_historic": {
+      "description": "Whether the content is historic (for boosting; boosts don't support boolean)",
+      "type": "integer",
+      "multipleOf": 1,
+      "minimum": 0,
+      "maximum": 1,
+      "indexable": true,
+      "retrievable": true
+    },
+    "organisation_state": {
+      "description": "The state of the organisation (for boosting)",
+      "type": "string",
+      "indexable": true
+    },
+    "government_name": {
+      "description": "The name of the government under which the content was originally created (shown as part of search result if present)",
+      "type": "string",
+      "retrievable": true
+    },
+    "locale": {
+      "description": "The locale of the content (not used yet, may be useful for i18n later)",
+      "type": "string",
+      "indexable": true
+    },
+    "parts": {
+      "description": "A list of parts (shown below search result if present)",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "searchable": true,
+            "retrievable": true
+          },
+          "body": {
+            "type": "string",
+            "searchable": true,
+            "retrievable": true
+          },
+          "slug": {
+            "type": "string",
+            "retrievable": true
+          }
+        },
+        "required": [
+          "title",
+          "slug",
+          "body"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "organisations": {
+      "description": "A list of organisation slugs this content belongs to (for filtering)",
+      "type": "array",
+      "items": {
+        "type": "string",
+        "indexable": true
+      }
+    },
+    "topical_events": {
+      "description": "A list of topical events slugs this content belongs to (for filtering)",
+      "type": "array",
+      "items": {
+        "type": "string",
+        "indexable": true
+      }
+    },
+    "world_locations": {
+      "description": "A list of world locations slugs this content belongs to (for filtering)",
+      "type": "array",
+      "items": {
+        "type": "string",
+        "indexable": true
+      }
+    },
+    "manual": {
+      "description": "The manual this content belongs to (if applicable) (for filtering)",
+      "type": "string",
+      "indexable": true
+    },
+    "payload_version": {
+      "$comment": "We've decided not to use this in the end as there isn't enough of a risk and we cannot guarantee atomic writes anyway. It is now included in the `debug` object field. Vertex does not support removing a field from the schema (as of Jan 2024) so it stays here.",
+      "description": "Incrementing document version number (used to avoid document update race conditions)",
+      "type": "integer"
+    },
+    "debug": {
+      "description": "Metadata that is only used for debugging purposes",
+      "type": "object",
+      "retrievable": false,
+      "properties": {
+        "payload_version": {
+          "type": "integer",
+          "description": "Incrementing version number of an export run from Publishing API"
+        },
+        "last_synced_at": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Timestamp of when this document was last synced to Vertex"
+        }
+      }
+    }
+  },
+  "required": [
+    "content_id",
+    "title",
+    "link",
+    "url",
+    "public_timestamp",
+    "document_type"
+  ],
+  "additionalProperties": false
+}
