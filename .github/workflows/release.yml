@@ -1,0 +1,80 @@
+name: Release
+
+on:
+  workflow_call:
+    secrets:
+      GH_TOKEN:
+        required: true
+
+jobs:
+  release:
+    name: Release
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          show-progress: false
+          ref: ${{ github.event.workflow_run.head_commit.id }}
+
+      - name: Find latest version tag
+        id: find-last-tag
+        run: |
+          last_tag=$(
+            git ls-remote -q --exit-code --tags --sort=-version:refname origin 'v*' |
+            head -1 | grep -Eo 'v[0-9]+'
+          )
+
+          if [[ ! "$last_tag" =~ ^v[0-9]*$ ]]; then
+            echo "No valid previous tag found. last_tag=$last_tag"
+            exit 1
+          fi
+
+          echo "result=$last_tag" >> "$GITHUB_OUTPUT"
+
+      - name: Check is merge commit
+        run: |
+          # Commits with more than 1 parent are merge commits
+          if [[ $(git cat-file -p HEAD | grep -c parent) -le 1 ]]; then
+            echo "The current commit is not a merge commit."
+            exit 1
+          fi
+
+      - name: Calculate new version tag
+        id: calculate-tag
+        run: |
+          last_tag="${{ steps.find-last-tag.outputs.result }}"
+
+          # Remove v prefix
+          version=${last_tag#v}
+
+          # Get the list of merge commits
+          merge_commits=$(git rev-list --merges "$last_tag"..HEAD)
+
+          # Count the number of merge commits
+          merge_count=$(echo "$merge_commits" | wc -l)
+
+          # Increase the version by the merge count
+          ((version+=merge_count))
+
+          # Construct the new version tag
+          new_tag="v${version}"
+
+          echo "result=$new_tag" >> "$GITHUB_OUTPUT"
+
+      - name: Create GitHub Release
+        uses: actions/github-script@v7
+        with:
+          retries: 3
+          github-token: ${{ secrets.GH_TOKEN }}
+          script: |
+            const newTag = '${{steps.calculate-tag.outputs.result}}'
+
+            await github.rest.repos.createRelease({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              tag_name: newTag,
+              name: newTag,
+              target_commitish: '${{ github.event.workflow_run.head_commit.id}}',
+              make_latest: "legacy",
+            });

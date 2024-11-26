@@ -1,0 +1,94 @@
+name: Auto-release Rubygem
+
+on:
+  workflow_call:
+    inputs:
+      gem_name:
+        required: false
+        type: string
+        default: ${{ github.event.repository.name }}
+    secrets:
+      GH_TOKEN:
+        required: true
+
+jobs:
+  release:
+    name: Release Gem
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+        show-progress: false
+        token: ${{ secrets.GH_TOKEN }}
+    - uses: ruby/setup-ruby@v1
+      with:
+        rubygems: latest
+        bundler-cache: true
+    - name: "Determine HEAD of default branch"
+      id: fetch_default_branch_head
+      run: echo "sha=$(git ls-remote origin HEAD | cut -f 1)" >> "$GITHUB_OUTPUT"
+
+    - if: github.sha == steps.fetch_default_branch_head.outputs.sha
+      name: "Auto-release rubygem"
+      env:
+        GEM_NAME: ${{ inputs.gem_name }}
+        GH_TOKEN: ${{ secrets.GH_TOKEN }}
+      run: |
+        set -euo pipefail
+
+        curr_ver=$(ruby -r rubygems -e "puts Gem::Specification::load('$GEM_NAME.gemspec').version")
+        major=$(echo "$curr_ver" | cut -d . -f1)
+        minor=$(echo "$curr_ver" | cut -d . -f2)
+        patch=$(echo "$curr_ver" | cut -d . -f3)
+        next_ver="$major.$minor.$((patch + 1))" # Increment the patch version
+        branch="release-$next_ver"
+        pr_title="Release v$next_ver"
+        pr_desc="This is an automated PR to bump the version number to $next_ver. This is a patch-level bump, as the only changes since v$curr_ver are dependency updates made by Dependabot."
+
+        if ! [[ -r CHANGELOG.md ]]; then
+          echo "CHANGELOG.md not found or not readable. Exiting."
+          exit 0
+        fi
+
+        if ! grep -qR --include "version.rb" --include "*.gemspec" "$curr_ver"; then
+          echo "Can't find version.rb or *.gemspec containing the string '$curr_ver'. Exiting."
+          exit 0
+        fi
+
+        if git ls-remote --exit-code origin "refs/heads/$branch" > /dev/null; then
+          echo "Branch 'release-$next_ver' already exists on the remote. Exiting."
+          exit 0
+        fi
+
+        if [ -z "$(git log "v$curr_ver..main" --no-merges --format=format:%an)" ]; then
+          echo "Gem has no unreleased changes. Exiting."
+          exit 0
+        fi
+
+        if [ "$(git log "v$curr_ver..main" --no-merges --format=format:%an | sort | uniq)" != "dependabot[bot]" ]; then
+          echo "Gem has unreleased changes from users other than Dependabot. Exiting."
+          exit 0
+        fi
+
+        find . -type f \( -iname "version.rb" -o -iname "*.gemspec" \) -exec sed -i "0,/$curr_ver/s//${next_ver}/" {} \;
+
+        printf "# %s\n\n* Update dependencies\n\n" "$next_ver" > NEW_CHANGELOG.md
+        cat CHANGELOG.md >> NEW_CHANGELOG.md
+        mv NEW_CHANGELOG.md CHANGELOG.md
+
+        git config --global user.name "GOV.UK Continuous Integration User"
+        git config --global user.email "govuk-ci@users.noreply.github.com"
+
+        git checkout -b "$branch"
+        git add .
+        git reset -- vendor/bundle
+        git commit -m "$pr_title"
+        git push origin "$branch"
+
+        gh pr create -H "$branch" --title "$pr_title" --body "$pr_desc"
+
+    - if: github.sha != steps.fetch_default_branch_head.outputs.sha
+      name: "Skip release: commit is not HEAD of default branch"
+      run: |
+        echo "Skipping release because commit (${GITHUB_SHA}) isn't the HEAD of the default branch (${{ steps.fetch_default_branch_head.outputs.sha }})"

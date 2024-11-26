@@ -1,0 +1,21 @@
+name: Run RuboCop
+
+on:
+  workflow_call:
+
+jobs:
+  run-rubocop:
+    name: Run RuboCop
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          show-progress: false
+
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
+
+      - name: Run RuboCop
+        run: bundle exec rubocop --parallel --format github --format progress

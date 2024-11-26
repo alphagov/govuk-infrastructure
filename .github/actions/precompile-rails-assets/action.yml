@@ -1,0 +1,18 @@
+name: Precompile Rails assets
+description: 'Precompile assets and cache'
+runs:
+  using: "composite"
+  steps:
+    - name: Assets cache
+      uses: actions/cache@v4
+      with:
+        path: |
+          public/assets
+          tmp/cache/assets/sprockets
+        key: rails-assets-cache-${{ runner.os }}-${{ github.ref }}-${{ github.sha }}
+
+    - name: Precompile assets
+      env:
+        RAILS_ENV: test
+      shell: bash
+      run: bundle exec rails assets:precompile

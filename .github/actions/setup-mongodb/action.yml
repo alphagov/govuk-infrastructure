@@ -1,0 +1,26 @@
+name: 'Setup MongoDB'
+description: 'Create a new MongoDB database'
+inputs:
+  version:
+    description: 'Version of MongoDB to use'
+    required: false
+    default: '2.6'
+runs:
+  using: "composite"
+  steps:
+    - name: Start container
+      env:
+        MONGODB_PORT: 27017
+        MONGODB_IMAGE_TAG: ${{ inputs.version }}
+        MONGODB_DB: ''
+        MONGODB_USERNAME: ''
+        MONGODB_PASSWORD: ''
+      shell: bash
+      run: |
+        docker run --name mongodb \
+         --rm --detach \
+         --publish "${MONGODB_PORT}:27017" \
+         --env "MONGO_INITDB_DATABASE=${MONGODB_DB}" \
+         --env "MONGO_INITDB_ROOT_USERNAME=${MONGODB_USERNAME}" \
+         --env "MONGO_INITDB_ROOT_PASSWORD=${MONGODB_PASSWORD}" \
+         mongo:${MONGODB_IMAGE_TAG}

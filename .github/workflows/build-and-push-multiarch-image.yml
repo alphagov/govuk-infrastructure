@@ -1,0 +1,167 @@
+name: Build and push multi-arch image
+
+on:
+  workflow_call:
+    inputs:
+      imageName:
+        required: false
+        type: string
+        default: ${{ github.event.repository.name }}
+      dockerfilePath:
+        required: false
+        type: string
+        default: Dockerfile
+      context:
+        required: false
+        type: string
+        default: .
+      buildArgs:
+        required: false
+        type: string
+      gitRef:
+        required: false
+        type: string
+        default: ${{ github.sha }}
+    outputs:
+      imageTag:
+        description: "The image tag for the built image"
+        value: ${{ jobs.build-and-push-image.outputs.imageTag }}
+
+jobs:
+  build-and-push-image:
+    name: Build and push image for ${{ inputs.imageName }}
+    strategy:
+      matrix:
+        arch:
+          - amd64
+          - arm64
+        include:
+          - arch: amd64
+            runner: ubuntu-latest
+          - arch: arm64
+            runner: ubuntu-24.04-arm
+    runs-on: ${{ matrix.runner }}
+    outputs:
+      imageTag: ${{ steps.meta.outputs.version }}
+      localSha: ${{ steps.local-head.outputs.sha }}
+    permissions:
+      id-token: write
+      contents: read
+      packages: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.gitRef }}
+          show-progress: false
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: docker/setup-buildx-action@v3
+
+      - run: echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+        id: local-head
+
+      - name: Generate Image Metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: |
+            ghcr.io/${{ github.repository_owner }}/govuk/${{ inputs.imageName }}
+          labels: |
+            org.opencontainers.image.vendor=GDS
+          tags: |
+            type=raw,priority=500,value=${{ inputs.gitRef }},enable=${{ startsWith(inputs.gitRef, 'v') }}
+            type=raw,priority=400,value=${{ steps.local-head.outputs.sha }},enable=${{ !startsWith(inputs.gitRef, 'v') }}
+
+      - id: build-image
+        uses: docker/build-push-action@v6
+        with:
+          file: ${{ inputs.dockerfilepath }}
+          context: ${{ inputs.context }}
+          platforms: "linux/${{ matrix.arch }}"
+          load: true
+          provenance: false
+          build-args: ${{ inputs.buildArgs }}
+          labels: ${{ steps.meta.outputs.labels }}
+          outputs: type=image,name=ghcr.io/${{ github.repository_owner }}/govuk/${{ inputs.imageName }},push-by-digest=true,name-canonical=true,push=true
+          cache-from: type=gha,scope=build-${{ inputs.imageName }}-${{ matrix.arch }}
+          cache-to: type=gha,scope=build-${{ inputs.imageName }}-${{ matrix.arch }},mode=max
+
+      - id: export-digests
+        env:
+          DIGEST: "${{ steps.build-image.outputs.digest }}"
+        run: |
+          mkdir -p /tmp/digests
+          touch "/tmp/digests/${DIGEST#sha256:}"
+
+      - id: upload-digests
+        uses: actions/upload-artifact@v4
+        with:
+          name: digests-${{ inputs.imageName }}-${{ matrix.arch }}
+          path: /tmp/digests/*
+          if-no-files-found: error
+          retention-days: 1
+          overwrite: true
+
+  combine_manifests:
+    name: Create Docker Manifests for Built Images
+    needs:
+      - build-and-push-image
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+      packages: write
+    steps:
+      - name: Download Digests
+        uses: actions/download-artifact@v4
+        with:
+          path: /tmp/digests
+          pattern: digests-${{ inputs.imageName }}-*
+          merge-multiple: true
+
+      - uses: docker/setup-buildx-action@v3
+
+      - run: echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+        id: local-head
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Generate Image Metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: |
+            ghcr.io/${{ github.repository_owner }}/govuk/${{ inputs.imageName }}
+          labels: |
+            org.opencontainers.image.vendor=GDS
+          tags: |
+            type=raw,value=latest,enable=${{ github.ref == format('refs/heads/{0}', 'main') }}
+            type=raw,priority=500,value=${{ inputs.gitRef }},enable=${{ startsWith(inputs.gitRef, 'v') }}
+            type=raw,priority=400,value=${{ needs.build-and-push-image.outputs.localSha }},enable=${{ !startsWith(inputs.gitRef, 'v') }}
+
+      - name: Create Manifest Lists
+        env:
+          IMAGEREF_PREFIX: 'ghcr.io/${{ github.repository_owner }}/govuk/${{ inputs.imageName }}'
+        working-directory: /tmp/digests
+        run: |
+          tag_args=$(jq -cr '.tags | map("-t " + .) | join(" ")' <<< "$DOCKER_METADATA_OUTPUT_JSON")
+          printf -v sources "${IMAGEREF_PREFIX}@sha256:%s " *
+          # shellcheck disable=SC2086 # Intentional word-splitting on $tag_args and $sources.
+          docker buildx imagetools create $tag_args $sources
+
+      - name: Inspect Images
+        env:
+          IMAGEREF: 'ghcr.io/${{ github.repository_owner }}/govuk/${{ inputs.imageName }}:${{ steps.meta.outputs.version }}'
+        run: |
+          docker buildx imagetools inspect "$IMAGEREF"

@@ -1,0 +1,31 @@
+name: Build and push toolbox image to ECR
+
+on:
+  workflow_dispatch:
+    inputs:
+      gitRef:
+        description: 'Commit, tag or branch name to deploy'
+        required: true
+        type: string
+        default: 'main'
+
+  push:
+    branches:
+      - main
+    paths:
+      - "images/toolbox/Dockerfile"
+  
+  schedule:
+    - cron: '8 2 * * 1'
+
+jobs:
+  build-and-push-image:
+    uses: alphagov/govuk-infrastructure/.github/workflows/build-and-push-multiarch-image.yml@main
+    with:
+      gitRef: ${{ inputs.gitRef || github.ref }}
+      imageName: toolbox
+      dockerfilePath: images/toolbox/Dockerfile
+    permissions:
+      id-token: write
+      contents: read
+      packages: write
