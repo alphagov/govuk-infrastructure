@@ -1,0 +1,18 @@
+# Configure synonyms for terms that aren't semantically equivalent to a general-purpose semantic
+# search engine. Use sparingly when there is a clear need because the search engine doesn't
+# automatically pick up on the relationship between equivalent terms.
+#
+# Each key in this file represents the ID and displayName of a serving control with a synonym
+# action. It should contain an array of words that the search engine should consider equivalent.
+#
+# IMPORTANT: The ID needs to be between 1-63 characters and *unique both within this file and
+# amongst all controls*! Stay consistent by using `syn_` as the prefix for any synonym control added
+# in this file.
+
+# TODO: Adding a single synonym for test purposes. This should be extended with a curated set of
+# synonyms based on the list in Search API v1 (but seriously trimmed as there are many in there that
+# are no longer necessary).
+syn_hmrc:
+  - inland revenue
+  - hmrc
+  - hm revenue and customs

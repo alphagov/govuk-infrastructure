@@ -1,0 +1,4 @@
+google-cloud-discoveryengine~=0.11.2
+functions_framework~=3.4
+protobuf~=4.25.0
+googleapis-common-protos~=1.61.0

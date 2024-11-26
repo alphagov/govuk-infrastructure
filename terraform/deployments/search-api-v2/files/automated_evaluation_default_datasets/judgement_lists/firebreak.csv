@@ -1,0 +1,341 @@
+id,query,link,link_position,score,created_at
+1,cost of living,/guidance/cost-of-living-payment,0,3,2022-12-05 21:23:07
+1,cost of living,/check-benefits-financial-support,1,3,2022-12-05 21:23:07
+1,cost of living,/the-warm-home-discount-scheme,2,3,2022-12-05 21:23:07
+1,cost of living,/guidance/understanding-student-living-costs,3,1,2022-12-05 21:23:07
+1,cost of living,/winter-fuel-payment,4,3,2022-12-05 21:23:07
+1,cost of living,/cost-living-help-local-council,5,3,2022-12-05 21:23:07
+1,cost of living,/request-copy-criminal-record,6,0,2022-12-05 21:23:07
+1,cost of living,/universal-credit,7,1,2022-12-05 21:23:07
+1,cost of living,/pip,8,1,2022-12-05 21:23:07
+1,cost of living,/help-with-childcare-costs,9,1,2022-12-05 21:23:07
+2,bank holidays,/bank-holidays,0,3,2022-12-06 09:57:29
+2,bank holidays,/calculate-your-holiday-entitlement,1,1,2022-12-06 09:57:29
+2,bank holidays,/child-benefit-payment-dates,2,2,2022-12-06 09:57:29
+2,bank holidays,/apply-to-come-to-the-uk,3,0,2022-12-06 09:57:29
+2,bank holidays,/pay-self-assessment-tax-bill,4,1,2022-12-06 09:57:29
+2,bank holidays,/order-coronavirus-rapid-lateral-flow-tests,5,0,2022-12-06 09:57:29
+2,bank holidays,/government/publications/ilf-bank-holiday-costs-policy-equality-impact-assessment,6,1,2022-12-06 09:57:29
+2,bank holidays,/check-uk-visa,7,0,2022-12-06 09:57:29
+2,bank holidays,/universal-credit,8,0,2022-12-06 09:57:29
+2,bank holidays,/standard-visitor,9,0,2022-12-06 09:57:29
+3,cost of living,/guidance/cost-of-living-payment,0,3,2022-12-06 10:44:02
+3,cost of living,/check-benefits-financial-support,1,3,2022-12-06 10:44:02
+3,cost of living,/the-warm-home-discount-scheme,2,2,2022-12-06 10:44:02
+3,cost of living,/guidance/understanding-student-living-costs,3,2,2022-12-06 10:44:02
+3,cost of living,/winter-fuel-payment,4,2,2022-12-06 10:44:02
+3,cost of living,/cost-living-help-local-council,5,2,2022-12-06 10:44:02
+3,cost of living,/request-copy-criminal-record,6,0,2022-12-06 10:44:02
+3,cost of living,/universal-credit,7,1,2022-12-06 10:44:02
+3,cost of living,/pip,8,1,2022-12-06 10:44:02
+3,cost of living,/help-with-childcare-costs,9,2,2022-12-06 10:44:02
+4,help save money,/get-help-savings-low-income,0,1,2022-12-06 10:45:26
+4,help save money,/sign-in-help-to-save,1,0,2022-12-06 10:45:26
+4,help save money,/government/publications/why-actuaries-are-essential-to-government,2,0,2022-12-06 10:45:26
+4,help save money,/guidance/cost-of-living-payment,3,2,2022-12-06 10:45:26
+4,help save money,/government/collections/schools-financial-health-and-efficiency,4,0,2022-12-06 10:45:26
+4,help save money,/government/case-studies/teaching-vacancies-helps-save-time-and-money-on-recruitment,5,0,2022-12-06 10:45:26
+4,help save money,/log-in-register-hmrc-online-services,6,0,2022-12-06 10:45:26
+4,help save money,/self-assessment-tax-returns,7,0,2022-12-06 10:45:26
+4,help save money,/universal-credit,8,1,2022-12-06 10:45:26
+4,help save money,/personal-pensions-your-rights,9,0,2022-12-06 10:45:26
+5,help reduce bills,/government/news/government-joins-with-households-to-help-millions-reduce-their-energy-bills,0,2,2022-12-06 10:45:58
+5,help reduce bills,/guidance/energy-bill-relief-scheme-help-for-businesses-and-other-non-domestic-customers,1,1,2022-12-06 10:45:58
+5,help reduce bills,/improve-energy-efficiency,2,2,2022-12-06 10:45:58
+5,help reduce bills,/difficulties-paying-hmrc,3,1,2022-12-06 10:45:58
+5,help reduce bills,/pay-self-assessment-tax-bill,4,0,2022-12-06 10:45:58
+5,help reduce bills,/self-assessment-tax-returns,5,0,2022-12-06 10:45:58
+5,help reduce bills,/introduction-to-business-rates,8,0,2022-12-06 10:45:58
+5,help reduce bills,/estimate-income-tax,9,0,2022-12-06 10:45:58
+6,get a license to run bar,/government/organisations/disclosure-and-barring-service,0,0,2022-12-06 10:46:30
+6,get a license to run bar,/get-information-about-a-company,1,0,2022-12-06 10:46:30
+6,get a license to run bar,/request-copy-criminal-record,2,0,2022-12-06 10:46:30
+6,get a license to run bar,/get-vehicle-information-from-dvla,3,0,2022-12-06 10:46:30
+6,get a license to run bar,/view-driving-licence,4,0,2022-12-06 10:46:30
+6,get a license to run bar,/standard-visitor,5,0,2022-12-06 10:46:30
+6,get a license to run bar,/universal-credit,6,0,2022-12-06 10:46:30
+6,get a license to run bar,/uk-visa-sponsorship-employers,7,0,2022-12-06 10:46:30
+6,get a license to run bar,/guidance/alcohol-at-charity-meetings-and-events,8,1,2022-12-06 10:46:30
+6,get a license to run bar,/employment-agencies-and-businesses,9,0,2022-12-06 10:46:30
+7,get alcohol license,/log-in-register-hmrc-online-services,0,0,2022-12-06 10:47:00
+7,get alcohol license,/get-information-about-a-company,1,0,2022-12-06 10:47:00
+7,get alcohol license,/penalty-points-endorsements,2,0,2022-12-06 10:47:00
+7,get alcohol license,/personal-tax-account,3,0,2022-12-06 10:47:00
+7,get alcohol license,/get-vehicle-information-from-dvla,4,0,2022-12-06 10:47:00
+7,get alcohol license,/driving-disqualifications,5,0,2022-12-06 10:47:00
+7,get alcohol license,/check-alcohol-wholesaler-registration,6,0,2022-12-06 10:47:00
+7,get alcohol license,/personal-licence-to-sell-alcohol,7,3,2022-12-06 10:47:00
+7,get alcohol license,/universal-credit,8,0,2022-12-06 10:47:00
+7,get alcohol license,/premises-licence,9,3,2022-12-06 10:47:00
+8,fishing license,/fishing-licences,0,3,2022-12-06 10:48:00
+8,fishing license,/government/collections/fishing-vessel-licences,1,2,2022-12-06 10:48:00
+8,fishing license,/government/publications/fishing-vessel-licence-types,2,2,2022-12-06 10:48:00
+8,fishing license,/guidance/do-i-need-a-fishing-vessel-licence,3,2,2022-12-06 10:48:00
+8,fishing license,/guidance/understand-your-fishing-vessel-licence,4,2,2022-12-06 10:48:00
+8,fishing license,/government/publications/rod-fishing-licence-campaign,5,1,2022-12-06 10:48:00
+8,fishing license,/commercial-inland-fishing-licence,6,2,2022-12-06 10:48:00
+8,fishing license,/fishing-licence-northern-ireland,8,2,2022-12-06 10:48:00
+8,fishing license,/fishing-vessel-licence-under-10-metres,9,2,2022-12-06 10:48:00
+9,help with bills,/guidance/getting-the-energy-bills-support-scheme-discount,0,3,2022-12-06 11:10:53
+9,help with bills,/government/news/up-to-600-for-pensioners-arrive-in-bank-accounts-from-today,1,1,2022-12-06 11:10:53
+9,help with bills,/government/news/government-joins-with-households-to-help-millions-reduce-their-energy-bills,2,1,2022-12-06 11:10:53
+9,help with bills,/guidance/energy-bill-relief-scheme-help-for-businesses-and-other-non-domestic-customers,3,1,2022-12-06 11:10:53
+9,help with bills,/winter-fuel-payment,4,3,2022-12-06 11:10:53
+9,help with bills,/cost-living-help-local-council,5,3,2022-12-06 11:10:53
+9,help with bills,/improve-energy-efficiency,6,2,2022-12-06 11:10:53
+9,help with bills,/pay-self-assessment-tax-bill,7,1,2022-12-06 11:10:53
+9,help with bills,/self-assessment-tax-returns,8,1,2022-12-06 11:10:53
+9,help with bills,/universal-credit,9,1,2022-12-06 11:10:53
+10,die without will,/search-will-probate,0,1,2022-12-06 11:11:37
+10,die without will,/settled-status-eu-citizens-families,1,0,2022-12-06 11:11:37
+10,die without will,/guidance/guidance-on-making-wills-using-video-conferencing,2,1,2022-12-06 11:11:37
+10,die without will,/applying-for-probate,3,1,2022-12-06 11:11:37
+10,die without will,/inheritance-tax,4,1,2022-12-06 11:11:37
+10,die without will,/government/publications/make-a-lasting-power-of-attorney,5,1,2022-12-06 11:11:37
+10,die without will,/child-maintenance-service,6,0,2022-12-06 11:11:37
+10,die without will,/guidance/technical-guidance-for-official-receivers/56-deceased-insolvents,7,1,2022-12-06 11:11:37
+10,die without will,/view-driving-licence,8,0,2022-12-06 11:11:37
+10,die without will,/make-will,9,1,2022-12-06 11:11:37
+11,contact government,/guidance/cost-of-living-payment,0,0,2022-12-06 11:12:12
+11,contact government,/find-a-visa-application-centre,1,0,2022-12-06 11:12:12
+11,contact government,/tell-hmrc-change-of-details,2,1,2022-12-06 11:12:12
+11,contact government,/check-income-tax-current-year,3,0,2022-12-06 11:12:12
+11,contact government,/lost-national-insurance-number,4,0,2022-12-06 11:12:12
+11,contact government,/tax-overpayments-and-underpayments,5,0,2022-12-06 11:12:12
+11,contact government,/biometric-residence-permits,6,0,2022-12-06 11:12:12
+11,contact government,/life-in-the-uk-test,7,0,2022-12-06 11:12:12
+11,contact government,/apply-to-come-to-the-uk,8,0,2022-12-06 11:12:12
+11,contact government,/self-assessment-tax-returns,9,0,2022-12-06 11:12:12
+12,contact home office,/government/news/ukhsa-update-on-scarlet-fever-and-invasive-group-a-strep,0,0,2022-12-06 11:12:41
+12,contact home office,/guidance/getting-the-energy-bills-support-scheme-discount,1,0,2022-12-06 11:12:41
+12,contact home office,/government/publications/application-registration-card-arc-enquiry,2,1,2022-12-06 11:12:41
+12,contact home office,/biometric-residence-permits,3,0,2022-12-06 11:12:41
+12,contact home office,/government/organisations/companies-house,4,0,2022-12-06 11:12:41
+12,contact home office,/employee-immigration-employment-status,5,0,2022-12-06 11:12:41
+12,contact home office,/check-job-applicant-right-to-work,6,0,2022-12-06 11:12:41
+12,contact home office,/settled-status-eu-citizens-families,7,0,2022-12-06 11:12:41
+12,contact home office,/child-benefit-tax-charge,8,0,2022-12-06 11:12:41
+12,contact home office,/electoral-register,9,0,2022-12-06 11:12:41
+13,contact passport office,/passport-advice-line,0,3,2022-12-06 11:13:20
+13,contact passport office,/renew-adult-passport,1,2,2022-12-06 11:13:20
+13,contact passport office,/get-a-child-passport,2,2,2022-12-06 11:13:20
+13,contact passport office,/apply-citizenship-indefinite-leave-to-remain,3,1,2022-12-06 11:13:20
+13,contact passport office,/check-job-applicant-right-to-work,4,0,2022-12-06 11:13:20
+13,contact passport office,/biometric-residence-permits,5,0,2022-12-06 11:13:20
+13,contact passport office,/guidance/visa-decision-waiting-times-applications-outside-the-uk,6,1,2022-12-06 11:13:20
+13,contact passport office,/view-prove-immigration-status,7,0,2022-12-06 11:13:20
+13,contact passport office,/uk-border-control,8,1,2022-12-06 11:13:20
+13,contact passport office,/id-for-driving-licence,9,0,2022-12-06 11:13:20
+14,contact tax,/contact-the-dvla,0,1,2022-12-06 11:13:54
+14,contact tax,/government/organisations/hm-revenue-customs/contact/income-tax-enquiries-for-individuals-pensioners-and-employees,1,3,2022-12-06 11:13:54
+14,contact tax,/contact-hmrc,2,3,2022-12-06 11:13:54
+14,contact tax,/check-income-tax-current-year,3,1,2022-12-06 11:13:54
+14,contact tax,/the-warm-home-discount-scheme,4,0,2022-12-06 11:13:54
+14,contact tax,/guidance/cost-of-living-payment,5,0,2022-12-06 11:13:54
+14,contact tax,/self-assessment-tax-returns,6,1,2022-12-06 11:13:54
+14,contact tax,/winter-fuel-payment,7,0,2022-12-06 11:13:54
+14,contact tax,/tax-free-childcare,8,1,2022-12-06 11:13:54
+14,contact tax,/tax-codes,9,2,2022-12-06 11:13:54
+15,contact a job centre,/contact-jobcentre-plus,0,3,2022-12-06 12:11:11
+15,contact a job centre,/employment-support-allowance,1,1,2022-12-06 12:11:11
+15,contact a job centre,/government/organisations/department-for-work-pensions,2,1,2022-12-06 12:11:11
+15,contact a job centre,/budgeting-help-benefits,3,1,2022-12-06 12:11:11
+15,contact a job centre,/jobseekers-allowance,4,1,2022-12-06 12:11:11
+15,contact a job centre,/universal-credit,5,1,2022-12-06 12:11:11
+15,contact a job centre,/bereavement-support-payment,6,1,2022-12-06 12:11:11
+15,contact a job centre,/paye-forms-p45-p60-p11d,7,1,2022-12-06 12:11:11
+15,contact a job centre,/national-insurance-credits,8,1,2022-12-06 12:11:11
+15,contact a job centre,/guidance/universal-credit-advances,9,1,2022-12-06 12:11:11
+16,who runs GOV.UK,/government/organisations/companies-house,0,0,2022-12-06 12:11:49
+16,who runs GOV.UK,/government/organisations/uk-visas-and-immigration,1,0,2022-12-06 12:11:49
+16,who runs GOV.UK,/self-assessment-tax-returns,2,0,2022-12-06 12:11:49
+16,who runs GOV.UK,/government/organisations/driver-and-vehicle-licensing-agency,3,0,2022-12-06 12:11:49
+16,who runs GOV.UK,/guidance/govuk-transition-guidance-for-agencies,4,1,2022-12-06 12:11:49
+16,who runs GOV.UK,/government/organisations/civil-service-operational-delivery-profession,5,0,2022-12-06 12:11:49
+16,who runs GOV.UK,/government/publications/self-assessment-uk-property-sa105,6,0,2022-12-06 12:11:49
+16,who runs GOV.UK,/universal-credit,7,0,2022-12-06 12:11:49
+16,who runs GOV.UK,/government/organisations/hm-revenue-customs,8,0,2022-12-06 12:11:49
+16,who runs GOV.UK,/check-mot-status,9,0,2022-12-06 12:11:49
+17,complain about GOV.UK,/government/organisations/independent-complaints-reviewer,0,0,2022-12-06 12:12:15
+17,complain about GOV.UK,/personal-tax-account,1,0,2022-12-06 12:12:15
+17,complain about GOV.UK,/contact-hmrc,2,0,2022-12-06 12:12:15
+17,complain about GOV.UK,/government/organisations/judicial-appointments-and-conduct-ombudsman,3,0,2022-12-06 12:12:15
+17,complain about GOV.UK,/government/organisations/public-services-ombudsman-for-wales,4,0,2022-12-06 12:12:15
+17,complain about GOV.UK,/government/organisations/housing-ombudsman,5,0,2022-12-06 12:12:15
+17,complain about GOV.UK,/get-information-about-a-company,6,0,2022-12-06 12:12:15
+17,complain about GOV.UK,/government/organisations/driver-and-vehicle-licensing-agency,7,0,2022-12-06 12:12:15
+17,complain about GOV.UK,/government/organisations/the-legal-ombudsman,8,0,2022-12-06 12:12:15
+17,complain about GOV.UK,/government/organisations/local-government-ombudsman,9,0,2022-12-06 12:12:15
+18,anchor link,/guidance/content-design/links,0,3,2022-12-06 13:08:11
+18,anchor link,/government/publications/mgn-661-mf-navigation-safe-and-responsible-anchoring-and-fishing-practices,1,0,2022-12-06 13:08:11
+18,anchor link,/government/publications/shoreline-management-plans-smps,2,0,2022-12-06 13:08:11
+18,anchor link,/government/publications/managing-marine-non-licensable-activities-studland-bay-next-steps,3,0,2022-12-06 13:08:11
+19,help with bills,/guidance/getting-the-energy-bills-support-scheme-discount,0,2,2022-12-07 13:44:25
+19,help with bills,/government/news/up-to-600-for-pensioners-arrive-in-bank-accounts-from-today,1,1,2022-12-07 13:44:25
+19,help with bills,/government/news/government-joins-with-households-to-help-millions-reduce-their-energy-bills,2,1,2022-12-07 13:44:25
+19,help with bills,/guidance/energy-bill-relief-scheme-help-for-businesses-and-other-non-domestic-customers,3,2,2022-12-07 13:44:25
+19,help with bills,/winter-fuel-payment,4,2,2022-12-07 13:44:25
+19,help with bills,/cost-living-help-local-council,5,2,2022-12-07 13:44:25
+19,help with bills,/improve-energy-efficiency,6,2,2022-12-07 13:44:25
+19,help with bills,/pay-self-assessment-tax-bill,7,0,2022-12-07 13:44:25
+19,help with bills,/self-assessment-tax-returns,8,0,2022-12-07 13:44:25
+19,help with bills,/universal-credit,9,1,2022-12-07 13:44:25
+20,state pension,/check-state-pension,0,3,2022-12-07 13:48:37
+20,state pension,/state-pension-age,1,3,2022-12-07 13:48:37
+20,state pension,/get-state-pension,2,3,2022-12-07 13:48:37
+20,state pension,/state-pension,3,3,2022-12-07 13:48:37
+20,state pension,/new-state-pension,4,3,2022-12-07 13:48:37
+20,state pension,/government/publications/application-for-a-state-pension-statement,5,3,2022-12-07 13:48:37
+20,state pension,/additional-state-pension,6,3,2022-12-07 13:48:37
+20,state pension,/check-national-insurance-record,7,2,2022-12-07 13:48:37
+20,state pension,/contact-pension-service,8,3,2022-12-07 13:48:37
+20,state pension,/contracted-out,9,3,2022-12-07 13:48:37
+21,scarlet fever,/government/news/ukhsa-update-on-scarlet-fever-and-invasive-group-a-strep,0,3,2022-12-07 13:49:40
+21,scarlet fever,/government/publications/scarlet-fever-managing-outbreaks-in-schools-and-nurseries,1,3,2022-12-07 13:49:40
+21,scarlet fever,/government/publications/group-a-streptococcal-infections-activity-during-the-2022-to-2023-season,2,3,2022-12-07 13:49:40
+21,scarlet fever,/government/collections/scarlet-fever-guidance-and-data,3,3,2022-12-07 13:49:40
+21,scarlet fever,/government/publications/scarlet-fever-symptoms-diagnosis-treatment,4,3,2022-12-07 13:49:40
+21,scarlet fever,/government/news/parents-encouraged-to-be-aware-of-scarlet-fever-symptoms,5,3,2022-12-07 13:49:40
+21,scarlet fever,/government/publications/group-a-streptococcal-infections-activity-during-the-2021-to-2022-season,6,2,2022-12-07 13:49:40
+21,scarlet fever,/government/publications/group-a-streptococcal-infections-activity-during-the-2019-to-2020-season,7,2,2022-12-07 13:49:40
+21,scarlet fever,/government/collections/group-a-streptococcal-infections-guidance-and-data,8,3,2022-12-07 13:49:40
+21,scarlet fever,/government/news/increase-in-scarlet-fever-across-england,9,3,2022-12-07 13:49:40
+22,help,/get-help-savings-low-income,0,1,2022-12-07 13:50:25
+22,help,/guidance/cost-of-living-payment,1,2,2022-12-07 13:50:25
+22,help,/contact-ukvi-inside-outside-uk,2,2,2022-12-07 13:50:25
+22,help,/sign-in-help-to-save,3,1,2022-12-07 13:50:25
+22,help,/tax-help,4,2,2022-12-07 13:50:25
+22,help,/government/collections/find-energy-grants-for-you-home-help-to-heat,5,2,2022-12-07 13:50:25
+22,help,/financial-help-disabled,6,2,2022-12-07 13:50:25
+22,help,/help-with-childcare-costs,7,2,2022-12-07 13:50:25
+22,help,/winter-fuel-payment,8,1,2022-12-07 13:50:25
+22,help,/log-in-register-hmrc-online-services,9,0,2022-12-07 13:50:25
+23,cold winter payment,/winter-fuel-payment,0,2,2022-12-07 13:52:02
+23,cold winter payment,/guidance/cost-of-living-payment,1,1,2022-12-07 13:52:02
+23,cold winter payment,/cold-weather-payment,2,3,2022-12-07 13:52:02
+23,cold winter payment,/government/statistics/winter-fuel-payment-statistics-for-winter-2020-to-2021-and-winter-2021-to-2022,3,1,2022-12-07 13:52:02
+23,cold winter payment,/government/statistics/cold-weather-payment-estimates-2021-to-2022,4,1,2022-12-07 13:52:02
+23,cold winter payment,/government/statistics/cold-weather-payment-estimates-2022-to-2023,5,1,2022-12-07 13:52:02
+23,cold winter payment,/government/statistics/winter-fuel-payment-statistics-for-winter-2019-to-2020,6,1,2022-12-07 13:52:02
+23,cold winter payment,/government/statistics/cold-weather-payment-estimates-2020-to-2021,7,1,2022-12-07 13:52:02
+23,cold winter payment,/the-warm-home-discount-scheme,8,2,2022-12-07 13:52:02
+23,cold winter payment,/guidance/getting-the-energy-bills-support-scheme-discount,9,2,2022-12-07 13:52:02
+24,Winter fuel payment,/winter-fuel-payment,0,1,2022-12-07 14:01:40
+24,Winter fuel payment,/government/publications/winter-fuel-payment-claim-form,1,2,2022-12-07 14:01:40
+24,Winter fuel payment,/government/news/up-to-600-for-pensioners-arrive-in-bank-accounts-from-today,2,1,2022-12-07 14:01:40
+24,Winter fuel payment,/government/collections/winter-fuel-payments-caseload-and-household-figures,3,1,2022-12-07 14:01:40
+24,Winter fuel payment,/guidance/cost-of-living-payment,4,2,2022-12-07 14:01:40
+24,Winter fuel payment,/government/statistics/winter-fuel-payment-statistics-for-winter-2020-to-2021-and-winter-2021-to-2022,5,1,2022-12-07 14:01:40
+24,Winter fuel payment,/government/publications/winter-fuel-payment-claim-form-eea-and-switzerland,6,2,2022-12-07 14:01:40
+24,Winter fuel payment,/guidance/getting-the-energy-bills-support-scheme-discount,7,2,2022-12-07 14:01:40
+24,Winter fuel payment,/government/publications/winter-fuel-payment-statistics-background-information-and-methodology-from-winter-2020-to-2021,8,1,2022-12-07 14:01:40
+24,Winter fuel payment,/government/statistics/winter-fuel-payment-statistics-for-winter-2019-to-2020,9,1,2022-12-07 14:01:40
+25,What to do when my spouse has died,/guidance/cost-of-living-payment,0,0,2022-12-07 14:03:03
+25,What to do when my spouse has died,/after-a-death,1,2,2022-12-07 14:03:03
+25,What to do when my spouse has died,/apply-to-come-to-the-uk,2,0,2022-12-07 14:03:03
+25,What to do when my spouse has died,/self-assessment-tax-returns,3,0,2022-12-07 14:03:03
+25,What to do when my spouse has died,/pay-self-assessment-tax-bill,4,0,2022-12-07 14:03:03
+25,What to do when my spouse has died,/get-a-passport-urgently,5,0,2022-12-07 14:03:03
+25,What to do when my spouse has died,/log-in-register-hmrc-online-services,6,0,2022-12-07 14:03:03
+25,What to do when my spouse has died,/view-prove-immigration-status,7,0,2022-12-07 14:03:03
+25,What to do when my spouse has died,/standard-visitor,8,0,2022-12-07 14:03:03
+25,What to do when my spouse has died,/report-covid19-result,9,0,2022-12-07 14:03:03
+26,Pot holes in my road,/contact-the-dvla,0,0,2022-12-07 14:04:01
+26,Pot holes in my road,/government/organisations/driver-and-vehicle-licensing-agency,1,0,2022-12-07 14:04:01
+26,Pot holes in my road,/sold-bought-vehicle,2,0,2022-12-07 14:04:01
+26,Pot holes in my road,/check-national-insurance-record,3,0,2022-12-07 14:04:01
+26,Pot holes in my road,/government/publications/development-matters--2,4,0,2022-12-07 14:04:01
+26,Pot holes in my road,/check-vehicle-tax,5,0,2022-12-07 14:04:01
+26,Pot holes in my road,/make-a-sorn,6,0,2022-12-07 14:04:01
+26,Pot holes in my road,/residential-property-tribunal-decisions/kingsmead-park-coggeshall-road-braintree-essex-cm7-9dw-cam-slash-22uc-slash-phi-slash-2022-slash-0003,7,0,2022-12-07 14:04:01
+26,Pot holes in my road,/report-covid19-result,8,0,2022-12-07 14:04:01
+26,Pot holes in my road,/government/publications/barriers-to-elected-office-for-disabled-people,9,0,2022-12-07 14:04:01
+27,Made redundant how to claim back income tax,/government/publications/income-tax-personal-allowance-and-basic-rate-limit-for-2016-to-2017,0,1,2022-12-07 14:06:46
+27,Made redundant how to claim back income tax,/income-tax-rates,1,1,2022-12-07 14:06:46
+27,Made redundant how to claim back income tax,/guidance/redundancy-help-finding-work-and-claiming-benefits,2,2,2022-12-07 14:06:46
+27,Made redundant how to claim back income tax,/the-warm-home-discount-scheme,3,0,2022-12-07 14:06:46
+27,Made redundant how to claim back income tax,/winter-fuel-payment,4,0,2022-12-07 14:06:46
+27,Made redundant how to claim back income tax,/guidance/cost-of-living-payment,5,0,2022-12-07 14:06:46
+27,Made redundant how to claim back income tax,/self-assessment-tax-returns,6,1,2022-12-07 14:06:46
+27,Made redundant how to claim back income tax,/pay-self-assessment-tax-bill,7,1,2022-12-07 14:06:46
+27,Made redundant how to claim back income tax,/tax-free-childcare,8,1,2022-12-07 14:06:46
+27,Made redundant how to claim back income tax,/get-tax-free-childcare,9,1,2022-12-07 14:06:46
+28,Travel to EC from uk,/apply-to-come-to-the-uk,0,0,2022-12-07 14:08:14
+28,Travel to EC from uk,/standard-visitor,1,0,2022-12-07 14:08:14
+28,Travel to EC from uk,/check-uk-visa,2,0,2022-12-07 14:08:14
+28,Travel to EC from uk,/log-in-register-hmrc-online-services,3,0,2022-12-07 14:08:14
+28,Travel to EC from uk,/foreign-travel-advice/anguilla,4,0,2022-12-07 14:08:14
+28,Travel to EC from uk,/get-a-passport-urgently,5,0,2022-12-07 14:08:14
+28,Travel to EC from uk,/skilled-worker-visa,6,0,2022-12-07 14:08:14
+28,Travel to EC from uk,/send-vat-return,7,0,2022-12-07 14:08:14
+28,Travel to EC from uk,/vehicle-log-book,8,0,2022-12-07 14:08:14
+28,Travel to EC from uk,/universal-credit,9,0,2022-12-07 14:08:14
+29,Party wall agreement,/government/publications/preventing-and-resolving-disputes-in-relation-to-party-walls,0,1,2022-12-07 17:43:32
+29,Party wall agreement,/party-walls-building-works,1,3,2022-12-07 17:43:32
+29,Party wall agreement,/government/publications/boundary-agreements-and-determined-boundaries,2,2,2022-12-07 17:43:32
+29,Party wall agreement,/your-property-boundaries,3,3,2022-12-07 17:43:32
+29,Party wall agreement,/government/publications/land-registry-plans-boundaries,4,2,2022-12-07 17:43:32
+29,Party wall agreement,/guidance/domestic-private-rented-property-minimum-energy-efficiency-standard-landlord-guidance,5,0,2022-12-07 17:43:32
+29,Party wall agreement,/guidance/check-when-aggregates-levy-applies,6,0,2022-12-07 17:43:32
+29,Party wall agreement,/government/publications/carriage-of-dangerous-goods-guidance-note-21,7,0,2022-12-07 17:43:32
+29,Party wall agreement,/guidance/how-to-bid-for-government-contracts-as-an-sme-effectively,8,0,2022-12-07 17:43:32
+29,Party wall agreement,/guidance/open-access-land-and-the-coastal-margin-how-to-restrict-public-access,9,0,2022-12-07 17:43:32
+30,levelling up,/government/publications/levelling-up-the-united-kingdom,0,3,2022-12-08 17:29:59
+30,levelling up,/government/organisations/department-for-levelling-up-housing-and-communities,1,3,2022-12-08 17:29:59
+30,levelling up,/government/collections/levelling-up-and-regeneration-bill,2,2,2022-12-08 17:29:59
+30,levelling up,/government/collections/new-levelling-up-and-community-investments,3,2,2022-12-08 17:29:59
+30,levelling up,/guidance/levelling-up-premium-payments-for-teachers,4,2,2022-12-08 17:29:59
+30,levelling up,/government/news/communities-put-at-heart-of-planning-system-as-government-strengthens-levelling-up-and-regeneration-bill,5,1,2022-12-08 17:29:59
+30,levelling up,/guidance/levelling-up-fund-round-2-frequently-asked-questions,6,1,2022-12-08 17:29:59
+30,levelling up,/dbs-update-service,7,0,2022-12-08 17:29:59
+30,levelling up,/government/ministers/secretary-of-state-for-levelling-up-housing-and-communities,8,1,2022-12-08 17:29:59
+30,levelling up,/request-copy-criminal-record,9,0,2022-12-08 17:29:59
+31,dla for children,/dla-disability-living-allowance-benefit,0,1,2022-12-08 17:35:43
+31,dla for children,/government/publications/disability-living-allowance-for-children-claim-form,1,2,2022-12-08 17:35:43
+31,dla for children,/disability-living-allowance-children,2,3,2022-12-08 17:35:43
+31,dla for children,/check-benefits-financial-support,3,1,2022-12-08 17:35:43
+31,dla for children,/guidance/cost-of-living-payment,4,1,2022-12-08 17:35:43
+31,dla for children,/disability-benefits-helpline,5,1,2022-12-08 17:35:43
+31,dla for children,/winter-fuel-payment,6,0,2022-12-08 17:35:43
+31,dla for children,/cold-weather-payment,7,0,2022-12-08 17:35:43
+31,dla for children,/pip,8,1,2022-12-08 17:35:43
+31,dla for children,/30-hours-free-childcare,9,0,2022-12-08 17:35:43
+32,exporting to ireland,/export-goods,0,1,2022-12-08 17:40:34
+32,exporting to ireland,/export-health-certificates/export-amphibians-to-ireland-8619ehc,1,1,2022-12-08 17:40:34
+32,exporting to ireland,/government/publications/ec3-form-ec-firearms-and-ammunition-transfer-dcoument-for-siel-applications,2,0,2022-12-08 17:40:34
+32,exporting to ireland,/export-health-certificates/export-rodents-to-the-repbublic-of-ireland-8614ehc,3,1,2022-12-08 17:40:34
+32,exporting to ireland,/guidance/export-plants-and-plant-products-from-great-britain-and-northern-ireland,4,0,2022-12-08 17:40:34
+32,exporting to ireland,/export-health-certificates/export-live-reptiles-to-ireland-certificate-9045,5,1,2022-12-08 17:40:34
+32,exporting to ireland,/guidance/making-an-indirect-export-from-northern-ireland,6,0,2022-12-08 17:40:34
+32,exporting to ireland,/export-health-certificates/export-of-live-amphibians-to-northern-ireland-certificate-8645,8,0,2022-12-08 17:40:34
+32,exporting to ireland,/export-health-certificates/export-of-live-lagomorphs-to-northern-ireland-certificate-8644,9,0,2022-12-08 17:40:34
+33,import car,/import-goods-into-uk,0,1,2022-12-08 17:42:14
+33,import car,/government/publications/gb-conversion-iva-passenger-cars,1,2,2022-12-08 17:42:14
+33,import car,/importing-vehicles-into-the-uk,2,3,2022-12-08 17:42:14
+33,import car,/government/publications/iva-application-form-for-passenger-cars-iva-1c,3,2,2022-12-08 17:42:14
+33,import car,/government/publications/inf106-how-to-import-a-vehicle-into-the-united-kingdom-uk,4,2,2022-12-08 17:42:14
+33,import car,/guidance/transfer-of-residence-to-great-britain,5,2,2022-12-08 17:42:14
+33,import car,/log-in-register-hmrc-online-services,6,0,2022-12-08 17:42:14
+33,import car,/government/publications/portugal-importation-of-motor-vehicles,7,1,2022-12-08 17:42:14
+33,import car,/government/publications/declaration-that-a-vehicle-is-new,8,2,2022-12-08 17:42:14
+33,import car,/guidance/telling-hmrc-youre-importing-multiple-vehicles,9,2,2022-12-08 17:42:14
+34,northern ireland,/find-local-council,0,1,2022-12-08 17:43:33
+34,northern ireland,/personal-tax-account,1,0,2022-12-08 17:43:33
+34,northern ireland,/government/organisations/companies-house,2,0,2022-12-08 17:43:33
+34,northern ireland,/guidance/cost-of-living-payment,3,0,2022-12-08 17:43:33
+34,northern ireland,/bank-holidays,4,1,2022-12-08 17:43:33
+34,northern ireland,/search-property-information-land-registry,5,0,2022-12-08 17:43:33
+34,northern ireland,/apply-online-to-replace-a-driving-licence,6,0,2022-12-08 17:43:33
+34,northern ireland,/check-medicines-online,7,1,2022-12-08 17:43:33
+34,northern ireland,/find-energy-certificate,8,0,2022-12-08 17:43:33
+34,northern ireland,/request-copy-criminal-record,9,0,2022-12-08 17:43:33
+35,how many points on my driving license,/check-driving-information,0,3,2022-12-09 14:49:21
+35,how many points on my driving license,/check-income-tax-current-year,1,0,2022-12-09 14:49:21
+35,how many points on my driving license,/renew-driving-licence-at-70,2,1,2022-12-09 14:49:21
+35,how many points on my driving license,/view-driving-licence,3,3,2022-12-09 14:49:21
+35,how many points on my driving license,/change-address-driving-licence,4,2,2022-12-09 14:49:21
+35,how many points on my driving license,/guidance/apply-for-an-sia-licence,5,0,2022-12-09 14:49:21
+35,how many points on my driving license,/change-address-v5c,6,1,2022-12-09 14:49:21
+35,how many points on my driving license,/renew-driving-licence,7,1,2022-12-09 14:49:21
+35,how many points on my driving license,/personal-tax-account,8,0,2022-12-09 14:49:21
+35,how many points on my driving license,/request-copy-criminal-record,9,0,2022-12-09 14:49:21

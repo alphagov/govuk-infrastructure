@@ -1,0 +1,68 @@
+query,link,score_description,score
+logbook,/vehicle-log-book,3 perfect,3
+logbook,/change-address-v5c,3 perfect,3
+eu ss,/settled-status-eu-citizens-families,3 perfect,3
+gate way,/log-in-register-hmrc-online-services,2 good,2
+boot camp,/guidance/find-a-skills-bootcamp,3 perfect,3
+payinghmrc,/topic/dealing-with-hmrc/paying-hmrc,3 perfect,3
+logon,/sign-in,3 perfect,3
+on line chat,/contact-hmrc,3 perfect,3
+skill boot camp,/guidance/find-a-skills-bootcamp,3 perfect,3
+ask hmrc on line,/contact-hmrc,3 perfect,3
+boot camps,/guidance/find-a-skills-bootcamp,3 perfect,3
+government gate way,/log-in-register-hmrc-online-services,2 good,2
+chat on line,/contact-hmrc,3 perfect,3
+skills boot camps,/guidance/find-a-skills-bootcamp,3 perfect,3
+corona virus,/coronavirus,3 perfect,3
+homeschool,/home-schooling-information-council,3 perfect,3
+homeschool,/home-education,3 perfect,3
+over paid tax,/tax-overpayments-and-underpayments,3 perfect,3
+taxcode,/tax-codes,3 perfect,3
+taxcode,/check-income-tax-current-year,2 good,2
+taxcode,/personal-tax-account,2 good,2
+helpforhouseholds,https://helpforhouseholds.campaign.gov.uk/,3 perfect,3
+helpforhouseholds,/cost-of-living,2 good,2
+landregistry,/government/organisations/land-registry,3 perfect,3
+m.o.t,/check-mot-status,3 perfect,3
+childcareaccount,/sign-in-childcare-account,3 perfect,3
+personaltax,/personal-tax-account,3 perfect,3
+personaltaxaccount,/personal-tax-account,3 perfect,3
+childmaintenance,/child-maintenance-service,3 perfect,3
+helpforhousehold,https://helpforhouseholds.campaign.gov.uk/,3 perfect,3
+childtax,/sign-in-childcare-account,3 perfect,3
+eusettlement,/settled-status-eu-citizens-families,3 perfect,3
+birthcertificate,/order-copy-birth-death-marriage-certificate,3 perfect,3
+helpforhomes,https://helpforhouseholds.campaign.gov.uk/,3 perfect,3
+mypension,/check-state-pension,3 perfect,3
+simpleassessment,/simple-assessment,3 perfect,3
+m.o.t.,/check-mot-history,3 perfect,3
+householdhelp,https://helpforhouseholds.campaign.gov.uk/,3 perfect,3
+nicontributions,/check-national-insurance-record,3 perfect,3
+minimumwage,/national-minimum-wage-rates,3 perfect,3
+visaapplication,/sign-in-visa,3 perfect,3
+helpforhouse,https://helpforhouseholds.campaign.gov.uk/,3 perfect,3
+helphousehold,https://helpforhouseholds.campaign.gov.uk/,3 perfect,3
+payvat,/pay-vat,3 perfect,3
+n.i.contributions,/check-national-insurance-record,3 perfect,3
+dartfordcrossing,/pay-dartford-crossing-charge,3 perfect,3
+‘fl401t,/government/publications/apply-for-a-non-molestation-or-occupation-order-fl397,3 perfect,3
+payyoursimpleassessmenttaxbill,/simple-assessment,3 perfect,3
+payselfassessment,/pay-self-assessment-tax-bill,3 perfect,3
+landregister,/government/organisations/land-registry,3 perfect,3
+p.o.a,/power-of-attorney,3 perfect,3
+self.assessment,/log-in-file-self-assessment-tax-return,3 perfect,3
+helphouseholds,https://helpforhouseholds.campaign.gov.uk/,3 perfect,3
+l.p.a,/power-of-attorney,3 perfect,3
+u.t.r,/find-utr-number,3 perfect,3
+personalaccount,/personal-tax-account,3 perfect,3
+childmaintenanceservice,/child-maintenance-service,3 perfect,3
+helpthehousehold,https://helpforhouseholds.campaign.gov.uk/,3 perfect,3
+nhspension,/government/collections/nhs-pensions,2 good,2
+birthcertificates,/order-copy-birth-death-marriage-certificate,3 perfect,3
+payclass3nationalinsurance,/pay-voluntary-class-3-national-insurance,3 perfect,3
+titledeeds,/get-information-about-property-and-land/copies-of-deeds,3 perfect,3
+c.o.l,/cost-of-living,3 perfect,3
+m.o.t,/check-mot-status,3 perfect,3
+m.o.t.,/check-mot-history,3 perfect,3
+web chat,/government/publications/web-chat-moderation-policy,1 okay,1
+web chat,/guidance/using-chatbots-and-webchat-tools,2 good,2
