@@ -1,0 +1,364 @@
+query,link,score_description,score
+not,/check-mot-history,3 perfect,3
+not,/check-mot-status,3 perfect,3
+sing in,/sign-in,3 perfect,3
+sing in,/log-in-register-hmrc-online-services,3 perfect,3
+hrmc,/log-in-register-hmrc-online-services,3 perfect,3
+hrmc,/contact-hmrc,3 perfect,3
+hercules,/log-in-register-hmrc-online-services,3 perfect,3
+pâté,/log-in-register-hmrc-online-services,3 perfect,3
+pays,/log-in-register-hmrc-online-services,2 good,2
+dependent,/uk-family-visa,3 perfect,3
+ute,/find-utr-number,2 good,2
+a rated sponsership,/uk-visa-sponsorship-employers,3 perfect,3
+page,/log-in-register-hmrc-online-services,2 good,2
+getaway,/log-in-register-hmrc-online-services,2 good,2
+caters allowance,/carers-allowance,3 perfect,3
+lap,/power-of-attorney,2 good,2
+hmrs,/log-in-register-hmrc-online-services,3 perfect,3
+pate,/log-in-register-hmrc-online-services,3 perfect,3
+paying hrmc,/topic/dealing-with-hmrc/paying-hmrc,3 perfect,3
+paying harv,/topic/dealing-with-hmrc/paying-hmrc,3 perfect,3
+pay as you go,/log-in-register-hmrc-online-services,2 good,2
+concil tax,/council-tax-bands,3 perfect,3
+concil tax,/pay-council-tax,3 perfect,3
+concil tax,/council-tax-arrears,2 good,2
+paying hercules,/topic/dealing-with-hmrc/paying-hmrc,3 perfect,3
+a rated sponcership,/uk-visa-sponsorship-employers,3 perfect,3
+tax rebait,/claim-tax-refund,3 perfect,3
+counsil tax,/council-tax-bands,3 perfect,3
+counsil tax,/pay-council-tax,3 perfect,3
+counsil tax,/council-tax-arrears,2 good,2
+coucil tax,/council-tax-bands,3 perfect,3
+coucil tax,/pay-council-tax,3 perfect,3
+coucil tax,/council-tax-arrears,2 good,2
+corperation tax,/corporation-tax,3 perfect,3
+tax refound,/claim-tax-refund,3 perfect,3
+visa sponsership,/uk-visa-sponsorship-employers,3 perfect,3
+veichle tax,/vehicle-tax,3 perfect,3
+tax cod,/tax-codes,3 perfect,3
+dependents,/uk-family-visa,3 perfect,3
+pay your cooperation tax bill,/pay-corporation-tax,3 perfect,3
+pay your corperation tax bill,/pay-corporation-tax,3 perfect,3
+tax cide,/tax-codes,3 perfect,3
+rod tax,/vehicle-tax,3 perfect,3
+pay your coporation tax bill,/pay-corporation-tax,3 perfect,3
+ni contrabutions,/check-national-insurance-record,3 perfect,3
+poi tax refund,/guidance/claim-a-refund-of-income-tax-deducted-from-savings-and-investments,3 perfect,3
+pay your cooperation tax,/pay-corporation-tax,3 perfect,3
+ask hrmc,/contact-hmrc,3 perfect,3
+vehcile tax,/vehicle-tax,3 perfect,3
+pay corperation tax,/pay-corporation-tax,3 perfect,3
+vehichle tax,/vehicle-tax,3 perfect,3
+coporation tax,/corporation-tax,3 perfect,3
+tax releif,/income-tax-reliefs,3 perfect,3
+coperation tax,/corporation-tax,3 perfect,3
+pay cooperation tax,/pay-corporation-tax,3 perfect,3
+paying hmrs,/topic/dealing-with-hmrc/paying-hmrc,3 perfect,3
+corparation tax,/corporation-tax,3 perfect,3
+dependent,/uk-family-visa,3 perfect,3
+pay as your earn,/log-in-register-hmrc-online-services,3 perfect,3
+marrage tax allowance,/marriage-allowance,3 perfect,3
+personal tax accpunt,/personal-tax-account,3 perfect,3
+sponsership visa,/uk-visa-sponsorship-employers,3 perfect,3
+blue bage,/apply-blue-badge,3 perfect,3
+vehicular tax,/vehicle-tax,3 perfect,3
+tax rebat,/claim-tax-refund,3 perfect,3
+annual tax summery,/guidance/annual-tax-summary,3 perfect,3
+state pendion,/new-state-pension,3 perfect,3
+petsonal tax account,/personal-tax-account,3 perfect,3
+no,/national-insurance-rates-letters,3 perfect,3
+pensio,/check-state-pension,3 perfect,3
+chilcare,/sign-in-childcare-account,3 perfect,3
+if,/sign-in-universal-credit,3 perfect,3
+devorce,/divorce,3 perfect,3
+apprenteships,/apply-apprenticeship,3 perfect,3
+previsional,/apply-first-provisional-driving-licence,3 perfect,3
+settlment,/settled-status-eu-citizens-families,3 perfect,3
+shercode,/prove-right-to-work,3 perfect,3
+shercode,/view-prove-immigration-status,3 perfect,3
+appren,/apply-apprenticeship,3 perfect,3
+pesion,/check-state-pension,3 perfect,3
+aprentaships,/apply-apprenticeship,3 perfect,3
+apprenteship,/apply-apprenticeship,3 perfect,3
+aprentiships,/apply-apprenticeship,3 perfect,3
+selfassement,/log-in-file-self-assessment-tax-return,3 perfect,3
+pervisional,/apply-first-provisional-driving-licence,3 perfect,3
+dval,/government/organisations/driver-and-vehicle-licensing-agency,3 perfect,3
+aprentiship,/apply-apprenticeship,3 perfect,3
+apprentship,/apply-apprenticeship,3 perfect,3
+aprenticeship,/apply-apprenticeship,3 perfect,3
+appreticeships,/apply-apprenticeship,3 perfect,3
+apprentships,/apply-apprenticeship,3 perfect,3
+aprenticeships,/apply-apprenticeship,3 perfect,3
+prnsion,/check-state-pension,3 perfect,3
+sharcode,/prove-right-to-work,3 perfect,3
+sharcode,/view-prove-immigration-status,3 perfect,3
+pansion,/check-state-pension,3 perfect,3
+aprentaship,/apply-apprenticeship,3 perfect,3
+minesters,/government/ministers,3 perfect,3
+shercod,/prove-right-to-work,3 perfect,3
+shercod,/view-prove-immigration-status,3 perfect,3
+apprentichips,/apply-apprenticeship,3 perfect,3
+chikdcare,/sign-in-childcare-account,3 perfect,3
+hmrx,/government/organisations/hm-revenue-customs,3 perfect,3
+chidcare,/sign-in-childcare-account,3 perfect,3
+appreciateship,/apply-apprenticeship,3 perfect,3
+apprenticehsips,/apply-apprenticeship,3 perfect,3
+selfasesment,/log-in-file-self-assessment-tax-return,3 perfect,3
+sercod,/prove-right-to-work,3 perfect,3
+sherecode,/prove-right-to-work,3 perfect,3
+sercod,/view-prove-immigration-status,3 perfect,3
+sherecode,/view-prove-immigration-status,3 perfect,3
+appreticeship,/apply-apprenticeship,3 perfect,3
+provitional,/apply-first-provisional-driving-licence,3 perfect,3
+setlment,/settled-status-eu-citizens-families,3 perfect,3
+appretiships,/apply-apprenticeship,3 perfect,3
+selfassasment,/log-in-file-self-assessment-tax-return,3 perfect,3
+selfassment,/log-in-file-self-assessment-tax-return,3 perfect,3
+childcarw,/sign-in-childcare-account,3 perfect,3
+pesions,/check-state-pension,3 perfect,3
+childcre,/sign-in-childcare-account,3 perfect,3
+sealf,/log-in-file-self-assessment-tax-return,3 perfect,3
+selfass,/log-in-file-self-assessment-tax-return,3 perfect,3
+oension,/check-state-pension,3 perfect,3
+sercode,/prove-right-to-work,3 perfect,3
+sercode,/view-prove-immigration-status,3 perfect,3
+apprentichip,/apply-apprenticeship,3 perfect,3
+penssion,/check-state-pension,3 perfect,3
+selfassestment,/log-in-file-self-assessment-tax-return,3 perfect,3
+breavment,/when-someone-dies,3 perfect,3
+breavment,/bereavement-support-payment,3 perfect,3
+childacre,/sign-in-childcare-account,3 perfect,3
+sattelment,/settled-status-eu-citizens-families,3 perfect,3
+perscription,/get-a-ppc,3 perfect,3
+appreciateships,/apply-apprenticeship,3 perfect,3
+appreciatship,/apply-apprenticeship,3 perfect,3
+sattlement,/settled-status-eu-citizens-families,3 perfect,3
+appretiship,/apply-apprenticeship,3 perfect,3
+dartfort,/pay-dartford-crossing-charge,3 perfect,3
+apprenticehsip,/apply-apprenticeship,3 perfect,3
+apprenticiships,/apply-apprenticeship,3 perfect,3
+bearevement,/when-someone-dies,3 perfect,3
+bearevement,/bereavement-support-payment,3 perfect,3
+prnsions,/check-state-pension,3 perfect,3
+providional,/apply-first-provisional-driving-licence,3 perfect,3
+apprenticips,/apply-apprenticeship,3 perfect,3
+appretaships,/apply-apprenticeship,3 perfect,3
+selfasessment,/log-in-file-self-assessment-tax-return,3 perfect,3
+sttlement,/settled-status-eu-citizens-families,3 perfect,3
+brevement,/when-someone-dies,3 perfect,3
+brevement,/bereavement-support-payment,3 perfect,3
+childbenifit,/child-benefit,3 perfect,3
+berievement,/when-someone-dies,3 perfect,3
+berievement,/bereavement-support-payment,3 perfect,3
+paspport,/renew-adult-passport,3 perfect,3
+aprenteship,/apply-apprenticeship,3 perfect,3
+aprenticships,/apply-apprenticeship,3 perfect,3
+appreniceships,/apply-apprenticeship,3 perfect,3
+satlement,/settled-status-eu-citizens-families,3 perfect,3
+sdudet,/student-finance-register-login,3 perfect,3
+pnsion,/check-state-pension,3 perfect,3
+bearevment,/when-someone-dies,3 perfect,3
+bearevment,/bereavement-support-payment,3 perfect,3
+appreniships,/apply-apprenticeship,3 perfect,3
+apprenticiship,/apply-apprenticeship,3 perfect,3
+helpforhousholds,https://helpforhouseholds.campaign.gov.uk/,3 perfect,3
+childcate,/sign-in-childcare-account,3 perfect,3
+chuldcare,/sign-in-childcare-account,3 perfect,3
+selfaccessment,/log-in-file-self-assessment-tax-return,3 perfect,3
+aprenteships,/apply-apprenticeship,3 perfect,3
+apprenticeshi,/apply-apprenticeship,3 perfect,3
+apprenships,/apply-apprenticeship,3 perfect,3
+apprentenship,/apply-apprenticeship,3 perfect,3
+shrecode,/prove-right-to-work,3 perfect,3
+shrecode,/view-prove-immigration-status,3 perfect,3
+seattlement,/settled-status-eu-citizens-families,3 perfect,3
+brevment,/when-someone-dies,3 perfect,3
+brevment,/bereavement-support-payment,3 perfect,3
+appreciatships,/apply-apprenticeship,3 perfect,3
+apprentischips,/apply-apprenticeship,3 perfect,3
+bearvement,/when-someone-dies,3 perfect,3
+bearvement,/bereavement-support-payment,3 perfect,3
+selfassesement,/log-in-file-self-assessment-tax-return,3 perfect,3
+apren,/apply-apprenticeship,3 perfect,3
+aprenticship,/apply-apprenticeship,3 perfect,3
+aprentships,/apply-apprenticeship,3 perfect,3
+apprentecships,/apply-apprenticeship,3 perfect,3
+sarecode,/prove-right-to-work,3 perfect,3
+sarecode,/view-prove-immigration-status,3 perfect,3
+beareavement,/when-someone-dies,3 perfect,3
+beareavement,/bereavement-support-payment,3 perfect,3
+apprecticeships,/apply-apprenticeship,3 perfect,3
+apprenship,/apply-apprenticeship,3 perfect,3
+appretaship,/apply-apprenticeship,3 perfect,3
+choldcare,/sign-in-childcare-account,3 perfect,3
+ippafs,/guidance/import-of-products-animals-food-and-feed-system,3 perfect,3
+sealf asesment,/log-in-file-self-assessment-tax-return,3 perfect,3
+apprencticeship,/apply-apprenticeship,3 perfect,3
+apprentceships,/apply-apprenticeship,3 perfect,3
+apprentieships,/apply-apprenticeship,3 perfect,3
+appreteships,/apply-apprenticeship,3 perfect,3
+childc,/sign-in-childcare-account,3 perfect,3
+childcsre,/sign-in-childcare-account,3 perfect,3
+retairment,/plan-for-retirement,3 perfect,3
+aprentship,/apply-apprenticeship,3 perfect,3
+appreterships,/apply-apprenticeship,3 perfect,3
+seatlement,/settled-status-eu-citizens-families,3 perfect,3
+aprent,/apply-apprenticeship,3 perfect,3
+apprenceship,/apply-apprenticeship,3 perfect,3
+apprencticeships,/apply-apprenticeship,3 perfect,3
+childca,/sign-in-childcare-account,3 perfect,3
+eusettelment,/settled-status-eu-citizens-families,3 perfect,3
+selfasses,/log-in-file-self-assessment-tax-return,3 perfect,3
+provistional,/apply-first-provisional-driving-licence,3 perfect,3
+apprenticesips,/apply-apprenticeship,3 perfect,3
+appreciaships,/apply-apprenticeship,3 perfect,3
+apprenaships,/apply-apprenticeship,3 perfect,3
+appretice,/apply-apprenticeship,3 perfect,3
+stlement,/settled-status-eu-citizens-families,3 perfect,3
+berievment,/when-someone-dies,3 perfect,3
+berievment,/bereavement-support-payment,3 perfect,3
+pantion,/check-state-pension,3 perfect,3
+provesional,/apply-first-provisional-driving-licence,3 perfect,3
+appreniceship,/apply-apprenticeship,3 perfect,3
+appreticships,/apply-apprenticeship,3 perfect,3
+childmaintance,/child-maintenance-service,3 perfect,3
+privisional,/apply-first-provisional-driving-licence,3 perfect,3
+ension,/check-state-pension,3 perfect,3
+stettlement,/settled-status-eu-citizens-families,3 perfect,3
+presciptions,/get-a-ppc,3 perfect,3
+probisional,/apply-first-provisional-driving-licence,3 perfect,3
+provissional,/apply-first-provisional-driving-licence,3 perfect,3
+apprentachip,/apply-apprenticeship,3 perfect,3
+apprentechips,/apply-apprenticeship,3 perfect,3
+apprentichsips,/apply-apprenticeship,3 perfect,3
+apprenceships,/apply-apprenticeship,3 perfect,3
+apprenitceships,/apply-apprenticeship,3 perfect,3
+apprentieship,/apply-apprenticeship,3 perfect,3
+dvlsa,/government/organisations/driver-and-vehicle-licensing-agency,2 good,2
+oensions,/check-state-pension,3 perfect,3
+stelment,/settled-status-eu-citizens-families,3 perfect,3
+berivment,/when-someone-dies,3 perfect,3
+berivment,/bereavement-support-payment,3 perfect,3
+berivement,/when-someone-dies,3 perfect,3
+berivement,/bereavement-support-payment,3 perfect,3
+appprenticeships,/apply-apprenticeship,3 perfect,3
+retiment,/plan-for-retirement,3 perfect,3
+selassessment,/log-in-file-self-assessment-tax-return,3 perfect,3
+selfasestment,/log-in-file-self-assessment-tax-return,3 perfect,3
+selfassesmant,/log-in-file-self-assessment-tax-return,3 perfect,3
+apprentacips,/apply-apprenticeship,3 perfect,3
+appreciship,/apply-apprenticeship,3 perfect,3
+apprentcieships,/apply-apprenticeship,3 perfect,3
+apprentise,/apply-apprenticeship,3 perfect,3
+appreships,/apply-apprenticeship,3 perfect,3
+childbenfit,/child-benefit,3 perfect,3
+childcarr,/sign-in-childcare-account,3 perfect,3
+childacare,/sign-in-childcare-account,3 perfect,3
+chldcare,/sign-in-childcare-account,3 perfect,3
+ippaffs,/guidance/import-of-products-animals-food-and-feed-system,3 perfect,3
+statlement,/settled-status-eu-citizens-families,3 perfect,3
+satlment,/settled-status-eu-citizens-families,3 perfect,3
+selfasement,/log-in-file-self-assessment-tax-return,3 perfect,3
+appprenticeship,/apply-apprenticeship,3 perfect,3
+apprentecship,/apply-apprenticeship,3 perfect,3
+apprentenships,/apply-apprenticeship,3 perfect,3
+aprentenship,/apply-apprenticeship,3 perfect,3
+childcard,/sign-in-childcare-account,3 perfect,3
+pernsion,/check-state-pension,3 perfect,3
+barevement,/when-someone-dies,3 perfect,3
+barevement,/bereavement-support-payment,3 perfect,3
+retaiment,/plan-for-retirement,3 perfect,3
+landregister,/government/organisations/land-registry,3 perfect,3
+chilscare,/sign-in-childcare-account,3 perfect,3
+chidlcare,/sign-in-childcare-account,3 perfect,3
+chlidcare,/sign-in-childcare-account,3 perfect,3
+dartf,/pay-dartford-crossing-charge,2 good,2
+sahrecode,/prove-right-to-work,3 perfect,3
+sherecod,/prove-right-to-work,3 perfect,3
+sahrecode,/view-prove-immigration-status,3 perfect,3
+sherecod,/view-prove-immigration-status,3 perfect,3
+selfasse,/log-in-file-self-assessment-tax-return,3 perfect,3
+apprentachips,/apply-apprenticeship,3 perfect,3
+apprenticeshios,/apply-apprenticeship,3 perfect,3
+apprenticeshps,/apply-apprenticeship,3 perfect,3
+apprenticesip,/apply-apprenticeship,3 perfect,3
+apprentishios,/apply-apprenticeship,3 perfect,3
+appreciaship,/apply-apprenticeship,3 perfect,3
+landregistery,/government/organisations/land-registry,3 perfect,3
+childcae,/sign-in-childcare-account,3 perfect,3
+childaccount,/sign-in-childcare-account,3 perfect,3
+sttelment,/settled-status-eu-citizens-families,3 perfect,3
+barevment,/when-someone-dies,3 perfect,3
+barevment,/bereavement-support-payment,3 perfect,3
+retierment,/plan-for-retirement,3 perfect,3
+beavement,/when-someone-dies,3 perfect,3
+beavement,/bereavement-support-payment,3 perfect,3
+pertition,/petition-government,3 perfect,3
+selfassesments,/log-in-file-self-assessment-tax-return,3 perfect,3
+apperenticeships,/apply-apprenticeship,3 perfect,3
+apprenerships,/apply-apprenticeship,3 perfect,3
+appretership,/apply-apprenticeship,3 perfect,3
+apretaships,/apply-apprenticeship,3 perfect,3
+ppension,/check-state-pension,3 perfect,3
+eusetlement,/settled-status-eu-citizens-families,3 perfect,3
+precriptions,/get-a-ppc,3 perfect,3
+selassesment,/log-in-file-self-assessment-tax-return,3 perfect,3
+provicional,/apply-first-provisional-driving-licence,3 perfect,3
+provosional,/apply-first-provisional-driving-licence,3 perfect,3
+apprnticeship,/apply-apprenticeship,3 perfect,3
+apprentecips,/apply-apprenticeship,3 perfect,3
+apprenticesh,/apply-apprenticeship,3 perfect,3
+apprenticeshio,/apply-apprenticeship,3 perfect,3
+appremticeships,/apply-apprenticeship,3 perfect,3
+apprenice,/apply-apprenticeship,3 perfect,3
+apprentischip,/apply-apprenticeship,3 perfect,3
+childmaintence,/child-maintenance-service,3 perfect,3
+childvare,/sign-in-childcare-account,3 perfect,3
+cildcare,/sign-in-childcare-account,3 perfect,3
+dartfor,/pay-dartford-crossing-charge,3 perfect,3
+ensions,/check-state-pension,3 perfect,3
+pentsion,/check-state-pension,3 perfect,3
+seatelment,/settled-status-eu-citizens-families,3 perfect,3
+setment,/settled-status-eu-citizens-families,3 perfect,3
+stattelment,/settled-status-eu-citizens-families,3 perfect,3
+stellment,/settled-status-eu-citizens-families,3 perfect,3
+pertitions,/petition-government,3 perfect,3
+appprentice,/apply-apprenticeship,3 perfect,3
+apprentashios,/apply-apprenticeship,3 perfect,3
+apprentchip,/apply-apprenticeship,3 perfect,3
+apprentechip,/apply-apprenticeship,3 perfect,3
+apprenticeshipa,/apply-apprenticeship,3 perfect,3
+aprentichips,/apply-apprenticeship,3 perfect,3
+appreciatiship,/apply-apprenticeship,3 perfect,3
+apprenaship,/apply-apprenticeship,3 perfect,3
+apprendiship,/apply-apprenticeship,3 perfect,3
+apprentceship,/apply-apprenticeship,3 perfect,3
+apprentcieship,/apply-apprenticeship,3 perfect,3
+apprenticheships,/apply-apprenticeship,3 perfect,3
+apprenticrship,/apply-apprenticeship,3 perfect,3
+apprentiveships,/apply-apprenticeship,3 perfect,3
+childcrae,/sign-in-childcare-account,3 perfect,3
+payre,/log-in-register-hmrc-online-services,3 perfect,3
+ippaf,/guidance/import-of-products-animals-food-and-feed-system,3 perfect,3
+stattlement,/settled-status-eu-citizens-families,3 perfect,3
+stetlement,/settled-status-eu-citizens-families,3 perfect,3
+beareavment,/when-someone-dies,3 perfect,3
+beareavment,/bereavement-support-payment,3 perfect,3
+bervement,/when-someone-dies,3 perfect,3
+bervement,/bereavement-support-payment,3 perfect,3
+pertions,/petition-government,3 perfect,3
+petetions,/petition-government,3 perfect,3
+povisional,/apply-first-provisional-driving-licence,3 perfect,3
+pravisional,/apply-first-provisional-driving-licence,3 perfect,3
+apprnticeships,/apply-apprenticeship,3 perfect,3
+aprrenticeships,/apply-apprenticeship,3 perfect,3
+appreciships,/apply-apprenticeship,3 perfect,3
+appreniship,/apply-apprenticeship,3 perfect,3
+apprenitceship,/apply-apprenticeship,3 perfect,3
+apprentiseship,/apply-apprenticeship,3 perfect,3
+childcar3,/sign-in-childcare-account,3 perfect,3
+shatecode,/prove-right-to-work,3 perfect,3
+shatecode,/view-prove-immigration-status,3 perfect,3
+hmnrc,/government/organisations/hm-revenue-customs,3 perfect,3

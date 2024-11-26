@@ -1,0 +1,35 @@
+# Configure general boosting of results by metadata fields.
+#
+# Each key in this file represents the ID and displayName of a serving control with a boost action.
+#
+# IMPORTANT: The ID needs to be between 1-63 characters and *unique both within this file and
+# amongst all controls*! Stay consistent by using `boost_` as the prefix for any boost control added
+# in this file.
+#
+# see https://cloud.google.com/generative-ai-app-builder/docs/reference/rest/v1alpha/projects.locations.collections.dataStores.controls#boostaction
+# and https://cloud.google.com/retail/docs/filter-and-order for `filter` syntax
+
+boost_promote_medium:
+  filter: 'content_purpose_supergroup: ANY("services") OR document_type: ANY("calendar", "detailed_guide", "document_collection", "external_content", "organisation")'
+  boost: 0.2
+
+boost_promote_low:
+  filter: 'document_type: ANY("guidance", "mainstream_browse_page", "policy_paper", "travel_advice")'
+  boost: 0.05
+
+boost_demote_low:
+  filter: 'document_type: ANY("about", "taxon", "world_news_story")'
+  boost: -0.25
+
+boost_demote_medium:
+  filter: 'document_type: ANY("employment_tribunal_decision", "foi_release", "service_standard_report") OR organisation_state: ANY("devolved", "closed")'
+  boost: -0.5
+
+boost_demote_strong:
+  filter: "is_historic = 1"
+  boost: -0.75
+
+# Temporary demotion of poor results that can't be dealt with in another way right now
+boost_demote_pages:
+  filter: 'link: ANY("/government/publications/pension-credit-claim-form--2")'
+  boost: -0.75

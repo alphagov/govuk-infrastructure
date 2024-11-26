@@ -1,0 +1,9 @@
+functions_framework~=3.4
+pandas~=1.5
+ranx~=0.3
+matplotlib~=3.8
+seaborn~=0.13
+google-cloud-discoveryengine~=0.11
+protobuf~=4.25
+gcsfs~=2023.10
+fsspec~=2023.10

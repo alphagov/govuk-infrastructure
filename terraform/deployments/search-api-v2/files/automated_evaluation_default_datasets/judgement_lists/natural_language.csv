@@ -1,0 +1,81 @@
+query,link,score_description,score
+wheres my reply,/guidance/check-when-you-can-expect-a-reply-from-hmrc,3 perfect,3
+where is my reply,/guidance/check-when-you-can-expect-a-reply-from-hmrc,3 perfect,3
+where's my reply,/guidance/check-when-you-can-expect-a-reply-from-hmrc,3 perfect,3
+how much pension will i get,/check-state-pension,3 perfect,3
+when can i retire,/state-pension-age,3 perfect,3
+what is my tax code,/tax-codes,3 perfect,3
+what is my tax code,/check-income-tax-current-year,3 perfect,3
+how much state pension will i get,/check-state-pension,3 perfect,3
+how to get share code,/view-prove-immigration-status,3 perfect,3
+how to get share code,/prove-right-to-work/get-a-share-code-online,3 perfect,3
+how to get a utr number,/find-utr-number,2 good,2
+how much is state pension,/new-state-pension/what-youll-get,3 perfect,3
+how much is state pension,/state-pension/how-much-you-get,2 good,2
+how to get a share code,/view-prove-immigration-status,3 perfect,3
+how to get a share code,/prove-right-to-work/get-a-share-code-online,3 perfect,3
+how much is my car tax,/vehicle-tax-rate-tables,3 perfect,3
+who needs to complete a return,/self-assessment-tax-returns/who-must-send-a-tax-return,3 perfect,3
+when is my mot due,/check-mot-status,3 perfect,3
+how much tax do i owe,/understand-self-assessment-bill,3 perfect,3
+how much do i owe,/understand-self-assessment-bill,2 good,2
+how much is my pension,/check-state-pension,3 perfect,3
+how much is the state pension,/new-state-pension/what-youll-get,3 perfect,3
+how much is my state pension,/check-state-pension,3 perfect,3
+what will my pension be,/check-state-pension,3 perfect,3
+how much will my pension be,/check-state-pension,3 perfect,3
+how to pay voluntary contributions,/voluntary-national-insurance-contributions,3 perfect,3
+what can i drive,/vehicles-can-drive,3 perfect,3
+how much tax have i paid,/check-income-tax-current-year,3 perfect,3
+how much tax have i paid,/check-income-tax-last-year,2 good,2
+how much tax have i paid,/understand-self-assessment-bill/payments-on-account,2 good,2
+how much is car tax,/vehicle-tax-rate-tables,3 perfect,3
+what is my national insurance number,/national-insurance/your-national-insurance-number,3 perfect,3
+what is my national insurance number,/lost-national-insurance-number,3 perfect,3
+when will i get my pension,/state-pension-age,3 perfect,3
+where is my passport,/track-passport-application,3 perfect,3
+is my car taxed,/check-vehicle-tax,3 perfect,3
+can i drive,/health-conditions-and-driving,2 good,2
+can i drive,/legal-obligations-drivers-riders,2 good,2
+is my car insured,/vehicle-insurance/uninsured-vehicles,3 perfect,3
+do i need a visa,/check-uk-visa,3 perfect,3
+is my vehicle taxed,/check-vehicle-tax,3 perfect,3
+my tax code is wrong,/tax-codes/how-to-update-your-tax-code,3 perfect,3
+is my passport valid,/foreign-travel-advice,2 good,2
+check if a vehicle is insured,/vehicle-insurance/uninsured-vehicles,3 perfect,3
+is my vehicle insured,/vehicle-insurance/uninsured-vehicles,3 perfect,3
+have i paid enough national insurance,/check-state-pension,3 perfect,3
+how much national insurance have i paid,/check-state-pension,3 perfect,3
+what am i entitled to,/check-benefits-financial-support,3 perfect,3
+what am i entitled to,/benefits-calculators,2 good,2
+am i due a tax rebate,/tax-overpayments-and-underpayments,2 good,2
+when do i get my pension,/state-pension-age,3 perfect,3
+how much is child benefit,/child-benefit/what-youll-get,3 perfect,3
+how much is carers allowance,/carers-allowance,3 perfect,3
+how much is my road tax,/vehicle-tax-rate-tables,3 perfect,3
+do i need to complete a tax return,/self-assessment-tax-returns/who-must-send-a-tax-return,3 perfect,3
+why has my tax code changed,/tax-codes/why-tax-code-change,3 perfect,3
+what can i claim,/check-benefits-financial-support,3 perfect,3
+what can i claim,/benefits-calculators,2 good,2
+how do i find my national insurance number,/national-insurance/your-national-insurance-number,3 perfect,3
+have i paid enough ni,/check-state-pension,3 perfect,3
+what age can i retire,/state-pension-age,3 perfect,3
+when does child maintenance stop,/child-maintenance-service/eligibility,2 good,2
+when can you leave school,/know-when-you-can-leave-school,3 perfect,3
+how much pension will i get when i retire,/check-state-pension,3 perfect,3
+how long does it take to renew a passport,/renew-adult-passport,2 good,2
+how long does it take to renew a passport,/government/organisations/hm-passport-office/about-our-services,3 perfect,3
+do i have to isolate if i have covid,/guidance/people-with-symptoms-of-a-respiratory-infection-including-covid-19,3 perfect,3
+who gets cost of living payments,/cost-of-living,3 perfect,3
+when do i stop paying national insurance,/tax-national-insurance-after-state-pension-age/stopping-paying-national-insurance,3 perfect,3
+when can i apply for my pension,/new-state-pension/how-to-claim,3 perfect,3
+when can i expect a reply,/guidance/check-when-you-can-expect-a-reply-from-hmrc,3 perfect,3
+am i entitled to the cost of living payment,/cost-of-living,3 perfect,3
+am i eligible for cost of living payment,/cost-of-living,3 perfect,3
+when are my bins collected,/rubbish-collection-day,3 perfect,3
+when are my bins collected,/log-in-register-hmrc-online-services,0 bad,0
+when are my bins collected,/check-state-pension,0 bad,0
+when are my bins collected,/government/publications/dwp-information-management-policies,0 bad,0
+when are my bins collected,/get-information-about-a-company,0 bad,0
+when are my bins collected,/sign-in-universal-credit,0 bad,0
+when are my bins collected,/check-mot-history,0 bad,0
