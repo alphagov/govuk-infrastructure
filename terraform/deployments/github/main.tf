@@ -214,3 +214,8 @@ import {
   id = "govuk-e2e-tests"
   to = github_repository.govuk_repos["govuk-e2e-tests"]
 }
+
+import {
+  id = "govuk-display-screen"
+  to = github_repository.govuk_repos["govuk-display-screen"]
+}
