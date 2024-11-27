@@ -276,6 +276,9 @@ repos:
     need_production_access_to_merge: false
     allow_squash_merge: true
     standard_contexts: *standard_security_checks
+    teams: {
+      govuk: "maintain"
+      }
 
   govuk-dns-tf:
     strict: true
