@@ -29,7 +29,8 @@ module "variable-set-staging" {
       c = { az = "eu-west-1c", cidr = "10.12.32.0/22" }
     }
 
-    govuk_environment = "staging"
+    govuk_environment  = "staging"
+    enable_arm_workers = true
 
     publishing_service_domain = "staging.publishing.service.gov.uk"
 
