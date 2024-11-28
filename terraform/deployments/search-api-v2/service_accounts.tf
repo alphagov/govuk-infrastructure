@@ -26,6 +26,9 @@ resource "google_project_iam_custom_role" "api" {
     "discoveryengine.documents.list",
     "discoveryengine.documents.update",
     "discoveryengine.operations.get",
+    "discoveryengine.suggestionDenyListEntries.import",
+    "discoveryengine.suggestionDenyListEntries.purge",
+    "discoveryengine.userEvents.import",
   ]
 }
 
