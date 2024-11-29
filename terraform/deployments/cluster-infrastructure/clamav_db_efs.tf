@@ -6,6 +6,7 @@ locals {
 resource "aws_efs_file_system" "clamav-db" {
   creation_token = local.clamav_db_name
   tags = {
+    Name        = local.clamav_db_name
     Description = "EFS where Clamav virus signature database is stored"
   }
 }
