@@ -26,7 +26,7 @@ resource "aws_efs_file_system" "assets_efs" {
   creation_token = "blue-assets"
   tags = {
     "Name"        = "asset-manager"
-    "Description" = "Asset Manager and Whitehall attachments are stored here temporarily for malware scanning before being transferred to S3."
+    "Description" = "ClamAV database configuration is stored here. Asset Manager and Whitehall attachments are stored here temporarily for malware scanning before being transferred to S3."
   }
 }
 

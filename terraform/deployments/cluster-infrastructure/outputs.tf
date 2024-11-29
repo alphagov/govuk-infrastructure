@@ -118,10 +118,6 @@ output "monitoring_namespace" {
   value       = local.monitoring_namespace
 }
 
-output "clamav_db_efs_id" {
-  value = aws_efs_file_system.clamav-db.id
-}
-
 output "public_nat_gateway_ips" {
   value = [for eip in aws_eip.eks_nat : eip.public_ip]
 }
