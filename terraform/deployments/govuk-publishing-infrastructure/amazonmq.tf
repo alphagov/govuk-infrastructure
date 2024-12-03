@@ -4,6 +4,14 @@ locals {
     ACTIVE_STANDBY_MULTI_AZ = 2
     CLUSTER_MULTI_AZ        = 3
   }[var.amazonmq_deployment_mode]
+
+  amazonmq_schema = templatefile("amazonmq_schema.json.tpl", {
+    publishing_amazonmq_passwords = {
+      for user, pw in random_password.mq_user : user => pw.result
+    }
+    publishing_amazonmq_broker_name = "PublishingMQ"
+    govuk_chat_retry_message_ttl    = var.amazonmq_govuk_chat_retry_message_ttl
+  })
 }
 
 resource "random_password" "mq_user" {
@@ -235,28 +243,6 @@ resource "aws_route53_record" "publishing_amazonmq_internal_root_domain_name" {
 # Create and invoke a Lambda function to POST the full RabbitMQ config to the
 # management API in the target environment.
 
-# TODO: replace this with something less horrible
-resource "local_sensitive_file" "amazonmq_rabbitmq_definitions" {
-  filename = join(".", [
-    "/tmp/amazonmq_rabbitmq_definitions",
-    formatdate("YYYY-MM-DD-hhmm-ZZZ", timestamp()),
-    "json",
-  ])
-  content = templatefile("amazonmq_schema.json.tpl", {
-    publishing_amazonmq_passwords = {
-      for user, pw in random_password.mq_user : user => pw.result
-    }
-    publishing_amazonmq_broker_name = "PublishingMQ"
-    govuk_chat_retry_message_ttl    = var.amazonmq_govuk_chat_retry_message_ttl
-  })
-}
-
-data "local_sensitive_file" "amazonmq_rabbitmq_definitions_interpolated" {
-  depends_on = [local_sensitive_file.amazonmq_rabbitmq_definitions]
-  filename   = local_sensitive_file.amazonmq_rabbitmq_definitions.filename
-}
-
-
 data "aws_iam_policy" "lambda_vpc_access" {
   name = "AWSLambdaVPCAccessExecutionRole"
 }
@@ -310,6 +296,6 @@ data "aws_lambda_invocation" "post_config_to_amazonmq" {
     url      = "${aws_mq_broker.publishing_amazonmq.instances[0].console_url}/api/definitions"
     username = "root"
     password = random_password.mq_user["root"].result
-    json_b64 = base64encode(data.local_sensitive_file.amazonmq_rabbitmq_definitions_interpolated.content)
+    json_b64 = base64encode(local.amazonmq_schema)
   })
 }
