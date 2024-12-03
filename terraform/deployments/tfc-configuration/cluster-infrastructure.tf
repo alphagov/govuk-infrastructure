@@ -20,8 +20,8 @@ module "cluster-infrastructure-integration" {
   }
 
   team_access = {
-    "GOV.UK Non-Production" = "write"
-    "GOV.UK Production"     = "write"
+    "GOV.UK Non-Production (r/o)" = "write"
+    "GOV.UK Production"           = "write"
   }
 
   variable_set_names = [
