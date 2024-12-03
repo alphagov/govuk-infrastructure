@@ -275,6 +275,7 @@ resource "aws_lambda_function" "post_config_to_amazonmq" {
   role          = aws_iam_role.post_config_to_amazonmq.arn
   handler       = "amazonmq_post_config.lambda_handler"
   runtime       = "python3.12"
+  timeout       = 10
 
   vpc_config {
     subnet_ids         = aws_mq_broker.publishing_amazonmq.subnet_ids

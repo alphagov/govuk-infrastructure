@@ -591,7 +591,7 @@ module "variable-set-amazonmq-production" {
 
   name = "amazonmq-production"
   tfvars = {
-    amazonmq_engine_version                       = "3.13.6"
+    amazonmq_engine_version                       = "3.13"
     amazonmq_deployment_mode                      = "CLUSTER_MULTI_AZ"
     amazonmq_maintenance_window_start_day_of_week = "WEDNESDAY"
     amazonmq_maintenance_window_start_time_utc    = "06:00"
