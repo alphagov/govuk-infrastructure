@@ -33,9 +33,8 @@ module "variable-set-production" {
 
     publishing_service_domain = "publishing.service.gov.uk"
 
-    workers_instance_types         = ["m6i.8xlarge", "m6a.8xlarge"]
-    frontend_memcached_node_type   = "cache.r6g.large"
-    shared_redis_cluster_node_type = "cache.r6g.xlarge"
+    workers_instance_types       = ["m6i.8xlarge", "m6a.8xlarge"]
+    frontend_memcached_node_type = "cache.r6g.large"
 
     ckan_s3_organogram_bucket = "datagovuk-production-ckan-organogram"
   }
