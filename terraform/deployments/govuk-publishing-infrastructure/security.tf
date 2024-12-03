@@ -14,30 +14,6 @@ data "aws_ec2_managed_prefix_list" "cloudfront" {
 }
 
 #
-# Redis
-#
-
-resource "aws_security_group_rule" "shared_redis_cluster_to_any_any" {
-  description       = "Redis cluster sends requests to anywhere over any protocol"
-  type              = "egress"
-  from_port         = 0
-  to_port           = 0
-  protocol          = -1
-  cidr_blocks       = ["0.0.0.0/0"]
-  security_group_id = aws_security_group.shared_redis_cluster.id
-}
-
-resource "aws_security_group_rule" "shared_redis_cluster_from_any" {
-  description              = "Shared Redis cluster for EKS accepts requests from EKS nodes"
-  type                     = "ingress"
-  from_port                = 6379
-  to_port                  = 6379
-  protocol                 = "tcp"
-  security_group_id        = aws_security_group.shared_redis_cluster.id
-  source_security_group_id = data.tfe_outputs.cluster_infrastructure.nonsensitive_values.node_security_group_id
-}
-
-#
 # Frontend memcached
 #
 

@@ -34,8 +34,7 @@ module "variable-set-staging" {
 
     publishing_service_domain = "staging.publishing.service.gov.uk"
 
-    frontend_memcached_node_type   = "cache.t4g.medium"
-    shared_redis_cluster_node_type = "cache.r6g.large"
+    frontend_memcached_node_type = "cache.t4g.medium"
 
     desired_ha_replicas         = 2
     rds_backup_retention_period = 1

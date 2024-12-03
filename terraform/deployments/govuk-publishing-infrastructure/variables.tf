@@ -19,11 +19,6 @@ variable "frontend_memcached_node_type" {
   description = "Instance type for the Frontend memcached."
 }
 
-variable "shared_redis_cluster_node_type" {
-  type        = string
-  description = "Instance type for the shared Redis cluster. t1 and t2 instances are not supported."
-}
-
 variable "licensify_documentdb_instance_count" {
   type        = number
   default     = 3
