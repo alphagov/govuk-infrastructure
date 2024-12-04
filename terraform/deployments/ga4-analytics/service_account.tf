@@ -1,5 +1,5 @@
 resource "google_service_account" "ga4_analytics" {
-  account_id                   = "ga4-analytics-352613"
+  account_id                   = google_project.project.project_id
   display_name                 = "App Engine default service account"
   create_ignore_already_exists = "true"
 }
