@@ -672,10 +672,6 @@ repos:
         - Test JavaScript / Run Jasmine
         - Test Ruby / Run Minitest
 
-  smokey:
-    required_status_checks:
-      standard_contexts: *standard_security_checks
-
   specialist-publisher:
     homepage_url: "https://docs.publishing.service.gov.uk/apps/specialist-publisher.html"
     required_status_checks:
