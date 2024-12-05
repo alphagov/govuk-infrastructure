@@ -5,7 +5,8 @@ resource "aws_s3_bucket" "mobile_backend_remote_config" {
 resource "aws_s3_bucket_versioning" "mobile_backend_remote_config" {
   bucket = aws_s3_bucket.mobile_backend_remote_config.id
   versioning_configuration {
-    status = "Enabled"
+    status     = "Enabled"
+    mfa_delete = "Enabled"
   }
 }
 
@@ -30,6 +31,13 @@ data "aws_iam_policy_document" "mobile_backend_remote_config_fastly_read" {
       variable = "aws:SourceIp"
 
       values = data.fastly_ip_ranges.fastly.cidr_blocks
+    }
+
+    condition {
+      test     = "Bool"
+      variable = "aws:SecureTransport"
+
+      values = ["true"]
     }
 
     principals {
