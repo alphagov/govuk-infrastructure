@@ -5,8 +5,7 @@ resource "aws_s3_bucket" "mobile_backend_remote_config" {
 resource "aws_s3_bucket_versioning" "mobile_backend_remote_config" {
   bucket = aws_s3_bucket.mobile_backend_remote_config.id
   versioning_configuration {
-    status     = "Enabled"
-    mfa_delete = "Enabled"
+    status = "Enabled"
   }
 }
 
