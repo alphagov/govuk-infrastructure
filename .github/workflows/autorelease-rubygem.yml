@@ -73,9 +73,13 @@ jobs:
 
         find . -type f \( -iname "version.rb" -o -iname "*.gemspec" \) -exec sed -i "0,/$curr_ver/s//${next_ver}/" {} \;
 
-        printf "# %s\n\n* Update dependencies\n\n" "$next_ver" > NEW_CHANGELOG.md
-        cat CHANGELOG.md >> NEW_CHANGELOG.md
-        mv NEW_CHANGELOG.md CHANGELOG.md
+        if [[ $(head -n1 CHANGELOG.md) == "# Changelog" ]]; then
+          sed -i "s/# Changelog/# Changelog\n\n## $next_ver\n\n* Update dependencies/" CHANGELOG.md
+        else
+          printf "# %s\n\n* Update dependencies\n\n" "$next_ver" > NEW_CHANGELOG.md
+          cat CHANGELOG.md >> NEW_CHANGELOG.md
+          mv NEW_CHANGELOG.md CHANGELOG.md
+        fi
 
         git config --global user.name "GOV.UK Continuous Integration User"
         git config --global user.email "govuk-ci@users.noreply.github.com"
