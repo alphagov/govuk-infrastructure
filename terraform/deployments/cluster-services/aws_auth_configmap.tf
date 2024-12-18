@@ -127,10 +127,17 @@ resource "kubernetes_cluster_role_binding" "read_crs_and_crbs" {
 
 resource "kubernetes_cluster_role" "poweruser" {
   metadata { name = "poweruser" }
+
   rule {
     api_groups = ["*"]
     resources  = ["*"]
     verbs      = ["*"]
+  }
+
+  rule {
+    api_groups = [""]
+    resources  = ["namespaces"]
+    verbs      = ["get", "list"]
   }
 }
 
