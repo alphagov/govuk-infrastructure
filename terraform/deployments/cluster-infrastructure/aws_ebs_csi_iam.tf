@@ -91,6 +91,18 @@ data "aws_iam_policy_document" "aws_ebs_csi_driver" {
     ]
 
     resources = [
+      "arn:*:ec2:*:*:snapshot/*"
+    ]
+  }
+
+  statement {
+    effect = "Allow"
+
+    actions = [
+      "ec2:CreateVolume"
+    ]
+
+    resources = [
       "*"
     ]
 
