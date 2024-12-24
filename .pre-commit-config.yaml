@@ -10,6 +10,6 @@ repos:
       - id: detect-secrets
         args: ['--baseline', '.secrets.baseline']
   - repo: https://github.com/antonbabenko/pre-commit-terraform
-    rev: v1.96.2
+    rev: v1.96.3
     hooks:
       - id: terraform_fmt
