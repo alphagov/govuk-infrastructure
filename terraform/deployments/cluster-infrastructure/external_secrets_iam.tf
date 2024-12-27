@@ -35,7 +35,8 @@ data "aws_iam_policy_document" "external_secrets" {
       "secretsmanager:GetResourcePolicy",
       "secretsmanager:GetSecretValue",
       "secretsmanager:DescribeSecret",
-      "secretsmanager:ListSecretVersionIds"
+      "secretsmanager:ListSecretVersionIds",
+      "secretsmanager:BatchGetSecretValue"
     ]
 
     resources = [
