@@ -21,9 +21,9 @@ jobs:
           bundler-cache: true
 
       - name: Run Brakeman
-        continue-on-error: true
         run: |
           bundle exec brakeman . --except CheckRenderInline --quiet \
+            --no-exit-on-warn --no-exit-on-error \
             -o brakeman.json -o brakeman.sarif
 
       - name: Upload SARIF to GitHub
