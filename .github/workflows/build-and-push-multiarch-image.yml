@@ -22,6 +22,10 @@ on:
         required: false
         type: string
         default: ${{ github.sha }}
+    secrets:
+      BUILD_SECRETS:
+        description: "Arguments passed to the docker build as secrets"
+        required: false 
     outputs:
       imageTag:
         description: "The image tag for the built image"
@@ -91,6 +95,7 @@ jobs:
           outputs: type=image,name=ghcr.io/${{ github.repository_owner }}/govuk/${{ inputs.imageName }},push-by-digest=true,name-canonical=true,push=true
           cache-from: type=gha,scope=build-${{ inputs.imageName }}-${{ matrix.arch }}
           cache-to: type=gha,scope=build-${{ inputs.imageName }}-${{ matrix.arch }},mode=max
+          secrets: ${{ secrets.BUILD_SECRETS }}
 
       - id: export-digests
         env:
