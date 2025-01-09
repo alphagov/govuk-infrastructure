@@ -91,6 +91,7 @@ jobs:
           outputs: type=image,name=ghcr.io/${{ github.repository_owner }}/govuk/${{ inputs.imageName }},push-by-digest=true,name-canonical=true,push=true
           cache-from: type=gha,scope=build-${{ inputs.imageName }}-${{ matrix.arch }}
           cache-to: type=gha,scope=build-${{ inputs.imageName }}-${{ matrix.arch }},mode=max
+          secrets: ${{ secrets.BUILD_SECRETS }}
 
       - id: export-digests
         env:
