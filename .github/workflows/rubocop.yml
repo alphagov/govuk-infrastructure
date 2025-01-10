@@ -2,6 +2,9 @@ name: Run RuboCop
 
 on:
   workflow_call:
+    secrets:
+      BUNDLE_GITHUB__COM:
+        required: false
 
 jobs:
   run-rubocop:
@@ -16,6 +19,8 @@ jobs:
         uses: ruby/setup-ruby@v1
         with:
           bundler-cache: true
+        env:
+          BUNDLE_GITHUB__COM: "x-access-token:${{ secrets.BUNDLE_GITHUB__COM }}"
 
       - name: Run RuboCop
         run: bundle exec rubocop --parallel --format github --format progress
