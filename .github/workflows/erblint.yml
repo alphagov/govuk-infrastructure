@@ -2,6 +2,10 @@ name: Run Erb Lint
 
 on:
   workflow_call:
+    secrets:
+      BUNDLER_GITHUB_TOKEN:
+        required: false
+        description: "Token used for Bundler to authenticate when installing gems from private Github repos"
 
 jobs:
   run-erblint:
@@ -16,6 +20,8 @@ jobs:
         uses: ruby/setup-ruby@v1
         with:
           bundler-cache: true
+        env:
+          BUNDLE_GITHUB__COM: "x-access-token:${{ secrets.BUNDLER_GITHUB_TOKEN }}"
 
       - name: Run ErbLint
         run: bundle exec erblint --lint-all

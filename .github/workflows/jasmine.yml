@@ -8,6 +8,10 @@ on:
         required: false
         default: false
         type: boolean
+    secrets:
+      BUNDLER_GITHUB_TOKEN:
+        required: false
+        description: "Token used for Bundler to authenticate when installing gems from private Github repos"
 
 jobs:
   run-jasmine:
@@ -24,6 +28,8 @@ jobs:
         uses: ruby/setup-ruby@v1
         with:
           bundler-cache: true
+        env:
+          BUNDLE_GITHUB__COM: "x-access-token:${{ secrets.BUNDLER_GITHUB_TOKEN }}"
 
       - name: Setup Node
         uses: alphagov/govuk-infrastructure/.github/actions/setup-node@main
