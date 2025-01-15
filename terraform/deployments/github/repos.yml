@@ -570,13 +570,6 @@ repos:
       additional_contexts:
         - Test Go
 
-  router-api:
-    homepage_url: "https://docs.publishing.service.gov.uk/repos/router-api.html"
-    required_status_checks:
-      standard_contexts: *standard_govuk_rails_checks
-      additional_contexts:
-        - Test Ruby
-
   rubocop-govuk:
     required_status_checks:
       standard_contexts: *standard_security_checks
