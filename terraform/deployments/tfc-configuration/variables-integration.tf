@@ -462,6 +462,24 @@ module "variable-set-rds-integration" {
         project                      = "GOV.UK - Publishing"
       }
 
+      publisher = {
+        engine         = "postgres"
+        engine_version = "14"
+        engine_params = {
+          log_min_duration_statement = { value = 10000 }
+          log_statement              = { value = "all" }
+          deadlock_timeout           = { value = 2500 }
+          log_lock_waits             = { value = 1 }
+        }
+        engine_params_family         = "postgres14"
+        name                         = "publisher"
+        allocated_storage            = 100
+        instance_class               = "db.t4g.small"
+        performance_insights_enabled = true
+        freestoragespace_threshold   = 10737418240
+        project                      = "GOV.UK - Publishing"
+      }
+
       release = {
         engine         = "mysql"
         engine_version = "8.0"
