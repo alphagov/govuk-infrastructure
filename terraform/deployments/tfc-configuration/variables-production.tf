@@ -40,13 +40,13 @@ module "variable-set-production" {
       b = { az = "eu-west-1b", cidr = "10.13.5.0/24" }
       c = { az = "eu-west-1c", cidr = "10.13.6.0/24" }
 
-      rds_a = { az = "eu-west-1a", cidr = "10.13.10.0/24" }
-      rds_b = { az = "eu-west-1b", cidr = "10.13.11.0/24" }
-      rds_c = { az = "eu-west-1c", cidr = "10.13.12.0/24" }
+      rds_a = { az = "eu-west-1a", cidr = "10.13.10.0/24", nat = false }
+      rds_b = { az = "eu-west-1b", cidr = "10.13.11.0/24", nat = false }
+      rds_c = { az = "eu-west-1c", cidr = "10.13.12.0/24", nat = false }
 
-      elasticache_a = { az = "eu-west-1a", cidr = "10.13.7.0/24" }
-      elasticache_b = { az = "eu-west-1b", cidr = "10.13.8.0/24" }
-      elasticache_c = { az = "eu-west-1c", cidr = "10.13.9.0/24" }
+      elasticache_a = { az = "eu-west-1a", cidr = "10.13.7.0/24", nat = false }
+      elasticache_b = { az = "eu-west-1b", cidr = "10.13.8.0/24", nat = false }
+      elasticache_c = { az = "eu-west-1c", cidr = "10.13.9.0/24", nat = false }
     }
 
     govuk_environment = "production"
