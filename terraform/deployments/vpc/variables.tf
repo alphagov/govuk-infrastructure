@@ -36,3 +36,13 @@ variable "cyber_slunk_aws_account_id" {
   description = "Account ID which holds the Splunk log bucket"
   default     = "885513274347"
 }
+
+variable "legacy_private_subnets" {
+  type        = map(object({ az = string, cidr = string, nat = bool }))
+  description = "Map of {subnet_name: {az=<az>, cidr=<cidr>}} for the private subnets for legacy resources"
+}
+
+variable "legacy_public_subnets" {
+  type        = map(object({ az = string, cidr = string }))
+  description = "Map of {subnet_name: {az=<az>, cidr=<cidr>}} for the public subnets for legacy resources"
+}
