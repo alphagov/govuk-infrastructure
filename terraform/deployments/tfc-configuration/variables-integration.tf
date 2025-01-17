@@ -36,9 +36,9 @@ module "variable-set-integration" {
     }
 
     legacy_private_subnets = {
-      a = { az = "eu-west-1a", cidr = "10.1.4.0/24" }
-      b = { az = "eu-west-1b", cidr = "10.1.5.0/24" }
-      c = { az = "eu-west-1c", cidr = "10.1.6.0/24" }
+      a = { az = "eu-west-1a", cidr = "10.1.4.0/24", nat = true }
+      b = { az = "eu-west-1b", cidr = "10.1.5.0/24", nat = true }
+      c = { az = "eu-west-1c", cidr = "10.1.6.0/24", nat = true }
 
       rds_a = { az = "eu-west-1a", cidr = "10.1.10.0/24", nat = false }
       rds_b = { az = "eu-west-1b", cidr = "10.1.11.0/24", nat = false }
