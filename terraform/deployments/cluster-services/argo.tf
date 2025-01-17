@@ -41,11 +41,6 @@ resource "kubernetes_namespace" "apps" {
   }
 }
 
-import {
-  to = kubernetes_namespace.licensify
-  id = "licensify"
-}
-
 resource "kubernetes_namespace" "licensify" {
   metadata {
     name = var.licensify_namespace
