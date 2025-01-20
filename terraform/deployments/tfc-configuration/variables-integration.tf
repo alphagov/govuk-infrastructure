@@ -47,6 +47,10 @@ module "variable-set-integration" {
       elasticache_a = { az = "eu-west-1a", cidr = "10.1.7.0/24", nat = false }
       elasticache_b = { az = "eu-west-1b", cidr = "10.1.8.0/24", nat = false }
       elasticache_c = { az = "eu-west-1c", cidr = "10.1.9.0/24", nat = false }
+
+      elasticsearch_a = { az = "eu-west-1a", cidr = "10.1.16.0/24", nat = false }
+      elasticsearch_b = { az = "eu-west-1b", cidr = "10.1.17.0/24", nat = false }
+      elasticsearch_c = { az = "eu-west-1c", cidr = "10.1.18.0/24", nat = false }
     }
 
     govuk_environment  = "integration"
