@@ -64,7 +64,7 @@ locals {
       min_size              = var.arm_workers_size_min
       instance_types        = var.arm_workers_instance_types
       update_config         = { max_unavailable = 1 }
-      block_device_mappings = local.x86_managed_node_group.main.block_device_mappings
+      block_device_mappings = local.x86_managed_node_group.x86.block_device_mappings
       taints = {
         arch = {
           key    = "arch"

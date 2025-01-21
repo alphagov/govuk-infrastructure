@@ -53,7 +53,7 @@ module "variable-set-production" {
       elasticsearch_c = { az = "eu-west-1c", cidr = "10.13.18.0/24", nat = false }
     }
 
-    govuk_environment = "production"
+    govuk_environment  = "production"
     enable_x86_workers = true
 
     publishing_service_domain = "publishing.service.gov.uk"
