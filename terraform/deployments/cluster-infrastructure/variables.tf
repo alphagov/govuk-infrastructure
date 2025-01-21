@@ -87,31 +87,37 @@ variable "arm_workers_size_max" {
   default     = 12
 }
 
-variable "workers_instance_types" {
+variable "enable_x86_workers" {
+  type        = bool
+  description = "Whether to enable the x86/AMD64 Managed Node Group"
+  default     = true
+}
+
+variable "x86_workers_instance_types" {
   type        = list(string)
   description = "List of instance types for the managed node group, in order of preference. The second and subsequent preferences are only relevant when using spot instances."
   default     = ["r7i.large", "r7a.large", "m7i-flex.xlarge", "m6a.xlarge", "m6i.xlarge"]
 }
 
-variable "workers_default_capacity_type" {
+variable "x86_workers_default_capacity_type" {
   type        = string
   description = "Default capacity type for managed node groups: SPOT or ON_DEMAND."
   default     = "ON_DEMAND"
 }
 
-variable "workers_size_desired" {
+variable "x86_workers_size_desired" {
   type        = number
   description = "Desired capacity of managed node autoscale group."
   default     = 0
 }
 
-variable "workers_size_min" {
+variable "x86_workers_size_min" {
   type        = number
   description = "Min capacity of managed node autoscale group."
   default     = 0
 }
 
-variable "workers_size_max" {
+variable "x86_workers_size_max" {
   type        = number
   description = "Max capacity of managed node autoscale group."
   default     = 6

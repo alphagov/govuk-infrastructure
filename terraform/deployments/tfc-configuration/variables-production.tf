@@ -54,14 +54,15 @@ module "variable-set-production" {
     }
 
     govuk_environment = "production"
+    enable_x86_workers = true
 
     publishing_service_domain = "publishing.service.gov.uk"
 
-    workers_instance_types = ["m6i.8xlarge", "m6a.8xlarge"]
+    x86_workers_instance_types = ["m6i.8xlarge", "m6a.8xlarge"]
 
-    workers_size_desired = 6
-    workers_size_min     = 3
-    workers_size_max     = 12
+    x86_workers_size_desired = 6
+    x86_workers_size_min     = 3
+    x86_workers_size_max     = 12
 
     frontend_memcached_node_type = "cache.r6g.large"
 

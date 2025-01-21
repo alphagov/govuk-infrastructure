@@ -56,6 +56,7 @@ module "variable-set-integration" {
     govuk_environment  = "integration"
     force_destroy      = true
     enable_arm_workers = true
+    enable_x86_workers = true
 
     publishing_service_domain = "integration.publishing.service.gov.uk"
 
