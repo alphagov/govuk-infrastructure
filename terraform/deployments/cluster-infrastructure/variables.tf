@@ -90,7 +90,7 @@ variable "arm_workers_size_max" {
 variable "workers_instance_types" {
   type        = list(string)
   description = "List of instance types for the managed node group, in order of preference. The second and subsequent preferences are only relevant when using spot instances."
-  default     = ["m6i.4xlarge", "m6a.4xlarge", "m6i.2xlarge", "m6a.2xlarge"]
+  default     = ["r7i.large", "r7a.large", "m7i-flex.xlarge", "m6a.xlarge", "m6i.xlarge"]
 }
 
 variable "workers_default_capacity_type" {
@@ -102,19 +102,19 @@ variable "workers_default_capacity_type" {
 variable "workers_size_desired" {
   type        = number
   description = "Desired capacity of managed node autoscale group."
-  default     = 6
+  default     = 0
 }
 
 variable "workers_size_min" {
   type        = number
   description = "Min capacity of managed node autoscale group."
-  default     = 3
+  default     = 0
 }
 
 variable "workers_size_max" {
   type        = number
   description = "Max capacity of managed node autoscale group."
-  default     = 12
+  default     = 6
 }
 
 variable "node_disk_size" {
