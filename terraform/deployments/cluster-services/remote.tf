@@ -11,8 +11,3 @@ data "tfe_outputs" "vpc" {
   organization = "govuk"
   workspace    = "vpc-${var.govuk_environment}"
 }
-
-data "tfe_outputs" "govuk_publishing_infrastructure" {
-  organization = "govuk"
-  workspace    = "govuk-publishing-infrastructure-${var.govuk_environment}"
-}
