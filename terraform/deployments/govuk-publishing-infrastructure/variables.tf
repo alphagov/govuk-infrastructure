@@ -103,3 +103,46 @@ variable "amazonmq_govuk_chat_retry_message_ttl" {
   default     = 300000
   description = "Time in miliseconds before messages in the govuk_chat_retry queue expires and are sent back to the govuk_chat_published_ducoments queue through the dead letter mechanism"
 }
+
+variable "allow_high_request_rate_from_cidrs" {
+  type        = list(string)
+  description = "List of CIDRs from which we allow a higher ratelimit."
+  default     = []
+}
+
+variable "backend_public_base_rate_warning" {
+  type        = number
+  description = "A warning rate limit threshold for the backend public web ACL"
+  default     = 2000
+}
+
+variable "backend_public_base_rate_limit" {
+  type        = number
+  description = "An enforced rate limit threshold for the backend public web ACL"
+  default     = 1000
+}
+
+variable "backend_public_ja3_denylist" {
+  type        = list(string)
+  description = "For the backend ALB. List of JA3 signatures for which we should block all requests."
+  default     = []
+}
+
+variable "waf_log_retention_days" {
+  type        = string
+  description = "The number of days CloudWatch will retain WAF logs for."
+  default     = "30"
+}
+
+variable "bouncer_public_base_rate_warning" {
+  type        = number
+  description = "A warning rate limit threshold for the bouncer public web ACL"
+  default     = 2000
+}
+
+variable "bouncer_public_base_rate_limit" {
+  type        = number
+  description = "An enforced rate limit threshold for the bouncer public web ACL"
+  default     = 1000
+}
+
