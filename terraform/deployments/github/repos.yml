@@ -743,12 +743,6 @@ repos:
       additional_contexts:
         - test
 
-  datagovuk_publish:
-    homepage_url: "https://docs.publishing.service.gov.uk/apps/datagovuk_publish.html"
-    required_status_checks:
-      additional_contexts:
-        - test
-
   govuk-browser-extension:
     required_status_checks:
       additional_contexts:
