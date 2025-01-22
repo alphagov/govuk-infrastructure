@@ -120,7 +120,7 @@ variable "x86_workers_default_capacity_type" {
 variable "x86_workers_size_desired" {
   type        = number
   description = "Desired capacity of managed node autoscale group."
-  default     = 0
+  default     = 3
 }
 
 variable "x86_workers_size_min" {
