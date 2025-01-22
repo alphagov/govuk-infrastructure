@@ -53,7 +53,7 @@ resource "kubernetes_namespace" "licensify" {
       # https://kubernetes-sigs.github.io/aws-load-balancer-controller/latest/deploy/pod_readiness_gate/
       "elbv2.k8s.aws/pod-readiness-gate-inject" = "enabled"
       "pod-security.kubernetes.io/audit"        = "restricted"
-      "pod-security.kubernetes.io/enforce"      = "baseline"
+      "pod-security.kubernetes.io/enforce"      = "restricted"
       "pod-security.kubernetes.io/warn"         = "restricted"
     }
   }
