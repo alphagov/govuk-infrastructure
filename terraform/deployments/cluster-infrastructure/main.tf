@@ -27,6 +27,34 @@ locals {
   secrets_prefix             = "govuk"
   monitoring_namespace       = "monitoring"
 
+  main_managed_node_group = {
+    main = {
+      name_prefix = var.cluster_name
+      # TODO: set iam_role_permissions_boundary
+      # TODO: apply provider default_tags to instances; might need to set launch_template_tags.
+      desired_size   = var.x86_workers_size_desired
+      max_size       = var.x86_workers_size_max
+      min_size       = var.x86_workers_size_min
+      instance_types = var.main_workers_instance_types
+      update_config  = { max_unavailable = 1 }
+      block_device_mappings = {
+        xvda = {
+          device_name = "/dev/xvda"
+          ebs = {
+            volume_size           = var.node_disk_size
+            volume_type           = "gp3"
+            encrypted             = true
+            delete_on_termination = true
+          }
+        }
+      }
+      additional_tags = {
+        "k8s.io/cluster-autoscaler/enabled"             = "true"
+        "k8s.io/cluster-autoscaler/${var.cluster_name}" = "owned"
+      }
+    }
+  }
+
   x86_managed_node_group = {
     x86 = {
       name_prefix = var.cluster_name
@@ -79,7 +107,7 @@ locals {
     }
   }
 
-  eks_managed_node_groups = merge(var.enable_x86_workers ? local.x86_managed_node_group : {}, var.enable_arm_workers ? local.arm_managed_node_group : {})
+  eks_managed_node_groups = merge(local.main_managed_node_group, var.enable_x86_workers ? local.x86_managed_node_group : {}, var.enable_arm_workers ? local.arm_managed_node_group : {})
 }
 
 provider "aws" {

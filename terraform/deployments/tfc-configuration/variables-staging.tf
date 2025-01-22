@@ -57,6 +57,8 @@ module "variable-set-staging" {
     enable_arm_workers = true
     enable_x86_workers = true
 
+    main_workers_instance_types = ["m6i.4xlarge", "m6a.4xlarge", "m6i.2xlarge", "m6a.2xlarge"]
+
     publishing_service_domain = "staging.publishing.service.gov.uk"
 
     frontend_memcached_node_type = "cache.t4g.medium"
