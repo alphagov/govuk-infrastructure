@@ -93,6 +93,12 @@ variable "enable_x86_workers" {
   default     = true
 }
 
+variable "main_workers_instance_types" {
+  type        = list(string)
+  description = "TEMPORARY - List of instance types for the managed node group, in order of preference. The second and subsequent preferences are only relevant when using spot instances."
+  default     = ["m6i.4xlarge", "m6a.4xlarge", "m6i.2xlarge", "m6a.2xlarge"]
+}
+
 variable "x86_workers_instance_types" {
   type        = list(string)
   description = "List of instance types for the managed node group, in order of preference. The second and subsequent preferences are only relevant when using spot instances."
