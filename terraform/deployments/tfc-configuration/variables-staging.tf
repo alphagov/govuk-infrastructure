@@ -55,6 +55,7 @@ module "variable-set-staging" {
 
     govuk_environment  = "staging"
     enable_arm_workers = true
+    enable_x86_workers = true
 
     publishing_service_domain = "staging.publishing.service.gov.uk"
 

@@ -27,15 +27,15 @@ locals {
   secrets_prefix             = "govuk"
   monitoring_namespace       = "monitoring"
 
-  main_managed_node_group = {
-    main = {
+  x86_managed_node_group = {
+    x86 = {
       name_prefix = var.cluster_name
       # TODO: set iam_role_permissions_boundary
       # TODO: apply provider default_tags to instances; might need to set launch_template_tags.
-      desired_size   = var.workers_size_desired
-      max_size       = var.workers_size_max
-      min_size       = var.workers_size_min
-      instance_types = var.workers_instance_types
+      desired_size   = var.x86_workers_size_desired
+      max_size       = var.x86_workers_size_max
+      min_size       = var.x86_workers_size_min
+      instance_types = var.x86_workers_instance_types
       update_config  = { max_unavailable = 1 }
       block_device_mappings = {
         xvda = {
@@ -64,7 +64,7 @@ locals {
       min_size              = var.arm_workers_size_min
       instance_types        = var.arm_workers_instance_types
       update_config         = { max_unavailable = 1 }
-      block_device_mappings = local.main_managed_node_group.main.block_device_mappings
+      block_device_mappings = local.x86_managed_node_group.x86.block_device_mappings
       taints = {
         arch = {
           key    = "arch"
@@ -79,7 +79,7 @@ locals {
     }
   }
 
-  eks_managed_node_groups = merge(local.main_managed_node_group, var.enable_arm_workers ? local.arm_managed_node_group : {})
+  eks_managed_node_groups = merge(var.enable_x86_workers ? local.x86_managed_node_group : {}, var.enable_arm_workers ? local.arm_managed_node_group : {})
 }
 
 provider "aws" {
@@ -193,7 +193,7 @@ module "eks" {
 
   eks_managed_node_group_defaults = {
     ami_type              = "AL2023_x86_64_STANDARD"
-    capacity_type         = var.workers_default_capacity_type
+    capacity_type         = var.x86_workers_default_capacity_type
     subnet_ids            = [for s in aws_subnet.eks_private : s.id]
     create_security_group = false
     create_iam_role       = false

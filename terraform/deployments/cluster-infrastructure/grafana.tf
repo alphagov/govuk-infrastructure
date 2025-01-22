@@ -74,12 +74,9 @@ resource "aws_iam_policy" "grafana" {
 }
 
 data "aws_rds_engine_version" "postgresql" {
-  engine  = "aurora-postgresql"
-  version = "13"
-  filter {
-    name   = "engine-mode"
-    values = ["serverless"]
-  }
+  engine       = "aurora-postgresql"
+  version      = "13"
+  default_only = true
 }
 
 resource "random_password" "grafana_db" { length = 20 }
