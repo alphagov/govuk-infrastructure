@@ -87,6 +87,12 @@ variable "arm_workers_size_max" {
   default     = 12
 }
 
+variable "enable_main_workers" {
+  type        = bool
+  description = "TEMPORARRY - Whether to enable the legacy Main-prefixed x86/AMD64 Managed Node Group"
+  default     = true
+}
+
 variable "enable_x86_workers" {
   type        = bool
   description = "Whether to enable the x86/AMD64 Managed Node Group"

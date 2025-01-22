@@ -53,10 +53,12 @@ module "variable-set-integration" {
       elasticsearch_c = { az = "eu-west-1c", cidr = "10.1.18.0/24", nat = false }
     }
 
-    govuk_environment  = "integration"
-    force_destroy      = true
-    enable_arm_workers = true
-    enable_x86_workers = true
+    govuk_environment = "integration"
+    force_destroy     = true
+
+    enable_arm_workers  = true
+    enable_main_workers = false
+    enable_x86_workers  = true
 
     main_workers_instance_types = ["m6i.4xlarge", "m6a.4xlarge", "m6i.2xlarge", "m6a.2xlarge"]
 
