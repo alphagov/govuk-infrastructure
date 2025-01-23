@@ -1,7 +1,7 @@
 version: 2
 updates:
   - package-ecosystem: terraform
-    directory: /terraform
+    directories: ["/terraform/**/*"]
     schedule:
       interval: weekly
   - package-ecosystem: bundler
