@@ -1,11 +1,18 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": [
-    "config:base"
-  ],
+  "extends": ["config:base"],
   "platformAutomerge": true,
   "pre-commit": {
     "enabled": true
   },
-  "enabledManagers": ["pre-commit"]
+  "enabledManagers": ["pre-commit", "terraform"],
+  "terraform": {
+    "fileMatch": ["^/terraform/.*\\.tf$"]
+  },
+  "packageRules": [
+    {
+      "matchPackageNames": ["/alexbasista\/workspacer\/tfe/"],
+      "groupName": "alexbasista/workspacer/tfe"
+    }
+  ]
 }
