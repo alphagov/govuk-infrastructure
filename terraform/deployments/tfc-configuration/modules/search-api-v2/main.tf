@@ -17,7 +17,7 @@ resource "tfe_workspace" "environment_workspace" {
   source_url  = "https://github.com/alphagov/search-v2-infrastructure/tree/main/terraform/meta"
 
   working_directory = "terraform/deployments/search-api-v2"
-  terraform_version = "~> 1.7.5"
+  terraform_version = "~> 1.10.0"
 
   # Only auto apply if there is no workspace defined that we need to wait for (in which case a
   # trigger will determine when to apply this workspace)
