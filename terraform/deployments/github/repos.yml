@@ -608,12 +608,6 @@ repos:
 
   search-v2-evaluator:
 
-  search-v2-infrastructure:
-    required_status_checks:
-      ignore_jenkins: true
-      additional_contexts:
-        - lint_and_validate
-
   service-manual-publisher:
     homepage_url: "https://docs.publishing.service.gov.uk/apps/service-manual-publisher.html"
     required_status_checks:
