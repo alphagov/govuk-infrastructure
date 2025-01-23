@@ -3,7 +3,7 @@ resource "helm_release" "efs_csi_driver" {
   name       = "aws-efs-csi-driver"
   namespace  = "kube-system"
   repository = "https://kubernetes-sigs.github.io/aws-efs-csi-driver"
-  version    = "3.1.1" # TODO: Dependabot or equivalent so this doesn't get neglected.
+  version    = "3.1.5" # TODO: Dependabot or equivalent so this doesn't get neglected.
 
   values = [yamlencode({
     controller = {
