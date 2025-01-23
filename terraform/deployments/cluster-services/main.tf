@@ -26,7 +26,7 @@ terraform {
     }
     tfe = {
       source  = "hashicorp/tfe"
-      version = "~> 0.55.0"
+      version = "~> 0.62.0"
     }
     # The AWS provider is only used here for remote state in remote.tf. Please
     # do not add AWS resources to this module.
