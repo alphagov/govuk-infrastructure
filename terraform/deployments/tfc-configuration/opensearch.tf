@@ -1,6 +1,6 @@
 module "opensearch-integration" {
   source  = "alexbasista/workspacer/tfe"
-  version = "0.10.0"
+  version = "0.12.0"
 
   organization      = var.organization
   workspace_name    = "opensearch-integration"
@@ -33,7 +33,7 @@ module "opensearch-integration" {
 
 module "opensearch-staging" {
   source  = "alexbasista/workspacer/tfe"
-  version = "0.10.0"
+  version = "0.12.0"
 
   organization      = var.organization
   workspace_name    = "opensearch-staging"
@@ -65,7 +65,7 @@ module "opensearch-staging" {
 
 module "opensearch-production" {
   source  = "alexbasista/workspacer/tfe"
-  version = "0.10.0"
+  version = "0.12.0"
 
   organization      = var.organization
   workspace_name    = "opensearch-production"
