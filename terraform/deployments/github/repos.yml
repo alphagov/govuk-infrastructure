@@ -800,7 +800,7 @@ repos:
     homepage_url: "https://docs.data-community.publishing.service.gov.uk/tools/govsearch/"
     required_pull_request_reviews:
       pull_request_bypassers:
-        - "/guilhem-fry"
+        - "/gfry"
         - "/nacnudus"
         - "/somme"
 
