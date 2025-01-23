@@ -11,7 +11,7 @@ terraform {
     # required for `google_service_usage_consumer_quota_override` resources
     google-beta = {
       source  = "hashicorp/google-beta"
-      version = "~> 5.20"
+      version = "~> 6.17"
     }
   }
 
