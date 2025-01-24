@@ -56,6 +56,8 @@ module "variable-set-integration" {
     govuk_environment = "integration"
     force_destroy     = true
 
+    enable_metrics_server = true
+
     enable_arm_workers  = true
     enable_main_workers = false
     enable_x86_workers  = true
