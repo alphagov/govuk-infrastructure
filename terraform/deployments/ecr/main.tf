@@ -66,7 +66,8 @@ locals {
     "licensify-feed",
     "licensify-frontend",
     "govuk-fastly-diff-generator",
-    "govuk-e2e-tests"
+    "govuk-e2e-tests",
+    "publisher-on-postgres-branch"
   ]
 }
 
