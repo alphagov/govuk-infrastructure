@@ -9,7 +9,7 @@ resource "helm_release" "aws_lb_controller" {
   name             = "aws-load-balancer-controller"
   repository       = "https://aws.github.io/eks-charts"
   chart            = "aws-load-balancer-controller"
-  version          = "1.7.2"
+  version          = "1.11.0"
   namespace        = local.services_ns
   create_namespace = true
   timeout          = var.helm_timeout_seconds
