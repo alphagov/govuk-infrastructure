@@ -1,6 +1,6 @@
 module "cluster-services-integration" {
   source  = "alexbasista/workspacer/tfe"
-  version = "0.10.0"
+  version = "0.12.0"
 
   organization      = var.organization
   workspace_name    = "cluster-services-integration"
@@ -32,7 +32,7 @@ module "cluster-services-integration" {
 
 module "cluster-services-staging" {
   source  = "alexbasista/workspacer/tfe"
-  version = "0.10.0"
+  version = "0.12.0"
 
   organization      = var.organization
   workspace_name    = "cluster-services-staging"
@@ -63,7 +63,7 @@ module "cluster-services-staging" {
 
 module "cluster-services-production" {
   source  = "alexbasista/workspacer/tfe"
-  version = "0.10.0"
+  version = "0.12.0"
 
   organization      = var.organization
   workspace_name    = "cluster-services-production"
