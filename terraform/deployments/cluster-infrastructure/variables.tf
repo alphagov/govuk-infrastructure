@@ -51,6 +51,12 @@ variable "force_destroy" {
   default     = false
 }
 
+variable "enable_metrics_server" {
+  type        = bool
+  description = "Enable the Metrics Server EKS Add-on. For Pod Metrics and HPA support."
+  default     = false
+}
+
 variable "enable_arm_workers" {
   type        = bool
   description = "Whether to enable the ARM/Graviton-based Managed Node Group"

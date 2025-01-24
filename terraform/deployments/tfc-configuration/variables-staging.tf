@@ -55,6 +55,8 @@ module "variable-set-staging" {
 
     govuk_environment = "staging"
 
+    enable_metrics_server = true
+
     enable_arm_workers  = true
     enable_main_workers = false
     enable_x86_workers  = true

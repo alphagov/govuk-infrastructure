@@ -27,6 +27,18 @@ locals {
   secrets_prefix             = "govuk"
   monitoring_namespace       = "monitoring"
 
+  default_cluster_addons = {
+    coredns    = { most_recent = true }
+    kube-proxy = { most_recent = true }
+    vpc-cni    = { most_recent = true }
+  }
+
+  metrics_server_addon = {
+    metrics-server = { most_recent = true }
+  }
+
+  enabled_cluster_addons = merge(local.default_cluster_addons, var.enable_metrics_server ? local.metrics_server_addon : {})
+
   main_managed_node_group = {
     main = {
       name_prefix = var.cluster_name
@@ -187,11 +199,7 @@ module "eks" {
   subnet_ids      = [for s in aws_subnet.eks_control_plane : s.id]
   vpc_id          = data.terraform_remote_state.infra_vpc.outputs.vpc_id
 
-  cluster_addons = {
-    coredns    = { most_recent = true }
-    kube-proxy = { most_recent = true }
-    vpc-cni    = { most_recent = true }
-  }
+  cluster_addons = local.enabled_cluster_addons
 
   cluster_endpoint_public_access         = true
   cloudwatch_log_group_retention_in_days = var.cluster_log_retention_in_days
