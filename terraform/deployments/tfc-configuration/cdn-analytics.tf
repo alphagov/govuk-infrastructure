@@ -1,6 +1,6 @@
 module "cdn-analytics-integration" {
   source  = "alexbasista/workspacer/tfe"
-  version = "0.10.0"
+  version = "0.12.0"
 
   organization        = var.organization
   workspace_name      = "cdn-analytics-integration"
@@ -33,7 +33,7 @@ module "cdn-analytics-integration" {
 
 module "cdn-analytics-staging" {
   source  = "alexbasista/workspacer/tfe"
-  version = "0.10.0"
+  version = "0.12.0"
 
   organization        = var.organization
   workspace_name      = "cdn-analytics-staging"
@@ -65,7 +65,7 @@ module "cdn-analytics-staging" {
 
 module "cdn-analytics-production" {
   source  = "alexbasista/workspacer/tfe"
-  version = "0.10.0"
+  version = "0.12.0"
 
   organization        = var.organization
   workspace_name      = "cdn-analytics-production"

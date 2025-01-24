@@ -1,6 +1,6 @@
 module "mobile-backend-production" {
   source  = "alexbasista/workspacer/tfe"
-  version = "0.10.0"
+  version = "0.12.0"
 
   organization        = var.organization
   workspace_name      = "mobile-backend-production"
@@ -32,7 +32,7 @@ module "mobile-backend-production" {
 
 module "mobile-backend-staging" {
   source  = "alexbasista/workspacer/tfe"
-  version = "0.10.0"
+  version = "0.12.0"
 
   organization        = var.organization
   workspace_name      = "mobile-backend-staging"
@@ -64,7 +64,7 @@ module "mobile-backend-staging" {
 
 module "mobile-backend-integration" {
   source  = "alexbasista/workspacer/tfe"
-  version = "0.10.0"
+  version = "0.12.0"
 
   organization        = var.organization
   workspace_name      = "mobile-backend-integration"

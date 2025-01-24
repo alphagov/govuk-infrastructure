@@ -1,6 +1,6 @@
 module "chat-integration" {
   source  = "alexbasista/workspacer/tfe"
-  version = "0.10.0"
+  version = "0.12.0"
 
   organization        = var.organization
   workspace_name      = "chat-integration"
@@ -34,7 +34,7 @@ module "chat-integration" {
 
 module "chat-staging" {
   source  = "alexbasista/workspacer/tfe"
-  version = "0.10.0"
+  version = "0.12.0"
 
   organization        = var.organization
   workspace_name      = "chat-staging"
@@ -68,7 +68,7 @@ module "chat-staging" {
 
 module "chat-production" {
   source  = "alexbasista/workspacer/tfe"
-  version = "0.10.0"
+  version = "0.12.0"
 
   organization        = var.organization
   workspace_name      = "chat-production"

@@ -1,6 +1,6 @@
 module "rds-integration" {
   source  = "alexbasista/workspacer/tfe"
-  version = "0.10.0"
+  version = "0.12.0"
 
   organization        = var.organization
   workspace_name      = "rds-integration"
@@ -34,7 +34,7 @@ module "rds-integration" {
 
 module "rds-staging" {
   source  = "alexbasista/workspacer/tfe"
-  version = "0.10.0"
+  version = "0.12.0"
 
   organization        = var.organization
   workspace_name      = "rds-staging"
@@ -67,7 +67,7 @@ module "rds-staging" {
 
 module "rds-production" {
   source  = "alexbasista/workspacer/tfe"
-  version = "0.10.0"
+  version = "0.12.0"
 
   organization        = var.organization
   workspace_name      = "rds-production"
