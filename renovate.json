@@ -8,11 +8,5 @@
   "enabledManagers": ["pre-commit", "terraform"],
   "terraform": {
     "fileMatch": ["^/terraform/.*\\.tf$"]
-  },
-  "packageRules": [
-    {
-      "matchPackageNames": ["/alexbasista\/workspacer\/tfe/"],
-      "groupName": "alexbasista/workspacer/tfe"
-    }
-  ]
+  }
 }
