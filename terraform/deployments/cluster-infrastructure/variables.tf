@@ -66,7 +66,7 @@ variable "enable_arm_workers" {
 variable "arm_workers_instance_types" {
   type        = list(string)
   description = "List of ARM-based instance types for the managed node group, in order of preference. The second and subsequent preferences are only relevant when using spot instances."
-  default     = ["m7g.4xlarge", "m6g.4xlarge", "m7g.2xlarge", "m6g.2xlarge"]
+  default     = ["m7g.4xlarge", "m6g.4xlarge"]
 }
 
 variable "arm_workers_default_capacity_type" {
