@@ -5,7 +5,7 @@ terraform {
       tags = ["opensearch", "eks", "aws"]
     }
   }
-  required_version = "~> 1.5"
+  required_version = "~> 1.10"
   required_providers {
     aws = {
       source  = "hashicorp/aws"
