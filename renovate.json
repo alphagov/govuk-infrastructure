@@ -9,10 +9,5 @@
   "terraform": {
     "fileMatch": ["^/terraform/.*\\.tf$"]
   },
-  "packageRules": [
-    {
-      "matchPackageNames": ["/alexbasista\/workspacer\/tfe/"],
-      "groupName": "alexbasista/workspacer/tfe"
-    }
-  ]
+  "prHourlyLimit": 20
 }
