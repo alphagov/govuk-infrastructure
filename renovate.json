@@ -8,5 +8,6 @@
   "enabledManagers": ["pre-commit", "terraform"],
   "terraform": {
     "fileMatch": ["^/terraform/.*\\.tf$"]
-  }
+  },
+  "prHourlyLimit": 20
 }
