@@ -103,7 +103,7 @@ data "aws_iam_policy_document" "tfc_policy" {
     actions = ["iam:PassRole"]
     resources = [
       "arn:aws:iam::*:role/service-role/AWSGlueServiceRole*",
-      "arn:aws:iam::*:role/AWSGlueServiceRole*",
+      "arn:aws:iam::*:role/AWSGlueServiceRole*"
     ]
     condition {
       test     = "StringEquals"
@@ -112,8 +112,11 @@ data "aws_iam_policy_document" "tfc_policy" {
     }
   }
   statement {
-    actions   = ["iam:PassRole"]
-    resources = ["arn:aws:iam::*:role/rds-monitoring-role"]
+    actions = ["iam:PassRole"]
+    resources = [
+      "arn:aws:iam::*:role/rds-monitoring-role",
+      "arn:aws:iam::*:role/govuk-*-csp-reports-firehose-role"
+    ]
   }
   statement {
     actions   = ["iam:*Role"]
