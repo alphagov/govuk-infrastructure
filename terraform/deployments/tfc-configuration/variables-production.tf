@@ -106,24 +106,14 @@ module "variable-set-ecr-production" {
   name = "ecr-production"
   tfvars = {
     emails = ["govuk-platform-engineering+ecr-inspector@digital.cabinet-office.gov.uk"]
-  }
-}
 
-# This has to be separate because the ':' get replaced with '='
-#  by the var set module
-resource "tfe_variable" "ecr-puller-arns" {
-  variable_set_id = module.variable-set-ecr-production.variable_set_id
-  key             = "puller_arns"
-  category        = "terraform"
-  value = jsonencode(
-    [
+    puller_arns = [
       "arn:aws:iam::172025368201:root", # Production
       "arn:aws:iam::696911096973:root", # Staging
       "arn:aws:iam::210287912431:root", # Integration
       "arn:aws:iam::430354129336:root", # Test
     ]
-  )
-  hcl = true
+  }
 }
 
 module "variable-set-chat-production" {

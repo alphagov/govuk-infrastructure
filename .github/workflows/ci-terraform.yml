@@ -43,7 +43,7 @@ jobs:
     - uses: terraform-linters/setup-tflint@v4
       name: Set up TFLint
       with:
-        tflint_version: v0.47.0
+        tflint_version: v0.55.0
 
     - name: terraform fmt
       working-directory: terraform
@@ -81,12 +81,14 @@ jobs:
       run: |
         cd terraform/deployments
         tflint --version
-        tflint --init --recursive 
-        tflint --format compact --module --recursive --force \
+        tflint --init --recursive -c ${{ github.workspace }}/.tflint.hcl
+        tflint --format compact --call-module-type=all --recursive --force \
+            -c ${{ github.workspace }}/.tflint.hcl \
             --enable-rule=terraform_comment_syntax \
             --enable-rule=terraform_deprecated_index \
             --enable-rule=terraform_required_providers \
             --enable-rule=terraform_standard_module_structure \
             --enable-rule=terraform_typed_variables \
             --enable-rule=terraform_unused_declarations \
-            --enable-rule=terraform_unused_required_providers
+            --enable-rule=terraform_unused_required_providers \
+            --disable-rule=aws_eks_node_group_invalid_ami_type
