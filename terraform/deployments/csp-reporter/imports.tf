@@ -139,11 +139,6 @@ import {
   id = "Content Security Policy reports"
 }
 
-import {
-  to = aws_glue_catalog_table.reports
-  id = "${data.aws_caller_identity.current.account_id}:csp_reports:reports"
-}
-
 # lambda.tf
 
 import {
