@@ -16,7 +16,7 @@ terraform {
 }
 
 provider "aws" {
-  region = "eu-west-1"
+  region = var.aws_region
   default_tags {
     tags = {
       Product              = "GOV.UK"
@@ -29,3 +29,10 @@ provider "aws" {
     }
   }
 }
+
+data "tfe_outputs" "vpc" {
+  organization = "govuk"
+  workspace    = "vpc-${var.govuk_environment}"
+}
+
+data "aws_caller_identity" "current" {}
