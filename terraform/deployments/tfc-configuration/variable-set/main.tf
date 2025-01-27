@@ -1,3 +1,11 @@
+terraform {
+  required_providers {
+    terraform = {
+      source = "terraform.io/builtin/terraform"
+    }
+  }
+}
+
 resource "tfe_variable_set" "set" {
   name         = var.name
   organization = "govuk"
@@ -10,7 +18,7 @@ resource "tfe_variable" "vars" {
 
   variable_set_id = tfe_variable_set.set.id
   key             = each.key
-  value           = try(tostring(each.value), replace(jsonencode(each.value), ":", "="))
-  hcl             = try(tostring(each.value), "nostring") == "nostring" ? true : false
+  value           = provider::terraform::encode_expr(each.value)
+  hcl             = true
   category        = "terraform"
 }
