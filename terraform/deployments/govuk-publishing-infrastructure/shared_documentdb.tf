@@ -6,20 +6,9 @@ resource "aws_docdb_cluster_instance" "shared_cluster_instances" {
   tags               = aws_docdb_cluster.shared_cluster.tags
 }
 
-import {
-  for_each = range(var.shared_documentdb_instance_count)
-  to       = aws_docdb_cluster_instance.shared_cluster_instances[each.key]
-  id       = "shared-documentdb-${each.key}"
-}
-
 resource "aws_docdb_subnet_group" "shared_cluster_subnet" {
   name       = "shared-documentdb-${var.govuk_environment}"
   subnet_ids = data.terraform_remote_state.infra_networking.outputs.private_subnet_ids
-}
-
-import {
-  to = aws_docdb_subnet_group.shared_cluster_subnet
-  id = "shared-documentdb-${var.govuk_environment}"
 }
 
 resource "aws_docdb_cluster_parameter_group" "shared_parameter_group" {
@@ -43,11 +32,6 @@ resource "aws_docdb_cluster_parameter_group" "shared_parameter_group" {
   }
 }
 
-import {
-  to = aws_docdb_cluster_parameter_group.shared_parameter_group
-  id = "shared-documentdb-parameter-group"
-}
-
 resource "random_password" "shared_documentdb_master" {
   length = 100
 }
@@ -66,25 +50,10 @@ resource "aws_docdb_cluster" "shared_cluster" {
   enabled_cloudwatch_logs_exports = ["profiler"]
 }
 
-import {
-  to = aws_docdb_cluster.shared_cluster
-  id = "shared-documentdb-${var.govuk_environment}"
-}
-
 resource "aws_route53_record" "shared_documentdb" {
   zone_id = data.aws_route53_zone.internal.zone_id
   name    = "shared-documentdb.${var.govuk_environment}.govuk-internal.digital"
   type    = "CNAME"
   ttl     = 300
   records = ["${aws_docdb_cluster.shared_cluster.endpoint}"]
-}
-
-data "aws_route53_zone" "import_zone" {
-  name         = "${var.govuk_environment}.govuk-internal.digital."
-  private_zone = true
-}
-
-import {
-  to = aws_route53_record.shared_documentdb
-  id = "${data.aws_route53_zone.import_zone.zone_id}_shared-documentdb.${var.govuk_environment}.govuk-internal.digital_CNAME"
 }

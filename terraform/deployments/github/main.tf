@@ -186,36 +186,26 @@ resource "github_branch_protection" "govuk_repos" {
 #
 
 resource "github_actions_organization_secret_repositories" "ci_user_github_api_token" {
-  secret_name             = "GOVUK_CI_GITHUB_API_TOKEN"
+  secret_name             = "GOVUK_CI_GITHUB_API_TOKEN" # pragma: allowlist secret
   selected_repository_ids = [for repo in concat(local.deployable_repos, local.gems) : repo.repo_id]
 }
 
 resource "github_actions_organization_secret_repositories" "argo_events_webhook_token" {
-  secret_name             = "GOVUK_ARGO_EVENTS_WEBHOOK_TOKEN"
+  secret_name             = "GOVUK_ARGO_EVENTS_WEBHOOK_TOKEN" # pragma: allowlist secret
   selected_repository_ids = [for repo in local.deployable_repos : repo.repo_id]
 }
 
 resource "github_actions_organization_secret_repositories" "argo_events_webhook_url" {
-  secret_name             = "GOVUK_ARGO_EVENTS_WEBHOOK_URL"
+  secret_name             = "GOVUK_ARGO_EVENTS_WEBHOOK_URL" # pragma: allowlist secret
   selected_repository_ids = [for repo in local.deployable_repos : repo.repo_id]
 }
 
 resource "github_actions_organization_secret_repositories" "pact_broker_password" {
-  secret_name             = "GOVUK_PACT_BROKER_PASSWORD"
+  secret_name             = "GOVUK_PACT_BROKER_PASSWORD" # pragma: allowlist secret
   selected_repository_ids = [for repo in local.pact_publishers : repo.repo_id]
 }
 
 resource "github_actions_organization_secret_repositories" "pact_broker_username" {
-  secret_name             = "GOVUK_PACT_BROKER_USERNAME"
+  secret_name             = "GOVUK_PACT_BROKER_USERNAME" # pragma: allowlist secret
   selected_repository_ids = [for repo in local.pact_publishers : repo.repo_id]
-}
-
-import {
-  id = "govuk-e2e-tests"
-  to = github_repository.govuk_repos["govuk-e2e-tests"]
-}
-
-import {
-  id = "govuk-display-screen"
-  to = github_repository.govuk_repos["govuk-display-screen"]
 }
