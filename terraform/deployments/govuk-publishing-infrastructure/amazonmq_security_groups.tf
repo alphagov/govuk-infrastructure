@@ -17,15 +17,6 @@ resource "aws_security_group" "rabbitmq" {
   description = "Access to the rabbitmq host from its ELB"
 }
 
-data "aws_security_group" "rabbitmq" {
-  name = "govuk_rabbitmq_access"
-}
-
-import {
-  to = aws_security_group.rabbitmq
-  id = data.aws_security_group.rabbitmq.id
-}
-
 resource "aws_security_group_rule" "rabbitmq_ingress_rabbitmq_elb_amqp" {
   type      = "ingress"
   from_port = 5672

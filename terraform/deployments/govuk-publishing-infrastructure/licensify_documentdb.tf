@@ -17,11 +17,6 @@ resource "aws_docdb_subnet_group" "licensify_cluster_subnet" {
   subnet_ids = data.terraform_remote_state.infra_networking.outputs.private_subnet_ids
 }
 
-import {
-  to = aws_docdb_subnet_group.licensify_cluster_subnet
-  id = "licensify-documentdb-${var.govuk_environment}"
-}
-
 resource "aws_docdb_cluster_parameter_group" "licensify_parameter_group" {
   family      = "docdb3.6"
   name        = "licensify-parameter-group"
@@ -44,11 +39,6 @@ resource "aws_docdb_cluster_parameter_group" "licensify_parameter_group" {
   }
 }
 
-import {
-  to = aws_docdb_cluster_parameter_group.licensify_parameter_group
-  id = "licensify-parameter-group"
-}
-
 resource "aws_docdb_cluster" "licensify_cluster" {
   cluster_identifier              = "licensify-documentdb-${var.govuk_environment}"
   availability_zones              = ["eu-west-1a", "eu-west-1b", "eu-west-1c"]
@@ -63,11 +53,6 @@ resource "aws_docdb_cluster" "licensify_cluster" {
   backup_retention_period         = var.licensify_backup_retention_period
 }
 
-import {
-  to = aws_docdb_cluster.licensify_cluster
-  id = "licensify-documentdb-${var.govuk_environment}"
-}
-
 resource "aws_docdb_cluster_instance" "licensify_cluster_instances" {
   count              = var.licensify_documentdb_instance_count
   identifier         = "licensify-documentdb-${count.index}"
@@ -75,10 +60,4 @@ resource "aws_docdb_cluster_instance" "licensify_cluster_instances" {
   # TODO: make sure this is the right DB instance size
   instance_class = "db.r5.large"
   tags           = aws_docdb_cluster.licensify_cluster.tags
-}
-
-import {
-  for_each = range(var.licensify_documentdb_instance_count)
-  to       = aws_docdb_cluster_instance.licensify_cluster_instances[each.key]
-  id       = "licensify-documentdb-${each.key}"
 }

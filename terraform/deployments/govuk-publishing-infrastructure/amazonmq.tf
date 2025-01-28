@@ -83,15 +83,6 @@ resource "aws_mq_broker" "publishing_amazonmq" {
   }
 }
 
-data "aws_mq_broker" "publishing_amazonmq" {
-  broker_name = "PublishingMQ"
-}
-
-import {
-  to = aws_mq_broker.publishing_amazonmq
-  id = data.aws_mq_broker.publishing_amazonmq.broker_id
-}
-
 resource "aws_lb" "publishingmq_lb_internal" {
   name               = "publishingamazonmq-lb-internal"
   tags               = { "Name" = "publishingamazonmq-lb-internal" }
@@ -103,15 +94,6 @@ resource "aws_lb" "publishingmq_lb_internal" {
     bucket = "govuk-${var.govuk_environment}-aws-logging"
     prefix = "lb/publishingamazonmq-internal-lb"
   }
-}
-
-data "aws_lb" "publishingmq_lb_internal" {
-  name = "publishingamazonmq-lb-internal"
-}
-
-import {
-  to = aws_lb.publishingmq_lb_internal
-  id = data.aws_lb.publishingmq_lb_internal.arn
 }
 
 resource "aws_lb_listener" "internal_https" {
@@ -128,16 +110,6 @@ resource "aws_lb_listener" "internal_https" {
   }
 }
 
-data "aws_lb_listener" "internal_https" {
-  port              = "443"
-  load_balancer_arn = data.aws_lb.publishingmq_lb_internal.arn
-}
-
-import {
-  to = aws_lb_listener.internal_https
-  id = data.aws_lb_listener.internal_https.arn
-}
-
 resource "aws_lb_target_group" "internal_https" {
   name        = "publishingmq-lb-internal-https"
   target_type = "ip"
@@ -149,15 +121,6 @@ resource "aws_lb_target_group" "internal_https" {
     path     = "/"
     protocol = "HTTPS"
   }
-}
-
-data "aws_lb_target_group" "internal_https" {
-  name = "publishingmq-lb-internal-https"
-}
-
-import {
-  to = aws_lb_target_group.internal_https
-  id = data.aws_lb_target_group.internal_https.arn
 }
 
 resource "aws_lb_target_group_attachment" "internal_https_ips" {
@@ -183,16 +146,6 @@ resource "aws_lb_listener" "internal_amqps" {
   }
 }
 
-data "aws_lb_listener" "internal_amqps" {
-  port              = "5671"
-  load_balancer_arn = data.aws_lb.publishingmq_lb_internal.arn
-}
-
-import {
-  to = aws_lb_listener.internal_amqps
-  id = data.aws_lb_listener.internal_amqps.arn
-}
-
 resource "aws_lb_target_group" "internal_amqps" {
   name        = "publishingmq-lb-internal-amqps"
   target_type = "ip"
@@ -205,15 +158,6 @@ resource "aws_lb_target_group" "internal_amqps" {
     port     = 443
     protocol = "HTTPS"
   }
-}
-
-data "aws_lb_target_group" "internal_amqps" {
-  name = "publishingmq-lb-internal-amqps"
-}
-
-import {
-  to = aws_lb_target_group.internal_amqps
-  id = data.aws_lb_target_group.internal_amqps.arn
 }
 
 resource "aws_lb_target_group_attachment" "internal_amqps_ips" {
