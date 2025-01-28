@@ -22,6 +22,14 @@ on:
         required: false
         type: string
         default: ${{ github.sha }}
+      tagOverride:
+        description: "Allows you to override a default image tag"
+        required: false
+        type: string
+      tagSuffix:
+        description: "Allows you to suffix image tags, e.g. to test features or variants"
+        required: false
+        type: string
     secrets:
       BUILD_SECRETS:
         description: "Allows adding secrets to the docker build task - https://docs.docker.com/build/ci/github-actions/secrets"
@@ -79,8 +87,9 @@ jobs:
           labels: |
             org.opencontainers.image.vendor=GDS
           tags: |
-            type=raw,priority=500,value=${{ inputs.gitRef }},enable=${{ startsWith(inputs.gitRef, 'v') }}
-            type=raw,priority=400,value=${{ steps.local-head.outputs.sha }},enable=${{ !startsWith(inputs.gitRef, 'v') }}
+            type=raw,priority=600,value=${{ inputs.tagOverride }},enable=${{ inputs.tagOverride != '' }}
+            type=raw,priority=500,value=${{ inputs.gitRef }},enable=${{ startsWith(inputs.gitRef, 'v') && !inputs.TagOverride }},suffix=${{ inputs.tagSuffix }}
+            type=raw,priority=400,value=${{ steps.local-head.outputs.sha }},enable=${{ !startsWith(inputs.gitRef, 'v') && !inputs.TagOverride }},suffix=${{ inputs.tagSuffix }}
 
       - id: build-image
         uses: docker/build-push-action@v6
@@ -152,8 +161,9 @@ jobs:
             org.opencontainers.image.vendor=GDS
           tags: |
             type=raw,value=latest,enable=${{ github.ref == format('refs/heads/{0}', 'main') }}
-            type=raw,priority=500,value=${{ inputs.gitRef }},enable=${{ startsWith(inputs.gitRef, 'v') }}
-            type=raw,priority=400,value=${{ needs.build-and-push-image.outputs.localSha }},enable=${{ !startsWith(inputs.gitRef, 'v') }}
+            type=raw,priority=600,value=${{ inputs.tagOverride }},enable=${{ inputs.tagOverride != '' }}
+            type=raw,priority=500,value=${{ inputs.gitRef }},enable=${{ startsWith(inputs.gitRef, 'v') && !inputs.TagOverride }},suffix=${{ inputs.tagSuffix }}
+            type=raw,priority=400,value=${{ needs.build-and-push-image.outputs.localSha }},enable=${{ !startsWith(inputs.gitRef, 'v') && !inputs.TagOverride }},suffix=${{ inputs.tagSuffix }}
 
       - name: Create Manifest Lists
         env:
