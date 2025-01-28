@@ -1,3 +1,7 @@
+data "tfe_github_app_installation" "alphagov" {
+  name = "alphagov"
+}
+
 module "variables-sensitive" {
   source  = "alexbasista/workspacer/tfe"
   version = "0.12.0"
@@ -14,9 +18,9 @@ module "variables-sensitive" {
 
   project_name = "govuk-infrastructure"
   vcs_repo = {
-    identifier     = "alphagov/govuk-infrastructure-sensitive"
-    branch         = "main"
-    oauth_token_id = data.tfe_oauth_client.github.oauth_token_id
+    identifier                 = "alphagov/govuk-infrastructure-sensitive"
+    branch                     = "main"
+    github_app_installation_id = data.tfe_github_app_installation.alphagov.id
   }
 
   team_access = {
