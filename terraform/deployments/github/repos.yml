@@ -299,6 +299,10 @@ repos:
     strict: true
     up_to_date_branches: true
 
+  govuk-infrastructure-sensitive:
+    strict: true
+    up_to_date_branches: true
+
   govuk-mobile-android-app:
     allow_squash_merge: true
     branch_protection: false
