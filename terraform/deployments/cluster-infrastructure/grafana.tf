@@ -118,6 +118,48 @@ module "grafana_db" {
   preferred_maintenance_window = "sun:02:00-sun:03:00"
 }
 
+module "grafana_db_v2" {
+  source  = "terraform-aws-modules/rds-aurora/aws"
+  version = "~> 9.11"
+
+  name              = "${local.grafana_db_name}-v2"
+  engine            = "aurora-postgresql"
+  engine_mode       = "provisioned"
+  engine_version    = data.aws_rds_engine_version.postgresql.version
+  storage_encrypted = true
+
+  allow_major_version_upgrade = true
+
+  vpc_id  = data.terraform_remote_state.infra_networking.outputs.vpc_id
+  subnets = data.terraform_remote_state.infra_networking.outputs.private_subnet_rds_ids
+
+  create_db_subnet_group = true
+  create_security_group  = true
+  security_group_rules = {
+    from_cluster = { source_security_group_id = module.eks.cluster_primary_security_group_id }
+  }
+  manage_master_user_password = false
+  master_password             = random_password.grafana_db.result
+
+  apply_immediately            = var.rds_apply_immediately
+  backup_retention_period      = var.rds_backup_retention_period
+  skip_final_snapshot          = var.rds_skip_final_snapshot
+  preferred_maintenance_window = "sun:02:00-sun:03:00"
+
+  serverlessv2_scaling_configuration = {
+    auto_pause               = var.grafana_db_auto_pause
+    min_capacity             = var.grafana_db_min_capacity
+    max_capacity             = var.grafana_db_max_capacity
+    seconds_until_auto_pause = var.grafana_db_seconds_until_auto_pause
+    timeout_action           = "ForceApplyCapacityChange"
+  }
+
+  instance_class = "db.serverless"
+  instances = {
+    one = {}
+  }
+}
+
 resource "aws_route53_record" "grafana_db" {
   zone_id = data.terraform_remote_state.infra_root_dns_zones.outputs.internal_root_zone_id
   # TODO: consider removing EKS suffix once the old EC2 environments are gone.
