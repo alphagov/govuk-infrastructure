@@ -271,7 +271,7 @@ repos:
     need_production_access_to_merge: false
     allow_squash_merge: true
     push_allowances: []
-  
+
   govuk-display-screen:
     need_production_access_to_merge: false
     allow_squash_merge: true
@@ -796,11 +796,6 @@ repos:
 
   govuk-knowledge-graph-search:
     homepage_url: "https://docs.data-community.publishing.service.gov.uk/tools/govsearch/"
-    required_pull_request_reviews:
-      pull_request_bypassers:
-        - "/gfry"
-        - "/nacnudus"
-        - "/somme"
 
   public-asset-checker:
     homepage_url: "https://govuk-public-asset-checker.herokuapp.com"
