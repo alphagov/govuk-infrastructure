@@ -55,14 +55,15 @@ module "variable-set-production" {
 
     govuk_environment = "production"
 
-    enable_metrics_server = false
+    enable_metrics_server = true
 
-    enable_arm_workers  = false
+    enable_arm_workers  = true
     enable_main_workers = true
     enable_x86_workers  = false
 
     publishing_service_domain = "publishing.service.gov.uk"
 
+    arm_workers_instance_types  = ["r8g.4xlarge", "r7g.4xlarge", "m7g.8xlarge", "m6g.8xlarge"]
     main_workers_instance_types = ["m6i.8xlarge", "m6a.8xlarge"]
     x86_workers_instance_types  = ["r7i.large", "r7a.large", "m7i-flex.xlarge", "m6a.xlarge", "m6i.xlarge"]
 
