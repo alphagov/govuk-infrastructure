@@ -28,7 +28,8 @@ module "govuk-publishing-infrastructure-integration" {
     "gcp-credentials-integration",
     module.variable-set-common.name,
     module.variable-set-integration.name,
-    module.variable-set-amazonmq-integration.name
+    module.variable-set-amazonmq-integration.name,
+    "sensitive-waf-integration"
   ]
 }
 
@@ -61,7 +62,8 @@ module "govuk-publishing-infrastructure-staging" {
     "gcp-credentials-staging",
     module.variable-set-common.name,
     module.variable-set-staging.name,
-    module.variable-set-amazonmq-staging.name
+    module.variable-set-amazonmq-staging.name,
+    "sensitive-waf-staging"
   ]
 }
 
@@ -94,6 +96,7 @@ module "govuk-publishing-infrastructure-production" {
     "gcp-credentials-production",
     module.variable-set-common.name,
     module.variable-set-production.name,
-    module.variable-set-amazonmq-production.name
+    module.variable-set-amazonmq-production.name,
+    "sensitive-waf-production"
   ]
 }
