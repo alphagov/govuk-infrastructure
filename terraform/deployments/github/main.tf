@@ -43,6 +43,13 @@ provider "github" {
 
 data "github_repositories" "govuk" {
   query = "topic:govuk org:alphagov archived:false"
+
+  lifecycle {
+    postcondition {
+      condition     = length(self.full_names) > 100
+      error_message = "not enough repositories were found by data source"
+    }
+  }
 }
 
 data "github_repository" "govuk" {
