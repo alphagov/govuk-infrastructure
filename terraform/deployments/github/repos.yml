@@ -299,7 +299,7 @@ repos:
     strict: true
     up_to_date_branches: true
 
-  govuk-infrastructure-sensitive:
+  terraform-govuk-infrastructure-sensitive:
     strict: true
     up_to_date_branches: true
 
