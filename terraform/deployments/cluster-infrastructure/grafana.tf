@@ -74,9 +74,9 @@ resource "aws_iam_policy" "grafana" {
 }
 
 data "aws_rds_engine_version" "postgresql" {
-  engine       = "aurora-postgresql"
-  version      = "13"
-  default_only = true
+  engine  = "aurora-postgresql"
+  version = "16"
+  latest  = true
 }
 
 resource "random_password" "grafana_db" { length = 20 }
@@ -88,7 +88,7 @@ module "grafana_db" {
   name              = local.grafana_db_name
   database_name     = "grafana"
   engine            = "aurora-postgresql"
-  engine_mode       = "serverless"
+  engine_mode       = "provisioned"
   engine_version    = data.aws_rds_engine_version.postgresql.version
   storage_encrypted = true
 
@@ -104,12 +104,10 @@ module "grafana_db" {
   manage_master_user_password = false
   master_password             = random_password.grafana_db.result
 
-  scaling_configuration = {
-    auto_pause               = var.grafana_db_auto_pause
-    min_capacity             = var.grafana_db_min_capacity
-    max_capacity             = var.grafana_db_max_capacity
-    seconds_until_auto_pause = var.grafana_db_seconds_until_auto_pause
-    timeout_action           = "ForceApplyCapacityChange"
+  serverlessv2_scaling_configuration = {
+    max_capacity             = 256
+    min_capacity             = 0
+    seconds_until_auto_pause = 300
   }
 
   apply_immediately            = var.rds_apply_immediately
