@@ -119,6 +119,8 @@ resource "github_repository" "govuk_repos" {
 
   name = each.key
 
+  visibility = try(each.value.visibility, "public")
+
   allow_squash_merge = true
   allow_merge_commit = false
 
