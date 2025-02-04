@@ -244,11 +244,17 @@ repos:
       additional_contexts:
         - test
 
+  govuk-analytics-engineering:
+    visibility: private
+
   govuk-aws:
     required_status_checks:
       additional_contexts:
         - Shellcheck
         - terraform fmt
+  
+  govuk-aws-data:
+    visibility: private
 
   govuk-content-api-docs:
     homepage_url: "https://content-api.publishing.service.gov.uk"
@@ -281,6 +287,7 @@ repos:
       }
 
   govuk-dns-tf:
+    visibility: private
     strict: true
     up_to_date_branches: true
     required_status_checks:
@@ -292,6 +299,7 @@ repos:
     up_to_date_branches: true
 
   govuk-fastly-secrets:
+    visibility: private
     strict: true
     up_to_date_branches: true
 
@@ -300,6 +308,7 @@ repos:
     up_to_date_branches: true
 
   terraform-govuk-infrastructure-sensitive:
+    visibility: private
     strict: true
     up_to_date_branches: true
 
@@ -767,17 +776,20 @@ repos:
         - Test
 
   govuk-rota-announcer:
+    visibility: internal
     required_status_checks:
       additional_contexts:
         - test
 
   govuk-user-reviewer:
+    visibility: private
     homepage_url: "https://github.com/alphagov/govuk-rfcs/pull/75"
     required_status_checks:
       additional_contexts:
         - test
 
   licensify:
+    visibility: private
     required_status_checks:
       additional_contexts:
         - test
@@ -786,6 +798,7 @@ repos:
     homepage_url: "https://alphagov.github.io/govuk-crd-library/"
 
   govuk-dns-ui:
+    visibility: private
     homepage_url: "https://dns.publishing.service.gov.uk"
 
   govuk-helm-charts:
@@ -817,8 +830,6 @@ repos:
 
   accessible-autocomplete-multiselect: {}
   ckan-mock-harvest-sources: {}
-  govuk-analytics-engineering: {}
-  govuk-aws-data: {}
   govuk-chat: {}
   govuk-data-science-workshop: {}
   govuk-mobile-backend: {}
