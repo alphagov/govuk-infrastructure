@@ -113,7 +113,8 @@ module "grafana_db" {
   apply_immediately            = var.rds_apply_immediately
   backup_retention_period      = var.rds_backup_retention_period
   skip_final_snapshot          = var.rds_skip_final_snapshot
-  preferred_maintenance_window = "sun:02:00-sun:03:00"
+  preferred_backup_window      = "02:00-03:00"
+  preferred_maintenance_window = "sun:04:00-sun:05:00"
 }
 
 resource "aws_route53_record" "grafana_db" {
