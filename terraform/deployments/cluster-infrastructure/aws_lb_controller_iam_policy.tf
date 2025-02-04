@@ -29,6 +29,7 @@ data "aws_iam_policy_document" "aws_lb_controller" {
       "ec2:DescribeTags",
       "ec2:GetCoipPoolUsage",
       "ec2:DescribeCoipPools",
+      "ec2:GetSecurityGroupsForVpc",
       "elasticloadbalancing:DescribeLoadBalancers",
       "elasticloadbalancing:DescribeLoadBalancerAttributes",
       "elasticloadbalancing:DescribeListeners",
@@ -38,7 +39,10 @@ data "aws_iam_policy_document" "aws_lb_controller" {
       "elasticloadbalancing:DescribeTargetGroups",
       "elasticloadbalancing:DescribeTargetGroupAttributes",
       "elasticloadbalancing:DescribeTargetHealth",
-      "elasticloadbalancing:DescribeTags"
+      "elasticloadbalancing:DescribeTags",
+      "elasticloadbalancing:DescribeTrustStores",
+      "elasticloadbalancing:DescribeListenerAttributes",
+      "elasticloadbalancing:DescribeCapacityReservation"
     ]
     resources = ["*"]
   }
@@ -215,7 +219,9 @@ data "aws_iam_policy_document" "aws_lb_controller" {
       "elasticloadbalancing:DeleteLoadBalancer",
       "elasticloadbalancing:ModifyTargetGroup",
       "elasticloadbalancing:ModifyTargetGroupAttributes",
-      "elasticloadbalancing:DeleteTargetGroup"
+      "elasticloadbalancing:DeleteTargetGroup",
+      "elasticloadbalancing:ModifyListenerAttributes",
+      "elasticloadbalancing:ModifyCapacityReservation"
     ]
     resources = ["*"]
     condition {
