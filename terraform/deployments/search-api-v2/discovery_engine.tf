@@ -14,6 +14,7 @@ module "govuk_content_discovery_engine" {
 # available for them yet.
 locals {
   discovery_engine_datastore_branch_path           = "${google_discovery_engine_data_store.govuk_content.name}/branches/default_branch"
+  discovery_engine_default_collection_name         = "projects/${var.gcp_project_id}/locations/${var.discovery_engine_location}/collections/default_collection"
   discovery_engine_serving_config_path             = "${google_discovery_engine_search_engine.govuk.name}/servingConfigs/default_search"
   discovery_engine_site_search_serving_config_path = "${google_discovery_engine_search_engine.govuk.name}/servingConfigs/site_search"
 }
@@ -68,11 +69,12 @@ resource "aws_secretsmanager_secret" "discovery_engine_configuration" {
 resource "aws_secretsmanager_secret_version" "discovery_engine_configuration" {
   secret_id = aws_secretsmanager_secret.discovery_engine_configuration.id
   secret_string = jsonencode({
-    "GOOGLE_CLOUD_CREDENTIALS"          = base64decode(google_service_account_key.api.private_key)
-    "GOOGLE_CLOUD_PROJECT_ID"           = var.gcp_project_id
-    "DISCOVERY_ENGINE_DATASTORE_BRANCH" = local.discovery_engine_datastore_branch_path,
-    "DISCOVERY_ENGINE_DATASTORE"        = google_discovery_engine_data_store.govuk_content.name,
-    "DISCOVERY_ENGINE_SERVING_CONFIG"   = local.discovery_engine_serving_config_path
+    "GOOGLE_CLOUD_CREDENTIALS"                 = base64decode(google_service_account_key.api.private_key)
+    "GOOGLE_CLOUD_PROJECT_ID"                  = var.gcp_project_id
+    "DISCOVERY_ENGINE_DATASTORE_BRANCH"        = local.discovery_engine_datastore_branch_path,
+    "DISCOVERY_ENGINE_DATASTORE"               = google_discovery_engine_data_store.govuk_content.name,
+    "DISCOVERY_ENGINE_DEFAULT_COLLECTION_NAME" = local.discovery_engine_default_collection_name
+    "DISCOVERY_ENGINE_SERVING_CONFIG"          = local.discovery_engine_serving_config_path
   })
 }
 
@@ -84,10 +86,11 @@ resource "aws_secretsmanager_secret" "discovery_engine_configuration_search_admi
 resource "aws_secretsmanager_secret_version" "discovery_engine_configuration_search_admin" {
   secret_id = aws_secretsmanager_secret.discovery_engine_configuration_search_admin.id
   secret_string = jsonencode({
-    "GOOGLE_CLOUD_CREDENTIALS"        = base64decode(google_service_account_key.search_admin.private_key)
-    "DISCOVERY_ENGINE_DATASTORE"      = google_discovery_engine_data_store.govuk_content.name
-    "DISCOVERY_ENGINE_ENGINE"         = google_discovery_engine_search_engine.govuk.name
-    "DISCOVERY_ENGINE_SERVING_CONFIG" = local.discovery_engine_site_search_serving_config_path
+    "GOOGLE_CLOUD_CREDENTIALS"                 = base64decode(google_service_account_key.search_admin.private_key)
+    "DISCOVERY_ENGINE_DATASTORE"               = google_discovery_engine_data_store.govuk_content.name
+    "DISCOVERY_ENGINE_DEFAULT_COLLECTION_NAME" = local.discovery_engine_default_collection_name
+    "DISCOVERY_ENGINE_ENGINE"                  = google_discovery_engine_search_engine.govuk.name
+    "DISCOVERY_ENGINE_SERVING_CONFIG"          = local.discovery_engine_site_search_serving_config_path
   })
 }
 
