@@ -124,7 +124,7 @@ module "variable-set-chat-production" {
     chat_redis_cluster_multi_az_enabled           = true
     chat_redis_cluster_node_type                  = "cache.r6g.xlarge"
     chat_redis_cluster_num_cache_clusters         = "2"
-    cloudfront_create                             = 1
+    cloudfront_create                             = true
     cloudfront_enable                             = true
     service_disabled                              = false
     origin_chat_domain                            = "chat.eks.production.govuk.digital"
