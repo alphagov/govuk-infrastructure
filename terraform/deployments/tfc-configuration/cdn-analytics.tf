@@ -26,8 +26,8 @@ module "cdn-analytics-integration" {
 
   variable_set_names = [
     "gcp-credentials-integration",
-    "common",
-    "common-integration"
+    module.variable-set-common.name,
+    module.variable-set-integration.name
   ]
 }
 
@@ -58,8 +58,8 @@ module "cdn-analytics-staging" {
 
   variable_set_names = [
     "gcp-credentials-staging",
-    "common",
-    "common-staging"
+    module.variable-set-common.name,
+    module.variable-set-staging.name
   ]
 }
 
@@ -90,7 +90,7 @@ module "cdn-analytics-production" {
 
   variable_set_names = [
     "gcp-credentials-production",
-    "common",
-    "common-production"
+    module.variable-set-common.name,
+    module.variable-set-production.name
   ]
 }

@@ -26,9 +26,9 @@ module "chat-integration" {
 
   variable_set_names = [
     "aws-credentials-integration",
-    "common",
-    "common-integration",
-    "chat-integration"
+    module.variable-set-common.name,
+    module.variable-set-integration.name,
+    module.variable-set-chat-integration.name
   ]
 }
 
@@ -60,9 +60,9 @@ module "chat-staging" {
 
   variable_set_names = [
     "aws-credentials-staging",
-    "common",
-    "common-staging",
-    "chat-staging"
+    module.variable-set-common.name,
+    module.variable-set-staging.name,
+    module.variable-set-chat-staging.name
   ]
 }
 
@@ -91,8 +91,8 @@ module "chat-production" {
 
   variable_set_names = [
     "aws-credentials-production",
-    "common",
-    "common-production",
-    "chat-production"
+    module.variable-set-common.name,
+    module.variable-set-production.name,
+    module.variable-set-chat-production.name
   ]
 }

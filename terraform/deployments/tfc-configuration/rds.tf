@@ -26,9 +26,9 @@ module "rds-integration" {
 
   variable_set_names = [
     "aws-credentials-integration",
-    "common",
-    "common-integration",
-    "rds-integration"
+    module.variable-set-common.name,
+    module.variable-set-integration.name,
+    module.variable-set-rds-integration.name
   ]
 }
 
@@ -59,9 +59,9 @@ module "rds-staging" {
 
   variable_set_names = [
     "aws-credentials-staging",
-    "common",
-    "common-staging",
-    "rds-staging"
+    module.variable-set-common.name,
+    module.variable-set-staging.name,
+    module.variable-set-rds-staging.name
   ]
 }
 
@@ -92,8 +92,8 @@ module "rds-production" {
 
   variable_set_names = [
     "aws-credentials-production",
-    "common",
-    "common-production",
-    "rds-production"
+    module.variable-set-common.name,
+    module.variable-set-production.name,
+    module.variable-set-rds-production.name
   ]
 }

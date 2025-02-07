@@ -23,8 +23,8 @@ module "ecr-production" {
 
   variable_set_names = [
     "aws-credentials-production",
-    "common",
-    "common-production",
-    "ecr-production"
+    module.variable-set-common.name,
+    module.variable-set-production.name,
+    module.variable-set-ecr-production.name
   ]
 }
