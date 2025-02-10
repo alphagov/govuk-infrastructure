@@ -25,8 +25,8 @@ module "cluster-services-integration" {
 
   variable_set_names = [
     "aws-credentials-integration",
-    "common",
-    "common-integration"
+    module.variable-set-common.name,
+    module.variable-set-integration.name
   ]
 }
 
@@ -56,8 +56,8 @@ module "cluster-services-staging" {
 
   variable_set_names = [
     "aws-credentials-staging",
-    "common",
-    "common-staging"
+    module.variable-set-common.name,
+    module.variable-set-staging.name
   ]
 }
 
@@ -87,7 +87,7 @@ module "cluster-services-production" {
 
   variable_set_names = [
     "aws-credentials-production",
-    "common",
-    "common-production"
+    module.variable-set-common.name,
+    module.variable-set-production.name
   ]
 }

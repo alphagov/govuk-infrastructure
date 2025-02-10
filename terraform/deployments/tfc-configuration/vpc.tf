@@ -27,8 +27,8 @@ module "vpc-integration" {
   variable_set_names = [
     "aws-credentials-integration",
     "gcp-credentials-integration",
-    "common",
-    "common-integration"
+    module.variable-set-common.name,
+    module.variable-set-integration.name
   ]
 }
 
@@ -60,8 +60,8 @@ module "vpc-staging" {
   variable_set_names = [
     "aws-credentials-staging",
     "gcp-credentials-staging",
-    "common",
-    "common-staging"
+    module.variable-set-common.name,
+    module.variable-set-staging.name
   ]
 }
 
@@ -93,7 +93,7 @@ module "vpc-production" {
   variable_set_names = [
     "aws-credentials-production",
     "gcp-credentials-production",
-    "common",
-    "common-production"
+    module.variable-set-common.name,
+    module.variable-set-production.name
   ]
 }

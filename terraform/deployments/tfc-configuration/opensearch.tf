@@ -25,9 +25,9 @@ module "opensearch-integration" {
 
   variable_set_names = [
     "aws-credentials-integration",
-    "common",
-    "common-integration",
-    "opensearch-integration"
+    module.variable-set-common.name,
+    module.variable-set-integration.name,
+    module.variable-set-opensearch-integration.name
   ]
 }
 
@@ -57,9 +57,9 @@ module "opensearch-staging" {
 
   variable_set_names = [
     "aws-credentials-staging",
-    "common",
-    "common-staging",
-    "opensearch-staging"
+    module.variable-set-common.name,
+    module.variable-set-staging.name,
+    module.variable-set-opensearch-staging.name
   ]
 }
 
@@ -89,8 +89,8 @@ module "opensearch-production" {
 
   variable_set_names = [
     "aws-credentials-production",
-    "common",
-    "common-production",
-    "opensearch-production"
+    module.variable-set-common.name,
+    module.variable-set-production.name,
+    module.variable-set-opensearch-production.name
   ]
 }

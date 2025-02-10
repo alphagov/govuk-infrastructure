@@ -25,9 +25,9 @@ module "cloudfront-staging" {
 
   variable_set_names = [
     "aws-credentials-staging",
-    "common",
-    "common-staging",
-    "cloudfront-staging"
+    module.variable-set-common.name,
+    module.variable-set-staging.name,
+    module.variable-set-cloudfront-staging.name
   ]
 }
 
@@ -58,8 +58,8 @@ module "cloudfront-production" {
 
   variable_set_names = [
     "aws-credentials-production",
-    "common",
-    "common-production",
-    "cloudfront-production"
+    module.variable-set-common.name,
+    module.variable-set-production.name,
+    module.variable-set-cloudfront-production.name
   ]
 }
