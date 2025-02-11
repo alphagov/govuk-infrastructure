@@ -1,6 +1,5 @@
 module "mobile-backend-production" {
-  source  = "alexbasista/workspacer/tfe"
-  version = "0.12.0"
+  source = "github.com/alphagov/terraform-tfe-workspacer"
 
   organization        = var.organization
   workspace_name      = "mobile-backend-production"
@@ -24,15 +23,17 @@ module "mobile-backend-production" {
   }
 
   variable_set_names = [
-    "aws-credentials-production",
-    module.variable-set-common.name,
-    module.variable-set-production.name
+    "aws-credentials-production"
+  ]
+
+  variable_set_ids = [
+    module.variable-set-common.id,
+    module.variable-set-production.id
   ]
 }
 
 module "mobile-backend-staging" {
-  source  = "alexbasista/workspacer/tfe"
-  version = "0.12.0"
+  source = "github.com/alphagov/terraform-tfe-workspacer"
 
   organization        = var.organization
   workspace_name      = "mobile-backend-staging"
@@ -56,15 +57,17 @@ module "mobile-backend-staging" {
   }
 
   variable_set_names = [
-    "aws-credentials-staging",
-    module.variable-set-common.name,
-    module.variable-set-staging.name
+    "aws-credentials-staging"
+  ]
+
+  variable_set_ids = [
+    module.variable-set-common.id,
+    module.variable-set-staging.id
   ]
 }
 
 module "mobile-backend-integration" {
-  source  = "alexbasista/workspacer/tfe"
-  version = "0.12.0"
+  source = "github.com/alphagov/terraform-tfe-workspacer"
 
   organization        = var.organization
   workspace_name      = "mobile-backend-integration"
@@ -89,9 +92,12 @@ module "mobile-backend-integration" {
   }
 
   variable_set_names = [
-    "aws-credentials-integration",
-    module.variable-set-common.name,
-    module.variable-set-integration.name
+    "aws-credentials-integration"
+  ]
+
+  variable_set_ids = [
+    module.variable-set-common.id,
+    module.variable-set-integration.id
   ]
 }
 

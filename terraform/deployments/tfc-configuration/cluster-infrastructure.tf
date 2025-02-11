@@ -1,6 +1,5 @@
 module "cluster-infrastructure-integration" {
-  source  = "alexbasista/workspacer/tfe"
-  version = "0.12.0"
+  source = "github.com/alphagov/terraform-tfe-workspacer"
 
   organization        = var.organization
   workspace_name      = "cluster-infrastructure-integration"
@@ -25,15 +24,17 @@ module "cluster-infrastructure-integration" {
   }
 
   variable_set_names = [
-    "aws-credentials-integration",
-    module.variable-set-common.name,
-    module.variable-set-integration.name
+    "aws-credentials-integration"
+  ]
+
+  variable_set_ids = [
+    module.variable-set-common.id,
+    module.variable-set-integration.id
   ]
 }
 
 module "cluster-infrastructure-staging" {
-  source  = "alexbasista/workspacer/tfe"
-  version = "0.12.0"
+  source = "github.com/alphagov/terraform-tfe-workspacer"
 
   organization        = var.organization
   workspace_name      = "cluster-infrastructure-staging"
@@ -58,15 +59,17 @@ module "cluster-infrastructure-staging" {
   }
 
   variable_set_names = [
-    "aws-credentials-staging",
-    module.variable-set-common.name,
-    module.variable-set-staging.name
+    "aws-credentials-staging"
+  ]
+
+  variable_set_ids = [
+    module.variable-set-common.id,
+    module.variable-set-staging.id
   ]
 }
 
 module "cluster-infrastructure-production" {
-  source  = "alexbasista/workspacer/tfe"
-  version = "0.12.0"
+  source = "github.com/alphagov/terraform-tfe-workspacer"
 
   organization        = var.organization
   workspace_name      = "cluster-infrastructure-production"
@@ -88,8 +91,11 @@ module "cluster-infrastructure-production" {
   team_access = { "GOV.UK Production" = "write" }
 
   variable_set_names = [
-    "aws-credentials-production",
-    module.variable-set-common.name,
-    module.variable-set-production.name
+    "aws-credentials-production"
+  ]
+
+  variable_set_ids = [
+    module.variable-set-common.id,
+    module.variable-set-production.id
   ]
 }

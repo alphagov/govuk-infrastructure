@@ -1,6 +1,5 @@
 module "rds-integration" {
-  source  = "alexbasista/workspacer/tfe"
-  version = "0.12.0"
+  source = "github.com/alphagov/terraform-tfe-workspacer"
 
   organization        = var.organization
   workspace_name      = "rds-integration"
@@ -25,16 +24,18 @@ module "rds-integration" {
   }
 
   variable_set_names = [
-    "aws-credentials-integration",
-    module.variable-set-common.name,
-    module.variable-set-integration.name,
-    module.variable-set-rds-integration.name
+    "aws-credentials-integration"
+  ]
+
+  variable_set_ids = [
+    module.variable-set-common.id,
+    module.variable-set-integration.id,
+    module.variable-set-rds-integration.id
   ]
 }
 
 module "rds-staging" {
-  source  = "alexbasista/workspacer/tfe"
-  version = "0.12.0"
+  source = "github.com/alphagov/terraform-tfe-workspacer"
 
   organization        = var.organization
   workspace_name      = "rds-staging"
@@ -58,16 +59,18 @@ module "rds-staging" {
   }
 
   variable_set_names = [
-    "aws-credentials-staging",
-    module.variable-set-common.name,
-    module.variable-set-staging.name,
-    module.variable-set-rds-staging.name
+    "aws-credentials-staging"
+  ]
+
+  variable_set_ids = [
+    module.variable-set-common.id,
+    module.variable-set-staging.id,
+    module.variable-set-rds-staging.id
   ]
 }
 
 module "rds-production" {
-  source  = "alexbasista/workspacer/tfe"
-  version = "0.12.0"
+  source = "github.com/alphagov/terraform-tfe-workspacer"
 
   organization        = var.organization
   workspace_name      = "rds-production"
@@ -91,9 +94,12 @@ module "rds-production" {
   }
 
   variable_set_names = [
-    "aws-credentials-production",
-    module.variable-set-common.name,
-    module.variable-set-production.name,
-    module.variable-set-rds-production.name
+    "aws-credentials-production"
+  ]
+
+  variable_set_ids = [
+    module.variable-set-common.id,
+    module.variable-set-production.id,
+    module.variable-set-rds-production.id
   ]
 }

@@ -1,6 +1,5 @@
 module "csp-reporter-integration" {
-  source  = "alexbasista/workspacer/tfe"
-  version = "0.12.0"
+  source = "github.com/alphagov/terraform-tfe-workspacer"
 
   organization      = var.organization
   workspace_name    = "csp-reporter-integration"
@@ -24,15 +23,17 @@ module "csp-reporter-integration" {
   }
 
   variable_set_names = [
-    "aws-credentials-integration",
-    module.variable-set-common.name,
-    module.variable-set-integration.name
+    "aws-credentials-integration"
+  ]
+
+  variable_set_ids = [
+    module.variable-set-common.id,
+    module.variable-set-integration.id
   ]
 }
 
 module "csp-reporter-staging" {
-  source  = "alexbasista/workspacer/tfe"
-  version = "0.12.0"
+  source = "github.com/alphagov/terraform-tfe-workspacer"
 
   organization      = var.organization
   workspace_name    = "csp-reporter-staging"
@@ -55,15 +56,17 @@ module "csp-reporter-staging" {
   }
 
   variable_set_names = [
-    "aws-credentials-staging",
-    module.variable-set-common.name,
-    module.variable-set-staging.name
+    "aws-credentials-staging"
+  ]
+
+  variable_set_ids = [
+    module.variable-set-common.id,
+    module.variable-set-staging.id
   ]
 }
 
 module "csp-reporter-production" {
-  source  = "alexbasista/workspacer/tfe"
-  version = "0.12.0"
+  source = "github.com/alphagov/terraform-tfe-workspacer"
 
   organization      = var.organization
   workspace_name    = "csp-reporter-production"
@@ -86,8 +89,11 @@ module "csp-reporter-production" {
   }
 
   variable_set_names = [
-    "aws-credentials-production",
-    module.variable-set-common.name,
-    module.variable-set-production.name
+    "aws-credentials-production"
+  ]
+
+  variable_set_ids = [
+    module.variable-set-common.id,
+    module.variable-set-production.id
   ]
 }

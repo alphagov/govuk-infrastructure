@@ -1,6 +1,5 @@
 module "cdn-analytics-integration" {
-  source  = "alexbasista/workspacer/tfe"
-  version = "0.12.0"
+  source = "github.com/alphagov/terraform-tfe-workspacer"
 
   organization        = var.organization
   workspace_name      = "cdn-analytics-integration"
@@ -25,15 +24,17 @@ module "cdn-analytics-integration" {
   }
 
   variable_set_names = [
-    "gcp-credentials-integration",
-    module.variable-set-common.name,
-    module.variable-set-integration.name
+    "gcp-credentials-integration"
+  ]
+
+  variable_set_ids = [
+    module.variable-set-common.id,
+    module.variable-set-integration.id
   ]
 }
 
 module "cdn-analytics-staging" {
-  source  = "alexbasista/workspacer/tfe"
-  version = "0.12.0"
+  source = "github.com/alphagov/terraform-tfe-workspacer"
 
   organization        = var.organization
   workspace_name      = "cdn-analytics-staging"
@@ -57,15 +58,17 @@ module "cdn-analytics-staging" {
   }
 
   variable_set_names = [
-    "gcp-credentials-staging",
-    module.variable-set-common.name,
-    module.variable-set-staging.name
+    "gcp-credentials-staging"
+  ]
+
+  variable_set_ids = [
+    module.variable-set-common.id,
+    module.variable-set-staging.id
   ]
 }
 
 module "cdn-analytics-production" {
-  source  = "alexbasista/workspacer/tfe"
-  version = "0.12.0"
+  source = "github.com/alphagov/terraform-tfe-workspacer"
 
   organization        = var.organization
   workspace_name      = "cdn-analytics-production"
@@ -89,8 +92,11 @@ module "cdn-analytics-production" {
   }
 
   variable_set_names = [
-    "gcp-credentials-production",
-    module.variable-set-common.name,
-    module.variable-set-production.name
+    "gcp-credentials-production"
+  ]
+
+  variable_set_ids = [
+    module.variable-set-common.id,
+    module.variable-set-production.id
   ]
 }

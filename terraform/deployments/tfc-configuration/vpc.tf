@@ -1,6 +1,5 @@
 module "vpc-integration" {
-  source  = "alexbasista/workspacer/tfe"
-  version = "~> 0.12.0"
+  source = "github.com/alphagov/terraform-tfe-workspacer"
 
   organization        = var.organization
   workspace_name      = "vpc-integration"
@@ -26,15 +25,17 @@ module "vpc-integration" {
 
   variable_set_names = [
     "aws-credentials-integration",
-    "gcp-credentials-integration",
-    module.variable-set-common.name,
-    module.variable-set-integration.name
+    "gcp-credentials-integration"
+  ]
+
+  variable_set_ids = [
+    module.variable-set-common.id,
+    module.variable-set-integration.id
   ]
 }
 
 module "vpc-staging" {
-  source  = "alexbasista/workspacer/tfe"
-  version = "~> 0.12.0"
+  source = "github.com/alphagov/terraform-tfe-workspacer"
 
   organization        = var.organization
   workspace_name      = "vpc-staging"
@@ -59,15 +60,17 @@ module "vpc-staging" {
 
   variable_set_names = [
     "aws-credentials-staging",
-    "gcp-credentials-staging",
-    module.variable-set-common.name,
-    module.variable-set-staging.name
+    "gcp-credentials-staging"
+  ]
+
+  variable_set_ids = [
+    module.variable-set-common.id,
+    module.variable-set-staging.id
   ]
 }
 
 module "vpc-production" {
-  source  = "alexbasista/workspacer/tfe"
-  version = "~> 0.12.0"
+  source = "github.com/alphagov/terraform-tfe-workspacer"
 
   organization        = var.organization
   workspace_name      = "vpc-production"
@@ -92,8 +95,11 @@ module "vpc-production" {
 
   variable_set_names = [
     "aws-credentials-production",
-    "gcp-credentials-production",
-    module.variable-set-common.name,
-    module.variable-set-production.name
+    "gcp-credentials-production"
+  ]
+
+  variable_set_ids = [
+    module.variable-set-common.id,
+    module.variable-set-production.id
   ]
 }

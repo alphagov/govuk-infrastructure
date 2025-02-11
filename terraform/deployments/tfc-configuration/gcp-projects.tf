@@ -1,6 +1,5 @@
 module "gcp-ga4-analytics" {
-  source  = "alexbasista/workspacer/tfe"
-  version = "0.12.0"
+  source = "github.com/alphagov/terraform-tfe-workspacer"
 
   organization        = var.organization
   workspace_name      = "gcp-ga4-analytics"

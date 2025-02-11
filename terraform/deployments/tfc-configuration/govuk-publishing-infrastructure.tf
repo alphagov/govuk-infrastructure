@@ -1,6 +1,5 @@
 module "govuk-publishing-infrastructure-integration" {
-  source  = "alexbasista/workspacer/tfe"
-  version = "0.12.0"
+  source = "github.com/alphagov/terraform-tfe-workspacer"
 
   organization      = var.organization
   workspace_name    = "govuk-publishing-infrastructure-integration"
@@ -25,17 +24,19 @@ module "govuk-publishing-infrastructure-integration" {
 
   variable_set_names = [
     "aws-credentials-integration",
-    "gcp-credentials-integration",
-    module.variable-set-common.name,
-    module.variable-set-integration.name,
-    module.variable-set-amazonmq-integration.name,
-    "sensitive-waf-integration"
+    "gcp-credentials-integration"
+  ]
+
+  variable_set_ids = [
+    module.variable-set-common.id,
+    module.variable-set-integration.id,
+    module.variable-set-amazonmq-integration.id,
+    module.sensitive-variables.waf_integration_id
   ]
 }
 
 module "govuk-publishing-infrastructure-staging" {
-  source  = "alexbasista/workspacer/tfe"
-  version = "0.12.0"
+  source = "github.com/alphagov/terraform-tfe-workspacer"
 
   organization      = var.organization
   workspace_name    = "govuk-publishing-infrastructure-staging"
@@ -59,17 +60,19 @@ module "govuk-publishing-infrastructure-staging" {
 
   variable_set_names = [
     "aws-credentials-staging",
-    "gcp-credentials-staging",
-    module.variable-set-common.name,
-    module.variable-set-staging.name,
-    module.variable-set-amazonmq-staging.name,
-    "sensitive-waf-staging"
+    "gcp-credentials-staging"
+  ]
+
+  variable_set_ids = [
+    module.variable-set-common.id,
+    module.variable-set-staging.id,
+    module.variable-set-amazonmq-staging.id,
+    module.sensitive-variables.waf_staging_id
   ]
 }
 
 module "govuk-publishing-infrastructure-production" {
-  source  = "alexbasista/workspacer/tfe"
-  version = "0.12.0"
+  source = "github.com/alphagov/terraform-tfe-workspacer"
 
   organization      = var.organization
   workspace_name    = "govuk-publishing-infrastructure-production"
@@ -93,10 +96,13 @@ module "govuk-publishing-infrastructure-production" {
 
   variable_set_names = [
     "aws-credentials-production",
-    "gcp-credentials-production",
-    module.variable-set-common.name,
-    module.variable-set-production.name,
-    module.variable-set-amazonmq-production.name,
-    "sensitive-waf-production"
+    "gcp-credentials-production"
+  ]
+
+  variable_set_ids = [
+    module.variable-set-common.id,
+    module.variable-set-production.id,
+    module.variable-set-amazonmq-production.id,
+    module.sensitive-variables.waf_production_id
   ]
 }

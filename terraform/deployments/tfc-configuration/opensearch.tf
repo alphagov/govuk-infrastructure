@@ -1,6 +1,5 @@
 module "opensearch-integration" {
-  source  = "alexbasista/workspacer/tfe"
-  version = "0.12.0"
+  source = "github.com/alphagov/terraform-tfe-workspacer"
 
   organization      = var.organization
   workspace_name    = "opensearch-integration"
@@ -24,16 +23,18 @@ module "opensearch-integration" {
   }
 
   variable_set_names = [
-    "aws-credentials-integration",
-    module.variable-set-common.name,
-    module.variable-set-integration.name,
-    module.variable-set-opensearch-integration.name
+    "aws-credentials-integration"
+  ]
+
+  variable_set_ids = [
+    module.variable-set-common.id,
+    module.variable-set-integration.id,
+    module.variable-set-opensearch-integration.id
   ]
 }
 
 module "opensearch-staging" {
-  source  = "alexbasista/workspacer/tfe"
-  version = "0.12.0"
+  source = "github.com/alphagov/terraform-tfe-workspacer"
 
   organization      = var.organization
   workspace_name    = "opensearch-staging"
@@ -56,16 +57,18 @@ module "opensearch-staging" {
   }
 
   variable_set_names = [
-    "aws-credentials-staging",
-    module.variable-set-common.name,
-    module.variable-set-staging.name,
-    module.variable-set-opensearch-staging.name
+    "aws-credentials-staging"
+  ]
+
+  variable_set_ids = [
+    module.variable-set-common.id,
+    module.variable-set-staging.id,
+    module.variable-set-opensearch-staging.id
   ]
 }
 
 module "opensearch-production" {
-  source  = "alexbasista/workspacer/tfe"
-  version = "0.12.0"
+  source = "github.com/alphagov/terraform-tfe-workspacer"
 
   organization      = var.organization
   workspace_name    = "opensearch-production"
@@ -88,9 +91,12 @@ module "opensearch-production" {
   }
 
   variable_set_names = [
-    "aws-credentials-production",
-    module.variable-set-common.name,
-    module.variable-set-production.name,
-    module.variable-set-opensearch-production.name
+    "aws-credentials-production"
+  ]
+
+  variable_set_ids = [
+    module.variable-set-common.id,
+    module.variable-set-production.id,
+    module.variable-set-opensearch-production.id
   ]
 }
