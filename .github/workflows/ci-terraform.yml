@@ -55,6 +55,7 @@ jobs:
 
     - name: terraform init
       run: |
+        export TF_TOKEN_app_terraform_io="${{ secrets.TFC_CI_READ_ONLY_TOKEN }}"
         STEP_EXIT_STATUS=0
         for d in terraform/deployments/*; do
           echo "$d"
