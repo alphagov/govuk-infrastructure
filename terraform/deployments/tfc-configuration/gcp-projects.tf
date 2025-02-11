@@ -24,7 +24,7 @@ module "gcp-ga4-analytics" {
     "GOV.UK Non-Production (r/o)"  = "read"
   }
 
-  variable_set_names = [
-    "gcp-credentials-production"
+  variable_set_ids = [
+    local.gcp_credentials["production"],
   ]
 }

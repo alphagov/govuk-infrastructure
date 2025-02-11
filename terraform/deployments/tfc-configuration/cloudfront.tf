@@ -22,11 +22,8 @@ module "cloudfront-staging" {
     "GOV.UK Production" = "write"
   }
 
-  variable_set_names = [
-    "aws-credentials-staging"
-  ]
-
   variable_set_ids = [
+    local.aws_credentials["staging"],
     module.variable-set-common.id,
     module.variable-set-staging.id,
     module.variable-set-cloudfront-staging.id
@@ -57,11 +54,8 @@ module "cloudfront-production" {
     "GOV.UK Production" = "write"
   }
 
-  variable_set_names = [
-    "aws-credentials-production"
-  ]
-
   variable_set_ids = [
+    local.aws_credentials["production"],
     module.variable-set-common.id,
     module.variable-set-production.id,
     module.variable-set-cloudfront-production.id

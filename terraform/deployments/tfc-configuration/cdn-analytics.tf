@@ -23,11 +23,8 @@ module "cdn-analytics-integration" {
     "GOV.UK Production"           = "write"
   }
 
-  variable_set_names = [
-    "gcp-credentials-integration"
-  ]
-
   variable_set_ids = [
+    local.gcp_credentials["integration"],
     module.variable-set-common.id,
     module.variable-set-integration.id
   ]
@@ -57,11 +54,8 @@ module "cdn-analytics-staging" {
     "GOV.UK Production" = "write"
   }
 
-  variable_set_names = [
-    "gcp-credentials-staging"
-  ]
-
   variable_set_ids = [
+    local.gcp_credentials["staging"],
     module.variable-set-common.id,
     module.variable-set-staging.id
   ]
@@ -91,11 +85,8 @@ module "cdn-analytics-production" {
     "GOV.UK Production" = "write"
   }
 
-  variable_set_names = [
-    "gcp-credentials-production"
-  ]
-
   variable_set_ids = [
+    local.gcp_credentials["production"],
     module.variable-set-common.id,
     module.variable-set-production.id
   ]
