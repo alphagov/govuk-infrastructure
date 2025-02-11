@@ -110,6 +110,18 @@ variable "allow_high_request_rate_from_cidrs" {
   default     = []
 }
 
+variable "cache_public_base_rate_warning" {
+  type        = number
+  description = "A warning rate limit threshold for the public web ACL"
+  default     = 2000
+}
+
+variable "cache_public_base_rate_limit" {
+  type        = number
+  description = "An enforced rate limit threshold for the public web ACL"
+  default     = 1000
+}
+
 variable "backend_public_base_rate_warning" {
   type        = number
   description = "A warning rate limit threshold for the backend public web ACL"
@@ -144,5 +156,11 @@ variable "bouncer_public_base_rate_limit" {
   type        = number
   description = "An enforced rate limit threshold for the bouncer public web ACL"
   default     = 1000
+}
+
+variable "fastly_rate_limit_token" {
+  type        = string
+  description = "Fastly API token for rate limiting"
+  default     = "test"
 }
 

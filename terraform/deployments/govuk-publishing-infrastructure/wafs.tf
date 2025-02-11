@@ -2,6 +2,25 @@
 # we use it as a simple sanity check / acceptance test from smokey to ensure that
 # the waf is enabled and processing requests
 #
+
+module "infrastructure-sensitive_wafs" {
+  source  = "app.terraform.io/govuk/infrastructure-sensitive/govuk//modules/wafs"
+  version = "0.0.10"
+
+  cache_public_base_rate_limit   = var.cache_public_base_rate_limit
+  cache_public_base_rate_warning = var.cache_public_base_rate_warning
+  fastly_rate_limit_token        = var.fastly_rate_limit_token
+  govuk_requesting_ips_arn       = aws_wafv2_ip_set.govuk_requesting_ips.arn
+  high_request_rate_ips_arn      = aws_wafv2_ip_set.high_request_rate.arn
+  x_always_block_arn             = aws_wafv2_rule_group.x_always_block.arn
+}
+
+
+moved {
+  from = aws_wafv2_web_acl.cache_public
+  to   = module.infrastructure-sensitive_wafs.aws_wafv2_web_acl.cache_public
+}
+
 resource "aws_wafv2_web_acl" "default" {
   name  = "x-always-block_web_acl"
   scope = "REGIONAL"
@@ -532,28 +551,6 @@ resource "aws_wafv2_web_acl_logging_configuration" "public_bouncer_waf" {
   }
 }
 
-resource "aws_wafv2_web_acl" "cache_public" {
-  name  = "cache_public_web_acl"
-  scope = "REGIONAL"
-
-  default_action {
-    allow {}
-  }
-
-  lifecycle {
-    ignore_changes = [
-      rule,
-      custom_response_body
-    ]
-  }
-
-  visibility_config {
-    cloudwatch_metrics_enabled = true
-    metric_name                = "cache-public-web-acl"
-    sampled_requests_enabled   = true
-  }
-}
-
 resource "aws_cloudwatch_log_group" "public_cache_waf" {
   # the name must start with aws-waf-logs
   # https://docs.aws.amazon.com/waf/latest/developerguide/logging-cw-logs.html#logging-cw-logs-naming
@@ -563,7 +560,7 @@ resource "aws_cloudwatch_log_group" "public_cache_waf" {
 
 resource "aws_wafv2_web_acl_logging_configuration" "public_cache_waf" {
   log_destination_configs = [aws_cloudwatch_log_group.public_cache_waf.arn]
-  resource_arn            = aws_wafv2_web_acl.cache_public.arn
+  resource_arn            = module.infrastructure-sensitive_wafs.public_cache_waf_arn
 
   logging_filter {
     default_behavior = "DROP"

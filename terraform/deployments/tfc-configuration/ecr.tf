@@ -1,6 +1,5 @@
 module "ecr-production" {
-  source  = "alexbasista/workspacer/tfe"
-  version = "0.12.0"
+  source = "github.com/alphagov/terraform-tfe-workspacer"
 
   organization        = var.organization
   workspace_name      = "ecr-production"
@@ -22,9 +21,12 @@ module "ecr-production" {
   team_access = { "GOV.UK Production" = "write" }
 
   variable_set_names = [
-    "aws-credentials-production",
-    module.variable-set-common.name,
-    module.variable-set-production.name,
-    module.variable-set-ecr-production.name
+    "aws-credentials-production"
+  ]
+
+  variable_set_ids = [
+    module.variable-set-common.id,
+    module.variable-set-production.id,
+    module.variable-set-ecr-production.id
   ]
 }
