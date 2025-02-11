@@ -303,6 +303,9 @@ repos:
     strict: true
     up_to_date_branches: true
 
+  govuk-graphql:
+    branch_protection: false
+
   govuk-infrastructure:
     strict: true
     up_to_date_branches: true
