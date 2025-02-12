@@ -1,5 +1,5 @@
 module "chat-integration" {
-  source = "github.com/alphagov/terraform-tfe-workspacer"
+  source = "github.com/alphagov/terraform-govuk-tfe-workspacer"
 
   organization        = var.organization
   workspace_name      = "chat-integration"
@@ -35,7 +35,7 @@ module "chat-integration" {
 }
 
 module "chat-staging" {
-  source = "github.com/alphagov/terraform-tfe-workspacer"
+  source = "github.com/alphagov/terraform-govuk-tfe-workspacer"
 
   organization        = var.organization
   workspace_name      = "chat-staging"
@@ -71,7 +71,7 @@ module "chat-staging" {
 }
 
 module "chat-production" {
-  source = "github.com/alphagov/terraform-tfe-workspacer"
+  source = "github.com/alphagov/terraform-govuk-tfe-workspacer"
 
   organization        = var.organization
   workspace_name      = "chat-production"

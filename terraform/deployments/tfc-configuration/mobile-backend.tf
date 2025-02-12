@@ -1,5 +1,5 @@
 module "mobile-backend-production" {
-  source = "github.com/alphagov/terraform-tfe-workspacer"
+  source = "github.com/alphagov/terraform-govuk-tfe-workspacer"
 
   organization        = var.organization
   workspace_name      = "mobile-backend-production"
@@ -33,7 +33,7 @@ module "mobile-backend-production" {
 }
 
 module "mobile-backend-staging" {
-  source = "github.com/alphagov/terraform-tfe-workspacer"
+  source = "github.com/alphagov/terraform-govuk-tfe-workspacer"
 
   organization        = var.organization
   workspace_name      = "mobile-backend-staging"
@@ -67,7 +67,7 @@ module "mobile-backend-staging" {
 }
 
 module "mobile-backend-integration" {
-  source = "github.com/alphagov/terraform-tfe-workspacer"
+  source = "github.com/alphagov/terraform-govuk-tfe-workspacer"
 
   organization        = var.organization
   workspace_name      = "mobile-backend-integration"

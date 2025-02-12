@@ -1,5 +1,5 @@
 module "cdn-analytics-integration" {
-  source = "github.com/alphagov/terraform-tfe-workspacer"
+  source = "github.com/alphagov/terraform-govuk-tfe-workspacer"
 
   organization        = var.organization
   workspace_name      = "cdn-analytics-integration"
@@ -34,7 +34,7 @@ module "cdn-analytics-integration" {
 }
 
 module "cdn-analytics-staging" {
-  source = "github.com/alphagov/terraform-tfe-workspacer"
+  source = "github.com/alphagov/terraform-govuk-tfe-workspacer"
 
   organization        = var.organization
   workspace_name      = "cdn-analytics-staging"
@@ -68,7 +68,7 @@ module "cdn-analytics-staging" {
 }
 
 module "cdn-analytics-production" {
-  source = "github.com/alphagov/terraform-tfe-workspacer"
+  source = "github.com/alphagov/terraform-govuk-tfe-workspacer"
 
   organization        = var.organization
   workspace_name      = "cdn-analytics-production"

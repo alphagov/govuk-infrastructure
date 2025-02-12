@@ -1,5 +1,5 @@
 module "cluster-services-integration" {
-  source = "github.com/alphagov/terraform-tfe-workspacer"
+  source = "github.com/alphagov/terraform-govuk-tfe-workspacer"
 
   organization      = var.organization
   workspace_name    = "cluster-services-integration"
@@ -33,7 +33,7 @@ module "cluster-services-integration" {
 }
 
 module "cluster-services-staging" {
-  source = "github.com/alphagov/terraform-tfe-workspacer"
+  source = "github.com/alphagov/terraform-govuk-tfe-workspacer"
 
   organization      = var.organization
   workspace_name    = "cluster-services-staging"
@@ -66,7 +66,7 @@ module "cluster-services-staging" {
 }
 
 module "cluster-services-production" {
-  source = "github.com/alphagov/terraform-tfe-workspacer"
+  source = "github.com/alphagov/terraform-govuk-tfe-workspacer"
 
   organization      = var.organization
   workspace_name    = "cluster-services-production"

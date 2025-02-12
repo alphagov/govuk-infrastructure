@@ -1,5 +1,5 @@
 module "cluster-infrastructure-integration" {
-  source = "github.com/alphagov/terraform-tfe-workspacer"
+  source = "github.com/alphagov/terraform-govuk-tfe-workspacer"
 
   organization        = var.organization
   workspace_name      = "cluster-infrastructure-integration"
@@ -34,7 +34,7 @@ module "cluster-infrastructure-integration" {
 }
 
 module "cluster-infrastructure-staging" {
-  source = "github.com/alphagov/terraform-tfe-workspacer"
+  source = "github.com/alphagov/terraform-govuk-tfe-workspacer"
 
   organization        = var.organization
   workspace_name      = "cluster-infrastructure-staging"
@@ -69,7 +69,7 @@ module "cluster-infrastructure-staging" {
 }
 
 module "cluster-infrastructure-production" {
-  source = "github.com/alphagov/terraform-tfe-workspacer"
+  source = "github.com/alphagov/terraform-govuk-tfe-workspacer"
 
   organization        = var.organization
   workspace_name      = "cluster-infrastructure-production"

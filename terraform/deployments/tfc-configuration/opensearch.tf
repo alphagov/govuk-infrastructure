@@ -1,5 +1,5 @@
 module "opensearch-integration" {
-  source = "github.com/alphagov/terraform-tfe-workspacer"
+  source = "github.com/alphagov/terraform-govuk-tfe-workspacer"
 
   organization      = var.organization
   workspace_name    = "opensearch-integration"
@@ -34,7 +34,7 @@ module "opensearch-integration" {
 }
 
 module "opensearch-staging" {
-  source = "github.com/alphagov/terraform-tfe-workspacer"
+  source = "github.com/alphagov/terraform-govuk-tfe-workspacer"
 
   organization      = var.organization
   workspace_name    = "opensearch-staging"
@@ -68,7 +68,7 @@ module "opensearch-staging" {
 }
 
 module "opensearch-production" {
-  source = "github.com/alphagov/terraform-tfe-workspacer"
+  source = "github.com/alphagov/terraform-govuk-tfe-workspacer"
 
   organization      = var.organization
   workspace_name    = "opensearch-production"

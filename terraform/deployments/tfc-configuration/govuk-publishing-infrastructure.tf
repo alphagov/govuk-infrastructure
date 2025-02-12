@@ -1,5 +1,5 @@
 module "govuk-publishing-infrastructure-integration" {
-  source = "github.com/alphagov/terraform-tfe-workspacer"
+  source = "github.com/alphagov/terraform-govuk-tfe-workspacer"
 
   organization      = var.organization
   workspace_name    = "govuk-publishing-infrastructure-integration"
@@ -36,7 +36,7 @@ module "govuk-publishing-infrastructure-integration" {
 }
 
 module "govuk-publishing-infrastructure-staging" {
-  source = "github.com/alphagov/terraform-tfe-workspacer"
+  source = "github.com/alphagov/terraform-govuk-tfe-workspacer"
 
   organization      = var.organization
   workspace_name    = "govuk-publishing-infrastructure-staging"
@@ -72,7 +72,7 @@ module "govuk-publishing-infrastructure-staging" {
 }
 
 module "govuk-publishing-infrastructure-production" {
-  source = "github.com/alphagov/terraform-tfe-workspacer"
+  source = "github.com/alphagov/terraform-govuk-tfe-workspacer"
 
   organization      = var.organization
   workspace_name    = "govuk-publishing-infrastructure-production"

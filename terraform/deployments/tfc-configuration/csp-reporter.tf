@@ -1,5 +1,5 @@
 module "csp-reporter-integration" {
-  source = "github.com/alphagov/terraform-tfe-workspacer"
+  source = "github.com/alphagov/terraform-govuk-tfe-workspacer"
 
   organization      = var.organization
   workspace_name    = "csp-reporter-integration"
@@ -33,7 +33,7 @@ module "csp-reporter-integration" {
 }
 
 module "csp-reporter-staging" {
-  source = "github.com/alphagov/terraform-tfe-workspacer"
+  source = "github.com/alphagov/terraform-govuk-tfe-workspacer"
 
   organization      = var.organization
   workspace_name    = "csp-reporter-staging"
@@ -66,7 +66,7 @@ module "csp-reporter-staging" {
 }
 
 module "csp-reporter-production" {
-  source = "github.com/alphagov/terraform-tfe-workspacer"
+  source = "github.com/alphagov/terraform-govuk-tfe-workspacer"
 
   organization      = var.organization
   workspace_name    = "csp-reporter-production"
