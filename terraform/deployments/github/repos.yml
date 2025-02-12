@@ -247,15 +247,6 @@ repos:
   govuk-analytics-engineering:
     visibility: private
 
-  govuk-aws:
-    required_status_checks:
-      additional_contexts:
-        - Shellcheck
-        - terraform fmt
-  
-  govuk-aws-data:
-    visibility: private
-
   govuk-content-api-docs:
     homepage_url: "https://content-api.publishing.service.gov.uk"
     need_production_access_to_merge: false
