@@ -126,7 +126,8 @@ data "aws_iam_policy_document" "tfc_policy" {
     actions = ["iam:*User"]
     resources = [
       "arn:aws:iam::*:user/govuk-*-fastly-logs-writer",
-      "arn:aws:iam::*:user/govuk-*-transition-downloader"
+      "arn:aws:iam::*:user/govuk-*-transition-downloader",
+      "arn:aws:iam::*:user/govuk-*-fastly-logs-athena-monitoring"
     ]
   }
   statement {
