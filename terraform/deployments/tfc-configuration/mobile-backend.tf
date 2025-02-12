@@ -22,11 +22,8 @@ module "mobile-backend-production" {
     "GOV.UK Production" = "write"
   }
 
-  variable_set_names = [
-    "aws-credentials-production"
-  ]
-
   variable_set_ids = [
+    local.aws_credentials["production"],
     module.variable-set-common.id,
     module.variable-set-production.id
   ]
@@ -56,11 +53,8 @@ module "mobile-backend-staging" {
     "GOV.UK Production" = "write"
   }
 
-  variable_set_names = [
-    "aws-credentials-staging"
-  ]
-
   variable_set_ids = [
+    local.aws_credentials["staging"],
     module.variable-set-common.id,
     module.variable-set-staging.id
   ]
@@ -91,11 +85,8 @@ module "mobile-backend-integration" {
     "GOV.UK Production"           = "write"
   }
 
-  variable_set_names = [
-    "aws-credentials-integration"
-  ]
-
   variable_set_ids = [
+    local.aws_credentials["integration"],
     module.variable-set-common.id,
     module.variable-set-integration.id
   ]

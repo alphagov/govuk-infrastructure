@@ -22,13 +22,8 @@ module "datagovuk-infrastructure-integration" {
     "GOV.UK Production"           = "write"
   }
 
-  variable_set_names = [
-    "aws-credentials-integration",
-    module.variable-set-common.name,
-    module.variable-set-integration.name
-  ]
-
   variable_set_ids = [
+    local.aws_credentials["integration"],
     module.variable-set-common.id,
     module.variable-set-integration.id
   ]
@@ -57,11 +52,8 @@ module "datagovuk-infrastructure-staging" {
     "GOV.UK Production" = "write"
   }
 
-  variable_set_names = [
-    "aws-credentials-staging"
-  ]
-
   variable_set_ids = [
+    local.aws_credentials["staging"],
     module.variable-set-common.id,
     module.variable-set-staging.id
   ]
@@ -90,11 +82,8 @@ module "datagovuk-infrastructure-production" {
     "GOV.UK Production" = "write"
   }
 
-  variable_set_names = [
-    "aws-credentials-production"
-  ]
-
   variable_set_ids = [
+    local.aws_credentials["production"],
     module.variable-set-common.id,
     module.variable-set-production.id
   ]
