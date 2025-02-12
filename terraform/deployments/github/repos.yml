@@ -314,6 +314,10 @@ repos:
     visibility: private
     strict: true
     up_to_date_branches: true
+  
+  terraform-govuk-tfe-workspacer:
+    strict: true
+    up_to_date_branches: true
 
   govuk-mobile-android-app:
     allow_squash_merge: true
