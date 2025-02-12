@@ -1,5 +1,5 @@
 module "ecr-production" {
-  source = "github.com/alphagov/terraform-tfe-workspacer"
+  source = "github.com/alphagov/terraform-govuk-tfe-workspacer"
 
   organization        = var.organization
   workspace_name      = "ecr-production"
