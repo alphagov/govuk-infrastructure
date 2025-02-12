@@ -131,6 +131,8 @@ resource "github_repository" "govuk_repos" {
 
   homepage_url = try(each.value.homepage_url, null)
 
+  archive_on_destroy = true
+
   lifecycle {
     ignore_changes = [
       description,
