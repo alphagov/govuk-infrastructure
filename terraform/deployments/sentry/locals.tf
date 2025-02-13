@@ -26,6 +26,7 @@ locals {
     "frontend"                 = [],
     "government-frontend"      = [],
     "govspeak-preview"         = ["govuk-publishing-platform"],
+    "govuk-graphql"            = [],
     "govuk-sli-collector"      = ["govuk-publishing-platform"],
     "hmrc-manuals-api"         = ["govuk-publishing-platform"],
     "licensify"                = [],
