@@ -88,6 +88,17 @@ resource "github_team" "govuk_production_admin" {
   description = "https://docs.publishing.service.gov.uk/manual/rules-for-getting-production-access.html"
 }
 
+resource "github_team" "govuk_production_deploy" {
+  name        = "GOV.UK Production Deploy"
+  privacy     = "closed"
+  description = "https://docs.publishing.service.gov.uk/manual/rules-for-getting-production-access.html"
+}
+
+import {
+  to = github_team.govuk_production_deploy
+  id = "gov-uk-production-deploy"
+}
+
 resource "github_team" "govuk" {
   name    = "GOV.UK"
   privacy = "closed"
@@ -117,6 +128,15 @@ resource "github_team_repository" "govuk_repos" {
   team_id    = github_team.govuk.id
   permission = try(each.value.teams["govuk"], "push")
 }
+
+resource "github_team_repository" "govuk_production_deploy_repos" {
+  for_each   = local.repositories
+  repository = each.key
+  team_id    = github_team.govuk_production_deploy.id
+  # give prod deploy the same permissions as the GOV.UK team
+  permission = try(each.value.teams["govuk"], "push")
+}
+
 
 resource "github_team_repository" "co_platform_engineering_repos" {
   for_each   = toset(["govuk-dns-tf", "govuk-dns", "govuk-dns-config"])
