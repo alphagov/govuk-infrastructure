@@ -93,6 +93,10 @@ resource "github_team" "govuk" {
   privacy = "closed"
 }
 
+data "github_team" "co_platform_engineering" {
+  slug = "co-platform-engineering"
+}
+
 resource "github_team_repository" "govuk_production_admin_repos" {
   for_each   = local.repositories
   repository = each.key
@@ -112,6 +116,13 @@ resource "github_team_repository" "govuk_repos" {
   repository = each.key
   team_id    = github_team.govuk.id
   permission = try(each.value.teams["govuk"], "push")
+}
+
+resource "github_team_repository" "co_platform_engineering_repos" {
+  for_each   = toset(["govuk-dns-tf", "govuk-dns", "govuk-dns-config"])
+  repository = each.key
+  team_id    = data.github_team.co_platform_engineering.id
+  permission = "pull"
 }
 
 resource "github_repository" "govuk_repos" {
