@@ -1,93 +1,54 @@
 [
   {
     "name": "client_ip",
-    "mode": "",
-    "type": "STRING",
-    "description": "",
-    "fields": []
+    "type": "STRING"
   },
   {
     "name": "request_received",
-    "mode": "",
-    "type": "STRING",
-    "description": "",
-    "fields": []
+    "type": "STRING"
   },
   {
     "name": "method",
-    "mode": "",
-    "type": "STRING",
-    "description": "",
-    "fields": []
+    "type": "STRING"
   },
   {
     "name": "url",
-    "mode": "",
-    "type": "STRING",
-    "description": "",
-    "fields": []
+    "type": "STRING"
   },
   {
     "name": "status",
-    "mode": "",
-    "type": "INTEGER",
-    "description": "",
-    "fields": []
+    "type": "INTEGER"
   },
   {
     "name": "protocol",
-    "mode": "",
-    "type": "STRING",
-    "description": "",
-    "fields": []
+    "type": "STRING"
   },
   {
     "name": "bytes",
-    "mode": "",
-    "type": "INTEGER",
-    "description": "",
-    "fields": []
+    "type": "INTEGER"
   },
   {
     "name": "content_type",
-    "mode": "",
-    "type": "STRING",
-    "description": "",
-    "fields": []
+    "type": "STRING"
   },
   {
     "name": "user_agent",
-    "mode": "",
-    "type": "STRING",
-    "description": "",
-    "fields": []
+    "type": "STRING"
   },
   {
     "name": "fastly_backend",
-    "mode": "",
-    "type": "STRING",
-    "description": "",
-    "fields": []
+    "type": "STRING"
   },
   {
     "name": "cache_response",
-    "mode": "",
-    "type": "STRING",
-    "description": "",
-    "fields": []
+    "type": "STRING"
   },
   {
     "name": "tls_client_protocol",
-    "mode": "",
-    "type": "STRING",
-    "description": "",
-    "fields": []
+    "type": "STRING"
   },
   {
     "name": "tls_client_cipher",
-    "mode": "",
-    "type": "STRING",
-    "description": "",
-    "fields": []
+    "type": "STRING"
   }
 ]
