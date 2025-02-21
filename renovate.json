@@ -1,13 +1,20 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": ["config:base"],
+  "extends": [
+    "config:recommended"
+  ],
   "platformAutomerge": true,
   "pre-commit": {
     "enabled": true
   },
-  "enabledManagers": ["pre-commit", "terraform"],
+  "enabledManagers": [
+    "pre-commit",
+    "terraform"
+  ],
   "terraform": {
-    "fileMatch": ["^/terraform/.*\\.tf$"]
+    "fileMatch": [
+      "^/terraform/.*\\.tf$"
+    ]
   },
   "prHourlyLimit": 20
 }
