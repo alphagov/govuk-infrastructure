@@ -88,7 +88,10 @@ resource "helm_release" "argo_cd" {
 
       # We terminate TLS at the ALB (L7 LB inside the VPC network), so tell
       # argo-cd-server not to redirect to HTTPS.
-      params = { "server.insecure" = true }
+      params = {
+        "server.insecure"                 = true
+        "controller.sync.timeout.seconds" = 300
+      }
 
       rbac = {
         "policy.csv" = <<-EOT
