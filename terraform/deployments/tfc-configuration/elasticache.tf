@@ -3,7 +3,7 @@ module "elasticache-integration" {
 
   organization        = var.organization
   workspace_name      = "elasticache-integration"
-  workspace_desc      = "This module manages AWS resources for creating RDS databases."
+  workspace_desc      = "Serverless ElastiCache instances"
   workspace_tags      = ["integration", "elasticache", "aws"]
   terraform_version   = var.terraform_version
   execution_mode      = "remote"
