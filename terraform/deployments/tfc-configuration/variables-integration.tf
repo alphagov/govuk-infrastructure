@@ -622,3 +622,21 @@ module "variable-set-amazonmq-integration" {
     amazonmq_govuk_chat_retry_message_ttl = 300000
   }
 }
+
+module "variable-set-elasticache-integration" {
+  source = "./variable-set"
+
+  name = "elasticache-integration"
+
+  tfvars = {
+    instances = {
+      test = {
+        limits = {
+          storage_gb       = 10
+          ecpus_per_second = 5000
+        }
+      }
+      test_defaults = {}
+    }
+  }
+}
