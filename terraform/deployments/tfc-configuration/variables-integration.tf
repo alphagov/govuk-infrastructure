@@ -630,11 +630,14 @@ module "variable-set-elasticache-integration" {
 
   tfvars = {
     instances = {
-      test = {
-        max_storage_gb       = 20
-        max_ecpus_per_second = 6000
+      /*
+      "example" = {
+        max_storage_gb       = 30
+        max_ecpus_per_second = 7000
+        major_engine_version = "7"
       }
-      test_defaults = {}
+      */
+      "publishing-api" = {}
     }
   }
 }
