@@ -631,10 +631,8 @@ module "variable-set-elasticache-integration" {
   tfvars = {
     instances = {
       test = {
-        limits = {
-          storage_gb       = 10
-          ecpus_per_second = 5000
-        }
+        max_storage_gb       = 20
+        max_ecpus_per_second = 6000
       }
       test_defaults = {}
     }
