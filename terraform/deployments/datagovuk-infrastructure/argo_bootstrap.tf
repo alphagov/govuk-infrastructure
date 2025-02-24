@@ -20,7 +20,7 @@ resource "kubernetes_namespace" "datagovuk" {
       "app.kubernetes.io/managed-by"       = "Terraform"
       "argocd.argoproj.io/managed-by"      = "cluster-services"
       "pod-security.kubernetes.io/audit"   = "restricted"
-      "pod-security.kubernetes.io/enforce" = "baseline"
+      "pod-security.kubernetes.io/enforce" = "restricted"
       "pod-security.kubernetes.io/warn"    = "restricted"
     }
   }
