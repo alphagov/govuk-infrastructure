@@ -11,7 +11,7 @@ variable "databases" {
 variable "engine_version" {
   type        = string
   default     = "8.0"
-  description = "ValKey version"
+  description = "Valkey version"
 }
 
 variable "node_type" {
