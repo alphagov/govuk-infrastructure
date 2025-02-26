@@ -282,7 +282,7 @@ module "variable-set-rds-integration" {
         }
         engine_params_family         = "postgres13"
         name                         = "blue-content-data-api-postgresql-primary"
-        allocated_storage            = 400
+        allocated_storage            = 500
         instance_class               = "db.m6g.large"
         performance_insights_enabled = false
         freestoragespace_threshold   = 536870912000
