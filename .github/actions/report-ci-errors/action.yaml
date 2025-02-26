@@ -1,0 +1,52 @@
+name: "Report CI errors to slack channel"
+description: "report CI errors to a nominated slack channel"
+inputs:
+  slack_webhook_url:
+    description: "Slack webhook URL"
+    required: true
+  channel:
+    description: "Name of the channel to send error notifications to"
+    required: true
+  github:
+    description: "Github Action context as json"
+    required: true
+  message:
+    description: "Optional message to show in channel"
+    default: ""
+runs:
+  using: "composite"
+  steps:
+    - run: |
+        # run checks as github actions required is not being enforced - https://github.com/actions/runner/issues/1070
+        [[ "${{ inputs.slack_webhook_url }}" ]] || { echo "slack_webhook_url input is empty" ; exit 1; }
+        [[ "${{ inputs.channel }}" ]] || { echo "channel input is empty" ; exit 1; }
+      shell: bash
+    - name: Send slack
+      uses: slackapi/slack-github-action@v2.0.0
+      with:
+        errors: true
+        webhook: ${{ inputs.slack_webhook_url }}
+        webhook-type: incoming-webhook
+        payload: |
+          {
+            "channel": "${{ inputs.channel }}",
+            "text": "The <https://github.com/${{ fromJson(inputs.github).repository }}> CI test failed.",
+            "blocks": [
+              {
+                "type": "section",
+                "text": {
+                  "type": "mrkdwn",
+                  "text": "The <https://github.com/${{ fromJson(inputs.github).repository }}> failed.\n${{ inputs.message }}",
+                },
+                "accessory": {
+                  "type": "button",
+                  "text": {
+                      "type": "plain_text",
+                      "text": "Check the build logs for details"
+                  },
+                  "url": "${{ fromJson(inputs.github).server_url }}/${{ fromJson(inputs.github).repository }}/actions/runs/${{ fromJson(inputs.github).run_id }}",
+                  "action_id": "button-view-workflow"
+                }
+              }
+            ]
+          }
