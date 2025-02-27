@@ -1,11 +1,11 @@
-name: "Report CI errors to slack channel"
-description: "report CI errors to a nominated slack channel"
+name: "Report Github run failure to slack channel"
+description: "Report Github run failure to a nominated slack channel"
 inputs:
   slack_webhook_url:
     description: "Slack webhook URL"
     required: true
   channel:
-    description: "Name of the channel to send error notifications to"
+    description: "Name of the channel to send failure notifications to"
     required: true
   github:
     description: "Github Action context as json"
@@ -23,7 +23,7 @@ runs:
         [[ "${{ inputs.channel }}" ]] || { echo "channel input is empty" ; exit 1; }
       shell: bash
     - if:  ${{ fromJson(inputs.github).ref_name == 'main' }}
-      name: Send slack
+      name: Send slack message
       uses: slackapi/slack-github-action@v2.0.0
       with:
         errors: true
@@ -32,7 +32,7 @@ runs:
         payload: |
           {
             "channel": "${{ inputs.channel }}",
-            "text": "The <https://github.com/${{ fromJson(inputs.github).repository }}> CI test failed.",
+            "text": "The <https://github.com/${{ fromJson(inputs.github).repository }}> Github run failed.",
             "blocks": [
               {
                 "type": "section",

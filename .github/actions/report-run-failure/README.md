@@ -25,7 +25,7 @@ jobs:
 
       # copy lines below to report CI errors to your team channel
       - if: ${{ failure() }}
-        uses: alphagov/govuk-infrastrtucture/.github/actions/report-ci-errors@main
+        uses: alphagov/govuk-infrastrtucture/.github/actions/report-run-failure@main
         with:
           slack_webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
           github: ${{ toJson(github) }}
