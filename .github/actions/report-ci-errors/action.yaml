@@ -16,12 +16,14 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - run: |
+    - if:  ${{ fromJson(inputs.github).ref_name == 'main' }}
+      run: |
         # run checks as github actions required is not being enforced - https://github.com/actions/runner/issues/1070
         [[ "${{ inputs.slack_webhook_url }}" ]] || { echo "slack_webhook_url input is empty" ; exit 1; }
         [[ "${{ inputs.channel }}" ]] || { echo "channel input is empty" ; exit 1; }
       shell: bash
-    - name: Send slack
+    - if:  ${{ fromJson(inputs.github).ref_name == 'main' }}
+      name: Send slack
       uses: slackapi/slack-github-action@v2.0.0
       with:
         errors: true
@@ -36,13 +38,13 @@ runs:
                 "type": "section",
                 "text": {
                   "type": "mrkdwn",
-                  "text": "The <https://github.com/${{ fromJson(inputs.github).repository }}> failed.\n${{ inputs.message }}",
+                  "text": "The <https://github.com/${{ fromJson(inputs.github).repository }}> failed on ${{ fromJson(inputs.github).ref_name }}.\n${{ inputs.message }}",
                 },
                 "accessory": {
                   "type": "button",
                   "text": {
                       "type": "plain_text",
-                      "text": "Check the build logs for details"
+                      "text": "Check the build logs"
                   },
                   "url": "${{ fromJson(inputs.github).server_url }}/${{ fromJson(inputs.github).repository }}/actions/runs/${{ fromJson(inputs.github).run_id }}",
                   "action_id": "button-view-workflow"
