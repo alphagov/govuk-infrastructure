@@ -4,6 +4,9 @@ You will need to get the slack webhook url from the secrets manager first and ad
 
 ## Usage example:
 
+Note: Typically you will want to report CI errors as part of a deployment workflow. The code below demonstrates where to insert the lines and what lines to copy across.
+
+```
 name: Always failing job
 on:
   workflow_dispatch:
@@ -24,3 +27,4 @@ jobs:
           github: ${{ toJson(github) }}
           channel: your-team-slack-channel
           message: an optional message
+```
