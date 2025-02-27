@@ -28,7 +28,6 @@ jobs:
         uses: alphagov/govuk-infrastrtucture/.github/actions/report-run-failure@main
         with:
           slack_webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
-          github: ${{ toJson(github) }}
           channel: your-team-slack-channel
           message: an optional message
 ```
