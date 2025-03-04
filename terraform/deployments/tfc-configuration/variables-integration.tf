@@ -629,15 +629,40 @@ module "variable-set-elasticache-integration" {
   name = "elasticache-integration"
 
   tfvars = {
-    instances = {
-      /*
-      "example" = {
-        max_storage_gb       = 30
-        max_ecpus_per_second = 7000
-        major_engine_version = "7"
-      }
-      */
-      "publishing-api" = {}
+
+    # a map of app names to database IDs
+    databases = {
+      "account-api"                = 0
+      "asset-manager"              = 1
+      "collections-publisher"      = 2
+      "contacts-admin"             = 3
+      "content-data-admin"         = 4
+      "content-data-api"           = 5
+      "content-publisher"          = 6
+      "content-tagger"             = 7
+      "draft-email-alert-frontend" = 8
+      "email-alert-api"            = 9
+      "email-alert-frontend"       = 10
+      "email-alert-service"        = 11
+      "link-checker-api"           = 12
+      "local-links-manager"        = 13
+      "locations-api"              = 14
+      "manuals-publisher"          = 15
+      "places-manager"             = 16
+      "publisher-on-pg"            = 17
+      "publisher"                  = 18
+      "publishing-api"             = 19
+      "search-admin"               = 20
+      "search-api"                 = 21
+      "search-api-v2"              = 22
+      "short-url-manager"          = 23
+      "signon"                     = 24
+      "specialist-publisher"       = 25
+      "support-api"                = 26
+      "support"                    = 27
+      "transition"                 = 28
+      "travel-advice-publisher"    = 29
+      "whitehall-admin"            = 30
     }
   }
 }
