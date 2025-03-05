@@ -1,5 +1,5 @@
 resource "aws_sns_topic" "rds_alerts" {
-  name         = "govuk-rds-alerts"
+  name         = "${var.govuk_environment}-rds-alerts"
   display_name = "GOV.UK RDS Alerts"
 }
 
