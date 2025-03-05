@@ -38,17 +38,7 @@ resource "aws_s3_bucket_cors_configuration" "datagovuk_organogram" {
   bucket = aws_s3_bucket.datagovuk-organogram.id
   cors_rule {
     allowed_methods = ["GET"]
-    allowed_origins = [
-      "https://data.gov.uk",
-      "https://www.data.gov.uk",
-      "https://staging.data.gov.uk",
-      "https://www.staging.data.gov.uk",
-      "https://integration.data.gov.uk",
-      "https://www.integration.data.gov.uk",
-      "https://find.eks.production.govuk.digital",
-      "https://find.eks.integration.govuk.digital",
-      "https://find.eks.staging.govuk.digital"
-    ]
+    allowed_origins = var.organogram_bucket_cors_origins
   }
 }
 
