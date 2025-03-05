@@ -10,7 +10,6 @@ terraform {
 }
 
 locals {
-  servingConfigs  = yamldecode(file("${path.module}/files/servingConfigs/servingConfigs.yml"))
   boostControls   = yamldecode(file("${path.module}/files/controls/boosts.yml"))
   synonymControls = yamldecode(file("${path.module}/files/controls/synonyms.yml"))
 }
@@ -42,56 +41,19 @@ resource "restapi_object" "discovery_engine_datastore_schema" {
 
 ############## ENGINE ##############
 
-# Default serving config (currently used by search-api-v2, to be superseded by site_search serving
-# config)
-resource "restapi_object" "discovery_engine_serving_config" {
-  depends_on = [
-    restapi_object.discovery_engine_boost_control,
-    restapi_object.discovery_engine_synonym_control
-  ]
+module "serving_config_default" {
+  source = "../serving_config"
 
-  path      = "/engines/${var.engine_id}/servingConfigs/default_search?updateMask=boost_control_ids,synonyms_control_ids"
-  object_id = "default_search"
+  id           = "default_search"
+  display_name = "Default (used by live Search API v2)"
+  engine_id    = var.engine_id
 
-  # Since the default serving config is created automatically with the engine, we need to update
-  # even on initial Terraform resource creation
-  create_method = "PATCH"
-  create_path   = "/engines/${var.engine_id}/servingConfigs/default_search?updateMask=boost_control_ids,synonyms_control_ids"
-  update_method = "PATCH"
-  update_path   = "/engines/${var.engine_id}/servingConfigs/default_search?updateMask=boost_control_ids,synonyms_control_ids"
-  read_path     = "/engines/${var.engine_id}/servingConfigs/default_search"
+  boost_control_ids   = keys(local.boostControls)
+  synonym_control_ids = keys(local.synonymControls)
 
-  data = jsonencode({
-    boostControlIds    = keys(local.boostControls)
-    synonymsControlIds = keys(local.synonymControls)
-  })
-}
-
-# Handles additional serving configs beyond the default_search serving config
-resource "restapi_object" "discovery_engine_serving_config_additional" {
-  depends_on = [
-    restapi_object.discovery_engine_boost_control,
-    restapi_object.discovery_engine_synonym_control
-  ]
-
-  for_each = local.servingConfigs
-
-  path      = "/engines/${var.engine_id}/servingConfigs"
-  object_id = each.key
-
-  create_method = "POST"
-  create_path   = "/engines/${var.engine_id}/servingConfigs?servingConfigId=${each.key}"
-  update_method = "PATCH"
-  update_path   = "/engines/${var.engine_id}/servingConfigs/${each.key}"
-  read_path     = "/engines/${var.engine_id}/servingConfigs/${each.key}"
-
-  data = jsonencode({
-    name               = each.key,
-    displayName        = each.key,
-    solutionType       = "SOLUTION_TYPE_SEARCH",
-    boostControlIds    = lookup(each.value, "boostControlIds", []),
-    synonymsControlIds = lookup(each.value, "synonymsControlIds", [])
-  })
+  # TODO: We can probably remove this once we have visible dependencies in this file and don't
+  # create controls through YAML
+  depends_on = [local.boostControls, local.synonymControls]
 }
 
 resource "restapi_object" "discovery_engine_boost_control" {
