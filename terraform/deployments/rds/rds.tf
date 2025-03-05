@@ -6,11 +6,15 @@ resource "random_string" "database_password" {
   lifecycle { ignore_changes = [length, special] }
 }
 
+# this resource is called `blue-govuk-rds-subnet` in
+# integration, staging and production
 resource "aws_db_subnet_group" "subnet_group" {
-  name       = "blue-govuk-rds-subnet"
+  name       = "${var.govuk_environment}-subnet"
   subnet_ids = data.terraform_remote_state.infra_networking.outputs.private_subnet_rds_ids
 
   tags = { Name = "blue-govuk-rds-subnet" }
+
+  lifecycle { ignore_changes = [name] }
 }
 
 resource "aws_db_parameter_group" "engine_params" {
@@ -30,6 +34,8 @@ resource "aws_db_parameter_group" "engine_params" {
   }
 }
 
+# this resource has no `var.govuk_environment` prefix in
+# integration, staging and production
 resource "aws_db_instance" "instance" {
   for_each = var.databases
 
@@ -39,7 +45,7 @@ resource "aws_db_instance" "instance" {
   password                = random_string.database_password[each.key].result
   allocated_storage       = each.value.allocated_storage
   instance_class          = each.value.instance_class
-  identifier              = "${each.value.name}-${each.value.engine}"
+  identifier              = "${var.govuk_environment}-${each.value.name}-${each.value.engine}"
   storage_type            = "gp3"
   db_subnet_group_name    = aws_db_subnet_group.subnet_group.name
   multi_az                = var.multi_az
@@ -52,7 +58,7 @@ resource "aws_db_instance" "instance" {
   monitoring_role_arn     = data.terraform_remote_state.infra_monitoring.outputs.rds_enhanced_monitoring_role_arn
   vpc_security_group_ids  = [aws_security_group.rds[each.key].id]
   ca_cert_identifier      = "rds-ca-rsa2048-g1"
-  apply_immediately       = var.govuk_environment != "production"
+  apply_immediately       = true # var.govuk_environment != "production"
 
   performance_insights_enabled          = each.value.performance_insights_enabled
   performance_insights_retention_period = each.value.performance_insights_enabled ? 7 : 0
@@ -68,10 +74,12 @@ resource "aws_db_instance" "instance" {
   skip_final_snapshot       = var.skip_final_snapshot
 
   tags = { Name = "govuk-rds-${each.value.name}-${each.value.engine}", project = lookup(each.value, "project", "GOV.UK - Other") }
+
+  lifecycle { ignore_changes = [identifier] }
 }
 
 resource "aws_db_event_subscription" "subscription" {
-  name      = "govuk-rds-event-subscription"
+  name      = "${var.govuk_environment}-rds-event-subscription"
   sns_topic = data.terraform_remote_state.infra_monitoring.outputs.sns_topic_rds_events_arn
 
   source_type      = "db-instance"
@@ -101,14 +109,14 @@ resource "aws_route53_record" "instance_cname" {
 
   # Zone is <environment>.govuk-internal.digital.
   zone_id = data.terraform_remote_state.infra_root_dns_zones.outputs.internal_root_zone_id
-  name    = "${each.value.name}-${each.value.engine}"
+  name    = aws_db_instance.instance[each.key].identifier
   type    = "CNAME"
   ttl     = 300
   records = [aws_db_instance.instance[each.key].address]
 }
 
 resource "aws_secretsmanager_secret" "database_passwords" {
-  name = "rds-admin-passwords"
+  name = "${var.govuk_environment}-rds-admin-passwords"
 }
 
 resource "aws_secretsmanager_secret_version" "database_passwords" {
