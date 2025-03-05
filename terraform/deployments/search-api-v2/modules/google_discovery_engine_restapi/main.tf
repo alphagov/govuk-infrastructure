@@ -67,56 +67,6 @@ resource "restapi_object" "discovery_engine_serving_config" {
   })
 }
 
-# Future serving configs managed by Search Admin
-# NOTE: These are created in TF for now, but should migrate to being fully managed by Search Admin
-# as soon as that is supported by the Discovery Engine Ruby client, at which point they should be
-# removed from state and deleted from this config.
-resource "restapi_object" "discovery_engine_serving_config_govuk_default" {
-  path      = "/engines/${var.engine_id}/servingConfigs/govuk_default"
-  object_id = "govuk_default"
-
-  create_method = "POST"
-  create_path   = "/engines/${var.engine_id}/servingConfigs?servingConfigId=govuk_default"
-  update_method = "PATCH"
-  update_path   = "/engines/${var.engine_id}/servingConfigs/govuk_default"
-  read_path     = "/engines/${var.engine_id}/servingConfigs/govuk_default"
-
-  data = jsonencode({
-    displayName  = "The default serving config used for live search (managed by Search Admin)"
-    solutionType = "SOLUTION_TYPE_SEARCH"
-  })
-}
-resource "restapi_object" "discovery_engine_serving_config_govuk_preview" {
-  path      = "/engines/${var.engine_id}/servingConfigs/govuk_preview"
-  object_id = "govuk_preview"
-
-  create_method = "POST"
-  create_path   = "/engines/${var.engine_id}/servingConfigs?servingConfigId=govuk_preview"
-  update_method = "PATCH"
-  update_path   = "/engines/${var.engine_id}/servingConfigs/govuk_preview"
-  read_path     = "/engines/${var.engine_id}/servingConfigs/govuk_preview"
-
-  data = jsonencode({
-    displayName  = "A preview serving config used for trying out new controls (managed by Search Admin)"
-    solutionType = "SOLUTION_TYPE_SEARCH"
-  })
-}
-resource "restapi_object" "discovery_engine_serving_config_govuk_raw" {
-  path      = "/engines/${var.engine_id}/servingConfigs/govuk_raw"
-  object_id = "govuk_raw"
-
-  create_method = "POST"
-  create_path   = "/engines/${var.engine_id}/servingConfigs?servingConfigId=govuk_raw"
-  update_method = "PATCH"
-  update_path   = "/engines/${var.engine_id}/servingConfigs/govuk_raw"
-  read_path     = "/engines/${var.engine_id}/servingConfigs/govuk_raw"
-
-  data = jsonencode({
-    displayName  = "A raw serving config without controls attached to it (managed by Search Admin)"
-    solutionType = "SOLUTION_TYPE_SEARCH"
-  })
-}
-
 # Handles additional serving configs beyond the default_search serving config
 resource "restapi_object" "discovery_engine_serving_config_additional" {
   depends_on = [
