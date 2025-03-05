@@ -34,7 +34,7 @@ data "aws_iam_policy_document" "tag_image" {
 }
 
 resource "aws_iam_policy" "tag_image" {
-  name        = "tag_image"
+  name        = "${local.tag_image_service_account_name}-${data.tfe_outputs.cluster_infrastructure.nonsensitive_values.cluster_id}"
   description = "Allows Argo Workflows to tag images."
   policy      = data.aws_iam_policy_document.tag_image.json
 }
