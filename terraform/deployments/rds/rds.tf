@@ -20,7 +20,7 @@ resource "aws_db_subnet_group" "subnet_group" {
 resource "aws_db_parameter_group" "engine_params" {
   for_each = var.databases
 
-  name_prefix = "${each.value.name}-${each.value.engine}-"
+  name_prefix = "${var.govuk_environment}-${each.value.name}-${each.value.engine}-"
   family      = merge({ engine_params_family = "${each.value.engine}${each.value.engine_version}" }, each.value)["engine_params_family"]
 
   dynamic "parameter" {
@@ -32,6 +32,9 @@ resource "aws_db_parameter_group" "engine_params" {
       apply_method = merge({ apply_method = "immediate" }, parameter.value)["apply_method"]
     }
   }
+
+  lifecycle { create_before_destroy = true }
+
 }
 
 # this resource has no `var.govuk_environment` prefix in
