@@ -26,7 +26,7 @@ locals {
 
 resource "aws_subnet" "eks_control_plane" {
   for_each          = var.eks_control_plane_subnets
-  vpc_id            = data.terraform_remote_state.infra_vpc.outputs.vpc_id
+  vpc_id            = data.tfe_outputs.vpc.nonsensitive_values.id
   cidr_block        = each.value.cidr
   availability_zone = each.value.az
   tags              = { Name = "${var.cluster_name}-eks-control-plane-${each.key}" }
@@ -34,7 +34,7 @@ resource "aws_subnet" "eks_control_plane" {
 
 resource "aws_route_table" "eks_control_plane" {
   for_each = var.eks_control_plane_subnets
-  vpc_id   = data.terraform_remote_state.infra_vpc.outputs.vpc_id
+  vpc_id   = data.tfe_outputs.vpc.nonsensitive_values.id
   tags     = { Name = "${var.cluster_name}-eks-control-plane-${each.key}" }
 }
 
@@ -62,7 +62,7 @@ resource "aws_route" "eks_control_plane_nat" {
 
 resource "aws_subnet" "eks_public" {
   for_each          = var.eks_public_subnets
-  vpc_id            = data.terraform_remote_state.infra_vpc.outputs.vpc_id
+  vpc_id            = data.tfe_outputs.vpc.nonsensitive_values.id
   cidr_block        = each.value.cidr
   availability_zone = each.value.az
   tags = {
@@ -75,7 +75,7 @@ resource "aws_subnet" "eks_public" {
 }
 
 resource "aws_route_table" "eks_public" {
-  vpc_id = data.terraform_remote_state.infra_vpc.outputs.vpc_id
+  vpc_id = data.tfe_outputs.vpc.nonsensitive_values.id
   tags   = { Name = "${var.cluster_name}-eks-public" }
 }
 
@@ -88,7 +88,7 @@ resource "aws_route_table_association" "eks_public" {
 resource "aws_route" "public_internet_gateway" {
   route_table_id         = aws_route_table.eks_public.id
   destination_cidr_block = "0.0.0.0/0"
-  gateway_id             = data.terraform_remote_state.infra_vpc.outputs.internet_gateway_id
+  gateway_id             = data.tfe_outputs.vpc.nonsensitive_values.internet_gateway_id
   timeouts { create = local.route_create_timeout }
 }
 
@@ -112,7 +112,7 @@ resource "aws_nat_gateway" "eks" {
 
 resource "aws_subnet" "eks_private" {
   for_each          = var.eks_private_subnets
-  vpc_id            = data.terraform_remote_state.infra_vpc.outputs.vpc_id
+  vpc_id            = data.tfe_outputs.vpc.nonsensitive_values.id
   cidr_block        = each.value.cidr
   availability_zone = each.value.az
   tags = {
@@ -125,7 +125,7 @@ resource "aws_subnet" "eks_private" {
 
 resource "aws_route_table" "eks_private" {
   for_each = var.eks_private_subnets
-  vpc_id   = data.terraform_remote_state.infra_vpc.outputs.vpc_id
+  vpc_id   = data.tfe_outputs.vpc.nonsensitive_values.id
   tags     = { Name = "${var.cluster_name}-eks-private-${each.key}" }
 }
 

@@ -8,7 +8,7 @@
 
 locals {
   external_dns_service_account_name = "external-dns"
-  external_dns_zone_name            = trimsuffix("${var.external_dns_subdomain}.${data.terraform_remote_state.infra_root_dns_zones.outputs.external_root_domain_name}", ".")
+  external_dns_zone_name            = trimsuffix("${var.external_dns_subdomain}.${data.tfe_outputs.vpc.nonsensitive_values.external_root_zone_name}", ".")
 }
 
 module "external_dns_iam_role" {
@@ -51,7 +51,7 @@ resource "aws_route53_zone" "cluster_public" {
 }
 
 resource "aws_route53_record" "cluster_public_ns_parent" {
-  zone_id = data.terraform_remote_state.infra_root_dns_zones.outputs.external_root_zone_id
+  zone_id = data.tfe_outputs.vpc.nonsensitive_values.external_root_zone_id
   name    = var.external_dns_subdomain
   type    = "NS"
   ttl     = 21600
