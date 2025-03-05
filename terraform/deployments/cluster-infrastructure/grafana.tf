@@ -81,6 +81,10 @@ data "aws_rds_engine_version" "postgresql" {
 
 resource "random_password" "grafana_db" { length = 20 }
 
+locals {
+  rds_subnet_ids = compact([for name, id in data.tfe_outputs.vpc.nonsensitive_values.private_subnet_ids : startswith(name, "rds_") ? id : ""])
+}
+
 module "grafana_db" {
   source  = "terraform-aws-modules/rds-aurora/aws"
   version = "~> 9.0"
@@ -94,8 +98,8 @@ module "grafana_db" {
 
   allow_major_version_upgrade = true
 
-  vpc_id                 = data.terraform_remote_state.infra_networking.outputs.vpc_id
-  subnets                = data.terraform_remote_state.infra_networking.outputs.private_subnet_rds_ids
+  vpc_id                 = data.tfe_outputs.vpc.nonsensitive_values.id
+  subnets                = local.rds_subnet_ids
   create_db_subnet_group = true
   create_security_group  = true
   security_group_rules = {
@@ -118,7 +122,7 @@ module "grafana_db" {
 }
 
 resource "aws_route53_record" "grafana_db" {
-  zone_id = data.terraform_remote_state.infra_root_dns_zones.outputs.internal_root_zone_id
+  zone_id = data.tfe_outputs.vpc.nonsensitive_values.internal_root_zone_id
   # TODO: consider removing EKS suffix once the old EC2 environments are gone.
   name    = "${local.grafana_db_name}-db.eks"
   type    = "CNAME"

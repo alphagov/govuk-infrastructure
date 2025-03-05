@@ -201,7 +201,7 @@ module "eks" {
   cluster_name    = var.cluster_name
   cluster_version = var.cluster_version
   subnet_ids      = [for s in aws_subnet.eks_control_plane : s.id]
-  vpc_id          = data.terraform_remote_state.infra_vpc.outputs.vpc_id
+  vpc_id          = data.tfe_outputs.vpc.nonsensitive_values.id
 
   cluster_addons = local.enabled_cluster_addons
 
