@@ -9,7 +9,7 @@ runs:
     - id: install
       shell: bash
       env:
-        ACTIONLINT_SHA: 4f6274a8e0f4f4d2057aa9ae07660f61aa29c5f3  # v1.7.1
+        ACTIONLINT_SHA: be0549f3c56c3bc347c94e43622466084fafc61d  # v1.7.7
       run: bash <(curl "https://raw.githubusercontent.com/rhysd/actionlint/$ACTIONLINT_SHA/scripts/download-actionlint.bash")
     - name: Run actionlint
       shell: bash
