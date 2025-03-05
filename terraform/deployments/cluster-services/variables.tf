@@ -55,3 +55,9 @@ variable "desired_ha_replicas" {
   description = "Default number of desired replicas for high availability"
   default     = 3
 }
+
+variable "cluster_name" {
+  type        = string
+  description = "Name of the EKS cluster to create resources in"
+  default     = "govuk"
+}

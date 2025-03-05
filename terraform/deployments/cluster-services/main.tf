@@ -53,7 +53,7 @@ provider "aws" {
 }
 
 data "aws_eks_cluster_auth" "cluster_token" {
-  name = "govuk"
+  name = var.cluster_name
 }
 
 provider "kubernetes" {
