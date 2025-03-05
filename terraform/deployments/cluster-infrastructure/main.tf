@@ -140,10 +140,14 @@ data "aws_iam_policy_document" "node_assumerole" {
   }
 }
 
+# this resource has an auto-generated name in
+# integration, staging and production
 resource "aws_iam_role" "node" {
+  name                  = "${var.cluster_name}-node-group"
   description           = "EKS managed node group IAM role"
   assume_role_policy    = data.aws_iam_policy_document.node_assumerole.json
   force_detach_policies = true
+  lifecycle { ignore_changes = [name] }
 }
 
 data "aws_iam_policy_document" "pull_from_ecr" {
@@ -170,7 +174,7 @@ data "aws_iam_policy_document" "pull_from_ecr" {
 }
 
 resource "aws_iam_policy" "pull_from_ecr" {
-  name        = "pull-from-ecr"
+  name        = "${var.cluster_name}-pull-from-ecr"
   description = "Policy to allows EKS to pull images from ECR"
   policy      = data.aws_iam_policy_document.pull_from_ecr.json
 }
@@ -233,7 +237,7 @@ module "eks" {
 }
 
 resource "aws_kms_key" "eks" {
-  description             = "EKS Secret Encryption Key"
+  description             = "EKS Secret Encryption Key (${var.cluster_name})"
   deletion_window_in_days = 7
   enable_key_rotation     = true
 }
