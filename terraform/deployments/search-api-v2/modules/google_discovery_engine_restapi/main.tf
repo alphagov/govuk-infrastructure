@@ -10,8 +10,8 @@ terraform {
 }
 
 locals {
-  boostControls   = yamldecode(file("${path.module}/files/controls/boosts.yml"))
-  synonymControls = yamldecode(file("${path.module}/files/controls/synonyms.yml"))
+  boostControls    = yamldecode(file("${path.module}/files/controls/boosts.yml"))
+  synonymsControls = yamldecode(file("${path.module}/files/controls/synonyms.yml"))
 }
 
 ############## DATASTORE ##############
@@ -48,12 +48,12 @@ module "serving_config_default" {
   display_name = "Default (used by live Search API v2)"
   engine_id    = var.engine_id
 
-  boost_control_ids   = keys(local.boostControls)
-  synonym_control_ids = keys(local.synonymControls)
+  boost_control_ids    = keys(local.boostControls)
+  synonyms_control_ids = keys(local.synonymsControls)
 
   # TODO: We can probably remove this once we have visible dependencies in this file and don't
   # create controls through YAML
-  depends_on = [local.boostControls, local.synonymControls]
+  depends_on = [local.boostControls, local.synonymsControls]
 }
 
 resource "restapi_object" "discovery_engine_boost_control" {
@@ -81,7 +81,7 @@ resource "restapi_object" "discovery_engine_boost_control" {
 }
 
 resource "restapi_object" "discovery_engine_synonym_control" {
-  for_each = local.synonymControls
+  for_each = local.synonymsControls
 
   path      = "/engines/${var.engine_id}/controls"
   object_id = each.key

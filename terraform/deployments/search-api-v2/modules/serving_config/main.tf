@@ -12,10 +12,10 @@ terraform {
 locals {
   path = "/engines/${var.engine_id}/servingConfigs"
   properties = {
-    displayName       = var.display_name
-    boostControlIds   = var.boost_control_ids
-    filterControlIds  = var.filter_control_ids
-    synonymControlIds = var.synonym_control_ids
+    displayName        = var.display_name
+    boostControlIds    = var.boost_control_ids
+    filterControlIds   = var.filter_control_ids
+    synonymsControlIds = var.synonyms_control_ids
 
     solutionType = "SOLUTION_TYPE_SEARCH"
   }
