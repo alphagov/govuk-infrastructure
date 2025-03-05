@@ -80,7 +80,7 @@ resource "aws_db_instance" "instance" {
 
 resource "aws_db_event_subscription" "subscription" {
   name      = "${var.govuk_environment}-rds-event-subscription"
-  sns_topic = data.terraform_remote_state.infra_monitoring.outputs.sns_topic_rds_events_arn
+  sns_topic = aws_sns_topic.rds_alerts.arn
 
   source_type      = "db-instance"
   source_ids       = [for i in aws_db_instance.instance : i.identifier]
