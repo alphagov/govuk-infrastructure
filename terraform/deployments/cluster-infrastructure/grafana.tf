@@ -124,6 +124,7 @@ module "grafana_db" {
   apply_immediately            = var.rds_apply_immediately
   backup_retention_period      = var.rds_backup_retention_period
   skip_final_snapshot          = var.rds_skip_final_snapshot
+  final_snapshot_identifier    = "${local.grafana_db_name}-final"
   preferred_backup_window      = "02:00-03:00"
   preferred_maintenance_window = "sun:04:00-sun:05:00"
 }
