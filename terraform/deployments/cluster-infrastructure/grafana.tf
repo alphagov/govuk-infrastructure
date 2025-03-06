@@ -79,7 +79,12 @@ data "aws_rds_engine_version" "postgresql" {
   latest  = true
 }
 
-resource "random_password" "grafana_db" { length = 20 }
+resource "random_password" "grafana_db" {
+  length  = 20
+  special = false
+
+  lifecycle { ignore_changes = [special] }
+}
 
 locals {
   rds_subnet_ids     = compact([for name, id in data.tfe_outputs.vpc.nonsensitive_values.private_subnet_ids : startswith(name, "rds_") ? id : ""])
