@@ -106,8 +106,8 @@ resource "helm_release" "argo_cd" {
       styles = templatefile("${path.module}/templates/argo-custom-css.tpl", {
         env_name             = title(var.govuk_environment)
         env_abbreviation     = upper(substr(var.govuk_environment, 0, 1))
-        env_background_color = local.argo_environment_banner_background_colors[var.govuk_environment]
-        env_foreground_color = local.argo_environment_banner_foreground_colors[var.govuk_environment]
+        env_background_color = lookup(local.argo_environment_banner_background_colors, var.govuk_environment, "#5694ca")
+        env_foreground_color = lookup(local.argo_environment_banner_foreground_colors, var.govuk_environment, "#000000")
       })
     }
 
