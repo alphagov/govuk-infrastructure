@@ -82,7 +82,8 @@ data "aws_rds_engine_version" "postgresql" {
 resource "random_password" "grafana_db" { length = 20 }
 
 locals {
-  rds_subnet_ids = compact([for name, id in data.tfe_outputs.vpc.nonsensitive_values.private_subnet_ids : startswith(name, "rds_") ? id : ""])
+  rds_subnet_ids     = compact([for name, id in data.tfe_outputs.vpc.nonsensitive_values.private_subnet_ids : startswith(name, "rds_") ? id : ""])
+  grafana_subnet_ids = startswith(var.govuk_environment, "eph-") ? [for sn in aws_subnet.eks_private : sn.id] : local.rds_subnet_ids
 }
 
 module "grafana_db" {
