@@ -25,7 +25,7 @@ variable "filter_control_ids" {
   default     = []
 }
 
-variable "synonym_control_ids" {
+variable "synonyms_control_ids" {
   description = "The IDs of the synonym controls to attach to the serving config"
   type        = list(string)
   default     = []
