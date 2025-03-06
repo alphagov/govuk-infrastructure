@@ -2,7 +2,7 @@ resource "aws_security_group" "rds" {
   for_each = var.databases
 
   name        = "${var.govuk_environment}-${each.value.name}-rds-access"
-  vpc_id      = data.terraform_remote_state.infra_vpc.outputs.vpc_id
+  vpc_id      = data.tfe_outputs.vpc.nonsensitive_values.id
   description = "Access to ${each.value.name} RDS"
 
   lifecycle { create_before_destroy = true }

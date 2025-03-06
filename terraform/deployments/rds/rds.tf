@@ -1,3 +1,7 @@
+locals {
+  rds_subnet_ids = compact([for name, id in data.tfe_outputs.vpc.nonsensitive_values.private_subnet_ids : startswith(name, "rds_") ? id : ""])
+}
+
 resource "random_string" "database_password" {
   for_each = var.databases
 
@@ -10,7 +14,7 @@ resource "random_string" "database_password" {
 # integration, staging and production
 resource "aws_db_subnet_group" "subnet_group" {
   name       = "${var.govuk_environment}-subnet"
-  subnet_ids = data.terraform_remote_state.infra_networking.outputs.private_subnet_rds_ids
+  subnet_ids = local.rds_subnet_ids
 
   tags = { Name = "blue-govuk-rds-subnet" }
 
@@ -58,7 +62,7 @@ resource "aws_db_instance" "instance" {
   backup_window           = var.backup_window
   copy_tags_to_snapshot   = true
   monitoring_interval     = 60
-  monitoring_role_arn     = data.terraform_remote_state.infra_monitoring.outputs.rds_enhanced_monitoring_role_arn
+  monitoring_role_arn     = data.tfe_outputs.vpc.nonsensitive_values.rds_enhanced_monitoring_role_arn
   vpc_security_group_ids  = [aws_security_group.rds[each.key].id]
   ca_cert_identifier      = "rds-ca-rsa2048-g1"
   apply_immediately       = true # var.govuk_environment != "production"
@@ -111,7 +115,7 @@ resource "aws_route53_record" "instance_cname" {
   for_each = var.databases
 
   # Zone is <environment>.govuk-internal.digital.
-  zone_id = data.terraform_remote_state.infra_root_dns_zones.outputs.internal_root_zone_id
+  zone_id = data.tfe_outputs.vpc.nonsensitive_values.internal_root_zone_id
   name    = aws_db_instance.instance[each.key].identifier
   type    = "CNAME"
   ttl     = 300
