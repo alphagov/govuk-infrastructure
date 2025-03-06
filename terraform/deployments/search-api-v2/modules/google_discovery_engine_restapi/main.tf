@@ -9,11 +9,6 @@ terraform {
   required_version = "~> 1.10"
 }
 
-locals {
-  boostControls    = yamldecode(file("${path.module}/files/controls/boosts.yml"))
-  synonymsControls = yamldecode(file("${path.module}/files/controls/synonyms.yml"))
-}
-
 ############## DATASTORE ##############
 
 # The data schema for the datastore
@@ -48,58 +43,118 @@ module "serving_config_default" {
   display_name = "Default (used by live Search API v2)"
   engine_id    = var.engine_id
 
-  boost_control_ids    = keys(local.boostControls)
-  synonyms_control_ids = keys(local.synonymsControls)
-
-  # TODO: We can probably remove this once we have visible dependencies in this file and don't
-  # create controls through YAML
-  depends_on = [local.boostControls, local.synonymsControls]
+  boost_control_ids = [
+    module.control_boost_demote_low.id,
+    module.control_boost_demote_medium.id,
+    module.control_boost_demote_pages.id,
+    module.control_boost_demote_strong.id,
+    module.control_boost_promote_low.id,
+    module.control_boost_promote_medium.id,
+  ]
+  synonyms_control_ids = [
+    module.control_synonym_hmrc.id,
+  ]
 }
 
-resource "restapi_object" "discovery_engine_boost_control" {
-  for_each = local.boostControls
+module "control_boost_promote_medium" {
+  source = "../control"
 
-  path      = "/engines/${var.engine_id}/controls"
-  object_id = each.key
-
-  # API uses query strings to specify ID of the resource to create (not payload)
-  create_path = "/engines/${var.engine_id}/controls?controlId=${each.key}"
-
-  data = jsonencode({
-    name        = each.key
-    displayName = each.key
-
-    solutionType = "SOLUTION_TYPE_SEARCH"
-    useCases     = ["SEARCH_USE_CASE_SEARCH"]
-
+  id           = "boost_promote_medium"
+  display_name = "Boost: Promote medium"
+  engine_id    = var.engine_id
+  action = {
     boostAction = {
-      boost     = lookup(each.value, "boost", 0.00000001),
-      filter    = lookup(each.value, "filter", ""),
-      dataStore = var.datastore_path
+      filter = "content_purpose_supergroup: ANY(\"services\") OR document_type: ANY(\"calendar\", \"detailed_guide\", \"document_collection\", \"external_content\", \"organisation\")",
+      boost  = 0.2
     }
-  })
+  }
 }
 
-resource "restapi_object" "discovery_engine_synonym_control" {
-  for_each = local.synonymsControls
+module "control_boost_promote_low" {
+  source = "../control"
 
-  path      = "/engines/${var.engine_id}/controls"
-  object_id = each.key
-
-  # API uses query strings to specify ID of the resource to create (not payload)
-  create_path = "/engines/${var.engine_id}/controls?controlId=${each.key}"
-
-  data = jsonencode({
-    name        = each.key
-    displayName = each.key
-
-    solutionType = "SOLUTION_TYPE_SEARCH"
-    useCases     = ["SEARCH_USE_CASE_SEARCH"]
-
-    synonymsAction = {
-      synonyms = each.value
+  id           = "boost_promote_low"
+  display_name = "Boost: Promote low"
+  engine_id    = var.engine_id
+  action = {
+    boostAction = {
+      filter = "document_type: ANY(\"guidance\", \"mainstream_browse_page\", \"policy_paper\", \"travel_advice\")",
+      boost  = 0.05
     }
-  })
+  }
+}
+
+module "control_boost_demote_low" {
+  source = "../control"
+
+  id           = "boost_demote_low"
+  display_name = "Boost: Demote low"
+  engine_id    = var.engine_id
+  action = {
+    boostAction = {
+      filter = "document_type: ANY(\"about\", \"taxon\", \"world_news_story\")",
+      boost  = -0.25
+    }
+  }
+}
+
+module "control_boost_demote_medium" {
+  source = "../control"
+
+  id           = "boost_demote_medium"
+  display_name = "Boost: Demote medium"
+  engine_id    = var.engine_id
+  action = {
+    boostAction = {
+      filter = "document_type: ANY(\"employment_tribunal_decision\", \"foi_release\", \"service_standard_report\") OR organisation_state: ANY(\"devolved\", \"closed\")",
+      boost  = -0.5
+    }
+  }
+}
+
+module "control_boost_demote_strong" {
+  source = "../control"
+
+  id           = "boost_demote_strong"
+  display_name = "Boost: Demote strong"
+  engine_id    = var.engine_id
+  action = {
+    boostAction = {
+      filter = "is_historic = 1",
+      boost  = -0.75
+    }
+  }
+}
+
+module "control_boost_demote_pages" {
+  source = "../control"
+
+  id           = "boost_demote_pages"
+  display_name = "Boost: Demote specific pages"
+  engine_id    = var.engine_id
+  action = {
+    boostAction = {
+      filter = "link: ANY(\"/government/publications/pension-credit-claim-form--2\")",
+      boost  = -0.75
+    }
+  }
+}
+
+module "control_synonym_hmrc" {
+  source = "../control"
+
+  id           = "syn_hmrc"
+  display_name = "Synonyms: HMRC"
+  engine_id    = var.engine_id
+  action = {
+    synonymsAction = {
+      synonyms = [
+        "inland revenue",
+        "hmrc",
+        "hm revenue and customs",
+      ]
+    }
+  }
 }
 
 resource "restapi_object" "discovery_engine_datastore_completion_config" {
