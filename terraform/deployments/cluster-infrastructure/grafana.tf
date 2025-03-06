@@ -100,7 +100,7 @@ module "grafana_db" {
   allow_major_version_upgrade = true
 
   vpc_id                 = data.tfe_outputs.vpc.nonsensitive_values.id
-  subnets                = local.rds_subnet_ids
+  subnets                = local.grafana_subnet_ids
   create_db_subnet_group = true
   create_security_group  = true
   security_group_rules = {
