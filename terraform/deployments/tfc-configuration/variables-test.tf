@@ -2,6 +2,7 @@ module "variable-set-ephemeral" {
   source = "./variable-set"
 
   name = "common-ephemeral"
+  priority = false
   tfvars = {
     cluster_version               = "1.31"
     cluster_log_retention_in_days = 7
