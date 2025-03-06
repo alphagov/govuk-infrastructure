@@ -12,17 +12,25 @@ terraform {
 locals {
   path = "/engines/${var.engine_id}/controls"
 
-  dynamic_properties = merge({
+  dynamic_properties = {
     displayName = var.display_name
-  }, var.action)
+  }
   # These properties are required on creation, but not updatable
   static_properties = {
     solutionType = "SOLUTION_TYPE_SEARCH"
     useCases     = ["SEARCH_USE_CASE_SEARCH"]
   }
-  properties = merge(local.dynamic_properties, local.static_properties)
+  properties = merge(local.dynamic_properties, local.static_properties, var.action)
 
-  update_mask = join(",", keys(local.dynamic_properties))
+  # Extract and format the subkeys of the action object for use in the updateMask
+  # for example: boostAction.filter, boostAction.boost
+  action_keys = flatten([
+    for key, value in var.action : [
+      for subkey in keys(value) : "${key}.${subkey}"
+    ] if can(keys(value))
+  ])
+
+  update_mask = join(",", concat(keys(local.dynamic_properties), local.action_keys))
 }
 
 resource "restapi_object" "control" {
