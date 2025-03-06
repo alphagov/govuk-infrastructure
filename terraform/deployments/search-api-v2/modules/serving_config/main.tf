@@ -11,15 +11,20 @@ terraform {
 
 locals {
   path = "/engines/${var.engine_id}/servingConfigs"
-  properties = {
+
+  dynamic_properties = {
     displayName        = var.display_name
     boostControlIds    = var.boost_control_ids
     filterControlIds   = var.filter_control_ids
     synonymsControlIds = var.synonyms_control_ids
-
+  }
+  # These properties are required on creation, but not updatable
+  static_properties = {
     solutionType = "SOLUTION_TYPE_SEARCH"
   }
-  update_mask = join(",", keys(local.properties))
+  properties = merge(local.dynamic_properties, local.static_properties)
+
+  update_mask = join(",", keys(local.dynamic_properties))
 }
 
 resource "restapi_object" "serving_config" {
