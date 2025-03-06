@@ -222,7 +222,7 @@ module "eks" {
   create_cluster_security_group = false
   create_node_security_group    = false
 
-  authentication_mode                      = "CONFIG_MAP"
+  authentication_mode                      = var.authentication_mode
   enable_cluster_creator_admin_permissions = true
 
   eks_managed_node_group_defaults = {

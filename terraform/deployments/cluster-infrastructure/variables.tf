@@ -199,3 +199,9 @@ variable "govuk_environment" {
   type        = string
   description = "Acceptable values are test, integration, staging, production"
 }
+
+variable "authentication_mode" {
+  type        = string
+  default     = "CONFIG_MAP"
+  description = "Authentication mode to use for the cluster"
+}
