@@ -23,7 +23,7 @@ module "variable-set-ephemeral" {
     eks_private_subnets = {
       a = { az = "eu-west-1a", cidr = "10.10.32.0/19" }
       b = { az = "eu-west-1b", cidr = "10.10.64.0/19" }
-      c = { az = "eu-west-1c", cidr = "10.12.96.0/19" }
+      c = { az = "eu-west-1c", cidr = "10.10.96.0/19" }
     }
 
     legacy_public_subnets = {}

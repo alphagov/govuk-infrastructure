@@ -69,7 +69,7 @@ resource "aws_route53_record" "cluster_public_soa" {
 
 resource "aws_acm_certificate" "cluster_public" {
   domain_name               = "*.${local.external_dns_zone_name}"
-  subject_alternative_names = ["*.${var.publishing_service_domain}"]
+  subject_alternative_names = startswith(var.govuk_environment, "eph-") ? [] : ["*.${var.publishing_service_domain}"]
   validation_method         = "DNS"
   lifecycle { create_before_destroy = true }
   tags = { Name = local.external_dns_zone_name }
