@@ -107,6 +107,7 @@ module "grafana_db" {
     from_cluster = { source_security_group_id = module.eks.cluster_primary_security_group_id }
   }
   manage_master_user_password = false
+  master_username             = "root"
   master_password             = random_password.grafana_db.result
 
   serverlessv2_scaling_configuration = {
