@@ -147,11 +147,9 @@ resource "kubernetes_cluster_role" "poweruser" {
 }
 
 resource "kubernetes_role_binding" "poweruser" {
-  for_each = toset([kubernetes_namespace.apps.metadata[0].name, "datagovuk"])
-
   metadata {
-    name      = "poweruser-${each.key}"
-    namespace = each.key
+    name      = "poweruser-${kubernetes_namespace.apps.metadata[0].name}"
+    namespace = kubernetes_namespace.apps.metadata[0].name
   }
   role_ref {
     api_group = "rbac.authorization.k8s.io"
