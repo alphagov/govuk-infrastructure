@@ -1,3 +1,50 @@
+locals {
+  dex_clients = toset([
+    "alert-manager",
+    "prometheus",
+    "grafana",
+    "argocd",
+    "argo-workflows"
+  ])
+  dex_client_namespaces = [
+    local.services_ns,
+    var.apps_namespace
+  ]
+
+  dex_clients_namespaces = {
+    for pair in setproduct(local.dex_clients, local.dex_client_namespaces) : "${pair[1]}-${pair[0]}" => { namespace = pair[1], client = pair[0] }
+  }
+}
+
+resource "random_bytes" "dex_id" {
+  for_each = local.dex_clients
+
+  length = 8
+}
+
+resource "random_password" "dex_secret" {
+  for_each = local.dex_clients
+
+  length  = 32
+  special = false
+  lower   = true
+  upper   = false
+  numeric = true
+}
+
+resource "kubernetes_secret" "dex_client" {
+  for_each = local.dex_clients_namespaces
+
+  metadata {
+    name      = "dex-client-${each.value.client}"
+    namespace = each.value.namespace
+  }
+  data = {
+    clientID     = random_bytes.dex_id[each.value.client].hex
+    clientSecret = random_password.dex_secret[each.value.client].result
+  }
+}
+
 resource "helm_release" "dex" {
   depends_on       = [helm_release.aws_lb_controller, helm_release.cluster_secrets]
   chart            = "dex"
@@ -97,7 +144,7 @@ resource "helm_release" "dex" {
         name = "ARGO_WORKFLOWS_CLIENT_ID"
         valueFrom = {
           secretKeyRef = {
-            name = "govuk-dex-argo-workflows"
+            name = "dex-client-argo-workflows"
             key  = "clientID"
           }
         }
@@ -106,7 +153,7 @@ resource "helm_release" "dex" {
         name = "ARGO_WORKFLOWS_CLIENT_SECRET"
         valueFrom = {
           secretKeyRef = {
-            name = "govuk-dex-argo-workflows"
+            name = "dex-client-argo-workflows"
             key  = "clientSecret"
           }
         }
@@ -115,7 +162,7 @@ resource "helm_release" "dex" {
         name = "ARGOCD_CLIENT_ID"
         valueFrom = {
           secretKeyRef = {
-            name = "govuk-dex-argocd"
+            name = "dex-client-argocd"
             key  = "clientID"
           }
         }
@@ -124,7 +171,7 @@ resource "helm_release" "dex" {
         name = "ARGOCD_CLIENT_SECRET"
         valueFrom = {
           secretKeyRef = {
-            name = "govuk-dex-argocd"
+            name = "dex-client-argocd"
             key  = "clientSecret"
           }
         }
@@ -133,7 +180,7 @@ resource "helm_release" "dex" {
         name = "GRAFANA_CLIENT_ID"
         valueFrom = {
           secretKeyRef = {
-            name = "govuk-dex-grafana"
+            name = "dex-client-grafana"
             key  = "clientID"
           }
         }
@@ -142,7 +189,7 @@ resource "helm_release" "dex" {
         name = "GRAFANA_CLIENT_SECRET"
         valueFrom = {
           secretKeyRef = {
-            name = "govuk-dex-grafana"
+            name = "dex-client-grafana"
             key  = "clientSecret"
           }
         }
@@ -151,7 +198,7 @@ resource "helm_release" "dex" {
         name = "PROMETHEUS_CLIENT_ID"
         valueFrom = {
           secretKeyRef = {
-            name = "govuk-dex-prometheus"
+            name = "dex-client-prometheus"
             key  = "clientID"
           }
         }
@@ -160,7 +207,7 @@ resource "helm_release" "dex" {
         name = "PROMETHEUS_CLIENT_SECRET"
         valueFrom = {
           secretKeyRef = {
-            name = "govuk-dex-prometheus"
+            name = "dex-client-prometheus"
             key  = "clientSecret"
           }
         }
@@ -169,7 +216,7 @@ resource "helm_release" "dex" {
         name = "ALERT_MANAGER_CLIENT_ID"
         valueFrom = {
           secretKeyRef = {
-            name = "govuk-dex-alertmanager"
+            name = "dex-client-alertmanager"
             key  = "clientID"
           }
         }
@@ -178,7 +225,7 @@ resource "helm_release" "dex" {
         name = "ALERT_MANAGER_CLIENT_SECRET"
         valueFrom = {
           secretKeyRef = {
-            name = "govuk-dex-alertmanager"
+            name = "dex-client-alertmanager"
             key  = "clientSecret"
           }
         }
