@@ -2,7 +2,7 @@
 
 locals {
   dex_clients = toset([
-    "alert-manager",
+    "alertmanager",
     "prometheus",
     "grafana",
     "argocd",
