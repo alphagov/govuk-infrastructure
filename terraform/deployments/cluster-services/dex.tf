@@ -1,3 +1,119 @@
+# Dex client credentials
+
+locals {
+  dex_clients = toset([
+    "alert-manager",
+    "prometheus",
+    "grafana",
+    "argocd",
+    "argo-workflows"
+  ])
+  dex_client_namespaces = [
+    local.services_ns,
+    var.apps_namespace
+  ]
+
+  dex_clients_namespaces = {
+    for pair in setproduct(local.dex_clients, local.dex_client_namespaces) : "${pair[1]}-${pair[0]}" => { namespace = pair[1], client = pair[0] }
+  }
+}
+
+resource "random_bytes" "dex_id" {
+  for_each = local.dex_clients
+
+  length = 8
+}
+
+resource "random_password" "dex_secret" {
+  for_each = local.dex_clients
+
+  length  = 32
+  special = false
+  lower   = true
+  upper   = false
+  numeric = true
+}
+
+resource "random_password" "dex_cookie_secret" {
+  for_each = local.dex_clients
+
+  length  = 32
+  special = false
+  lower   = true
+  upper   = false
+  numeric = true
+}
+
+resource "kubernetes_secret" "dex_client" {
+  for_each = local.dex_clients_namespaces
+
+  metadata {
+    name      = "dex-client-${each.value.client}"
+    namespace = each.value.namespace
+  }
+  data = {
+    clientID     = random_bytes.dex_id[each.value.client].hex
+    clientSecret = random_password.dex_secret[each.value.client].result
+    cookieSecret = random_password.dex_cookie_secret[each.value.client].result
+  }
+}
+
+# Ephemeral account credentials
+
+resource "random_uuid" "eph_account" {}
+
+resource "random_password" "eph_account" {
+  length = 32
+
+  special = false
+  upper   = true
+  lower   = true
+  numeric = true
+}
+
+resource "kubernetes_secret" "eph_account" {
+  count = startswith(var.govuk_environment, "eph-") ? 1 : 0
+  metadata {
+    name      = "dex-account"
+    namespace = "cluster-services"
+  }
+
+  data = {
+    username = "admin"
+    password = random_password.eph_account.result
+  }
+}
+
+locals {
+  # this list will only have a value in it if
+  # we are in an ephemeral environment
+  dex_static_passwords = startswith(var.govuk_environment, "eph-") ? [
+    {
+      username = "admin"
+      hash     = random_password.eph_account.bcrypt_hash
+      email    = "ephemeral-user@digital.cabinet-office.gov.uk"
+      userID   = random_uuid.eph_account.result
+    }
+  ] : []
+  dex_enable_passworddb = startswith(var.govuk_environment, "eph-")
+
+  dex_connectors = startswith(var.govuk_environment, "eph-") ? [] : [
+    {
+      type = "github"
+      id   = "github"
+      name = "GitHub"
+      config = {
+        clientID      = "$GITHUB_CLIENT_ID"
+        clientSecret  = "$GITHUB_CLIENT_SECRET"
+        redirectURI   = "https://${local.dex_host}/callback"
+        orgs          = var.dex_github_orgs_teams
+        teamNameField = "both"
+        useLoginAsID  = true
+      }
+    }
+  ]
+}
+
 resource "helm_release" "dex" {
   depends_on       = [helm_release.aws_lb_controller, helm_release.cluster_secrets]
   chart            = "dex"
@@ -22,21 +138,11 @@ resource "helm_release" "dex" {
         }
       }
 
-      connectors = [
-        {
-          type = "github"
-          id   = "github"
-          name = "GitHub"
-          config = {
-            clientID      = "$GITHUB_CLIENT_ID"
-            clientSecret  = "$GITHUB_CLIENT_SECRET"
-            redirectURI   = "https://${local.dex_host}/callback"
-            orgs          = var.dex_github_orgs_teams
-            teamNameField = "both"
-            useLoginAsID  = true
-          }
-        }
-      ]
+      # static account for ephemeral environments
+      enablePasswordDB = local.dex_enable_passworddb
+      staticPasswords  = local.dex_static_passwords
+
+      connectors = local.dex_connectors
 
       # staticClients uses a different method for expansion of environment
       # variables, see [bug](https://github.com/gabibbo97/charts/issues/36#issuecomment-736911424)
@@ -97,7 +203,7 @@ resource "helm_release" "dex" {
         name = "ARGO_WORKFLOWS_CLIENT_ID"
         valueFrom = {
           secretKeyRef = {
-            name = "govuk-dex-argo-workflows"
+            name = "dex-client-argo-workflows"
             key  = "clientID"
           }
         }
@@ -106,7 +212,7 @@ resource "helm_release" "dex" {
         name = "ARGO_WORKFLOWS_CLIENT_SECRET"
         valueFrom = {
           secretKeyRef = {
-            name = "govuk-dex-argo-workflows"
+            name = "dex-client-argo-workflows"
             key  = "clientSecret"
           }
         }
@@ -115,7 +221,7 @@ resource "helm_release" "dex" {
         name = "ARGOCD_CLIENT_ID"
         valueFrom = {
           secretKeyRef = {
-            name = "govuk-dex-argocd"
+            name = "dex-client-argocd"
             key  = "clientID"
           }
         }
@@ -124,7 +230,7 @@ resource "helm_release" "dex" {
         name = "ARGOCD_CLIENT_SECRET"
         valueFrom = {
           secretKeyRef = {
-            name = "govuk-dex-argocd"
+            name = "dex-client-argocd"
             key  = "clientSecret"
           }
         }
@@ -133,7 +239,7 @@ resource "helm_release" "dex" {
         name = "GRAFANA_CLIENT_ID"
         valueFrom = {
           secretKeyRef = {
-            name = "govuk-dex-grafana"
+            name = "dex-client-grafana"
             key  = "clientID"
           }
         }
@@ -142,7 +248,7 @@ resource "helm_release" "dex" {
         name = "GRAFANA_CLIENT_SECRET"
         valueFrom = {
           secretKeyRef = {
-            name = "govuk-dex-grafana"
+            name = "dex-client-grafana"
             key  = "clientSecret"
           }
         }
@@ -151,7 +257,7 @@ resource "helm_release" "dex" {
         name = "PROMETHEUS_CLIENT_ID"
         valueFrom = {
           secretKeyRef = {
-            name = "govuk-dex-prometheus"
+            name = "dex-client-prometheus"
             key  = "clientID"
           }
         }
@@ -160,7 +266,7 @@ resource "helm_release" "dex" {
         name = "PROMETHEUS_CLIENT_SECRET"
         valueFrom = {
           secretKeyRef = {
-            name = "govuk-dex-prometheus"
+            name = "dex-client-prometheus"
             key  = "clientSecret"
           }
         }
@@ -169,7 +275,7 @@ resource "helm_release" "dex" {
         name = "ALERT_MANAGER_CLIENT_ID"
         valueFrom = {
           secretKeyRef = {
-            name = "govuk-dex-alertmanager"
+            name = "dex-client-alertmanager"
             key  = "clientID"
           }
         }
@@ -178,7 +284,7 @@ resource "helm_release" "dex" {
         name = "ALERT_MANAGER_CLIENT_SECRET"
         valueFrom = {
           secretKeyRef = {
-            name = "govuk-dex-alertmanager"
+            name = "dex-client-alertmanager"
             key  = "clientSecret"
           }
         }
