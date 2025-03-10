@@ -21,6 +21,10 @@ module "serving_config_variant" {
     # explicitly not included in serving_config_variant
     # module.control_boost_demote_strong.id,
   ]
+  filter_control_ids = [
+    # identical to serving_config_default
+    module.control_filter_temporary_exclusions.id,
+  ]
   synonyms_control_ids = [
     # identical to serving_config_default
     module.control_synonym_hmrc.id,

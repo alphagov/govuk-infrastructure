@@ -13,6 +13,9 @@ module "serving_config_default" {
     module.control_boost_promote_low.id,
     module.control_boost_promote_medium.id,
   ]
+  filter_control_ids = [
+    module.control_filter_temporary_exclusions.id,
+  ]
   synonyms_control_ids = [
     module.control_synonym_hmrc.id,
   ]
@@ -98,6 +101,34 @@ module "control_boost_demote_pages" {
     boostAction = {
       filter = "link: ANY(\"/government/publications/pension-credit-claim-form--2\")",
       boost  = -0.75
+    }
+  }
+}
+
+locals {
+  # Pages to temporarily exclude from search results
+  filtered_pages = [
+    # GOV.UK app beta
+    "/government/publications/govuk-app-terms-and-conditions",
+    "/government/publications/govuk-app-privacy-notice-how-we-use-your-data",
+    "/government/publications/govuk-app-test-privacy-notice-how-we-use-your-data",
+    "/government/publications/accessibility-statement-for-the-govuk-app",
+    "/sign-up-test-govuk-app",
+    "/contact/govuk-app-support",
+  ]
+  filtered_pages_expr = join(",", [for page in local.filtered_pages : "\"${page}\""])
+}
+module "control_filter_temporary_exclusions" {
+  source = "./modules/control"
+
+  id           = "filter_temporary_exclusions"
+  display_name = "Filter: Temporary exclusions"
+  engine_id    = google_discovery_engine_search_engine.govuk.engine_id
+
+  action = {
+    filterAction = {
+      filter    = "NOT link: ANY(${local.filtered_pages_expr})"
+      dataStore = google_discovery_engine_data_store.govuk_content.name
     }
   }
 }
