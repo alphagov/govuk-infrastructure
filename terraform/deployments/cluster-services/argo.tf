@@ -23,6 +23,23 @@ locals {
   }
 }
 
+# this label is required for argocd to pick up the secret
+# https://argo-cd.readthedocs.io/en/stable/operator-manual/user-management/#alternative
+resource "kubernetes_labels" "argocd_secret" {
+  for_each   = toset(local.dex_client_namespaces)
+  depends_on = [kubernetes_secret.dex_client]
+
+  api_version = "v1"
+  kind        = "secret"
+  metadata {
+    name      = "dex-client-argocd"
+    namespace = each.key
+  }
+  labels = {
+    "app.kubernetes.io/part-of" = "argocd"
+  }
+}
+
 resource "helm_release" "argo_cd" {
   chart            = "argo-cd"
   name             = "argo-cd"
