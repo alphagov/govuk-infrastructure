@@ -1,7 +1,7 @@
 module "variable-set-ephemeral" {
   source = "./variable-set"
 
-  name = "common-ephemeral"
+  name     = "common-ephemeral"
   priority = false
   tfvars = {
     cluster_version               = "1.31"
