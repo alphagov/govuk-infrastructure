@@ -10,7 +10,8 @@ locals {
   ])
   dex_client_namespaces = [
     local.services_ns,
-    var.apps_namespace
+    var.apps_namespace,
+    local.monitoring_ns
   ]
 
   dex_clients_namespaces = {
@@ -55,6 +56,10 @@ resource "kubernetes_secret" "dex_client" {
     clientID     = random_bytes.dex_id[each.value.client].hex
     clientSecret = random_password.dex_secret[each.value.client].result
     cookieSecret = random_password.dex_cookie_secret[each.value.client].result
+  }
+
+  lifecycle {
+    ignore_changes = [metadata[0].labels]
   }
 }
 
