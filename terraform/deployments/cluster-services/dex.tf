@@ -57,6 +57,10 @@ resource "kubernetes_secret" "dex_client" {
     clientSecret = random_password.dex_secret[each.value.client].result
     cookieSecret = random_password.dex_cookie_secret[each.value.client].result
   }
+
+  lifecycle {
+    ignore_changes = [metadata[0].labels]
+  }
 }
 
 # Ephemeral account credentials
