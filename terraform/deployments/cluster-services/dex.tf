@@ -10,7 +10,8 @@ locals {
   ])
   dex_client_namespaces = [
     local.services_ns,
-    var.apps_namespace
+    var.apps_namespace,
+    local.monitoring_ns
   ]
 
   dex_clients_namespaces = {
