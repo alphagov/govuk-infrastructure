@@ -30,7 +30,7 @@ resource "kubernetes_labels" "argocd_secret" {
   depends_on = [kubernetes_secret.dex_client]
 
   api_version = "v1"
-  kind        = "secret"
+  kind        = "Secret"
   metadata {
     name      = "dex-client-argocd"
     namespace = each.key
