@@ -26,6 +26,14 @@ Update our CI/CD to Build all GOV.UK App Images with ARM support, update our EKS
 
 We will adopt an "ARM-first" approach for our software development and unify our architectures in Development, non-Production and Production environments. We will retain the flexibility to continue to support x86 workloads should the need arise in the future.
 
+### Cost Savings
+
+The cost saving per-instance is approximately 15% when stepping from m6i to m7g instances of the same "size". However, the benefits are potentially more significant when this is combined with more efficient compute, right-sizing efforts and committing to the correct Savings Plans and/or Reserved Instances.
+
+Further, making improvements to our workload resource requests and limits has allowed us to "right-size" our infrastructure and not need to overprovision our compute instances. This has resulted in a 55% cost saving when combined with our switch to Graviton hardware. As explained above, Savings Plans and RIs should improve our savings further.
+
+Calculations can be provided on-request by the GOV.UK Platform Engineering team.
+
 ## Summary
 
 Following the decision to switch all of GOV.UK over to Graviton/ARM, GOV.UK will:
