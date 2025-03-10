@@ -45,8 +45,8 @@ resource "helm_release" "argo_cd" {
         "oidc.config" = yamlencode({
           name         = "GitHub"
           issuer       = "https://${local.dex_host}"
-          clientID     = "$govuk-dex-argocd:clientID"
-          clientSecret = "$govuk-dex-argocd:clientSecret"
+          clientID     = "$dex-client-argocd:clientID"
+          clientSecret = "$dex-client-argocd:clientSecret"
         })
       }
 
@@ -294,11 +294,11 @@ resource "helm_release" "argo_workflows" {
         enabled = true
         issuer  = "https://${local.dex_host}"
         clientId = {
-          name = "govuk-dex-argo-workflows"
+          name = "dex-client-argo-workflows"
           key  = "clientID"
         }
         clientSecret = {
-          name = "govuk-dex-argo-workflows"
+          name = "dex-client-argo-workflows"
           key  = "clientSecret"
         }
         redirectUrl = "https://${local.argo_workflows_host}/oauth2/callback"
