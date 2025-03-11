@@ -152,7 +152,10 @@ resource "helm_release" "argo_cd" {
 
 resource "helm_release" "argo_bootstrap" {
   # Relies on CRDs
-  depends_on       = [helm_release.argo_cd]
+  depends_on = [
+    helm_release.argo_cd,
+    helm_release.external_secrets
+  ]
   chart            = "argo-bootstrap"
   name             = "argo-bootstrap"
   namespace        = local.services_ns
