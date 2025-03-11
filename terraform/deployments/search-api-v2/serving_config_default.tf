@@ -29,8 +29,9 @@ module "control_boost_promote_medium" {
   engine_id    = google_discovery_engine_search_engine.govuk.engine_id
   action = {
     boostAction = {
-      filter = "content_purpose_supergroup: ANY(\"services\") OR document_type: ANY(\"calendar\", \"detailed_guide\", \"document_collection\", \"external_content\", \"organisation\")",
-      boost  = 0.2
+      filter     = "content_purpose_supergroup: ANY(\"services\") OR document_type: ANY(\"calendar\", \"detailed_guide\", \"document_collection\", \"external_content\", \"organisation\")",
+      fixedBoost = 0.2
+      dataStore  = google_discovery_engine_data_store.govuk_content.name
     }
   }
 }
@@ -43,8 +44,9 @@ module "control_boost_promote_low" {
   engine_id    = google_discovery_engine_search_engine.govuk.engine_id
   action = {
     boostAction = {
-      filter = "document_type: ANY(\"guidance\", \"mainstream_browse_page\", \"policy_paper\", \"travel_advice\")",
-      boost  = 0.05
+      filter     = "document_type: ANY(\"guidance\", \"mainstream_browse_page\", \"policy_paper\", \"travel_advice\")",
+      fixedBoost = 0.05
+      dataStore  = google_discovery_engine_data_store.govuk_content.name
     }
   }
 }
@@ -57,8 +59,9 @@ module "control_boost_demote_low" {
   engine_id    = google_discovery_engine_search_engine.govuk.engine_id
   action = {
     boostAction = {
-      filter = "document_type: ANY(\"about\", \"taxon\", \"world_news_story\")",
-      boost  = -0.25
+      filter     = "document_type: ANY(\"about\", \"taxon\", \"world_news_story\")",
+      fixedBoost = -0.25
+      dataStore  = google_discovery_engine_data_store.govuk_content.name
     }
   }
 }
@@ -71,8 +74,9 @@ module "control_boost_demote_medium" {
   engine_id    = google_discovery_engine_search_engine.govuk.engine_id
   action = {
     boostAction = {
-      filter = "document_type: ANY(\"employment_tribunal_decision\", \"foi_release\", \"service_standard_report\") OR organisation_state: ANY(\"devolved\", \"closed\")",
-      boost  = -0.5
+      filter     = "document_type: ANY(\"employment_tribunal_decision\", \"foi_release\", \"service_standard_report\") OR organisation_state: ANY(\"devolved\", \"closed\")",
+      fixedBoost = -0.5
+      dataStore  = google_discovery_engine_data_store.govuk_content.name
     }
   }
 }
@@ -85,8 +89,9 @@ module "control_boost_demote_strong" {
   engine_id    = google_discovery_engine_search_engine.govuk.engine_id
   action = {
     boostAction = {
-      filter = "is_historic = 1",
-      boost  = -0.75
+      filter     = "is_historic = 1",
+      fixedBoost = -0.75
+      dataStore  = google_discovery_engine_data_store.govuk_content.name
     }
   }
 }
@@ -99,8 +104,9 @@ module "control_boost_demote_pages" {
   engine_id    = google_discovery_engine_search_engine.govuk.engine_id
   action = {
     boostAction = {
-      filter = "link: ANY(\"/government/publications/pension-credit-claim-form--2\")",
-      boost  = -0.75
+      filter     = "link: ANY(\"/government/publications/pension-credit-claim-form--2\")",
+      fixedBoost = -0.75
+      dataStore  = google_discovery_engine_data_store.govuk_content.name
     }
   }
 }
