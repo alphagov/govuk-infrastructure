@@ -181,6 +181,11 @@ resource "helm_release" "argo_bootstrap" {
 }
 
 resource "helm_release" "argo_workflows" {
+  depends_on = [
+    kubernetes_secret.dex_client,
+    helm_release.aws_lb_controller
+  ]
+
   chart            = "argo-workflows"
   name             = "argo-workflows"
   namespace        = local.services_ns
