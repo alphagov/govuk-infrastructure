@@ -164,6 +164,7 @@ resource "kubernetes_role_binding" "poweruser" {
 }
 
 resource "kubernetes_role" "licensing" {
+  depends_on = [kubernetes_namespace.licensify]
   metadata {
     name      = "licensing"
     namespace = "licensify"
@@ -183,6 +184,7 @@ resource "kubernetes_role" "licensing" {
 }
 
 resource "kubernetes_role_binding" "licensing" {
+  depends_on = [kubernetes_role.licensing]
   metadata {
     name      = "licensing"
     namespace = "licensify"
