@@ -1,6 +1,9 @@
 # logging.tf manages Filebeat, which ships logs to Logit.io, a managed ELK stack.
 
 resource "helm_release" "filebeat" {
+  # don't install in ephemeral environments
+  count = startswith(var.govuk_environment, "eph-") ? 0 : 1
+
   name       = "filebeat"
   repository = "https://helm.elastic.co"
   chart      = "filebeat"
