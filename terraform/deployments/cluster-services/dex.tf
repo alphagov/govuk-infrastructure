@@ -47,6 +47,11 @@ resource "random_password" "dex_cookie_secret" {
 
 resource "kubernetes_secret" "dex_client" {
   for_each = local.dex_clients_namespaces
+  depends_on = [
+    kubernetes_namespace.apps,
+    kubernetes_namespace.monitoring,
+    helm_release.dex
+  ]
 
   metadata {
     name      = "dex-client-${each.value.client}"
@@ -77,7 +82,9 @@ resource "random_password" "eph_account" {
 }
 
 resource "kubernetes_secret" "eph_account" {
-  count = startswith(var.govuk_environment, "eph-") ? 1 : 0
+  count      = startswith(var.govuk_environment, "eph-") ? 1 : 0
+  depends_on = [helm_release.dex]
+
   metadata {
     name      = "dex-account"
     namespace = "cluster-services"
