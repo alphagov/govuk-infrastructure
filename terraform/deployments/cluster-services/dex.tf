@@ -154,24 +154,6 @@ locals {
     local.dex_github_env_var,
     [
       {
-        name = "GITHUB_CLIENT_ID"
-        valueFrom = {
-          secretKeyRef = {
-            name = "govuk-dex-github"
-            key  = "clientID"
-          }
-        }
-      },
-      {
-        name = "GITHUB_CLIENT_SECRET"
-        valueFrom = {
-          secretKeyRef = {
-            name = "govuk-dex-github"
-            key  = "clientSecret"
-          }
-        }
-      },
-      {
         name = "ARGO_WORKFLOWS_CLIENT_ID"
         valueFrom = {
           secretKeyRef = {
