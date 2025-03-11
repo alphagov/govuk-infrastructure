@@ -50,7 +50,11 @@ resource "kubernetes_secret" "dex_client" {
   depends_on = [
     kubernetes_namespace.apps,
     kubernetes_namespace.monitoring,
-    helm_release.dex
+    # we depend on the namespace existing
+    # but aren't managing it explicitly in TF
+    # so we need to depend on something that will
+    # create it implicitly
+    helm_release.aws_lb_controller
   ]
 
   metadata {
@@ -124,93 +128,31 @@ locals {
       }
     }
   ]
-}
 
-resource "helm_release" "dex" {
-  depends_on       = [helm_release.aws_lb_controller, helm_release.cluster_secrets]
-  chart            = "dex"
-  name             = "dex"
-  namespace        = local.services_ns
-  create_namespace = true
-  repository       = "https://charts.dexidp.io"
-  version          = "0.22.1"
-  values = [yamlencode({
-    replicaCount = var.desired_ha_replicas
-    config = {
-      issuer = "https://${local.dex_host}"
-
-      oauth2 = {
-        skipApprovalScreen = true
-      }
-
-      storage = {
-        type = "kubernetes"
-        config = {
-          inCluster = true
+  dex_github_env_var = startswith(var.govuk_environment, "eph-") ? [] : [
+    {
+      name = "GITHUB_CLIENT_ID"
+      valueFrom = {
+        secretKeyRef = {
+          name = "govuk-dex-github"
+          key  = "clientID"
         }
       }
-
-      # static account for ephemeral environments
-      enablePasswordDB = local.dex_enable_passworddb
-      staticPasswords  = local.dex_static_passwords
-
-      connectors = local.dex_connectors
-
-      # staticClients uses a different method for expansion of environment
-      # variables, see [bug](https://github.com/gabibbo97/charts/issues/36#issuecomment-736911424)
-      staticClients = [
-        {
-          name         = "argo-workflows"
-          idEnv        = "ARGO_WORKFLOWS_CLIENT_ID"
-          secretEnv    = "ARGO_WORKFLOWS_CLIENT_SECRET"
-          redirectURIs = ["https://${local.argo_workflows_host}/oauth2/callback"]
-        },
-        {
-          name         = "argocd"
-          idEnv        = "ARGOCD_CLIENT_ID"
-          secretEnv    = "ARGOCD_CLIENT_SECRET"
-          redirectURIs = ["https://${local.argo_host}/auth/callback"]
-        },
-        {
-          name         = "grafana"
-          idEnv        = "GRAFANA_CLIENT_ID"
-          secretEnv    = "GRAFANA_CLIENT_SECRET"
-          redirectURIs = ["https://${local.grafana_host}/login/generic_oauth"]
-        },
-        {
-          name         = "prometheus"
-          idEnv        = "PROMETHEUS_CLIENT_ID"
-          secretEnv    = "PROMETHEUS_CLIENT_SECRET"
-          redirectURIs = ["https://${local.prometheus_host}/oauth2/callback"]
-        },
-        {
-          name         = "alert-manager"
-          idEnv        = "ALERT_MANAGER_CLIENT_ID"
-          secretEnv    = "ALERT_MANAGER_CLIENT_SECRET"
-          redirectURIs = ["https://${local.alertmanager_host}/oauth2/callback"]
+    },
+    {
+      name = "GITHUB_CLIENT_SECRET"
+      valueFrom = {
+        secretKeyRef = {
+          name = "govuk-dex-github"
+          key  = "clientSecret"
         }
-      ]
+      }
     }
+  ]
 
-    envVars = [
-      {
-        name = "GITHUB_CLIENT_ID"
-        valueFrom = {
-          secretKeyRef = {
-            name = "govuk-dex-github"
-            key  = "clientID"
-          }
-        }
-      },
-      {
-        name = "GITHUB_CLIENT_SECRET"
-        valueFrom = {
-          secretKeyRef = {
-            name = "govuk-dex-github"
-            key  = "clientSecret"
-          }
-        }
-      },
+  dex_env_vars = concat(
+    local.dex_github_env_var,
+    [
       {
         name = "ARGO_WORKFLOWS_CLIENT_ID"
         valueFrom = {
@@ -302,6 +244,76 @@ resource "helm_release" "dex" {
         }
       }
     ]
+  )
+}
+
+resource "helm_release" "dex" {
+  depends_on       = [helm_release.aws_lb_controller, helm_release.cluster_secrets]
+  chart            = "dex"
+  name             = "dex"
+  namespace        = local.services_ns
+  create_namespace = true
+  repository       = "https://charts.dexidp.io"
+  version          = "0.22.1"
+  values = [yamlencode({
+    replicaCount = var.desired_ha_replicas
+    config = {
+      issuer = "https://${local.dex_host}"
+
+      oauth2 = {
+        skipApprovalScreen = true
+      }
+
+      storage = {
+        type = "kubernetes"
+        config = {
+          inCluster = true
+        }
+      }
+
+      # static account for ephemeral environments
+      enablePasswordDB = local.dex_enable_passworddb
+      staticPasswords  = local.dex_static_passwords
+
+      connectors = local.dex_connectors
+
+      # staticClients uses a different method for expansion of environment
+      # variables, see [bug](https://github.com/gabibbo97/charts/issues/36#issuecomment-736911424)
+      staticClients = [
+        {
+          name         = "argo-workflows"
+          idEnv        = "ARGO_WORKFLOWS_CLIENT_ID"
+          secretEnv    = "ARGO_WORKFLOWS_CLIENT_SECRET"
+          redirectURIs = ["https://${local.argo_workflows_host}/oauth2/callback"]
+        },
+        {
+          name         = "argocd"
+          idEnv        = "ARGOCD_CLIENT_ID"
+          secretEnv    = "ARGOCD_CLIENT_SECRET"
+          redirectURIs = ["https://${local.argo_host}/auth/callback"]
+        },
+        {
+          name         = "grafana"
+          idEnv        = "GRAFANA_CLIENT_ID"
+          secretEnv    = "GRAFANA_CLIENT_SECRET"
+          redirectURIs = ["https://${local.grafana_host}/login/generic_oauth"]
+        },
+        {
+          name         = "prometheus"
+          idEnv        = "PROMETHEUS_CLIENT_ID"
+          secretEnv    = "PROMETHEUS_CLIENT_SECRET"
+          redirectURIs = ["https://${local.prometheus_host}/oauth2/callback"]
+        },
+        {
+          name         = "alert-manager"
+          idEnv        = "ALERT_MANAGER_CLIENT_ID"
+          secretEnv    = "ALERT_MANAGER_CLIENT_SECRET"
+          redirectURIs = ["https://${local.alertmanager_host}/oauth2/callback"]
+        }
+      ]
+    }
+
+    envVars = local.dex_env_vars
 
     service = {
       ports = {

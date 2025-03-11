@@ -21,6 +21,17 @@ locals {
     staging     = "#000000"
     production  = "#ffffff"
   }
+
+  # give everyone admin role in ephemeral envs
+  # use GitHub teams in other environments
+  argo_rbac_policy = startswith(var.govuk_environment, "eph-") ? {
+    "policy.default" = "role:admin"
+    } : {
+    "policy.csv" = <<-EOT
+    g, ${var.github_read_only_team}, role:readonly
+    g, ${var.github_read_write_team}, role:admin
+    EOT
+  }
 }
 
 # this label is required for argocd to pick up the secret
@@ -74,12 +85,7 @@ resource "helm_release" "argo_cd" {
         "controller.sync.timeout.seconds" = 300
       }
 
-      rbac = {
-        "policy.csv" = <<-EOT
-          g, ${var.github_read_only_team}, role:readonly
-          g, ${var.github_read_write_team}, role:admin
-          EOT
-      }
+      rbac = local.argo_rbac_policy
 
       # Adds some hacky custom CSS that inserts an environment banner into the ArgoCD UI to make it
       # easier to differentiate between environments. May break if there are major changes to the
@@ -152,7 +158,10 @@ resource "helm_release" "argo_cd" {
 
 resource "helm_release" "argo_bootstrap" {
   # Relies on CRDs
-  depends_on       = [helm_release.argo_cd]
+  depends_on = [
+    helm_release.argo_cd,
+    helm_release.external_secrets
+  ]
   chart            = "argo-bootstrap"
   name             = "argo-bootstrap"
   namespace        = local.services_ns
@@ -181,6 +190,11 @@ resource "helm_release" "argo_bootstrap" {
 }
 
 resource "helm_release" "argo_workflows" {
+  depends_on = [
+    kubernetes_secret.dex_client,
+    helm_release.aws_lb_controller
+  ]
+
   chart            = "argo-workflows"
   name             = "argo-workflows"
   namespace        = local.services_ns
