@@ -50,7 +50,11 @@ resource "kubernetes_secret" "dex_client" {
   depends_on = [
     kubernetes_namespace.apps,
     kubernetes_namespace.monitoring,
-    helm_release.dex
+    # we depend on the namespace existing
+    # but aren't managing it explicitly in TF
+    # so we need to depend on something that will
+    # create it implicitly
+    helm_release.aws_lb_controller
   ]
 
   metadata {
