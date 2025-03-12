@@ -157,6 +157,7 @@ resource "helm_release" "argo_cd" {
 }
 
 resource "helm_release" "argo_bootstrap" {
+  count = startswith(var.govuk_environment, "eph-") ? 0 : 1
   # Relies on CRDs
   depends_on = [
     helm_release.argo_cd,
@@ -180,6 +181,35 @@ resource "helm_release" "argo_bootstrap" {
       read_only  = var.github_read_only_team
       read_write = var.github_read_write_team
     }
+    iamRoleServiceAccounts = {
+      tagImageWorkflow = {
+        name       = local.tag_image_service_account_name
+        iamRoleArn = module.tag_image_iam_role.iam_role_arn
+      }
+    }
+  })]
+}
+
+resource "helm_release" "argo_bootstrap_ephemeral" {
+  count = startswith(var.govuk_environment, "eph-") ? 1 : 0
+  # Relies on CRDs
+  depends_on = [
+    helm_release.argo_cd,
+    helm_release.external_secrets
+  ]
+  chart            = "argo-bootstrap-ephemeral"
+  name             = "argo-bootstrap-ephemeral"
+  namespace        = local.services_ns
+  create_namespace = true
+  repository       = "https://alphagov.github.io/govuk-helm-charts/"
+  version          = "0.0.1"
+  timeout          = var.helm_timeout_seconds
+  values = [yamlencode({
+    awsAccountId     = data.aws_caller_identity.current.account_id
+    govukEnvironment = "ephemeral"
+    clusterId        = var.cluster_name
+    argocdUrl        = "https://${local.argo_host}"
+    argoWorkflowsUrl = "https://${local.argo_workflows_host}"
     iamRoleServiceAccounts = {
       tagImageWorkflow = {
         name       = local.tag_image_service_account_name
