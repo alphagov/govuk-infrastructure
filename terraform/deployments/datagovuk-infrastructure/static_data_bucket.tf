@@ -10,6 +10,8 @@ resource "aws_s3_bucket_versioning" "datagovuk_static" {
 }
 
 resource "aws_s3_bucket_logging" "datagovuk_static" {
+  count = startswith(var.govuk_environment, "eph-") ? 0 : 1
+
   bucket        = aws_s3_bucket.datagovuk_static.id
   target_bucket = "govuk-${var.govuk_environment}-aws-logging"
   target_prefix = "s3/datagovuk-${var.govuk_environment}-ckan-static-data/"
