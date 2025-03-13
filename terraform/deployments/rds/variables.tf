@@ -15,7 +15,19 @@ variable "govuk_aws_state_bucket" {
 }
 
 variable "databases" {
-  type        = map(any)
+  type = map(object({
+    engine                       = string
+    engine_version               = string
+    engine_params                = map(any)
+    engine_params_family         = string
+    name                         = string
+    allocated_storage            = number
+    instance_class               = string
+    performance_insights_enabled = bool
+    freestoragespace_threshold   = number
+    project                      = string
+    maintenance_window           = optional(string)
+  }))
   description = "Databases to create and their configuration."
 }
 
