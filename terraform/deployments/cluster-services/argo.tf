@@ -207,6 +207,7 @@ resource "helm_release" "argo_bootstrap_ephemeral" {
   values = [yamlencode({
     awsAccountId     = data.aws_caller_identity.current.account_id
     govukEnvironment = "ephemeral"
+    argoNamespace    = "cluster-services"
     clusterId        = var.cluster_name
     argocdUrl        = "https://${local.argo_host}"
     argoWorkflowsUrl = "https://${local.argo_workflows_host}"
