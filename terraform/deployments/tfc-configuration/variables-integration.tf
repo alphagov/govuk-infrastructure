@@ -473,6 +473,7 @@ module "variable-set-rds-integration" {
         freestoragespace_threshold   = 10737418240
         project                      = "GOV.UK - Publishing"
         backup_retention_period      = 1
+        has_read_replica             = true
       }
 
       publisher = {
