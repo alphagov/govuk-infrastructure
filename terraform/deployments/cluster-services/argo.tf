@@ -202,12 +202,12 @@ resource "helm_release" "argo_bootstrap_ephemeral" {
   namespace        = local.services_ns
   create_namespace = true
   repository       = "https://alphagov.github.io/govuk-helm-charts/"
-  version          = "0.0.4"
+  version          = "0.0.5"
   timeout          = var.helm_timeout_seconds
   values = [yamlencode({
     awsAccountId     = data.aws_caller_identity.current.account_id
     govukEnvironment = "ephemeral"
-    argoNamespace    = "cluster-services"
+    argoNamespace    = local.services_ns
     clusterId        = var.cluster_name
     argocdUrl        = "https://${local.argo_host}"
     argoWorkflowsUrl = "https://${local.argo_workflows_host}"
