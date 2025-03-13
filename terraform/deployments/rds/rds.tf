@@ -122,6 +122,35 @@ resource "aws_route53_record" "instance_cname" {
   records = [aws_db_instance.instance[each.key].address]
 }
 
+resource "aws_db_instance" "replica" {
+  for_each = {
+    for key, value in var.databases : key => value
+    if lookup(value, "has_read_replica", false)
+  }
+
+  instance_class      = each.value.instance_class
+  identifier          = "${var.govuk_environment}-${each.value.name}-${each.value.engine}-replica"
+  replicate_source_db = "aws_db_instance.${var.govuk_environment}-${each.value.name}-${each.value.engine}"
+
+  tags = { Name = "govuk-rds-${each.value.name}-${each.value.engine}-replica", project = lookup(each.value, "project", "GOV.UK - Other") }
+
+  lifecycle { ignore_changes = [identifier] }
+}
+
+resource "aws_route53_record" "replica_cname" {
+  for_each = {
+    for key, value in var.databases : key => value
+    if lookup(value, "has_read_replica", false) == true
+  }
+
+  # Zone is <environment>.govuk-internal.digital.
+  zone_id = data.tfe_outputs.vpc.nonsensitive_values.internal_root_zone_id
+  name    = aws_db_instance.replica[each.key].identifier
+  type    = "CNAME"
+  ttl     = 300
+  records = [aws_db_instance.replica[each.key].address]
+}
+
 resource "aws_secretsmanager_secret" "database_passwords" {
   name = "${var.govuk_environment}-rds-admin-passwords"
 }
