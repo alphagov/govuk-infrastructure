@@ -58,7 +58,7 @@ resource "aws_db_instance" "instance" {
   multi_az                = var.multi_az
   parameter_group_name    = aws_db_parameter_group.engine_params[each.key].name
   maintenance_window      = lookup(each.value, "maintenance_window", var.maintenance_window)
-  backup_retention_period = var.backup_retention_period
+  backup_retention_period = lookup(each.value, "backup_retention_period", var.backup_retention_period)
   backup_window           = var.backup_window
   copy_tags_to_snapshot   = true
   monitoring_interval     = 60
