@@ -103,6 +103,25 @@ resource "google_storage_bucket_object" "results_seed_file" {
   source = "${path.module}/files/automated_evaluation_default_datasets/results.csv"
 }
 
+# top level dataset to store automated evaluation input datasets
+resource "google_bigquery_dataset" "automated_evaluation_input" {
+  dataset_id                 = "automated_evaluation_input"
+  location                   = var.gcp_region
+  delete_contents_on_destroy = true
+}
+
+# ga4 'select_item' events get transformed and inserted into this time-partitioned sample query set table defined with a vertex schema
+resource "google_bigquery_table" "clickstream" {
+  dataset_id          = google_bigquery_dataset.automated_evaluation_input.dataset_id
+  table_id            = "clickstream"
+  schema              = file("./files/sample-query-set-schema.json")
+  deletion_protection = false
+  time_partitioning {
+    type = "MONTH"
+  }
+
+}
+
 # top level dataset to store automated evaluation output
 resource "google_bigquery_dataset" "automated_evaluation_output" {
   dataset_id                 = "automated_evaluation_output"
