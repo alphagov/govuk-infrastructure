@@ -130,7 +130,7 @@ resource "aws_db_instance" "replica" {
 
   instance_class      = each.value.instance_class
   identifier          = "${var.govuk_environment}-${each.value.name}-${each.value.engine}-replica"
-  replicate_source_db = "aws_db_instance.${var.govuk_environment}-${each.value.name}-${each.value.engine}"
+  replicate_source_db = aws_db_instance.instance[each.key].identifier
 
   tags = { Name = "govuk-rds-${each.value.name}-${each.value.engine}-replica", project = lookup(each.value, "project", "GOV.UK - Other") }
 
