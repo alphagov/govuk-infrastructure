@@ -1,9 +1,9 @@
 resource "sentry_project" "govuk" {
-  for_each = local.sentry_projects
+  for_each = toset(local.sentry_projects)
 
   organization = "govuk"
 
-  teams = concat(local.common_teams, each.value)
+  teams = local.common_teams
   name  = each.key
   slug  = "app-${each.key}"
 
