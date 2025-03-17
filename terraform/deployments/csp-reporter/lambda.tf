@@ -12,7 +12,7 @@ resource "aws_lambda_function" "lambda" {
   description   = "Handles Content Security Policy reports, passing valid ones to Kinesis Firehose"
   role          = aws_iam_role.lambda_role.arn
   handler       = "index.handler"
-  runtime       = "nodejs18.x"
+  runtime       = "nodejs22.x"
 
   environment {
     variables = {
