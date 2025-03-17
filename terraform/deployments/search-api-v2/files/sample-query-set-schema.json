@@ -3,27 +3,21 @@
       "name": "queryEntry",
       "mode": "NULLABLE",
       "type": "RECORD",
-      "description": "",
       "fields": [
         {
           "name": "query",
           "mode": "NULLABLE",
-          "type": "STRING",
-          "description": "",
-          "fields": []
+          "type": "STRING"
         },
         {
           "name": "targets",
           "mode": "REPEATED",
           "type": "RECORD",
-          "description": "",
           "fields": [
             {
               "name": "uri",
               "mode": "NULLABLE",
-              "type": "STRING",
-              "description": "",
-              "fields": []
+              "type": "STRING"
             }
           ]
         }

@@ -1,4 +1,3 @@
-
 # SEARCH EVALUATION
 
 # bucket for automated_evaluation_function function.zip
@@ -78,7 +77,7 @@ resource "google_storage_bucket" "automated_evaluation_output" {
   location = var.gcp_region
 }
 
-# 
+#
 resource "google_storage_bucket_object" "qrels_seed_file" {
   name   = "ts=1970-01-01T00:00:00/qc=0/rc=0/judgement_list=sample/qrels.csv"
   bucket = google_storage_bucket.automated_evaluation_output.name
@@ -119,7 +118,6 @@ resource "google_bigquery_table" "clickstream" {
   time_partitioning {
     type = "MONTH"
   }
-
 }
 
 # top level dataset to store automated evaluation output
@@ -128,7 +126,6 @@ resource "google_bigquery_dataset" "automated_evaluation_output" {
   location                   = var.gcp_region
   delete_contents_on_destroy = true
 }
-
 
 resource "google_bigquery_table" "qrels" {
   dataset_id          = google_bigquery_dataset.automated_evaluation_output.dataset_id
@@ -150,7 +147,6 @@ resource "google_bigquery_table" "qrels" {
       quote           = ""
     }
   }
-
 }
 
 resource "google_bigquery_table" "report" {
@@ -173,7 +169,6 @@ resource "google_bigquery_table" "report" {
       quote           = ""
     }
   }
-
 }
 
 resource "google_bigquery_table" "run" {
@@ -196,7 +191,6 @@ resource "google_bigquery_table" "run" {
       quote           = ""
     }
   }
-
 }
 
 resource "google_bigquery_table" "results" {
@@ -219,7 +213,6 @@ resource "google_bigquery_table" "results" {
       quote           = ""
     }
   }
-
 }
 
 ### judgement lists
@@ -271,4 +264,3 @@ resource "google_project_iam_binding" "automated_evaluation_pipeline" {
   members = [
   google_service_account.automated_evaluation_pipeline.member]
 }
-
