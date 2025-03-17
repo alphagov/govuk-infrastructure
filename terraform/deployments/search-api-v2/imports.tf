@@ -6,6 +6,6 @@ import {
 }
 
 moved {
-  from = module.govuk_content_discovery_engine.restapi_object.discovery_engine_datastore_schema
-  to   = restapi_object.google_discovery_engine_datastore_schema
+  from = module.govuk_content_discovery_engine.restapi_object.discovery_engine_datastore_completion_config
+  to   = restapi_object.google_discovery_engine_data_store_completion_config
 }
