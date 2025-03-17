@@ -19,21 +19,6 @@ terraform {
 #
 # API resource: v1alpha.projects.locations.collections.dataStores.schemas
 
-
-resource "restapi_object" "discovery_engine_datastore_schema" {
-  path      = "/dataStores/${var.datastore_id}/schemas"
-  object_id = "default_schema"
-
-  # Since the default schema is created automatically with the datastore, we need to update even on
-  # initial Terraform resource creation
-  create_method = "PATCH"
-  create_path   = "/dataStores/${var.datastore_id}/schemas/default_schema"
-
-  data = jsonencode({
-    jsonSchema = file("${path.module}/files/datastore_schema.json")
-  })
-}
-
 resource "restapi_object" "discovery_engine_datastore_completion_config" {
   path      = "/dataStores/${var.datastore_id}/completionConfig"
   object_id = "completionConfig"

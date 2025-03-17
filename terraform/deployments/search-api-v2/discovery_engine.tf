@@ -35,6 +35,15 @@ resource "google_discovery_engine_data_store" "govuk_content" {
   }
 }
 
+resource "restapi_object" "google_discovery_engine_datastore_schema" {
+  path      = "/dataStores/${google_discovery_engine_data_store.govuk_content.data_store_id}/schemas"
+  object_id = "default_schema"
+
+  data = jsonencode({
+    jsonSchema = file("${path.module}/files/datastore-schema.json")
+  })
+}
+
 resource "google_discovery_engine_search_engine" "govuk" {
   engine_id    = "govuk"
   display_name = "GOV.UK Site Search"
