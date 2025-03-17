@@ -426,7 +426,7 @@ module "variable-set-rds-staging" {
         performance_insights_enabled = false
         freestoragespace_threshold   = 10737418240
         project                      = "GOV.UK - Publishing"
-        maintenance_window           = "Mon:01:00-Mon:03:00"
+        maintenance_window           = "Mon:00:00-Mon:01:00"
       }
 
       local_links_manager = {
