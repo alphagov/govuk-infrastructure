@@ -9,7 +9,7 @@ jobs:
   tflint:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
       with:
         show-progress: false
     
@@ -29,7 +29,7 @@ jobs:
       with:
         path: terraform
 
-    - uses: hashicorp/setup-terraform@v3
+    - uses: hashicorp/setup-terraform@b9cd54a3c349d3f38e8881555d616ced269862dd # v3
       if: steps.changed-deployments.outputs.any_changed == 'true'
       with:
         terraform_version: ${{ steps.terraform-version.outputs.terraform }}
@@ -40,21 +40,21 @@ jobs:
       if: steps.changed-deployments.outputs.any_changed == 'true'
 
     - name: Cache Terraform plugins
-      uses: actions/cache@v4
+      uses: actions/cache@d4323d4df104b026a6aa633fdb11d772146be0bf # v4
       if: steps.changed-deployments.outputs.any_changed == 'true'
       with:
         path: ${{ env.TF_PLUGIN_CACHE_DIR }}
         key:
           terraform-plugins-${{ runner.os }}-${{ hashFiles('**/.terraform.lock.hcl') }}
 
-    - uses: actions/cache@v4
+    - uses: actions/cache@d4323d4df104b026a6aa633fdb11d772146be0bf # v4
       name: Cache TFLint plugins
       if: steps.changed-deployments.outputs.any_changed == 'true'
       with:
         path: ~/.tflint.d/plugins
         key: tflint-${{ runner.os }}-${{ hashFiles('**/tflint.hcl') }}
 
-    - uses: terraform-linters/setup-tflint@v4
+    - uses: terraform-linters/setup-tflint@90f302c255ef959cbfb4bd10581afecdb7ece3e6 # v4
       name: Set up TFLint
       if: steps.changed-deployments.outputs.any_changed == 'true'
       with:
