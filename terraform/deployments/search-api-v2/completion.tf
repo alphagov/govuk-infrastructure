@@ -14,3 +14,9 @@ resource "restapi_object" "google_discovery_engine_data_store_completion_config"
     enableMode      = "AUTOMATIC"
   })
 }
+
+# Bucket for autocomplete data artifacts (denylist)
+resource "google_storage_bucket" "vais_artifacts" {
+  name     = "${var.gcp_project_id}_vais_artifacts"
+  location = var.gcp_region
+}
