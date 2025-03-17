@@ -16,7 +16,7 @@ jobs:
       actions: read
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
         with:
           show-progress: false
 
@@ -34,12 +34,12 @@ jobs:
 
       - name: Upload SARIF to GitHub
         if: github.repository_visibility == 'public'
-        uses: github/codeql-action/upload-sarif@v3
+        uses: github/codeql-action/upload-sarif@6bb031afdd8eb862ea3fc1848194185e076637e5 # v3
         with:
           sarif_file: brakeman.sarif
 
       - name: Upload JSON results
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@4cec3d8aa04e39d1a68397de0c4cd6fb9dce8ec1 # v4
         with:
           name: brakeman-json
           path: brakeman.json
