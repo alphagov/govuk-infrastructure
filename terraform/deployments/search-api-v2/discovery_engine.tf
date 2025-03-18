@@ -1,15 +1,3 @@
-# Creates and configures an unstructured datastore for Google Discovery Engine ("Vertex AI Search")
-# see https://cloud.google.com/generative-ai-app-builder/docs/reference/rest/
-
-module "govuk_content_discovery_engine" {
-  source = "./modules/google_discovery_engine_restapi"
-
-  datastore_id   = google_discovery_engine_data_store.govuk_content.data_store_id
-  datastore_path = google_discovery_engine_data_store.govuk_content.name
-  engine_id      = google_discovery_engine_search_engine.govuk.engine_id
-  # storage_bucket_name = google_storage_bucket.vais_artifacts.name
-}
-
 # TODO: These IDs/paths are semi-hardcoded here as there aren't first party resources/data sources
 # available for them yet.
 locals {
@@ -65,37 +53,4 @@ resource "google_discovery_engine_search_engine" "govuk" {
   common_config {
     company_name = "GOV.UK"
   }
-}
-
-resource "aws_secretsmanager_secret" "discovery_engine_configuration" {
-  name                    = "govuk/search-api-v2/google-cloud-discovery-engine-configuration"
-  recovery_window_in_days = 0 # Force delete to allow re-applying immediately after destroying
-}
-
-resource "aws_secretsmanager_secret_version" "discovery_engine_configuration" {
-  secret_id = aws_secretsmanager_secret.discovery_engine_configuration.id
-  secret_string = jsonencode({
-    "GOOGLE_CLOUD_CREDENTIALS"                 = base64decode(google_service_account_key.api.private_key)
-    "GOOGLE_CLOUD_PROJECT_ID"                  = var.gcp_project_id
-    "DISCOVERY_ENGINE_DEFAULT_COLLECTION_NAME" = local.discovery_engine_default_collection_name
-  })
-}
-
-resource "aws_secretsmanager_secret" "discovery_engine_configuration_search_admin" {
-  name                    = "govuk/search-admin/google-cloud-discovery-engine-configuration"
-  recovery_window_in_days = 0 # Force delete to allow re-applying immediately after destroying
-}
-
-resource "aws_secretsmanager_secret_version" "discovery_engine_configuration_search_admin" {
-  secret_id = aws_secretsmanager_secret.discovery_engine_configuration_search_admin.id
-  secret_string = jsonencode({
-    "GOOGLE_CLOUD_CREDENTIALS"                 = base64decode(google_service_account_key.search_admin.private_key)
-    "DISCOVERY_ENGINE_DEFAULT_COLLECTION_NAME" = local.discovery_engine_default_collection_name
-  })
-}
-
-# bucket for VAIS related data artifacts e.g. denylist
-resource "google_storage_bucket" "vais_artifacts" {
-  name     = "${var.gcp_project_id}_vais_artifacts"
-  location = var.gcp_region
 }
