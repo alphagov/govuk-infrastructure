@@ -120,7 +120,7 @@ jobs:
           echo "$d"
           cd "$d"
           tflint --init -c ${{ github.workspace }}/.tflint.hcl
-          tflint --format compact --call-module-type=all --recursive --force \
+          tflint --format compact --call-module-type=all --force \
             -c ${{ github.workspace }}/.tflint.hcl \
             --enable-rule=terraform_comment_syntax \
             --enable-rule=terraform_deprecated_index \
