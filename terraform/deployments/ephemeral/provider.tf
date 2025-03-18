@@ -1,0 +1,3 @@
+provider "tfe" {
+  organization = "govuk"
+}
