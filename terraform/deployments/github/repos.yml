@@ -305,7 +305,7 @@ repos:
     visibility: private
     strict: true
     up_to_date_branches: true
-  
+
   terraform-govuk-tfe-workspacer:
     strict: true
     up_to_date_branches: true
@@ -351,10 +351,6 @@ repos:
       standard_contexts: *standard_security_checks
       additional_contexts:
         - test
-
-  govuk-sli-collector:
-    required_status_checks:
-      standard_contexts: *standard_security_checks
 
   govuk_ab_testing:
     required_status_checks:

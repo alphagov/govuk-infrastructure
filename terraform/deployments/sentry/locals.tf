@@ -27,7 +27,6 @@ locals {
     "government-frontend",
     "govspeak-preview",
     "govuk-graphql",
-    "govuk-sli-collector",
     "hmrc-manuals-api",
     "licensify",
     "link-checker-api",
