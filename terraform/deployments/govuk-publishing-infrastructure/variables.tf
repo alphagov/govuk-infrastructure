@@ -101,7 +101,7 @@ variable "amazonmq_host_instance_type" {
 variable "amazonmq_govuk_chat_retry_message_ttl" {
   type        = number
   default     = 300000
-  description = "Time in miliseconds before messages in the govuk_chat_retry queue expires and are sent back to the govuk_chat_published_ducoments queue through the dead letter mechanism"
+  description = "Time in miliseconds before messages in the govuk_chat_retry queue expires and are sent back to the govuk_chat_published_documents queue through the dead letter mechanism"
 }
 
 variable "allow_high_request_rate_from_cidrs" {
