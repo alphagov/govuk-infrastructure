@@ -44,9 +44,10 @@
       "indexable": true
     },
     "url": {
-      "description": "Absolute URL including protocol and host even for content on GOV.UK proper (used for Vertex to incorporate popularity/event signals)",
+      "description": "Absolute URL including protocol and host even for content on GOV.UK proper (used for Vertex to incorporate popularity/event signals and for internal purposes)",
       "type": "string",
       "format": "url",
+      "retrievable": true,
       "keyPropertyMapping": "uri"
     },
     "public_timestamp": {
