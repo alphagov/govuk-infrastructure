@@ -620,7 +620,7 @@ module "variable-set-amazonmq-integration" {
     amazonmq_deployment_mode                      = "SINGLE_INSTANCE"
     amazonmq_maintenance_window_start_day_of_week = "MONDAY"
     amazonmq_maintenance_window_start_time_utc    = "07:00"
-    amazonmq_host_instance_type                   = "mq.t3.micro"
+    amazonmq_host_instance_type                   = "mq.m5.large"
 
     amazonmq_govuk_chat_retry_message_ttl = 300000
   }
