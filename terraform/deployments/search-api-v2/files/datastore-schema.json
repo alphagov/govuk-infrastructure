@@ -11,6 +11,13 @@
       "format": "uuid",
       "retrievable": true
     },
+    "cdoc_url": {
+      "$comment": "This is only used to compare results for evaluation purposes, and is not a URL despite the name. We decided against using the alternative 'uri' field name to avoid confusion with our existing 'url' field and 'uri' key property (see https://cloud.google.com/generative-ai-app-builder/docs/evaluate-search-quality)",
+      "description": "Unique identifier for search quality evaluation (identical to content_id)",
+      "type": "string",
+      "format": "uuid",
+      "retrievable": true
+    },
     "title": {
       "description": "The main title (shown in search results)",
       "type": "string",
@@ -181,6 +188,7 @@
   },
   "required": [
     "content_id",
+    "cdoc_url",
     "title",
     "link",
     "url",
