@@ -27,6 +27,7 @@ locals {
   action_keys = flatten([
     for key, value in var.action : [
       for subkey in keys(value) : "${key}.${subkey}"
+      if subkey != "dataStore" # immutable subkey used in several action types
     ] if can(keys(value))
   ])
 
