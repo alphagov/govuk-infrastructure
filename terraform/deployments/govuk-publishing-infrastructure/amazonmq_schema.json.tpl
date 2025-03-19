@@ -164,7 +164,7 @@
       "apply-to": "queues",
       "definition": {
         "dead-letter-exchange": "search_api_to_be_indexed_discarded_dlx",
-        "message-ttl": ${/* value in milliseconds */ "60000"}
+        "message-ttl": ${/* value in milliseconds */ "60000"},
         "ha-mode": "all",
         "ha-sync-mode": "automatic"
       },
@@ -426,7 +426,7 @@
       "destination_type": "queue",
       "routing_key": "#",
       "arguments": {}
-    }
+    },
     {
       "source": "published_documents",
       "vhost": "publishing",
