@@ -28,7 +28,7 @@ resource "restapi_object" "google_discovery_engine_datastore_schema" {
   object_id = "default_schema"
 
   data = jsonencode({
-    jsonSchema = file("${path.module}/files/datastore-schema.json")
+    structSchema = jsondecode(file("${path.module}/files/datastore-schema.json"))
   })
 }
 
