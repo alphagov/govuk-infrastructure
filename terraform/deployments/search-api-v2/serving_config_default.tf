@@ -153,3 +153,29 @@ module "control_synonym_hmrc" {
     }
   }
 }
+
+module "control_synonym_spring_statement" {
+  source = "./modules/control"
+
+  id           = "syn_spring_statement"
+  display_name = "Synonyms: Budget/spring statement"
+  engine_id    = google_discovery_engine_search_engine.govuk.engine_id
+
+  conditions = [
+    {
+      queryTerm = {
+        value     = "budget"
+        fullMatch = true
+      }
+    }
+  ]
+  action = {
+    synonymsAction = {
+      synonyms = [
+        "budget",
+        "spring forecast",
+        "spring statement",
+      ]
+    }
+  }
+}
