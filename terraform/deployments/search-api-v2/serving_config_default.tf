@@ -163,10 +163,10 @@ module "control_synonym_spring_statement" {
 
   conditions = [
     {
-      queryTerm = {
+      queryTerms = [{
         value     = "budget"
         fullMatch = true
-      }
+      }]
     }
   ]
   action = {
