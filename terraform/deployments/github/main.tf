@@ -254,5 +254,5 @@ resource "github_actions_organization_secret_repositories" "pact_broker_username
 
 resource "github_actions_organization_secret_repositories" "slack_webhook_url" {
   secret_name             = "GOVUK_SLACK_WEBHOOK_URL" # pragma: allowlist secret
-  selected_repository_ids = [for repo in local.deployable_repos : repo.repo_id]
+  selected_repository_ids = [for repo in data.github_repository.govuk : repo.repo_id]
 }
