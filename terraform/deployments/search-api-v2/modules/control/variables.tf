@@ -17,3 +17,9 @@ variable "action" {
   description = "The action for the control (merged into the control properties)"
   type        = any
 }
+
+variable "conditions" {
+  description = "The conditions for the control (merged into the control properties)"
+  type        = list(any)
+  default     = []
+}

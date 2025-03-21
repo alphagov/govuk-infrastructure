@@ -14,6 +14,7 @@ locals {
 
   dynamic_properties = {
     displayName = var.display_name
+    conditions  = length(var.conditions) > 0 ? var.conditions : null
   }
   # These properties are required on creation, but not updatable
   static_properties = {
