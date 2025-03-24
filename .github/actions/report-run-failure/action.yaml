@@ -1,4 +1,4 @@
-name: "Report Github run failure to slack channel"
+name: "Report GitHub workflow run failure to Slack"
 description: "Report Github run failure to a nominated slack channel"
 inputs:
   slack_webhook_url:

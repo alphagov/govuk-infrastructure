@@ -1,3 +1,7 @@
+# Report GitHub workflow run failure to Slack
+
+This GitHub Action sends a notification to a nominated Slack channel when a GitHub workflow run fails. The action is typically used to notify a team about critical CI failures on the main branch. It helps to ensure that key issues are addressed quickly by sending relevant information including a direct link to the build logs.
+
 ## Notes on using this action
 
   - This action relies on GOVUK_SLACK_WEBHOOK_URL actions secret being configured for the repository. It’s added to all GOV.UK repositories as an organisation secret in the [GOV.UK GitHub Infrastructure configuration](https://github.com/alphagov/govuk-infrastructure/blob/main/terraform/deployments/github/main.tf)
