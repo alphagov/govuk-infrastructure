@@ -39,6 +39,7 @@ variable "organogram_bucket_cors_origins" {
     "https://www.integration.data.gov.uk",
     "https://find.eks.production.govuk.digital",
     "https://find.eks.integration.govuk.digital",
-    "https://find.eks.staging.govuk.digital"
+    "https://find.eks.staging.govuk.digital",
+    "https://find.eph-aaa113.ephemeral.govuk.digital"
   ]
 }
