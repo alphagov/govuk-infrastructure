@@ -4,8 +4,12 @@ This GitHub Action sends a notification to a nominated Slack channel when a GitH
 
 ## Notes on using this action
 
-  - This action relies on GOVUK_SLACK_WEBHOOK_URL actions secret being configured for the repository. It’s added to all GOV.UK repositories as an organisation secret in the [GOV.UK GitHub Infrastructure configuration](https://github.com/alphagov/govuk-infrastructure/blob/main/terraform/deployments/github/main.tf)
-  - To minimise noise, the slack message is only sent out for failures on the main branch.
+- It is configured with the following inputs:
+  -  `slack_webhook_url`: (required) The Slack webhook URL used to send notifications to a specific Slack channel. It's stored as a GitHub secret (GOVUK_SLACK_WEBHOOK_URL), which is added to all GOV.UK repositories as an organisation secret in the [GOV.UK GitHub Infrastructure configuration](https://github.com/alphagov/govuk-infrastructure/blob/main/terraform/deployments/github/main.tf).
+  - `channel`: (required) The name of the Slack channel (excluding `#`) where the failure notifications will be sent. 
+  - `message`: (optional) A custom message that can be included in the notification to provide additional context. It could include a link to a runbook or documentation.
+
+- To minimise noise, the slack message is only sent out for failures on the main branch.
 
 ## Usage example:
 
