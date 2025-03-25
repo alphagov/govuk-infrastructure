@@ -17,7 +17,7 @@ Helm charts for GOV.UK applications are in [alphagov/govuk-helm-charts](https://
 
 Base image definitions for GOV.UK Ruby apps are in [alphagov/govuk-ruby-images](https://github.com/alphagov/govuk-ruby-images/).
 
-Some AWS services for GOV.UK are still configured using the legacy [alphagov/govuk-aws](https://github.com/alphagov/govuk-aws/) (public) and [alphagov/govuk-aws-data](https://github.com/alphagov/govuk-aws-data/) (private) repos.
+Configuration of CDN services is stored in [alphagov/govuk-fastly](https://github.com/alphagov/govuk-fastly) and [alphagov/govuk-fastly-secrets](https://github.com/alphagov/govuk-fastly-secrets) (private) repos.
 
 ## Usage
 
