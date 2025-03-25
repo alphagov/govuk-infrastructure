@@ -50,11 +50,6 @@ resource "aws_s3_bucket_policy" "govuk_datagovuk_organogram_read_policy" {
   policy = data.aws_iam_policy_document.s3_fastly_read_policy_doc.json
 }
 
-import {
-  to = aws_s3_bucket_public_access_block.datagovuk_organogram
-  id = aws_s3_bucket.datagovuk-organogram.id
-}
-
 resource "aws_s3_bucket_public_access_block" "datagovuk_organogram" {
   bucket = aws_s3_bucket.datagovuk-organogram.id
 
@@ -62,11 +57,6 @@ resource "aws_s3_bucket_public_access_block" "datagovuk_organogram" {
   block_public_policy     = false
   ignore_public_acls      = false
   restrict_public_buckets = false
-}
-
-import {
-  to = aws_s3_bucket_ownership_controls.datagovuk_organogram
-  id = aws_s3_bucket.datagovuk-organogram.id
 }
 
 resource "aws_s3_bucket_ownership_controls" "datagovuk_organogram" {
