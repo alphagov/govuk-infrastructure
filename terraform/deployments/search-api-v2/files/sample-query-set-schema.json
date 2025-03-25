@@ -18,6 +18,11 @@
               "name": "uri",
               "mode": "NULLABLE",
               "type": "STRING"
+            },
+            {
+              "name": "score",
+              "mode": "NULLABLE",
+              "type": "INT64"
             }
           ]
         }
