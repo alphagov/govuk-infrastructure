@@ -30,7 +30,7 @@ jobs:
 
       # copy lines below to report a github failure to your team channel
       - if: ${{ failure() }}
-        uses: alphagov/govuk-infrastructure/.github/actions/report-run-failure.yml@main
+        uses: alphagov/govuk-infrastructure/.github/actions/report-run-failure@main
         with:
           slack_webhook_url: ${{ secrets.GOVUK_SLACK_WEBHOOK_URL }}
           channel: your-team-slack-channel
