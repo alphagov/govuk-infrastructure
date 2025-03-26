@@ -231,7 +231,7 @@ repos:
         - Test Ruby / Run Minitest
 
   govspeak:
-    homepage_url: "http://govspeak-preview.herokuapp.com/"
+    homepage_url: "https://govspeak-preview.publishing.service.gov.uk/"
     required_status_checks:
       standard_contexts: *standard_security_checks
       additional_contexts:
@@ -808,6 +808,7 @@ repos:
     homepage_url: "https://govuk-public-asset-checker.herokuapp.com"
 
   govspeak-visual-editor:
+    homepage_url: "https://govspeak-preview.publishing.service.gov.uk/editor"
     required_pull_request_reviews:
       pull_request_bypassers:
         - "alphagov/gov-uk"
