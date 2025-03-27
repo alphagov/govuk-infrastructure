@@ -148,7 +148,7 @@
     {
       "vhost": "publishing",
       "name": "search_api_to_be_indexed_retry",
-      "pattern": "search_api_to_be_indexed",
+      "pattern": "^search_api_to_be_indexed$",
       "apply-to": "queues",
       "definition": {
         "dead-letter-exchange": "search_api_to_be_indexed_retry_dlx",
@@ -419,10 +419,18 @@
       "routing_key": "*.links",
       "arguments": {}
     },
-     {
+    {
       "source": "search_api_to_be_indexed_discarded_dlx",
       "vhost": "publishing",
       "destination": "search_api_to_be_indexed",
+      "destination_type": "queue",
+      "routing_key": "#",
+      "arguments": {}
+    },
+    {
+      "source": "search_api_to_be_indexed_retry_dlx",
+      "vhost": "publishing",
+      "destination": "search_api_to_be_indexed_wait_to_retry",
       "destination_type": "queue",
       "routing_key": "#",
       "arguments": {}
