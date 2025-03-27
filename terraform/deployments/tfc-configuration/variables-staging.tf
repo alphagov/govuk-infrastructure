@@ -483,8 +483,9 @@ module "variable-set-rds-staging" {
         instance_class               = "db.m6g.large"
         performance_insights_enabled = true
         freestoragespace_threshold   = 10737418240
-        backup_retention_period      = 1
         project                      = "GOV.UK - Publishing"
+        backup_retention_period      = 1
+        has_read_replica             = true
       }
 
       release = {
