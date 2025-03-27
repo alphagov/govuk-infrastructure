@@ -123,7 +123,7 @@
     {
       "vhost": "publishing",
       "name": "govuk_chat_retry_dlx",
-      "pattern": "govuk_chat_published_documents",
+      "pattern": "^govuk_chat_published_documents$",
       "apply-to": "queues",
       "definition": {
         "dead-letter-exchange": "govuk_chat_retry_dlx",
@@ -135,7 +135,7 @@
     {
       "vhost": "publishing",
       "name": "govuk_chat_retry",
-      "pattern": "govuk_chat_retry",
+      "pattern": "^govuk_chat_retry$",
       "apply-to": "queues",
       "definition": {
         "dead-letter-exchange": "govuk_chat_dlx",
@@ -160,7 +160,7 @@
     {
       "vhost": "publishing",
       "name": "search_api_to_be_indexed_wait_to_retry_discarded",
-      "pattern": "search_api_to_be_indexed_wait_to_retry",
+      "pattern": "^search_api_to_be_indexed_wait_to_retry$",
       "apply-to": "queues",
       "definition": {
         "dead-letter-exchange": "search_api_to_be_indexed_discarded_dlx",
