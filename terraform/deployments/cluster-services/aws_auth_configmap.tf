@@ -79,20 +79,6 @@ import {
   id = "kube-system/aws-auth"
 }
 
-resource "kubernetes_cluster_role_binding" "cluster_admins" {
-  metadata { name = "cluster-admins" }
-  role_ref {
-    api_group = "rbac.authorization.k8s.io"
-    kind      = "ClusterRole"
-    name      = "cluster-admin"
-  }
-  subject {
-    kind      = "Group"
-    name      = "cluster-admins"
-    api_group = "rbac.authorization.k8s.io"
-  }
-}
-
 resource "kubernetes_cluster_role_binding" "cluster_readonly" {
   metadata { name = "cluster-readonly" }
   role_ref {
