@@ -62,7 +62,7 @@ resource "aws_db_instance" "instance" {
   backup_window           = var.backup_window
   copy_tags_to_snapshot   = true
   monitoring_interval     = 60
-  monitoring_role_arn     = data.tfe_outputs.vpc.nonsensitive_values.rds_enhanced_monitoring_role_arn
+  monitoring_role_arn     = data.tfe_outputs.logging.nonsensitive_values.rds_enhanced_monitoring_role_arn
   vpc_security_group_ids  = [aws_security_group.rds[each.key].id]
   ca_cert_identifier      = "rds-ca-rsa2048-g1"
   apply_immediately       = true # var.govuk_environment != "production"
