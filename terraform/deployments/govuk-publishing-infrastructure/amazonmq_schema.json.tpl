@@ -118,7 +118,7 @@
         "ha-mode": "all",
         "ha-sync-mode": "automatic"
       },
-      "priority": 0
+      "priority": 1 
     },
     {
       "vhost": "publishing",
@@ -130,7 +130,7 @@
         "ha-mode": "all",
         "ha-sync-mode": "automatic"
       },
-      "priority": 0
+      "priority": 1
     },
     {
       "vhost": "publishing",
@@ -143,7 +143,7 @@
         "ha-mode": "all",
         "ha-sync-mode": "automatic"
       },
-      "priority": 0
+      "priority": 1
     },
     {
       "vhost": "publishing",
@@ -155,7 +155,7 @@
         "ha-mode": "all",
         "ha-sync-mode": "automatic"
       },
-      "priority": 0
+      "priority": 1
     },
     {
       "vhost": "publishing",
@@ -168,7 +168,7 @@
         "ha-mode": "all",
         "ha-sync-mode": "automatic"
       },
-      "priority": 0
+      "priority": 1
     },
     {
       "vhost": "publishing",
@@ -180,7 +180,7 @@
         "ha-mode": "all",
         "ha-sync-mode": "automatic"
       },
-      "priority": 0
+      "priority": 1
     },
     {
       "vhost": "publishing",
@@ -193,7 +193,7 @@
         "ha-mode": "all",
         "ha-sync-mode": "automatic"
       },
-      "priority": 0
+      "priority": 1
     },
     {
       "vhost": "publishing",
@@ -205,7 +205,7 @@
         "ha-mode": "all",
         "ha-sync-mode": "automatic"
       },
-      "priority": 0
+      "priority": 1
     },
     {
       "vhost": "publishing",
@@ -218,7 +218,7 @@
         "ha-mode": "all",
         "ha-sync-mode": "automatic"
       },
-      "priority": 0
+      "priority": 1
     },
     {
       "vhost": "publishing",
