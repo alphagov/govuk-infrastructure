@@ -172,6 +172,56 @@
     },
     {
       "vhost": "publishing",
+      "name": "search_api_govuk_index_retry",
+      "pattern": "^search_api_govuk_index$",
+      "apply-to": "queues",
+      "definition": {
+        "dead-letter-exchange": "search_api_govuk_index_retry_dlx",
+        "ha-mode": "all",
+        "ha-sync-mode": "automatic"
+      },
+      "priority": 0
+    },
+    {
+      "vhost": "publishing",
+      "name": "search_api_govuk_index_wait_to_retry_discarded",
+      "pattern": "search_api_govuk_index_wait_to_retry",
+      "apply-to": "queues",
+      "definition": {
+        "dead-letter-exchange": "search_api_govuk_index_discarded_dlx",
+        "message-ttl": 60000,
+        "ha-mode": "all",
+        "ha-sync-mode": "automatic"
+      },
+      "priority": 0
+    },
+    {
+      "vhost": "publishing",
+      "name": "search_api_bulk_reindex_retry",
+      "pattern": "^search_api_bulk_reindex$",
+      "apply-to": "queues",
+      "definition": {
+        "dead-letter-exchange": "search_api_bulk_reindex_retry_dlx",
+        "ha-mode": "all",
+        "ha-sync-mode": "automatic"
+      },
+      "priority": 0
+    },
+    {
+      "vhost": "publishing",
+      "name": "search_api_bulk_reindex_wait_to_retry_discarded",
+      "pattern": "search_api_bulk_reindex_wait_to_retry",
+      "apply-to": "queues",
+      "definition": {
+        "dead-letter-exchange": "search_api_bulk_reindex_discarded_dlx",
+        "message-ttl": 60000,
+        "ha-mode": "all",
+        "ha-sync-mode": "automatic"
+      },
+      "priority": 0
+    },
+    {
+      "vhost": "publishing",
       "name": "ha-all",
       "pattern": ".*",
       "apply-to": "all",
@@ -240,6 +290,13 @@
       "arguments": {}
     },
     {
+      "name": "search_api_bulk_reindex_wait_to_retry",
+      "vhost": "publishing",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {}
+    },
+    {
       "name": "content_data_api",
       "vhost": "publishing",
       "durable": true,
@@ -248,6 +305,13 @@
     },
     {
       "name": "search_api_govuk_index",
+      "vhost": "publishing",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {}
+    },
+    {
+      "name": "search_api_govuk_index_wait_to_retry",
       "vhost": "publishing",
       "durable": true,
       "auto_delete": false,
@@ -336,6 +400,42 @@
       "auto_delete": false,
       "internal": false,
       "arguments": {}
+    },
+    {
+      "name": "search_api_govuk_index_discarded_dlx",
+      "vhost": "publishing",
+      "type": "topic",
+      "durable": true,
+      "auto_delete": false,
+      "internal": false,
+      "arguments": {}
+    },
+    {
+      "name": "search_api_govuk_index_retry_dlx",
+      "vhost": "publishing",
+      "type": "topic",
+      "durable": true,
+      "auto_delete": false,
+      "internal": false,
+      "arguments": {}
+    },
+      {
+      "name": "search_api_bulk_reindex_discarded_dlx",
+      "vhost": "publishing",
+      "type": "topic",
+      "durable": true,
+      "auto_delete": false,
+      "internal": false,
+      "arguments": {}
+    },
+    {
+      "name": "search_api_bulk_reindex_retry_dlx",
+      "vhost": "publishing",
+      "type": "topic",
+      "durable": true,
+      "auto_delete": false,
+      "internal": false,
+      "arguments": {}
     }
   ],
   "bindings": [
@@ -353,6 +453,22 @@
       "destination": "search_api_govuk_index",
       "destination_type": "queue",
       "routing_key": "*.*",
+      "arguments": {}
+    },
+    {
+      "source": "search_api_govuk_index_discarded_dlx",
+      "vhost": "publishing",
+      "destination": "search_api_govuk_index",
+      "destination_type": "queue",
+      "routing_key": "#",
+      "arguments": {}
+    },
+    {
+      "source": "search_api_govuk_index_retry_dlx",
+      "vhost": "publishing",
+      "destination": "search_api_govuk_index_wait_to_retry",
+      "destination_type": "queue",
+      "routing_key": "#",
       "arguments": {}
     },
     {
@@ -385,6 +501,22 @@
       "destination": "search_api_bulk_reindex",
       "destination_type": "queue",
       "routing_key": "*.bulk.reindex",
+      "arguments": {}
+    },
+    {
+      "source": "search_api_bulk_reindex_discarded_dlx",
+      "vhost": "publishing",
+      "destination": "search_api_bulk_reindex",
+      "destination_type": "queue",
+      "routing_key": "#",
+      "arguments": {}
+    },
+    {
+      "source": "search_api_bulk_reindex_retry_dlx",
+      "vhost": "publishing",
+      "destination": "search_api_bulk_reindex_wait_to_retry",
+      "destination_type": "queue",
+      "routing_key": "#",
       "arguments": {}
     },
     {
