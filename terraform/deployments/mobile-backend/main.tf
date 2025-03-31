@@ -14,7 +14,7 @@ terraform {
     }
     fastly = {
       source  = "fastly/fastly"
-      version = "~> 5.13"
+      version = "~> 6.0"
     }
   }
 }
