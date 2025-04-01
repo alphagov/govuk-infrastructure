@@ -87,6 +87,13 @@ repos:
         - Lint SCSS / Run Stylelint
         - Test Ruby / Run RSpec
 
+  content-block-editor:
+    required_status_checks:
+      standard_contexts: *standard_security_checks
+      additional_contexts:
+        - Playwright / Run Tests
+        - Vitest / Run Tests
+
   content-data-admin:
     homepage_url: "https://docs.publishing.service.gov.uk/apps/content-data-admin.html"
     required_status_checks:
