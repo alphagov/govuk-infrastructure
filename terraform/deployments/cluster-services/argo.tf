@@ -209,6 +209,7 @@ resource "helm_release" "argo_bootstrap_ephemeral" {
     govukEnvironment = "ephemeral"
     clusterId        = var.cluster_name
     argocdUrl        = "https://${local.argo_host}"
+    argoNamespace    = local.services_ns
     argoWorkflowsUrl = "https://${local.argo_workflows_host}"
     iamRoleServiceAccounts = {
       tagImageWorkflow = {
