@@ -7,7 +7,6 @@ resource "helm_release" "aws_ebs_csi_driver" {
   create_namespace = true
   timeout          = var.helm_timeout_seconds
   values = [yamlencode({
-    enableVolumeResizing = true
     controller = {
       serviceAccount = {
         create = true
