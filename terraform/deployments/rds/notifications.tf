@@ -8,7 +8,7 @@ data "aws_secretsmanager_secret_version" "slack_channel" {
 
 resource "aws_sns_topic" "rds_alerts" {
   name         = "${var.govuk_environment}-rds-alerts"
-  display_name = "GOV.UK RDS Alerts"
+  display_name = "RDS Alerts (${var.govuk_environment})"
 }
 
 resource "aws_sns_topic_subscription" "rds_alerts" {
