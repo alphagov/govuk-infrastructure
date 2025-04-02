@@ -8,7 +8,6 @@ module "serving_config_variant" {
   boost_control_ids = [
     # specific to serving_config_variant
     module.control_boost_demote_historic.id,
-    module.control_boost_freshness_news.id,
     module.control_boost_freshness_general.id,
 
     # identical to serving_config_default
