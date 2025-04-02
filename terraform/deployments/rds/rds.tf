@@ -132,6 +132,8 @@ resource "aws_db_instance" "replica" {
   identifier          = "${var.govuk_environment}-${each.value.name}-${each.value.engine}-replica"
   replicate_source_db = aws_db_instance.instance[each.key].identifier
 
+  skip_final_snapshot = true
+
   tags = { Name = "govuk-rds-${each.value.name}-${each.value.engine}-replica", project = lookup(each.value, "project", "GOV.UK - Other") }
 
   lifecycle { ignore_changes = [identifier] }
