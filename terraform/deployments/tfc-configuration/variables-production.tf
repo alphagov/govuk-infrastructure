@@ -491,6 +491,7 @@ module "variable-set-rds-production" {
         performance_insights_enabled = true
         freestoragespace_threshold   = 10737418240
         project                      = "GOV.UK - Publishing"
+        has_read_replica             = true
       }
 
       release = {
