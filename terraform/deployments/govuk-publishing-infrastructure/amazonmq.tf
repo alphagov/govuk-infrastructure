@@ -173,7 +173,7 @@ resource "aws_lb_target_group_attachment" "internal_amqps_ips" {
 
 
 resource "aws_route53_record" "publishing_amazonmq_internal_root_domain_name" {
-  zone_id = data.tfe_outputs.vpc.nonsensitive_values.internal_root_zone_id
+  zone_id = data.tfe_outputs.root_dns.nonsensitive_values.internal_root_zone_id
   name    = "${lower(aws_mq_broker.publishing_amazonmq.broker_name)}.${var.govuk_environment}.govuk-internal.digital"
   type    = "A"
 
