@@ -115,7 +115,7 @@ resource "aws_route53_record" "instance_cname" {
   for_each = var.databases
 
   # Zone is <environment>.govuk-internal.digital.
-  zone_id = data.tfe_outputs.vpc.nonsensitive_values.internal_root_zone_id
+  zone_id = data.tfe_outputs.root_dns.nonsensitive_values.internal_root_zone_id
   name    = aws_db_instance.instance[each.key].identifier
   type    = "CNAME"
   ttl     = 300
@@ -146,7 +146,7 @@ resource "aws_route53_record" "replica_cname" {
   }
 
   # Zone is <environment>.govuk-internal.digital.
-  zone_id = data.tfe_outputs.vpc.nonsensitive_values.internal_root_zone_id
+  zone_id = data.tfe_outputs.root_dns.nonsensitive_values.internal_root_zone_id
   name    = aws_db_instance.replica[each.key].identifier
   type    = "CNAME"
   ttl     = 300
