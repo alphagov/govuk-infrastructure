@@ -14,6 +14,12 @@ variable "gcp_analytics_project_id" {
   default     = "ga4-analytics-352613"
 }
 
+variable "gcp_dataform_project_number" {
+  type        = string
+  description = "GCP project number for the dataform instance orchestrating data movement"
+  default     = "235345844001"
+}
+
 variable "gcp_region" {
   type        = string
   description = "GCP region to create non-global infrastructure in, e.g. europe-west2"
