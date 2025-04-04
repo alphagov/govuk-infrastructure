@@ -45,35 +45,6 @@ module "control_boost_demote_historic" {
   }
 }
 
-module "control_boost_freshness_news" {
-  source = "./modules/control"
-
-  id           = "boost_freshness_news"
-  display_name = "Boost: Freshness (news)"
-  engine_id    = google_discovery_engine_search_engine.govuk.engine_id
-  action = {
-    boostAction = {
-      filter    = "content_purpose_supergroup: ANY(\"news_and_communications\")",
-      dataStore = google_discovery_engine_data_store.govuk_content.name,
-      interpolationBoostSpec = {
-        fieldName         = "public_timestamp_datetime",
-        attributeType     = "FRESHNESS",
-        interpolationType = "LINEAR",
-        controlPoints = [
-          {
-            attributeValue = "0D",
-            boostAmount    = 0.2
-          },
-          {
-            attributeValue = "1460D",
-            boostAmount    = -0.75
-          }
-        ]
-      }
-    }
-  }
-}
-
 module "control_boost_freshness_general" {
   source = "./modules/control"
 
