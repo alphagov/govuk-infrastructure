@@ -12,6 +12,29 @@ things like Load Balancers becoming available.
 
 State for the ephemeral module is stored locally for now.
 
+### Validating working alertmanager, prometheus and grafana
+
+If we take the cluster id as being `eph-da2f44` then these will be the URLs to access the web apps running on the ephemeral cluster:
+
+- Alertmanager: https://alertmanager.eph-da2f44.ephemeral.govuk.digital/
+- CKAN:  https://ckan.eph-da2f44.ephemeral.govuk.digital/
+- Grafana: https://grafana.eph-da2f44.ephemeral.govuk.digital/
+
+- to validate that alertmanager is working by checking that the `watchdog` alert is firing.
+- validation of grafana and prometheus working can done by logging into the CKAN website as an admin user 
+
+  - username: ckan_admin_test
+  - password: test1234
+
+- and then creating a harvest job in CKAN with the following parameters:
+
+  - url: http://environment.data.gov.uk/discover/ea/csw
+  - source type: csw
+
+and finally clicking on the reharvest button under on the Admin site of harvest job page. More detailed instructions can be found in the E2E testing documentation for DGU on an Ephemeral cluster.
+
+Shortly after triggering the harvest job, metrics should start to appear in grafana in the `App: request rates, errors, durations dashboard`.
+
 ### Teardown
 
 This hasn't been properly tested yet, and just running a `terraform apply -destroy` in the ephemeral module
