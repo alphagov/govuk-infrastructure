@@ -5,7 +5,7 @@ locals {
 
 # TODO: replace this data source with an output when certs are managed in this repo
 data "aws_acm_certificate" "csp_reporter" {
-  domain   = data.tfe_outputs.vpc.nonsensitive_values.external_root_zone_name
+  domain   = data.tfe_outputs.root_dns.nonsensitive_values.external_root_zone_name
   statuses = ["ISSUED"]
 }
 
@@ -73,9 +73,9 @@ resource "aws_lambda_permission" "gateway_invoke_csp_reports_to_firehose_functio
 }
 
 resource "aws_route53_record" "csp_reporter" {
-  name    = "csp-reporter.${data.tfe_outputs.vpc.nonsensitive_values.external_root_zone_name}"
+  name    = "csp-reporter.${data.tfe_outputs.root_dns.nonsensitive_values.external_root_zone_name}"
   type    = "A"
-  zone_id = data.tfe_outputs.vpc.nonsensitive_values.external_root_zone_id
+  zone_id = data.tfe_outputs.root_dns.nonsensitive_values.external_root_zone_id
 
   alias {
     name                   = aws_apigatewayv2_domain_name.csp_reporter.domain_name_configuration[0].target_domain_name

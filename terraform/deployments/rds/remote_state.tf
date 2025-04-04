@@ -8,6 +8,11 @@ data "tfe_outputs" "logging" {
   workspace    = "logging-${var.govuk_environment}"
 }
 
+data "tfe_outputs" "root_dns" {
+  organization = "govuk"
+  workspace    = "root-dns-${var.govuk_environment}"
+}
+
 data "tfe_outputs" "vpc" {
   organization = "govuk"
   workspace    = "vpc-${var.govuk_environment}"
