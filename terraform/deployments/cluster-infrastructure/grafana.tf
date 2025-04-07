@@ -121,6 +121,13 @@ module "grafana_db" {
     seconds_until_auto_pause = 300
   }
 
+  instance_class = "db.serverless"
+  instances = {
+    one = {
+      identifier = "${local.grafana_db_name}-instance-1"
+    }
+  }
+
   apply_immediately            = var.rds_apply_immediately
   backup_retention_period      = var.rds_backup_retention_period
   skip_final_snapshot          = var.rds_skip_final_snapshot
