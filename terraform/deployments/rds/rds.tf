@@ -91,7 +91,7 @@ resource "aws_db_event_subscription" "subscription" {
 
   source_type      = "db-instance"
   source_ids       = [for i in aws_db_instance.instance : i.identifier]
-  event_categories = ["availability", "deletion", "failure", "low storage"]
+  event_categories = ["deletion", "failure", "low storage"]
 }
 
 # Alarm if free storage space is below threshold (typically 10 GiB) for 10m.
