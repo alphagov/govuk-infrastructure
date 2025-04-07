@@ -11,6 +11,10 @@ terraform {
       source  = "hashicorp/aws"
       version = "~> 5.0"
     }
+    tfe = {
+      source  = "hashicorp/tfe"
+      version = "~> 0.6"
+    }
   }
 }
 
@@ -19,7 +23,7 @@ provider "aws" {
   default_tags {
     tags = {
       Product              = "GOV.UK"
-      System               = "Serverless ElastiCache"
+      System               = "GOVUK ElastiCache"
       Environment          = var.govuk_environment
       Owner                = "govuk-platform-engineering@digital.cabinet-office.gov.uk"
       repository           = "govuk-infrastructure"

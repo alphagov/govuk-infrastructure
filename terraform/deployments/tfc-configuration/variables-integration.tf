@@ -634,41 +634,40 @@ module "variable-set-elasticache-integration" {
 
   name = "elasticache-integration"
 
-  tfvars = {
+  # The configuration of the "caches" variable is in
+  # "govuk-infrastructure/terraform/deployments/elasticache/variables.tf".
+  # Only the name and description are required, the rest of the parameters
+  # are optional, with their defaults as follows:
+  #   name                       = required
+  #   description                = required
+  #   num_cache_clusters         = optional (default = "1")
+  #   node_type                  = optional (default = "cache.t4g.small")
+  #   automatic_failover_enabled = optional (default = false)
+  #   multi_az_enabled           = optional (default = false)
+  #   engine                     = optional (default = "valkey")
+  #   engine_version             = optional (default = "8.0")
+  #   family                     = optional (default = "valkey8")
+  # If any further parameters need to be modified in the
+  # elasticache parameter group, they need to be configured here
+  # for them to take effect, otherwise the values will be ignored:
+  #   parameters = {
+  #     maxmemory-policy = optional (default = "noeviction")
+  #   }
 
-    # a map of app names to database IDs
-    databases = {
-      "account-api"                = 0
-      "asset-manager"              = 1
-      "collections-publisher"      = 2
-      "contacts-admin"             = 3
-      "content-data-admin"         = 4
-      "content-data-api"           = 5
-      "content-publisher"          = 6
-      "content-tagger"             = 7
-      "draft-email-alert-frontend" = 8
-      "email-alert-api"            = 9
-      "email-alert-frontend"       = 10
-      "email-alert-service"        = 11
-      "link-checker-api"           = 12
-      "local-links-manager"        = 13
-      "locations-api"              = 14
-      "manuals-publisher"          = 15
-      "places-manager"             = 16
-      "publisher-on-pg"            = 17
-      "publisher"                  = 18
-      "publishing-api"             = 19
-      "search-admin"               = 20
-      "search-api"                 = 21
-      "search-api-v2"              = 22
-      "short-url-manager"          = 23
-      "signon"                     = 24
-      "specialist-publisher"       = 25
-      "support-api"                = 26
-      "support"                    = 27
-      "transition"                 = 28
-      "travel-advice-publisher"    = 29
-      "whitehall-admin"            = 30
+  tfvars = {
+    caches = {
+      publishing-api = {
+        name        = "publishing-api-valkey"
+        description = "Publishing API Valkey Instance"
+        node_type   = "cache.m7g.large"
+      }
+      search-api = {
+        name           = "whitehall-admin-redis"
+        description    = "Whitehall Admin Redis Instance"
+        engine         = "redis"
+        engine_version = "7.1"
+        family         = "redis7"
+      }
     }
   }
 }
