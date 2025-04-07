@@ -3,19 +3,23 @@ variable "govuk_environment" {
   description = "GOV.UK environment name"
 }
 
-variable "databases" {
-  type        = map(number)
-  description = "Map of app names to database IDs"
-}
+variable "caches" {
+  type = map(object({
+    name                       = string
+    description                = string
+    num_cache_clusters         = optional(string, "1")
+    node_type                  = optional(string, "cache.t4g.small")
+    automatic_failover_enabled = optional(bool, false)
+    multi_az_enabled           = optional(bool, false)
+    engine                     = optional(string, "valkey")
+    engine_version             = optional(string, "8.0")
+    family                     = optional(string, "valkey8")
 
-variable "engine_version" {
-  type        = string
-  default     = "8.0"
-  description = "Valkey version"
-}
-
-variable "node_type" {
-  type        = string
-  default     = "cache.m7g.xlarge"
-  description = "ElastiCache node type"
+    # If any further parameters need to be modified in the
+    # elasticache parameter group, they need to be configured here
+    # for them to take effect, otherwise the values will be ignored:
+    parameters = optional(object({
+      maxmemory-policy = optional(string, "noeviction")
+    }), {})
+  }))
 }
