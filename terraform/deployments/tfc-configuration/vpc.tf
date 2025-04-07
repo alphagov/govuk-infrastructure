@@ -3,7 +3,7 @@ module "vpc-integration" {
 
   organization        = var.organization
   workspace_name      = "vpc-integration"
-  workspace_desc      = "This module manages foundational cloud resources that are required by most other modules (VPC, DNS zones)"
+  workspace_desc      = "This module manages foundational cloud resources that are required by most other modules (VPC)"
   workspace_tags      = ["integration", "vpc", "eks", "aws"]
   terraform_version   = var.terraform_version
   execution_mode      = "remote"
@@ -36,7 +36,7 @@ module "vpc-staging" {
 
   organization        = var.organization
   workspace_name      = "vpc-staging"
-  workspace_desc      = "This module manages foundational cloud resources that are required by most other modules (VPC, DNS zones)"
+  workspace_desc      = "This module manages foundational cloud resources that are required by most other modules (VPC)"
   workspace_tags      = ["staging", "vpc", "eks", "aws"]
   terraform_version   = var.terraform_version
   execution_mode      = "remote"
@@ -68,7 +68,7 @@ module "vpc-production" {
 
   organization        = var.organization
   workspace_name      = "vpc-production"
-  workspace_desc      = "This module manages foundational cloud resources that are required by most other modules (VPC, DNS zones)"
+  workspace_desc      = "This module manages foundational cloud resources that are required by most other modules (VPC)"
   workspace_tags      = ["production", "vpc", "eks", "aws"]
   terraform_version   = var.terraform_version
   execution_mode      = "remote"
@@ -100,7 +100,7 @@ module "vpc-ephemeral" {
 
   organization        = var.organization
   workspace_name      = "vpc-ephemeral"
-  workspace_desc      = "This module manages foundational cloud resources that are required by most other modules (VPC, DNS zones)"
+  workspace_desc      = "This module manages foundational cloud resources that are required by most other modules (VPC)"
   workspace_tags      = ["ephemeral", "vpc", "eks", "aws"]
   terraform_version   = var.terraform_version
   execution_mode      = "remote"

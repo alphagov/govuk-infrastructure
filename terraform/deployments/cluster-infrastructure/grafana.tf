@@ -130,7 +130,7 @@ module "grafana_db" {
 }
 
 resource "aws_route53_record" "grafana_db" {
-  zone_id = data.tfe_outputs.vpc.nonsensitive_values.internal_root_zone_id
+  zone_id = data.tfe_outputs.root_dns.nonsensitive_values.internal_root_zone_id
   # TODO: consider removing EKS suffix once the old EC2 environments are gone.
   name    = "${local.grafana_db_name}-db.eks"
   type    = "CNAME"
