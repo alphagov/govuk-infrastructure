@@ -74,12 +74,16 @@ resource "aws_iam_policy" "grafana" {
 }
 
 data "aws_rds_engine_version" "postgresql" {
+  count = startswith(var.govuk_environment, "eph-") ? 0 : 1
+
   engine  = "aurora-postgresql"
   version = "16"
   latest  = true
 }
 
 resource "random_password" "grafana_db" {
+  count = startswith(var.govuk_environment, "eph-") ? 0 : 1
+
   length  = 20
   special = false
 
@@ -92,6 +96,8 @@ locals {
 }
 
 module "grafana_db" {
+  count = startswith(var.govuk_environment, "eph-") ? 0 : 1
+
   source  = "terraform-aws-modules/rds-aurora/aws"
   version = "~> 9.0"
 
@@ -99,7 +105,7 @@ module "grafana_db" {
   database_name     = "grafana"
   engine            = "aurora-postgresql"
   engine_mode       = "provisioned"
-  engine_version    = data.aws_rds_engine_version.postgresql.version
+  engine_version    = data.aws_rds_engine_version.postgresql[count.index].version
   storage_encrypted = true
 
   allow_major_version_upgrade = true
@@ -113,7 +119,7 @@ module "grafana_db" {
   }
   manage_master_user_password = false
   master_username             = "root"
-  master_password             = random_password.grafana_db.result
+  master_password             = random_password.grafana_db[count.index].result
 
   serverlessv2_scaling_configuration = {
     max_capacity             = 256
@@ -137,27 +143,33 @@ module "grafana_db" {
 }
 
 resource "aws_route53_record" "grafana_db" {
+  count = startswith(var.govuk_environment, "eph-") ? 0 : 1
+
   zone_id = data.tfe_outputs.root_dns.nonsensitive_values.internal_root_zone_id
   # TODO: consider removing EKS suffix once the old EC2 environments are gone.
   name    = "${local.grafana_db_name}-db.eks"
   type    = "CNAME"
   ttl     = 300
-  records = [module.grafana_db.cluster_endpoint]
+  records = [module.grafana_db[count.index].cluster_endpoint]
 }
 
 resource "aws_secretsmanager_secret" "grafana_db" {
+  count = startswith(var.govuk_environment, "eph-") ? 0 : 1
+
   name                    = "${module.eks.cluster_name}/grafana/database"
   recovery_window_in_days = var.secrets_recovery_window_in_days
 }
 
 resource "aws_secretsmanager_secret_version" "grafana_db" {
-  secret_id = aws_secretsmanager_secret.grafana_db.id
+  count = startswith(var.govuk_environment, "eph-") ? 0 : 1
+
+  secret_id = aws_secretsmanager_secret.grafana_db[count.index].id
   secret_string = jsonencode({
     "engine"   = "aurora"
-    "host"     = aws_route53_record.grafana_db.fqdn
-    "username" = module.grafana_db.cluster_master_username
-    "password" = module.grafana_db.cluster_master_password
+    "host"     = aws_route53_record.grafana_db[count.index].fqdn
+    "username" = module.grafana_db[count.index].cluster_master_username
+    "password" = module.grafana_db[count.index].cluster_master_password
     "dbname"   = local.grafana_db_name
-    "port"     = module.grafana_db.cluster_port
+    "port"     = module.grafana_db[count.index].cluster_port
   })
 }
