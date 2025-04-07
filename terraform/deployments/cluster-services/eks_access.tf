@@ -1,5 +1,5 @@
 
-data "aws_iam_roles" "cluster-admin" { name_regex = "(^terraform-cloud$|\\..*-admin$|\\..*-fulladmin$)" }
+data "aws_iam_roles" "cluster-admin" { name_regex = "(\\..*-admin$|\\..*-fulladmin$)" }
 data "aws_iam_roles" "developer" { name_regex = "\\..*-developer$" }
 
 resource "aws_eks_access_entry" "cluster-admin" {
