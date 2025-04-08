@@ -18,5 +18,6 @@
       "^/terraform/.*\\.tf$"
     ]
   },
-  "prHourlyLimit": 20
+  "prHourlyLimit": 20,
+  "labels": ["dependencies", "renovate"]
 }
