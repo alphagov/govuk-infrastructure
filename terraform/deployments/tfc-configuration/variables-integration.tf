@@ -661,7 +661,7 @@ module "variable-set-elasticache-integration" {
         description = "Publishing API Valkey Instance"
         node_type   = "cache.m7g.large"
       }
-      search-api = {
+      whitehall-admin = {
         name           = "whitehall-admin-redis"
         description    = "Whitehall Admin Redis Instance"
         engine         = "redis"
