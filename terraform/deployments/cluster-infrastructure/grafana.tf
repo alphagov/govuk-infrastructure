@@ -136,6 +136,11 @@ module "grafana_db" {
   preferred_maintenance_window = "sun:04:00-sun:05:00"
 }
 
+import {
+  to = module.grafana_db.aws_rds_cluster_instance.this["one"]
+  id = "${local.grafana_db_name}-instance-1"
+}
+
 resource "aws_route53_record" "grafana_db" {
   zone_id = data.tfe_outputs.root_dns.nonsensitive_values.internal_root_zone_id
   # TODO: consider removing EKS suffix once the old EC2 environments are gone.
