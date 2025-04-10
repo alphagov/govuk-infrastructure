@@ -2,6 +2,10 @@
 data "aws_iam_roles" "cluster-admin" { name_regex = "(\\..*-admin$|\\..*-fulladmin$)" }
 data "aws_iam_roles" "developer" { name_regex = "\\..*-developer$" }
 
+locals {
+  developer_namespaces = ["apps", "datagovuk", "licensify"]
+}
+
 resource "aws_eks_access_entry" "cluster-admin" {
   for_each = data.aws_iam_roles.cluster-admin.arns
 
@@ -20,6 +24,31 @@ resource "aws_eks_access_entry" "developer" {
   principal_arn     = each.value
   kubernetes_groups = ["developers"]
   type              = "STANDARD"
+}
+
+resource "aws_eks_access_policy_association" "cluster_admin" {
+  for_each = data.aws_iam_roles.cluster-admin.arns
+
+  cluster_name  = local.cluster_name
+  policy_arn    = "arn:aws:eks::aws:cluster-access-policy/AmazonEKSClusterAdminPolicy"
+  principal_arn = each.value
+
+  access_scope {
+    type = "cluster"
+  }
+}
+
+resource "aws_eks_access_policy_association" "developer" {
+  for_each = data.aws_iam_roles.developer.arns
+
+  cluster_name  = local.cluster_name
+  policy_arn    = "arn:aws:eks::aws:cluster-access-policy/AmazonEKSAdminPolicy"
+  principal_arn = each.value
+
+  access_scope {
+    type       = "namespace"
+    namespaces = local.developer_namespaces
+  }
 }
 
 resource "kubernetes_cluster_role_binding" "cluster_admins" {
@@ -76,7 +105,7 @@ resource "kubernetes_cluster_role_binding" "developer" {
 }
 
 resource "kubernetes_role" "developer" {
-  for_each = toset(["apps", "datagovuk", "licensify"])
+  for_each = toset(local.developer_namespaces)
 
   metadata {
     name      = "developer"
