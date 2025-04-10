@@ -26,6 +26,7 @@ resource "aws_eks_access_entry" "developer" {
   type              = "STANDARD"
 }
 
+
 resource "aws_eks_access_policy_association" "cluster_admin" {
   for_each = data.aws_iam_roles.cluster-admin.arns
 
@@ -48,6 +49,18 @@ resource "aws_eks_access_policy_association" "developer" {
   access_scope {
     type       = "namespace"
     namespaces = local.developer_namespaces
+  }
+}
+
+resource "aws_eks_access_policy_association" "developer_cluster_insights" {
+  for_each = data.aws_iam_roles.developer.arns
+
+  cluster_name  = local.cluster_name
+  policy_arn    = "arn:aws:eks::aws:cluster-access-policy/AmazonEKSClusterInsightsPolicy"
+  principal_arn = each.value
+
+  access_scope {
+    type = "cluster"
   }
 }
 
