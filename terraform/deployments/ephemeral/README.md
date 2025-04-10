@@ -12,28 +12,45 @@ things like Load Balancers becoming available.
 
 State for the ephemeral module is stored locally for now.
 
-### Validating working alertmanager, prometheus and grafana
+### Alertmanager, Prometheus and Grafana
 
-If we take the cluster id as being `eph-da2f44` then these will be the URLs to access the web apps running on the ephemeral cluster:
+As an example if the cluster ID as `eph-da2f44` then these are the following URLs to access the monitoring apps:
 
 - Alertmanager: https://alertmanager.eph-da2f44.ephemeral.govuk.digital/
 - CKAN:  https://ckan.eph-da2f44.ephemeral.govuk.digital/
 - Grafana: https://grafana.eph-da2f44.ephemeral.govuk.digital/
 
-- to validate that alertmanager is working by checking that the `watchdog` alert is firing.
-- validation of grafana and prometheus working can done by logging into the CKAN website as an admin user 
+#### Validating the monitoring configuration
 
-  - username: ckan_admin_test
-  - password: test1234
+1. Check that the `watchdog` alert is firing in AlertManager
+2. Navigate to `Dashboards` and verify if there are dashboards present
+3. Navigate to `Alert rules` and verify if there are alerting rules present
+4. Log into the CKAN website:
 
-- and then creating a harvest job in CKAN with the following parameters:
+```
+username: ckan_admin_test
+password: test1234
+```
 
-  - url: http://environment.data.gov.uk/discover/ea/csw
-  - source type: csw
+5. Click on the `Harvest` tab
+6. Click on `Add Harvest Source` and fill in the fields with these details
+```
+URL: http://environment.data.gov.uk/discover/ea/csw
+Title: Environment Agency
+Source Type: CSW
+Update frequency: Manual
+```
 
-and finally clicking on the reharvest button under on the Admin site of harvest job page. More detailed instructions can be found in the E2E testing documentation for DGU on an Ephemeral cluster.
+7. Click on `Admin` and then `Reharvest` to trigger a harvest job
+8. Verify that metrics are appearing in Grafana in `App: request rates, errors, durations dashboard`
 
-Shortly after triggering the harvest job, metrics should start to appear in grafana in the `App: request rates, errors, durations dashboard`.
+#### Testing out `argo-bootstrap-ephemeral`
+
+Sometimes you want to test out a change to `argo-bootstrap-ephemeral` in `govuk-helm-charts` in the ephemeral cluster before creating a PR in `govuk-infrastructure` and running the Terraform. To do this:
+
+1. Increment `version` in `Chart.yaml`
+2. Run `helm upgrade -n cluster-services argo-bootstrap-ephemeral ./charts/argo-bootstrap-ephemeral --reuse-values`
+3. After you have finished testing your changes create a Terraform run in `cluster-services-eph-da2f44` to downgrade the Helm chart
 
 ### Teardown
 
