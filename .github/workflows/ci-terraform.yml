@@ -15,7 +15,7 @@ jobs:
     
     - name: Get changed TF deployments
       id: changed-deployments
-      uses: tj-actions/changed-files@6cb76d07bee4c9772c6882c06c37837bf82a04d3 # v46.0.4
+      uses: tj-actions/changed-files@ed68ef82c095e0d48ec87eccea555d944a631a4c # v46.0.5
       with:
         path: terraform/deployments
         dir_names: true
