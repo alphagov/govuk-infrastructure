@@ -16,7 +16,7 @@ terraform {
     }
     google = {
       source  = "hashicorp/google"
-      version = "~> 6.27.0"
+      version = "~> 6.29.0"
     }
     restapi = {
       source  = "Mastercard/restapi"
