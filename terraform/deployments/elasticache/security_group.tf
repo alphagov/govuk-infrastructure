@@ -21,8 +21,6 @@ resource "aws_vpc_security_group_ingress_rule" "cache" {
 
 resource "aws_vpc_security_group_egress_rule" "cache" {
   description                  = "Allow outbound requests to EKS nodes"
-  from_port                    = 0
-  to_port                      = 0
   ip_protocol                  = -1
   referenced_security_group_id = data.tfe_outputs.cluster_infrastructure.nonsensitive_values.node_security_group_id
   security_group_id            = aws_security_group.cache.id
