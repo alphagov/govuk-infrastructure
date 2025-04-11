@@ -36,6 +36,10 @@ resource "aws_eks_access_policy_association" "cluster_admin" {
   access_scope {
     type = "cluster"
   }
+
+  depends_on = [
+    aws_eks_access_entry.cluster-admin
+  ]
 }
 
 resource "aws_eks_access_policy_association" "developer" {
@@ -49,6 +53,10 @@ resource "aws_eks_access_policy_association" "developer" {
     type       = "namespace"
     namespaces = local.developer_namespaces
   }
+
+  depends_on = [
+    aws_eks_access_entry.developer
+  ]
 }
 
 resource "kubernetes_cluster_role_binding" "cluster_admins" {
