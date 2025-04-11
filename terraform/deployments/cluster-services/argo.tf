@@ -168,7 +168,7 @@ resource "helm_release" "argo_bootstrap" {
   namespace        = local.services_ns
   create_namespace = true
   repository       = "https://alphagov.github.io/govuk-helm-charts/"
-  version          = "0.3.3" # TODO: Dependabot or equivalent so this doesn't get neglected.
+  version          = "0.3.4" # TODO: Dependabot or equivalent so this doesn't get neglected.
   timeout          = var.helm_timeout_seconds
   values = [yamlencode({
     # TODO: This TF module should not need to know the govuk_environment, since
@@ -202,7 +202,7 @@ resource "helm_release" "argo_bootstrap_ephemeral" {
   namespace        = local.services_ns
   create_namespace = true
   repository       = "https://alphagov.github.io/govuk-helm-charts/"
-  version          = "0.0.9"
+  version          = "0.0.10"
   timeout          = var.helm_timeout_seconds
   values = [yamlencode({
     awsAccountId     = data.aws_caller_identity.current.account_id
