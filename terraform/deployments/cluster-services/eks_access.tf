@@ -3,7 +3,7 @@ data "aws_iam_roles" "cluster-admin" { name_regex = "(\\..*-admin$|\\..*-fulladm
 data "aws_iam_roles" "developer" { name_regex = "\\..*-developer$" }
 
 locals {
-  developer_namespaces = ["apps", "licensify"]
+  developer_namespaces = ["apps", "datagovuk", "licensify"]
 }
 
 resource "aws_eks_access_entry" "cluster-admin" {
