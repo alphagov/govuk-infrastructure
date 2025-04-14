@@ -141,7 +141,7 @@ resource "kubernetes_role" "developer" {
 }
 
 resource "kubernetes_role_binding" "developer" {
-  for_each   = toset(["apps", "datagovuk", "licensify"])
+  for_each   = toset(local.developer_namespaces)
   depends_on = [kubernetes_role.developer]
 
   metadata {
