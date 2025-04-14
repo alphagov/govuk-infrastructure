@@ -9,10 +9,3 @@ resource "helm_release" "argo_bootstrap" {
     environment = var.govuk_environment
   })]
 }
-
-removed {
-  from = kubernetes_namespace.datagovuk
-  lifecycle {
-    destroy = false
-  }
-}
