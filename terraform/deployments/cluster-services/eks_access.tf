@@ -3,7 +3,7 @@ data "aws_iam_roles" "cluster-admin" { name_regex = "(\\..*-admin$|\\..*-fulladm
 data "aws_iam_roles" "developer" { name_regex = "\\..*-developer$" }
 
 locals {
-  developer_namespaces = ["apps", "licensify"]
+  developer_namespaces = ["apps", "datagovuk", "licensify"]
 }
 
 resource "aws_eks_access_entry" "cluster-admin" {
@@ -141,7 +141,7 @@ resource "kubernetes_role" "developer" {
 }
 
 resource "kubernetes_role_binding" "developer" {
-  for_each   = toset(["apps", "datagovuk", "licensify"])
+  for_each   = toset(local.developer_namespaces)
   depends_on = [kubernetes_role.developer]
 
   metadata {

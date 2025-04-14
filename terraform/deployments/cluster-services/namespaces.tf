@@ -33,3 +33,24 @@ resource "kubernetes_namespace" "licensify" {
     }
   }
 }
+
+resource "kubernetes_namespace" "datagovuk" {
+  metadata {
+    name = var.datagovuk_namespace
+    annotations = {
+      "argocd.argoproj.io/sync-options" = "ServerSideApply=true"
+    }
+    labels = {
+      "app.kubernetes.io/managed-by"       = "Terraform"
+      "argocd.argoproj.io/managed-by"      = "cluster-services"
+      "pod-security.kubernetes.io/audit"   = "restricted"
+      "pod-security.kubernetes.io/enforce" = "restricted"
+      "pod-security.kubernetes.io/warn"    = "restricted"
+    }
+  }
+}
+
+import {
+  to = kubernetes_namespace.datagovuk
+  id = var.datagovuk_namespace
+}
