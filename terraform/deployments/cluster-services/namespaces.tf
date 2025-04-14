@@ -49,8 +49,3 @@ resource "kubernetes_namespace" "datagovuk" {
     }
   }
 }
-
-import {
-  to = kubernetes_namespace.datagovuk
-  id = var.datagovuk_namespace
-}
