@@ -30,7 +30,7 @@ resource "helm_release" "aws_ebs_csi_driver" {
         parameters = {
           type = "gp3"
         }
-        reclaimPolicy        = "Retain"
+        reclaimPolicy        = local.is_ephemeral ? "Delete" : "Retain"
         volumeBindingMode    = "WaitForFirstConsumer"
         allowVolumeExpansion = true
       }

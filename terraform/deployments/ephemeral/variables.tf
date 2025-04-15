@@ -1,6 +1,5 @@
 variable "ephemeral_cluster_id" {
-  type    = string
-  default = "eph-aaa113"
+  type = string
 }
 
 variable "organization" {

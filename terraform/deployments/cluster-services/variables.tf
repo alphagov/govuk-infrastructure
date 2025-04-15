@@ -67,3 +67,9 @@ variable "cluster_name" {
   description = "Name of the EKS cluster to create resources in"
   default     = "govuk"
 }
+
+variable "force_destroy" {
+  type        = bool
+  description = "Setting for force_destroy on resources such as Route53 zones. For use in non-production environments to allow for automated tear-down."
+  default     = false
+}

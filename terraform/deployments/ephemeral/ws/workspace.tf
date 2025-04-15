@@ -4,7 +4,7 @@ module "workspace" {
   organization        = var.organization
   workspace_name      = "${var.name}-${var.ephemeral_cluster_id}"
   workspace_desc      = "Resources for an ephemeral cluster"
-  workspace_tags      = ["ephemeral", "${var.name}", "aws"]
+  workspace_tags      = ["ephemeral", var.name, "aws", var.ephemeral_cluster_id]
   terraform_version   = var.terraform_version
   execution_mode      = "remote"
   working_directory   = "/terraform/deployments/${var.name}/"
@@ -24,7 +24,7 @@ module "workspace" {
     "GOV.UK Production"           = "write"
   }
 
-  variable_set_ids   = [var.variable_set_id]
+  variable_set_ids = [var.variable_set_id]
   variable_set_names = [
     "aws-credentials-test",
     "common",
@@ -38,12 +38,7 @@ resource "tfe_workspace_run" "run" {
   apply {
     manual_confirm = false
     wait_for_run   = true
-    retry          = false
-  }
-
-  destroy {
-    manual_confirm = false
-    wait_for_run   = true
-    retry          = false
+    retry          = true
+    retry_attempts = 2
   }
 }

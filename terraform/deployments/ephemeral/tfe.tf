@@ -14,13 +14,16 @@ module "var_set" {
     cluster_name           = var.ephemeral_cluster_id
     external_dns_subdomain = var.ephemeral_cluster_id
 
+    force_destroy = true
+
     govuk_aws_state_bucket    = ""
     publishing_service_domain = "${var.ephemeral_cluster_id}.publishing.service.gov.uk"
     authentication_mode       = "API_AND_CONFIG_MAP"
 
-    enable_arm_workers  = true
-    enable_main_workers = false
-    enable_x86_workers  = false
+    enable_arm_workers         = true
+    enable_main_workers        = false
+    enable_x86_workers         = false
+    arm_workers_instance_types = ["m7g.2xlarge"]
   }
 }
 
