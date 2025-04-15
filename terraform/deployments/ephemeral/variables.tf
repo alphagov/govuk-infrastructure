@@ -1,5 +1,5 @@
 variable "ephemeral_cluster_id" {
-  type    = string
+  type = string
 }
 
 variable "organization" {

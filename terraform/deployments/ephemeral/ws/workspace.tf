@@ -24,7 +24,7 @@ module "workspace" {
     "GOV.UK Production"           = "write"
   }
 
-  variable_set_ids   = [var.variable_set_id]
+  variable_set_ids = [var.variable_set_id]
   variable_set_names = [
     "aws-credentials-test",
     "common",
@@ -38,6 +38,7 @@ resource "tfe_workspace_run" "run" {
   apply {
     manual_confirm = false
     wait_for_run   = true
-    retry          = false
+    retry          = true
+    retry_attempts = 2
   }
 }
