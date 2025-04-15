@@ -5,6 +5,8 @@ locals {
 
 resource "aws_s3_bucket" "tempo" {
   bucket = "govuk-${var.govuk_environment}-tempo"
+
+  force_destroy = var.force_destroy
 }
 
 module "tempo_iam_role" {
