@@ -54,3 +54,24 @@ resource "google_discovery_engine_search_engine" "govuk" {
     company_name = "GOV.UK"
   }
 }
+
+resource "google_discovery_engine_search_engine" "govuk_global" {
+  engine_id    = "govuk_global"
+  display_name = "GOV.UK Site Search for Global Search"
+
+  location      = google_discovery_engine_data_store.govuk_content.location
+  collection_id = "default_collection"
+
+  industry_vertical = "GENERIC"
+
+  data_store_ids = [google_discovery_engine_data_store.govuk_content.data_store_id]
+
+  search_engine_config {
+    search_tier    = "SEARCH_TIER_STANDARD"
+    search_add_ons = []
+  }
+
+  common_config {
+    company_name = "GOV.UK"
+  }
+}
