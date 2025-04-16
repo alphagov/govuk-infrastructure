@@ -35,6 +35,10 @@ resource "helm_release" "external_secrets" {
       replicaCount = var.desired_ha_replicas
     }
   })]
+
+  lifecycle {
+    create_before_destroy = true
+  }
 }
 
 resource "helm_release" "cluster_secret_store" {
