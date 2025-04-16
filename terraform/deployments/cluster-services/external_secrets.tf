@@ -44,7 +44,7 @@ resource "helm_release" "cluster_secret_store" {
   name       = "cluster-secret-store"
   repository = "https://alphagov.github.io/govuk-helm-charts/"
   chart      = "cluster-secret-store"
-  version    = "0.1.1" # TODO: Dependabot or equivalent so this doesn't get neglected.
+  version    = "0.2.0" # TODO: Dependabot or equivalent so this doesn't get neglected.
   namespace  = local.services_ns
   timeout    = var.helm_timeout_seconds
   values = [yamlencode({
