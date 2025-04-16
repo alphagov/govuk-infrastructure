@@ -60,6 +60,11 @@ module "environment_integration" {
   google_workload_provider_name = "projects/780375417592/locations/global/workloadIdentityPools/terraform-cloud-id-pool/providers/terraform-cloud-provider-oidc"
   google_service_account_email  = "tfc-service-account@search-api-v2-integration.iam.gserviceaccount.com"
   tfc_project                   = tfe_project.project
+
+  variable_set_ids = [
+    module.variable-set-common.id,
+    module.variable-set-integration.id
+  ]
 }
 
 # Start of importing of all staging module components:
@@ -119,6 +124,11 @@ module "environment_staging" {
   google_workload_provider_name = "projects/773027887517/locations/global/workloadIdentityPools/terraform-cloud-id-pool/providers/terraform-cloud-provider-oidc"
   google_service_account_email  = "tfc-service-account@search-api-v2-staging.iam.gserviceaccount.com"
   tfc_project                   = tfe_project.project
+
+  variable_set_ids = [
+    module.variable-set-common.id,
+    module.variable-set-staging.id
+  ]
 }
 
 # Start of importing of all production module components:
@@ -178,4 +188,9 @@ module "environment_production" {
   google_workload_provider_name = "projects/931453572747/locations/global/workloadIdentityPools/terraform-cloud-id-pool/providers/terraform-cloud-provider-oidc"
   google_service_account_email  = "tfc-service-account@search-api-v2-production.iam.gserviceaccount.com"
   tfc_project                   = tfe_project.project
+
+  variable_set_ids = [
+    module.variable-set-common.id,
+    module.variable-set-production.id
+  ]
 }
