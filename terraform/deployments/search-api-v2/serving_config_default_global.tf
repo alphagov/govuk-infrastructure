@@ -107,7 +107,7 @@ module "control_boost_demote_pages_global" {
 
 locals {
   # Pages to temporarily exclude from search results
-  filtered_pages = [
+  filtered_pages_global = [
     # GOV.UK app beta (note double appearance of HTML publications)
     "/government/publications/govuk-app-terms-and-conditions",
     "/government/publications/govuk-app-terms-and-conditions/govuk-app-terms-and-conditions",
@@ -120,7 +120,7 @@ locals {
     "/sign-up-test-govuk-app",
     "/contact/govuk-app-support",
   ]
-  filtered_pages_expr = join(",", [for page in local.filtered_pages : "\"${page}\""])
+  filtered_pages_expr_global = join(",", [for page in local.filtered_pages_global : "\"${page}\""])
 }
 module "control_filter_temporary_exclusions_global" {
   source = "./modules/control"
@@ -131,7 +131,7 @@ module "control_filter_temporary_exclusions_global" {
 
   action = {
     filterAction = {
-      filter    = "NOT link: ANY(${local.filtered_pages_expr})"
+      filter    = "NOT link: ANY(${local.filtered_pages_expr_global})"
       dataStore = google_discovery_engine_data_store.govuk_content.name
     }
   }
