@@ -307,7 +307,7 @@ module "variable-set-rds-production" {
         allocated_storage            = 1024
         instance_class               = "db.m6g.large"
         performance_insights_enabled = false
-        freestoragespace_threshold   = 536870912000
+        freestoragespace_threshold   = 307200000000
         project                      = "GOV.UK - Publishing"
       }
 
