@@ -76,6 +76,17 @@ resource "tfe_variable" "gcp_project_id" {
   sensitive = false
 }
 
+resource "tfe_variable" "gcp_env" {
+
+  workspace_id = tfe_workspace.environment_workspace.id
+  category     = "terraform"
+  description  = "The GCP environment"
+
+  key       = "gcp_env"
+  value     = var.name
+  sensitive = false
+}
+
 resource "tfe_variable" "gcp_project_number" {
   workspace_id = tfe_workspace.environment_workspace.id
   category     = "terraform"
