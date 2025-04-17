@@ -106,9 +106,12 @@ resource "aws_cloudwatch_metric_alarm" "rds_freestoragespace" {
   namespace           = "AWS/RDS"
   period              = "60"
   statistic           = "Minimum"
-  threshold           = each.value.freestoragespace_threshold
-  alarm_actions       = [aws_sns_topic.rds_alerts.arn]
-  alarm_description   = "Available storage space on ${aws_db_instance.instance[each.key].identifier} RDS is too low."
+  threshold = (
+    each.value.allocated_storage * (tonumber(lookup(each.value, "storage_alarm_threshold_percentage", 10)) / 100)
+    * 1024 * 1024 * 1024 # allocated_storage is in GB, metric value is in bytes
+  )
+  alarm_actions     = [aws_sns_topic.rds_alerts.arn]
+  alarm_description = "Available storage space on ${aws_db_instance.instance[each.key].identifier} RDS is below ${lookup(each.value, "storage_alarm_threshold_percentage", 10)}%."
 }
 
 resource "aws_route53_record" "instance_cname" {
