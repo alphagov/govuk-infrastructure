@@ -10,7 +10,7 @@ terraform {
   cloud {
     organization = "govuk"
     workspaces {
-      tags = ["cluster-services", "eks", "aws"]
+      tags = ["cluster-services", "aws"]
     }
   }
 
