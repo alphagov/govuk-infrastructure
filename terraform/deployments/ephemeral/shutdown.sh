@@ -1,5 +1,4 @@
-#!/usr/bin/env nix-shell
-#!nix-shell -i bash -p awscli kubectl kubernetes-helm jq curl
+#!/usr/bin/env bash
 
 CLUSTER_ID="${1}"
 
@@ -35,6 +34,7 @@ function application_shutdown {
   done <<< "$(application_list)"
 }
 
+# takes an optional selector to choose which charts to list
 function helm_list {
   SELECTOR="${1}"
   helm list --selector "${SELECTOR}" --no-headers -n cluster-services
@@ -71,10 +71,12 @@ function helm_shutdown {
   helm_uninstall_charts ""
 }
 
+# get the user's TFC token from their home directory
 function tfc_token {
   jq -r '.credentials."app.terraform.io".token' < ~/.terraform.d/credentials.tfrc.json
 }
 
+# get a workspace ID from name
 function tfc_get_workspace_id {
   TOKEN="$(tfc_token)"
   WORKSPACE_NAME="${1}"
@@ -88,6 +90,7 @@ function tfc_get_workspace_id {
     | jq -r ".data[0].id"
 }
 
+# start a destroy run
 function tfc_destroy_start {
   TOKEN="$(tfc_token)"
   WORKSPACE_NAME="${1}"
@@ -121,6 +124,7 @@ EOF
   echo "${RUN_ID}"
 }
 
+# get status for a given run ID
 function tfc_run_status {
   RUN_ID="${1}"
   curl --silent \
@@ -129,6 +133,7 @@ function tfc_run_status {
     "https://app.terraform.io/api/v2/runs/${RUN_ID}" | jq -r ".data.attributes.status"
 }
 
+# poll TFC API for run status, blocks until run has completed
 function tfc_wait_for_run {
   WORKSPACE_NAME="${1}"
   RUN_ID="${2}"
@@ -155,6 +160,7 @@ function tfc_wait_for_run {
   done
 }
 
+# start a destroy run for a given workspace name
 function tfc_do_destroy {
   WORKSPACE_NAME="${1}"
   RUN_ID="$(tfc_destroy_start "${WORKSPACE_NAME}")"
@@ -178,6 +184,7 @@ function retry {
   exit 1
 }
 
+# make sure the correct cluster is selected before destroying anything
 aws eks update-kubeconfig --name "${CLUSTER_ID}"
 
 # delete ArgoCD Application resources
