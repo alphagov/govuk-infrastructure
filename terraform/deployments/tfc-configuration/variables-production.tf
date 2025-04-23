@@ -181,7 +181,6 @@ module "variable-set-rds-production" {
         allocated_storage            = 100
         instance_class               = "db.t4g.medium"
         performance_insights_enabled = true
-        freestoragespace_threshold   = 10737418240
         project                      = "GOV.UK - Web"
       }
 
@@ -200,7 +199,6 @@ module "variable-set-rds-production" {
         allocated_storage            = 100
         instance_class               = "db.t4g.small"
         performance_insights_enabled = false
-        freestoragespace_threshold   = 10737418240
         project                      = "GOV.UK - Publishing"
       }
 
@@ -218,7 +216,6 @@ module "variable-set-rds-production" {
         allocated_storage            = 100
         instance_class               = "db.m6g.large"
         performance_insights_enabled = false
-        freestoragespace_threshold   = 10737418240
         project                      = "GOV.UK - AI"
       }
 
@@ -236,7 +233,6 @@ module "variable-set-rds-production" {
         allocated_storage            = 1000
         instance_class               = "db.m6g.2xlarge"
         performance_insights_enabled = true
-        freestoragespace_threshold   = 10737418240
         project                      = "GOV.UK - DGU"
       }
 
@@ -251,7 +247,6 @@ module "variable-set-rds-production" {
         allocated_storage            = 100
         instance_class               = "db.t4g.medium"
         performance_insights_enabled = true
-        freestoragespace_threshold   = 10737418240
         project                      = "GOV.UK - Publishing"
       }
 
@@ -266,7 +261,6 @@ module "variable-set-rds-production" {
         allocated_storage            = 100
         instance_class               = "db.t4g.medium"
         performance_insights_enabled = true
-        freestoragespace_threshold   = 10737418240
         project                      = "GOV.UK - Publishing"
       }
 
@@ -284,7 +278,6 @@ module "variable-set-rds-production" {
         allocated_storage            = 100
         instance_class               = "db.t4g.medium"
         performance_insights_enabled = true
-        freestoragespace_threshold   = 10737418240
         project                      = "GOV.UK - Publishing"
       }
 
@@ -307,7 +300,6 @@ module "variable-set-rds-production" {
         allocated_storage            = 1024
         instance_class               = "db.m6g.large"
         performance_insights_enabled = false
-        freestoragespace_threshold   = 307200000000
         project                      = "GOV.UK - Publishing"
       }
 
@@ -325,7 +317,6 @@ module "variable-set-rds-production" {
         allocated_storage            = 100
         instance_class               = "db.t4g.medium"
         performance_insights_enabled = true
-        freestoragespace_threshold   = 10737418240
         project                      = "GOV.UK - Publishing"
       }
 
@@ -343,7 +334,6 @@ module "variable-set-rds-production" {
         allocated_storage            = 1000
         instance_class               = "db.m6g.2xlarge"
         performance_insights_enabled = true
-        freestoragespace_threshold   = 10737418240
         project                      = "GOV.UK - Publishing"
       }
 
@@ -361,7 +351,6 @@ module "variable-set-rds-production" {
         allocated_storage            = 100
         instance_class               = "db.t4g.medium"
         performance_insights_enabled = true
-        freestoragespace_threshold   = 10737418240
         project                      = "GOV.UK - Publishing"
       }
 
@@ -379,7 +368,6 @@ module "variable-set-rds-production" {
         allocated_storage            = 1000
         instance_class               = "db.m6g.2xlarge"
         performance_insights_enabled = true
-        freestoragespace_threshold   = 10737418240
         project                      = "GOV.UK - Publishing"
       }
 
@@ -397,7 +385,6 @@ module "variable-set-rds-production" {
         allocated_storage            = 4500
         instance_class               = "db.m7g.2xlarge"
         performance_insights_enabled = true
-        freestoragespace_threshold   = 10737418240
         project                      = "GOV.UK - Web"
       }
 
@@ -416,7 +403,6 @@ module "variable-set-rds-production" {
         allocated_storage            = 100
         instance_class               = "db.m6g.large"
         performance_insights_enabled = true
-        freestoragespace_threshold   = 10737418240
         project                      = "GOV.UK - Web"
       }
 
@@ -434,7 +420,6 @@ module "variable-set-rds-production" {
         allocated_storage            = 100
         instance_class               = "db.t4g.large"
         performance_insights_enabled = true
-        freestoragespace_threshold   = 10737418240
         project                      = "GOV.UK - Publishing"
         maintenance_window           = "Mon:00:00-Mon:01:00"
       }
@@ -453,7 +438,6 @@ module "variable-set-rds-production" {
         allocated_storage            = 100
         instance_class               = "db.t4g.medium"
         performance_insights_enabled = true
-        freestoragespace_threshold   = 10737418240
         project                      = "GOV.UK - Web"
       }
 
@@ -471,7 +455,6 @@ module "variable-set-rds-production" {
         allocated_storage            = 1000
         instance_class               = "db.m6g.large"
         performance_insights_enabled = true
-        freestoragespace_threshold   = 10737418240
         project                      = "GOV.UK - Web"
       }
 
@@ -489,7 +472,6 @@ module "variable-set-rds-production" {
         allocated_storage            = 1000
         instance_class               = "db.m6g.4xlarge"
         performance_insights_enabled = true
-        freestoragespace_threshold   = 10737418240
         project                      = "GOV.UK - Publishing"
         has_read_replica             = true
       }
@@ -505,7 +487,6 @@ module "variable-set-rds-production" {
         allocated_storage            = 100
         instance_class               = "db.t4g.small"
         performance_insights_enabled = false
-        freestoragespace_threshold   = 10737418240
         project                      = "GOV.UK - Infrastructure"
       }
 
@@ -520,7 +501,6 @@ module "variable-set-rds-production" {
         allocated_storage            = 100
         instance_class               = "db.t4g.small"
         performance_insights_enabled = false
-        freestoragespace_threshold   = 10737418240
         project                      = "GOV.UK - Search"
       }
 
@@ -538,7 +518,6 @@ module "variable-set-rds-production" {
         allocated_storage            = 100
         instance_class               = "db.t4g.medium"
         performance_insights_enabled = true
-        freestoragespace_threshold   = 10737418240
         project                      = "GOV.UK - Publishing"
       }
 
@@ -553,7 +532,6 @@ module "variable-set-rds-production" {
         allocated_storage            = 100
         instance_class               = "db.t4g.large"
         performance_insights_enabled = true
-        freestoragespace_threshold   = 10737418240
         project                      = "GOV.UK - Publishing"
       }
 
@@ -571,7 +549,6 @@ module "variable-set-rds-production" {
         allocated_storage            = 200
         instance_class               = "db.t4g.medium"
         performance_insights_enabled = true
-        freestoragespace_threshold   = 10737418240
         project                      = "GOV.UK - Publishing"
       }
 
@@ -589,7 +566,6 @@ module "variable-set-rds-production" {
         allocated_storage            = 120
         instance_class               = "db.m6g.large" # TODO: downsize this after migration if required
         performance_insights_enabled = true
-        freestoragespace_threshold   = 10737418240
         project                      = "GOV.UK - Publishing"
       }
 
@@ -604,7 +580,6 @@ module "variable-set-rds-production" {
         allocated_storage            = 300
         instance_class               = "db.m7g.xlarge"
         performance_insights_enabled = true
-        freestoragespace_threshold   = 10737418240
         project                      = "GOV.UK - Publishing"
       }
     }
