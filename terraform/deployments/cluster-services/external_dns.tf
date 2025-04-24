@@ -2,12 +2,14 @@ resource "helm_release" "external_dns" {
   name             = "external-dns"
   repository       = "https://kubernetes-sigs.github.io/external-dns"
   chart            = "external-dns"
-  version          = "1.15.2"
+  version          = "1.16.1"
   namespace        = local.services_ns
   create_namespace = true
 
   values = [yamlencode({
-    provider = "aws"
+    provider = {
+      name = "aws"
+    }
     env = [
       {
         name  = "AWS_DEFAULT_REGION"
