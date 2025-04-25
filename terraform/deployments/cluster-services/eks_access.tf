@@ -107,7 +107,7 @@ resource "kubernetes_cluster_role_binding" "developer" {
   }
   subject {
     kind      = "Group"
-    name      = "developer"
+    name      = "developers"
     api_group = "rbac.authorization.k8s.io"
   }
 }
