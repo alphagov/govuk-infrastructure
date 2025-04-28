@@ -1,9 +1,4 @@
 import {
-  to = github_repository.govuk_repos["terraform-govuk-tfe-workspacer"]
-  id = "terraform-govuk-tfe-workspacer"
-}
-
-import {
-  to = github_repository.govuk_repos["content-block-editor"]
-  id = "content-block-editor"
+  to = github_repository.govuk_repos["content-modelling-e2e"]
+  id = "content-modelling-e2e"
 }
