@@ -110,6 +110,14 @@ repos:
       additional_contexts:
         - Test Ruby / Run RSpec
 
+  content-modelling-e2e:
+    required_status_checks:
+      standard_contexts: *standard_security_checks
+      additional_contexts:
+        - Lint / Eslint
+        - Prettier / Check
+        - Playwright Tests / Run Tests
+
   content-publisher:
     homepage_url: "https://docs.publishing.service.gov.uk/apps/content-publisher.html"
     required_status_checks:
