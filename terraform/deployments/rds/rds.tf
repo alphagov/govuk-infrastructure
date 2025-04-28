@@ -166,3 +166,8 @@ resource "aws_secretsmanager_secret_version" "database_passwords" {
     { for k, v in random_string.database_password : k => v.result }
   )
 }
+
+moved {
+  from = aws_db_instance.replica["publishing_api"]
+  to   = aws_db_instance.replica["publishing_api"]
+}
