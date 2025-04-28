@@ -630,6 +630,10 @@ module "variable-set-elasticache-integration" {
 
   tfvars = {
     caches = {
+      search-api = {
+        name        = "search-api-valkey"
+        description = "Search API Valkey Instance"
+      }
       publishing-api = {
         name        = "publishing-api-valkey"
         description = "Publishing API Valkey Instance"
