@@ -848,6 +848,11 @@ repos:
   govuk-rfcs: {}
   govuk-ruby-images: {}
   govuk-s3-mirror: {}
+  govuk-content-publishing-guidance: {
+    teams: {
+      govuk: "maintain"
+    }
+  }
   govuk-e2e-tests: {}
   govuk-design-guide: {
     teams: {
