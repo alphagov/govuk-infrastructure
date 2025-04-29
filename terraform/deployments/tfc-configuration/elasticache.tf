@@ -57,7 +57,7 @@ module "elasticache-staging" {
   }
 
   variable_set_ids = [
-    local.aws_credentials["integration"],
+    local.aws_credentials["staging"],
     module.variable-set-common.id,
     module.variable-set-staging.id,
     module.variable-set-elasticache-staging.id
