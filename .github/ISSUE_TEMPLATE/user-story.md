@@ -9,8 +9,8 @@ assignees: ''
 
 **User Need**
 
-**As a** (type of user)  
-**I want** (some action)  
+**As a** (type of user)
+**I want** (some action)
 **so that** (some result)
 
 ---
