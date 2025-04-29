@@ -29,6 +29,7 @@ resource "google_project_iam_custom_role" "api" {
     "discoveryengine.suggestionDenyListEntries.import",
     "discoveryengine.suggestionDenyListEntries.purge",
     "discoveryengine.userEvents.import",
+    "discoveryengine.userEvents.purge",
   ]
 }
 
