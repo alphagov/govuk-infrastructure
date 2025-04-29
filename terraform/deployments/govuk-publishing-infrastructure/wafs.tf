@@ -5,10 +5,9 @@
 
 module "infrastructure-sensitive_wafs" {
   source  = "app.terraform.io/govuk/infrastructure-sensitive/govuk//modules/wafs"
-  version = "0.0.16"
+  version = "0.0.17"
 
   cache_public_base_rate_limit   = var.cache_public_base_rate_limit
-  cache_public_base_rate_warning = var.cache_public_base_rate_warning
   cache_public_post_rate_warning = var.cache_public_post_rate_warning
   fastly_rate_limit_token        = var.fastly_rate_limit_token
   govuk_requesting_ips_arn       = aws_wafv2_ip_set.govuk_requesting_ips.arn
