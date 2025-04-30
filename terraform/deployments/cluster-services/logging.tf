@@ -26,6 +26,9 @@ resource "helm_release" "filebeat" {
           add  = ["DAC_READ_SEARCH"]
           drop = ["ALL"]
         }
+        seccompProfile = {
+          type = "RuntimeDefault"
+        }
       }
       secretMounts = []
       tolerations = [{ # TODO: remove once we no longer run amd64 (Intel) nodes.
