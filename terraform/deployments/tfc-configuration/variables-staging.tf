@@ -631,8 +631,8 @@ module "variable-set-elasticache-staging" {
         description = "Search API Valkey Instance"
       }
       whitehall-admin = {
-        name        = "whitehall-admin-redis"
-        description = "Whitehall Admin Redis Instance"
+        name        = "whitehall-admin-valkey"
+        description = "Whitehall Admin Valkey Instance"
       }
     }
   }
