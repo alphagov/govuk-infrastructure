@@ -16,6 +16,20 @@ resource "helm_release" "filebeat" {
   timeout          = var.helm_timeout_seconds
   values = [yamlencode({
     daemonset = {
+      securityContext = {
+        allowPrivilegeEscalation = false
+        readOnlyRootFilesystem   = true
+        privileged               = false
+        runAsUser                = 0
+        runAsNonRoot             = false
+        capabilities = {
+          add  = ["DAC_READ_SEARCH"]
+          drop = ["ALL"]
+        }
+        seccompProfile = {
+          type = "RuntimeDefault"
+        }
+      }
       secretMounts = []
       tolerations = [{ # TODO: remove once we no longer run amd64 (Intel) nodes.
         key      = "arch"
