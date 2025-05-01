@@ -326,6 +326,25 @@ resource "helm_release" "dex" {
       }
     }
 
+    podSecurityContext = {
+      fsGroup = 1001
+    }
+
+    securityContext = {
+      allowPrivilegeEscalation = false
+      privileged               = false
+      readOnlyRootFilesystem   = true
+      runAsNonRoot             = true
+      runAsUser                = 1001
+      runAsGroup               = 1001
+      capabilities = {
+        drop = ["ALL"]
+      }
+      seccompProfile = {
+        type = "RuntimeDefault"
+      }
+    }
+
     ingress = {
       enabled = true
       annotations = {
