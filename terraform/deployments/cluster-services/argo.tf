@@ -106,7 +106,7 @@ resource "helm_release" "argo_cd" {
       ingress = {
         enabled = true
         annotations = {
-          "alb.ingress.kubernetes.io/group.name"         = "argo"
+          "alb.ingress.kubernetes.io/group.name"         = "argo-${var.govuk_environment}"
           "alb.ingress.kubernetes.io/scheme"             = "internet-facing"
           "alb.ingress.kubernetes.io/target-type"        = "ip"
           "alb.ingress.kubernetes.io/load-balancer-name" = "argo"
