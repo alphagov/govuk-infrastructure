@@ -10,5 +10,5 @@ data "tfe_outputs" "root_dns" {
 
 data "tfe_outputs" "vpc" {
   organization = "govuk"
-  workspace    = startswith(var.govuk_environment, "eph-") ? "vpc-ephemeral" : "vpc-${var.govuk_environment}"
+  workspace    = "vpc-${var.govuk_environment}"
 }

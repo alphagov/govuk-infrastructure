@@ -27,6 +27,16 @@ module "var_set" {
   }
 }
 
+module "vpc" {
+  source = "./ws"
+
+  name                 = "vpc"
+  ephemeral_cluster_id = var.ephemeral_cluster_id
+  variable_set_id      = module.var_set.id
+
+  depends_on = [tfe_project.project]
+}
+
 module "cluster_infrastructure" {
   source = "./ws"
 
@@ -34,7 +44,7 @@ module "cluster_infrastructure" {
   ephemeral_cluster_id = var.ephemeral_cluster_id
   variable_set_id      = module.var_set.id
 
-  depends_on = [tfe_project.project]
+  depends_on = [module.vpc, tfe_project.project]
 }
 
 module "cluster_services" {
