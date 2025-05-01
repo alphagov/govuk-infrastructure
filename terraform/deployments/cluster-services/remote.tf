@@ -13,5 +13,5 @@ data "tfe_outputs" "cluster_infrastructure" {
 
 data "tfe_outputs" "vpc" {
   organization = "govuk"
-  workspace    = startswith(var.govuk_environment, "eph-") ? "vpc-ephemeral" : "vpc-${var.govuk_environment}"
+  workspace    = "vpc-${var.govuk_environment}"
 }
