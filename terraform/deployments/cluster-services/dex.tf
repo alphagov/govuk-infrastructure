@@ -329,7 +329,7 @@ resource "helm_release" "dex" {
     ingress = {
       enabled = true
       annotations = {
-        "alb.ingress.kubernetes.io/group.name"         = "dex"
+        "alb.ingress.kubernetes.io/group.name"         = "dex-${var.govuk_environment}"
         "alb.ingress.kubernetes.io/scheme"             = "internet-facing"
         "alb.ingress.kubernetes.io/target-type"        = "ip"
         "alb.ingress.kubernetes.io/load-balancer-name" = "dex"
