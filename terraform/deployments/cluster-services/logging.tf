@@ -18,10 +18,10 @@ resource "helm_release" "filebeat" {
     daemonset = {
       securityContext = {
         allowPrivilegeEscalation = false
+        readOnlyRootFilesystem   = true
         privileged               = false
         runAsUser                = 1000
-        runAsGroup               = 1000
-        fsGroup                  = 1000
+        runAsGroup               = 0
         runAsNonRoot             = true
         capabilities = {
           add  = ["DAC_READ_SEARCH"]
