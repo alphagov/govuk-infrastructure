@@ -20,9 +20,8 @@ resource "helm_release" "filebeat" {
         allowPrivilegeEscalation = false
         readOnlyRootFilesystem   = true
         privileged               = false
-        runAsUser                = 1000
-        runAsGroup               = 0
-        runAsNonRoot             = true
+        runAsUser                = 0
+        runAsNonRoot             = false
         capabilities = {
           add  = ["DAC_READ_SEARCH"]
           drop = ["ALL"]
