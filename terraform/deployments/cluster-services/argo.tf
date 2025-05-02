@@ -106,10 +106,10 @@ resource "helm_release" "argo_cd" {
       ingress = {
         enabled = true
         annotations = {
-          "alb.ingress.kubernetes.io/group.name"         = "argo-${var.govuk_environment}"
+          "alb.ingress.kubernetes.io/group.name"         = "argo${local.elb_name_suffix}"
           "alb.ingress.kubernetes.io/scheme"             = "internet-facing"
           "alb.ingress.kubernetes.io/target-type"        = "ip"
-          "alb.ingress.kubernetes.io/load-balancer-name" = "argo"
+          "alb.ingress.kubernetes.io/load-balancer-name" = "argo${local.elb_name_suffix}"
           "alb.ingress.kubernetes.io/listen-ports"       = jsonencode([{ "HTTP" : 80 }, { "HTTPS" : 443 }])
           "alb.ingress.kubernetes.io/ssl-redirect"       = "443"
         }
@@ -123,10 +123,10 @@ resource "helm_release" "argo_cd" {
         enabled  = true
         isAWSALB = true
         annotations = {
-          "alb.ingress.kubernetes.io/group.name"         = "argo"
+          "alb.ingress.kubernetes.io/group.name"         = "argo${local.elb_name_suffix}"
           "alb.ingress.kubernetes.io/scheme"             = "internet-facing"
           "alb.ingress.kubernetes.io/target-type"        = "ip"
-          "alb.ingress.kubernetes.io/load-balancer-name" = "argo"
+          "alb.ingress.kubernetes.io/load-balancer-name" = "argo${local.elb_name_suffix}"
           "alb.ingress.kubernetes.io/listen-ports"       = jsonencode([{ "HTTP" : 80 }, { "HTTPS" : 443 }])
           "alb.ingress.kubernetes.io/ssl-redirect"       = "443"
         }
@@ -342,10 +342,10 @@ resource "helm_release" "argo_workflows" {
       ingress = {
         enabled = true
         annotations = {
-          "alb.ingress.kubernetes.io/group.name"         = "argo-workflows"
+          "alb.ingress.kubernetes.io/group.name"         = "argo-workflows${local.elb_name_suffix}"
           "alb.ingress.kubernetes.io/scheme"             = "internet-facing"
           "alb.ingress.kubernetes.io/target-type"        = "ip"
-          "alb.ingress.kubernetes.io/load-balancer-name" = "argo-workflows-${var.govuk_environment}"
+          "alb.ingress.kubernetes.io/load-balancer-name" = "argo-workflows${local.elb_name_suffix}"
           "alb.ingress.kubernetes.io/listen-ports"       = jsonencode([{ "HTTP" : 80 }, { "HTTPS" : 443 }])
           "alb.ingress.kubernetes.io/ssl-redirect"       = "443"
         }

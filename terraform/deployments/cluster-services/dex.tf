@@ -329,10 +329,10 @@ resource "helm_release" "dex" {
     ingress = {
       enabled = true
       annotations = {
-        "alb.ingress.kubernetes.io/group.name"         = "dex-${var.govuk_environment}"
+        "alb.ingress.kubernetes.io/group.name"         = "dex${local.elb_name_suffix}"
         "alb.ingress.kubernetes.io/scheme"             = "internet-facing"
         "alb.ingress.kubernetes.io/target-type"        = "ip"
-        "alb.ingress.kubernetes.io/load-balancer-name" = "dex"
+        "alb.ingress.kubernetes.io/load-balancer-name" = "dex${local.elb_name_suffix}"
         "alb.ingress.kubernetes.io/listen-ports"       = jsonencode([{ "HTTP" : 80 }, { "HTTPS" : 443 }])
         "alb.ingress.kubernetes.io/ssl-redirect"       = "443"
       }
