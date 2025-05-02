@@ -90,4 +90,5 @@ locals {
   prometheus_internal_url   = "http://kube-prometheus-stack-prometheus:9090"
   alertmanager_internal_url = "http://kube-prometheus-stack-alertmanager:9093"
   is_ephemeral              = startswith(var.govuk_environment, "eph-")
+  elb_name_suffix           = local.is_ephemeral ? "-${var.govuk_environment}" : ""
 }
