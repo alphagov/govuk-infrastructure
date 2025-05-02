@@ -69,6 +69,8 @@ resource "google_project_iam_custom_role" "search_admin" {
     "discoveryengine.servingConfigs.get",
     "discoveryengine.servingConfigs.list",
     "discoveryengine.servingConfigs.update",
+    "discoveryengine.suggestionDenyListEntries.import",
+    "discoveryengine.suggestionDenyListEntries.purge",
   ]
 }
 
