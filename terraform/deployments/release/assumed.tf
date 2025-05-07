@@ -46,3 +46,9 @@ resource "aws_iam_role_policy_attachment" "release_assumed" {
   role       = aws_iam_role.release_assumed.name
   policy_arn = aws_iam_policy.release_assumed.arn
 }
+
+resource "aws_eks_access_entry" "release_assumed" {
+  cluster_name      = data.tfe_outputs.cluster_infrastructure.nonsensitive_values.cluster_id
+  principal_arn     = aws_iam_role.release_assumed.arn
+  kubernetes_groups = ["release-assumed"]
+}
