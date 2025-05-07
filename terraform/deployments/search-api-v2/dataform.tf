@@ -23,10 +23,6 @@ import {
   to = google_secret_manager_secret.github_ssh
 }
 
-resource "google_secret_manager_secret_version" "github_ssh" {
-  secret = google_secret_manager_secret.github_ssh.id
-}
-
 import {
   id = "projects/${var.gcp_project_id}/secrets/github_search_v2_api_dataform_ssh_key/versions/latest"
   to = google_secret_manager_secret_version.github_ssh
