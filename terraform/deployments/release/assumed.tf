@@ -14,7 +14,7 @@ data "aws_iam_policy_document" "release_assumed_assume" {
       for_each = toset(local.assumed_identifiers)
       content {
         type        = "AWS"
-        identifiers = each.key
+        identifiers = principals.key
       }
     }
   }
