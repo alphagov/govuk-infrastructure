@@ -19,7 +19,7 @@ resource "google_service_account" "dataform_service_account" {
 
 # Create Secret Manager secret for GitHub ssh key
 resource "google_secret_manager_secret" "github_ssh" {
-  secret_id = "github_search_v2_api_ssh_key"
+  secret_id = "github_search_v2_api_dataform_ssh_key"
   project   = var.gcp_project_id
 
   replication {
