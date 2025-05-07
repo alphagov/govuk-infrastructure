@@ -18,7 +18,7 @@ module "var_set" {
 
     govuk_aws_state_bucket    = ""
     publishing_service_domain = "${var.ephemeral_cluster_id}.publishing.service.gov.uk"
-    authentication_mode       = "API_AND_CONFIG_MAP"
+    authentication_mode       = "API"
 
     enable_arm_workers         = true
     enable_main_workers        = false

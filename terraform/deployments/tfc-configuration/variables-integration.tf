@@ -72,7 +72,7 @@ module "variable-set-integration" {
     github_read_write_team = "alphagov:gov-uk"
 
     # Enable EKS Access Entries support in prep for aws-auth deprecation.
-    authentication_mode = "API_AND_CONFIG_MAP"
+    authentication_mode = "API"
 
     grafana_db_auto_pause       = true
     maintenance_window          = "Sun:04:00-Sun:06:00"
