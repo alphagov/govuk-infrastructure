@@ -18,9 +18,6 @@ resource "google_service_account" "dataform_service_account" {
 }
 
 # Create Secret Manager secret for GitHub ssh key
-resource "google_secret_manager_secret" "github_ssh" {
-}
-
 import {
   id = "projects/${var.gcp_project_id}/secrets/github_search_v2_api_dataform_ssh_key"
   to = google_secret_manager_secret.github_ssh
