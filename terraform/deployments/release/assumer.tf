@@ -1,17 +1,21 @@
+data "aws_caller_identity" "current" {}
+
 locals {
-  account_ids = [
+  # production can assume everywhere,
+  # other accounts can assume into themselves
+  account_ids = var.govuk_environment == "production" ? [
     "172025368201", # production
     "696911096973", # staging
     "210287912431", # integration
     "430354129336"  # test
-  ]
+  ] : [data.aws_caller_identity.current.account_id]
 
   assume_arns = [
     for id in local.account_ids : "arn:aws:iam::${id}:role/release-assumed"
   ]
 }
 
-data "aws_iam_policy_document" "release_assumer" {
+data "aws_iam_policy_document" "release_assumer_assume" {
   statement {
     actions = ["sts:AssumeRoleWithWebIdentity"]
     principals {
@@ -33,10 +37,10 @@ data "aws_iam_policy_document" "release_assumer" {
 
 resource "aws_iam_role" "release_assumer" {
   name               = "release-assumer"
-  assume_role_policy = data.aws_iam_policy_document.release_assumer.json
+  assume_role_policy = data.aws_iam_policy_document.release_assumer_assume.json
 }
 
-data "aws_iam_policy_document" "release_assumer_policy" {
+data "aws_iam_policy_document" "release_assumer" {
   statement {
     actions   = ["sts:AssumeRole"]
     effect    = "Allow"
@@ -48,7 +52,7 @@ resource "aws_iam_policy" "release_assumer" {
   name        = "release-assumer"
   description = "Allow Release app to assume roles in each environment"
 
-  policy = data.aws_iam_policy_document.release_assumer_policy.json
+  policy = data.aws_iam_policy_document.release_assumer.json
 }
 
 resource "aws_iam_role_policy_attachment" "release_assumer" {
