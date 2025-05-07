@@ -10,12 +10,9 @@ data "aws_iam_policy_document" "release_assumed_assume" {
   statement {
     actions = ["sts:AssumeRole"]
     effect  = "Allow"
-    dynamic "principals" {
-      for_each = toset(local.assumed_identifiers)
-      content {
-        type        = "AWS"
-        identifiers = principals.key
-      }
+    principals {
+      type        = "AWS"
+      identifiers = local.assumed_identifiers
     }
   }
 }
