@@ -116,9 +116,9 @@ variable "cache_public_base_rate_limit" {
   default     = 1000
 }
 
-variable "cache_public_post_rate_warning" {
+variable "cache_public_post_rate_limit" {
   type        = number
-  description = "An warning rate limit threshold for posts to the public web ACL"
+  description = "A rate limit threshold for posts to the public web ACL"
   default     = 1000
 }
 
