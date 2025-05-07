@@ -8,6 +8,11 @@ variable "gcp_project_number" {
   description = "GCP Project number"
 }
 
+variable "gcp_env" {
+  type        = string
+  description = "GCP environment"
+}
+
 variable "gcp_analytics_project_id" {
   type        = string
   description = "GCP project ID for the project containing BigQuery analytics data"
