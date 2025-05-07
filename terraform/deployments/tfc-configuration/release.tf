@@ -1,14 +1,14 @@
-module "release-assumer-production" {
+module "release-production" {
   source = "github.com/alphagov/terraform-govuk-tfe-workspacer"
 
   organization        = var.organization
-  workspace_name      = "release-assumer-production"
-  workspace_desc      = "Manages the release-assumer IAM role and policies"
-  workspace_tags      = ["production", "release-assumer", "aws"]
+  workspace_name      = "release-production"
+  workspace_desc      = "Manages IAM roles and policies for the Release app"
+  workspace_tags      = ["production", "release", "aws"]
   terraform_version   = var.terraform_version
   execution_mode      = "remote"
-  working_directory   = "/terraform/deployments/release-assumer/"
-  trigger_patterns    = ["/terraform/deployments/release-assumer/**/*"]
+  working_directory   = "/terraform/deployments/release/"
+  trigger_patterns    = ["/terraform/deployments/release/**/*"]
   global_remote_state = true
 
   project_name = "govuk-infrastructure"
