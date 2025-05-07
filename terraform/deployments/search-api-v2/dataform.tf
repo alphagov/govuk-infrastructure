@@ -1,9 +1,3 @@
-variable "search_dataform_bq_target_projects" {
-  description = "List of target BigQuery projects that Dataform will write to"
-  type        = list(string)
-  default     = ["search-api-v2-integration", "search-api-v2-staging", "search-api-v2-production"]
-}
-
 variable "search_dataform_github_repository_url" {
   description = "URL of the GitHub repository to link with Dataform"
   type        = string
@@ -25,7 +19,7 @@ resource "google_service_account" "dataform_service_account" {
 
 # Create Secret Manager secret for GitHub ssh key
 resource "google_secret_manager_secret" "github_ssh" {
-  secret_id = "github_search_v2_api_ssh_key"
+  secret_id = "github_search_v2_api_dataform_ssh_key"
   project   = var.gcp_project_id
 
   replication {
@@ -98,24 +92,21 @@ resource "google_dataform_repository_workflow_config" "search-intraday" {
 }
 
 # BigQuery cross-project permissions
-# Service account permissions to access BigQuery in target projects
+# Service account permissions to access BigQuery
 resource "google_project_iam_member" "bigquery_data_editor" {
-  count   = length(var.search_dataform_bq_target_projects)
-  project = var.search_dataform_bq_target_projects[count.index]
+  project = "search-api-v2-${var.gcp_env}"
   role    = "roles/bigquery.dataEditor"
   member  = "serviceAccount:${google_service_account.dataform_service_account.email}"
 }
 
 resource "google_project_iam_member" "bigquery_job_user" {
-  count   = length(var.search_dataform_bq_target_projects)
-  project = var.search_dataform_bq_target_projects[count.index]
+  project = "search-api-v2-${var.gcp_env}"
   role    = "roles/bigquery.jobUser"
   member  = "serviceAccount:${google_service_account.dataform_service_account.email}"
 }
 
 resource "google_project_iam_member" "bigquery_data_viewer" {
-  count   = length(var.search_dataform_bq_target_projects)
-  project = var.search_dataform_bq_target_projects[count.index]
+  project = "search-api-v2-${var.gcp_env}"
   role    = "roles/bigquery.dataViewer"
   member  = "serviceAccount:${google_service_account.dataform_service_account.email}"
 }
