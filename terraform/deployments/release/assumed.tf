@@ -7,12 +7,15 @@ locals {
 }
 
 data "aws_iam_policy_document" "release_assumed_assume" {
-  statement {
-    actions = ["sts:AssumeRole"]
-    effect  = "Allow"
-    principals {
-      type        = "AWS"
-      identifiers = local.assumed_identifiers
+  dynamic "statement" {
+    for_each = toset(local.assumed_identifiers)
+    content {
+      actions = ["sts:AssumeRole"]
+      effect  = "Allow"
+      principals {
+        type        = "AWS"
+        identifiers = [statement.key]
+      }
     }
   }
 }
