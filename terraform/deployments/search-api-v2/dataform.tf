@@ -74,6 +74,7 @@ resource "google_dataform_repository_release_config" "release_config" {
   repository    = google_dataform_repository.search_api_v2.id
   git_commitish = var.gcp_env == "production" ? "main" : var.gcp_env
   project       = var.gcp_project_id
+  region        = var.gcp_region
 }
 
 # Create workflow configurations
@@ -83,6 +84,7 @@ resource "google_dataform_repository_workflow_config" "search-intraday" {
   repository     = google_dataform_repository.search_api_v2.id
   release_config = google_dataform_repository_release_config.release_config.id
   project        = var.gcp_project_id
+  region         = var.gcp_region
 
   #  schedule {
   #    cron = "0 * * * *"  # Run hourly
