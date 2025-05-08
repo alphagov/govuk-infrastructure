@@ -33,7 +33,8 @@ import {
 }
 
 resource "google_secret_manager_secret_version" "github_ssh" {
-  secret = google_secret_manager_secret.github_ssh.id
+  secret      = google_secret_manager_secret.github_ssh.id
+  secret_data = "secret holder"
 }
 
 import {
