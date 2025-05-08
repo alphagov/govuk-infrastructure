@@ -55,6 +55,7 @@ resource "google_dataform_repository" "search_api_v2" {
   provider = google-beta
   name     = "search_api_v2"
   project  = var.gcp_project_id
+  region   = var.gcp_region
 
   git_remote_settings {
     url            = var.search_dataform_github_repository_url
