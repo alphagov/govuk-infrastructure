@@ -32,7 +32,7 @@ resource "tfe_workspace" "environment_workspace" {
 
   vcs_repo {
     identifier     = "alphagov/govuk-infrastructure"
-    branch         = "main"
+    branch         = var.vcs_repo_branch
     oauth_token_id = data.tfe_oauth_client.github.oauth_token_id
   }
 }
