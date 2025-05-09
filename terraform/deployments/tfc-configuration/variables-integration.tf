@@ -71,9 +71,6 @@ module "variable-set-integration" {
     # Non-production-only access is sufficient to access tools in this cluster.
     github_read_write_team = "alphagov:gov-uk"
 
-    # Enable EKS Access Entries support in prep for aws-auth deprecation.
-    authentication_mode = "API"
-
     grafana_db_auto_pause       = true
     maintenance_window          = "Sun:04:00-Sun:06:00"
     rds_apply_immediately       = true

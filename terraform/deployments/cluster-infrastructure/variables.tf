@@ -202,6 +202,6 @@ variable "govuk_environment" {
 
 variable "authentication_mode" {
   type        = string
-  default     = "API_AND_CONFIG_MAP"
+  default     = "API"
   description = "Authentication mode to use for the cluster"
 }
