@@ -6,6 +6,10 @@ on:
       GH_TOKEN:
         required: true
 
+concurrency:
+  group: release-${{ github.event.workflow_run.repository.name }}
+  cancel-in-progress: false
+
 jobs:
   release:
     name: Release
