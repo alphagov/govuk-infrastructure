@@ -50,10 +50,8 @@ resource "aws_db_instance" "instance" {
   engine_version          = each.value.engine_version
   username                = var.database_admin_username
   password                = random_string.database_password[each.key].result
-  allocated_storage       = each.value.allocated_storage
   instance_class          = each.value.instance_class
   identifier              = "${var.govuk_environment}-${each.value.name}-${each.value.engine}"
-  storage_type            = "gp3"
   db_subnet_group_name    = aws_db_subnet_group.subnet_group.name
   multi_az                = var.multi_az
   parameter_group_name    = aws_db_parameter_group.engine_params[each.key].name
@@ -69,6 +67,11 @@ resource "aws_db_instance" "instance" {
 
   performance_insights_enabled          = each.value.performance_insights_enabled
   performance_insights_retention_period = each.value.performance_insights_enabled ? 7 : 0
+
+  allocated_storage  = each.value.allocated_storage
+  iops               = try(each.value.iops, null)
+  storage_throughput = try(each.value.storage_throughput, null)
+  storage_type       = "gp3"
 
   timeouts {
     create = var.terraform_create_rds_timeout

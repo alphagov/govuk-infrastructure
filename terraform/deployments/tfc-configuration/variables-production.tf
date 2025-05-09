@@ -470,6 +470,8 @@ module "variable-set-rds-production" {
         engine_params_family         = "postgres13"
         name                         = "publishing-api"
         allocated_storage            = 1000
+        iops                         = 24000
+        storage_throughput           = 1000
         instance_class               = "db.m6g.4xlarge"
         performance_insights_enabled = true
         project                      = "GOV.UK - Publishing"
