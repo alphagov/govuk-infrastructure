@@ -3,6 +3,12 @@ variable "name" {
   description = "A short name for this environment (used in resource IDs)"
 }
 
+variable "vcs_repo_branch" {
+  type        = string
+  description = "Branch name to use"
+  default     = "main"
+}
+
 variable "tfc_project" {
   type = object({
     id   = string
