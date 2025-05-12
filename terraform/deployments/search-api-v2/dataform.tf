@@ -49,6 +49,11 @@ resource "google_dataform_repository_release_config" "release_config" {
   git_commitish = var.gcp_env == "production" ? "main" : var.gcp_env
   project       = var.gcp_project_id
   region        = var.gcp_region
+  code_compilation_config {
+    vars = {
+       project_id = var.gcp_project_id 
+    }
+  }
 }
 
 # Create workflow configurations
