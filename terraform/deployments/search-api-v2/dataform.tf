@@ -82,14 +82,32 @@ resource "google_project_iam_member" "bigquery_data_editor" {
   member  = "serviceAccount:service-${var.gcp_project_number}@gcp-sa-dataform.iam.gserviceaccount.com"
 }
 
+resource "google_project_iam_member" "bigquery_g4a_data_editor" {
+  project = "ga4-analytics-352613"
+  role    = "roles/bigquery.dataEditor"
+  member  = "serviceAccount:service-${var.gcp_project_number}@gcp-sa-dataform.iam.gserviceaccount.com"
+}
+
 resource "google_project_iam_member" "bigquery_job_user" {
   project = "search-api-v2-${var.gcp_env}"
   role    = "roles/bigquery.jobUser"
   member  = "serviceAccount:service-${var.gcp_project_number}@gcp-sa-dataform.iam.gserviceaccount.com"
 }
 
+resource "google_project_iam_member" "bigquery_g4a_job_user" {
+  project = "ga4-analytics-352613"
+  role    = "roles/bigquery.jobUser"
+  member  = "serviceAccount:service-${var.gcp_project_number}@gcp-sa-dataform.iam.gserviceaccount.com"
+}
+
 resource "google_project_iam_member" "bigquery_data_viewer" {
   project = "search-api-v2-${var.gcp_env}"
+  role    = "roles/bigquery.dataViewer"
+  member  = "serviceAccount:service-${var.gcp_project_number}@gcp-sa-dataform.iam.gserviceaccount.com"
+}
+
+resource "google_project_iam_member" "bigquery_g4a_data_viewer" {
+  project = "ga4-analytics-352613"
   role    = "roles/bigquery.dataViewer"
   member  = "serviceAccount:service-${var.gcp_project_number}@gcp-sa-dataform.iam.gserviceaccount.com"
 }
