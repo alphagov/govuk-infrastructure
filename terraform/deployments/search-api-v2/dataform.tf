@@ -51,7 +51,7 @@ resource "google_dataform_repository_release_config" "release_config" {
   region        = var.gcp_region
   code_compilation_config {
     vars = {
-       project_id = var.gcp_project_id 
+      project_id = var.gcp_project_id
     }
   }
 }
