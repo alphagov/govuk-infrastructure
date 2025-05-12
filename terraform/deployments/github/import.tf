@@ -1,4 +1,4 @@
 import {
-  to = github_branch_protection.govuk_repos["govuk-mobile-backend"]
-  id = "govuk-mobile-backend:main"
+  to = github_repository.govuk_repos["govuk-content-publishing-guidance"]
+  id = "govuk-content-publishing-guidance"
 }
