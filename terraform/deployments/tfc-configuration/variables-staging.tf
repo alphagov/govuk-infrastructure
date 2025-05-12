@@ -465,7 +465,7 @@ module "variable-set-rds-staging" {
         allocated_storage            = 1000
         iops                         = 24000
         storage_throughput           = 1000
-        instance_class               = "db.m6g.large"
+        instance_class               = "db.m7g.2xlarge"
         performance_insights_enabled = true
         project                      = "GOV.UK - Publishing"
         backup_retention_period      = 1
