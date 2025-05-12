@@ -120,7 +120,7 @@ module "environment_staging" {
   google_workload_provider_name = "projects/773027887517/locations/global/workloadIdentityPools/terraform-cloud-id-pool/providers/terraform-cloud-provider-oidc"
   google_service_account_email  = "tfc-service-account@search-api-v2-staging.iam.gserviceaccount.com"
   tfc_project                   = tfe_project.project
-  vcs_repo_branch               = "debug"
+  vcs_repo_branch               = "main"
 }
 
 # Start of importing of all production module components:
