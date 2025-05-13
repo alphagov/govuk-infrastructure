@@ -345,6 +345,20 @@ resource "helm_release" "dex" {
       }
     }
 
+    volumes = [
+      {
+        name     = "dex-temp-volume"
+        emptyDir = {}
+      }
+    ]
+
+    volumeMounts = [
+      {
+        name      = "dex-temp-volume"
+        mountPath = "/tmp"
+      }
+    ]
+
     ingress = {
       enabled = true
       annotations = {
