@@ -235,6 +235,10 @@ resource "helm_release" "argo_workflows" {
   timeout          = var.helm_timeout_seconds
   values = [yamlencode({
     controller = {
+      metricsConfig = {
+        enabled = true
+        secure  = false
+      }
       podSecurityContext = {
         runAsNonRoot = true
         seccompProfile = {
