@@ -53,6 +53,7 @@ resource "google_dataform_repository_release_config" "release_config" {
     vars = {
       project_id = var.gcp_project_id
     }
+    default_database = var.gcp_project_id
   }
 }
 
@@ -65,12 +66,43 @@ resource "google_dataform_repository_workflow_config" "search-intraday" {
   project        = var.gcp_project_id
   region         = var.gcp_region
 
-  #  schedule {
-  #    cron = "0 * * * *"  # Run hourly
-  #  }
+  cron_schedule = "45 05,11,17,23 * * *" # Run every 6 hours
+  time_zone     = "Europe/London"
 
   invocation_config {
     included_tags = ["search-intraday"]
+  }
+}
+
+resource "google_dataform_repository_workflow_config" "search-daily" {
+  provider       = google-beta
+  name           = "search-daily-${var.gcp_env}"
+  repository     = google_dataform_repository.search_api_v2.name
+  release_config = google_dataform_repository_release_config.release_config.id
+  project        = var.gcp_project_id
+  region         = var.gcp_region
+
+  cron_schedule = "0 12 * * *" # Run daily
+  time_zone     = "Europe/London"
+
+  invocation_config {
+    included_tags = ["search-daily"]
+  }
+}
+
+resource "google_dataform_repository_workflow_config" "search-monthly" {
+  provider       = google-beta
+  name           = "search-monthly-${var.gcp_env}"
+  repository     = google_dataform_repository.search_api_v2.name
+  release_config = google_dataform_repository_release_config.release_config.id
+  project        = var.gcp_project_id
+  region         = var.gcp_region
+
+  cron_schedule = "0 13 1 * *" # Run monthly
+  time_zone     = "Europe/London"
+
+  invocation_config {
+    included_tags = ["search-monthly"]
   }
 }
 
