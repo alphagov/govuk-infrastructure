@@ -1,5 +1,5 @@
 
-data "aws_iam_roles" "cluster-admin" { name_regex = "(\\..*-admin$|\\..*-fulladmin$)" }
+data "aws_iam_roles" "cluster-admin" { name_regex = "(\\..*-fulladmin$|\\..*-platformengineer$)" }
 data "aws_iam_roles" "developer" { name_regex = "\\..*-developer$" }
 data "aws_iam_roles" "licensing" { name_regex = "\\..*-licensinguser$" }
 
