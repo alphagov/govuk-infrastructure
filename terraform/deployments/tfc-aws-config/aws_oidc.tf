@@ -38,6 +38,7 @@ data "aws_iam_policy_document" "tfc_policy" {
   statement {
     resources = ["*"]
     actions = [
+      "access-analyzer:*",
       "acm:*",
       "apigateway:*",
       "athena:*",
@@ -131,6 +132,11 @@ data "aws_iam_policy_document" "tfc_policy" {
     ]
   }
   statement {
+    effect    = "Allow"
+    actions   = ["iam:CreateServiceLinkedRole"]
+    resources = ["arn:aws:iam::*:role/aws-service-role/access-analyzer.amazonaws.com/AWSServiceRoleForAccessAnalyzer"]
+  }
+  statement {
     effect    = "Deny"
     resources = ["*"]
     actions = [
@@ -145,7 +151,6 @@ data "aws_iam_policy_document" "tfc_policy" {
       "iam:*Login*",
       "iam:*Group*",
       "iam:*PermissionsBoundary*",
-      "iam:CreateServiceLinkedRole",
     ]
   }
 }
