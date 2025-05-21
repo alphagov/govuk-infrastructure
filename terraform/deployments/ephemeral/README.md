@@ -15,7 +15,7 @@ State for the ephemeral module is stored locally for now.
 
 Ensure `EPH_CLUSTER_ID` is set to your ephemeral cluster ID
 
-1. Get some AWS credentials in the test account
+1. Assume the `govuk-test-platformengineer` role
 2. Run shutdown script
    `./shutdown.sh "${EPH_CLUSTER_ID}"`
 3. Run Terraform destroy on the ephemeral workspaces
