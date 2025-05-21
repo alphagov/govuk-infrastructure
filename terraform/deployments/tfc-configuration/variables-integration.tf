@@ -638,12 +638,16 @@ module "variable-set-elasticache-integration" {
         name        = "search-api-valkey"
         description = "Search API Valkey Instance"
       }
-      whitehall-admin = {
+      whitehall-admin-redis = {
         name           = "whitehall-admin-redis"
         description    = "Whitehall Admin Redis Instance"
         engine         = "redis"
         engine_version = "7.1"
         family         = "redis7"
+      }
+      whitehall-admin = {
+        name        = "whitehall-admin-valkey"
+        description = "Whitehall Admin Valkey Instance"
       }
     }
   }
