@@ -635,7 +635,13 @@ repos:
     required_status_checks:
       standard_contexts: *standard_security_checks
       additional_contexts:
-        - test
+        - Lint SCSS / Run Stylelint
+        - Lint JavaScript / Run Standardx
+        - Prettier / Run Prettier
+        - Lint Ruby / Run RuboCop
+        - Lint ERB / Run ERB lint
+        - Test Ruby / Run Minitest
+        - Test JavaScript / Run Jasmine
 
   service-manual-publisher:
     homepage_url: "https://docs.publishing.service.gov.uk/apps/service-manual-publisher.html"
