@@ -27,3 +27,7 @@ provider "aws" {
     }
   }
 }
+
+locals {
+  is_ephemeral = startswith(var.govuk_environment, "eph-")
+}
