@@ -1,10 +1,9 @@
 ---
 name: User Story
-about: Capture a user story from stakeholders, ensuring a focus on user outcomes and clear communication.
+about: Capture a user story with clear outcomes and an easy-to-read list of what’s needed.
 title: ''
 labels: user-story
 assignees: ''
-
 ---
 
 **User Need**
@@ -15,69 +14,65 @@ assignees: ''
 
 ---
 
-**Functional Requirements (What):**
+### What’s Needed
 
-- [ ]
+List anything the solution must do or be (behaviour, performance, security, UX, etc.).
 
-**Non-Functional Requirements (How):**
-
-- [ ]
+- [ ] 
 
 ---
 
-**Acceptance Criteria:**
+### Acceptance Criteria
 
-- [ ] The functional and non-functional requirements are fulfilled.
-- [ ] Changes (if any) during delivery are reflected in this story.
-- [ ] Impacted users have been notified or communicated with appropriately (e.g., change logs, Slack, documentation updates).
-
----
-
-**User Communication Plan (if applicable):**
-
-Describe briefly how users will be informed about the change (e.g., Slack message, email, platform announcement).
+- [ ] Everything in **What’s Needed** is delivered.
+- [ ] Any changes during delivery are reflected in this story.
+- [ ] Impacted users have been informed appropriately (e.g. change logs, Slack, docs).
 
 ---
 
-**Assumptions (optional):**
+### User Comms Plan (if applicable)
+
+Briefly describe how you’ll let users know about the change.
+
+---
+
+### Assumptions (optional)
 
 - 
 
 ---
 
-**Risks and Mitigation (optional):**
+### Risks & Mitigation (optional)
 
 - 
 
 ---
 
-**Notes:**
+### Notes
 
-(Add any additional context, links to diagrams, stakeholder interviews, etc.)
+(Add any extra context, links, diagrams, stakeholder interviews, etc.)
 
 ---
 
 <!-- Field explanations:
 
-As a (type of user): The role that the stakeholder or user plays (developer, project manager, security team, etc.).
+As a (type of user): The role the stakeholder or user plays (developer, PM, security team, etc.).
 
 I want (some action): The specific action, functionality, or change the user is requesting.
 
 so that (some result): The benefit or reason behind the action.
 
-Functional Requirements: What you are building — feature behaviours or system capabilities.
-
-Non-Functional Requirements: How it should behave — performance, security, reliability, etc.
+What’s Needed: A single list covering both functional and non-functional aspects—what the feature must do and how it must behave (performance, security, reliability, etc.).
 
 Acceptance Criteria: Clear, measurable conditions to verify the story is complete and valuable.
 
-User Communication Plan: How users will be made aware of relevant changes or impacts (essential for user trust).
+User Comms Plan: How users will be made aware of relevant changes or impacts.
 
-Assumptions: Important assumptions that inform how the story is delivered.
+Assumptions: Important assumptions informing delivery.
 
-Risks and Mitigation: Risks associated with the story and how they will be handled.
+Risks & Mitigation: Risks associated with the story and how they will be handled.
 
-Notes: Any other useful information. 
+Notes: Any other useful information.
 
 Tip: Update this story if the scope changes during delivery to maintain clarity for everyone.
 -->
