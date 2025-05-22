@@ -8,8 +8,8 @@ assignees: ''
 
 **User Need**
 
-**As a** (type of user)  
-**I want** (some action)  
+**As a** (type of user)
+**I want** (some action)
 **so that** (some result)
 
 ---
@@ -76,4 +76,3 @@ Notes: Any other useful information.
 
 Tip: Update this story if the scope changes during delivery to maintain clarity for everyone.
 -->
-
