@@ -31,11 +31,8 @@ data "aws_iam_policy_document" "bedrock_access" {
       "bedrock:InvokeModel",
       "bedrock:InvokeModelWithResponseStream"
     ]
-    effect = "Allow"
-    resources = [
-      "arn:aws:bedrock:*:${data.aws_caller_identity.current.account_id}:inference-profile/eu.anthropic.claude-3-5-sonnet-20240620-v1:0",
-      "arn:aws:bedrock:*::foundation-model/anthropic.claude-3-5-sonnet-20240620-v1:0"
-    ]
+    effect    = "Allow"
+    resources = ["*"]
   }
 }
 
