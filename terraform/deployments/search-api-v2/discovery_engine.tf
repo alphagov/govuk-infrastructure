@@ -30,6 +30,11 @@ resource "restapi_object" "google_discovery_engine_datastore_schema" {
   data = jsonencode({
     structSchema = jsondecode(file("${path.module}/files/datastore-schema.json"))
   })
+
+  # Since version 2.0 of the Terraform REST API provider, the provider will try to refresh the
+  # resource and finds lots of false positive drift (as VAIS ignores some of the fields in the
+  # schema). This tells the provider to not check for changes.
+  ignore_all_server_changes = true
 }
 
 resource "google_discovery_engine_search_engine" "govuk" {
