@@ -2,17 +2,17 @@ resource "restapi_object" "google_discovery_engine_data_store_completion_config"
   path      = "/dataStores/${google_discovery_engine_data_store.govuk_content.data_store_id}/completionConfig"
   object_id = "completionConfig"
 
-  update_path = "/dataStores/${google_discovery_engine_data_store.govuk_content.data_store_id}/completionConfig?updateMask=matching_order,max_suggestions,min_prefix_length,query_model,enable_mode,query_frequency_treshold"
+  update_path = "/dataStores/${google_discovery_engine_data_store.govuk_content.data_store_id}/completionConfig?updateMask=matching_order,max_suggestions,min_prefix_length,query_model,enable_mode,query_frequency_threshold"
   read_path   = "/dataStores/${google_discovery_engine_data_store.govuk_content.data_store_id}/completionConfig"
 
   data = jsonencode({
-    name                   = "completionConfig"
-    matchingOrder          = "out-of-order"
-    maxSuggestions         = 5,
-    minPrefixLength        = 3,
-    queryFrequencyTreshold = 250,
-    queryModel             = "automatic",
-    enableMode             = "AUTOMATIC"
+    name                    = "completionConfig"
+    matchingOrder           = "out-of-order"
+    maxSuggestions          = 5,
+    minPrefixLength         = 3,
+    queryFrequencyThreshold = 250,
+    queryModel              = "automatic",
+    enableMode              = "AUTOMATIC"
   })
 }
 
