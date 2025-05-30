@@ -38,4 +38,11 @@ resource "restapi_object" "serving_config" {
 
   # Set updateMask to ensure we don't accidentally overwrite other fields with `null`
   update_path = "${local.path}/${var.id}?updateMask=${local.update_mask}"
+
+  # VAIS adds some properties dynamically, which creates false positive drift
+  ignore_changes_to = [
+    "name",
+    "createTime",
+    "updateTime",
+  ]
 }
