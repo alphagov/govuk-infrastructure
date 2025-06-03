@@ -1,7 +1,7 @@
 variable "search_dataform_github_repository_url" {
   description = "URL of the GitHub repository to link with Dataform"
   type        = string
-  default     = "git@github.com:alphagov/search_v2_api_dataform.git"
+  default     = "git@github.com:alphagov/search-api-v2-dataform.git"
 }
 
 variable "search_dataform_github_public_key" {
