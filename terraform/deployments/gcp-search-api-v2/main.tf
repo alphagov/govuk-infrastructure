@@ -34,8 +34,7 @@ module "environment_integration" {
 module "environment_staging" {
   source = "./modules/search-api-v2"
 
-  name                      = "staging"
-  upstream_environment_name = "integration"
+  name = "staging"
 
   google_cloud_billing_account = var.google_cloud_billing_account
   google_cloud_folder          = var.google_cloud_folder
@@ -46,8 +45,7 @@ module "environment_staging" {
 module "environment_production" {
   source = "./modules/search-api-v2"
 
-  name                      = "production"
-  upstream_environment_name = "staging"
+  name = "production"
 
   google_cloud_billing_account = var.google_cloud_billing_account
   google_cloud_folder          = var.google_cloud_folder

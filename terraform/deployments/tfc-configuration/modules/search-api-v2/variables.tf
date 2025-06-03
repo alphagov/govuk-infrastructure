@@ -17,12 +17,6 @@ variable "tfc_project" {
   description = "The Terraform Cloud/Enterprise project to create workspaces under"
 }
 
-variable "upstream_environment_name" {
-  type        = string
-  description = "The name of the upstream environment, if any (used to wait for a successful apply on a 'lower' environment before applying this one)"
-  default     = null
-}
-
 variable "tfc_organization_name" {
   type        = string
   description = "The name of the Terraform Cloud/Enterprise organization to use"
