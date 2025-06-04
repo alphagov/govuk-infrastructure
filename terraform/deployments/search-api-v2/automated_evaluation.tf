@@ -120,6 +120,36 @@ resource "google_bigquery_table" "clickstream" {
   }
 }
 
+# manual google sheets judgements get transformed and inserted into this time-partitioned sample query set table defined with a vertex schema
+resource "google_bigquery_table" "explicit" {
+  dataset_id          = google_bigquery_dataset.automated_evaluation_input.dataset_id
+  table_id            = "explicit"
+  schema              = file("./files/sample-query-set-schema.json")
+  deletion_protection = false
+  time_partitioning {
+    type = "MONTH"
+  }
+}
+
+# manual google sheets judgements get transformed and inserted into this time-partitioned sample query set table defined with a vertex schema
+resource "google_bigquery_table" "explicit_source" {
+  dataset_id = google_bigquery_dataset.automated_evaluation_input.dataset_id
+  table_id   = "explicit_source"
+  external_data_configuration {
+    autodetect    = true
+    source_format = "GOOGLE_SHEETS"
+
+    google_sheets_options {
+      range             = "integration"
+      skip_leading_rows = 1
+    }
+
+    source_uris = [
+      "https://drive.google.com/open?id=13w0tLqGDtFsJgeoiBYXmqjclNL1rEd17fvtgJVwYnTs",
+    ]
+  }
+}
+
 # top level dataset to store automated evaluation output
 resource "google_bigquery_dataset" "automated_evaluation_output" {
   dataset_id                 = "automated_evaluation_output"
