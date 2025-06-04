@@ -565,7 +565,7 @@ module "variable-set-rds-integration" {
         engine_params_family         = "postgres13"
         name                         = "transition"
         allocated_storage            = 120
-        instance_class               = "db.m6g.large" # TODO: downsize this after migration if required
+        instance_class               = "db.m6g.large"
         performance_insights_enabled = true
         project                      = "GOV.UK - Publishing"
       }
