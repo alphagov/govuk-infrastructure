@@ -131,7 +131,7 @@ resource "google_bigquery_table" "explicit" {
   }
 }
 
-# manual google sheets judgements get transformed and inserted into this time-partitioned sample query set table defined with a vertex schema
+# the source manual google sheets judgements are available from this external table
 resource "google_bigquery_table" "explicit_source" {
   dataset_id = google_bigquery_dataset.automated_evaluation_input.dataset_id
   table_id   = "explicit_source"
