@@ -16,7 +16,6 @@ resource "google_project_iam_custom_role" "api" {
   description = "Provides the required permissions for Search API v2 to access Discovery Engine"
 
   permissions = [
-    "discoveryengine.servingConfigs.search",
     "discoveryengine.dataStores.completeQuery",
     "discoveryengine.dataStores.get",
     "discoveryengine.documents.create",
@@ -25,7 +24,14 @@ resource "google_project_iam_custom_role" "api" {
     "discoveryengine.documents.import",
     "discoveryengine.documents.list",
     "discoveryengine.documents.update",
+    "discoveryengine.evaluations.create",
+    "discoveryengine.evaluations.get",
     "discoveryengine.operations.get",
+    "discoveryengine.sampleQueries.import",
+    "discoveryengine.sampleQuerySets.create",
+    "discoveryengine.sampleQuerySets.delete",
+    "discoveryengine.sampleQuerySets.get",
+    "discoveryengine.servingConfigs.search",
     "discoveryengine.suggestionDenyListEntries.import",
     "discoveryengine.suggestionDenyListEntries.purge",
     "discoveryengine.userEvents.import",
