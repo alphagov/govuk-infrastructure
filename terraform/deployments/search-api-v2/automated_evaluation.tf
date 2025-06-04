@@ -140,7 +140,7 @@ resource "google_bigquery_table" "explicit_source" {
     source_format = "GOOGLE_SHEETS"
 
     google_sheets_options {
-      range             = "integration"
+      range             = "explicit"
       skip_leading_rows = 1
     }
 
