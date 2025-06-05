@@ -628,6 +628,9 @@ repos:
       additional_contexts:
         - Test Ruby
 
+  search-api-v2-dataform:
+    homepage_url: "https://docs.publishing.service.gov.uk/repos/search-api-v2-dataform.html"
+
   search-v2-evaluator:
 
   select-with-search-component:
