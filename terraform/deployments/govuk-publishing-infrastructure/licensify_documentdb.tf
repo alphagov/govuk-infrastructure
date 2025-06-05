@@ -57,7 +57,7 @@ resource "aws_kms_key" "licensify_documentdb_kms_key" {
 
 resource "aws_kms_alias" "licensify_documentdb_kms_alias" {
   name          = "alias/documentdb/licensify-documentdb-kms-key"
-  target_key_id = aws_kms_key.shared_documentdb_kms_key.id
+  target_key_id = aws_kms_key.licensify_documentdb_kms_key.id
 }
 
 resource "aws_kms_key_policy" "licensify_documentdb_kms_key_policy" {
