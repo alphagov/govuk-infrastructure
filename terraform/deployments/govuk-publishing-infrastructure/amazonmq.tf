@@ -62,8 +62,8 @@ resource "aws_mq_broker" "publishing_amazonmq" {
   security_groups = [aws_security_group.rabbitmq.id]
   subnet_ids = (
     var.amazonmq_deployment_mode == "SINGLE_INSTANCE"
-    ? [data.terraform_remote_state.infra_networking.outputs.private_subnet_ids[0]]
-    : data.terraform_remote_state.infra_networking.outputs.private_subnet_ids
+    ? [local.private_subnet_ids[0]]
+    : local.private_subnet_ids
   )
 
   auto_minor_version_upgrade = true
