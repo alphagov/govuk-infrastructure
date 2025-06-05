@@ -61,7 +61,7 @@ resource "aws_kms_alias" "licensify_documentdb_kms_alias" {
 }
 
 resource "aws_kms_key_policy" "licensify_documentdb_kms_key_policy" {
-  key_id = aws_kms_key.shared_documentdb_kms_key.id
+  key_id = aws_kms_key.licensify_documentdb_kms_key.id
 
   policy = jsonencode({
     "Version" : "2012-10-17",
