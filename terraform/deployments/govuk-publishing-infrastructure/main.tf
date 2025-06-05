@@ -29,9 +29,12 @@ terraform {
 
 locals {
   cluster_name         = data.tfe_outputs.cluster_infrastructure.nonsensitive_values.cluster_id
-  internal_dns_zone_id = data.terraform_remote_state.infra_root_dns_zones.outputs.internal_root_zone_id
+  internal_dns_zone_id = data.tfe_outputs.root_dns.nonsensitive_values.internal_root_zone_id
   external_dns_zone_id = data.tfe_outputs.cluster_infrastructure.nonsensitive_values.external_dns_zone_id
-  elasticache_subnets  = data.terraform_remote_state.infra_networking.outputs.private_subnet_elasticache_ids
+  elasticache_subnets  = [for name, subnet in data.tfe_outputs.vpc.nonsensitive_values.private_subnet_ids : subnet if startswith(name, "elasticache_")]
+
+  target_private_subnets = ["a", "b", "c"]
+  private_subnet_ids     = [for name, subnet in data.tfe_outputs.vpc.nonsensitive_values.private_subnet_ids : subnet if contains(local.target_private_subnets, name)]
 
   default_tags = {
     Product              = "GOV.UK"

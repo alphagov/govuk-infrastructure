@@ -14,7 +14,7 @@ resource "random_password" "licensify_documentdb_master" {
 
 resource "aws_docdb_subnet_group" "licensify_cluster_subnet" {
   name       = "licensify-documentdb-${var.govuk_environment}"
-  subnet_ids = data.terraform_remote_state.infra_networking.outputs.private_subnet_ids
+  subnet_ids = local.private_subnet_ids
 }
 
 resource "aws_docdb_cluster_parameter_group" "licensify_parameter_group" {
@@ -39,6 +39,69 @@ resource "aws_docdb_cluster_parameter_group" "licensify_parameter_group" {
   }
 }
 
+# TODO: Remove me once KMS Key is Imported across all environments.
+data "aws_kms_key" "licensify_documentdb_kms_key_migrate" {
+  key_id = data.terraform_remote_state.infra_security.outputs.licensify_documentdb_kms_key_arn
+}
+
+# TODO: Remove me once KMS Key is Imported across all environments.
+import {
+  id = data.aws_kms_key.licensify_documentdb_kms_key_migrate.id
+  to = aws_kms_key.licensify_documentdb_kms_key
+}
+
+resource "aws_kms_key" "licensify_documentdb_kms_key" {
+  description = "Encryption key for Licensify DocumentDB"
+  key_usage   = "ENCRYPT_DECRYPT"
+}
+
+resource "aws_kms_alias" "licensify_documentdb_kms_alias" {
+  name          = "alias/documentdb/licensify-documentdb-kms-key"
+  target_key_id = aws_kms_key.shared_documentdb_kms_key.id
+}
+
+resource "aws_kms_key_policy" "licensify_documentdb_kms_key_policy" {
+  key_id = aws_kms_key.shared_documentdb_kms_key.id
+
+  policy = jsonencode({
+    "Version" : "2012-10-17",
+    "Statement" : [
+      {
+        "Sid" : "Delegate permissions to IAM policies",
+        "Effect" : "Allow",
+        "Principal" : {
+          "AWS" : "arn:aws:iam::${data.aws_caller_identity.current.account_id}:root"
+        },
+        "Action" : "kms:*",
+        "Resource" : "*"
+      },
+      {
+        "Sid" : "Allow access through RDS for all principals in the account that are authorized to use RDS",
+        "Effect" : "Allow",
+        "Principal" : {
+          "AWS" : "*"
+        },
+        "Action" : [
+          "kms:ReEncrypt*",
+          "kms:ListGrants",
+          "kms:GenerateDataKey*",
+          "kms:Encrypt",
+          "kms:DescribeKey",
+          "kms:Decrypt",
+          "kms:CreateGrant"
+        ],
+        "Resource" : "*",
+        "Condition" : {
+          "StringEquals" : {
+            "kms:ViaService" : "rds.eu-west-1.amazonaws.com",
+            "kms:CallerAccount" : "${data.aws_caller_identity.current.account_id}"
+          }
+        }
+      }
+    ]
+  })
+}
+
 resource "aws_docdb_cluster" "licensify_cluster" {
   cluster_identifier              = "licensify-documentdb-${var.govuk_environment}"
   availability_zones              = ["eu-west-1a", "eu-west-1b", "eu-west-1c"]
@@ -47,7 +110,7 @@ resource "aws_docdb_cluster" "licensify_cluster" {
   master_username                 = "master"
   master_password                 = random_password.licensify_documentdb_master.result
   storage_encrypted               = true
-  kms_key_id                      = data.terraform_remote_state.infra_security.outputs.licensify_documentdb_kms_key_arn
+  kms_key_id                      = aws_kms_key.licensify_documentdb_kms_key.arn
   vpc_security_group_ids          = ["${data.terraform_remote_state.infra_security_groups.outputs.sg_licensify_documentdb_id}"]
   enabled_cloudwatch_logs_exports = ["profiler"]
   backup_retention_period         = var.licensify_backup_retention_period

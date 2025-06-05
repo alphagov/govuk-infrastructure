@@ -7,7 +7,7 @@ resource "aws_lb" "search_nlb" {
   name               = "search-nlb"
   load_balancer_type = "network"
   internal           = true
-  subnets            = data.terraform_remote_state.infra_networking.outputs.private_subnet_ids
+  subnets            = local.private_subnet_ids
 }
 
 resource "aws_lb_target_group" "search_api_gateway_tg" {
