@@ -51,5 +51,8 @@ resource "restapi_object" "control" {
   ignore_changes_to = [
     "associatedServingConfigIds",
     "name",
+    # legacy field that still comes through in the API response even for boost controls that use the
+    # new `fixedBoost` property
+    "boostAction.boost"
   ]
 }
