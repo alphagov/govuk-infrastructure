@@ -1,5 +1,5 @@
 data "aws_security_group" "eks_cluster_primary_sg" {
-  id = data.tfe_outputs.cluster_infrastructure.nonsensitive_values.cluster_primary_security_group_id
+  id = data.tfe_outputs.cluster_infrastructure.nonsensitive_values.control_plane_security_group_id
 }
 
 import {
