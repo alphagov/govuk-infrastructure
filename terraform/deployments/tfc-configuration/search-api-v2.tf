@@ -104,17 +104,12 @@ import {
   id = "govuk/search-api-v2-staging/aws-credentials-staging"
 }
 
-import {
-  to = module.environment_staging.tfe_run_trigger.apply_after_upstream_workspace[0]
-  id = "rt-MrZrhrnX5Ui29A49"
-}
 
 # Main staging module
 module "environment_staging" {
   source = "./modules/search-api-v2"
 
   name                          = "staging"
-  upstream_environment_name     = "integration"
   google_project_id             = "search-api-v2-staging"
   google_project_number         = "773027887517"
   google_workload_provider_name = "projects/773027887517/locations/global/workloadIdentityPools/terraform-cloud-id-pool/providers/terraform-cloud-provider-oidc"
@@ -164,17 +159,12 @@ import {
   id = "govuk/search-api-v2-production/aws-credentials-production"
 }
 
-import {
-  to = module.environment_production.tfe_run_trigger.apply_after_upstream_workspace[0]
-  id = "rt-uR7ws5qAzQovR8v1"
-}
 
 # Main production module
 module "environment_production" {
   source = "./modules/search-api-v2"
 
   name                          = "production"
-  upstream_environment_name     = "staging"
   google_project_id             = "search-api-v2-production"
   google_project_number         = "931453572747"
   google_workload_provider_name = "projects/931453572747/locations/global/workloadIdentityPools/terraform-cloud-id-pool/providers/terraform-cloud-provider-oidc"
