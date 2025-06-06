@@ -70,14 +70,14 @@ resource "aws_security_group" "govuk_elasticsearch6_access" {
     from_port       = 80
     to_port         = 80
     protocol        = "tcp"
-    security_groups = [aws_security_group.sg_search-ltr-generation_access.id]
+    security_groups = [aws_security_group.search-ltr-generation_access.id]
   }
 
   ingress {
     from_port       = 443
     to_port         = 443
     protocol        = "tcp"
-    security_groups = [aws_security_group.sg_search-ltr-generation_access.id]
+    security_groups = [aws_security_group.search-ltr-generation_access.id]
   }
 
   tags = {
@@ -87,11 +87,11 @@ resource "aws_security_group" "govuk_elasticsearch6_access" {
 
 import {
   id = data.terraform_remote_state.infra_security_groups.outputs.sg_search-ltr-generation_id
-  to = aws_security_group.sg_search-ltr-generation_access
+  to = aws_security_group.search-ltr-generation_access
 }
 
-resource "aws_security_group" "sg_search-ltr-generation_access" {
-  name        = "sg_search-ltr-generation_access"
+resource "aws_security_group" "search-ltr-generation_access" {
+  name        = "search-ltr-generation_access"
   description = "Legacy SG for Search LTR Generation Access (used by ES6)"
   vpc_id      = data.tfe_outputs.vpc.nonsensitive_values.id
 
@@ -104,7 +104,13 @@ resource "aws_security_group" "sg_search-ltr-generation_access" {
   }
 
   tags = {
-    Name = "sg_search-ltr-generation_access"
+    Name = "search-ltr-generation_access"
+  }
+
+  lifecycle {
+    # SGs cannot have their Descriptions changed for some reason, so ignore it.
+    ignore_changes  = [description]
+    prevent_destroy = true
   }
 }
 
