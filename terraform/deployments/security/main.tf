@@ -1,5 +1,5 @@
 data "aws_security_group" "eks_cluster_primary_sg" {
-  id = data.tfe_outputs.cluster_infrastructure.nonsensitive_values.cluster_primary_security_group_id
+  id = data.tfe_outputs.cluster_infrastructure.nonsensitive_values.control_plane_security_group_id
 }
 
 import {
@@ -49,7 +49,7 @@ resource "aws_security_group" "govuk_content-data-api-postgresql-primary_access"
 }
 
 import {
-  id = data.terraform_remote_state.infra_security_groups.outputs.govuk_elasticsearch6_id
+  id = data.terraform_remote_state.infra_security_groups.outputs.sg_elasticsearch6_id
   to = aws_security_group.govuk_elasticsearch6_access
 }
 

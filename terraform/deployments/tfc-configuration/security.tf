@@ -26,8 +26,7 @@ module "security-integration" {
   variable_set_ids = [
     local.aws_credentials["integration"],
     module.variable-set-common.id,
-    module.variable-set-integration.id,
-    module.variable-set-rds-integration.id
+    module.variable-set-integration.id
   ]
 }
 
@@ -58,8 +57,7 @@ module "security-staging" {
   variable_set_ids = [
     local.aws_credentials["staging"],
     module.variable-set-common.id,
-    module.variable-set-integration.id,
-    module.variable-set-rds-integration.id
+    module.variable-set-staging.id
   ]
 }
 
@@ -90,7 +88,6 @@ module "security-production" {
   variable_set_ids = [
     local.aws_credentials["production"],
     module.variable-set-common.id,
-    module.variable-set-integration.id,
-    module.variable-set-rds-integration.id
+    module.variable-set-production.id
   ]
 }
