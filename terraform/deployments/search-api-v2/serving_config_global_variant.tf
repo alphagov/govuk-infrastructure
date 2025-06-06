@@ -1,7 +1,7 @@
 module "serving_config_global_variant" {
   source = "./modules/serving_config"
 
-  id           = "variant_search"
+  id           = "variant"
   display_name = "Variant (used as the 'B' variant when AB testing live Search API v2)"
   engine_id    = google_discovery_engine_search_engine.govuk_global.engine_id
 
