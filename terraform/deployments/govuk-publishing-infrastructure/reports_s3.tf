@@ -32,7 +32,6 @@ data "aws_iam_policy_document" "write_reports_to_s3" {
     actions = ["s3:GetBucketLocation", "s3:ListBucket"]
     resources = [
       aws_s3_bucket.publisher_csvs.arn,
-      "arn:aws:s3:::govuk-${var.govuk_environment}-content-data-csvs",
       "arn:aws:s3:::govuk-${var.govuk_environment}-content-data-siteimprove-sitemaps",
       "arn:aws:s3:::govuk-${var.govuk_environment}-specialist-publisher-csvs",
       "arn:aws:s3:::govuk-${var.govuk_environment}-support-api-csvs",
@@ -51,7 +50,6 @@ data "aws_iam_policy_document" "write_reports_to_s3" {
     ]
     resources = [
       "${aws_s3_bucket.publisher_csvs.arn}/*",
-      "arn:aws:s3:::govuk-${var.govuk_environment}-content-data-csvs/*",
       "arn:aws:s3:::govuk-${var.govuk_environment}-content-data-siteimprove-sitemaps/*",
       "arn:aws:s3:::govuk-${var.govuk_environment}-specialist-publisher-csvs/*",
       "arn:aws:s3:::govuk-${var.govuk_environment}-support-api-csvs/*",
