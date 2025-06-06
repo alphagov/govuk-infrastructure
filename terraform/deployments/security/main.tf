@@ -49,7 +49,7 @@ resource "aws_security_group" "govuk_content-data-api-postgresql-primary_access"
 }
 
 import {
-  id = data.terraform_remote_state.infra_security_groups.outputs.govuk_elasticsearch6_id
+  id = data.terraform_remote_state.infra_security_groups.outputs.sg_elasticsearch6_id
   to = aws_security_group.govuk_elasticsearch6_access
 }
 
