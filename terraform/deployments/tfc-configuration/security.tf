@@ -52,8 +52,7 @@ module "security-staging" {
   }
 
   team_access = {
-    "GOV.UK Non-Production (r/o)" = "write"
-    "GOV.UK Production"           = "write"
+    "GOV.UK Production" = "write"
   }
 
   variable_set_ids = [
@@ -85,8 +84,7 @@ module "security-production" {
   }
 
   team_access = {
-    "GOV.UK Non-Production (r/o)" = "write"
-    "GOV.UK Production"           = "write"
+    "GOV.UK Production" = "write"
   }
 
   variable_set_ids = [
