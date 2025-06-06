@@ -108,6 +108,8 @@ resource "aws_security_group" "search-ltr-generation_access" {
   }
 
   lifecycle {
+    # SGs cannot have their Descriptions changed for some reason, so ignore it.
+    ignore_changes  = [description]
     prevent_destroy = true
   }
 }
