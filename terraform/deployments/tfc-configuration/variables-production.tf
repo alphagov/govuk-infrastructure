@@ -250,20 +250,6 @@ module "variable-set-rds-production" {
         project                      = "GOV.UK - Publishing"
       }
 
-      contacts_admin = {
-        engine         = "mysql"
-        engine_version = "8.0"
-        engine_params = {
-          max_allowed_packet = { value = 1073741824 }
-        }
-        engine_params_family         = "mysql8.0"
-        name                         = "contacts-admin"
-        allocated_storage            = 100
-        instance_class               = "db.t4g.medium"
-        performance_insights_enabled = true
-        project                      = "GOV.UK - Publishing"
-      }
-
       content_data_admin = {
         engine         = "postgres"
         engine_version = "13"
