@@ -164,3 +164,8 @@ variable "fastly_rate_limit_token" {
   default     = "test"
 }
 
+variable "office_ips" {
+  type        = list(string)
+  description = "List of CIDRs from which we consider Office IPs."
+  default     = []
+}

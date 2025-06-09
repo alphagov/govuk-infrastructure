@@ -125,7 +125,7 @@ data "aws_iam_policy_document" "s3_mirror_read_policy" {
     condition {
       test     = "IpAddress"
       variable = "aws:SourceIp"
-      values   = data.terraform_remote_state.infra_security_groups.outputs.office_ips
+      values   = var.office_ips
     }
 
     principals {
@@ -190,7 +190,7 @@ data "aws_iam_policy_document" "s3_mirror_replica_read_policy" {
     condition {
       test     = "IpAddress"
       variable = "aws:SourceIp"
-      values   = data.terraform_remote_state.infra_security_groups.outputs.office_ips
+      values   = var.office_ips
     }
 
     principals {
