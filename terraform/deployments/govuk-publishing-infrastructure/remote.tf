@@ -20,6 +20,11 @@ data "tfe_outputs" "vpc" {
   workspace    = "vpc-${var.govuk_environment}"
 }
 
+data "tfe_outputs" "security" {
+  organization = "govuk"
+  workspace    = "security-${var.govuk_environment}"
+}
+
 data "terraform_remote_state" "infra_networking" {
   backend = "s3"
   config = {
