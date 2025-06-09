@@ -39,17 +39,6 @@ resource "aws_docdb_cluster_parameter_group" "licensify_parameter_group" {
   }
 }
 
-# TODO: Remove me once KMS Key is Imported across all environments.
-data "aws_kms_key" "licensify_documentdb_kms_key_migrate" {
-  key_id = data.terraform_remote_state.infra_security.outputs.licensify_documentdb_kms_key_arn
-}
-
-# TODO: Remove me once KMS Key is Imported across all environments.
-import {
-  id = data.aws_kms_key.licensify_documentdb_kms_key_migrate.id
-  to = aws_kms_key.licensify_documentdb_kms_key
-}
-
 resource "aws_kms_key" "licensify_documentdb_kms_key" {
   description = "Encryption key for Licensify DocumentDB"
   key_usage   = "ENCRYPT_DECRYPT"
@@ -102,6 +91,12 @@ resource "aws_kms_key_policy" "licensify_documentdb_kms_key_policy" {
   })
 }
 
+locals {
+  list_licensify_docdb_sg_ids = [
+    data.tfe_outputs.security.nonsensitive_values.licensify_documentdb_access_sg_id
+  ]
+}
+
 resource "aws_docdb_cluster" "licensify_cluster" {
   cluster_identifier              = "licensify-documentdb-${var.govuk_environment}"
   availability_zones              = ["eu-west-1a", "eu-west-1b", "eu-west-1c"]
@@ -111,7 +106,7 @@ resource "aws_docdb_cluster" "licensify_cluster" {
   master_password                 = random_password.licensify_documentdb_master.result
   storage_encrypted               = true
   kms_key_id                      = aws_kms_key.licensify_documentdb_kms_key.arn
-  vpc_security_group_ids          = ["${data.terraform_remote_state.infra_security_groups.outputs.sg_licensify_documentdb_id}"]
+  vpc_security_group_ids          = local.list_licensify_docdb_sg_ids
   enabled_cloudwatch_logs_exports = ["profiler"]
   backup_retention_period         = var.licensify_backup_retention_period
 }

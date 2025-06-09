@@ -36,16 +36,6 @@ resource "random_password" "shared_documentdb_master" {
   length = 100
 }
 
-data "aws_kms_key" "shared_documentdb_kms_key_migrate" {
-  key_id = data.terraform_remote_state.infra_security.outputs.shared_documentdb_kms_key_arn
-}
-
-# TODO: Remove me once KMS Key is Imported across all environments.
-import {
-  id = data.aws_kms_key.shared_documentdb_kms_key_migrate.id
-  to = aws_kms_key.shared_documentdb_kms_key
-}
-
 # TODO: Remove me once KMS Key is Imported across all environments.
 resource "aws_kms_key" "shared_documentdb_kms_key" {
   description = "Encryption key for Shared DocumentDB"
@@ -99,6 +89,12 @@ resource "aws_kms_key_policy" "shared_documentdb_kms_key_policy" {
   })
 }
 
+locals {
+  list_shared_docdb_sg_ids = [
+    data.tfe_outputs.security.nonsensitive_values.shared_documentdb_access_sg_id
+  ]
+}
+
 resource "aws_docdb_cluster" "shared_cluster" {
   cluster_identifier              = "shared-documentdb-${var.govuk_environment}"
   availability_zones              = ["eu-west-1a", "eu-west-1b", "eu-west-1c"]
@@ -109,7 +105,7 @@ resource "aws_docdb_cluster" "shared_cluster" {
   backup_retention_period         = var.shared_documentdb_backup_retention_period
   db_cluster_parameter_group_name = aws_docdb_cluster_parameter_group.shared_parameter_group.name
   kms_key_id                      = aws_kms_key.shared_documentdb_kms_key.arn
-  vpc_security_group_ids          = ["${data.terraform_remote_state.infra_security_groups.outputs.sg_shared_documentdb_id}"]
+  vpc_security_group_ids          = list_shared_docdb_sg_ids
   enabled_cloudwatch_logs_exports = ["profiler"]
 }
 
