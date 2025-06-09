@@ -21,13 +21,16 @@ Configuration of CDN services is stored in [alphagov/govuk-fastly](https://githu
 
 ## Usage
 
-To install the [currently-used version of Terraform](terraform/.terraform-version):
+To install the compatible version of Terraform:
 
 ```shell
 brew install tfenv
 cd terraform/
-tfenv install
+tfenv install latest
+tfenv use latest
 ```
+
+We set the constraints with minor version precision. However when using this Terraform version manager, you need to specify the patch version, e.g. `tfenv install 1.10.5`.
 
 ## Pre-commit hooks
 
