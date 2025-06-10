@@ -28,6 +28,7 @@ module "govuk-publishing-infrastructure-integration" {
     module.variable-set-common.id,
     module.variable-set-integration.id,
     module.variable-set-amazonmq-integration.id,
+    module.sensitive-variables.security_integration_id,
     module.sensitive-variables.waf_integration_id
   ]
 }
@@ -61,6 +62,7 @@ module "govuk-publishing-infrastructure-staging" {
     module.variable-set-common.id,
     module.variable-set-staging.id,
     module.variable-set-amazonmq-staging.id,
+    module.sensitive-variables.security_staging_id,
     module.sensitive-variables.waf_staging_id
   ]
 }
@@ -94,6 +96,7 @@ module "govuk-publishing-infrastructure-production" {
     module.variable-set-common.id,
     module.variable-set-production.id,
     module.variable-set-amazonmq-production.id,
+    module.sensitive-variables.security_production_id,
     module.sensitive-variables.waf_production_id
   ]
 }
