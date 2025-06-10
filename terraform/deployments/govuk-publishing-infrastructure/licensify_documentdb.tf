@@ -1,13 +1,3 @@
-data "terraform_remote_state" "infra_security" {
-  backend = "s3"
-
-  config = {
-    bucket = "${var.govuk_aws_state_bucket}"
-    key    = "govuk/infra-security.tfstate"
-    region = "eu-west-1"
-  }
-}
-
 resource "random_password" "licensify_documentdb_master" {
   length = 100
 }

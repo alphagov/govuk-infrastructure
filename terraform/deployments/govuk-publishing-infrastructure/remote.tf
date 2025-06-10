@@ -25,32 +25,4 @@ data "tfe_outputs" "security" {
   workspace    = "security-${var.govuk_environment}"
 }
 
-data "terraform_remote_state" "infra_networking" {
-  backend = "s3"
-  config = {
-    bucket = var.govuk_aws_state_bucket
-    key    = "govuk/infra-networking.tfstate"
-    region = data.aws_region.current.name
-  }
-}
-
-data "terraform_remote_state" "infra_root_dns_zones" {
-  backend = "s3"
-  config = {
-    bucket = var.govuk_aws_state_bucket
-    key    = "govuk/infra-root-dns-zones.tfstate"
-    region = data.aws_region.current.name
-  }
-}
-
-data "terraform_remote_state" "app_search" {
-  backend = "s3"
-
-  config = {
-    bucket = var.govuk_aws_state_bucket
-    key    = "blue/app-search.tfstate"
-    region = data.aws_region.current.name
-  }
-}
-
 data "fastly_ip_ranges" "fastly" {}

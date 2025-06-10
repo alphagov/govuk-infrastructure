@@ -57,7 +57,7 @@ resource "aws_security_group_rule" "shared_docdb_from_eks_workers" {
   from_port                = 27017
   to_port                  = 27017
   protocol                 = "tcp"
-  security_group_id        = data.tfe_outputs.security.nonsensitive_values.shared_documentdb_access_sg_id
+  security_group_id        = data.tfe_outputs.security.nonsensitive_values.govuk_shared_documentdb_access_sg_id
   source_security_group_id = data.tfe_outputs.cluster_infrastructure.nonsensitive_values.node_security_group_id
 }
 
@@ -67,7 +67,7 @@ resource "aws_security_group_rule" "licensify_docdb_from_eks_workers" {
   from_port                = 27017
   to_port                  = 27017
   protocol                 = "tcp"
-  security_group_id        = data.tfe_outputs.security.nonsensitive_values.licensify_documentdb_access_sg_id
+  security_group_id        = data.tfe_outputs.security.nonsensitive_values.govuk_licensify-documentdb_access_sg_id
   source_security_group_id = data.tfe_outputs.cluster_infrastructure.nonsensitive_values.node_security_group_id
 }
 
@@ -115,17 +115,6 @@ resource "aws_security_group" "eks_ingress_www_origin" {
     System = "Frontend"
     Name   = "eks_ingress_www_origin"
   }
-}
-
-# TODO: Remove after EC2 GOV.UK decommissioned
-resource "aws_security_group_rule" "eks_ingress_www_origin_from_ec2_nat" {
-  description       = "EKS ingress www-origin accepts requests from EC2 NAT gateways"
-  type              = "ingress"
-  from_port         = 443
-  to_port           = 443
-  protocol          = "tcp"
-  cidr_blocks       = formatlist("%s/32", data.terraform_remote_state.infra_networking.outputs.nat_gateway_elastic_ips_list)
-  security_group_id = aws_security_group.eks_ingress_www_origin.id
 }
 
 resource "aws_security_group_rule" "eks_ingress_www_origin_from_eks_nat" {
