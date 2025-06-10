@@ -25,7 +25,7 @@ data "aws_iam_policy_document" "release_assumer_assume" {
     condition {
       test     = "StringEquals"
       variable = "${replace(data.tfe_outputs.cluster_infrastructure.nonsensitive_values.cluster_oidc_provider_arn, "/^(.*provider/)/", "")}:sub"
-      values   = ["system:serviceaccount:apps:release"]
+      values   = ["system:serviceaccount:apps:release-assumer"]
     }
     condition {
       test     = "StringEquals"
