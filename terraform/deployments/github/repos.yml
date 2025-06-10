@@ -352,6 +352,11 @@ repos:
     allow_squash_merge: true
     branch_protection: false
 
+  govuk-reports-prototype:
+    need_production_access_to_merge: false
+    allow_squash_merge: true
+    branch_protection: false
+
   govuk-rota-generator:
     required_status_checks:
       standard_contexts: *standard_security_checks
