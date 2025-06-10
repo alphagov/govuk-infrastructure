@@ -110,6 +110,17 @@ resource "google_bigquery_dataset" "automated_evaluation_input" {
 }
 
 # ga4 'select_item' events get transformed and inserted into this time-partitioned sample query set table defined with a vertex schema
+resource "google_bigquery_table" "binary" {
+  dataset_id          = google_bigquery_dataset.automated_evaluation_input.dataset_id
+  table_id            = "binary"
+  schema              = file("./files/sample-query-set-schema.json")
+  deletion_protection = false
+  time_partitioning {
+    type = "MONTH"
+  }
+}
+
+# ga4 'select_item' events get transformed and inserted into this time-partitioned sample query set table defined with a vertex schema
 resource "google_bigquery_table" "clickstream" {
   dataset_id          = google_bigquery_dataset.automated_evaluation_input.dataset_id
   table_id            = "clickstream"
