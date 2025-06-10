@@ -89,12 +89,6 @@ resource "aws_kms_key_policy" "shared_documentdb_kms_key_policy" {
   })
 }
 
-locals {
-  list_shared_docdb_sg_ids = [
-    data.tfe_outputs.security.nonsensitive_values.govuk_shared_documentdb_access_sg_id
-  ]
-}
-
 resource "aws_docdb_cluster" "shared_cluster" {
   cluster_identifier              = "shared-documentdb-${var.govuk_environment}"
   availability_zones              = ["eu-west-1a", "eu-west-1b", "eu-west-1c"]
@@ -105,7 +99,7 @@ resource "aws_docdb_cluster" "shared_cluster" {
   backup_retention_period         = var.shared_documentdb_backup_retention_period
   db_cluster_parameter_group_name = aws_docdb_cluster_parameter_group.shared_parameter_group.name
   kms_key_id                      = aws_kms_key.shared_documentdb_kms_key.arn
-  vpc_security_group_ids          = local.list_shared_docdb_sg_ids
+  vpc_security_group_ids          = ["${data.tfe_outputs.security.nonsensitive_values.govuk_shared_documentdb_access_sg_id}"]
   enabled_cloudwatch_logs_exports = ["profiler"]
 }
 

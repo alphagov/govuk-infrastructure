@@ -73,7 +73,7 @@ resource "aws_security_group_rule" "licensify_docdb_from_eks_workers" {
 
 # Remove once the content-data-api RDS instance has been migrated to govuk-infrastructure
 resource "aws_security_group_rule" "postgres_from_eks_workers" {
-  for_each                 = { "content_data_api" = data.tfe_outputs.security.nonsensitive_values.content_data_api_postgresql_primary_access_sg_id }
+  for_each                 = { "content_data_api" = data.tfe_outputs.security.nonsensitive_values.govuk_content-data-api-postgresql-primary_access_sg_id }
   description              = "Database accepts requests from EKS nodes"
   type                     = "ingress"
   from_port                = 5432
