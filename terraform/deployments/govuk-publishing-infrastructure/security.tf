@@ -47,7 +47,7 @@ resource "aws_security_group_rule" "rabbitmq_from_eks_workers" {
   from_port                = 5671 # AMQP 1.0
   to_port                  = 5672 # AMQP 0-9-1
   protocol                 = "tcp"
-  security_group_id        = data.terraform_remote_state.infra_security_groups.outputs.sg_rabbitmq_id
+  security_group_id        = aws_security_group.rabbitmq.id
   source_security_group_id = data.tfe_outputs.cluster_infrastructure.nonsensitive_values.node_security_group_id
 }
 
@@ -57,7 +57,7 @@ resource "aws_security_group_rule" "shared_docdb_from_eks_workers" {
   from_port                = 27017
   to_port                  = 27017
   protocol                 = "tcp"
-  security_group_id        = data.terraform_remote_state.infra_security_groups.outputs.sg_shared_documentdb_id
+  security_group_id        = data.tfe_outputs.security.nonsensitive_values.govuk_shared_documentdb_access_sg_id
   source_security_group_id = data.tfe_outputs.cluster_infrastructure.nonsensitive_values.node_security_group_id
 }
 
@@ -67,13 +67,13 @@ resource "aws_security_group_rule" "licensify_docdb_from_eks_workers" {
   from_port                = 27017
   to_port                  = 27017
   protocol                 = "tcp"
-  security_group_id        = data.terraform_remote_state.infra_security_groups.outputs.sg_licensify_documentdb_id
+  security_group_id        = data.tfe_outputs.security.nonsensitive_values.govuk_licensify-documentdb_access_sg_id
   source_security_group_id = data.tfe_outputs.cluster_infrastructure.nonsensitive_values.node_security_group_id
 }
 
 # Remove once the content-data-api RDS instance has been migrated to govuk-infrastructure
 resource "aws_security_group_rule" "postgres_from_eks_workers" {
-  for_each                 = { "content_data_api" = data.terraform_remote_state.infra_security_groups.outputs.sg_content-data-api-postgresql-primary_id }
+  for_each                 = { "content_data_api" = data.tfe_outputs.security.nonsensitive_values.govuk_content-data-api-postgresql-primary_access_sg_id }
   description              = "Database accepts requests from EKS nodes"
   type                     = "ingress"
   from_port                = 5432
@@ -89,7 +89,7 @@ resource "aws_security_group_rule" "elasticsearch_from_eks_workers" {
   from_port                = 443
   to_port                  = 443
   protocol                 = "tcp"
-  security_group_id        = data.terraform_remote_state.infra_security_groups.outputs.sg_elasticsearch6_id
+  security_group_id        = data.tfe_outputs.security.nonsensitive_values.govuk_elasticsearch6_access_sg_id
   source_security_group_id = data.tfe_outputs.cluster_infrastructure.nonsensitive_values.node_security_group_id
 }
 
@@ -99,7 +99,7 @@ resource "aws_security_group_rule" "efs_from_eks_workers" {
   from_port                = 2049
   to_port                  = 2049
   protocol                 = "tcp"
-  security_group_id        = data.terraform_remote_state.infra_security_groups.outputs.sg_asset-master-efs_id
+  security_group_id        = data.tfe_outputs.security.nonsensitive_values.govuk_asset-master-efs_access_sg_id
   source_security_group_id = data.tfe_outputs.cluster_infrastructure.nonsensitive_values.node_security_group_id
 }
 
@@ -115,17 +115,6 @@ resource "aws_security_group" "eks_ingress_www_origin" {
     System = "Frontend"
     Name   = "eks_ingress_www_origin"
   }
-}
-
-# TODO: Remove after EC2 GOV.UK decommissioned
-resource "aws_security_group_rule" "eks_ingress_www_origin_from_ec2_nat" {
-  description       = "EKS ingress www-origin accepts requests from EC2 NAT gateways"
-  type              = "ingress"
-  from_port         = 443
-  to_port           = 443
-  protocol          = "tcp"
-  cidr_blocks       = formatlist("%s/32", data.terraform_remote_state.infra_networking.outputs.nat_gateway_elastic_ips_list)
-  security_group_id = aws_security_group.eks_ingress_www_origin.id
 }
 
 resource "aws_security_group_rule" "eks_ingress_www_origin_from_eks_nat" {
