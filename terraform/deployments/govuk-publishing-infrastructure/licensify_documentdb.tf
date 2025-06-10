@@ -83,7 +83,7 @@ resource "aws_kms_key_policy" "licensify_documentdb_kms_key_policy" {
 
 locals {
   list_licensify_docdb_sg_ids = [
-    data.tfe_outputs.security.nonsensitive_values.licensify_documentdb_access_sg_id
+    data.tfe_outputs.security.nonsensitive_values.govuk_licensify-documentdb_access_sg_id
   ]
 }
 
