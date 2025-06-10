@@ -99,7 +99,7 @@ resource "aws_docdb_cluster" "shared_cluster" {
   backup_retention_period         = var.shared_documentdb_backup_retention_period
   db_cluster_parameter_group_name = aws_docdb_cluster_parameter_group.shared_parameter_group.name
   kms_key_id                      = aws_kms_key.shared_documentdb_kms_key.arn
-  vpc_security_group_ids          = ["${data.tfe_outputs.security.nonsensitive_values.govuk_shared_documentdb_access_sg_id}"]
+  vpc_security_group_ids          = [data.tfe_outputs.security.nonsensitive_values.govuk_shared_documentdb_access_sg_id]
   enabled_cloudwatch_logs_exports = ["profiler"]
 }
 

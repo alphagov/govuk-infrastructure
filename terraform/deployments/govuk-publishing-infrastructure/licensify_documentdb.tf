@@ -90,7 +90,7 @@ resource "aws_docdb_cluster" "licensify_cluster" {
   master_password                 = random_password.licensify_documentdb_master.result
   storage_encrypted               = true
   kms_key_id                      = aws_kms_key.licensify_documentdb_kms_key.arn
-  vpc_security_group_ids          = ["${data.tfe_outputs.security.nonsensitive_values.govuk_licensify-documentdb_access_sg_id}"]
+  vpc_security_group_ids          = [data.tfe_outputs.security.nonsensitive_values.govuk_licensify-documentdb_access_sg_id]
   enabled_cloudwatch_logs_exports = ["profiler"]
   backup_retention_period         = var.licensify_backup_retention_period
 }
