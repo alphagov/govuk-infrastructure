@@ -24,6 +24,7 @@ provider "aws" {
     tags = {
       Product              = "GOV.UK"
       System               = "GitHub"
+      Environment          = var.govuk_environment
       Owner                = "govuk-platform-engineering@digital.cabinet-office.gov.uk"
       repository           = "govuk-infrastructure"
       terraform_deployment = basename(abspath(path.root))

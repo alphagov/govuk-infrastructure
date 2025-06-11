@@ -40,15 +40,9 @@ terraform {
 provider "aws" {
   region = "eu-west-1"
   default_tags {
-    tags = {
-      Product              = "GOV.UK"
-      System               = "EKS cluster services"
-      Environment          = var.govuk_environment
-      Owner                = "govuk-platform-engineering@digital.cabinet-office.gov.uk"
-      cluster              = "govuk"
-      repository           = "govuk-infrastructure"
-      terraform_deployment = basename(abspath(path.root))
-    }
+    tags = merge(local.default_tags, {
+      cluster = "govuk"
+    })
   }
 }
 
@@ -73,6 +67,15 @@ provider "helm" {
 }
 
 locals {
+  default_tags = {
+    Product              = "GOV.UK"
+    System               = "EKS cluster services"
+    Environment          = var.govuk_environment
+    Owner                = "govuk-platform-engineering@digital.cabinet-office.gov.uk"
+    repository           = "govuk-infrastructure"
+    terraform_deployment = basename(abspath(path.root))
+  }
+
   monitoring_ns          = data.tfe_outputs.cluster_infrastructure.nonsensitive_values.monitoring_namespace
   services_ns            = data.tfe_outputs.cluster_infrastructure.nonsensitive_values.cluster_services_namespace
   external_dns_zone_name = data.tfe_outputs.cluster_infrastructure.nonsensitive_values.external_dns_zone_name

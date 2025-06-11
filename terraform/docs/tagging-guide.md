@@ -11,12 +11,13 @@ The common column distinguishes between Tags that have been added as part of an 
 | **Tag Key** | **Tag Value(s)** | **Description** | **Example** | **Common** |
 |--|--|--|--|--|
 | Name | [ServiceName]-[Environment]-[Workspace] | This is the identifiable name of the service. | publisher-test-default | no |
-| chargeable_entity | govuk-publishing-platform-[Environment] | This is required for billing. | govuk-publishing-platform-test | yes |
-| environment | test integration staging production | Environment area to which this belongs. | test | yes |
-|project | replatforming | This is the project under which this was developed. | replatforming | yes |
+| Product | GOV.UK One Login / GOV.UK or DSP | The product this resource belongs to. | GOV.UK | yes |
+| System | Authentication, Identity proofing and verification core, VPC, etc. | The name of the software system (avoid abbreviations). | VPC | yes |
+| Environment | production, staging, integration, development | Environment area to which this belongs. | production | yes |
+| Owner | Email address for resource owner | Individual email for dev environments, group email elsewhere. | govuk-platform-engineering@digital.cabinet-office.gov.uk | yes |
+| Service | account management, session storage, front end, etc. | Function of the particular resource (optional). | session storage | no |
 | repository | govuk-aws govuk-infrastructure | This is the Git repo where this service resides. | govuk-infrastructure | yes |
 | terraform_deployment | cluster-infrastructure cluster-services ecr govuk-publishing-infrastructure | The source directory where the resource's Terraform code resides. | cluster-infrastructure | yes |
-|terraform_workspace | default bill chris fred karl nadeem steve roch towers | This should be the name of the terraform workspace that created the service. | default | yes |
 
 
 
@@ -38,16 +39,33 @@ tags = merge(
     }
 ```
 
-- Below example of local common tags defined in the main.tf file
+- Below example of common tags defined via provider default_tags in the main.tf file
+```
+provider "aws" {
+  region = "eu-west-1"
+  default_tags {
+    tags = {
+      Product              = "GOV.UK"
+      System               = "[System description - e.g., VPC, Authentication]"
+      Environment          = var.govuk_environment
+      Owner                = "govuk-platform-engineering@digital.cabinet-office.gov.uk"
+      repository           = "govuk-infrastructure"
+      terraform_deployment = basename(abspath(path.root))
+    }
+  }
+}
+```
+
+- Below example of local additional tags for resource-specific tagging
 ```
 locals {
-  additional_tags = {
-    chargeable_entity    = "govuk-publishing-platform-${var.govuk_environment}"
-    environment          = var.govuk_environment
-    project              = "replatforming"
+  default_tags = {
+    Product              = "GOV.UK"
+    System               = "[System description]"
+    Environment          = var.govuk_environment
+    Owner                = "govuk-platform-engineering@digital.cabinet-office.gov.uk"
     repository           = "govuk-infrastructure"
-    terraform_deployment = "govuk-publishing-platform"
-    terraform_workspace  = terraform.workspace
+    terraform_deployment = basename(abspath(path.root))
   }
 }
 ```
@@ -58,8 +76,22 @@ locals {
 
 **NOTES :-**
 - All listed resources from below should be made compliant.
-- Common Tags have been added as **locals** with in the deployment terraform **main** file.
-- This tagging strategy should ideally be replicated to other and new yet to be deployed environments such as **integration**
+- Common Tags are implemented via AWS provider **default_tags** in the deployment terraform **main** file.
+- Additional resource-specific tags should use the merge pattern with locals when needed.
+- This tagging strategy applies to all environments (production, staging, integration, development).
+
+## Mandatory Tags
+The following tags are **MANDATORY** and must be present on all taggable resources:
+
+- **Product**: GOV.UK One Login / GOV.UK or DSP
+- **System**: The name of the software system (avoid abbreviations)  
+- **Environment**: production, staging, integration, or development
+- **Owner**: Email address - individual for dev environments, group elsewhere
+
+## Optional Tags
+The following tag is **OPTIONAL** but recommended:
+
+- **Service**: Function of the particular resource (e.g., account management, session storage, front end)
 
 # AWS Resources
 ## Can be tagged

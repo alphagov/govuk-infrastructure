@@ -38,6 +38,7 @@ locals {
 
   default_tags = {
     Product              = "GOV.UK"
+    System               = "GOV.UK Publishing"
     Environment          = var.govuk_environment
     Owner                = "govuk-platform-engineering@digital.cabinet-office.gov.uk"
     repository           = "govuk-infrastructure"
