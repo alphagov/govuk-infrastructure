@@ -24,7 +24,7 @@ provider "aws" {
   default_tags {
     tags = {
       Product              = "GOV.UK"
-      System               = "EKS release assumer"
+      System               = "GOV.UK Release"
       Environment          = var.govuk_environment
       Owner                = "govuk-platform-engineering@digital.cabinet-office.gov.uk"
       cluster              = "govuk"
