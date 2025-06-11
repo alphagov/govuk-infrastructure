@@ -80,6 +80,8 @@ locals {
 - Additional resource-specific tags should use the merge pattern with locals when needed.
 - This tagging strategy applies to all environments (production, staging, integration, development).
 
+These are also described in the [GDS Ways](https://gds-way.digital.cabinet-office.gov.uk/manuals/aws-tagging.html#alerting-and-enforcement)
+
 ## Mandatory Tags
 The following tags are **MANDATORY** and must be present on all taggable resources:
 
