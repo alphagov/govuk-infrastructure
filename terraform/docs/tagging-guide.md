@@ -11,7 +11,7 @@ The common column distinguishes between Tags that have been added as part of an 
 | **Tag Key** | **Tag Value(s)** | **Description** | **Example** | **Common** |
 |--|--|--|--|--|
 | Name | [ServiceName]-[Environment]-[Workspace] | This is the identifiable name of the service. | publisher-test-default | no |
-| Product | GOV.UK One Login / GOV.UK or DSP | The product this resource belongs to. | GOV.UK | yes |
+| Product | GOV.UK | The product this resource belongs to. | GOV.UK | yes |
 | System | Authentication, Identity proofing and verification core, VPC, etc. | The name of the software system (avoid abbreviations). | VPC | yes |
 | Environment | production, staging, integration, development | Environment area to which this belongs. | production | yes |
 | Owner | Email address for resource owner | Individual email for dev environments, group email elsewhere. | govuk-platform-engineering@digital.cabinet-office.gov.uk | yes |
@@ -85,7 +85,7 @@ These are also described in the [GDS Ways](https://gds-way.digital.cabinet-offic
 ## Mandatory Tags
 The following tags are **MANDATORY** and must be present on all taggable resources:
 
-- **Product**: GOV.UK One Login / GOV.UK or DSP
+- **Product**: GOV.UK
 - **System**: The name of the software system (avoid abbreviations)  
 - **Environment**: production, staging, integration, or development
 - **Owner**: Email address - individual for dev environments, group elsewhere
