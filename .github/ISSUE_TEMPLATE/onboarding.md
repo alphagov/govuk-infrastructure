@@ -19,7 +19,7 @@ assignees: ''
 - [ ] Add them to [GOV.UK Platform Engineering Google Group](https://groups.google.com/a/digital.cabinet-office.gov.uk/g/govuk-platform-engineering/members), which also adds them to team calendar and events
 - [ ] Introduce them to the team during a stand up
 - [ ] Arrange a call to introduce the Platform Engineering leads and Platform Engineering area (platform architecture, workflows etc.)
-- [ ] Add them to Private and Public Slack channels
+- [ ] Add them to Private and Public Slack channels (inc #govuk-fastly)
 - [ ] Add them to [Trello](https://trello.com/w/gds_govuk/members) (for access to our historical cards and other teams' backlogs)
 - [ ] Add them to the [GOV.UK Platform Engineering GitHub team](https://github.com/orgs/alphagov/teams/gov-uk-platform-engineering)
 - [ ] Add them to the @platform-engineering-team Slack user group
