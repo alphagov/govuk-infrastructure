@@ -25,8 +25,8 @@ resource "aws_iam_policy" "aws_lb_controller" {
   description = "Allow AWS Load Balancer Controller to manage ALBs/NLBs etc."
 
   # The policy file should be a verbatim copy of
-  # https://raw.githubusercontent.com/kubernetes-sigs/aws-load-balancer-controller/v2.6.2/docs/install/iam_policy.json,
+  # https://github.com/kubernetes-sigs/aws-load-balancer-controller/blob/main/docs/install/iam_policy.json
   # which is Apache-licensed:
   # https://raw.githubusercontent.com/kubernetes-sigs/aws-load-balancer-controller/main/LICENSE
-  policy = data.aws_iam_policy_document.aws_lb_controller.json
+  policy = file("aws_lb_controller_iam_policy.json")
 }
