@@ -1,9 +1,18 @@
 locals {
-  # roles in production and current account can assume this role
-  assumed_identifiers = distinct([
-    "arn:aws:iam::172025368201:role/release-assumer",
-    "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/release-assumer"
-  ])
+  # only prooduction assumer role can assume production
+  # other accounts can assume into non-prod accounts
+  _prod_account_id = ["172025368201"]
+  _non_prod_account_ids = [
+    "696911096973", # staging
+    "210287912431", # integration
+    "430354129336"  # test
+  ]
+  assumer_account_ids = (var.govuk_environment == "production" ?
+  local._prod_account_id : concat(local._non_prod_account_ids, local._prod_account_id))
+
+  assumed_identifiers = [
+    for id in local.assumer_account_ids : "arn:aws:iam::${id}:role/release-assumer"
+  ]
 }
 
 data "aws_iam_policy_document" "release_assumed_assume" {
