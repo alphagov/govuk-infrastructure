@@ -33,13 +33,12 @@ locals {
   oidc_provider = data.tfe_outputs.cluster_infrastructure.nonsensitive_values.cluster_oidc_provider
 
   default_tags = {
-    Product              = "DATA.GOV.UK"
-    System               = "DATA.GOV.UK"
-    Environment          = var.govuk_environment
-    Owner                = "govuk-platform-engineering@digital.cabinet-office.gov.uk"
-    project              = "replatforming"
+    product              = "govuk"
+    system               = "govuk-dgu"
+    environment          = var.govuk_environment
+    owner                = "govuk-platform-engineering@digital.cabinet-office.gov.uk"
     repository           = "govuk-infrastructure"
-    terraform_deployment = basename(abspath(path.root))
+    terraform-deployment = basename(abspath(path.root))
   }
 }
 

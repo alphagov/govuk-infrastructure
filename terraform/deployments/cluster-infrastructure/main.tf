@@ -28,12 +28,13 @@ locals {
   monitoring_namespace       = "monitoring"
 
   default_tags = {
-    Product              = "GOV.UK"
-    System               = "EKS cluster infrastructure"
-    Environment          = var.govuk_environment
-    Owner                = "govuk-platform-engineering@digital.cabinet-office.gov.uk"
+    product              = "govuk"
+    system               = "govuk-platform-engineering"
+    service              = "eks"
+    environment          = var.govuk_environment
+    owner                = "govuk-platform-engineering@digital.cabinet-office.gov.uk"
     repository           = "govuk-infrastructure"
-    terraform_deployment = basename(abspath(path.root))
+    terraform-deployment = basename(abspath(path.root))
   }
 
   default_cluster_addons = {

@@ -24,13 +24,14 @@ provider "aws" {
   region = var.aws_region
   default_tags {
     tags = {
-      Product              = "GOV.UK"
-      System               = "EKS RDS"
-      Environment          = var.govuk_environment
-      Owner                = "govuk-platform-engineering@digital.cabinet-office.gov.uk"
+      product              = "govuk"
+      system               = "govuk-platform-engineering"
+      service              = "rds"
+      environment          = var.govuk_environment
+      owner                = "govuk-platform-engineering@digital.cabinet-office.gov.uk"
       cluster              = "govuk"
       repository           = "govuk-infrastructure"
-      terraform_deployment = basename(abspath(path.root))
+      terraform-deployment = basename(abspath(path.root))
     }
   }
 }
