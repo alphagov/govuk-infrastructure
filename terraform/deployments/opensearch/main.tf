@@ -17,21 +17,19 @@ terraform {
 provider "aws" {
   region = var.aws_region
   default_tags {
-    tags = local.default_tags
+    tags = {
+      product              = "govuk"
+      system               = "govuk-chat"
+      service              = "opensearch"
+      environment          = var.govuk_environment
+      owner                = "govuk-platform-engineering@digital.cabinet-office.gov.uk"
+      repository           = "govuk-infrastructure"
+      terraform-deployment = basename(abspath(path.root))
+    }
   }
 }
 
 locals {
-  default_tags = {
-    product              = "govuk"
-    system               = "govuk-chat"
-    service              = "opensearch"
-    environment          = var.govuk_environment
-    owner                = "govuk-platform-engineering@digital.cabinet-office.gov.uk"
-    repository           = "govuk-infrastructure"
-    terraform-deployment = basename(abspath(path.root))
-  }
-
   domain      = "${var.service}-engine"
   subnet_ids  = data.terraform_remote_state.infra_networking.outputs.private_subnet_rds_ids
   master_user = "${var.service}-masteruser"
