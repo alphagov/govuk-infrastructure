@@ -2,13 +2,14 @@ data "aws_caller_identity" "current" {}
 
 locals {
   # production can assume everywhere,
-  # other accounts can assume into themselves
-  account_ids = var.govuk_environment == "production" ? [
-    "172025368201", # production
+  # other accounts can assume into non-prod accounts
+  _account_ids = [
     "696911096973", # staging
     "210287912431", # integration
     "430354129336"  # test
-  ] : [data.aws_caller_identity.current.account_id]
+  ]
+  account_ids = (var.govuk_environment == "production" ?
+  concat(local._account_ids, ["172025368201"]) : local._account_ids)
 
   assume_arns = [
     for id in local.account_ids : "arn:aws:iam::${id}:role/release-assumed"
