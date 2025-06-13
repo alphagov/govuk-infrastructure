@@ -27,16 +27,6 @@ locals {
   secrets_prefix             = "govuk"
   monitoring_namespace       = "monitoring"
 
-  default_tags = {
-    product              = "govuk"
-    system               = "govuk-platform-engineering"
-    service              = "eks"
-    environment          = var.govuk_environment
-    owner                = "govuk-platform-engineering@digital.cabinet-office.gov.uk"
-    repository           = "govuk-infrastructure"
-    terraform-deployment = basename(abspath(path.root))
-  }
-
   default_cluster_addons = {
     coredns    = { most_recent = true }
     kube-proxy = { most_recent = true }
@@ -128,9 +118,15 @@ locals {
 provider "aws" {
   region = "eu-west-1"
   default_tags {
-    tags = merge(local.default_tags, {
-      cluster = var.cluster_name
-    })
+    tags = {
+      product              = "govuk"
+      system               = "govuk-platform-engineering"
+      service              = "eks"
+      environment          = var.govuk_environment
+      owner                = "govuk-platform-engineering@digital.cabinet-office.gov.uk"
+      repository           = "govuk-infrastructure"
+      terraform-deployment = basename(abspath(path.root))
+    }
   }
 }
 
