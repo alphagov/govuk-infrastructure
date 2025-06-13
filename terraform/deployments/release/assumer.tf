@@ -9,7 +9,7 @@ locals {
     "430354129336"  # test
   ]
   account_ids = (var.govuk_environment == "production" ?
-  "${concat(local._account_ids, ["172025368201"])}" : local._account_ids)
+  concat(local._account_ids, ["172025368201"]) : local._account_ids)
 
   assume_arns = [
     for id in local.account_ids : "arn:aws:iam::${id}:role/release-assumed"
