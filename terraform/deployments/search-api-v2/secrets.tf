@@ -9,6 +9,7 @@ resource "aws_secretsmanager_secret_version" "discovery_engine_configuration" {
     "GOOGLE_CLOUD_CREDENTIALS"                 = base64decode(google_service_account_key.api.private_key)
     "GOOGLE_CLOUD_PROJECT_ID"                  = var.gcp_project_id
     "DISCOVERY_ENGINE_DEFAULT_COLLECTION_NAME" = local.discovery_engine_default_collection_name
+    "DISCOVERY_ENGINE_DEFAULT_LOCATION_NAME"   = local.discovery_engine_default_location_name
   })
 }
 
