@@ -7,3 +7,8 @@ output "google_cloud_discovery_engine_default_collection_name" {
   description = "The fully qualified name of the default collection on the GCP project"
   value       = local.discovery_engine_default_collection_name
 }
+
+output "google_cloud_discovery_engine_default_location_name" {
+  description = "The fully qualified name of the default location for the GCP project"
+  value       = local.discovery_engine_default_location_name
+}
