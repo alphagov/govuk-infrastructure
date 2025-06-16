@@ -5,20 +5,9 @@ module "serving_config_default" {
   display_name = "Default (used by live Search API v2)"
   engine_id    = google_discovery_engine_search_engine.govuk.engine_id
 
-  boost_control_ids = [
-    module.control_boost_demote_low.id,
-    module.control_boost_demote_medium.id,
-    module.control_boost_demote_pages.id,
-    module.control_boost_demote_strong.id,
-    module.control_boost_promote_low.id,
-    module.control_boost_promote_medium.id,
-  ]
-  filter_control_ids = [
-    module.control_filter_temporary_exclusions.id,
-  ]
-  synonyms_control_ids = [
-    module.control_synonym_hmrc.id,
-  ]
+  boost_control_ids    = []
+  filter_control_ids   = []
+  synonyms_control_ids = []
 }
 
 module "control_boost_promote_medium" {

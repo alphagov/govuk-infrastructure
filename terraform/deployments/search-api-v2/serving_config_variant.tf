@@ -5,29 +5,9 @@ module "serving_config_variant" {
   display_name = "Variant (used as the 'B' variant when AB testing live Search API v2)"
   engine_id    = google_discovery_engine_search_engine.govuk.engine_id
 
-  boost_control_ids = [
-    # specific to serving_config_variant
-    module.control_boost_demote_historic.id,
-    module.control_boost_freshness_general.id,
-
-    # identical to serving_config_default
-    module.control_boost_promote_medium.id,
-    module.control_boost_promote_low.id,
-    module.control_boost_demote_low.id,
-    module.control_boost_demote_medium.id,
-    module.control_boost_demote_pages.id,
-
-    # explicitly not included in serving_config_variant
-    # module.control_boost_demote_strong.id,
-  ]
-  filter_control_ids = [
-    # identical to serving_config_default
-    module.control_filter_temporary_exclusions.id,
-  ]
-  synonyms_control_ids = [
-    # identical to serving_config_default
-    module.control_synonym_hmrc.id,
-  ]
+  boost_control_ids    = []
+  filter_control_ids   = []
+  synonyms_control_ids = []
 }
 
 module "control_boost_demote_historic" {
