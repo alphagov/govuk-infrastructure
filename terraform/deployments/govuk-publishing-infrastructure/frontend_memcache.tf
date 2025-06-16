@@ -37,7 +37,6 @@ resource "aws_elasticache_cluster" "frontend_memcached" {
 
 resource "aws_route53_record" "frontend_memcached" {
   zone_id = local.internal_dns_zone_id
-  # TODO: consider removing EKS suffix once the old EC2 environments are gone.
   name    = "frontend-memcached-${local.cluster_name}.eks"
   type    = "CNAME"
   ttl     = 300
