@@ -30,8 +30,8 @@ resource "aws_iam_role" "govuk_fastly_service_role" {
 
 data "aws_iam_policy_document" "govuk_fastly_s3_access" {
   statement {
-    sid = "S3AssumeRolePolicy"
-    effect    = "Allow"
+    sid    = "S3AssumeRolePolicy"
+    effect = "Allow"
     actions = [
       "s3:PutObject",
       "s3:AbortMultipartUpload"
