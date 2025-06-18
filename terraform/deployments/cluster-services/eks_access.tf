@@ -3,6 +3,7 @@ data "aws_iam_roles" "cluster-admin" { name_regex = "(\\..*-fulladmin$|\\..*-pla
 data "aws_iam_roles" "developer" { name_regex = "\\..*-developer$" }
 data "aws_iam_roles" "licensing" { name_regex = "\\..*-licensinguser$" }
 data "aws_iam_roles" "readonly" { name_regex = "\\..*-readonly$" }
+data "aws_iam_roles" "ithctester" { name_regex = "\\..*-ithctester$" }
 
 locals {
   developer_namespaces = ["apps", "datagovuk", "licensify"]
@@ -45,6 +46,16 @@ resource "aws_eks_access_entry" "readonly" {
 
   principal_arn     = each.value
   kubernetes_groups = ["readonly"]
+  type              = "STANDARD"
+}
+
+resource "aws_eks_access_entry" "ithctester" {
+  for_each = data.aws_iam_roles.ithctester.arns
+
+  cluster_name = local.cluster_name
+
+  principal_arn     = each.value
+  kubernetes_groups = ["ithctester"]
   type              = "STANDARD"
 }
 
@@ -112,6 +123,22 @@ resource "aws_eks_access_policy_association" "readonly" {
 
   depends_on = [
     aws_eks_access_entry.readonly
+  ]
+}
+
+resource "aws_eks_access_policy_association" "ithctester" {
+  for_each = data.aws_iam_roles.ithctester.arns
+
+  cluster_name  = local.cluster_name
+  policy_arn    = "arn:aws:eks::aws:cluster-access-policy/AmazonEKSViewPolicy"
+  principal_arn = each.value
+
+  access_scope {
+    type = "cluster"
+  }
+
+  depends_on = [
+    aws_eks_access_entry.ithctester
   ]
 }
 
@@ -307,6 +334,38 @@ resource "kubernetes_cluster_role_binding" "readonly" {
   subject {
     kind      = "Group"
     name      = "readonly"
+    api_group = "rbac.authorization.k8s.io"
+  }
+}
+
+resource "kubernetes_cluster_role" "ithctester" {
+  metadata {
+    name   = "ithctester"
+    labels = { "app.kubernetes.io/managed-by" = "Terraform" }
+  }
+
+  # Grant read-only access to certain custom resources
+  rule {
+    api_groups = ["argoproj.io", "external-secrets.io"]
+    resources  = ["*"]
+    verbs      = ["get", "list", "watch"]
+  }
+
+}
+
+resource "kubernetes_cluster_role_binding" "ithctester" {
+  metadata {
+    name   = "ithctester-cluster-binding"
+    labels = { "app.kubernetes.io/managed-by" = "Terraform" }
+  }
+  role_ref {
+    api_group = "rbac.authorization.k8s.io"
+    kind      = "ClusterRole"
+    name      = kubernetes_cluster_role.ithctester.metadata[0].name
+  }
+  subject {
+    kind      = "Group"
+    name      = "ithctester"
     api_group = "rbac.authorization.k8s.io"
   }
 }
