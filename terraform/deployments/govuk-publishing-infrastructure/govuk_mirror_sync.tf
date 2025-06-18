@@ -390,7 +390,7 @@ module "govuk_mirror_sync_iam_role" {
   role_description = "Role for govuk-mirror-sync to access S3. Corresponds to govuk-mirror-sync k8s ServiceAccount."
 
   cluster_service_accounts = {
-    "${local.cluster_name}" = ["apps:govuk-mirror-sync"]
+    "${local.cluster_name}" = ["apps:mirror"]
   }
 
   role_policy_arns = {
