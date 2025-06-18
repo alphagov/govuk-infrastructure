@@ -27,7 +27,8 @@ module "security-integration" {
     local.aws_credentials["integration"],
     module.variable-set-common.id,
     module.variable-set-integration.id,
-    module.sensitive-variables.security_common_id
+    module.sensitive-variables.security_common_id,
+    module.sensitive-variables.security_integration_id
   ]
 }
 
@@ -59,7 +60,8 @@ module "security-staging" {
     local.aws_credentials["staging"],
     module.variable-set-common.id,
     module.variable-set-staging.id,
-    module.sensitive-variables.security_common_id
+    module.sensitive-variables.security_common_id,
+    module.sensitive-variables.security_staging_id
   ]
 }
 
@@ -91,6 +93,7 @@ module "security-production" {
     local.aws_credentials["production"],
     module.variable-set-common.id,
     module.variable-set-production.id,
-    module.sensitive-variables.security_common_id
+    module.sensitive-variables.security_common_id,
+    module.sensitive-variables.security_production_id
   ]
 }
