@@ -17,5 +17,4 @@ variable "govuk_environment" {
 variable "fastly_account_id" {
   type        = string
   description = "GOV.UK Fastly Account ID"
-  default     = ""
 }
