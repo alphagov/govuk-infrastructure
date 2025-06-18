@@ -10,6 +10,11 @@ data "tfe_outputs" "vpc" {
   workspace    = "vpc-${var.govuk_environment}"
 }
 
+data "tfe_outputs" "fastly_logs" {
+  organization = "govuk"
+  workspace    = "govuk-fastly-logs-${var.govuk_environment}"
+}
+
 data "terraform_remote_state" "infra_security_groups" {
   backend = "s3"
   config = {

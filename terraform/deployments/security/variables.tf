@@ -13,3 +13,8 @@ variable "govuk_environment" {
   type        = string
   description = "GOV.UK environment where resources are being deployed"
 }
+
+variable "fastly_account_id" {
+  type        = string
+  description = "GOV.UK Fastly Account ID"
+}
