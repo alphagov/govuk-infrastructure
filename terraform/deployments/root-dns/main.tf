@@ -2,7 +2,7 @@ terraform {
   cloud {
     organization = "govuk"
     workspaces {
-      tags = ["dns", "eks", "aws"]
+      tags = ["root-dns", "aws"]
     }
   }
   required_version = "~> 1.10"

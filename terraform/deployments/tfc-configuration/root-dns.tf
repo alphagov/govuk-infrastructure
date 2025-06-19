@@ -4,7 +4,7 @@ module "root-dns-ephemeral" {
   organization        = var.organization
   workspace_name      = "root-dns-ephemeral"
   workspace_desc      = "Internal and external DNS zones for ephemeral environment"
-  workspace_tags      = ["ephemeral", "dns", "aws"]
+  workspace_tags      = ["ephemeral", "root-dns", "aws"]
   terraform_version   = var.terraform_version
   execution_mode      = "remote"
   working_directory   = "/terraform/deployments/root-dns/"
@@ -36,7 +36,7 @@ module "root-dns-integration" {
   organization        = var.organization
   workspace_name      = "root-dns-integration"
   workspace_desc      = "Internal and external DNS zones for integration environment"
-  workspace_tags      = ["integration", "dns", "aws"]
+  workspace_tags      = ["integration", "root-dns", "aws"]
   terraform_version   = var.terraform_version
   execution_mode      = "remote"
   working_directory   = "/terraform/deployments/root-dns/"
@@ -69,7 +69,7 @@ module "root-dns-staging" {
   organization        = var.organization
   workspace_name      = "root-dns-staging"
   workspace_desc      = "Internal and external DNS zones for staging environment"
-  workspace_tags      = ["staging", "dns", "aws"]
+  workspace_tags      = ["staging", "root-dns", "aws"]
   terraform_version   = var.terraform_version
   execution_mode      = "remote"
   working_directory   = "/terraform/deployments/root-dns/"
@@ -101,7 +101,7 @@ module "root-dns-production" {
   organization        = var.organization
   workspace_name      = "root-dns-production"
   workspace_desc      = "Internal and external DNS zones for production environment"
-  workspace_tags      = ["production", "dns", "aws"]
+  workspace_tags      = ["production", "root-dns", "aws"]
   terraform_version   = var.terraform_version
   execution_mode      = "remote"
   working_directory   = "/terraform/deployments/root-dns/"
