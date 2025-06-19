@@ -169,3 +169,15 @@ variable "office_ips" {
   description = "List of CIDRs from which we consider Office IPs."
   default     = []
 }
+
+variable "subdomain_dns_records" {
+  type = list(object({
+    type  = string
+    name  = string
+    value = list(string)
+    ttl   = number
+  }))
+
+  description = "List of arbitrary DNS records that should be present in the the publishing subdomain's hosted zone"
+  default     = []
+}
