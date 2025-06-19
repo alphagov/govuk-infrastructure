@@ -94,6 +94,12 @@ resource "github_team" "govuk_production_deploy" {
   description = "https://docs.publishing.service.gov.uk/manual/rules-for-getting-production-access.html"
 }
 
+resource "github_team" "govuk_ithc" {
+  name        = "GOV.UK ITHC and Penetration Testing"
+  privacy     = "closed"
+  description = "To grant temporary access to our GitHub repositories and services that require GitHub authentication to ITHC testers"
+}
+
 import {
   to = github_team.govuk_production_deploy
   id = "gov-uk-production-deploy"
@@ -143,6 +149,18 @@ resource "github_team_repository" "co_platform_engineering_repos" {
   repository = each.key
   team_id    = data.github_team.co_platform_engineering.id
   permission = "pull"
+}
+
+resource "github_team_repository" "ithc_repos" {
+  # Only grant ITHC access to repositories that have been explicitly configured
+  # to be accessible by the ITHC team in repos.yml.
+  for_each = {
+    for name, repo in local.repositories : name => repo
+    if lookup(lookup(repo, "teams", {}), "govuk_ithc", "") != ""
+  }
+  repository = each.key
+  team_id    = github_team.govuk_ithc.id
+  permission = try(each.value.teams["govuk_ithc"], "pull")
 }
 
 resource "github_repository" "govuk_repos" {
