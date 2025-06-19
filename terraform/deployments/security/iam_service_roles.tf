@@ -36,10 +36,16 @@ data "aws_iam_policy_document" "govuk_fastly_s3_access" {
       "s3:PutObject",
       "s3:AbortMultipartUpload"
     ]
-    resources = [
-      data.tfe_outputs.fastly_logs.nonsensitive_values.govuk_fastly_logs_s3_bucket_arn,
-      "${data.tfe_outputs.fastly_logs.nonsensitive_values.govuk_fastly_logs_s3_bucket_arn}/*"
-    ]
+    resources = concat(
+      [
+        data.tfe_outputs.fastly_logs.nonsensitive_values.govuk_fastly_logs_s3_bucket_arn,
+        "${data.tfe_outputs.fastly_logs.nonsensitive_values.govuk_fastly_logs_s3_bucket_arn}/*"
+      ],
+      var.govuk_environment == "production" ? [
+        "arn:aws:s3:::govuk-analytics-logs-production",
+        "arn:aws:s3:::govuk-analytics-logs-production/*"
+      ] : []
+    )
   }
 }
 
