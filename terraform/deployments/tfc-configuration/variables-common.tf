@@ -6,7 +6,7 @@ module "variable-set-common" {
   tfvars = {
     dex_github_orgs_teams = [{
       name  = "alphagov"
-      teams = ["gov-uk", "gov-uk-production-deploy"]
+      teams = ["gov-uk", "gov-uk-production-deploy", "gov-uk-ithc-and-penetration-testing"]
     }]
   }
 }
