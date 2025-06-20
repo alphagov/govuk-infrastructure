@@ -50,8 +50,8 @@ metadata:
   name: ephemeral-cluster-validator
 spec:
   ports:
-  - name: 443-8080
-    port: 443
+  - name: 8080-8080
+    port: 8080
     protocol: TCP
     targetPort: 8080
   selector:
@@ -66,12 +66,19 @@ metadata:
   annotations:
     alb.ingress.kubernetes.io/scheme: internet-facing
     alb.ingress.kubernetes.io/listen-ports: '[{"HTTPS":443}]'
-    alb.ingress.kubernetes.io/certificate-arn: "arn:aws:acm:eu-west-1:430354129336:certificate/539c42e5-4194-4213-83a2-a68620c6e18a"
-    external-dns.alpha.kubernetes.io/hostname: ephemeral-cluster-validator.eph-20250617.ephemeral.govuk.digital
 spec:
   ingressClassName: aws-alb
-  defaultBackend:
-    service:
-      name: ephemeral-cluster-validator
-      port:
-        number: 443
+  tls:
+  - hosts:
+    - "*.eph-20250617.ephemeral.govuk.digital"
+  rules:
+  - host: ephemeral-cluster-validator.eph-20250617.ephemeral.govuk.digital
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: ephemeral-cluster-validator
+            port:
+              number: 8080
