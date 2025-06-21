@@ -51,9 +51,9 @@ variable "force_destroy" {
   default     = false
 }
 
-variable "enable_metrics_server" {
+variable "enable_kube_state_metrics" {
   type        = bool
-  description = "Enable the Metrics Server EKS Add-on. For Pod Metrics and HPA support."
+  description = "Enable the Kube State Metrics EKS Add-on. For Pod State Metrics."
   default     = false
 }
 

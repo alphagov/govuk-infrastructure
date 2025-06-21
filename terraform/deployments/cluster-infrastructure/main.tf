@@ -28,16 +28,17 @@ locals {
   monitoring_namespace       = "monitoring"
 
   default_cluster_addons = {
-    coredns    = { most_recent = true }
-    kube-proxy = { most_recent = true }
-    vpc-cni    = { most_recent = true }
-  }
-
-  metrics_server_addon = {
+    coredns        = { most_recent = true }
+    kube-proxy     = { most_recent = true }
     metrics-server = { most_recent = true }
+    vpc-cni        = { most_recent = true }
   }
 
-  enabled_cluster_addons = merge(local.default_cluster_addons, var.enable_metrics_server ? local.metrics_server_addon : {})
+  kube_state_metrics_addon = {
+    kube-state-metrics = { most_recent = true }
+  }
+
+  enabled_cluster_addons = merge(local.default_cluster_addons, var.enable_kube_state_metrics ? local.kube_state_metrics_addon : {})
 
   main_managed_node_group = {
     main = {

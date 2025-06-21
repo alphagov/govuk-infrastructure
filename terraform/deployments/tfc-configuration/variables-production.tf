@@ -55,7 +55,7 @@ module "variable-set-production" {
 
     govuk_environment = "production"
 
-    enable_metrics_server = true
+    enable_kube_state_metrics = false
 
     enable_arm_workers  = true
     enable_main_workers = false
