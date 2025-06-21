@@ -50,7 +50,6 @@ resource "aws_elasticache_replication_group" "chat_redis_cluster" {
 
 resource "aws_route53_record" "chat_redis_cluster" {
   zone_id = local.internal_dns_zone_id
-  # TODO: consider removing EKS suffix once the old EC2 environments are gone.
   name    = "${local.chat_redis_name}.eks"
   type    = "CNAME"
   ttl     = 300
