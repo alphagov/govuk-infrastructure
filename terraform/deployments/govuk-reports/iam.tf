@@ -11,7 +11,7 @@ data "aws_iam_policy_document" "govuk_reports_permissions" {
     sid = "CostExplorerAccess"
     actions = [
       "ce:GetCostAndUsage",
-      "ce:GetDimensionValues", 
+      "ce:GetDimensionValues",
       "ce:GetRightsizingRecommendation",
       "ce:ListCostCategoryDefinitions"
     ]
@@ -83,3 +83,4 @@ module "govuk_reports_iam_role" {
     application = "govuk-reports"
   }
 }
+
