@@ -37,6 +37,11 @@ provider "aws" {
   region = "us-east-1"
 }
 
+provider "aws" {
+  alias  = "eu_west_2"
+  region = "eu-west-2"
+}
+
 provider "archive" {}
 
 resource "aws_cloudfront_cache_policy" "no-cookies" {
@@ -194,10 +199,9 @@ resource "aws_wafv2_web_acl" "cdn_poc_govuk" {
 }
 
 resource "aws_cloudfront_distribution" "www_distribution" {
-  count = var.cloudfront_create ? 1 : 0
-
   aliases    = var.cloudfront_www_distribution_aliases
   web_acl_id = aws_wafv2_web_acl.cdn_poc_govuk.arn
+
   origin {
     domain_name = var.origin_www_domain
     origin_id   = var.origin_www_id
@@ -240,6 +244,12 @@ resource "aws_cloudfront_distribution" "www_distribution" {
 
     viewer_protocol_policy = "redirect-to-https"
     min_ttl                = 0
+
+    lambda_function_association {
+      event_type   = "viewer-request"
+      lambda_arn   = "${aws_lambda_function.url_rewrite.arn}:${aws_lambda_function.url_rewrite.version}"
+      include_body = false
+    }
   }
 
   ordered_cache_behavior {
@@ -292,7 +302,6 @@ resource "aws_cloudfront_distribution" "www_distribution" {
 }
 
 resource "aws_cloudfront_distribution" "assets_distribution" {
-  count      = var.cloudfront_create ? 1 : 0
   web_acl_id = aws_wafv2_web_acl.cdn_poc_govuk.arn
   origin {
     domain_name = var.origin_assets_domain
@@ -342,4 +351,55 @@ resource "aws_cloudfront_distribution" "assets_distribution" {
     ssl_support_method       = "sni-only"
     minimum_protocol_version = "TLSv1.2_2021"
   }
+}
+
+import {
+  to       = aws_lambda_function.url_rewrite
+  id       = "url_rewrite"
+  for_each = var.govuk_environment == "production" ? [1] : []
+}
+
+resource "aws_iam_role" "basic_lambda_role" {
+  name = "basic_lambda_role"
+
+  assume_role_policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Principal": {
+        "Service": [
+          "lambda.amazonaws.com",
+          "edgelambda.amazonaws.com"
+        ]
+      },
+      "Action": "sts:AssumeRole"
+    }
+  ]
+}
+EOF
+}
+
+resource "aws_iam_policy_attachment" "basic_lambda_attach" {
+  name       = "basic-lambda-attachment"
+  roles      = [aws_iam_role.basic_lambda_role.name]
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+}
+
+data "archive_file" "url_rewrite" {
+  type        = "zip"
+  source_file = "${path.module}/index.js"
+  output_path = "${path.module}/CloudfrontUrlRewrite.zip"
+}
+
+resource "aws_lambda_function" "url_rewrite" {
+  filename         = data.archive_file.url_rewrite.output_path
+  source_code_hash = data.archive_file.url_rewrite.output_base64sha256
+
+  function_name = "url_rewrite"
+  role          = aws_iam_role.basic_lambda_role.arn
+  handler       = "index.handler"
+  runtime       = "nodejs22.x"
+  provider      = aws.eu_west_2
 }

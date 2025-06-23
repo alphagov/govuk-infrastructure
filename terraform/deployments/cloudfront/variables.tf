@@ -8,12 +8,6 @@ variable "govuk_environment" {
   description = "Name of the environment (AWS account) being deployed to."
 }
 
-variable "cloudfront_create" {
-  description = "Create Cloudfront resources."
-  type        = bool
-  default     = false
-}
-
 variable "cloudfront_enable" {
   description = "Enable Cloudfront distributions."
   type        = bool
