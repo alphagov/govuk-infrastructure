@@ -29,8 +29,19 @@ module "govuk-publishing-infrastructure-integration" {
     module.variable-set-integration.id,
     module.variable-set-amazonmq-integration.id,
     module.sensitive-variables.security_integration_id,
-    module.sensitive-variables.waf_integration_id
+    module.sensitive-variables.waf_integration_id,
+    module.govuk-publishing-infrastructure-variable-set-integration.id,
   ]
+}
+
+module "govuk-publishing-infrastructure-variable-set-integration" {
+  source = "./variable-set"
+
+  name = "govuk-publishing-infrastructure-integration"
+
+  tfvars = {
+    subdomain_dns_records = []
+  }
 }
 
 module "govuk-publishing-infrastructure-staging" {
@@ -63,8 +74,19 @@ module "govuk-publishing-infrastructure-staging" {
     module.variable-set-staging.id,
     module.variable-set-amazonmq-staging.id,
     module.sensitive-variables.security_staging_id,
-    module.sensitive-variables.waf_staging_id
+    module.sensitive-variables.waf_staging_id,
+    module.govuk-publishing-infrastructure-variable-set-staging.id,
   ]
+}
+
+module "govuk-publishing-infrastructure-variable-set-staging" {
+  source = "./variable-set"
+
+  name = "govuk-publishing-infrastructure-staging"
+
+  tfvars = {
+    subdomain_dns_records = []
+  }
 }
 
 module "govuk-publishing-infrastructure-production" {
@@ -97,6 +119,17 @@ module "govuk-publishing-infrastructure-production" {
     module.variable-set-production.id,
     module.variable-set-amazonmq-production.id,
     module.sensitive-variables.security_production_id,
-    module.sensitive-variables.waf_production_id
+    module.sensitive-variables.waf_production_id,
+    module.govuk-publishing-infrastructure-variable-set-production.id,
   ]
+}
+
+module "govuk-publishing-infrastructure-variable-set-production" {
+  source = "./variable-set"
+
+  name = "govuk-publishing-infrastructure-production"
+
+  tfvars = {
+    subdomain_dns_records = []
+  }
 }
