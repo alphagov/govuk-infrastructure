@@ -70,6 +70,13 @@ resource "restapi_object" "google_discovery_engine_datastore_schema" {
           retrievable = true
           indexable   = true
         }
+        # RFC3339 timestamp of when this document was first published (for
+        # sorting/filtering/boosting)
+        first_published_at = {
+          type        = "datetime"
+          retrievable = true
+          indexable   = true
+        }
         # The source document type (for boosting)
         document_type = {
           type        = "string"
