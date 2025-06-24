@@ -37,7 +37,7 @@ module "govuk-publishing-infrastructure-integration" {
 module "govuk-publishing-infrastructure-variable-set-integration" {
   source = "./variable-set"
 
-  name = "govuk-publishing-infrastructure-integration"
+  name = "govuk-publishing-infrastructure-integration-non-sensitive"
 
   tfvars = {
     subdomain_dns_records = []
@@ -82,7 +82,7 @@ module "govuk-publishing-infrastructure-staging" {
 module "govuk-publishing-infrastructure-variable-set-staging" {
   source = "./variable-set"
 
-  name = "govuk-publishing-infrastructure-staging"
+  name = "govuk-publishing-infrastructure-staging-non-sensitive"
 
   tfvars = {
     subdomain_dns_records = []
@@ -127,7 +127,7 @@ module "govuk-publishing-infrastructure-production" {
 module "govuk-publishing-infrastructure-variable-set-production" {
   source = "./variable-set"
 
-  name = "govuk-publishing-infrastructure-production"
+  name = "govuk-publishing-infrastructure-production-non-sensitive"
 
   tfvars = {
     subdomain_dns_records = []
