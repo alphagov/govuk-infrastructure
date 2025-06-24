@@ -180,4 +180,12 @@ variable "subdomain_dns_records" {
 
   description = "List of arbitrary DNS records that should be present in the the publishing subdomain's hosted zone"
   default     = []
+
+  validation {
+    condition = !anytrue([
+      for record in var.subdomain_dns_records : endswith(record.name, ".")
+    ])
+
+    error_message = "Subdomain DNS record names should not end with a dot"
+  }
 }

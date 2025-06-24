@@ -9,7 +9,11 @@ resource "aws_route53_record" "additional_dns_records" {
   for_each = { for _, v in var.subdomain_dns_records : v.name => v }
 
   zone_id = data.aws_route53_zone.publishing_subdomain.zone_id
-  name    = each.value.name
+  name = (
+    each.value.name == "@" ?
+    data.aws_route53_zone.publishing_subdomain.name
+    : "${each.value.name}.${data.aws_route53_zone.publishing_subdomain.name}"
+  )
   type    = each.value.type
   records = each.value.value
   ttl     = each.value.ttl
