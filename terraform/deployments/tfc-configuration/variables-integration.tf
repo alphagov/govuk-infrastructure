@@ -197,27 +197,27 @@ module "variable-set-rds-integration" {
         performance_insights_enabled = false
         project                      = "GOV.UK - AI"
       }
-      # ckan = {
-      #   engine         = "postgres"
-      #   engine_version = "13"
-      #   engine_params = {
-      #     log_min_duration_statement      = { value = 10000 }
-      #     log_statement                   = { value = "all" }
-      #     deadlock_timeout                = { value = 2500 }
-      #     log_lock_waits                  = { value = 1 }
-      #     "rds.logical_replication"       = { value = 1, apply_method = "pending-reboot" }
-      #     max_wal_senders                 = { value = 35, apply_method = "pending-reboot" }
-      #     max_logical_replication_workers = { value = 20, apply_method = "pending-reboot" }
-      #     max_worker_processes            = { value = 40, apply_method = "pending-reboot" }
-      #   }
-      #   backup_retention_period      = 1
-      #   engine_params_family         = "postgres13"
-      #   name                         = "ckan"
-      #   allocated_storage            = 1000
-      #   instance_class               = "db.m6g.large"
-      #   performance_insights_enabled = true
-      #   project                      = "GOV.UK - DGU"
-      # }
+      ckan = {
+        engine         = "postgres"
+        engine_version = "14.18"
+        engine_params = {
+          log_min_duration_statement      = { value = 10000 }
+          log_statement                   = { value = "all" }
+          deadlock_timeout                = { value = 2500 }
+          log_lock_waits                  = { value = 1 }
+          "rds.logical_replication"       = { value = 1, apply_method = "pending-reboot" }
+          max_wal_senders                 = { value = 35, apply_method = "pending-reboot" }
+          max_logical_replication_workers = { value = 20, apply_method = "pending-reboot" }
+          max_worker_processes            = { value = 40, apply_method = "pending-reboot" }
+        }
+        backup_retention_period      = 1
+        engine_params_family         = "postgres14"
+        name                         = "ckan"
+        allocated_storage            = 1000
+        instance_class               = "db.m6g.large"
+        performance_insights_enabled = true
+        project                      = "GOV.UK - DGU"
+      }
 
       collections_publisher = {
         engine         = "mysql"
