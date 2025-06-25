@@ -353,12 +353,6 @@ resource "aws_cloudfront_distribution" "assets_distribution" {
   }
 }
 
-import {
-  to       = aws_lambda_function.url_rewrite
-  id       = "url_rewrite"
-  for_each = var.govuk_environment == "production" ? [1] : []
-}
-
 resource "aws_iam_role" "basic_lambda_role" {
   name = "basic_lambda_role"
 
