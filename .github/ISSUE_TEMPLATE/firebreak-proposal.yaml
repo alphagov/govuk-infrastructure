@@ -1,0 +1,130 @@
+name: "Firebreak Proposal"
+description: "Propose work for an upcoming Firebreak period"
+title: "🔥 [Firebreak] :short_title:"
+labels: ["firebreak"]
+assignees: []
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Firebreak guidelines
+        A **Firebreak** is typically a two‑week sprint in which the team works on tasks **outside the normal roadmap** with clear benefit to **GOV.UK** – ideally also to **Platform Engineering**.
+
+        Valid activities include:
+        * Exploring new tools or technologies
+        * Paying down technical debt
+        * Experimenting with new ways of working
+        * Fixing long‑standing issues that hurt the platform
+
+        **During Firebreak, you still need to**:
+        * Attend daily stand‑ups
+        * Cover the Platform Support rota & respond to enquiries
+        * Remain on‑call if you're scheduled
+        * Help with urgent incidents if needed
+
+        You'll _pitch_ this proposal in a 2–3 minute slot at the team’s Firebreak planning session.
+
+        At the end of Firebreak, you must:
+        * Demo your work in the team's Show‑and‑Tell session
+        * Document findings in the team drive
+        * Tear down any ephemeral environments
+        * Merge or mark draft any open PRs
+        * Close or move this issue to the backlog
+
+  - type: input
+    id: summary
+    attributes:
+      label: One‑sentence summary *(required)*
+      placeholder: "Investigate using OpenTelemetry for request tracing"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: category
+    attributes:
+      label: Category *(required)*
+      options:
+        - Explore new tool / technology
+        - Pay down technical debt
+        - Experiment with new process
+        - Fix a long‑standing issue
+    validations:
+      required: true
+
+  - type: textarea
+    id: benefit
+    attributes:
+      label: Benefit to GOV.UK / Platform Engineering *(required)*
+      description: "Explain the value we expect to realise."
+      placeholder: |
+        * Reduces build time by ~30 %
+        * Improves incident response by providing richer logs
+      render: markdown
+    validations:
+      required: true
+
+  - type: textarea
+    id: approach
+    attributes:
+      label: Proposed approach & tasks *(required)*
+      description: "Outline the steps you plan to take during the Firebreak."
+      placeholder: |
+        1. Spin up a sandbox environment
+        2. Integrate OpenTelemetry SDK into Publishing API
+        3. Capture and analyse traces in Grafana Tempo
+        4. Document findings
+      render: markdown
+    validations:
+      required: true
+
+  - type: input
+    id: collaborators
+    attributes:
+      label: Who’s working on it? *(required)*
+      description: "GitHub usernames or “solo”."
+      placeholder: "@namePersonHeres"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: duration
+    attributes:
+      label: Intended duration
+      description: "Firebreaks items usually take one week. If you need more, justify in *Benefit* section."
+      options:
+        - 1 week
+        - 2 weeks
+
+  - type: textarea
+    id: dependencies
+    attributes:
+      label: Dependencies / risks
+      description: "List anything that could block this work."
+      placeholder: "Requires VPN access to xyz; vendor licence pending..."
+      render: markdown
+
+  - type: textarea
+    id: deliverables
+    attributes:
+      label: Expected deliverables *(required)*
+      description: "List what you expect to have by the end of Firebreak."
+      placeholder: |
+        * Demo at Show‑and‑Tell
+        * Write‑up in team drive
+        * PR merged or marked draft
+        * Ephemeral environment deleted
+      render: markdown
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: wrapup
+    attributes:
+      label: End‑of‑Firebreak wrap‑up checklist
+      options:
+        - label: Demo prepared for Show‑and‑Tell
+        - label: Findings documented in team drive
+        - label: Ephemeral environments deleted
+        - label: PRs merged or marked draft
+        - label: Issue closed or moved to backlog
