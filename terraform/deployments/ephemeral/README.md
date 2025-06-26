@@ -8,6 +8,8 @@ Set an ephemeral cluster ID before doing anything: `export EPH_CLUSTER_ID=eph-aa
 2. Do a `terraform init`
 3. Run an apply with your chosen ephemeral cluster ID (this isn't generated for you)
    `terraform apply -var ephemeral_cluster_id=${EPH_CLUSTER_ID}`
+4. Once all the Terraform workspaces have successfully applied, log into the cluster and 
+   run `./validate.sh` to test that the cluster is functioning and able to accept ingress.
 
 State for the ephemeral module is stored locally for now.
 
