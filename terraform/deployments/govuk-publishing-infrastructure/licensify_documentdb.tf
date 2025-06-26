@@ -99,7 +99,6 @@ resource "aws_docdb_cluster_instance" "licensify_cluster_instances" {
   count              = var.licensify_documentdb_instance_count
   identifier         = "licensify-documentdb-${count.index}"
   cluster_identifier = aws_docdb_cluster.licensify_cluster.id
-  # TODO: make sure this is the right DB instance size
-  instance_class = "db.r5.large"
-  tags           = aws_docdb_cluster.licensify_cluster.tags
+  instance_class     = "db.r5.large"
+  tags               = aws_docdb_cluster.licensify_cluster.tags
 }
