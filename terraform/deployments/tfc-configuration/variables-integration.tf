@@ -649,7 +649,6 @@ module "variable-set-elasticsearch-integration" {
       throughput       = 250
       provisioned_iops = 3000
     }
-    govuk_environment      = "integration"
     engine_version         = "6.7"
     zone_awareness_enabled = true
 
@@ -669,5 +668,7 @@ module "variable-set-elasticsearch-integration" {
       "arn:aws:s3:::govuk-staging-elasticsearch6-manual-snapshots",
       "arn:aws:s3:::govuk-integration-elasticsearch6-manual-snapshots"
     ]
+
+    encryption_at_rest = false
   }
 }

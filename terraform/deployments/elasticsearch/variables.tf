@@ -47,6 +47,11 @@ variable "ebs" {
   default     = null
 }
 
+variable "encryption_at_rest" {
+  type        = bool
+  description = "Enable encryption at rest in the opensearch cluster"
+}
+
 variable "tls_security_policy" {
   type        = string
   description = "The pre-canned AWS security policy to enforce for connections to opensearch"
