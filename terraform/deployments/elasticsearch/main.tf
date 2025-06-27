@@ -42,15 +42,7 @@ locals {
     data.tfe_outputs.vpc.nonsensitive_values.private_subnet_ids["elasticsearch_b"],
     data.tfe_outputs.vpc.nonsensitive_values.private_subnet_ids["elasticsearch_c"],
   ]
-  // master_user = "${var.service}-masteruser"
 }
-
-/*
-resource "random_password" "password" {
-  length  = 32
-  special = true
-}
-*/
 
 import {
   to = aws_cloudwatch_log_group.opensearch_search_slow_logs
