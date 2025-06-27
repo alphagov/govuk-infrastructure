@@ -61,9 +61,10 @@ No modules.
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
 | <a name="input_aws_region"></a> [aws\_region](#input\_aws\_region) | AWS region | `string` | `"eu-west-1"` | no |
-| <a name="input_dedicated_master"></a> [dedicated\_master](#input\_dedicated\_master) | Dedicated master settings, leave null to disable dedicated master | <pre>object({<br>    instance_count = number<br>    instance_type = string<br>  })</pre> | `null` | no |
+| <a name="input_dedicated_master"></a> [dedicated\_master](#input\_dedicated\_master) | Dedicated master settings, leave null to disable dedicated master | <pre>object({<br>    instance_count = number<br>    instance_type  = string<br>  })</pre> | `null` | no |
 | <a name="input_ebs"></a> [ebs](#input\_ebs) | EBS configuration, leave null to disable EBS | <pre>object({<br>    volume_size      = number<br>    volume_type      = string<br>    throughput       = number<br>    provisioned_iops = number<br>  })</pre> | `null` | no |
 | <a name="input_elasticsearch6_manual_snapshot_bucket_arns"></a> [elasticsearch6\_manual\_snapshot\_bucket\_arns](#input\_elasticsearch6\_manual\_snapshot\_bucket\_arns) | A list of S3 Bucket ARNS that the manual snapshot role should be able to access | `list(string)` | n/a | yes |
+| <a name="input_encryption_at_rest"></a> [encryption\_at\_rest](#input\_encryption\_at\_rest) | Enable encryption at rest in the opensearch cluster | `bool` | n/a | yes |
 | <a name="input_engine_version"></a> [engine\_version](#input\_engine\_version) | The engine version of the opensearch cluster | `string` | n/a | yes |
 | <a name="input_govuk_environment"></a> [govuk\_environment](#input\_govuk\_environment) | Acceptable values are test, integration, staging, production | `string` | n/a | yes |
 | <a name="input_instance_count"></a> [instance\_count](#input\_instance\_count) | n/a | `number` | n/a | yes |
