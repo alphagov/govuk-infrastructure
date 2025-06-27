@@ -141,7 +141,7 @@ resource "aws_elasticsearch_domain" "opensearch" {
   }
 
   encrypt_at_rest {
-    enabled = false
+    enabled = var.encryption_at_rest
   }
 
   domain_endpoint_options {
