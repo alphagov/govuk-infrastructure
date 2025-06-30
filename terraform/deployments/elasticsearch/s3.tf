@@ -2,11 +2,6 @@ locals {
   bucket_name = "govuk-${var.govuk_environment}-elasticsearch6-manual-snapshots"
 }
 
-import {
-  to = aws_s3_bucket.manual_snapshots
-  id = local.bucket_name
-}
-
 resource "aws_s3_bucket" "manual_snapshots" {
   bucket = local.bucket_name
   tags = {
@@ -14,20 +9,10 @@ resource "aws_s3_bucket" "manual_snapshots" {
   }
 }
 
-import {
-  to = aws_s3_bucket_logging.manual_snapshots
-  id = local.bucket_name
-}
-
 resource "aws_s3_bucket_logging" "manual_snapshots" {
   bucket        = aws_s3_bucket.manual_snapshots.id
   target_bucket = data.tfe_outputs.logging.nonsensitive_values.aws_logging_bucket_id
   target_prefix = "s3/${local.bucket_name}/"
-}
-
-import {
-  to = aws_s3_bucket_policy.manual_snapshots_cross_account_access
-  id = local.bucket_name
 }
 
 resource "aws_s3_bucket_policy" "manual_snapshots_cross_account_access" {
