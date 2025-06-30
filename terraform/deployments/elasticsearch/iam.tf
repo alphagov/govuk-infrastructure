@@ -1,8 +1,3 @@
-import {
-  to = aws_iam_role.manual_snapshot_role
-  id = "${var.stackname}-elasticsearch6-manual-snapshot-role"
-}
-
 resource "aws_iam_role" "manual_snapshot_role" {
   name               = "${var.stackname}-elasticsearch6-manual-snapshot-role"
   assume_role_policy = data.aws_iam_policy_document.es_can_assume_role.json
@@ -16,11 +11,6 @@ data "aws_iam_policy_document" "es_can_assume_role" {
     }
     actions = ["sts:AssumeRole"]
   }
-}
-
-import {
-  to = aws_iam_policy.manual_snapshot_bucket_policy
-  id = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:policy/govuk-${var.govuk_environment}-elasticsearch6-manual-snapshot-bucket-policy"
 }
 
 resource "aws_iam_policy" "manual_snapshot_bucket_policy" {
@@ -43,20 +33,10 @@ data "aws_iam_policy_document" "manual_snapshot_bucket_policy" {
   }
 }
 
-import {
-  to = aws_iam_role_policy_attachment.manual_snapshot_role_policy
-  id = "${aws_iam_role.manual_snapshot_role.name}/${aws_iam_policy.manual_snapshot_bucket_policy.arn}"
-}
-
 resource "aws_iam_role_policy_attachment" "manual_snapshot_role_policy" {
   role       = aws_iam_role.manual_snapshot_role.name
   policy_arn = aws_iam_policy.manual_snapshot_bucket_policy.arn
 
-}
-
-import {
-  to = aws_iam_policy.can_configure_es_snapshots
-  id = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:policy/govuk-${var.govuk_environment}-elasticsearch6-manual-snapshot-domain-configuration-policy"
 }
 
 resource "aws_iam_policy" "can_configure_es_snapshots" {
