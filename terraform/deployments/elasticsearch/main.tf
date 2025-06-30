@@ -1,12 +1,3 @@
-/***
- * # Elasticsearch cluster
- *
- * Managed Elasticsearch 6 cluster
- *
- * The snapshot repository configuration is not currently done via Terraform;
- * see register-snapshot-repository.py.
- */
-
 terraform {
   cloud {
     organization = "govuk"
