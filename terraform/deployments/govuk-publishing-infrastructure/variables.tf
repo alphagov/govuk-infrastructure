@@ -189,3 +189,28 @@ variable "subdomain_dns_records" {
     error_message = "Subdomain DNS record names should not end with a dot"
   }
 }
+
+variable "subdomain_delegation_name_servers" {
+  type        = map(list(string))
+  description = "A map of subdomains and their name servers to create DNS delegation records for. This should be empty outside of production, where the other environments will be delegated from."
+  default     = {}
+
+  validation {
+    condition     = var.govuk_environment == "production" ? true : length(var.subdomain_delegation_name_servers) == 0
+    error_message = "Subdomain delegation name servers should be empty outside of the production environment"
+  }
+
+  validation {
+    condition = !anytrue([
+      for name, _ in var.subdomain_delegation_name_servers : endswith(name, ".")
+    ])
+    error_message = "Subdomains should not end with a dot"
+  }
+
+  validation {
+    condition = !anytrue([
+      for _, nameservers in var.subdomain_delegation_name_servers : (length(nameservers) < 1)
+    ])
+    error_message = "Lists of name servers must contain at least one entry"
+  }
+}

@@ -40,6 +40,7 @@ module "govuk-publishing-infrastructure-variable-set-integration" {
   name = "govuk-publishing-infrastructure-integration-non-sensitive"
 
   tfvars = {
+    subdomain_delegation_name_servers = {}
     subdomain_dns_records = [
       { type = "CNAME", name = "_acme-challenge", ttl = 3600, value = ["tgcqj5pd616ulzbjv9.fastly-validations.com."] },
       { type = "CNAME", name = "_9fe718d811f09809db412a7f98eb9ffb", ttl = 10800, value = ["5dd99c1fde2deb7076ac37f0b2be18a6.53330f7819da7606482bc76d77ca8777.ba9be94b9a84fd28d757.comodoca.com."] },
@@ -135,6 +136,7 @@ module "govuk-publishing-infrastructure-variable-set-staging" {
   name = "govuk-publishing-infrastructure-staging-non-sensitive"
 
   tfvars = {
+    subdomain_delegation_name_servers = {}
     subdomain_dns_records = [
       { type = "CNAME", name = "_acme-challenge", ttl = 3600, value = ["swkxpvjulr7u0dfqxo.fastly-validations.com."] },
       { type = "CNAME", name = "chat", ttl = 3600, value = ["chat.eks.staging.govuk.digital."] },
@@ -229,6 +231,20 @@ module "govuk-publishing-infrastructure-variable-set-production" {
   name = "govuk-publishing-infrastructure-production-non-sensitive"
 
   tfvars = {
+    subdomain_delegation_name_servers = {
+      "integration" = [
+        "ns-1575.awsdns-04.co.uk.",
+        "ns-534.awsdns-02.net.",
+        "ns-1077.awsdns-06.org.",
+        "ns-11.awsdns-01.com.",
+      ]
+      "staging" = [
+        "ns-821.awsdns-38.net.",
+        "ns-114.awsdns-14.com.",
+        "ns-1516.awsdns-61.org.",
+        "ns-1898.awsdns-45.co.uk.",
+      ]
+    }
     subdomain_dns_records = [
       { type = "TXT", name = "@", ttl = 3600, value = ["globalsign-domain-verification=INYQnRXIQfznLaHejAi-z4ZPb6W3Ez3H7BMdhfeAXx", "google-site-verification=M5Q0yBeU28XdlP78DtIzUcc6m63GXzYS4Rrkf2Ab7Ng", "v=spf1 -all"] },
       { type = "TXT", name = "_dmarc", ttl = 3600, value = ["v=DMARC1;p=reject;fo=1;rua=mailto:dmarc-rua@dmarc.service.gov.uk;ruf=mailto:dmarc-ruf@dmarc.service.gov.uk"] },
