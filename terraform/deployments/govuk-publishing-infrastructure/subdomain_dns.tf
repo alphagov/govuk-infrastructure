@@ -18,3 +18,13 @@ resource "aws_route53_record" "additional_dns_records" {
   records = each.value.value
   ttl     = each.value.ttl
 }
+
+resource "aws_route53_record" "subdomain_delegation" {
+  for_each = var.subdomain_delegation_name_servers
+
+  zone_id = data.aws_route53_zone.publishing_subdomain.zone_id
+  name    = "${each.key}.${data.aws_route53_zone.publishing_subdomain.name}"
+  type    = "NS"
+  records = each.value
+  ttl     = 86400
+}
