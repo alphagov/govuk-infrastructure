@@ -304,8 +304,14 @@ resource "kubernetes_cluster_role" "readonly" {
 
   rule {
     api_groups = [""]
-    resources  = ["namespaces", "pods", "pods/logs", "services", "configmaps", "secrets", "endpoints", "events"]
+    resources  = ["namespaces", "pods", "pods/logs", "services", "configmaps", "endpoints", "events"]
     verbs      = ["get", "list", "watch"]
+  }
+
+  rule {
+    api_groups = [""]
+    resources  = ["secrets"]
+    verbs      = ["list"]
   }
 
   rule {
