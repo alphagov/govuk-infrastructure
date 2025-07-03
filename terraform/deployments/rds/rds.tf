@@ -134,9 +134,11 @@ resource "aws_db_instance" "replica" {
     if lookup(value, "has_read_replica", false)
   }
 
-  instance_class      = each.value.instance_class
-  identifier          = "${var.govuk_environment}-${each.value.name}-${each.value.engine}-replica"
-  replicate_source_db = aws_db_instance.instance[each.key].identifier
+  instance_class                        = each.value.instance_class
+  identifier                            = "${var.govuk_environment}-${each.value.name}-${each.value.engine}-replica"
+  replicate_source_db                   = aws_db_instance.instance[each.key].identifier
+  performance_insights_enabled          = aws_db_instance.instance[each.key].performance_insights_enabled
+  performance_insights_retention_period = aws_db_instance.instance[each.key].performance_insights_retention_period
 
   skip_final_snapshot = true
 
