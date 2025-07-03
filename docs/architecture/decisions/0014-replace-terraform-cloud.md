@@ -1,4 +1,4 @@
-# 14. Replace Terraform Cloud backend with S3 + DynamoDB
+# 14. Replace Terraform Cloud backend with AWS S3
 
 Date: 2025-06-10
 
@@ -10,21 +10,20 @@ Pending
 
 GOV.UK’s infrastructure-as‑code currently stores Terraform state in **Terraform Cloud**. We have **93 workspaces** (each with integration, staging and production environments) and pay a lot for the service.
 
-While Terraform Cloud gives us managed state, variable sets, secret interpolation and a friendly UI, its cost and proprietary lock‑in are no longer acceptable. A renewal decision is due within six months.
+While Terraform Cloud gives us managed state, variable sets, secret interpolation and a friendly UI, its cost and proprietary lock‑in are no longer acceptable. A renewal decision is due within six months.
 
-S3‑backed state with DynamoDB locking has matured, and AWS already meets our security baseline (SSE‑KMS, CloudTrail, GuardDuty). We estimate an annual cost of **< £100**, a > 99 % saving.
+S3‑backed state with S3 native locking has matured, and AWS already meets our security baseline (SSE‑KMS, CloudTrail, GuardDuty). We estimate an annual cost of **<£100**, a >99% saving.
 
 ## Decision
 
-* **Adopt S3 + DynamoDB as the canonical Terraform backend** for all workspaces.
+* **Adopt S3 as the canonical Terraform backend** for all workspaces.
 * Provision **one bucket per environment**:
 
   * `govuk-terraform-state-integration`
   * `govuk-terraform-state-staging`
   * `govuk-terraform-state-production`
     with versioning, bucket‑level public‑access blocks and SSE‑KMS.
-* Create a single DynamoDB table `terraform-state-locks` (on‑demand capacity) for state locking.
-* Retain object versions for **90 days** via an S3 lifecycle rule.
+* Retain object versions for **90 days** via an S3 lifecycle rule.
 * Manage these resources through a shared `state-backend` Terraform module in `govuk-infrastructure`.
 * Example workspace backend block:
 
@@ -34,7 +33,6 @@ S3‑backed state with DynamoDB locking has matured, and AWS already meets our s
       bucket         = "govuk-terraform-state-${ var.environment }"
       key            = "${ path_relative_to_include() }/terraform.tfstate"
       region         = "eu-west-2"
-      dynamodb_table = "terraform-state-locks"
       encrypt        = true
     }
   }
@@ -50,12 +48,12 @@ S3‑backed state with DynamoDB locking has matured, and AWS already meets our s
 
 ### Positive
 
-* Reduces IaC platform spend by ≥ 99 %.
+* Reduces IaC platform spend by ≥99%.
 * Removes vendor lock‑in; state resides wholly inside our AWS org.
 * Leverages existing AWS security tooling and auditing.
 * Aligns with open source, CNCF‑standard workflows.
 
-### Negative / Risks
+### Negatives/Risks
 
 * Loss of TF Cloud convenience features (run UI, drift detection, cost estimation).
   *Mitigation:* self‑hosted GHA runner or Atlantis; Infracost; scheduled drift plans.
