@@ -6,7 +6,7 @@ resource "aws_route53_record" "additional_dns_records" {
   # this could be a simple foreach, but Terraform would think the order matters then
   # instead transform the list into a name => object pair so that each resource has
   # a stable name
-  for_each = { for _, v in var.subdomain_dns_records : v.name => v }
+  for_each = { for _, v in var.subdomain_dns_records : "${v.name} (${v.type})" => v }
 
   zone_id = data.aws_route53_zone.publishing_subdomain.zone_id
   name = (
