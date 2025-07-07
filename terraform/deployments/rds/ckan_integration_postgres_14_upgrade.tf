@@ -1,25 +1,9 @@
-resource "aws_db_parameter_group" "postgresql14_green_params" {
+import {
+  to = aws_db_instance.instance["ckan"]
+  id = "ckan-postgres"
+}
 
-  name_prefix = "${var.govuk_environment}-ckan-postgres-"
-  family      = "postgres14"
-
-  parameter {
-    name         = "rds.logical_replication"
-    value        = "1"
-    apply_method = "pending-reboot"
-  }
-
-  parameter {
-    name         = "max_logical_replication_workers"
-    value        = "20"
-    apply_method = "pending-reboot"
-  }
-
-  parameter {
-    name         = "max_worker_processes"
-    value        = "25"
-    apply_method = "pending-reboot"
-  }
-
-  lifecycle { create_before_destroy = true }
+import {
+  to = aws_db_parameter_group.engine_params["ckan"]
+  id = "integration-ckan-postgres-20250703154858125500000001"
 }
