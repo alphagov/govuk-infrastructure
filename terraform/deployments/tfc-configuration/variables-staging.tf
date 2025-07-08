@@ -626,20 +626,7 @@ module "variable-set-elasticache-staging" {
   #   }
 
   tfvars = {
-    caches = {
-      publishing-api = {
-        name        = "publishing-api-valkey"
-        description = "Publishing API Valkey Instance"
-      }
-      search-api = {
-        name        = "search-api-valkey"
-        description = "Search API Valkey Instance"
-      }
-      whitehall-admin = {
-        name        = "whitehall-admin-valkey"
-        description = "Whitehall Admin Valkey Instance"
-      }
-    }
+    caches = {}
   }
 }
 
