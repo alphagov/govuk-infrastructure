@@ -1,0 +1,75 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: elasticsearch
+  name: elasticsearch
+  namespace: elk
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: elasticsearch
+  template:
+    metadata:
+      labels:
+        app: elasticsearch
+    spec:
+      affinity:
+        nodeAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 1
+              preference:
+                matchExpressions:
+                  - key: "kubernetes.io/arch"
+                    operator: "In"
+                    values: ["arm64"]
+      containers:
+        - env:
+            - name: ES_JAVA_OPTS
+              value: -Xms512m -Xmx512m
+            - name: discovery.type
+              value: single-node
+            - name: bootstrap.memory_lock
+              value: "true"
+            - name: "xpack.security.enabled"
+              value: "true"
+            - name: "xpack.security.http.ssl.enabled"
+              value: "false"
+            - name: "xpack.security.transport.ssl.enabled"
+              value: "false"
+            - name: "xpack.license.self_generated.type"
+              value: "basic"
+          envFrom:
+            - secretRef:
+                name: elasticsearch
+          image: elasticsearch:8.18.2
+          startupProbe:
+            exec:
+              # Create a k8s-events index once the cluster can receive requests, this also functions as a good startupProbe
+              # since the ES cluster has to actually be listening and accepting requests for it to work
+              command: 
+                - bash
+                - "-c"
+                - |
+                  curl -u elastic:${ELASTIC_PASSWORD} -X PUT --fail --silent http://localhost:9200/k8s-events &&
+                  curl -s -X POST -u "elastic:${ELASTIC_PASSWORD}" -H "Content-Type: application/json" http://localhost:9200/_security/user/kibana_system/_password -d "{\"password\":\"${KIBANA_PASSWORD}\"}" &&
+                  curl -s -X POST -u "elastic:${ELASTIC_PASSWORD}" -H "Content-Type: application/json" http://localhost:9200/_security/role/otel_writer -d '{"indices": [{"names": ["k8s-events"], "privileges": ["write"]}]}' &&
+                  curl -s -X POST -u "elastic:${ELASTIC_PASSWORD}" -H "Content-Type: application/json" http://localhost:9200/_security/user/otel_collector/ -d "{\"roles\": [\"otel_writer\"], \"password\":\"${OTEL_PASSWORD}\"}"
+            failureThreshold: 120
+            periodSeconds: 5
+            timeoutSeconds: 10
+          name: elasticsearch
+          ports:
+            - containerPort: 9200
+              protocol: TCP
+            - containerPort: 9300
+              protocol: TCP
+          volumeMounts:
+            - mountPath: "/usr/share/elasticsearch/data"
+              name: elasticsearch-storage
+      restartPolicy: Always
+      volumes:
+        - name: elasticsearch-storage
+          emptyDir:
+            sizeLimit: 5Gi

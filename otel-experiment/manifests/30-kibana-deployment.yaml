@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: kibana
+  name: kibana
+  namespace: elk
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kibana
+  template:
+    metadata:
+      labels:
+        app: kibana
+    spec:
+      affinity:
+        nodeAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 1
+              preference:
+                matchExpressions:
+                  - key: "kubernetes.io/arch"
+                    operator: "In"
+                    values: ["arm64"]
+      containers:
+        - image: kibana:8.18.2
+          name: kibana
+          ports:
+            - containerPort: 5601
+              protocol: TCP
+          env:
+            - name: "xpack.security.enabled"
+              value: "true"
+            - name: "xpack.security.http.ssl.enabled"
+              value: "false"
+            - name: "xpack.security.transport.ssl.enabled"
+              value: "false"
+            - name: "xpack.license.self_generated.type"
+              value: "basic"
+            - name: "ELASTICSEARCH_HOSTS"
+              value: "http://elasticsearch:9200"
+            - name: "ELASTICSEARCH_USERNAME"
+              value: "kibana_system"
+          envFrom:
+            - secretRef:
+                name: kibana
+      restartPolicy: Always

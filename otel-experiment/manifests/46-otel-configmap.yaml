@@ -1,0 +1,35 @@
+apiVersion: v1
+metadata:
+  name: otel-collector-config
+  namespace: elk
+data:
+  otel-collector-config: |
+    extensions:
+      basicauth/logs:
+        client_auth:
+          username: 'otel_collector'
+          password: "${ELASTICSEARCH_PASSWORD}"
+    receivers:
+      k8sobjects:
+        objects:
+          - name: events
+            mode: watch
+            group: events.k8s.io/v1
+    exporters:
+      debug:
+      opensearch:
+        logs_index: k8s-events
+        http:
+          endpoint: http://elasticsearch:9200
+          auth:
+            authenticator: basicauth/logs
+    service:
+      extensions:
+       - basicauth/logs
+      pipelines:
+        logs:
+          receivers: [k8sobjects]
+          exporters:
+            - debug
+            - opensearch
+kind: ConfigMap

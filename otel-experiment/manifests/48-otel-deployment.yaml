@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: otel-collector
+  name: otel-collector
+  namespace: elk
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: otel-collector
+  template:
+    metadata:
+      labels:
+        app: otel-collector
+    spec:
+      serviceAccountName: otel-collector
+      affinity:
+        nodeAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 1
+              preference:
+                matchExpressions:
+                  - key: "kubernetes.io/arch"
+                    operator: "In"
+                    values: ["arm64"]
+      containers:
+        - image: otel/opentelemetry-collector-contrib:0.129.1
+          name: otel-collector
+          volumeMounts:
+            - mountPath: /etc/otelcol-contrib/config.yaml
+              name: otel-collector-config
+              subPath: otel-collector-config
+          envFrom:
+            - secretRef:
+                name: otel-collector
+      restartPolicy: Always
+      volumes:
+        - configMap:
+            items:
+              - key: otel-collector-config
+                path: otel-collector-config
+            name: otel-collector-config
+          name: otel-collector-config
+

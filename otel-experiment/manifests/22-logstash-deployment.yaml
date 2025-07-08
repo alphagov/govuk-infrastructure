@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: logstash
+  name: logstash
+  namespace: elk
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: logstash
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: logstash
+    spec:
+      affinity:
+        nodeAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 1
+              preference:
+                matchExpressions:
+                  - key: "kubernetes.io/arch"
+                    operator: "In"
+                    values: ["arm64"]
+      containers:
+        - args:
+            - logstash
+            - -f
+            - /usr/share/logstash/pipeline/logstash-nginx.config
+          env:
+            - name: LS_JAVA_OPTS
+              value: -Xms512m -Xmx512m
+            - name: discovery.seed_hosts
+              value: logstash
+          image: logstash:8.18.2
+          name: logstash
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+            - containerPort: 9600
+              protocol: TCP
+          volumeMounts:
+            - mountPath: /usr/share/logstash/pipeline/logstash-nginx.config
+              name: logstash-nginx-config
+              subPath: logstash-nginx.config
+      restartPolicy: Always
+      volumes:
+        - configMap:
+            items:
+              - key: logstash-nginx.config
+                path: logstash-nginx.config
+            name: logstash-nginx-config
+          name: logstash-nginx-config
+
