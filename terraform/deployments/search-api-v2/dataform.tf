@@ -98,7 +98,7 @@ resource "google_dataform_repository_workflow_config" "search-monthly" {
   project        = var.gcp_project_id
   region         = var.gcp_region
 
-  cron_schedule = "0 13 1 * *" # Run monthly
+  cron_schedule = "0 1 1 * *" # Run monthly
   time_zone     = "Europe/London"
 
   invocation_config {
