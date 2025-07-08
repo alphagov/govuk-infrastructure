@@ -849,7 +849,6 @@ repos:
         - "Dependency Review scan / dependency-review-pr"
         - "test"
 
-  accessible-autocomplete-multiselect: {}
   ckan-mock-harvest-sources: {}
   govuk-chat: {}
   govuk-data-science-workshop: {}
