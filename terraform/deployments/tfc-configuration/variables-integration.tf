@@ -199,14 +199,14 @@ module "variable-set-rds-integration" {
       }
       ckan = {
         engine         = "postgres"
-        engine_version = "14.18"
+        engine_version = "13"
         engine_params = {
           log_min_duration_statement = { value = 10000 }
           log_statement              = { value = "all" }
           deadlock_timeout           = { value = 2500 }
           log_lock_waits             = { value = 1 }
         }
-        engine_params_family         = "postgres14"
+        engine_params_family         = "postgres13"
         name                         = "ckan"
         allocated_storage            = 1000
         instance_class               = "db.m6g.large"
