@@ -5,5 +5,5 @@ import {
 
 import {
   to = aws_db_parameter_group.engine_params["ckan"]
-  id = "integration-ckan-postgres-20250305112304940000000016"
+  id = "integration-ckan-postgres-20250708160016009000000001"
 }
