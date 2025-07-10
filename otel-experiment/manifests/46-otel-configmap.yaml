@@ -15,20 +15,34 @@ data:
           - name: events
             mode: watch
             group: events.k8s.io/v1
+
+    processors:
+      transform:
+        log_statements:
+          - statements:
+            - set(log.time, Time(log.body["object"]["lastTimestamp"], "2006-01-02T15:04:05Z"))
+            - set(log.cache["object"], log.body["object"])
+            - delete_key(log.body, "object")
+            - merge_maps(log.body, log.cache["object"], "upsert")
     exporters:
       debug:
+        verbosity: detailed
       opensearch:
         logs_index: k8s-events
         http:
           endpoint: http://elasticsearch:9200
           auth:
             authenticator: basicauth/logs
+        mapping:
+          mode: ecs
+          dedot: true
     service:
       extensions:
        - basicauth/logs
       pipelines:
         logs:
           receivers: [k8sobjects]
+          processors: [transform]
           exporters:
             - debug
             - opensearch
