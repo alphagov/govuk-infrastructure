@@ -52,10 +52,10 @@ spec:
                 - bash
                 - "-c"
                 - |
-                  curl -u elastic:${ELASTIC_PASSWORD} -X PUT --fail --silent http://localhost:9200/k8s-events &&
-                  curl -s -X POST -u "elastic:${ELASTIC_PASSWORD}" -H "Content-Type: application/json" http://localhost:9200/_security/user/kibana_system/_password -d "{\"password\":\"${KIBANA_PASSWORD}\"}" &&
-                  curl -s -X POST -u "elastic:${ELASTIC_PASSWORD}" -H "Content-Type: application/json" http://localhost:9200/_security/role/otel_writer -d '{"indices": [{"names": ["k8s-events"], "privileges": ["write"]}]}' &&
-                  curl -s -X POST -u "elastic:${ELASTIC_PASSWORD}" -H "Content-Type: application/json" http://localhost:9200/_security/user/otel_collector/ -d "{\"roles\": [\"otel_writer\"], \"password\":\"${OTEL_PASSWORD}\"}"
+                  curl --silent --fail -X POST -u "elastic:${ELASTIC_PASSWORD}" -H "Content-Type: application/json" http://localhost:9200/_security/user/kibana_system/_password -d "{\"password\":\"${KIBANA_PASSWORD}\"}" &&
+                  curl --silent --fail -X POST -u "elastic:${ELASTIC_PASSWORD}" -H "Content-Type: application/json" http://localhost:9200/_security/role/otel_writer -d '{"indices": [{"names": ["k8s-events"], "privileges": ["write"]}]}' &&
+                  curl --silent --fail -X POST -u "elastic:${ELASTIC_PASSWORD}" -H "Content-Type: application/json" http://localhost:9200/_security/user/otel_collector/ -d "{\"roles\": [\"otel_writer\"], \"password\":\"${OTEL_PASSWORD}\"}" &&
+                  (curl --silent --fail -X GET  -u "elastic:${ELASTIC_PASSWORD}" http://localhost:9200/k8s-events || curl --silent --fail -X PUT -u "elastic:${ELASTIC_PASSWORD}" http://localhost:9200/k8s-events)
             failureThreshold: 120
             periodSeconds: 5
             timeoutSeconds: 10
