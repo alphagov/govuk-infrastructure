@@ -54,22 +54,27 @@ module "control_global_boost_freshness_general" {
   action = {
     boostAction = {
       dataStore = google_discovery_engine_data_store.govuk_content.name,
+      filter    = "content_purpose_supergroup: ANY(\"news_and_communications\")",
       interpolationBoostSpec = {
         fieldName         = "public_timestamp_datetime",
         attributeType     = "FRESHNESS",
         interpolationType = "LINEAR",
         controlPoints = [
           {
-            attributeValue = "0D",
-            boostAmount    = 0.4
+            attributeValue = "7D",
+            boostAmount    = 0.2
           },
           {
-            attributeValue = "30D",
-            boostAmount    = 0.1
+            attributeValue = "90D",
+            boostAmount    = 0.05
+          },
+          {
+            attributeValue = "365D",
+            boostAmount    = -0.5
           },
           {
             attributeValue = "1460D",
-            # boostAmount = 0 is the default, setting it explicitly causes state drift
+            boostAmount    = -0.75
           }
         ]
       }
