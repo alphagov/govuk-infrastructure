@@ -115,16 +115,8 @@ locals {
   # Pages to temporarily exclude from search results
   filtered_pages = [
     # GOV.UK app beta (note double appearance of HTML publications)
-    "/government/publications/govuk-app-terms-and-conditions",
-    "/government/publications/govuk-app-terms-and-conditions/govuk-app-terms-and-conditions",
-    "/government/publications/govuk-app-privacy-notice-how-we-use-your-data",
-    "/government/publications/govuk-app-privacy-notice-how-we-use-your-data/govuk-app-privacy-notice-how-we-use-your-data",
     "/government/publications/govuk-app-testing-privacy-notice-how-we-use-your-data",
     "/government/publications/govuk-app-testing-privacy-notice-how-we-use-your-data/govuk-app-testing-privacy-notice-how-we-use-your-data",
-    "/government/publications/accessibility-statement-for-the-govuk-app",
-    "/government/publications/accessibility-statement-for-the-govuk-app/accessibility-statement-for-the-govuk-app",
-    "/sign-up-test-govuk-app",
-    "/contact/govuk-app-support",
   ]
   filtered_pages_expr = join(",", [for page in local.filtered_pages : "\"${page}\""])
 }
