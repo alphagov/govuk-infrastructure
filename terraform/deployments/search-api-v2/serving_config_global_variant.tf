@@ -7,7 +7,6 @@ module "serving_config_global_variant" {
 
   boost_control_ids = [
     # specific to serving_config_global_variant
-    module.control_global_boost_demote_historic.id,
     module.control_global_boost_freshness_general.id,
 
     # identical to serving_config_global_default
@@ -16,9 +15,7 @@ module "serving_config_global_variant" {
     module.control_global_boost_demote_low.id,
     module.control_global_boost_demote_medium.id,
     module.control_global_boost_demote_pages.id,
-
-    # explicitly not included in serving_config_global_variant
-    # module.control_global_boost_demote_strong.id,
+    module.control_global_boost_demote_strong.id,
   ]
   filter_control_ids = [
     # identical to serving_config_global_default
