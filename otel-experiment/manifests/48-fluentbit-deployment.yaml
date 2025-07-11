@@ -2,20 +2,20 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    app: otel-collector
-  name: otel-collector
+    app: fluentbit
+  name: fluentbit
   namespace: elk
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: otel-collector
+      app: fluentbit
   template:
     metadata:
       labels:
-        app: otel-collector
+        app: fluentbit
     spec:
-      serviceAccountName: otel-collector
+      serviceAccountName: fluentbit
       affinity:
         nodeAffinity:
           preferredDuringSchedulingIgnoredDuringExecution:
@@ -26,21 +26,22 @@ spec:
                     operator: "In"
                     values: ["arm64"]
       containers:
-        - image: otel/opentelemetry-collector-contrib:0.129.1
-          name: otel-collector
+        - image: cr.fluentbit.io/fluent/fluent-bit:4.0.4-debug # Remove the -debug for real use
+          name: fluentbit
           volumeMounts:
-            - mountPath: /etc/otelcol-contrib/config.yaml
-              name: otel-collector-config
-              subPath: otel-collector-config
+            - mountPath: /fluent-bit/etc/fluent-bit.yaml
+              name: fluentbit-config
+              subPath: fluentbit-config
           envFrom:
             - secretRef:
-                name: otel-collector
+                name: fluentbit
+          command: ["-c", "/fluent-bit/etc/fluent-bit.yaml"]
       restartPolicy: Always
       volumes:
         - configMap:
             items:
-              - key: otel-collector-config
-                path: otel-collector-config
-            name: otel-collector-config
-          name: otel-collector-config
+              - key: fluentbit-config
+                path: fluentbit-config
+            name: fluentbit-config
+          name: fluentbit-config
 
