@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+ creationTimestamp: null
+ labels:
+   app: nginx-dummy
+ name: nginx-dummy
+spec:
+ replicas: 1
+ selector:
+   matchLabels:
+     app: nginx-dummy
+ strategy: {}
+ template:
+   metadata:
+     creationTimestamp: null
+     labels:
+       app: nginx-dummy
+   spec:
+     containers:
+     - image: "nginxinc/nginx-unprivileged:latest"
+       name: nginx
+       resources: {}
+       securityContext:
+         allowPrivilegeEscalation: false
+         capabilities:
+           drop:
+             - "ALL"
+         readOnlyRootFilesystem: true
+       volumeMounts:
+         - name: nginx-dummy-tmp
+           mountPath: /tmp
+     securityContext:
+       seccompProfile:
+         type: RuntimeDefault
+       fsGroup: 101
+       runAsNonRoot: true
+       runAsUser: 101
+       runAsGroup: 101
+     volumes:
+     - name: nginx-dummy-tmp
+       emptyDir: {}
