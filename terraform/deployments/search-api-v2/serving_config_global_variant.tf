@@ -27,21 +27,6 @@ module "serving_config_global_variant" {
   ]
 }
 
-module "control_global_boost_demote_historic" {
-  source = "./modules/control"
-
-  id           = "boost_demote_historic"
-  display_name = "Boost: Demote historic"
-  engine_id    = google_discovery_engine_search_engine.govuk_global.engine_id
-  action = {
-    boostAction = {
-      filter     = "is_historic = 1",
-      fixedBoost = -0.25
-      dataStore  = google_discovery_engine_data_store.govuk_content.name
-    }
-  }
-}
-
 module "control_global_boost_freshness_general" {
   source = "./modules/control"
 
