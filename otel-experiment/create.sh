@@ -49,7 +49,6 @@ info_line "Setting namespace for context $CONTEXT"
 kubectl config set-context --current --namespace elk
 
 mkdir -p secrets/elasticsearch/
-mkdir -p secrets/kibana/
 mkdir -p secrets/fluentbit/
 
 if [ ! -f secrets/elasticsearch/ELASTIC_PASSWORD ]; then
@@ -58,21 +57,9 @@ if [ ! -f secrets/elasticsearch/ELASTIC_PASSWORD ]; then
   echo
 fi
 
-if [ ! -f secrets/elasticsearch/KIBANA_PASSWORD ]; then
-  info_line "Generating kibana password"
-  pwgen -s 32 1 | tr -d "\r\n" >> secrets/elasticsearch/KIBANA_PASSWORD
-  echo
-fi
-
 if [ ! -f secrets/elasticsearch/FLUENTBIT_PASSWORD ]; then
   info_line "Generating password for fluentbit writer"
   pwgen -s 32 1 | tr -d "\r\n" >> secrets/elasticsearch/FLUENTBIT_PASSWORD
-  echo
-fi
-
-if [ ! -f secrets/kibana/ELASTICSEARCH_PASSWORD ]; then
-  info_line "Copying kibana password from elasticsearch dir to kibana dir"
-  cp secrets/elasticsearch/KIBANA_PASSWORD secrets/kibana/ELASTICSEARCH_PASSWORD
   echo
 fi
 
@@ -88,12 +75,6 @@ if [ ! -f secrets/elasticsearch.yaml ]; then
   echo
 fi
 
-if [ ! -f secrets/kibana.yaml ]; then
-  info_line "Outputting kibana secret yaml to secrets/kibana.yaml"
-  kubectl create secret generic kibana --from-file ./secrets/kibana/ --dry-run=client --output YAML > secrets/kibana.yaml
-  echo
-fi
-
 if [ ! -f secrets/fluentbit.yaml ]; then
   info_line "Outputting fluentbit secret yaml to secrets/fluentbit.yaml"
   kubectl create secret generic fluentbit --from-file ./secrets/fluentbit/ --dry-run=client --output YAML > secrets/fluentbit.yaml
@@ -102,9 +83,6 @@ fi
 
 info_line "Applying elasticsearch secrets"
 kubectl apply -f secrets/elasticsearch.yaml
-
-info_line "Applying kibana secrets"
-kubectl apply -f secrets/kibana.yaml
 
 info_line "Applying fluentbit secrets"
 kubectl apply -f secrets/fluentbit.yaml
@@ -116,16 +94,9 @@ for FILE in ./manifests/1*.yaml; do
   kubectl apply -f "$FILE"
 done
 
-info_line "Applying kibana configs"
-echo
-for FILE in ./manifests/2*.yaml; do
-  echo -n "  $FILE: "
-  kubectl apply -f "$FILE"
-done
-
 info_line "Applying fluentbit configs"
 echo
-for FILE in ./manifests/3*.yaml; do
+for FILE in ./manifests/2*.yaml; do
   echo -n "  $FILE: "
   kubectl apply -f "$FILE"
 done

@@ -41,14 +41,6 @@ kubectl config set-context --current --namespace elk
 
 info_line "Deleting fluentbit configs"
 echo
-for FILE in $(find manifests/ -maxdepth 1 -mindepth 1 -name '3*.yaml' | sort -r); do
-  echo -n "  $FILE: "
-  kubectl delete --ignore-not-found -f "$FILE"
-done
-echo
-
-info_line "Deleting kibana configs"
-echo
 for FILE in $(find manifests/ -maxdepth 1 -mindepth 1 -name '2*.yaml' | sort -r); do
   echo -n "  $FILE: "
   kubectl delete --ignore-not-found -f "$FILE"

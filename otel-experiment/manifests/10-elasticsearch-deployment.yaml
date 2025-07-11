@@ -46,13 +46,12 @@ spec:
           image: elasticsearch:8.18.2
           startupProbe:
             exec:
-              # Create a k8s-events index once the cluster can receive requests, this also functions as a good startupProbe
+              # Create a fluentbit write role and user, and a k8s-events index once the cluster can receive requests, this also functions as a good startupProbe
               # since the ES cluster has to actually be listening and accepting requests for it to work
               command: 
                 - bash
                 - "-c"
                 - |
-                  curl --silent --fail -X POST -u "elastic:${ELASTIC_PASSWORD}" -H "Content-Type: application/json" http://localhost:9200/_security/user/kibana_system/_password -d "{\"password\":\"${KIBANA_PASSWORD}\"}" &&
                   curl --silent --fail -X POST -u "elastic:${ELASTIC_PASSWORD}" -H "Content-Type: application/json" http://localhost:9200/_security/role/fluentbit_writer -d '{"indices": [{"names": ["k8s-events"], "privileges": ["write"]}]}' &&
                   curl --silent --fail -X POST -u "elastic:${ELASTIC_PASSWORD}" -H "Content-Type: application/json" http://localhost:9200/_security/user/fluentbit/ -d "{\"roles\": [\"fluentbit_writer\"], \"password\":\"${FLUENTBIT_PASSWORD}\"}" &&
                   (curl --silent --fail -X GET  -u "elastic:${ELASTIC_PASSWORD}" http://localhost:9200/k8s-events || curl --silent --fail -X PUT -u "elastic:${ELASTIC_PASSWORD}" http://localhost:9200/k8s-events)
