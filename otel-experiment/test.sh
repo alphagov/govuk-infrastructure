@@ -15,7 +15,7 @@ DATE_COMMAND="date"
 if [ "$(uname)" == "Darwin" ] ; then
   if ! command -v gdate >>/dev/null 2>&1; then
     # shellcheck disable=SC2016
-    echo 'ERROR: You need the GNU Date utility on macOS for this to work. You can `brew install gdate` to get it'
+    echo 'ERROR: You need the GNU Date utility on macOS for this to work. You can `brew install coreutils` to get it'
     exit 1
   fi
 
