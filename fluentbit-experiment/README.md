@@ -8,7 +8,7 @@ This directory was the result of an experiment to use Fluent Bit with the kubern
 
 * A kubernetes cluster you can apply to, and a context set up for it with kubectl
 * pwgen (On macOS you can `brew install pwgen` to get this)
-* GNU Date (default on linux distros, can be installed with `brew install gdate` on macOS)
+* GNU Date (default on linux distros, can be installed with `brew install coreutils` on macOS)
 
 ### Setup
 
