@@ -116,23 +116,16 @@ for FILE in ./manifests/1*.yaml; do
   kubectl apply -f "$FILE"
 done
 
-info_line "Applying logstash configs"
+info_line "Applying kibana configs"
 echo
 for FILE in ./manifests/2*.yaml; do
   echo -n "  $FILE: "
   kubectl apply -f "$FILE"
 done
 
-info_line "Applying kibana configs"
-echo
-for FILE in ./manifests/3*.yaml; do
-  echo -n "  $FILE: "
-  kubectl apply -f "$FILE"
-done
-
 info_line "Applying fluentbit configs"
 echo
-for FILE in ./manifests/4*.yaml; do
+for FILE in ./manifests/3*.yaml; do
   echo -n "  $FILE: "
   kubectl apply -f "$FILE"
 done
