@@ -50,7 +50,7 @@ kubectl config set-context --current --namespace elk
 
 mkdir -p secrets/elasticsearch/
 mkdir -p secrets/kibana/
-mkdir -p secrets/otel-collector/
+mkdir -p secrets/fluentbit/
 
 if [ ! -f secrets/elasticsearch/ELASTIC_PASSWORD ]; then
   info_line "Generating elasticsearch password"
@@ -64,9 +64,9 @@ if [ ! -f secrets/elasticsearch/KIBANA_PASSWORD ]; then
   echo
 fi
 
-if [ ! -f secrets/elasticsearch/OTEL_PASSWORD ]; then
-  info_line "Generating password for otel writer"
-  pwgen -s 32 1 | tr -d "\r\n" >> secrets/elasticsearch/OTEL_PASSWORD
+if [ ! -f secrets/elasticsearch/FLUENTBIT_PASSWORD ]; then
+  info_line "Generating password for fluentbit writer"
+  pwgen -s 32 1 | tr -d "\r\n" >> secrets/elasticsearch/FLUENTBIT_PASSWORD
   echo
 fi
 
@@ -76,9 +76,9 @@ if [ ! -f secrets/kibana/ELASTICSEARCH_PASSWORD ]; then
   echo
 fi
 
-if [ ! -f secrets/otel-collector/ELASTICSEARCH_PASSWORD ]; then
-  info_line "Copying otel password from elasticsearch dir to otel-collector dir"
-  cp secrets/elasticsearch/OTEL_PASSWORD secrets/otel-collector/ELASTICSEARCH_PASSWORD
+if [ ! -f secrets/fluentbit/ELASTICSEARCH_PASSWORD ]; then
+  info_line "Copying fluentbit password from elasticsearch dir to fluentbit dir"
+  cp secrets/elasticsearch/FLUENTBIT_PASSWORD secrets/fluentbit/ELASTICSEARCH_PASSWORD
   echo
 fi
 
@@ -94,9 +94,9 @@ if [ ! -f secrets/kibana.yaml ]; then
   echo
 fi
 
-if [ ! -f secrets/otel-collector.yaml ]; then
-  info_line "Outputting otel-collector secret yaml to secrets/otel-collector.yaml"
-  kubectl create secret generic otel-collector --from-file ./secrets/otel-collector/ --dry-run=client --output YAML > secrets/otel-collector.yaml
+if [ ! -f secrets/fluentbit.yaml ]; then
+  info_line "Outputting fluentbit secret yaml to secrets/fluentbit.yaml"
+  kubectl create secret generic fluentbit --from-file ./secrets/fluentbit/ --dry-run=client --output YAML > secrets/fluentbit.yaml
   echo
 fi
 
@@ -106,8 +106,8 @@ kubectl apply -f secrets/elasticsearch.yaml
 info_line "Applying kibana secrets"
 kubectl apply -f secrets/kibana.yaml
 
-info_line "Applying otel collector secrets"
-kubectl apply -f secrets/otel-collector.yaml
+info_line "Applying fluentbit secrets"
+kubectl apply -f secrets/fluentbit.yaml
 
 info_line "Applying elasticsearch configs"
 echo
@@ -130,7 +130,7 @@ for FILE in ./manifests/3*.yaml; do
   kubectl apply -f "$FILE"
 done
 
-info_line "Applying otel configs"
+info_line "Applying fluentbit configs"
 echo
 for FILE in ./manifests/4*.yaml; do
   echo -n "  $FILE: "

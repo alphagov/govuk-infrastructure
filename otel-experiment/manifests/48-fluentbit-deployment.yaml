@@ -26,22 +26,26 @@ spec:
                     operator: "In"
                     values: ["arm64"]
       containers:
-        - image: cr.fluentbit.io/fluent/fluent-bit:4.0.4-debug # Remove the -debug for real use
+        - image: cr.fluentbit.io/fluent/fluent-bit:4.0.4-debug # remove -debug for real deployments
           name: fluentbit
           volumeMounts:
             - mountPath: /fluent-bit/etc/fluent-bit.yaml
               name: fluentbit-config
               subPath: fluentbit-config
+            - mountPath: /mnt/k8s-events/
+              name: fluentbit-db
           envFrom:
             - secretRef:
                 name: fluentbit
-          command: ["-c", "/fluent-bit/etc/fluent-bit.yaml"]
+          command: ["/fluent-bit/bin/fluent-bit", "-c", "/fluent-bit/etc/fluent-bit.yaml"]
       restartPolicy: Always
       volumes:
-        - configMap:
+        - name: fluentbit-config
+          configMap:
             items:
               - key: fluentbit-config
                 path: fluentbit-config
             name: fluentbit-config
-          name: fluentbit-config
-
+        - name: fluentbit-db
+          emptyDir:
+            sizeLimit: 100Mi

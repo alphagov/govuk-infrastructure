@@ -13,7 +13,18 @@ data:
       inputs:
         - name: kubernetes_events
           tag: k8s_events
-          kube
+          db: /mnt/k8s-events/k8s-events.db
+      outputs:
+        - name: stdout
+          match: '*'
+        - name: opensearch
+          match: '*'
+          host: elasticsearch
+          port: 9200
+          index: k8s-events
+          http_user: 'fluentbit'
+          http_passwd: "${ELASTICSEARCH_PASSWORD}"
+          suppress_type_name: true
 
 
 
@@ -22,7 +33,7 @@ data:
 #       basicauth/logs:
 #         client_auth:
 #           username: 'fluentbit'
-#           password: "${ELASTICSEARCH_PASSWORD}"
+#           password: 
 #     receivers:
 #       k8sobjects:
 #         objects:
