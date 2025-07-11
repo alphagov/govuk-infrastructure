@@ -1,7 +1,7 @@
 # IAM role for govuk-reports application with access to Cost Explorer, RDS, and tagging APIs
 
 locals {
-  govuk_reports_service_account_name = "govuk-reports"
+  govuk_reports_service_account_name = "govuk-reports-prototype"
 }
 
 # IAM policy document for govuk-reports permissions
@@ -62,7 +62,7 @@ module "govuk_reports_iam_role" {
   source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
   version = "~> 5.20"
 
-  role_name            = "${local.govuk_reports_service_account_name}-${data.tfe_outputs.cluster_infrastructure.nonsensitive_values.cluster_id}"
+  role_name            = local.govuk_reports_service_account_name
   role_description     = "Role for govuk-reports application. Corresponds to ${local.govuk_reports_service_account_name} k8s ServiceAccount."
   max_session_duration = 28800
 
