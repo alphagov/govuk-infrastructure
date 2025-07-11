@@ -7,6 +7,7 @@ module "serving_config_global_variant" {
 
   boost_control_ids = [
     # specific to serving_config_global_variant
+    module.control_global_boost_demote_historic.id,
     module.control_global_boost_freshness_general.id,
 
     # identical to serving_config_global_default
@@ -15,7 +16,9 @@ module "serving_config_global_variant" {
     module.control_global_boost_demote_low.id,
     module.control_global_boost_demote_medium.id,
     module.control_global_boost_demote_pages.id,
-    module.control_global_boost_demote_strong.id
+
+    # explicitly not included in serving_config_global_variant
+    # module.control_global_boost_demote_strong.id,
   ]
   filter_control_ids = [
     # identical to serving_config_global_default
@@ -27,6 +30,21 @@ module "serving_config_global_variant" {
   ]
 }
 
+module "control_global_boost_demote_historic" {
+  source = "./modules/control"
+
+  id           = "boost_demote_historic"
+  display_name = "Boost: Demote historic"
+  engine_id    = google_discovery_engine_search_engine.govuk_global.engine_id
+  action = {
+    boostAction = {
+      filter     = "is_historic = 1",
+      fixedBoost = -0.25
+      dataStore  = google_discovery_engine_data_store.govuk_content.name
+    }
+  }
+}
+
 module "control_global_boost_freshness_general" {
   source = "./modules/control"
 
@@ -36,27 +54,22 @@ module "control_global_boost_freshness_general" {
   action = {
     boostAction = {
       dataStore = google_discovery_engine_data_store.govuk_content.name,
-      filter    = "content_purpose_supergroup: ANY(\"news_and_communications\")",
       interpolationBoostSpec = {
         fieldName         = "public_timestamp_datetime",
         attributeType     = "FRESHNESS",
         interpolationType = "LINEAR",
         controlPoints = [
           {
-            attributeValue = "7D",
-            boostAmount    = 0.2
+            attributeValue = "0D",
+            boostAmount    = 0.4
           },
           {
-            attributeValue = "90D",
-            boostAmount    = 0.05
-          },
-          {
-            attributeValue = "365D",
-            boostAmount    = -0.5
+            attributeValue = "30D",
+            boostAmount    = 0.1
           },
           {
             attributeValue = "1460D",
-            boostAmount    = -0.75
+            # boostAmount = 0 is the default, setting it explicitly causes state drift
           }
         ]
       }
