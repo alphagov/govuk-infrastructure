@@ -14,7 +14,7 @@ terraform {
     }
     helm = {
       source  = "hashicorp/helm"
-      version = "~> 2.0"
+      version = "~> 3.0"
     }
     aws = {
       source  = "hashicorp/aws"
@@ -61,13 +61,15 @@ provider "kubernetes" {
 provider "helm" {
   # TODO: If/when TF makes provider configs a first-class language object,
   # reuse the identical config from above.
-  kubernetes {
+  kubernetes = {
     host                   = data.tfe_outputs.cluster_infrastructure.nonsensitive_values.cluster_endpoint
     cluster_ca_certificate = base64decode(data.tfe_outputs.cluster_infrastructure.nonsensitive_values.cluster_certificate_authority_data)
     token                  = data.aws_eks_cluster_auth.cluster_token.token
   }
 }
 
-provider "fastly" { api_key = "test" }
+provider "fastly" {
+  api_key = "test" # pragma: allowlist secret
+}
 
 data "fastly_ip_ranges" "fastly" {}
