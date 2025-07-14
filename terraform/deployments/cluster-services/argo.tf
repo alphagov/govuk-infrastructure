@@ -58,7 +58,7 @@ resource "helm_release" "argo_cd" {
   namespace        = local.services_ns
   create_namespace = true
   repository       = "https://argoproj.github.io/argo-helm"
-  version          = "7.9.1" # TODO: Dependabot or equivalent so this doesn't get neglected.
+  version          = "8.1.3"
   timeout          = var.helm_timeout_seconds
   values = [yamlencode({
     global = {
