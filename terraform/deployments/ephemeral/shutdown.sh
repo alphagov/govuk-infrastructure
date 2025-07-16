@@ -8,6 +8,12 @@ if [ "${CLUSTER_ID:0:4}" != "eph-" ] && [ "${IGNORE_BAD_CLUSTER_ID}" != "true" ]
   exit 1
 fi
 
+if [ "$(aws sts get-caller-identity --query Account --output text)" != "430354129336" ] && [ "${IGNORE_BAD_ACCOUNT_ID}" != "true" ]; then
+  echo "Current AWS credentials ($(aws sts get-caller-identity --query Arn --output text)) are not for the test account"
+  echo "Set IGNORE_BAD_ACCOUNT_ID=true or assume credentials in the test account"
+  exit 1
+fi
+
 # list all ArgoCD Application resources that are managed by Helm
 function application_list {
   kubectl get application -l app.kubernetes.io/managed-by=Helm --all-namespaces --no-headers=true
