@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+set -eu
+
 CLUSTER_ID="${1}"
 
 if [ "${CLUSTER_ID:0:4}" != "eph-" ] && [ "${IGNORE_BAD_CLUSTER_ID}" != "true" ]; then
@@ -151,13 +153,12 @@ function tfc_wait_for_run {
   
   while true; do
     RUN_STATUS=$(tfc_run_status "${RUN_ID}")
-    echo "${RUN_STATUS}" | grep -E '(applied|planned_and_finished)' > /dev/null
-    if [ "$?" = "0" ]; then
+
+    if [[ "${RUN_STATUS}" =~ (applied|planned_and_finished) ]]; then
       echo "Run ID ${RUN_ID} finished: ${RUN_STATUS}"
       return 0
     fi
-    echo "${RUN_STATUS}" | grep -E '(errored|canceled|force_canceled|discarded)' > /dev/null
-    if [ "$?" = "0" ]; then
+    if [[ "${RUN_STATUS}" =~ (errored|canceled|force_canceled|discarded) ]]; then
       echo "Run ID ${RUN_ID} failed: ${RUN_STATUS}"
       return 1
     fi
@@ -181,8 +182,7 @@ function retry {
     if [ "${i}" != "1" ]; then
       echo "retrying '$*' attempt ${i}/${RETRY_COUNT}"
     fi
-    ($@)
-    if [ "$?" = "0" ]; then
+    if "$@"; then
       return 0
     fi
   done
