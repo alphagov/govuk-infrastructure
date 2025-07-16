@@ -176,8 +176,7 @@ function retry {
     if [ "${i}" != "1" ]; then
       echo "retrying '$*' attempt ${i}/${RETRY_COUNT}"
     fi
-    ($@)
-    if [ "$?" = "0" ]; then
+    if "$@"; then
       return 0
     fi
   done
