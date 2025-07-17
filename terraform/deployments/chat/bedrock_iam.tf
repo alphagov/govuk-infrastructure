@@ -82,6 +82,6 @@ resource "aws_iam_policy" "bedrock_cloudwatch" {
 }
 
 resource "aws_iam_role_policy_attachment" "bedrock_cloudwatch" {
-  role       = aws_iam_role.bedrock_access.name
+  role       = aws_iam_role.bedrock_cloudwatch.name
   policy_arn = aws_iam_policy.bedrock_cloudwatch.arn
 }
