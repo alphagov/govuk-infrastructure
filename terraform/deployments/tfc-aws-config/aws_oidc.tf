@@ -43,6 +43,7 @@ data "aws_iam_policy_document" "tfc_policy" {
       "apigateway:*",
       "athena:*",
       "autoscaling:*",
+      "bedrock:PutModelInvocationLoggingConfiguration",
       "cloudfront:*",
       "cloudwatch:*",
       "ec2:*",
