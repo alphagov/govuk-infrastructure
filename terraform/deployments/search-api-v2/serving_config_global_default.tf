@@ -114,6 +114,8 @@ module "control_global_boost_demote_pages" {
 locals {
   # Pages to temporarily exclude from search results
   filtered_pages = [
+    # It is unclear how terraform will handle an empty filtered_pages array, so this dummy path should not be deleted
+    "/example/link/dont-delete-me",
     # GOV.UK app beta (note double appearance of HTML publications)
     "/government/publications/govuk-app-testing-privacy-notice-how-we-use-your-data",
     "/government/publications/govuk-app-testing-privacy-notice-how-we-use-your-data/govuk-app-testing-privacy-notice-how-we-use-your-data",
