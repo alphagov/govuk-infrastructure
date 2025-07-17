@@ -305,6 +305,8 @@ repos:
   govuk-infrastructure:
     strict: true
     up_to_date_branches: true
+    required_pull_request_reviews:
+      require_code_owner_reviews: true
 
   terraform-govuk-infrastructure-sensitive:
     visibility: private
