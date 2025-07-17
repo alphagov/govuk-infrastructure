@@ -1,0 +1,8 @@
+# Production access required by default
+* @alphagov/gov-uk-production-deploy
+
+# Platform Engineering review required
+# Reusable GitHub Actions workflows and repo config
+/.github/ @alphagov/gov-uk-platform-engineering
+# Terraform code
+/terraform/deployments/ @alphagov/gov-uk-platform-engineering
