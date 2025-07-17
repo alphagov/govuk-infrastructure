@@ -117,7 +117,8 @@ data "aws_iam_policy_document" "tfc_policy" {
     actions = ["iam:PassRole"]
     resources = [
       "arn:aws:iam::*:role/rds-monitoring-role",
-      "arn:aws:iam::*:role/govuk-*-csp-reports-firehose-role"
+      "arn:aws:iam::*:role/govuk-*-csp-reports-firehose-role",
+      "arn:aws:iam::*:role/govuk-chat-bedrock-access-role"
     ]
   }
   statement {
