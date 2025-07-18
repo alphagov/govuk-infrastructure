@@ -213,10 +213,10 @@ module "variable-set-rds-staging" {
         engine         = "postgres"
         engine_version = "14.18"
         engine_params = {
-          log_min_duration_statement      = { value = 10000 }
-          log_statement                   = { value = "all" }
-          deadlock_timeout                = { value = 2500 }
-          log_lock_waits                  = { value = 1 }
+          log_min_duration_statement = { value = 10000 }
+          log_statement              = { value = "all" }
+          deadlock_timeout           = { value = 2500 }
+          log_lock_waits             = { value = 1 }
         }
         engine_params_family         = "postgres14"
         name                         = "ckan"
