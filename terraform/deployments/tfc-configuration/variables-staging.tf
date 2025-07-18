@@ -211,7 +211,7 @@ module "variable-set-rds-staging" {
 
       ckan = {
         engine         = "postgres"
-        engine_version = "13"
+        engine_version = "14.18"
         engine_params = {
           log_min_duration_statement      = { value = 10000 }
           log_statement                   = { value = "all" }
@@ -223,7 +223,7 @@ module "variable-set-rds-staging" {
           max_worker_processes            = { value = 40, apply_method = "pending-reboot" }
         }
         backup_retention_period      = 1
-        engine_params_family         = "postgres13"
+        engine_params_family         = "postgres14"
         name                         = "ckan"
         allocated_storage            = 1000
         instance_class               = "db.m6g.large"
