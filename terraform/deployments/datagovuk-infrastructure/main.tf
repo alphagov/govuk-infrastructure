@@ -31,21 +31,20 @@ locals {
   cluster_id    = data.tfe_outputs.cluster_infrastructure.nonsensitive_values.cluster_id
   services_ns   = data.tfe_outputs.cluster_infrastructure.nonsensitive_values.cluster_services_namespace
   oidc_provider = data.tfe_outputs.cluster_infrastructure.nonsensitive_values.cluster_oidc_provider
-
-  default_tags = {
-    Product              = "DATA.GOV.UK"
-    System               = "DATA.GOV.UK"
-    Environment          = var.govuk_environment
-    Owner                = "govuk-platform-engineering@digital.cabinet-office.gov.uk"
-    project              = "replatforming"
-    repository           = "govuk-infrastructure"
-    terraform_deployment = basename(abspath(path.root))
-  }
 }
 
 provider "aws" {
   region = "eu-west-1"
-  default_tags { tags = local.default_tags }
+  default_tags {
+    tags = {
+      product              = "govuk"
+      system               = "govuk-dgu"
+      environment          = var.govuk_environment
+      owner                = "govuk-platform-engineering@digital.cabinet-office.gov.uk"
+      repository           = "govuk-infrastructure"
+      terraform-deployment = basename(abspath(path.root))
+    }
+  }
 }
 
 data "aws_eks_cluster_auth" "cluster_token" {
