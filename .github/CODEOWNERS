@@ -1,5 +1,5 @@
-# Production access required by default
-* @alphagov/gov-uk-production-deploy
+# Anyone with write access can merge by default
+*
 
 # Platform Engineering review required
 # Reusable GitHub Actions workflows and repo config
