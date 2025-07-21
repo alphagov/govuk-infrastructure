@@ -32,7 +32,7 @@ Cloud.
     ```sh
     for account in tools test integration staging production; do
       terraform workspace select tfc-aws-config-$account
-      gds aws govuk-$account-admin -- \
+      gds aws govuk-$account-fulladmin -- \
         terraform apply -var=govuk_environment=$account
     done
     ```
