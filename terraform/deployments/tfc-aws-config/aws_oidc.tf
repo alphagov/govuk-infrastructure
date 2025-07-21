@@ -124,8 +124,11 @@ data "aws_iam_policy_document" "tfc_policy" {
     ]
   }
   statement {
-    actions   = ["iam:*Role"]
-    resources = ["arn:aws:iam::*:role/AWSLambdaRole-transition-executor"]
+    actions = ["iam:*Role"]
+    resources = [
+      "arn:aws:iam::*:role/AWSLambdaRole-transition-executor",
+      "arn:aws:iam::*:role/basic_lambda_role"
+    ]
   }
   statement {
     actions = ["iam:*User"]
