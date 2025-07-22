@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: fluentbit
+  name: fluentbit
+  namespace: elk
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: fluentbit
+  template:
+    metadata:
+      labels:
+        app: fluentbit
+    spec:
+      serviceAccountName: fluentbit
+      affinity:
+        nodeAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 1
+              preference:
+                matchExpressions:
+                  - key: "kubernetes.io/arch"
+                    operator: "In"
+                    values: ["arm64"]
+      containers:
+        - image: cr.fluentbit.io/fluent/fluent-bit:4.0.4-debug # remove -debug for real deployments
+          name: fluentbit
+          volumeMounts:
+            - mountPath: /fluent-bit/etc/fluent-bit.yaml
+              name: fluentbit-config
+              subPath: fluentbit-config
+            - mountPath: /mnt/k8s-events/
+              name: fluentbit-db
+          envFrom:
+            - secretRef:
+                name: fluentbit
+          command: ["/fluent-bit/bin/fluent-bit", "-c", "/fluent-bit/etc/fluent-bit.yaml"]
+      restartPolicy: Always
+      volumes:
+        - name: fluentbit-config
+          configMap:
+            items:
+              - key: fluentbit-config
+                path: fluentbit-config
+            name: fluentbit-config
+        - name: fluentbit-db
+          emptyDir:
+            sizeLimit: 100Mi
