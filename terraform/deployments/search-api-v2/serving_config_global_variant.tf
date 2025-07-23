@@ -41,14 +41,23 @@ module "control_global_boost_freshness_general" {
         fieldName         = "public_timestamp_datetime",
         attributeType     = "FRESHNESS",
         interpolationType = "LINEAR",
+        # Control points explained
+        # 0.2 (decaying to 0.05), for the first 7 days
+        # 0.05 (decaying to 0), for 8 days to 90 days
+        # 0 (decaying to -0.5) for 91 days to 365 days
+        # -0.5 (decaying to -0.75) for 366 days to 1460 days
         controlPoints = [
           {
-            attributeValue = "7D",
+            attributeValue = "0D",
             boostAmount    = 0.2
           },
           {
-            attributeValue = "90D",
+            attributeValue = "7D",
             boostAmount    = 0.05
+          },
+          {
+            attributeValue = "90D",
+            boostAmount    = 0
           },
           {
             attributeValue = "365D",
