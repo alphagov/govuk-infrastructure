@@ -77,6 +77,12 @@ resource "google_storage_bucket" "automated_evaluation_output" {
   location = var.gcp_region
 }
 
+# bucket for output of VAIS (i.e. out-of-the-box) automated evaluation
+resource "google_storage_bucket" "vais_evaluation_output" {
+  name     = "${var.gcp_project_id}_vais_evaluation_output"
+  location = var.gcp_region
+}
+
 #
 resource "google_storage_bucket_object" "qrels_seed_file" {
   name   = "ts=1970-01-01T00:00:00/qc=0/rc=0/judgement_list=sample/qrels.csv"
