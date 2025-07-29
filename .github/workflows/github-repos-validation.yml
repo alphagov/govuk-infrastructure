@@ -13,6 +13,5 @@ jobs:
 
       - name: Validate YAML Schema
         run: |
-          pip install yq
           yq -o=json '. ' terraform/deployments/github/repos.yml > repos.json
           npx ajv-cli validate -s terraform/deployments/github/schemas/repos.schema.json -d repos.json
