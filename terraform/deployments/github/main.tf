@@ -61,18 +61,18 @@ locals {
   repositories = yamldecode(file("repos.yml"))["repos"]
 
   deployable_repos = [
-    for r in data.github_repository.govuk : r
-    if !r.fork && contains(r.topics, "container")
+    for name, repo in local.repositories : data.github_repository.govuk[name]
+    if try(repo.can_be_deployed, false)
   ]
 
   gems = [
-    for r in data.github_repository.govuk : r
-    if !r.fork && contains(r.topics, "gem")
+    for name, repo in local.repositories : data.github_repository.govuk[name]
+    if try(repo.publishes_gem, false)
   ]
 
   pact_publishers = [
-    for r in data.github_repository.govuk : r
-    if !r.fork && contains(r.topics, "pact-publisher")
+    for name, repo in local.repositories : data.github_repository.govuk[name]
+    if try(repo.pact_publisher, false)
   ]
 }
 
