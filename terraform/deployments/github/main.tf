@@ -100,6 +100,12 @@ resource "github_team" "govuk_ithc" {
   description = "To grant temporary access to our GitHub repositories and services that require GitHub authentication to ITHC testers"
 }
 
+resource "github_team" "govuk_publishing_devs" {
+  name        = "GOV.UK Publishing Developers"
+  privacy     = "closed"
+  description = "To enable finer access for merge permissions in publishing apps"
+}
+
 import {
   to = github_team.govuk_production_deploy
   id = "gov-uk-production-deploy"
