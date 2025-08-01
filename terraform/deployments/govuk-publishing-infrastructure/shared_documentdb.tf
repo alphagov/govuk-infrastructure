@@ -1,18 +1,3 @@
-import {
-  to = aws_docdb_cluster_instance.shared_cluster_instances[0]
-  id = "shared-documentdb-production-1"
-}
-
-import {
-  to = aws_docdb_cluster_instance.shared_cluster_instances[1]
-  id = "shared-documentdb-production-12"
-}
-
-import {
-  to = aws_docdb_cluster_instance.shared_cluster_instances[2]
-  id = "shared-documentdb-production-13"
-}
-
 resource "aws_docdb_cluster_instance" "shared_cluster_instances" {
   count              = var.shared_documentdb_instance_count
   identifier         = "shared-documentdb-${count.index}"
@@ -108,11 +93,6 @@ resource "aws_kms_key_policy" "shared_documentdb_kms_key_policy" {
       }
     ]
   })
-}
-
-import {
-  to = aws_docdb_cluster.shared_cluster
-  id = "shared-documentdb-production-1"
 }
 
 resource "aws_docdb_cluster" "shared_cluster" {
