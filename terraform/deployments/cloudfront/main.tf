@@ -247,7 +247,7 @@ resource "aws_cloudfront_distribution" "www_distribution" {
 
     lambda_function_association {
       event_type   = "viewer-request"
-      lambda_arn   = aws_lambda_function.url_rewrite.arn
+      lambda_arn   = aws_lambda_function.url_rewrite.qualified_arn
       include_body = false
     }
   }
@@ -396,4 +396,5 @@ resource "aws_lambda_function" "url_rewrite" {
   handler       = "index.handler"
   runtime       = "nodejs22.x"
   provider      = aws.eu_west_2
+  publish       = true
 }
