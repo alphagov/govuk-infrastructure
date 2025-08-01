@@ -61,18 +61,18 @@ locals {
   repositories = yamldecode(file("repos.yml"))["repos"]
 
   deployable_repos = [
-    for name, repo in local.repositories : data.github_repository.govuk[name]
-    if try(repo.can_be_deployed, false)
+    for name, repo in local.repositories : data.github_repository.govuk["alphagov/${name}"]
+    if try(repo.can_be_deployed, false) && contains(keys(data.github_repository.govuk), "alphagov/${name}")
   ]
 
   gems = [
-    for name, repo in local.repositories : data.github_repository.govuk[name]
-    if try(repo.publishes_gem, false)
+    for name, repo in local.repositories : data.github_repository.govuk["alphagov/${name}"]
+    if try(repo.publishes_gem, false) && contains(keys(data.github_repository.govuk), "alphagov/${name}")
   ]
 
   pact_publishers = [
-    for name, repo in local.repositories : data.github_repository.govuk[name]
-    if try(repo.pact_publisher, false)
+    for name, repo in local.repositories : data.github_repository.govuk["alphagov/${name}"]
+    if try(repo.pact_publisher, false) && contains(keys(data.github_repository.govuk), "alphagov/${name}")
   ]
 }
 
@@ -198,6 +198,16 @@ resource "github_repository" "govuk_repos" {
       pages
     ]
   }
+}
+
+import {
+  to = github_repository.govuk_repos["govuk_chat_private"]
+  id = "alphagov/govuk_chat_private"
+}
+
+import {
+  to = github_repository.govuk_repos["govuk_web_banners"]
+  id = "alphagov/govuk_web_banners"
 }
 
 resource "github_branch_protection" "govuk_repos" {
