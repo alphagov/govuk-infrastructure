@@ -395,6 +395,6 @@ resource "aws_lambda_function" "url_rewrite" {
   role          = aws_iam_role.basic_lambda_role.arn
   handler       = "index.handler"
   runtime       = "nodejs22.x"
-  provider      = aws.eu_west_2
+  provider      = aws.global
   publish       = true
 }
