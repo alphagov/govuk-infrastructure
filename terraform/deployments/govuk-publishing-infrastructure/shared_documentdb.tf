@@ -1,9 +1,30 @@
+import {
+  to = aws_docdb_cluster_instance.shared_cluster_instances[0]
+  id = "shared-documentdb-production-1"
+}
+
+import {
+  to = aws_docdb_cluster_instance.shared_cluster_instances[1]
+  id = "shared-documentdb-production-12"
+}
+
+import {
+  to = aws_docdb_cluster_instance.shared_cluster_instances[2]
+  id = "shared-documentdb-production-13"
+}
+
 resource "aws_docdb_cluster_instance" "shared_cluster_instances" {
   count              = var.shared_documentdb_instance_count
   identifier         = "shared-documentdb-${count.index}"
   cluster_identifier = aws_docdb_cluster.shared_cluster.id
   instance_class     = "db.r5.large"
   tags               = aws_docdb_cluster.shared_cluster.tags
+
+  lifecycle {
+    ignore_changes = [
+      identifier
+    ]
+  }
 }
 
 resource "aws_docdb_subnet_group" "shared_cluster_subnet" {
@@ -89,9 +110,15 @@ resource "aws_kms_key_policy" "shared_documentdb_kms_key_policy" {
   })
 }
 
+import {
+  to = aws_docdb_cluster.shared_cluster
+  id = "shared-documentdb-production-1"
+}
+
 resource "aws_docdb_cluster" "shared_cluster" {
-  cluster_identifier              = "shared-documentdb-${var.govuk_environment}"
+  cluster_identifier              = "shared-documentdb-${var.govuk_environment}${var.shared_documentdb_identifier_suffix}"
   availability_zones              = ["eu-west-1a", "eu-west-1b", "eu-west-1c"]
+  deletion_protection             = true
   db_subnet_group_name            = aws_docdb_subnet_group.shared_cluster_subnet.name
   master_username                 = "master"
   master_password                 = random_password.shared_documentdb_master.result
@@ -101,6 +128,13 @@ resource "aws_docdb_cluster" "shared_cluster" {
   kms_key_id                      = aws_kms_key.shared_documentdb_kms_key.arn
   vpc_security_group_ids          = [data.tfe_outputs.security.nonsensitive_values.govuk_shared_documentdb_access_sg_id]
   enabled_cloudwatch_logs_exports = ["profiler"]
+
+  lifecycle {
+    ignore_changes = [
+      cluster_identifier,
+      master_password
+    ]
+  }
 }
 
 resource "aws_route53_record" "shared_documentdb" {

@@ -70,6 +70,8 @@ module "variable-set-production" {
     frontend_memcached_node_type = "cache.r6g.large"
 
     ckan_s3_organogram_bucket = "datagovuk-production-ckan-organogram"
+
+    shared_documentdb_identifier_suffix = "-1"
   }
 }
 
