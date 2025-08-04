@@ -247,7 +247,7 @@ resource "aws_cloudfront_distribution" "www_distribution" {
 
     lambda_function_association {
       event_type   = "viewer-request"
-      lambda_arn   = aws_lambda_function.url_rewrite.qualified_arn
+      lambda_arn   = data.aws_lambda_function.url_rewrite.arn
       include_body = false
     }
   }
@@ -385,6 +385,16 @@ data "archive_file" "url_rewrite" {
   type        = "zip"
   source_file = "${path.module}/index.js"
   output_path = "${path.module}/CloudfrontUrlRewrite.zip"
+}
+
+data "aws_lambda_function" "url_rewrite" {
+  function_name = "url_rewrite"
+  provider      = aws.global
+}
+
+data "aws_lambda_function_url" "url_rewrite" {
+  function_name = data.aws_lambda_function.url_rewrite.function_name
+  provider      = aws.global
 }
 
 resource "aws_lambda_function" "url_rewrite" {
