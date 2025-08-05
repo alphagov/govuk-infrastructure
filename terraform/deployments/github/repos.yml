@@ -278,6 +278,15 @@ repos:
 
   govuk-chat:
     can_be_deployed: true
+    homepage_url: "https://docs.publishing.service.gov.uk/apps/govuk-chat.html"
+    required_status_checks:
+      standard_contexts: *standard_govuk_rails_checks
+      additional_contexts:
+        - Lint SCSS / Run Stylelint
+        - Lint JavaScript
+        - Lint ERB / Run ErbLint
+        - Test JavaScript / Run Jasmine
+        - Test Ruby / Run RSpec
 
   govuk-content-api-docs:
     homepage_url: "https://content-api.publishing.service.gov.uk"
