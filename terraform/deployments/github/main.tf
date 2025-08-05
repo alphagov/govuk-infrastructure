@@ -202,12 +202,12 @@ resource "github_repository" "govuk_repos" {
 
 import {
   to = github_repository.govuk_repos["govuk_chat_private"]
-  id = "alphagov/govuk_chat_private"
+  id = "govuk_chat_private"
 }
 
 import {
   to = github_repository.govuk_repos["govuk_web_banners"]
-  id = "alphagov/govuk_web_banners"
+  id = "govuk_web_banners"
 }
 
 resource "github_branch_protection" "govuk_repos" {
