@@ -30,6 +30,8 @@ module "workspace" {
     "common",
     "common-ephemeral"
   ]
+
+  tfvars = var.tfvars
 }
 
 resource "tfe_workspace_run" "run" {

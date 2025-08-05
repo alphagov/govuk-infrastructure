@@ -19,3 +19,9 @@ variable "terraform_version" {
 variable "variable_set_id" {
   type = string
 }
+
+variable "tfvars" {
+  type        = map(any)
+  description = "Additional tfvars to set on the workspace"
+  default     = {}
+}
