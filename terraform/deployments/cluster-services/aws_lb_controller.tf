@@ -25,7 +25,7 @@ resource "helm_release" "aws_lb_controller" {
     ] } }
     podDisruptionBudget = var.desired_ha_replicas > 1 ? { minAvailable = 1 } : {}
     replicaCount        = var.desired_ha_replicas
-    region              = data.aws_region.current.name
+    region              = data.aws_region.current.region
     serviceMonitor = {
       enabled = !startswith(var.govuk_environment, "eph-")
     }

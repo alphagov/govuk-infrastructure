@@ -5,7 +5,7 @@
 # ../cluster-services/external_secrets.tf.
 
 locals {
-  external_secrets_service_account_name = "external-secrets"
+  external_secrets_service_account_name = "external-secrets" # pragma: allowlist secret
 }
 
 module "external_secrets_iam_role" {

@@ -64,7 +64,7 @@ data "aws_iam_policy_document" "opensearch_log_publishing_policy" {
     ]
 
     resources = [
-      "arn:aws:logs:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:log-group:/aws/aes/domains/${local.domain}/*"
+      "arn:aws:logs:${data.aws_region.current.region}:${data.aws_caller_identity.current.account_id}:log-group:/aws/aes/domains/${local.domain}/*"
     ]
   }
 }
@@ -164,7 +164,7 @@ data "aws_iam_policy_document" "domain_access_policy" {
     }
 
     actions   = ["es:*"]
-    resources = ["arn:aws:es:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:domain/${local.domain}/*"]
+    resources = ["arn:aws:es:${data.aws_region.current.region}:${data.aws_caller_identity.current.account_id}:domain/${local.domain}/*"]
   }
 }
 

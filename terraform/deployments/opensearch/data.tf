@@ -1,6 +1,6 @@
 data "aws_caller_identity" "current" {}
 data "aws_region" "current" {
-  name = var.aws_region
+  region = var.aws_region
 }
 data "tfe_outputs" "cluster_infrastructure" {
   organization = "govuk"
@@ -11,7 +11,7 @@ data "terraform_remote_state" "infra_vpc" {
   config = {
     bucket = var.govuk_aws_state_bucket
     key    = "govuk/infra-vpc.tfstate"
-    region = data.aws_region.current.name
+    region = data.aws_region.current.region
   }
 }
 data "terraform_remote_state" "infra_security_groups" {
@@ -19,7 +19,7 @@ data "terraform_remote_state" "infra_security_groups" {
   config = {
     bucket = var.govuk_aws_state_bucket
     key    = "govuk/infra-security-groups.tfstate"
-    region = data.aws_region.current.name
+    region = data.aws_region.current.region
   }
 }
 

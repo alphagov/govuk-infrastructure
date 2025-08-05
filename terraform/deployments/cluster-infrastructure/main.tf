@@ -24,7 +24,7 @@ terraform {
 
 locals {
   cluster_services_namespace = "cluster-services"
-  secrets_prefix             = "govuk"
+  secrets_prefix             = "govuk" # pragma: allowlist secret
   monitoring_namespace       = "monitoring"
 
   default_cluster_addons = {

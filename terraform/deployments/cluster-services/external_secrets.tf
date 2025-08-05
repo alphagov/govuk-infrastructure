@@ -48,7 +48,7 @@ resource "helm_release" "cluster_secret_store" {
   namespace  = local.services_ns
   timeout    = var.helm_timeout_seconds
   values = [yamlencode({
-    awsRegion          = data.aws_region.current.name
+    awsRegion          = data.aws_region.current.region
     serviceAccountName = data.tfe_outputs.cluster_infrastructure.nonsensitive_values.external_secrets_service_account_name
   })]
 
