@@ -79,3 +79,9 @@ variable "force_destroy" {
   description = "Setting for force_destroy on resources such as Route53 zones. For use in non-production environments to allow for automated tear-down."
   default     = false
 }
+
+variable "ship_kubernetes_events_to_logit" {
+  type        = bool
+  description = "Whether to deploy the kubernetes-events-shipper helm chart which ships kubernetes events to logit"
+  default     = true
+}
