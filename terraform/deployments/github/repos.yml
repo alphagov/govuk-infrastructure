@@ -429,10 +429,6 @@ repos:
       additional_contexts:
         - test
 
-  govuk_chat_private:
-    publishes_gem: true
-    visibility: private
-
   govuk_document_types:
     homepage_url: "https://docs.publishing.service.gov.uk/document-types.html"
     publishes_gem: true

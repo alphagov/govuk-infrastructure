@@ -201,11 +201,6 @@ resource "github_repository" "govuk_repos" {
 }
 
 import {
-  to = github_repository.govuk_repos["govuk_chat_private"]
-  id = "govuk_chat_private"
-}
-
-import {
   to = github_repository.govuk_repos["govuk_web_banners"]
   id = "govuk_web_banners"
 }
