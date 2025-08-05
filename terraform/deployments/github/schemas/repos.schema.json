@@ -1,0 +1,71 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "GOV.UK Repos YAML Schema",
+  "type": "object",
+  "properties": {
+    "access_levels": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "array",
+        "items": { "type": "string" }
+      }
+    },
+    "repos": {
+      "type": "object",
+      "patternProperties": {
+        "^[a-zA-Z0-9._-]+$": {
+          "type": "object",
+          "properties": {
+            "can_be_deployed": { "type": "boolean" },
+            "pact_publisher": { "type": "boolean" },
+            "publishes_gem": { "type": "boolean" },
+            "homepage_url": { "type": "string" },
+            "visibility": { "type": "string", "enum": ["public", "private", "internal"] },
+            "branch_protection": { "type": "boolean" },
+            "allow_squash_merge": { "type": "boolean" },
+            "need_production_access_to_merge": { "type": "boolean" },
+            "strict": { "type": "boolean" },
+            "up_to_date_branches": { "type": "boolean" },
+            "required_pull_request_reviews": {
+              "type": "object",
+              "properties": {
+                "require_code_owner_reviews": { "type": "boolean" },
+                "pull_request_bypassers": {
+                  "type": "array",
+                  "items": { "type": "string" }
+                }
+              },
+              "additionalProperties": true
+            },
+            "push_allowances": {
+              "type": "array",
+              "items": { "type": "string" }
+            },
+            "teams": {
+              "type": "object",
+              "additionalProperties": { "type": "string" }
+            },
+            "required_status_checks": {
+              "type": "object",
+              "properties": {
+                "standard_contexts": {
+                  "type": "array",
+                  "items": { "type": "string" }
+                },
+                "additional_contexts": {
+                  "type": "array",
+                  "items": { "type": "string" }
+                },
+                "ignore_jenkins": { "type": "boolean" }
+              },
+              "additionalProperties": true
+            }
+          },
+          "additionalProperties": true
+        }
+      }
+    }
+  },
+  "required": ["repos"],
+  "additionalProperties": true
+}

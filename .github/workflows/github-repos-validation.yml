@@ -1,0 +1,20 @@
+name: Validate Github Repos YAML
+on:
+  push:
+    paths: ['.github/workflows/**', 'terraform/deployments/github/**']
+jobs:
+  github_repos_validation:
+    name: Validate Github Repos YAML
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
+        with:
+          show-progress: false
+
+      - name: Validate YAML Schema
+        run: |
+          yq -o=json '. ' terraform/deployments/github/repos.yml > repos.json
+          npx ajv-cli validate -s terraform/deployments/github/schemas/repos.schema.json -d repos.json
