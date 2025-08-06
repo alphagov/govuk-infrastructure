@@ -200,11 +200,6 @@ resource "github_repository" "govuk_repos" {
   }
 }
 
-import {
-  to = github_branch_protection.govuk_repos["govuk_chat_private"]
-  id = "govuk_chat_private:main"
-}
-
 resource "github_branch_protection" "govuk_repos" {
   for_each = { for repo_name, repo_details in local.repositories : repo_name => repo_details if try(repo_details["branch_protection"], true) }
 

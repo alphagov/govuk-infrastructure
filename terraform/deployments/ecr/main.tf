@@ -46,14 +46,10 @@ provider "github" {
   token = data.aws_secretsmanager_secret_version.github-token.secret_string
 }
 
-data "github_repositories" "govuk" {
-  query = "org:alphagov topic:container topic:govuk fork:false archived:false"
-}
-
 locals {
   repositories = concat(
     local.extra_repositories,
-    data.github_repositories.govuk.names
+    data.tfe_outputs.github.nonsensitive_values.deployable_repo_names
   )
 
   extra_repositories = [
@@ -79,6 +75,10 @@ resource "aws_ecr_repository" "github_repositories" {
   name                 = "github/alphagov/govuk/${each.key}"
   image_tag_mutability = "MUTABLE" # To support a movable `latest` for developer convenience.
   image_scanning_configuration { scan_on_push = true }
+
+  lifecycle {
+   prevent_destroy = true
+ }
 }
 
 resource "aws_ecr_pull_through_cache_rule" "github" {
