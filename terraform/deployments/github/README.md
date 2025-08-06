@@ -3,18 +3,17 @@
 > **Note**: Currently this module can only be applied by an alphagov GitHub
 Organisation Admin.
 
-This module configures GitHub resources (currently just GitHub Action Organisation
-Secret Repositories) so that the platform can automatically give permissions to
-repositories with specific tags.
+This module configures GitHub resources so that the platform can automatically give permissions to
+repositories with specific properties in the included YAML file.
 
-We anticipate that teams will add GitHub tags to their repositories (similar to
-annotations on Kubernetes resources) to enable platform functionality.
-For instance creating an ECR registry and giving permissions to push to the
-registry might be enabled with the repo tag `container`.
+We no longer use GitHub topics (tags) on repositories (similar to
+annotations on Kubernetes resources) to configure or enable platform functionality.
+
+Instead, creating an ECR registry and giving permissions to push to the
+registry might be enabled by setting `can_be_deployed` to `true` in the YAML file.
 
 This module configures repositories with sensible defaults such as
-protecting the `main` branch and ensuring the repository is compatible with
-our old EC2-based platform (such as checking Jenkins config).
+protecting the `main` branch.
 
 ## Applying Terraform
 
