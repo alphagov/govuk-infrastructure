@@ -438,6 +438,19 @@ repos:
       additional_contexts:
         - test
 
+  govuk_chat_private:
+    homepage_url: "https://docs.publishing.service.gov.uk/repos/govuk_chat_private.html"
+    visibility: private
+    # This utility is a gem that isn't pushed to Rubygems, but we need to set
+    # this to true for the appropriate CI token to be set
+    publishes_gem: true
+    required_status_checks:
+      # standard security checks are disabled as not configured for a private repo
+      additional_contexts:
+        - Lint Ruby / Run RuboCop
+        - Run RSpec
+        - Test GOV.UK Chat / Run RSpec
+
   govuk_document_types:
     homepage_url: "https://docs.publishing.service.gov.uk/document-types.html"
     publishes_gem: true
