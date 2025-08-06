@@ -201,8 +201,8 @@ resource "github_repository" "govuk_repos" {
 }
 
 import {
-  to = github_repository.govuk_repos["govuk_web_banners"]
-  id = "govuk_web_banners"
+  to = github_branch_protection.govuk_repos["govuk_web_banners"]
+  id = "govuk_web_banners:main"
 }
 
 import {
