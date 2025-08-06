@@ -74,7 +74,7 @@ resource "aws_cloudwatch_log_resource_policy" "opensearch_log_resource_policy" {
               "aws:SourceAccount": "${data.aws_caller_identity.current.account_id}"
           },
           "ArnLike": {
-              "aws:SourceArn": "arn:aws:es:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:domain/${local.domain}"
+              "aws:SourceArn": "arn:aws:es:${data.aws_region.current.region}:${data.aws_caller_identity.current.account_id}:domain/${local.domain}"
           }
       }
     }
@@ -158,7 +158,7 @@ resource "aws_opensearch_domain" "opensearch" {
             "Action": "es:*",
             "Principal": "*",
             "Effect": "Allow",
-            "Resource": "arn:aws:es:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:domain/${local.domain}/*"
+            "Resource": "arn:aws:es:${data.aws_region.current.region}:${data.aws_caller_identity.current.account_id}:domain/${local.domain}/*"
         }
     ]
 }

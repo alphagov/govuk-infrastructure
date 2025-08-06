@@ -20,6 +20,6 @@ data "terraform_remote_state" "infra_security_groups" {
   config = {
     bucket = var.govuk_aws_state_bucket
     key    = "govuk/infra-security-groups.tfstate"
-    region = data.aws_region.current.name
+    region = data.aws_region.current.region
   }
 }
