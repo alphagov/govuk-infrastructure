@@ -210,6 +210,11 @@ import {
   id = "govuk_chat_private"
 }
 
+import {
+  to = github_repository.govuk_repos["govuk-chat-evaluation"]
+  id = "govuk-chat-evaluation"
+}
+
 resource "github_branch_protection" "govuk_repos" {
   for_each = { for repo_name, repo_details in local.repositories : repo_name => repo_details if try(repo_details["branch_protection"], true) }
 
