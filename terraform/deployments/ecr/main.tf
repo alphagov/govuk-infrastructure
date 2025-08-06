@@ -53,17 +53,18 @@ locals {
   )
 
   extra_repositories = [
-    "mongodb",
-    "imminence",
-    "toolbox",
     "clamav",
-    "search-api-learn-to-rank",
+    "govuk-e2e-tests",
+    "govuk-fastly-diff-generator",
+    "govuk-replatform-test-app",
+    "imminence",
     "licensify-backend",
     "licensify-feed",
     "licensify-frontend",
-    "govuk-fastly-diff-generator",
-    "govuk-e2e-tests",
-    "publisher-on-pg"
+    "mongodb",
+    "publisher-on-pg",
+    "search-api-learn-to-rank",
+    "toolbox",
   ]
 }
 
@@ -77,8 +78,8 @@ resource "aws_ecr_repository" "github_repositories" {
   image_scanning_configuration { scan_on_push = true }
 
   lifecycle {
-   prevent_destroy = true
- }
+    prevent_destroy = true
+  }
 }
 
 resource "aws_ecr_pull_through_cache_rule" "github" {
