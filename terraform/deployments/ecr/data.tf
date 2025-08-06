@@ -44,3 +44,8 @@ data "aws_iam_policy_document" "topic-policy-ecr-sns" {
     sid       = "TrustCWEToPublishEventsToMyTopic"
   }
 }
+
+data "tfe_outputs" "github" {
+  organization = "govuk"
+  workspace    = "Github"
+}
