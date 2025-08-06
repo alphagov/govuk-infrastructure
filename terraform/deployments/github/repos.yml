@@ -288,6 +288,16 @@ repos:
         - Test JavaScript / Run Jasmine
         - Test Ruby / Run RSpec
 
+  govuk-chat-evaluation:
+    homepage_url: "https://docs.publishing.service.gov.uk/apps/govuk-chat-evaluation.html"
+    required_status_checks:
+      standard_contexts: *standard_security_checks
+      additional_contexts:
+        - Tests
+        - Lint
+        - Format
+        - Type checks
+
   govuk-content-api-docs:
     homepage_url: "https://content-api.publishing.service.gov.uk"
     need_production_access_to_merge: false
