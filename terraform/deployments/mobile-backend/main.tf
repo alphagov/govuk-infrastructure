@@ -23,12 +23,12 @@ provider "aws" {
   region = "eu-west-1"
   default_tags {
     tags = {
-      Product              = "GOV.UK"
-      System               = "GOV.UK App"
-      Environment          = var.govuk_environment
-      Owner                = "govuk-app-engineering@digital.cabinet-office.gov.uk"
+      product              = "govuk"
+      system               = "govuk-app"
+      environment          = var.govuk_environment
+      owner                = "govuk-app-engineering@digital.cabinet-office.gov.uk"
       repository           = "govuk-infrastructure"
-      terraform_deployment = basename(abspath(path.root))
+      terraform-deployment = basename(abspath(path.root))
     }
   }
 }
