@@ -449,14 +449,14 @@ module "variable-set-rds-integration" {
 
       publisher = {
         engine         = "postgres"
-        engine_version = "14"
+        engine_version = "17"
         engine_params = {
           log_min_duration_statement = { value = 10000 }
           log_statement              = { value = "all" }
           deadlock_timeout           = { value = 2500 }
           log_lock_waits             = { value = 1 }
         }
-        engine_params_family         = "postgres14"
+        engine_params_family         = "postgres17"
         name                         = "publisher"
         allocated_storage            = 100
         instance_class               = "db.t4g.small"
