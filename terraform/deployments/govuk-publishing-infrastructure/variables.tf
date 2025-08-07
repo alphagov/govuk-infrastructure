@@ -76,7 +76,6 @@ variable "search_api_rate_limit" {
 
 variable "amazonmq_engine_version" {
   type        = string
-  default     = "3.11.28"
   description = "Engine version for publishing AmazonMQ cluster"
 }
 
