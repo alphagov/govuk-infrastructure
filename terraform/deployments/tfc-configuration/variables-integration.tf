@@ -448,8 +448,9 @@ module "variable-set-rds-integration" {
       }
 
       publisher = {
-        engine         = "postgres"
-        engine_version = "17"
+        engine                      = "postgres"
+        engine_version              = "17"
+        allow_major_version_upgrade = true
         engine_params = {
           log_min_duration_statement = { value = 10000 }
           log_statement              = { value = "all" }
