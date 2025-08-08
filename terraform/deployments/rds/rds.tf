@@ -46,24 +46,25 @@ resource "aws_db_parameter_group" "engine_params" {
 resource "aws_db_instance" "instance" {
   for_each = var.databases
 
-  engine                  = each.value.engine
-  engine_version          = each.value.engine_version
-  username                = var.database_admin_username
-  password                = random_string.database_password[each.key].result
-  instance_class          = each.value.instance_class
-  identifier              = "${var.govuk_environment}-${each.value.name}-${each.value.engine}"
-  db_subnet_group_name    = aws_db_subnet_group.subnet_group.name
-  multi_az                = var.multi_az
-  parameter_group_name    = aws_db_parameter_group.engine_params[each.key].name
-  maintenance_window      = lookup(each.value, "maintenance_window", var.maintenance_window)
-  backup_retention_period = lookup(each.value, "backup_retention_period", var.backup_retention_period)
-  backup_window           = var.backup_window
-  copy_tags_to_snapshot   = true
-  monitoring_interval     = 60
-  monitoring_role_arn     = data.tfe_outputs.logging.nonsensitive_values.rds_enhanced_monitoring_role_arn
-  vpc_security_group_ids  = [aws_security_group.rds[each.key].id]
-  ca_cert_identifier      = "rds-ca-rsa2048-g1"
-  apply_immediately       = var.govuk_environment != "production"
+  engine                      = each.value.engine
+  engine_version              = each.value.engine_version
+  username                    = var.database_admin_username
+  password                    = random_string.database_password[each.key].result
+  instance_class              = each.value.instance_class
+  identifier                  = "${var.govuk_environment}-${each.value.name}-${each.value.engine}"
+  db_subnet_group_name        = aws_db_subnet_group.subnet_group.name
+  multi_az                    = var.multi_az
+  parameter_group_name        = aws_db_parameter_group.engine_params[each.key].name
+  maintenance_window          = lookup(each.value, "maintenance_window", var.maintenance_window)
+  backup_retention_period     = lookup(each.value, "backup_retention_period", var.backup_retention_period)
+  backup_window               = var.backup_window
+  copy_tags_to_snapshot       = true
+  monitoring_interval         = 60
+  monitoring_role_arn         = data.tfe_outputs.logging.nonsensitive_values.rds_enhanced_monitoring_role_arn
+  vpc_security_group_ids      = [aws_security_group.rds[each.key].id]
+  ca_cert_identifier          = "rds-ca-rsa2048-g1"
+  apply_immediately           = var.govuk_environment != "production"
+  allow_major_version_upgrade = try(each.value.allow_major_version_upgrade, false)
 
   performance_insights_enabled          = each.value.performance_insights_enabled
   performance_insights_retention_period = each.value.performance_insights_enabled ? 7 : 0
