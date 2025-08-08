@@ -64,7 +64,7 @@ resource "aws_db_instance" "instance" {
   vpc_security_group_ids      = [aws_security_group.rds[each.key].id]
   ca_cert_identifier          = "rds-ca-rsa2048-g1"
   apply_immediately           = var.govuk_environment != "production"
-  allow_major_version_upgrade = try(each.value.allow_major_version_upgrade, false)
+  allow_major_version_upgrade = lookup(each.value, "allow_major_version_upgrade", false)
 
   performance_insights_enabled          = each.value.performance_insights_enabled
   performance_insights_retention_period = each.value.performance_insights_enabled ? 7 : 0
