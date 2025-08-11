@@ -80,7 +80,7 @@ resource "aws_db_instance" "instance" {
     update = var.terraform_update_rds_timeout
   }
 
-  deletion_protection       = var.govuk_environment == "production"
+  deletion_protection       = try(each.value.deletion_protection, true)
   final_snapshot_identifier = "${each.value.name}-final-snapshot"
   skip_final_snapshot       = var.skip_final_snapshot
 
