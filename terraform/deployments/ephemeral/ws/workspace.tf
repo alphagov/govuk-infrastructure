@@ -15,7 +15,7 @@ module "workspace" {
   project_name = var.ephemeral_cluster_id
   vcs_repo = {
     identifier     = "alphagov/govuk-infrastructure"
-    branch         = "main"
+    branch         = var.git_branch
     oauth_token_id = data.tfe_oauth_client.github.oauth_token_id
   }
 
@@ -30,6 +30,8 @@ module "workspace" {
     "common",
     "common-ephemeral"
   ]
+
+  tfvars = var.tfvars
 }
 
 resource "tfe_workspace_run" "run" {
