@@ -22,6 +22,14 @@ on:
         required: false
         type: string
         default: ${{ github.sha }}
+      arm64_runner_name:
+        required: false
+        type: string
+        default: ubuntu-24.04-arm
+      amd64_runner_name:
+        required: false
+        type: string
+        default: ubuntu-latest
     secrets:
       BUILD_SECRETS:
         description: "Allows adding secrets to the docker build task - https://docs.docker.com/build/ci/github-actions/secrets"
@@ -41,9 +49,9 @@ jobs:
           - arm64
         include:
           - arch: amd64
-            runner: ubuntu-latest
+            runner: ${{ inputs.amd64_runner_name }}
           - arch: arm64
-            runner: ubuntu-24.04-arm
+            runner: ${{ inputs.arm64_runner_name }}
     runs-on: ${{ matrix.runner }}
     outputs:
       imageTag: ${{ steps.meta.outputs.version }}
