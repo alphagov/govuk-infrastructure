@@ -16,6 +16,16 @@ terraform {
 
 provider "aws" {
   region = var.aws_region
+  default_tags {
+    tags = {
+      product              = "govuk"
+      system               = "govuk-chat"
+      environment          = var.govuk_environment
+      owner                = "govuk-platform-engineering@digital.cabinet-office.gov.uk"
+      repository           = "govuk-infrastructure"
+      terraform-deployment = basename(abspath(path.root))
+    }
+  }
 }
 
 locals {
