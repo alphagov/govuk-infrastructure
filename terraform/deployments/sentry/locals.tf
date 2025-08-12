@@ -32,7 +32,6 @@ locals {
     "local-links-manager",
     "locations-api",
     "manuals-publisher",
-    "maslow",
     "places-manager",
     "publisher",
     "publishing-api",
