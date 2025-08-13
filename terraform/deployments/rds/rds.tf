@@ -145,6 +145,10 @@ resource "aws_db_instance" "replica" {
   skip_final_snapshot = true
 
   tags = { Name = "govuk-rds-${each.value.name}-${each.value.engine}-replica", project = lookup(each.value, "project", "GOV.UK - Other") }
+
+  lifecycle {
+    ignore_changes = [identifier]
+  }
 }
 
 resource "aws_route53_record" "replica_cname" {
