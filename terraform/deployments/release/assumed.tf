@@ -4,8 +4,7 @@ locals {
   _prod_account_id = ["172025368201"]
   _non_prod_account_ids = [
     "696911096973", # staging
-    "210287912431", # integration
-    "430354129336"  # test
+    "210287912431"  # integration
   ]
   assumer_account_ids = (var.govuk_environment == "production" ?
   local._prod_account_id : concat(local._non_prod_account_ids, local._prod_account_id))
