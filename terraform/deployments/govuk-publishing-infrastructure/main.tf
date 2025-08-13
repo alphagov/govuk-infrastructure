@@ -37,11 +37,12 @@ locals {
   private_subnet_ids     = [for name, subnet in data.tfe_outputs.vpc.nonsensitive_values.private_subnet_ids : subnet if contains(local.target_private_subnets, name)]
 
   default_tags = {
-    Product              = "GOV.UK"
-    Environment          = var.govuk_environment
-    Owner                = "govuk-platform-engineering@digital.cabinet-office.gov.uk"
+    product              = "govuk"
+    system               = "govuk-publishing"
+    environment          = var.govuk_environment
+    owner                = "govuk-platform-engineering@digital.cabinet-office.gov.uk"
     repository           = "govuk-infrastructure"
-    terraform_deployment = basename(abspath(path.root))
+    terraform-deployment = basename(abspath(path.root))
   }
 }
 

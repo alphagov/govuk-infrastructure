@@ -84,7 +84,15 @@ resource "aws_db_instance" "instance" {
   final_snapshot_identifier = "${each.value.name}-final-snapshot"
   skip_final_snapshot       = var.skip_final_snapshot
 
-  tags = { Name = "govuk-rds-${each.value.name}-${each.value.engine}", project = lookup(each.value, "project", "GOV.UK - Other") }
+  tags = {
+    Name        = "govuk-rds-${each.value.name}-${each.value.engine}" # Keep this as I'm not sure what it's used for
+    product     = "govuk"
+    system      = "govuk-${each.value.name}"
+    service     = "rds-${each.value.engine}"
+    environment = var.govuk_environment
+    owner       = "${each.value.name}"
+    repository  = "govuk-infrastructure"
+  }
 
   lifecycle { ignore_changes = [identifier] }
 }
@@ -143,7 +151,16 @@ resource "aws_db_instance" "replica" {
 
   skip_final_snapshot = true
 
-  tags = { Name = "govuk-rds-${each.value.name}-${each.value.engine}-replica", project = lookup(each.value, "project", "GOV.UK - Other") }
+  tags = {
+    Name        = "govuk-rds-${each.value.name}-${each.value.engine}" # Keep this as I'm not sure what it's used for
+    product     = "govuk"
+    system      = "govuk-${each.value.name}"
+    service     = "rds-${each.value.engine}"
+    environment = var.govuk_environment
+    owner       = "${each.value.name}"
+    repository  = "govuk-infrastructure"
+  }
+
 
   lifecycle { ignore_changes = [identifier] }
 }
