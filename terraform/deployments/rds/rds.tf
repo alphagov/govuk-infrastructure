@@ -1,5 +1,8 @@
 locals {
   rds_subnet_ids = compact([for name, id in data.tfe_outputs.vpc.nonsensitive_values.private_subnet_ids : startswith(name, "rds_") ? id : ""])
+
+  is_ephemeral      = startswith(var.govuk_environment, "eph-")
+  identifier_prefix = local.is_ephemeral ? "${var.govuk_environment}-" : ""
 }
 
 resource "random_string" "database_password" {
@@ -51,7 +54,7 @@ resource "aws_db_instance" "instance" {
   username                    = var.database_admin_username
   password                    = random_string.database_password[each.key].result
   instance_class              = each.value.instance_class
-  identifier                  = "${var.govuk_environment}-${each.value.name}-${each.value.engine}"
+  identifier                  = "${local.identifier_prefix}${each.value.name}-${each.value.engine}"
   db_subnet_group_name        = aws_db_subnet_group.subnet_group.name
   multi_az                    = var.multi_az
   parameter_group_name        = aws_db_parameter_group.engine_params[each.key].name
@@ -85,8 +88,6 @@ resource "aws_db_instance" "instance" {
   skip_final_snapshot       = var.skip_final_snapshot
 
   tags = { Name = "govuk-rds-${each.value.name}-${each.value.engine}", project = lookup(each.value, "project", "GOV.UK - Other") }
-
-  lifecycle { ignore_changes = [identifier] }
 }
 
 resource "aws_db_event_subscription" "subscription" {
@@ -136,7 +137,7 @@ resource "aws_db_instance" "replica" {
   }
 
   instance_class                        = each.value.instance_class
-  identifier                            = "${var.govuk_environment}-${each.value.name}-${each.value.engine}-replica"
+  identifier                            = "${local.identifier_prefix}${each.value.name}-${each.value.engine}-replica"
   replicate_source_db                   = aws_db_instance.instance[each.key].identifier
   performance_insights_enabled          = aws_db_instance.instance[each.key].performance_insights_enabled
   performance_insights_retention_period = aws_db_instance.instance[each.key].performance_insights_retention_period
@@ -145,7 +146,9 @@ resource "aws_db_instance" "replica" {
 
   tags = { Name = "govuk-rds-${each.value.name}-${each.value.engine}-replica", project = lookup(each.value, "project", "GOV.UK - Other") }
 
-  lifecycle { ignore_changes = [identifier] }
+  lifecycle {
+    ignore_changes = [identifier]
+  }
 }
 
 resource "aws_route53_record" "replica_cname" {
