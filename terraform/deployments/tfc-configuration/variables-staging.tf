@@ -473,6 +473,7 @@ module "variable-set-rds-staging" {
         instance_class               = "db.t4g.micro"
         performance_insights_enabled = false
         project                      = "GOV.UK - Publishing"
+        deletion_protection          = false
       }
 
       release = {

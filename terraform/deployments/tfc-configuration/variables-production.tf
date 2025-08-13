@@ -481,6 +481,7 @@ module "variable-set-rds-production" {
         instance_class               = "db.t4g.medium"
         performance_insights_enabled = true
         project                      = "GOV.UK - Publishing"
+        deletion_protection          = false
       }
 
       release = {
