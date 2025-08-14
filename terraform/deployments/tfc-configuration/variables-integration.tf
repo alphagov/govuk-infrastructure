@@ -231,14 +231,14 @@ module "variable-set-rds-integration" {
 
       content_data_admin = {
         engine         = "postgres"
-        engine_version = "14.18"
+        engine_version = "13"
         engine_params = {
           log_min_duration_statement = { value = 10000 }
           log_statement              = { value = "all" }
           deadlock_timeout           = { value = 2500 }
           log_lock_waits             = { value = 1 }
         }
-        engine_params_family         = "postgres14"
+        engine_params_family         = "postgres13"
         name                         = "content-data-admin"
         allocated_storage            = 100
         instance_class               = "db.t4g.micro"
