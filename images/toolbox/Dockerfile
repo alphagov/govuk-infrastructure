@@ -10,6 +10,7 @@ WORKDIR $keyrings_dir
 # hadolint ignore=DL3020
 ADD ${github_apt_repo}/githubcli-archive-keyring.gpg github.gpg
 ADD https://pgp.mongodb.com/server-7.0.pub mongodb.gpg
+ADD https://www.postgresql.org/media/keys/ACCC4CF8.asc apt.postgresql.org.asc
 # hadolint ignore=DL3008
 RUN apt-get update -qq ; \
     apt-get install -qy --no-install-recommends ca-certificates ; \
@@ -19,8 +20,11 @@ RUN apt-get update -qq ; \
     apt-get update -qq ; \
     apt-get install -qy --no-install-recommends \
         curl file gh git jq libarchive-tools mysql-client netcat-openbsd \
-        postgresql-client pv wget2 gettext mongodb-mongosh=2.2.10 \
+        postgresql-common pv wget2 gettext mongodb-mongosh=2.2.10 \
         mongodb-database-tools=100.9.4 redis-tools ; \
+    /usr/share/postgresql-common/pgdg/apt.postgresql.org.sh -y ; \
+    apt-get install -qy --no-install-recommends \
+        postgresql-client-17 ; \
     rm -fr /var/lib/apt/lists/*
 
 ARG yq_package_url=https://github.com/mikefarah/yq/releases/latest/download
@@ -54,6 +58,9 @@ RUN aws --version ; \
     mongodump --version ; \
     mysql --version ; \
     psql --version ; \
+    pg_dump --version ; \
+    createdb --version ; \
+    dropdb --version ; \
     redis-cli --version ; \
     echo -n "s5cmd "; s5cmd version ; \
     yq --version
