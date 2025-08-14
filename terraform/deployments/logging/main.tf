@@ -18,11 +18,12 @@ provider "aws" {
   region = "eu-west-1"
   default_tags {
     tags = {
-      product     = "govuk"
-      system      = "govuk-platform-engineering"
-      service     = "logging"
-      environment = var.govuk_environment
-      owner       = "govuk-platform-engineering@digital.cabinet-office.gov.uk"
+      product              = "govuk"
+      system               = "govuk-platform-engineering"
+      service              = "logging"
+      environment          = var.govuk_environment
+      owner                = "govuk-platform-engineering@digital.cabinet-office.gov.uk"
+      terraform-deployment = basename(abspath(path.root))
     }
   }
 }
@@ -35,6 +36,6 @@ provider "google" {
     environment          = var.govuk_environment
     owner                = "govuk-platform-engineering"
     repository           = "govuk-infrastructure"
-    terraform_deployment = lower(basename(abspath(path.root)))
+    terraform-deployment = lower(basename(abspath(path.root)))
   }
 }
