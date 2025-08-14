@@ -18,20 +18,20 @@ provider "aws" {
   region = "eu-west-1"
   default_tags {
     tags = {
-      Product              = "GOV.UK"
-      System               = "Logging"
-      Environment          = var.govuk_environment
-      Owner                = "govuk-platform-engineering@digital.cabinet-office.gov.uk"
-      repository           = "govuk-infrastructure"
-      terraform_deployment = basename(abspath(path.root))
+      product     = "govuk"
+      system      = "govuk-platform-engineering"
+      service     = "logging"
+      environment = var.govuk_environment
+      owner       = "govuk-platform-engineering@digital.cabinet-office.gov.uk"
     }
   }
 }
 
 provider "google" {
   default_labels = {
-    product              = "gov-uk"
-    system               = "terraform-cloud"
+    product              = "govuk"
+    system               = "govuk-platform-engineering"
+    service              = "logging"
     environment          = var.govuk_environment
     owner                = "govuk-platform-engineering"
     repository           = "govuk-infrastructure"
