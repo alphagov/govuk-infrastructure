@@ -1,8 +1,7 @@
 # Prerequisite Secrets
 
 The platform requires some prerequisite secrets in order to fully function.
-These secrets are stores in AWS Secret Manager, further info about the integration
-of the k8s platform platform with AWS Secret Manager is available [here](kubernetes-external-secrets.md)
+These secrets are stored in AWS Secret Manager, using the Kubernetes [External Secrets operator](kubernetes-external-secrets.md)
 
 The secrets listed here are either:
 1. externally generated in external systems and imported into our platform. E.g.
@@ -15,9 +14,8 @@ The secrets listed here are either:
    helm chart of the [govuk-helm-charts] GitHub repository. These are usually copied across from
    from [govuk-secrets](https://github.com/alphagov/govuk-secrets)
 
-The canonical source of all the platform secrets required are listed
-[here](https://github.com/alphagov/govuk-helm-charts/tree/main/charts/cluster-secrets/templates)
-in the [govuk-helm-charts] GitHub repository.
+The canonical source of all the [platform secrets](https://github.com/alphagov/govuk-helm-charts/tree/main/charts/cluster-secrets/templates) 
+required are listed in the [govuk-helm-charts] GitHub repository.
 
 The purpose of this document is to provide information about:
 1. how these secrets are generated/obtained exactly
