@@ -97,4 +97,4 @@ The following is a list of AWS resources that do NOT support tags :-
 - AWS::WAFRegional::WebACL
 
 # Reference content
-- For the definitive list of AWS resources that support tagging see [here](https://docs.aws.amazon.com/awsconsolehelpdocs/latest/gsg/supported-resources.html)
+- For the definitive list of AWS resources that support tagging see [AWS' guide to supported resources](https://docs.aws.amazon.com/awsconsolehelpdocs/latest/gsg/supported-resources.html)
