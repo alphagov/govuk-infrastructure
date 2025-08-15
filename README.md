@@ -39,9 +39,9 @@ to [install `pre-commit`](https://pre-commit.com/#install) for these to run.
 
 ## Documentation
 
-See the [docs/](docs/) directory.
+See the [`docs/` directory](docs/).
 
-There are also docs in [terraform/docs/](terraform/docs/) and inline READMEs in some directories.
+There are also docs in [the `terraform/docs/` directory](terraform/docs/) and inline in READMEs in some directories.
 
 ## Team
 
