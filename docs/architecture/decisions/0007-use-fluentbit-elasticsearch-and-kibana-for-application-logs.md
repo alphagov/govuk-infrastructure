@@ -9,7 +9,7 @@ Deprecated (no superseding ADR)
 ## Context
 
 ### Log collection and forwarding
-Application containers should output their logs as [`stdout`/`stderr`](https://12factor.net/logs) streams, which can then be forwarded by an aggregator to a single log store. These logs should be searchable, filterable and appropriately tagged with application/component etc.
+Application containers should output their logs as [`stdout`/`stderr` streams](https://12factor.net/logs), which can then be forwarded by an aggregator to a single log store. These logs should be searchable, filterable and appropriately tagged with application/component etc.
 
 There are two broad approaches to log collection and forwarding in Kubernetes
 

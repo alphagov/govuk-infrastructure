@@ -12,7 +12,7 @@ all namespaces.
 
 The ClusterSecretStore is responsible for authenticating with AWS when we need
 to manage a secret in SecretsManager. It holds references to secrets which hold
-credentials to access the SecretsManager API. The ClusterSecretStore
+credentials to access the SecretsManager API. The ClusterSecretStore
 'aws-secretsmanager' uses a short-lived Service Account token to authenticate
 with AWS.
 
