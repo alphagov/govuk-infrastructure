@@ -248,20 +248,7 @@ module "variable-set-rds-staging" {
           log_statement              = { value = "all" }
           deadlock_timeout           = { value = 2500 }
           log_lock_waits             = { value = 1 }
-          "rds.logical_replication" = {
-            value = 1, apply_method = "pending-reboot"
-          }
-          max_wal_senders = {
-            value = 35, apply_method = "pending-reboot"
-          }
-          max_logical_replication_workers = {
-            value = 20, apply_method = "pending-reboot"
-          }
-          max_worker_processes = {
-            value = 40, apply_method = "pending-reboot"
-          }
         }
-        backup_retention_period      = 1
         engine_params_family         = "postgres14"
         name                         = "content-data-admin"
         allocated_storage            = 100
