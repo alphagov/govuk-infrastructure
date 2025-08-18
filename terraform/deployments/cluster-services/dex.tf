@@ -254,7 +254,7 @@ resource "helm_release" "dex" {
   namespace        = local.services_ns
   create_namespace = true
   repository       = "https://charts.dexidp.io"
-  version          = "0.23.0"
+  version          = "0.23.1"
   values = [yamlencode({
     replicaCount = var.desired_ha_replicas
     config = {
