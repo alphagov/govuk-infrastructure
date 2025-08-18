@@ -244,12 +244,6 @@ resource "aws_cloudfront_distribution" "www_distribution" {
 
     viewer_protocol_policy = "redirect-to-https"
     min_ttl                = 0
-
-    lambda_function_association {
-      event_type   = "viewer-request"
-      lambda_arn   = aws_lambda_function.url_rewrite.qualified_arn
-      include_body = false
-    }
   }
 
   ordered_cache_behavior {
