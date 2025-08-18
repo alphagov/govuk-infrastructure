@@ -12,7 +12,7 @@ account.
 essential services such as the VPC, databases, message queues and so on.
 Eventually all these resources will move to this repository. Until then,
 `govuk-infrastructure` needs to be deployed into an existing GOV.UK AWS account
-containing the old EC2/[Puppet][govuk-puppet] stack.
+containing the old [EC2/Puppet stack][govuk-puppet].
 
 [govuk-aws]: https://github.com/alphagov/govuk-aws
 [govuk-puppet]: https://github.com/alphagov/govuk-puppet
@@ -28,9 +28,9 @@ To deploy the root modules, see [Applying Terraform](../terraform/docs/applying-
 ## GOV.UK apps deployment
 
 GOV.UK apps are deployed by ArgoCD and the config is stored in the
-[app-config](https://github.com/alphagov/govuk-helm-charts/tree/main/charts/app-config)
-helm chart of the [govuk-helm-charts] GitHub repository.
+[`app-config` helm-chart](https://github.com/alphagov/govuk-helm-charts/tree/main/charts/app-config) of the 
+[govuk-helm-charts] GitHub repository.
 
-See [CI/CD](https://govuk-kubernetes-cluster-user-docs.publishing.service.gov.uk/manage-app/access-ci-cd/) in the GOV.UK Kubernetes cluster docs.
+Our CI/CD process is documented in [the CI/CD section of the GOV.UK Kubernetes cluster docs](https://govuk-kubernetes-cluster-user-docs.publishing.service.gov.uk/manage-app/access-ci-cd/).
 
 [govuk-helm-charts]: https://github.com/alphagov/govuk-helm-charts
