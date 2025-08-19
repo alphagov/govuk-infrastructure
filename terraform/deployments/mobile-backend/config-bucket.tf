@@ -12,7 +12,7 @@ resource "aws_s3_bucket_versioning" "mobile_backend_remote_config" {
 resource "aws_s3_bucket_logging" "mobile_backend_remote_config" {
   bucket        = aws_s3_bucket.mobile_backend_remote_config.id
   target_bucket = "govuk-${var.govuk_environment}-aws-logging"
-  target_prefix = "s3/mobile-backend-remote-config-${var.govuk_environment}"
+  target_prefix = "s3/mobile-backend-remote-config-${var.govuk_environment}/"
 }
 
 data "aws_iam_policy_document" "mobile_backend_remote_config_fastly_read" {
