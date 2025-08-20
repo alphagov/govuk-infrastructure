@@ -50,6 +50,7 @@ resource "aws_cloudwatch_log_group" "www_distribution_cloudfront_log_group" {
 resource "aws_cloudwatch_log_delivery_source" "www_distribution_cloudfront_log_delivery_source" {
   name         = "www_distribution_cloudfront"
   log_type     = "ACCESS_LOGS"
+  provider     = aws.global
   resource_arn = aws_cloudfront_distribution.www_distribution.arn
 }
 
