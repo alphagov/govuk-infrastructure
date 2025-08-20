@@ -301,12 +301,6 @@ resource "aws_cloudfront_distribution" "assets_distribution" {
   is_ipv6_enabled = true
   comment         = "Assets"
 
-  logging_config {
-    include_cookies = false
-    bucket          = "govuk-${var.govuk_environment}-aws-logging.s3.amazonaws.com"
-    prefix          = "cloudfront/"
-  }
-
   aliases = var.cloudfront_assets_distribution_aliases
 
   default_cache_behavior {
