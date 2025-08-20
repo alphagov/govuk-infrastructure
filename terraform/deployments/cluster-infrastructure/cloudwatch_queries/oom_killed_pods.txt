@@ -1,0 +1,6 @@
+fields @timestamp, responseObject.metadata.namespace, responseObject.metadata.name
+| filter stage="ResponseComplete"
+| filter responseObject.status.containerStatuses.0 like /OOMKilled/
+| filter userAgent like /kube-controller-manager/
+| sort @timestamp desc
+| limit 500
