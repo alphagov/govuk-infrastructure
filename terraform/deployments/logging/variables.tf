@@ -9,6 +9,12 @@ variable "aws_region" {
   default     = "eu-west-1"
 }
 
+variable "aws_region_global" {
+  type        = string
+  description = "AWS region"
+  default     = "us-east-1"
+}
+
 variable "traffic_type" {
   type        = string
   description = "The traffic type to capture. Allows ACCEPT, ALL or REJECT"
