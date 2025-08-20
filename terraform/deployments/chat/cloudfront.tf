@@ -37,12 +37,6 @@ resource "aws_cloudfront_distribution" "chat_distribution" {
   is_ipv6_enabled = true
   comment         = "Chat"
 
-  logging_config {
-    include_cookies = false
-    bucket          = "govuk-${var.govuk_environment}-aws-logging.s3.amazonaws.com"
-    prefix          = "cloudfront/"
-  }
-
   default_cache_behavior {
     allowed_methods          = ["GET", "HEAD", "OPTIONS", "PUT", "POST", "PATCH", "DELETE"]
     cached_methods           = ["GET", "HEAD"]

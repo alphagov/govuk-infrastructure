@@ -28,6 +28,11 @@ provider "aws" {
   }
 }
 
+provider "aws" {
+  alias  = "global"
+  region = "us-east-1"
+}
+
 locals {
   internal_dns_zone_id = data.terraform_remote_state.infra_root_dns_zones.outputs.internal_root_zone_id
 }
