@@ -65,6 +65,7 @@ resource "aws_cloudwatch_log_delivery_destination" "www_distribution_cloudfront_
 }
 
 resource "aws_cloudwatch_log_delivery" "www_distribution_cloudfront_log_delivery" {
+  provider                 = aws.global
   delivery_source_name     = aws_cloudwatch_log_delivery_source.www_distribution_cloudfront_log_delivery_source.name
   delivery_destination_arn = aws_cloudwatch_log_delivery_destination.www_distribution_cloudfront_log_delivery_destination.arn
 }
