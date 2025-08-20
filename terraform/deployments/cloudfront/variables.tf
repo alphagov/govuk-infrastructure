@@ -3,6 +3,11 @@ variable "aws_region" {
   default = "eu-west-1"
 }
 
+variable "aws_region_global" {
+  type    = string
+  default = "us-east-1"
+}
+
 variable "govuk_environment" {
   type        = string
   description = "Name of the environment (AWS account) being deployed to."

@@ -4,7 +4,7 @@ resource "aws_iam_role" "cloudfront_cloudwatch" {
 }
 
 data "aws_region" "global" {
-  region = "us-east-1"
+  region = var.aws_region_global
 }
 
 data "aws_caller_identity" "current" {}
@@ -45,6 +45,7 @@ resource "aws_iam_role_policy_attachment" "cloudfront_cloudwatch" {
 resource "aws_cloudwatch_log_group" "www_distribution_cloudfront_log_group" {
   name              = "/aws/cloudfront/www-${var.govuk_environment}"
   provider          = aws.global
+  region            = var.aws_region_global
   retention_in_days = 30
 }
 
