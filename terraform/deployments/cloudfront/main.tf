@@ -37,11 +37,6 @@ provider "aws" {
   region = "us-east-1"
 }
 
-provider "aws" {
-  alias  = "eu_west_2"
-  region = "eu-west-2"
-}
-
 provider "archive" {}
 
 resource "aws_cloudfront_cache_policy" "no-cookies" {
