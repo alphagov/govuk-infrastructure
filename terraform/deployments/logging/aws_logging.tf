@@ -160,3 +160,42 @@ resource "aws_iam_role_policy_attachment" "rds_enhanced_monitoring" {
   role       = aws_iam_role.rds_enhanced_monitoring.name
   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonRDSEnhancedMonitoringRole"
 }
+
+# IAM role and policy for CloudFront V2 logging
+resource "aws_iam_role" "cloudfront_cloudwatch" {
+  name               = "${var.govuk_environment}-cloudfront-cloudwatch-role"
+  assume_role_policy = data.aws_iam_policy_document.cloudfront_cloudwatch_assume_role.json
+}
+
+data "aws_iam_policy_document" "cloudfront_cloudwatch_assume_role" {
+  statement {
+    principals {
+      type        = "Service"
+      identifiers = ["cloudfront.amazonaws.com"]
+    }
+    actions = ["sts:AssumeRole"]
+  }
+}
+
+data "aws_iam_policy_document" "cloudfront_cloudwatch" {
+  statement {
+    actions = [
+      "logs:CreateLogStream",
+      "logs:PutLogEvents"
+    ]
+    effect = "Allow"
+    resources = [
+      "arn:aws:logs:${var.aws_region_global}:${data.aws_caller_identity.current.account_id}:log-group:/aws/cloudfront/*:*",
+    ]
+  }
+}
+
+resource "aws_iam_policy" "cloudfront_cloudwatch" {
+  name   = "${var.govuk_environment}-cloudfront-cloudwatch-policy"
+  policy = data.aws_iam_policy_document.cloudfront_cloudwatch.json
+}
+
+resource "aws_iam_role_policy_attachment" "cloudfront_cloudwatch" {
+  role       = aws_iam_role.cloudfront_cloudwatch.name
+  policy_arn = aws_iam_policy.cloudfront_cloudwatch.arn
+}
