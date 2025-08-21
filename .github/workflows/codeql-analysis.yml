@@ -15,6 +15,11 @@ jobs:
       with:
         show-progress: false
 
+    - name: Setup Ruby
+      uses: ruby/setup-ruby@v1
+      with:
+        bundler-cache: true
+
     - name: Initialize CodeQL
       uses: github/codeql-action/init@96f518a34f7a870018057716cc4d7a5c014bd61c # v3.29.10
       with:
