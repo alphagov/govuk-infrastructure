@@ -10,6 +10,13 @@
         "items": { "type": "string" }
       }
     },
+    "github_actions_sets": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "array",
+        "items": { "type": "string" }
+      }
+    },
     "repos": {
       "type": "object",
       "patternProperties": {
