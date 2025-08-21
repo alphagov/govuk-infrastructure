@@ -208,8 +208,16 @@ resource "github_repository" "govuk_repos" {
     ]
 
     precondition {
-      condition =  !try(each.value.archived, false) || length(data.github_repository_pull_requests.govuk_repos_prs[each.key].results) == 0
+      condition     = !try(each.value.archived, false) || length(data.github_repository_pull_requests.govuk_repos_prs[each.key].results) == 0
       error_message = "You cannot archive a Repo with open PRs. Review and close the PRs first."
+    }
+
+    precondition {
+      condition = (
+        !try(each.value.archived, false) ||
+        try(length(data.github_repository.govuk[format("alphagov/%s", each.key)].pages), 0) == 0
+      )
+      error_message = "You cannot archive a Repo with an active GitHub Pages Configuration. Remove this first."
     }
   }
 }
