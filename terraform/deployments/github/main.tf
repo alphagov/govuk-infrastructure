@@ -164,6 +164,12 @@ resource "github_team_repository" "ithc_repos" {
   permission = try(each.value.teams["govuk_ithc"], "pull")
 }
 
+data "github_repository_pull_requests" "govuk_repos_prs" {
+  for_each        = local.repositories
+  base_repository = each.key
+  state           = "open"
+}
+
 resource "github_repository" "govuk_repos" {
   for_each = local.repositories
 
@@ -183,6 +189,8 @@ resource "github_repository" "govuk_repos" {
 
   archive_on_destroy = true
 
+  archived = try(each.value.archived, false)
+
   lifecycle {
     ignore_changes = [
       description,
@@ -198,6 +206,11 @@ resource "github_repository" "govuk_repos" {
       squash_merge_commit_message,
       pages
     ]
+
+    precondition {
+      condition =  !try(each.value.archived, false) || length(data.github_repository_pull_requests.govuk_repos_prs[each.key].results) == 0
+      error_message = "You cannot archive a Repo with open PRs. Review and close the PRs first."
+    }
   }
 }
 
