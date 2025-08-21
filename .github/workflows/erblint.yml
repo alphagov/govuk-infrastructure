@@ -24,4 +24,4 @@ jobs:
           BUNDLE_GITHUB__COM: "x-access-token:${{ secrets.BUNDLER_GITHUB_TOKEN }}"
 
       - name: Run ErbLint
-        run: bundle exec erblint --lint-all
+        run: bundle exec erb_lint --lint-all
