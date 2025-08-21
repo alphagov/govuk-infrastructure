@@ -8,6 +8,36 @@ access_levels:
     - Lint Ruby / Run RuboCop
     - Security Analysis / Run Brakeman
 
+github_actions_sets:
+  platform_engineering_repository_actions: &platform_engineering_repository_actions
+    # Trusted (allow any version)
+    - actions/*
+    - alphagov/*
+    - docker/*
+    - ruby/*
+    - slackapi/*
+    - hashicorp/*
+    - ./.github/*
+    - helm/*
+    - azure/*
+    - dependabot/*
+    # Untrusted (require specific version)
+    - anchore/sbom-action/download-syft@b6a39da80722a2cb0ef5d197531764a89b5d48c3
+    - aws-actions/configure-aws-credentials@7474bc4690e29a8392af63c5b98e7449536d5c3a
+    - dflook/terraform-version@c397d406dba225ea3a19d04a7308a310f0fc83f1
+    - dflook/terraform-version@c397d406dba225ea3a19d04a7308a310f0fc83f1
+    - github/codeql-action/analyze@96f518a34f7a870018057716cc4d7a5c014bd61c
+    - github/codeql-action/autobuild@96f518a34f7a870018057716cc4d7a5c014bd61c
+    - github/codeql-action/init@96f518a34f7a870018057716cc4d7a5c014bd61c
+    - github/codeql-action/upload-sarif@96f518a34f7a870018057716cc4d7a5c014bd61c
+    - golangci/golangci-lint-action@4afd733a84b1f43292c63897423277bb7f4313a9
+    - JamesIves/github-pages-deploy-action@6c2d9db40f9296374acc17b90404b6e8864128c8
+    - jbergstroem/hadolint-gh-action@eac45b98f6d761309202bd201205a8f8c988bfad
+    - ludeeus/action-shellcheck@00cae500b08a931fb5698e11e79bfbd38e612a38
+    - sigstore/cosign-installer@e1523de7571e31dbe865fd2e80c5c7c23ae71eb4
+    - terraform-linters/setup-tflint@ae78205cfffec9e8d93fd2b3115c7e9d3166d4b6
+    - tj-actions/changed-files@ed68ef82c095e0d48ec87eccea555d944a631a4c
+
 repos:
   account-api:
     can_be_deployed: true
