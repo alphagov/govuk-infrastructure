@@ -32,11 +32,17 @@ jobs:
             --no-exit-on-warn --no-exit-on-error \
             -o brakeman.json -o brakeman.sarif
 
+      - name: Strip suppressed results from SARIF
+        run: |
+          ruby -rjson -e 's=JSON.parse(File.read("brakeman.sarif"));
+            s["runs"]&.each{|r| r["results"] = (r["results"]||[]).reject{|res| res["suppressions"] && !res["suppressions"].empty? }};
+            File.write("brakeman.filtered.sarif", JSON.pretty_generate(s))'
+
       - name: Upload SARIF to GitHub
         if: github.repository_visibility == 'public'
         uses: github/codeql-action/upload-sarif@96f518a34f7a870018057716cc4d7a5c014bd61c # v3.29.10
         with:
-          sarif_file: brakeman.sarif
+          sarif_file: brakeman.filtered.sarif
           category: brakeman
 
       - name: Upload JSON results
@@ -45,8 +51,10 @@ jobs:
           name: brakeman-json
           path: brakeman.json
 
-      - name: Upload SARIF artifact
+      - name: Upload SARIF artifacts
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: brakeman-sarif
-          path: brakeman.sarif
+          path: |
+            brakeman.sarif
+            brakeman.filtered.sarif
