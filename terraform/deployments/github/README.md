@@ -33,6 +33,64 @@ protecting the `main` branch.
   ```shell
   GITHUB_TOKEN=<token> gds aws govuk-production-poweruser -- terraform apply
   ```
+## Adding existing repositories
+
+To manage an existing repository using the GOV.UK GitHub Infrastructure configuration, it needs to be imported into terraform state. Otherwise terraform apply will fail attempting to create a repository that already exists. 
+
+To import the resource, use an import block:
+```
+import {
+  to = github_repository.govuk_repos["govuk-existing-repo-name"]
+  id = "govuk-existing-repo-name"
+}
+```
+
+[Example commit of importing an existing repository](https://github.com/alphagov/govuk-infrastructure/commit/c6774a7d42ca2eb9b0987a51cde8b57e13e0577f). Note that the code only has to run once so it's ok to remove old entries.
+
+### Private repositories 
+
+Private repositiores should be treated as exceptions. We should [make new source code open](https://www.gov.uk/service-manual/service-standard/point-12-make-new-source-code-open) in accordance with [point 3 of the Technology Code of Practice](https://www.gov.uk/guidance/the-technology-code-of-practice). Only create a private repository if there are legitimate [grounds for keeping the code closed](https://www.gov.uk/government/publications/open-source-guidance/when-code-should-be-open-or-closed). 
+
+To configure a `private` or `internal` repository, set the `visibility` explicitly: 
+```
+  visibility: private
+```
+
+Note: Private repositories can't use GitHub Actions workflows that upload SARIF files, and therefore can't use the predefined standard security checks.
+
+
+### Configuring required status checks
+
+Use the predefined anchors for consistency. For Ruby on Rails applications use:
+```
+standard_contexts: *standard_govuk_rails_checks
+```
+
+For other software use:
+```
+standard_contexts: *standard_security_checks
+```
+
+When defining additional required checks, make sure workflow jobs have names so they can be referenced directly. Alternatively, you can reference job IDs. For workflows which use reusable workflows, the pattern is `<initial_workflow.jobs.job.[name/id]> / <reused-workflow.jobs.job.[name/id]`
+
+Example configuration:
+```
+    required_status_checks:
+      standard_contexts: *standard_govuk_rails_checks
+      additional_contexts:
+        - Test features / Run Cucumber
+        - Lint JavaScript / Run Standardx
+        - Test JavaScript / Run Jasmine
+        - Test Ruby / Run RSpec
+```
+
+Note that private repositories can't use the predefined `standard_govuk_rails_checks` or `standard_security_checks`. In such cases, include a comment: `# standard security checks are disabled as not configured for a private repo`. You should define equivalent jobs in your repository’s CI workflow and reference them in the `additional_contexts` section of the required status checks.
+
+### Apply terraform changes
+
+Before merging your Pull Pequest, review the Terraform plan carefully. 
+After the PR is merged, remember to review it again and to apply the Terraform changes. 
+
 
 ## Removing repositories
 
