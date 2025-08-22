@@ -7,7 +7,6 @@ access_levels:
     - Dependency Review scan / dependency-review-pr
     - Lint Ruby / Run RuboCop
     - Security Analysis / Run Brakeman
-
 github_actions_sets:
   platform_engineering_repository_actions: &platform_engineering_repository_actions
     # Trusted (allow any version)
@@ -37,7 +36,6 @@ github_actions_sets:
     - sigstore/cosign-installer@e1523de7571e31dbe865fd2e80c5c7c23ae71eb4
     - terraform-linters/setup-tflint@ae78205cfffec9e8d93fd2b3115c7e9d3166d4b6
     - tj-actions/changed-files@ed68ef82c095e0d48ec87eccea555d944a631a4c
-
 repos:
   account-api:
     can_be_deployed: true
@@ -49,7 +47,6 @@ repos:
         - Dependency Review scan / dependency-review-pr
         - Security Analysis / Run Brakeman
         - Lint Ruby / Run RuboCop
-
   asset-manager:
     can_be_deployed: true
     homepage_url: "https://docs.publishing.service.gov.uk/apps/asset-manager.html"
@@ -61,7 +58,6 @@ repos:
         - Dependency Review scan / dependency-review-pr
         - Security Analysis / Run Brakeman
         - Lint Ruby / Run RuboCop
-
   authenticating-proxy:
     can_be_deployed: true
     homepage_url: "https://docs.publishing.service.gov.uk/apps/authenticating-proxy.html"
@@ -69,7 +65,6 @@ repos:
       standard_contexts: *standard_govuk_rails_checks
       additional_contexts:
         - Test Ruby
-
   bouncer:
     can_be_deployed: true
     homepage_url: "https://docs.publishing.service.gov.uk/apps/bouncer.html"
@@ -78,15 +73,18 @@ repos:
       additional_contexts:
         - Test Ruby
         - Lint Ruby / Run RuboCop
-
   bulk-changer:
     required_status_checks:
       standard_contexts: *standard_security_checks
       additional_contexts:
         - Test
-
-  bulk-merger: {}
-
+    restrict_github_actions:
+      enabled: true
+      restricted_action_patterns: *platform_engineering_repository_actions
+  bulk-merger:
+    restrict_github_actions:
+      enabled: true
+      restricted_action_patterns: *platform_engineering_repository_actions
   collections:
     can_be_deployed: true
     homepage_url: "https://docs.publishing.service.gov.uk/apps/collections.html"
@@ -103,7 +101,6 @@ repos:
         - Dependency Review scan / dependency-review-pr
         - Security Analysis / Run Brakeman
         - Lint Ruby / Run RuboCop
-
   collections-publisher:
     can_be_deployed: true
     homepage_url: "https://docs.publishing.service.gov.uk/apps/collections-publisher.html"
@@ -113,14 +110,12 @@ repos:
         - Lint JavaScript / Run Standardx
         - Lint SCSS / Run Stylelint
         - Test Ruby / Run RSpec
-
   content-block-editor:
     required_status_checks:
       standard_contexts: *standard_security_checks
       additional_contexts:
         - Playwright / Run Tests
         - Vitest / Run Tests
-
   content-data-admin:
     can_be_deployed: true
     homepage_url: "https://docs.publishing.service.gov.uk/apps/content-data-admin.html"
@@ -130,7 +125,9 @@ repos:
         - Test Ruby
         - Lint SCSS / Run Stylelint
         - Lint JavaScript / Run Standardx
-
+    restrict_github_actions:
+      enabled: true
+      restricted_action_patterns: *platform_engineering_repository_actions
   content-data-api:
     can_be_deployed: true
     homepage_url: "https://docs.publishing.service.gov.uk/apps/content-performance-manager.html"
@@ -138,7 +135,9 @@ repos:
       standard_contexts: *standard_govuk_rails_checks
       additional_contexts:
         - Test Ruby / Run RSpec
-
+    restrict_github_actions:
+      enabled: true
+      restricted_action_patterns: *platform_engineering_repository_actions
   content-modelling-e2e:
     required_status_checks:
       standard_contexts: *standard_security_checks
@@ -146,7 +145,6 @@ repos:
         - Lint / Eslint
         - Prettier / Check
         - Playwright Tests / Run Tests
-
   content-publisher:
     can_be_deployed: true
     homepage_url: "https://docs.publishing.service.gov.uk/apps/content-publisher.html"
@@ -157,7 +155,6 @@ repos:
         - Lint JavaScript / Run Standardx
         - Test JavaScript / Run Jasmine
         - Test Ruby / Run RSpec
-
   content-store:
     can_be_deployed: true
     homepage_url: "https://docs.publishing.service.gov.uk/apps/content-store.html"
@@ -165,7 +162,6 @@ repos:
       standard_contexts: *standard_govuk_rails_checks
       additional_contexts:
         - Test Ruby / Run RSpec
-
   content-tagger:
     can_be_deployed: true
     homepage_url: "https://docs.publishing.service.gov.uk/apps/content-tagger.html"
@@ -175,19 +171,16 @@ repos:
         - Lint SCSS / Run Stylelint
         - Lint JavaScript / Run Standardx
         - Test Ruby / Run RSpec
-
   data-community-tech-docs:
     homepage_url: "https://docs.data-community.publishing.service.gov.uk/"
     need_production_access_to_merge: false
     allow_squash_merge: true
     push_allowances: []
-
   datagovuk-tech-docs:
     homepage_url: "https://guidance.data.gov.uk/"
     need_production_access_to_merge: false
     allow_squash_merge: true
     push_allowances: []
-
   email-alert-api:
     can_be_deployed: true
     homepage_url: "https://docs.publishing.service.gov.uk/apps/email-alert-api.html"
@@ -199,7 +192,6 @@ repos:
         - Dependency Review scan / dependency-review-pr
         - Security Analysis / Run Brakeman
         - Lint Ruby / Run RuboCop
-
   email-alert-frontend:
     can_be_deployed: true
     homepage_url: "https://docs.publishing.service.gov.uk/apps/email-alert-frontend.html"
@@ -210,7 +202,6 @@ repos:
         - Lint JavaScript / Run Standardx
         - Test JavaScript / Run Jasmine
         - Test Ruby / Run RSpec
-
   email-alert-service:
     can_be_deployed: true
     homepage_url: "https://docs.publishing.service.gov.uk/apps/email-alert-service.html"
@@ -219,7 +210,6 @@ repos:
       additional_contexts:
         - Lint Ruby / Run RuboCop
         - Test Ruby / Run RSpec
-
   feedback:
     can_be_deployed: true
     homepage_url: "https://docs.publishing.service.gov.uk/apps/feedback.html"
@@ -230,7 +220,6 @@ repos:
         - Lint SCSS / Run Stylelint
         - Test JavaScript / Run Jasmine
         - Test Ruby / Run RSpec
-
   finder-frontend:
     can_be_deployed: true
     homepage_url: "https://docs.publishing.service.gov.uk/apps/finder-frontend.html"
@@ -242,7 +231,6 @@ repos:
         - Lint JavaScript / Run Standardx
         - Test JavaScript / Run Jasmine
         - Test Ruby / Run RSpec
-
   frontend:
     can_be_deployed: true
     homepage_url: "https://docs.publishing.service.gov.uk/apps/frontend.html"
@@ -257,7 +245,6 @@ repos:
         - Dependency Review scan / dependency-review-pr
         - Security Analysis / Run Brakeman
         - Lint Ruby / Run RuboCop
-
   gds-api-adapters:
     homepage_url: "http://www.rubydoc.info/github/alphagov/gds-api-adapters"
     pact_publisher: true
@@ -268,14 +255,12 @@ repos:
         - CodeQL SAST scan / Analyze
         - Dependency Review scan / dependency-review-pr
         - test
-
   gds-sso:
     publishes_gem: true
     required_status_checks:
       standard_contexts: *standard_security_checks
       additional_contexts:
         - test
-
   government-frontend:
     can_be_deployed: true
     homepage_url: "https://docs.publishing.service.gov.uk/apps/government-frontend.html"
@@ -286,7 +271,6 @@ repos:
         - Lint JavaScript / Run Standardx
         - Test JavaScript / Run Jasmine
         - Test Ruby / Run Minitest
-
   govspeak:
     homepage_url: "https://govspeak-preview.publishing.service.gov.uk/"
     publishes_gem: true
@@ -294,7 +278,6 @@ repos:
       standard_contexts: *standard_security_checks
       additional_contexts:
         - test
-
   govspeak-preview:
     can_be_deployed: true
     homepage_url: "https://govspeak-preview.publishing.service.gov.uk/"
@@ -302,10 +285,8 @@ repos:
       standard_contexts: *standard_security_checks
       additional_contexts:
         - test
-
   govuk-analytics-engineering:
     visibility: private
-
   govuk-chat:
     can_be_deployed: true
     homepage_url: "https://docs.publishing.service.gov.uk/apps/govuk-chat.html"
@@ -317,7 +298,6 @@ repos:
         - Lint ERB / Run ErbLint
         - Test JavaScript / Run Jasmine
         - Test Ruby / Run RSpec
-
   govuk-chat-evaluation:
     homepage_url: "https://docs.publishing.service.gov.uk/apps/govuk-chat-evaluation.html"
     required_status_checks:
@@ -327,7 +307,6 @@ repos:
         - Lint
         - Format
         - Type checks
-
   govuk-chat-gradio-prototype:
     visibility: private
     homepage_url: "https://docs.publishing.service.gov.uk/repos/govuk-chat-gradio-prototype.html"
@@ -338,38 +317,36 @@ repos:
         - Lint
         - Format
         - Type checks
-
   govuk-content-api-docs:
     homepage_url: "https://content-api.publishing.service.gov.uk"
     need_production_access_to_merge: false
     allow_squash_merge: true
     push_allowances: []
-
   govuk-dependabot-merger:
     required_status_checks:
       standard_contexts: *standard_security_checks
-
+    restrict_github_actions:
+      enabled: true
+      restricted_action_patterns: *platform_engineering_repository_actions
   govuk-dependency-checker:
     can_be_deployed: true
     required_status_checks:
       standard_contexts: *standard_security_checks
       additional_contexts:
         - Test
-
+    restrict_github_actions:
+      enabled: true
+      restricted_action_patterns: *platform_engineering_repository_actions
   govuk-developer-docs:
     allow_squash_merge: true
     can_be_deployed: true
     homepage_url: "https://docs.publishing.service.gov.uk"
     need_production_access_to_merge: false
-
   govuk-display-screen:
     need_production_access_to_merge: false
     allow_squash_merge: true
     standard_contexts: *standard_security_checks
-    teams: {
-      govuk: "maintain"
-      }
-
+    teams: {govuk: "maintain"}
   govuk-dns-tf:
     visibility: private
     strict: true
@@ -377,109 +354,116 @@ repos:
     required_status_checks:
       additional_contexts:
         - test
-
+    restrict_github_actions:
+      enabled: true
+      restricted_action_patterns: *platform_engineering_repository_actions
   govuk-e2e-tests:
     can_be_deployed: true
-
+    restrict_github_actions:
+      enabled: true
+      restricted_action_patterns: *platform_engineering_repository_actions
   govuk-exporter:
     can_be_deployed: true
     required_status_checks:
       additional_contexts:
         - Test Go
-
+    restrict_github_actions:
+      enabled: true
+      restricted_action_patterns: *platform_engineering_repository_actions
   govuk-fastly:
     can_be_deployed: true
     strict: true
     up_to_date_branches: true
-
+    restrict_github_actions:
+      enabled: true
+      restricted_action_patterns: *platform_engineering_repository_actions
   govuk-fastly-secrets:
     visibility: private
     strict: true
     up_to_date_branches: true
-
+    restrict_github_actions:
+      enabled: true
+      restricted_action_patterns: *platform_engineering_repository_actions
   govuk-graphql:
     branch_protection: false
     can_be_deployed: true
-
   govuk-infrastructure:
     strict: true
     up_to_date_branches: true
     required_pull_request_reviews:
       require_code_owner_reviews: true
-
+    restrict_github_actions:
+      enabled: true
+      restricted_action_patterns: *platform_engineering_repository_actions
   terraform-govuk-infrastructure-sensitive:
     visibility: private
     strict: true
     up_to_date_branches: true
-
+    restrict_github_actions:
+      enabled: true
+      restricted_action_patterns: *platform_engineering_repository_actions
   terraform-govuk-tfe-workspacer:
     strict: true
     up_to_date_branches: true
-
+    restrict_github_actions:
+      enabled: true
+      restricted_action_patterns: *platform_engineering_repository_actions
   govuk-mobile-android-app:
     allow_squash_merge: true
     branch_protection: false
-
   govuk-mobile-android-homepage:
     allow_squash_merge: true
     branch_protection: false
-
   govuk-mobile-android-onboarding:
     allow_squash_merge: true
     branch_protection: false
-
   govuk-mobile-android-services:
     allow_squash_merge: true
     branch_protection: false
-
   govuk-mobile-ios-app:
     allow_squash_merge: true
     branch_protection: false
-
   govuk-mobile-ios-homepage:
     allow_squash_merge: true
     branch_protection: false
-
   govuk-mobile-ios-onboarding:
     allow_squash_merge: true
     branch_protection: false
-
   govuk-mobile-ios-services:
     allow_squash_merge: true
     branch_protection: false
-
   govuk-mobile-ios-ui-components:
     allow_squash_merge: true
     branch_protection: false
-
   govuk-reports-prototype:
     need_production_access_to_merge: false
     allow_squash_merge: true
     branch_protection: false
-
   govuk-rota-generator:
     required_status_checks:
       standard_contexts: *standard_security_checks
       additional_contexts:
         - test
-
+    restrict_github_actions:
+      enabled: true
+      restricted_action_patterns: *platform_engineering_repository_actions
   govuk-ruby-images:
     can_be_deployed: true
-
+    restrict_github_actions:
+      enabled: true
+      restricted_action_patterns: *platform_engineering_repository_actions
   govuk_ab_testing:
     publishes_gem: true
     required_status_checks:
       standard_contexts: *standard_security_checks
       additional_contexts:
         - test
-
   govuk_admin_template:
     publishes_gem: true
     required_status_checks:
       standard_contexts: *standard_security_checks
       additional_contexts:
         - test
-
   govuk_app_config:
     can_be_deployed: true
     homepage_url: "https://rubygems.org/gems/govuk_app_config"
@@ -488,7 +472,9 @@ repos:
       standard_contexts: *standard_security_checks
       additional_contexts:
         - test
-
+    restrict_github_actions:
+      enabled: true
+      restricted_action_patterns: *platform_engineering_repository_actions
   govuk_chat_private:
     homepage_url: "https://docs.publishing.service.gov.uk/repos/govuk_chat_private.html"
     visibility: private
@@ -501,7 +487,6 @@ repos:
         - Lint Ruby / Run RuboCop
         - Run RSpec
         - Test GOV.UK Chat / Run RSpec
-
   govuk_document_types:
     homepage_url: "https://docs.publishing.service.gov.uk/document-types.html"
     publishes_gem: true
@@ -509,14 +494,12 @@ repos:
       standard_contexts: *standard_security_checks
       additional_contexts:
         - test
-
   govuk_message_queue_consumer:
     publishes_gem: true
     required_status_checks:
       standard_contexts: *standard_security_checks
       additional_contexts:
         - test
-
   govuk_content_block_tools:
     homepage_url: "https://rubygems.org/gems/content_block_tools"
     publishes_gem: true
@@ -524,7 +507,6 @@ repos:
       standard_contexts: *standard_security_checks
       additional_contexts:
         - test
-
   govuk_personalisation:
     homepage_url: "https://github.com/alphagov/govuk_personalisation"
     publishes_gem: true
@@ -532,7 +514,6 @@ repos:
       standard_contexts: *standard_security_checks
       additional_contexts:
         - test
-
   govuk_publishing_components:
     homepage_url: "https://components.publishing.service.gov.uk"
     publishes_gem: true
@@ -540,7 +521,6 @@ repos:
       standard_contexts: *standard_security_checks
       additional_contexts:
         - test
-
   govuk_schemas:
     homepage_url: "http://www.rubydoc.info/github/alphagov/govuk_schemas"
     publishes_gem: true
@@ -548,24 +528,23 @@ repos:
       standard_contexts: *standard_security_checks
       additional_contexts:
         - test
-
   govuk_sidekiq:
     publishes_gem: true
     required_status_checks:
       standard_contexts: *standard_security_checks
       additional_contexts:
         - test
-
   govuk_test:
     publishes_gem: true
     required_status_checks:
       standard_contexts: *standard_security_checks
       additional_contexts:
         - test
-
+    restrict_github_actions:
+      enabled: true
+      restricted_action_patterns: *platform_engineering_repository_actions
   govuk_web_banners:
     publishes_gem: true
-
   hmrc-manuals-api:
     can_be_deployed: true
     homepage_url: "https://docs.publishing.service.gov.uk/apps/hmrc-manuals-api.html"
@@ -573,7 +552,6 @@ repos:
       standard_contexts: *standard_govuk_rails_checks
       additional_contexts:
         - Test Ruby / Run RSpec
-
   link-checker-api:
     can_be_deployed: true
     homepage_url: "https://docs.publishing.service.gov.uk/apps/link-checker-api.html"
@@ -585,7 +563,6 @@ repos:
         - Dependency Review scan / dependency-review-pr
         - Security Analysis / Run Brakeman
         - Lint Ruby / Run RuboCop
-
   local-links-manager:
     can_be_deployed: true
     homepage_url: "https://docs.publishing.service.gov.uk/apps/local-links-manager.html"
@@ -596,7 +573,6 @@ repos:
         - Lint JavaScript / Run Standardx
         - Lint SCSS / Run Stylelint
         - Lint Views
-
   locations-api:
     can_be_deployed: true
     required_status_checks:
@@ -607,7 +583,6 @@ repos:
         - Dependency Review scan / dependency-review-pr
         - Security Analysis / Run Brakeman
         - Lint Ruby / Run RuboCop
-
   manuals-publisher:
     can_be_deployed: true
     homepage_url: "https://docs.publishing.service.gov.uk/apps/manuals-publisher.html"
@@ -619,33 +594,28 @@ repos:
         - Lint SCSS / Run Stylelint
         - Test JavaScript / Run Jasmine
         - Test Ruby / Run RSpec
-
   markdown-toolbar-element:
     homepage_url: "https://alphagov.github.io/markdown-toolbar-element"
     required_status_checks:
       standard_contexts: *standard_security_checks
-
   miller-columns-element:
     homepage_url: "https://alphagov.github.io/miller-columns-element/"
     required_status_checks:
       standard_contexts: *standard_security_checks
       additional_contexts:
         - test
-
   optic14n:
     publishes_gem: true
     required_status_checks:
       standard_contexts: *standard_security_checks
       additional_contexts:
         - test
-
   paste-html-to-govspeak:
     homepage_url: "https://alphagov.github.io/paste-html-to-govspeak/"
     required_status_checks:
       standard_contexts: *standard_security_checks
       additional_contexts:
         - test
-
   places-manager:
     can_be_deployed: true
     homepage_url: "https://docs.publishing.service.gov.uk/apps/imminence.html"
@@ -659,14 +629,15 @@ repos:
         - Dependency Review scan / dependency-review-pr
         - Security Analysis / Run Brakeman
         - Lint Ruby / Run RuboCop
-
   plek:
     publishes_gem: true
     required_status_checks:
       standard_contexts: *standard_security_checks
       additional_contexts:
         - test
-
+    restrict_github_actions:
+      enabled: true
+      restricted_action_patterns: *platform_engineering_repository_actions
   publisher:
     can_be_deployed: true
     homepage_url: "https://docs.publishing.service.gov.uk/apps/publisher.html"
@@ -679,7 +650,6 @@ repos:
         - Lint SCSS / Run Stylelint
         - Test JavaScript / Run Jasmine
         - Test Ruby / Run Minitest
-
   publishing-api:
     can_be_deployed: true
     homepage_url: "https://docs.publishing.service.gov.uk/apps/publishing-api.html"
@@ -693,7 +663,6 @@ repos:
         - Dependency Review scan / dependency-review-pr
         - Security Analysis / Run Brakeman
         - Lint Ruby / Run RuboCop
-
   rack-logstasher:
     publishes_gem: true
     homepage_url: "https://rubygems.org/gems/rack-logstasher"
@@ -701,14 +670,15 @@ repos:
       standard_contexts: *standard_security_checks
       additional_contexts:
         - test
-
+    restrict_github_actions:
+      enabled: true
+      restricted_action_patterns: *platform_engineering_repository_actions
   rails_translation_manager:
     publishes_gem: true
     required_status_checks:
       standard_contexts: *standard_security_checks
       additional_contexts:
         - test
-
   release:
     can_be_deployed: true
     homepage_url: "https://docs.publishing.service.gov.uk/repos/release.html"
@@ -718,28 +688,36 @@ repos:
         - Test Ruby
         - Lint JavaScript / Run Standardx
         - Lint SCSS / Run Stylelint
-
+    restrict_github_actions:
+      enabled: true
+      restricted_action_patterns: *platform_engineering_repository_actions
   router:
     can_be_deployed: true
     homepage_url: "https://docs.publishing.service.gov.uk/repos/router.html"
     required_status_checks:
       additional_contexts:
         - Test Go
-
+    restrict_github_actions:
+      enabled: true
+      restricted_action_patterns: *platform_engineering_repository_actions
   rubocop-govuk:
     publishes_gem: true
     required_status_checks:
       standard_contexts: *standard_security_checks
       additional_contexts:
         - test
-
+    restrict_github_actions:
+      enabled: true
+      restricted_action_patterns: *platform_engineering_repository_actions
   seal:
     can_be_deployed: true
     required_status_checks:
       standard_contexts: *standard_security_checks
       additional_contexts:
         - test
-
+    restrict_github_actions:
+      enabled: true
+      restricted_action_patterns: *platform_engineering_repository_actions
   search-admin:
     can_be_deployed: true
     homepage_url: "https://docs.publishing.service.gov.uk/apps/search-admin.html"
@@ -749,7 +727,6 @@ repos:
         - Lint JavaScript / Run Standardx
         - Lint SCSS / Run Stylelint
         - Test Ruby / Run RSpec
-
   search-api:
     can_be_deployed: true
     homepage_url: "https://docs.publishing.service.gov.uk/apps/search-api.html"
@@ -758,7 +735,6 @@ repos:
       additional_contexts:
         - Lint Ruby / Run RuboCop
         - Test Ruby / Run RSpec
-
   search-api-v2:
     can_be_deployed: true
     required_status_checks:
@@ -766,13 +742,10 @@ repos:
       standard_contexts: *standard_govuk_rails_checks
       additional_contexts:
         - Test Ruby
-
   search-api-v2-dataform:
     homepage_url: "https://docs.publishing.service.gov.uk/repos/search-api-v2-dataform.html"
-
   search-v2-evaluator:
     can_be_deployed: true
-
   service-manual-publisher:
     can_be_deployed: true
     homepage_url: "https://docs.publishing.service.gov.uk/apps/service-manual-publisher.html"
@@ -783,7 +756,6 @@ repos:
         - Lint JavaScript / Run Standardx
         - Test JavaScript / Run Jasmine
         - Test Ruby / Run RSpec
-
   short-url-manager:
     can_be_deployed: true
     homepage_url: "https://docs.publishing.service.gov.uk/apps/short-url-manager.html"
@@ -792,7 +764,6 @@ repos:
       additional_contexts:
         - Test Ruby / Run RSpec
         - Lint SCSS / Run Stylelint
-
   signon:
     can_be_deployed: true
     homepage_url: "https://docs.publishing.service.gov.uk/apps/signon.html"
@@ -803,21 +774,21 @@ repos:
         - Lint JavaScript / Run Standardx
         - Lint SCSS / Run Stylelint
         - Test JavaScript / Run Jasmine
-
   siteimprove_api_client:
     publishes_gem: true
     required_status_checks:
       standard_contexts: *standard_security_checks
       additional_contexts:
         - test
-
+    restrict_github_actions:
+      enabled: true
+      restricted_action_patterns: *platform_engineering_repository_actions
   slimmer:
     publishes_gem: true
     required_status_checks:
       standard_contexts: *standard_security_checks
       additional_contexts:
         - test
-
   smart-answers:
     can_be_deployed: true
     homepage_url: "https://docs.publishing.service.gov.uk/apps/smart-answers.html"
@@ -829,7 +800,6 @@ repos:
         - Lint SCSS / Run Stylelint
         - Test JavaScript / Run Jasmine
         - Test Ruby / Run Minitest
-
   specialist-publisher:
     can_be_deployed: true
     homepage_url: "https://docs.publishing.service.gov.uk/apps/specialist-publisher.html"
@@ -840,7 +810,6 @@ repos:
         - Lint SCSS / Run Stylelint
         - Test JavaScript / Run Jasmine
         - Test Ruby / Run RSpec
-
   static:
     can_be_deployed: true
     homepage_url: "https://docs.publishing.service.gov.uk/apps/static.html"
@@ -851,7 +820,6 @@ repos:
         - Lint JavaScript / Run Standardx
         - Lint SCSS / Run Stylelint
         - Test JavaScript / Run Jasmine
-
   support:
     can_be_deployed: true
     homepage_url: "https://docs.publishing.service.gov.uk/apps/support.html"
@@ -861,7 +829,6 @@ repos:
         - Test Ruby
         - Lint JavaScript / Run Standardx
         - Lint SCSS / Run Stylelint
-
   support-api:
     can_be_deployed: true
     homepage_url: "https://docs.publishing.service.gov.uk/apps/support-api.html"
@@ -869,7 +836,6 @@ repos:
       standard_contexts: *standard_govuk_rails_checks
       additional_contexts:
         - Test Ruby
-
   transition:
     can_be_deployed: true
     homepage_url: "https://docs.publishing.service.gov.uk/apps/transition.html"
@@ -879,7 +845,6 @@ repos:
         - Integration tests
         - Test Ruby
         - Test JavaScript / Run Jasmine
-
   travel-advice-publisher:
     can_be_deployed: true
     homepage_url: "https://docs.publishing.service.gov.uk/apps/travel-advice-publisher.html"
@@ -890,7 +855,6 @@ repos:
         - Lint JavaScript / Run Standardx
         - Test JavaScript / Run Jasmine
         - Test Ruby / Run RSpec
-
   whitehall:
     can_be_deployed: true
     homepage_url: "https://docs.publishing.service.gov.uk/apps/whitehall.html"
@@ -904,65 +868,74 @@ repos:
         - Test Ruby / Run Minitest
         - Lint ERB / Run ERB lint
         - Prettier / Run Prettier
-
   ckanext-datagovuk:
     required_status_checks:
       additional_contexts:
         - test
-
   datagovuk_find:
     required_status_checks:
       additional_contexts:
         - test
-
   govuk-browser-extension:
     required_status_checks:
       additional_contexts:
         - Test Extension JS
-
   govuk-docker:
     required_status_checks:
       additional_contexts:
         - test
-
+    restrict_github_actions:
+      enabled: true
+      restricted_action_patterns: *platform_engineering_repository_actions
   govuk-mirror:
     can_be_deployed: true
     required_status_checks:
       additional_contexts:
         - Test Go
-
+    restrict_github_actions:
+      enabled: true
+      restricted_action_patterns: *platform_engineering_repository_actions
   govuk-replatform-test-app:
     required_status_checks:
       additional_contexts:
         - Test
-
+    restrict_github_actions:
+      enabled: true
+      restricted_action_patterns: *platform_engineering_repository_actions
   govuk-rota-announcer:
     visibility: internal
     required_status_checks:
       additional_contexts:
         - test
-
+    restrict_github_actions:
+      enabled: true
+      restricted_action_patterns: *platform_engineering_repository_actions
   govuk-user-reviewer:
     visibility: private
     homepage_url: "https://github.com/alphagov/govuk-rfcs/pull/75"
     required_status_checks:
       additional_contexts:
         - test
-
+    restrict_github_actions:
+      enabled: true
+      restricted_action_patterns: *platform_engineering_repository_actions
   licensify:
     can_be_deployed: true
     visibility: private
     required_status_checks:
       additional_contexts:
         - test
-
   govuk-crd-library:
     homepage_url: "https://alphagov.github.io/govuk-crd-library/"
-
+    restrict_github_actions:
+      enabled: true
+      restricted_action_patterns: *platform_engineering_repository_actions
   govuk-dns-ui:
     visibility: private
     homepage_url: "https://dns.publishing.service.gov.uk"
-
+    restrict_github_actions:
+      enabled: true
+      restricted_action_patterns: *platform_engineering_repository_actions
   govuk-helm-charts:
     can_be_deployed: true
     homepage_url: "https://www.gov.uk/"
@@ -970,43 +943,46 @@ repos:
       pull_request_bypassers:
         - "/govuk-ci"
       require_code_owner_reviews: true
-
+    restrict_github_actions:
+      enabled: true
+      restricted_action_patterns: *platform_engineering_repository_actions
   govuk-knowledge-graph-search:
     homepage_url: "https://docs.data-community.publishing.service.gov.uk/tools/govsearch/"
-
   public-asset-checker:
     homepage_url: "https://govuk-public-asset-checker.herokuapp.com"
-
   govspeak-visual-editor:
     homepage_url: "https://govspeak-preview.publishing.service.gov.uk/editor"
     required_pull_request_reviews:
       pull_request_bypassers:
         - "alphagov/gov-uk"
-
   govuk-knowledge-graph-gcp:
     homepage_url: "https://docs.data-community.publishing.service.gov.uk/tools/govgraph/"
-
   github-trello-poster:
     required_status_checks:
       additional_contexts:
         - "CodeQL SAST scan / Analyze"
         - "Dependency Review scan / dependency-review-pr"
         - "test"
-
+    restrict_github_actions:
+      enabled: true
+      restricted_action_patterns: *platform_engineering_repository_actions
   ckan-mock-harvest-sources: {}
   govuk-data-science-workshop: {}
   govuk-mobile-backend: {}
   govuk-mobile-backend-config: {}
-  govuk-pact-broker: {}
+  govuk-pact-broker:
+    restrict_github_actions:
+      enabled: true
+      restricted_action_patterns: *platform_engineering_repository_actions
   govuk-rfcs: {}
   govuk-s3-mirror: {}
-  govuk-content-publishing-guidance: {
-    teams: {
-      govuk: "maintain"
-    }
-  }
-  govuk-design-guide: {
-    teams: {
-      govuk: "maintain"
-    }
-  }
+  govuk-content-publishing-guidance: {teams: {govuk: "maintain"}}
+  govuk-design-guide: {teams: {govuk: "maintain"}}
+  ckan-helm:
+    restrict_github_actions:
+      enabled: true
+      restricted_action_patterns: *platform_engineering_repository_actions
+  govuk-platform-internal:
+    restrict_github_actions:
+      enabled: true
+      restricted_action_patterns: *platform_engineering_repository_actions
