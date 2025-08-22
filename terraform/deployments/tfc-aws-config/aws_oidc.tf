@@ -45,6 +45,7 @@ data "aws_iam_policy_document" "tfc_policy" {
       "autoscaling:*",
       "bedrock:GetModelInvocationLoggingConfiguration",
       "bedrock:PutModelInvocationLoggingConfiguration",
+      "chatbot:*",
       "cloudfront:*",
       "cloudwatch:*",
       "ec2:*",
