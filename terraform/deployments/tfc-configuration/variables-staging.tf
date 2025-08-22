@@ -165,6 +165,22 @@ module "variable-set-rds-staging" {
           log_statement              = { value = "all" }
           deadlock_timeout           = { value = 2500 }
           log_lock_waits             = { value = 1 }
+          "rds.logical_replication" = {
+            value        = 1,
+            apply_method = "pending-reboot"
+          }
+          max_wal_senders = {
+            value        = 35,
+            apply_method = "pending-reboot"
+          }
+          max_logical_replication_workers = {
+            value        = 20,
+            apply_method = "pending-reboot"
+          }
+          max_worker_processes = {
+            value        = 40,
+            apply_method = "pending-reboot"
+          }
         }
         engine_params_family         = "postgres13"
         name                         = "account-api"
@@ -270,6 +286,22 @@ module "variable-set-rds-staging" {
           log_statement                        = { value = "all" }
           deadlock_timeout                     = { value = 2500 }
           log_lock_waits                       = { value = 1 }
+          "rds.logical_replication" = {
+            value        = 1,
+            apply_method = "pending-reboot"
+          }
+          max_wal_senders = {
+            value        = 35,
+            apply_method = "pending-reboot"
+          }
+          max_logical_replication_workers = {
+            value        = 20,
+            apply_method = "pending-reboot"
+          }
+          max_worker_processes = {
+            value        = 40,
+            apply_method = "pending-reboot"
+          }
         }
         engine_params_family         = "postgres13"
         name                         = "blue-content-data-api-postgresql-primary"
@@ -287,6 +319,22 @@ module "variable-set-rds-staging" {
           log_statement              = { value = "all" }
           deadlock_timeout           = { value = 2500 }
           log_lock_waits             = { value = 1 }
+          "rds.logical_replication" = {
+            value        = 1,
+            apply_method = "pending-reboot"
+          }
+          max_wal_senders = {
+            value        = 35,
+            apply_method = "pending-reboot"
+          }
+          max_logical_replication_workers = {
+            value        = 20,
+            apply_method = "pending-reboot"
+          }
+          max_worker_processes = {
+            value        = 40,
+            apply_method = "pending-reboot"
+          }
         }
         engine_params_family         = "postgres13"
         name                         = "content-publisher"
@@ -321,6 +369,22 @@ module "variable-set-rds-staging" {
           log_statement              = { value = "all" }
           deadlock_timeout           = { value = 2500 }
           log_lock_waits             = { value = 1 }
+          "rds.logical_replication" = {
+            value        = 1,
+            apply_method = "pending-reboot"
+          }
+          max_wal_senders = {
+            value        = 35,
+            apply_method = "pending-reboot"
+          }
+          max_logical_replication_workers = {
+            value        = 20,
+            apply_method = "pending-reboot"
+          }
+          max_worker_processes = {
+            value        = 40,
+            apply_method = "pending-reboot"
+          }
         }
         engine_params_family         = "postgres13"
         name                         = "content-tagger"
@@ -355,6 +419,22 @@ module "variable-set-rds-staging" {
           log_statement              = { value = "all" }
           deadlock_timeout           = { value = 2500 }
           log_lock_waits             = { value = 1 }
+          "rds.logical_replication" = {
+            value        = 1,
+            apply_method = "pending-reboot"
+          }
+          max_wal_senders = {
+            value        = 35,
+            apply_method = "pending-reboot"
+          }
+          max_logical_replication_workers = {
+            value        = 20,
+            apply_method = "pending-reboot"
+          }
+          max_worker_processes = {
+            value        = 40,
+            apply_method = "pending-reboot"
+          }
         }
         engine_params_family         = "postgres13"
         name                         = "email-alert-api"
@@ -390,6 +470,22 @@ module "variable-set-rds-staging" {
           log_statement              = { value = "all" }
           deadlock_timeout           = { value = 2500 }
           log_lock_waits             = { value = 1 }
+          "rds.logical_replication" = {
+            value        = 1,
+            apply_method = "pending-reboot"
+          }
+          max_wal_senders = {
+            value        = 35,
+            apply_method = "pending-reboot"
+          }
+          max_logical_replication_workers = {
+            value        = 20,
+            apply_method = "pending-reboot"
+          }
+          max_worker_processes = {
+            value        = 40,
+            apply_method = "pending-reboot"
+          }
         }
         engine_params_family         = "postgres13"
         name                         = "link-checker-api"
@@ -408,6 +504,22 @@ module "variable-set-rds-staging" {
           log_statement              = { value = "all" }
           deadlock_timeout           = { value = 2500 }
           log_lock_waits             = { value = 1 }
+          "rds.logical_replication" = {
+            value        = 1,
+            apply_method = "pending-reboot"
+          }
+          max_wal_senders = {
+            value        = 35,
+            apply_method = "pending-reboot"
+          }
+          max_logical_replication_workers = {
+            value        = 20,
+            apply_method = "pending-reboot"
+          }
+          max_worker_processes = {
+            value        = 40,
+            apply_method = "pending-reboot"
+          }
         }
         engine_params_family         = "postgres13"
         name                         = "local-links-manager"
@@ -425,6 +537,22 @@ module "variable-set-rds-staging" {
           log_statement              = { value = "all" }
           deadlock_timeout           = { value = 2500 }
           log_lock_waits             = { value = 1 }
+          "rds.logical_replication" = {
+            value        = 1,
+            apply_method = "pending-reboot"
+          }
+          max_wal_senders = {
+            value        = 35,
+            apply_method = "pending-reboot"
+          }
+          max_logical_replication_workers = {
+            value        = 20,
+            apply_method = "pending-reboot"
+          }
+          max_worker_processes = {
+            value        = 40,
+            apply_method = "pending-reboot"
+          }
         }
         engine_params_family         = "postgres13"
         name                         = "locations-api"
@@ -445,6 +573,22 @@ module "variable-set-rds-staging" {
           checkpoint_timeout         = { value = 3600 }
           max_wal_size               = { value = 4096 }
           synchronous_commit         = { value = "off" }
+          "rds.logical_replication" = {
+            value        = 1,
+            apply_method = "pending-reboot"
+          }
+          max_wal_senders = {
+            value        = 35,
+            apply_method = "pending-reboot"
+          }
+          max_logical_replication_workers = {
+            value        = 20,
+            apply_method = "pending-reboot"
+          }
+          max_worker_processes = {
+            value        = 40,
+            apply_method = "pending-reboot"
+          }
         }
         engine_params_family         = "postgres13"
         name                         = "publishing-api"
@@ -512,6 +656,22 @@ module "variable-set-rds-staging" {
           log_statement              = { value = "all" }
           deadlock_timeout           = { value = 2500 }
           log_lock_waits             = { value = 1 }
+          "rds.logical_replication" = {
+            value        = 1,
+            apply_method = "pending-reboot"
+          }
+          max_wal_senders = {
+            value        = 35,
+            apply_method = "pending-reboot"
+          }
+          max_logical_replication_workers = {
+            value        = 20,
+            apply_method = "pending-reboot"
+          }
+          max_worker_processes = {
+            value        = 40,
+            apply_method = "pending-reboot"
+          }
         }
         engine_params_family         = "postgres13"
         name                         = "service-manual-publisher"
@@ -543,6 +703,22 @@ module "variable-set-rds-staging" {
           log_statement              = { value = "all" }
           deadlock_timeout           = { value = 2500 }
           log_lock_waits             = { value = 1 }
+          "rds.logical_replication" = {
+            value        = 1,
+            apply_method = "pending-reboot"
+          }
+          max_wal_senders = {
+            value        = 35,
+            apply_method = "pending-reboot"
+          }
+          max_logical_replication_workers = {
+            value        = 20,
+            apply_method = "pending-reboot"
+          }
+          max_worker_processes = {
+            value        = 40,
+            apply_method = "pending-reboot"
+          }
         }
         engine_params_family         = "postgres13"
         name                         = "support-api"
@@ -560,6 +736,22 @@ module "variable-set-rds-staging" {
           log_statement              = { value = "all" }
           deadlock_timeout           = { value = 2500 }
           log_lock_waits             = { value = 1 }
+          "rds.logical_replication" = {
+            value        = 1,
+            apply_method = "pending-reboot"
+          }
+          max_wal_senders = {
+            value        = 35,
+            apply_method = "pending-reboot"
+          }
+          max_logical_replication_workers = {
+            value        = 20,
+            apply_method = "pending-reboot"
+          }
+          max_worker_processes = {
+            value        = 40,
+            apply_method = "pending-reboot"
+          }
         }
         engine_params_family         = "postgres13"
         name                         = "transition"
