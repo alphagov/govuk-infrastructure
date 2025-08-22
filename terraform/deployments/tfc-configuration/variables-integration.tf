@@ -147,8 +147,9 @@ module "variable-set-rds-integration" {
 
     databases = {
       account_api = {
-        engine         = "postgres"
-        engine_version = "13"
+        engine                  = "postgres"
+        engine_version          = "13"
+        backup_retention_period = 1
         engine_params = {
           log_min_duration_statement = { value = 10000 }
           log_statement              = { value = "all" }
@@ -264,8 +265,9 @@ module "variable-set-rds-integration" {
       }
 
       content_data_api = {
-        engine         = "postgres"
-        engine_version = "13"
+        engine                  = "postgres"
+        engine_version          = "13"
+        backup_retention_period = 1
         engine_params = {
           work_mem                             = { value = "GREATEST({DBInstanceClassMemory/${1024 * 16}},65536)" }
           autovacuum_max_workers               = { value = 1, apply_method = "pending-reboot" }
@@ -302,8 +304,9 @@ module "variable-set-rds-integration" {
       }
 
       content_publisher = {
-        engine         = "postgres"
-        engine_version = "13"
+        engine                  = "postgres"
+        engine_version          = "13"
+        backup_retention_period = 1
         engine_params = {
           log_min_duration_statement = { value = 10000 }
           log_statement              = { value = "all" }
@@ -352,8 +355,9 @@ module "variable-set-rds-integration" {
       }
 
       content_tagger = {
-        engine         = "postgres"
-        engine_version = "13"
+        engine                  = "postgres"
+        engine_version          = "13"
+        backup_retention_period = 1
         engine_params = {
           log_min_duration_statement = { value = 10000 }
           log_statement              = { value = "all" }
@@ -402,8 +406,9 @@ module "variable-set-rds-integration" {
       }
 
       email_alert_api = {
-        engine         = "postgres"
-        engine_version = "13"
+        engine                  = "postgres"
+        engine_version          = "13"
+        backup_retention_period = 1
         engine_params = {
           log_min_duration_statement = { value = 10000 }
           log_statement              = { value = "all" }
@@ -453,8 +458,9 @@ module "variable-set-rds-integration" {
       }
 
       link_checker_api = {
-        engine         = "postgres"
-        engine_version = "13"
+        engine                  = "postgres"
+        engine_version          = "13"
+        backup_retention_period = 1
         engine_params = {
           log_min_duration_statement = { value = 10000 }
           log_statement              = { value = "all" }
@@ -487,8 +493,9 @@ module "variable-set-rds-integration" {
       }
 
       local_links_manager = {
-        engine         = "postgres"
-        engine_version = "13"
+        engine                  = "postgres"
+        engine_version          = "13"
+        backup_retention_period = 1
         engine_params = {
           log_min_duration_statement = { value = 10000 }
           log_statement              = { value = "all" }
@@ -520,8 +527,9 @@ module "variable-set-rds-integration" {
       }
 
       locations_api = {
-        engine         = "postgres"
-        engine_version = "13"
+        engine                  = "postgres"
+        engine_version          = "13"
+        backup_retention_period = 1
         engine_params = {
           log_min_duration_statement = { value = 10000 }
           log_statement              = { value = "all" }
@@ -639,8 +647,9 @@ module "variable-set-rds-integration" {
       }
 
       service_manual_publisher = {
-        engine         = "postgres"
-        engine_version = "13"
+        engine                  = "postgres"
+        engine_version          = "13"
+        backup_retention_period = 1
         engine_params = {
           log_min_duration_statement = { value = 10000 }
           log_statement              = { value = "all" }
@@ -686,8 +695,9 @@ module "variable-set-rds-integration" {
       }
 
       support_api = {
-        engine         = "postgres"
-        engine_version = "13"
+        engine                  = "postgres"
+        engine_version          = "13"
+        backup_retention_period = 1
         engine_params = {
           log_min_duration_statement = { value = 10000 }
           log_statement              = { value = "all" }
@@ -719,8 +729,9 @@ module "variable-set-rds-integration" {
       }
 
       transition = {
-        engine         = "postgres"
-        engine_version = "13"
+        engine                  = "postgres"
+        engine_version          = "13"
+        backup_retention_period = 1
         engine_params = {
           log_min_duration_statement = { value = 10000 }
           log_statement              = { value = "all" }
