@@ -242,6 +242,24 @@ resource "github_branch_protection" "govuk_repos" {
   }
 }
 
+resource "github_actions_repository_permissions" "gha_permissions" {
+  for_each = {
+    for name, repo in local.repositories : name => data.github_repository.govuk["alphagov/${name}"]
+    if try(repo.restrict_github_actions.enabled, false) && contains(keys(data.github_repository.govuk), "alphagov/${name}")
+  }
+
+  repository = each.key
+
+  enabled         = true
+  allowed_actions = "selected"
+
+  allowed_actions_config {
+    github_owned_allowed = true
+    patterns_allowed     = local.repositories[each.key].restrict_github_actions.restricted_action_patterns
+    verified_allowed     = false
+  }
+}
+
 #
 # Only the list of repositories which will have access to a secret is created/modified
 # here, the secret should have been created in the GitHub UI in advance by a
