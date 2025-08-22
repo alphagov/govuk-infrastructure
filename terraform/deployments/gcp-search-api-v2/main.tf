@@ -29,6 +29,7 @@ module "environment_integration" {
   google_cloud_folder          = var.google_cloud_folder
   tfc_project_name             = var.tfe_project_name
   environment_workspace_name   = "search-api-v2-integration"
+  access_group_name            = "govuk-gcp-access-integration"
 }
 
 module "environment_staging" {
@@ -40,6 +41,7 @@ module "environment_staging" {
   google_cloud_folder          = var.google_cloud_folder
   tfc_project_name             = var.tfe_project_name
   environment_workspace_name   = "search-api-v2-staging"
+  access_group_name            = "govuk-gcp-access"
 }
 
 module "environment_production" {
@@ -51,6 +53,7 @@ module "environment_production" {
   google_cloud_folder          = var.google_cloud_folder
   tfc_project_name             = var.tfe_project_name
   environment_workspace_name   = "search-api-v2-production"
+  access_group_name            = "govuk-gcp-access"
 
 
   # NOTE: There are limits on the Google side on how high we are permitted to set these quotas. If
