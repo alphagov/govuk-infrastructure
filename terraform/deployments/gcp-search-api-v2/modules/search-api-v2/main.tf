@@ -22,9 +22,9 @@ locals {
   display_name = title(var.name)
 }
 
-resource "google_project" "environment_project" {
-  name       = "Search API V2 ${local.display_name}"
-  project_id = "search-api-v2-${var.name}"
+resource "google_project" "production_environment_project" {
+  name       = "Search API V2 Production"
+  project_id = "search-api-v2-production"
 
   folder_id       = var.google_cloud_folder
   billing_account = var.google_cloud_billing_account
@@ -32,15 +32,57 @@ resource "google_project" "environment_project" {
   labels = {
     "programme"         = "govuk"
     "team"              = "govuk-search-improvement"
-    "govuk_environment" = var.name
+    "govuk_environment" = production
   }
 }
 
-resource "google_project_iam_member" "environment_project_owner" {
-  project = google_project.environment_project.project_id
+resource "google_project" "staging_environment_project" {
+  name       = "Search API V2 Staging"
+  project_id = "search-api-v2-staging"
+
+  folder_id       = var.google_cloud_folder
+  billing_account = var.google_cloud_billing_account
+
+  labels = {
+    "programme"         = "govuk"
+    "team"              = "govuk-search-improvement"
+    "govuk_environment" = staging
+  }
+}
+
+resource "google_project" "integration_environment_project" {
+  name       = "Search API V2 Integration"
+  project_id = "search-api-v2-integration"
+
+  folder_id       = var.google_cloud_folder
+  billing_account = var.google_cloud_billing_account
+
+  labels = {
+    "programme"         = "govuk"
+    "team"              = "govuk-search-improvement"
+    "govuk_environment" = integration
+  }
+}
+
+resource "google_project_iam_member" "production_environment_project_owner" {
+  project = google_project.production_environment_project.project_id
   role    = "roles/owner"
 
-  member = "group:govuk-gcp-access@digital.cabinet-office.gov.uk"
+  member = "group:govuk-gcp-access-production@digital.cabinet-office.gov.uk"
+}
+
+resource "google_project_iam_member" "staging_environment_project_owner" {
+  project = google_project.staging_environment_project.project_id
+  role    = "roles/owner"
+
+  member = "group:govuk-gcp-access-production@digital.cabinet-office.gov.uk"
+}
+
+resource "google_project_iam_member" "integration_environment_project_owner" {
+  project = google_project.integration_environment_project.project_id
+  role    = "roles/owner"
+
+  member = "group:govuk-gcp-access-integration@digital.cabinet-office.gov.uk"
 }
 
 resource "google_project_service" "api_service" {
