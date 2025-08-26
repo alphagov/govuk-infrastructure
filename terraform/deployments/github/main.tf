@@ -12,7 +12,7 @@ terraform {
     }
     github = {
       source  = "integrations/github"
-      version = "~> 6.0"
+      version = "~> 6.6"
     }
   }
 }
@@ -44,6 +44,7 @@ provider "github" {
 
 data "github_repositories" "govuk" {
   query = "topic:govuk org:alphagov archived:false"
+  include_repo_id = true
 
   lifecycle {
     postcondition {
@@ -53,28 +54,47 @@ data "github_repositories" "govuk" {
   }
 }
 
-data "github_repository" "govuk" {
-  for_each  = toset(data.github_repositories.govuk.full_names)
-  full_name = each.key
-}
-
 locals {
-  repositories = yamldecode(file("repos.yml"))["repos"]
+  yaml_repos = yamldecode(file("repos.yml"))["repos"]
 
-  deployable_repos = [
-    for name, repo in local.repositories : data.github_repository.govuk["alphagov/${name}"]
-    if try(repo.can_be_deployed, false) && contains(keys(data.github_repository.govuk), "alphagov/${name}")
-  ]
+  repo_id_map = { for i, name in data.github_repositories.govuk.full_names : name => data.github_repositories.govuk.repo_ids[i] }
 
-  gems = [
-    for name, repo in local.repositories : data.github_repository.govuk["alphagov/${name}"]
-    if try(repo.publishes_gem, false) && contains(keys(data.github_repository.govuk), "alphagov/${name}")
-  ]
+  # Consolidated map: repo_name => { ...yaml_props, full_name, repo_id }
+  repo_metadata = {
+    for name, repo in local.yaml_repos :
+    name => merge(
+      repo,
+      {
+        full_name = format("alphagov/%s", name)
+        repo_id   = try(local.repo_id_map[format("alphagov/%s", name)], null)
+      }
+    )
+  }
 
-  pact_publishers = [
-    for name, repo in local.repositories : data.github_repository.govuk["alphagov/${name}"]
-    if try(repo.pact_publisher, false) && contains(keys(data.github_repository.govuk), "alphagov/${name}")
-  ]
+  # Filtered maps for deployable, gems, and pact publishers
+  deployable_repos = {
+    for name, repo in local.repo_metadata :
+    name => repo
+    if try(repo.can_be_deployed, false) && repo.repo_id != null
+  }
+
+  gems = {
+    for name, repo in local.repo_metadata :
+    name => repo
+    if try(repo.publishes_gem, false) && repo.repo_id != null
+  }
+
+  pact_publishers = {
+    for name, repo in local.repo_metadata :
+    name => repo
+    if try(repo.pact_publisher, false) && repo.repo_id != null
+  }
+
+  # Lists of repo IDs and names for use in resources
+  deployable_repo_ids        = [for repo in values(local.deployable_repos) : repo.repo_id]
+  deployable_repo_names      = keys(local.deployable_repos)
+  gems_repo_ids              = [for repo in values(local.gems) : repo.repo_id]
+  pact_publishers_repo_ids   = [for repo in values(local.pact_publishers) : repo.repo_id]
 }
 
 resource "github_team" "govuk_ci_bots" {
@@ -116,34 +136,32 @@ data "github_team" "co_platform_engineering" {
 }
 
 resource "github_team_repository" "govuk_production_admin_repos" {
-  for_each   = local.repositories
+  for_each   = local.repo_metadata
   repository = each.key
   team_id    = github_team.govuk_production_admin.id
   permission = try(each.value.teams["govuk_production_admin"], "admin")
 }
 
 resource "github_team_repository" "govuk_ci_bots_repos" {
-  for_each   = local.repositories
+  for_each   = local.repo_metadata
   repository = each.key
   team_id    = github_team.govuk_ci_bots.id
   permission = try(each.value.teams["govuk_ci_bots"], "admin")
 }
 
 resource "github_team_repository" "govuk_repos" {
-  for_each   = local.repositories
+  for_each   = local.repo_metadata
   repository = each.key
   team_id    = github_team.govuk.id
   permission = try(each.value.teams["govuk"], "push")
 }
 
 resource "github_team_repository" "govuk_production_deploy_repos" {
-  for_each   = local.repositories
+  for_each   = local.repo_metadata
   repository = each.key
   team_id    = github_team.govuk_production_deploy.id
-  # give prod deploy the same permissions as the GOV.UK team
   permission = try(each.value.teams["govuk"], "push")
 }
-
 
 resource "github_team_repository" "co_platform_engineering_repos" {
   for_each   = toset(["govuk-dns-tf", "govuk-dns", "govuk-dns-config"])
@@ -153,10 +171,8 @@ resource "github_team_repository" "co_platform_engineering_repos" {
 }
 
 resource "github_team_repository" "ithc_repos" {
-  # Only grant ITHC access to repositories that have been explicitly configured
-  # to be accessible by the ITHC team in repos.yml.
   for_each = {
-    for name, repo in local.repositories : name => repo
+    for name, repo in local.repo_metadata : name => repo
     if lookup(lookup(repo, "teams", {}), "govuk_ithc", "") != ""
   }
   repository = each.key
@@ -165,7 +181,7 @@ resource "github_team_repository" "ithc_repos" {
 }
 
 resource "github_repository" "govuk_repos" {
-  for_each = local.repositories
+  for_each = local.repo_metadata
 
   name = each.key
 
@@ -202,7 +218,7 @@ resource "github_repository" "govuk_repos" {
 }
 
 resource "github_branch_protection" "govuk_repos" {
-  for_each = { for repo_name, repo_details in local.repositories : repo_name => repo_details if try(repo_details["branch_protection"], true) }
+  for_each = { for repo_name, repo_details in local.repo_metadata : repo_name => repo_details if try(repo_details["branch_protection"], true) }
 
   repository_id    = github_repository.govuk_repos[each.key].node_id
   pattern          = "main"
@@ -250,30 +266,30 @@ resource "github_branch_protection" "govuk_repos" {
 
 resource "github_actions_organization_secret_repositories" "ci_user_github_api_token" {
   secret_name             = "GOVUK_CI_GITHUB_API_TOKEN" # pragma: allowlist secret
-  selected_repository_ids = [for repo in concat(local.deployable_repos, local.gems) : repo.repo_id]
+  selected_repository_ids = concat(local.deployable_repo_ids, local.gems_repo_ids)
 }
 
 resource "github_actions_organization_secret_repositories" "argo_events_webhook_token" {
   secret_name             = "GOVUK_ARGO_EVENTS_WEBHOOK_TOKEN" # pragma: allowlist secret
-  selected_repository_ids = [for repo in local.deployable_repos : repo.repo_id]
+  selected_repository_ids = local.deployable_repo_ids
 }
 
 resource "github_actions_organization_secret_repositories" "argo_events_webhook_url" {
   secret_name             = "GOVUK_ARGO_EVENTS_WEBHOOK_URL" # pragma: allowlist secret
-  selected_repository_ids = [for repo in local.deployable_repos : repo.repo_id]
+  selected_repository_ids = local.deployable_repo_ids
 }
 
 resource "github_actions_organization_secret_repositories" "pact_broker_password" {
   secret_name             = "GOVUK_PACT_BROKER_PASSWORD" # pragma: allowlist secret
-  selected_repository_ids = [for repo in local.pact_publishers : repo.repo_id]
+  selected_repository_ids = local.pact_publishers_repo_ids
 }
 
 resource "github_actions_organization_secret_repositories" "pact_broker_username" {
   secret_name             = "GOVUK_PACT_BROKER_USERNAME" # pragma: allowlist secret
-  selected_repository_ids = [for repo in local.pact_publishers : repo.repo_id]
+  selected_repository_ids = local.pact_publishers_repo_ids
 }
 
 resource "github_actions_organization_secret_repositories" "slack_webhook_url" {
   secret_name             = "GOVUK_SLACK_WEBHOOK_URL" # pragma: allowlist secret
-  selected_repository_ids = [for repo in data.github_repository.govuk : repo.repo_id]
+  selected_repository_ids = [for repo in values(local.repo_metadata) : repo.repo_id if repo.repo_id != null]
 }

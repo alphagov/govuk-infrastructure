@@ -1,9 +1,26 @@
-resource "aws_codecommit_repository" "govuk_repos" {
-  for_each = data.github_repository.govuk
+locals {
+  codecommit_repos = {
+    for name, repo in local.repo_metadata :
+    "alphagov/${name}" => {
+      repo_name   = name
+      description = try(repo.description, "Mirror of GitHub repository alphagov/${name}")
+    }
+    if contains(data.github_repositories.govuk.full_names, format("alphagov/%s", name))
+  }
+}
 
-  repository_name = each.value.name
-  description     = each.value.description
-  default_branch  = each.value.default_branch
+resource "aws_codecommit_repository" "govuk_repos" {
+  for_each = local.codecommit_repos
+
+  repository_name = each.value.repo_name
+  # description     = each.value.description
+  default_branch = "main"
+
+  lifecycle {
+    ignore_changes = [
+      description
+    ]
+  }
 }
 
 data "aws_iam_policy_document" "github_action_can_assume_role" {
