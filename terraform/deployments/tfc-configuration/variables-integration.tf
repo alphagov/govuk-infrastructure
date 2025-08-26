@@ -459,7 +459,7 @@ module "variable-set-rds-integration" {
 
       link_checker_api = {
         engine                  = "postgres"
-        engine_version          = "13"
+        engine_version          = "14.18"
         backup_retention_period = 1
         engine_params = {
           log_min_duration_statement = { value = 10000 }
@@ -483,7 +483,7 @@ module "variable-set-rds-integration" {
             apply_method = "pending-reboot"
           }
         }
-        engine_params_family         = "postgres13"
+        engine_params_family         = "postgres14"
         name                         = "link-checker-api"
         allocated_storage            = 100
         instance_class               = "db.t4g.medium"
