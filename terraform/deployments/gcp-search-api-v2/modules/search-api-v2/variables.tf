@@ -79,3 +79,8 @@ variable "environment_workspace_name" {
   type        = string
   description = "Provisions search-api-v2 Discovery Engine resources for the environment"
 }
+
+variable "access_group_name" {
+  type        = string
+  description = "The google group that should be able to access the environment"
+}
