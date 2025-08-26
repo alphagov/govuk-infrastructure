@@ -1,6 +1,6 @@
 import {
   to = aws_db_instance.instance["link_checker_api"]
-  id = "linker-checker-api-postgres"
+  id = "link-checker-api-postgres"
 }
 
 import {
