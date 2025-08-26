@@ -165,7 +165,11 @@ resource "github_team_repository" "ithc_repos" {
 }
 
 data "github_repository_pull_requests" "govuk_repos_prs" {
-  for_each        = local.repositories
+  for_each = {
+    for name, repo in local.repositories :
+    name => repo
+    if try(repo.archived, false)
+  }
   base_repository = each.key
   state           = "open"
 }
@@ -208,7 +212,14 @@ resource "github_repository" "govuk_repos" {
     ]
 
     precondition {
-      condition     = !try(each.value.archived, false) || length(data.github_repository_pull_requests.govuk_repos_prs[each.key].results) == 0
+      condition = (
+        !try(each.value.archived, false) ||
+        (
+          contains(keys(data.github_repository_pull_requests.govuk_repos_prs), each.key)
+          ? length(try(data.github_repository_pull_requests.govuk_repos_prs[each.key].results, [])) == 0
+          : true
+        )
+      )
       error_message = "You cannot archive a Repo with open PRs. Review and close the PRs first."
     }
 
