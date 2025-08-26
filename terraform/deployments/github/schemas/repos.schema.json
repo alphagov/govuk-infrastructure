@@ -10,6 +10,13 @@
         "items": { "type": "string" }
       }
     },
+    "github_actions_sets": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "array",
+        "items": { "type": "string" }
+      }
+    },
     "repos": {
       "type": "object",
       "patternProperties": {
@@ -26,6 +33,26 @@
             "need_production_access_to_merge": { "type": "boolean" },
             "strict": { "type": "boolean" },
             "up_to_date_branches": { "type": "boolean" },
+            "restrict_github_actions": {
+              "type": "object",
+              "properties": {
+                "enabled": { "type":  "boolean", "default":  false},
+                "restricted_action_patterns": {
+                  "type": "array",
+                  "items": { "type":  "string" },
+                  "default": [],
+                  "examples": [
+                    "actions/*",
+                    "hashicorp/setup-terraform@*",
+                    "terraform-linters/setup-tflint@ae78205cfffec9e8d93fd2b3115c7e9d3166d4b6"
+                  ]
+                }
+              },
+              "default": {
+                "enabled": false,
+                "restricted_actions_patterns": []
+              }
+            },
             "required_pull_request_reviews": {
               "type": "object",
               "properties": {
