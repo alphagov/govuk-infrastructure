@@ -4,7 +4,7 @@ module "variable-set-ephemeral" {
   name     = "common-ephemeral"
   priority = false
   tfvars = {
-    cluster_version               = "1.31"
+    cluster_version               = "1.33"
     cluster_log_retention_in_days = 7
 
     vpc_cidr = "10.10.0.0/16"
