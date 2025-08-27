@@ -11,6 +11,19 @@ if [ $# -ne 1 ]; then
   usage
 fi
 
+REQUIRED_TOOLS=(
+  aws
+  jq
+  kubectl
+)
+
+for TOOL in "${REQUIRED_TOOLS[@]}"; do
+  if ! command -v "$TOOL" >>/dev/null 2>&1; then
+    echo "Command $TOOL is not available, but is required to run this validator"
+    exit 1
+  fi
+done
+
 export CLUSTER_NAME=$1
 if [ -z "$CLUSTER_NAME" ]; then
   echo "The cluster name must be given as the first argument" >&2
@@ -25,7 +38,32 @@ fi
 echo "Cluster name: ${CLUSTER_NAME}" >&2
 echo "Assuming your shell has access to the ephemeral cluster" >&2
 
+SECRETS_MANAGER_SECRET_NAME="govuk/ephemeral/${CLUSTER_NAME}/validator-external-secret-$(date +%s)" # pragma: allowlist secret
+echo "Creating secrets manager secret $SECRETS_MANAGER_SECRET_NAME"
+aws secretsmanager create-secret \
+  --name "$SECRETS_MANAGER_SECRET_NAME" \
+  --description 'Secret created/updated/used by the ephemeral-cluster-valdator script' \
+  --secret-string '{"testSecretKey": "testSecretValueInitial"}' >> /dev/null # pragma: allowlist secret
+
 MANIFEST="$(cat <<EOF
+apiVersion: external-secrets.io/v1beta1
+kind: ExternalSecret
+metadata:
+  name: ephemeral-cluster-validator
+  annotations:
+    kubernetes.io/description: Secret created/updated/used by the ephemeral-cluster-valdator script
+spec:
+  refreshInterval: 1h
+  secretStoreRef:
+    name: aws-secretsmanager
+    kind: ClusterSecretStore
+  target:
+    deletionPolicy: Delete
+    name: ephemeral-cluster-validator
+  dataFrom:
+    - extract:
+        key: "$SECRETS_MANAGER_SECRET_NAME"
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -55,6 +93,12 @@ spec:
             drop:
               - "ALL"
           readOnlyRootFilesystem: true
+        env:
+          - name: EXTERNAL_SECRET
+            valueFrom:
+              secretKeyRef:
+                name: ephemeral-cluster-validator
+                key: testSecretKey
         volumeMounts:
           - name: ephemeral-cluster-validator-tmp
             mountPath: /tmp
@@ -130,7 +174,69 @@ kubectl apply -f <(echo "${MANIFEST}")
 function delete_validator {
   echo "Cleaning up"
   kubectl delete -f <(echo "${MANIFEST}")
+
+  echo "Deleting secrets manager secret $SECRETS_MANAGER_SECRET_NAME"
+  if aws secretsmanager delete-secret --secret-id "$SECRETS_MANAGER_SECRET_NAME" --force-delete-without-recovery >>/dev/null; then
+    echo "Secrets manager secret deleted"
+  else
+    echo "Failed to delete secrets manager secret, see error from aws cli above"
+  fi
 }
+
+function validate_external_secret_value {
+  local EXPECTED_SECRET_VALUE="$1"
+
+  if ! INITIAL_SECRET_VALUE_JSON=$(kubectl get secret ephemeral-cluster-validator -o json); then
+    >&2 echo "Secret ephemeral-cluster-validator has not been provisioned by the configured external secret"
+    return 1
+  fi
+  
+  if ! INITIAL_SECRET_VALUE=$(jq --raw-output <<<"$INITIAL_SECRET_VALUE_JSON" '.data.testSecretKey | @base64d'); then
+    >&2 echo "Secret ephemeral-cluster-validator could not be parsed correctly by jq, or did not contain the key 'testSecretKey'"
+    return 1
+  fi
+  
+  if [ "$INITIAL_SECRET_VALUE" != "$EXPECTED_SECRET_VALUE" ]; then
+    >&2 echo "The key testSecretKey of secret ephemeral-cluster-validator did not have the correct value"
+    return 1
+  fi
+  
+  return 0
+}
+
+echo "Checking that the external secret was correctly provisioned"
+if ! validate_external_secret_value "testSecretValueInitial"; then # pragma: allowlist secret
+  >&2 echo "Failed validation of external secret"
+  delete_validator
+  exit 1
+fi
+
+echo "Updating secrets manager secret $SECRETS_MANAGER_SECRET_NAME"
+if ! aws secretsmanager update-secret \
+  --secret-id "$SECRETS_MANAGER_SECRET_NAME" \
+  --description 'Secret created/updated/used by the ephemeral-cluster-valdator script' \
+  --secret-string '{"testSecretKey": "testSecretValueUpdated"}' >>/dev/null; then # pragma: allowlist secret
+  >&2 echo "Failed to update secrets manager secret"
+  delete_validator
+  exit 1
+fi
+
+echo "Forcing resync of external secret"
+if ! kubectl annotate externalsecrets.external-secrets.io ephemeral-cluster-validator force-sync="$(date +%s)" --overwrite; then
+  >&2 echo "Failed to annotate the external secret to force a resync"
+  delete_validator
+  exit 1
+fi
+
+echo "Waiting 2 seconds to give ample time to update"
+sleep 2
+
+echo "Checking that the external secret was correctly updated"
+if ! validate_external_secret_value "testSecretValueUpdated"; then # pragma: allowlist secret
+  >&2 echo "Failed validation of external secret update"
+  delete_validator
+  exit 1
+fi
 
 START_TIME="$(date +%s)"
 NOW="$(date +%s)"
