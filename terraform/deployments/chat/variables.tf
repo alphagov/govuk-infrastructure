@@ -66,3 +66,9 @@ variable "chat_certificate_arn" {
   type        = string
   description = "ARN of the TLS cert to use for the Chat CloudFront distribution."
 }
+
+variable "chat_slack_channel_id" {
+  type        = string
+  description = "ID of Slack channel for CloudWatch Alarms"
+  default     = "C06AWTPNJMV"
+}

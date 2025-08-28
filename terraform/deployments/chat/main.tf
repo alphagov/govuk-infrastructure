@@ -2,7 +2,7 @@ terraform {
   cloud {
     organization = "govuk"
     workspaces {
-      tags = ["opensearch", "eks", "aws"]
+      tags = ["chat", "aws"]
     }
   }
   required_version = "~> 1.10"
