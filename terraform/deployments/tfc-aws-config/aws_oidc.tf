@@ -98,6 +98,7 @@ data "aws_iam_policy_document" "tfc_policy" {
       test     = "StringEquals"
       variable = "iam:PassedToService"
       values = [
+        "chatbot.amazonaws.com",
         "eks.amazonaws.com",
         "s3.amazonaws.com",
       ]
