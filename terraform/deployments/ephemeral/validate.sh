@@ -29,91 +29,99 @@ MANIFEST="$(cat <<EOF
 apiVersion: apps/v1
 kind: Deployment
 metadata:
- creationTimestamp: null
- labels:
-   app: ephemeral-cluster-validator
- name: ephemeral-cluster-validator
+  creationTimestamp: null
+  labels:
+    app: ephemeral-cluster-validator
+  name: ephemeral-cluster-validator
 spec:
- replicas: 1
- selector:
-   matchLabels:
-     app: ephemeral-cluster-validator
- strategy: {}
- template:
-   metadata:
-     creationTimestamp: null
-     labels:
+  replicas: 1
+  selector:
+     matchLabels:
        app: ephemeral-cluster-validator
-   spec:
-     containers:
-     - image: "nginxinc/nginx-unprivileged:latest"
-       name: nginx
-       resources: {}
-       securityContext:
-         allowPrivilegeEscalation: false
-         capabilities:
-           drop:
-             - "ALL"
-         readOnlyRootFilesystem: true
-       volumeMounts:
-         - name: ephemeral-cluster-validator-tmp
-           mountPath: /tmp
-     securityContext:
-       seccompProfile:
-         type: RuntimeDefault
-       fsGroup: 101
-       runAsNonRoot: true
-       runAsUser: 101
-       runAsGroup: 101
-     volumes:
-     - name: ephemeral-cluster-validator-tmp
-       emptyDir: {}
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: ephemeral-cluster-validator
+    spec:
+      containers:
+      - image: "nginxinc/nginx-unprivileged:latest"
+        name: nginx
+        resources: {}
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+              - "ALL"
+          readOnlyRootFilesystem: true
+        volumeMounts:
+          - name: ephemeral-cluster-validator-tmp
+            mountPath: /tmp
+      securityContext:
+        seccompProfile:
+          type: RuntimeDefault
+        fsGroup: 101
+        runAsNonRoot: true
+        runAsUser: 101
+        runAsGroup: 101
+      volumes:
+      - name: ephemeral-cluster-validator-tmp
+        ephemeral:
+          volumeClaimTemplate:
+            spec:
+              accessModes:
+                - ReadWriteOncePod
+              storageClassName: ebs-gp3
+              resources:
+                requests:
+                  storage: 1Gi
 ---
 apiVersion: v1
 kind: Service
 metadata:
- creationTimestamp: null
- labels:
-   app: ephemeral-cluster-validator
- name: ephemeral-cluster-validator
+  creationTimestamp: null
+  labels:
+    app: ephemeral-cluster-validator
+  name: ephemeral-cluster-validator
 spec:
- ports:
- - name: 8080-8080
-   port: 8080
-   protocol: TCP
-   targetPort: 8080
- selector:
-   app: ephemeral-cluster-validator
- type: NodePort
+  ports:
+  - name: 8080-8080
+    port: 8080
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    app: ephemeral-cluster-validator
+  type: NodePort
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
- creationTimestamp: null
- name: ephemeral-cluster-validator
- annotations:
-   alb.ingress.kubernetes.io/scheme: "internet-facing"
-   alb.ingress.kubernetes.io/listen-ports: '[{"HTTPS":443}]'
-   alb.ingress.kubernetes.io/healthcheck-timeout-seconds: "2"
-   alb.ingress.kubernetes.io/healthy-threshold-count: "2"
-   alb.ingress.kubernetes.io/healthcheck-interval-seconds: "5"
-   alb.ingress.kubernetes.io/load-balancer-name: "ephemeral-cluster-validator"
+  creationTimestamp: null
+  name: ephemeral-cluster-validator
+  annotations:
+    alb.ingress.kubernetes.io/scheme: "internet-facing"
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTPS":443}]'
+    alb.ingress.kubernetes.io/healthcheck-timeout-seconds: "2"
+    alb.ingress.kubernetes.io/healthy-threshold-count: "2"
+    alb.ingress.kubernetes.io/healthcheck-interval-seconds: "5"
+    alb.ingress.kubernetes.io/load-balancer-name: "ephemeral-cluster-validator"
 spec:
- ingressClassName: aws-alb
- tls:
- - hosts:
-   - "ephemeral-cluster-validator.${CLUSTER_NAME}.ephemeral.govuk.digital"
- rules:
- - host: ephemeral-cluster-validator.${CLUSTER_NAME}.ephemeral.govuk.digital
-   http:
-     paths:
-     - path: /
-       pathType: Prefix
-       backend:
-         service:
-           name: ephemeral-cluster-validator
-           port:
-             number: 8080
+  ingressClassName: aws-alb
+  tls:
+  - hosts:
+    - "ephemeral-cluster-validator.${CLUSTER_NAME}.ephemeral.govuk.digital"
+  rules:
+  - host: ephemeral-cluster-validator.${CLUSTER_NAME}.ephemeral.govuk.digital
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: ephemeral-cluster-validator
+            port:
+              number: 8080
 EOF
 )"
 
