@@ -98,6 +98,13 @@ function tfc_get_workspace_id {
     | jq -r ".data[0].id"
 }
 
+# check if a workspace exists
+function tfc_workspace_exists {
+  WORKSPACE_NAME="${1}"
+  WORKSPACE_ID="$(tfc_get_workspace_id "${WORKSPACE_NAME}")"
+  [ "${WORKSPACE_ID}" != "null" ] && [ "${WORKSPACE_ID}" != "" ]
+}
+
 # start a destroy run
 function tfc_destroy_start {
   TOKEN="$(tfc_token)"
@@ -170,6 +177,13 @@ function tfc_wait_for_run {
 # start a destroy run for a given workspace name
 function tfc_do_destroy {
   WORKSPACE_NAME="${1}"
+  
+  if ! tfc_workspace_exists "${WORKSPACE_NAME}"; then
+    echo "Workspace ${WORKSPACE_NAME}-${CLUSTER_ID} does not exist, skipping destroy"
+    return 0
+  fi
+  
+  echo "Destroying workspace ${WORKSPACE_NAME}-${CLUSTER_ID}"
   RUN_ID="$(tfc_destroy_start "${WORKSPACE_NAME}")"
   tfc_wait_for_run "${WORKSPACE_NAME}" "${RUN_ID}"
 }
@@ -189,6 +203,14 @@ function retry {
   echo "command '$*' failed after ${RETRY_COUNT} attempts"
   exit 1
 }
+
+echo "AWS IAM Role ARN: $(aws sts get-caller-identity --query Arn --output text)"
+echo "EKS Cluster Name: ${CLUSTER_ID}"
+echo ""
+echo "This script is destructive."
+echo "It will delete all Application resources in the cluster and trigger Terraform destroy runs."
+echo "Continue with cluster shutdown? [Enter]"
+read
 
 # make sure the correct cluster is selected before destroying anything
 aws eks update-kubeconfig --name "${CLUSTER_ID}"
