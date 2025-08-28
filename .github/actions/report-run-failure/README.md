@@ -17,6 +17,8 @@ The Slack message includes "The https://github.com/alphagov/repo-name failed on 
 
 The code below indicates where to insert the lines and what lines to copy across.
 
+- If you want to be notified about a single job failing
+
 ```
 name: Always failing job
 on:
@@ -37,4 +39,43 @@ jobs:
           slack_webhook_url: ${{ secrets.GOVUK_SLACK_WEBHOOK_URL }}
           channel: your-team-slack-channel
           message: an optional message
+```
+
+- If you want to be notified of a failure in a workflow that includes multiple jobs
+
+```
+name: CI
+
+on:
+  workflow_dispatch: {}
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  codeql-sast:
+    name: CodeQL SAST scan
+    uses: alphagov/govuk-infrastructure/.github/workflows/codeql-analysis.yml@main
+    permissions:
+      security-events: write
+
+  dependency-review:
+    name: Dependency Review scan
+    uses: alphagov/govuk-infrastructure/.github/workflows/dependency-review.yml@main
+
+  test-features:
+    name: Test features
+    uses: ./.github/workflows/cucumber.yml
+  
+  # copy lines below
+  notify-slack-if-failure-on-main:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Notify Slack if failure on main
+        if: ${{ failure() }}
+        uses: alphagov/govuk-infrastructure/.github/actions/report-run-failure@main
+        with:
+          slack_webhook_url: ${{ secrets.GOVUK_SLACK_WEBHOOK_URL }}
+          channel: your-team-slack-channel
 ```
