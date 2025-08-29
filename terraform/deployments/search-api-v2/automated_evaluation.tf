@@ -83,7 +83,18 @@ resource "google_storage_bucket" "vais_evaluation_output" {
   location = var.gcp_region
 }
 
-#
+resource "google_storage_bucket_iam_member" "vais_evaluation_output_api_service_account_bucketviewer" {
+  bucket = google_storage_bucket.vais_evaluation_output.name
+  role   = "roles/storage.bucketViewer"
+  member = google_service_account.api.member
+}
+
+resource "google_storage_bucket_iam_member" "vais_evaluation_output_api_service_account_objectcreator" {
+  bucket = google_storage_bucket.vais_evaluation_output.name
+  role   = "roles/storage.objectCreator"
+  member = google_service_account.api.member
+}
+
 resource "google_storage_bucket_object" "qrels_seed_file" {
   name   = "ts=1970-01-01T00:00:00/qc=0/rc=0/judgement_list=sample/qrels.csv"
   bucket = google_storage_bucket.automated_evaluation_output.name
