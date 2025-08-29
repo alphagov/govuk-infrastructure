@@ -46,7 +46,7 @@ aws secretsmanager create-secret \
   --secret-string '{"testSecretKey": "testSecretValueInitial"}' >> /dev/null # pragma: allowlist secret
 
 MANIFEST="$(cat <<EOF
-apiVersion: external-secrets.io/v1beta1
+apiVersion: external-secrets.io/v1
 kind: ExternalSecret
 metadata:
   name: ephemeral-cluster-validator
@@ -282,6 +282,10 @@ while [ $(( NOW - START_TIME )) -lt 600 ]; do
 
   NOW="$(date +%s)"
 done
+
+if [ "${SUCCESS}" -eq 1 ]; then
+  read -r -p "Cluster validation success, press enter to continue to delete: "
+fi
 
 delete_validator
 
