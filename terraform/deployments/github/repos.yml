@@ -917,6 +917,12 @@ repos:
       additional_contexts:
         - test
 
+  govuk-synthetic-test-app:
+    can_be_deployed: true
+    required_status_checks:
+      additional_contexts:
+        - Test
+
   govuk-user-reviewer:
     visibility: private
     homepage_url: "https://github.com/alphagov/govuk-rfcs/pull/75"
