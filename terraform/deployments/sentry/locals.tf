@@ -9,6 +9,7 @@ locals {
     "ckanext-datagovuk",
     "collections",
     "collections-publisher",
+    "content-block-manager",
     "content-data-admin",
     "content-data-api",
     "content-publisher",
