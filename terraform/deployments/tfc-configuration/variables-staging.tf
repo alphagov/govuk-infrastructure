@@ -257,6 +257,24 @@ module "variable-set-rds-staging" {
         project                      = "GOV.UK - Publishing"
       }
 
+      content_block_manager = {
+        engine                      = "postgres"
+        engine_version              = "17"
+        allow_major_version_upgrade = true
+        engine_params = {
+          log_min_duration_statement = { value = 10000 }
+          log_statement              = { value = "all" }
+          deadlock_timeout           = { value = 2500 }
+          log_lock_waits             = { value = 1 }
+        }
+        engine_params_family         = "postgres17"
+        name                         = "content_block_manager"
+        allocated_storage            = 100
+        instance_class               = "db.t4g.small"
+        performance_insights_enabled = true
+        project                      = "GOV.UK - Publishing"
+      }
+
       content_data_admin = {
         engine         = "postgres"
         engine_version = "14.18"
