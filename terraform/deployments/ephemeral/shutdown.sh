@@ -225,5 +225,6 @@ helm_shutdown
 retry 2 tfc_do_destroy "datagovuk-infrastructure"
 retry 2 tfc_do_destroy "rds"
 retry 2 tfc_do_destroy "cluster-services"
+retry 2 tfc_do_destroy "cluster-access"
 retry 2 tfc_do_destroy "cluster-infrastructure"
 retry 2 tfc_do_destroy "vpc"
