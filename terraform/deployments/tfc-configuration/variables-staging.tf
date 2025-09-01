@@ -268,7 +268,7 @@ module "variable-set-rds-staging" {
           log_lock_waits             = { value = 1 }
         }
         engine_params_family         = "postgres17"
-        name                         = "content_block_manager"
+        name                         = "content-block-manager"
         allocated_storage            = 100
         instance_class               = "db.t4g.small"
         performance_insights_enabled = true
