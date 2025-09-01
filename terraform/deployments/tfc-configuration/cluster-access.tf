@@ -6,6 +6,7 @@ module "cluster-access-integration" {
   workspace_desc    = "This module manages user access to the EKS cluster"
   workspace_tags    = ["integration", "cluster-access", "eks", "aws"]
   terraform_version = var.terraform_version
+  auto_apply        = true
   execution_mode    = "remote"
   working_directory = "/terraform/deployments/cluster-access/"
   trigger_patterns  = ["/terraform/deployments/cluster-access/**/*"]
@@ -27,6 +28,8 @@ module "cluster-access-integration" {
     module.variable-set-common.id,
     module.variable-set-integration.id
   ]
+
+  run_trigger_source_workspaces = ["govuk-aws-users-integration"]
 }
 
 module "cluster-access-staging" {
@@ -37,6 +40,7 @@ module "cluster-access-staging" {
   workspace_desc    = "This module manages user access to the EKS cluster"
   workspace_tags    = ["staging", "cluster-access", "eks", "aws"]
   terraform_version = var.terraform_version
+  auto_apply        = true
   execution_mode    = "remote"
   working_directory = "/terraform/deployments/cluster-access/"
   trigger_patterns  = ["/terraform/deployments/cluster-access/**/*"]
@@ -57,6 +61,8 @@ module "cluster-access-staging" {
     module.variable-set-common.id,
     module.variable-set-staging.id
   ]
+
+  run_trigger_source_workspaces = ["govuk-aws-users-staging"]
 }
 
 module "cluster-access-production" {
@@ -67,6 +73,7 @@ module "cluster-access-production" {
   workspace_desc    = "This module manages user access to the EKS cluster"
   workspace_tags    = ["production", "cluster-access", "eks", "aws"]
   terraform_version = var.terraform_version
+  auto_apply        = true
   execution_mode    = "remote"
   working_directory = "/terraform/deployments/cluster-access/"
   trigger_patterns  = ["/terraform/deployments/cluster-access/**/*"]
@@ -87,4 +94,6 @@ module "cluster-access-production" {
     module.variable-set-common.id,
     module.variable-set-production.id
   ]
+
+  run_trigger_source_workspaces = ["govuk-aws-users-production"]
 }
