@@ -1,15 +1,16 @@
 module "cluster-access-integration" {
   source = "github.com/alphagov/terraform-govuk-tfe-workspacer"
 
-  organization      = var.organization
-  workspace_name    = "cluster-access-integration"
-  workspace_desc    = "This module manages user access to the EKS cluster"
-  workspace_tags    = ["integration", "cluster-access", "eks", "aws"]
-  terraform_version = var.terraform_version
-  auto_apply        = true
-  execution_mode    = "remote"
-  working_directory = "/terraform/deployments/cluster-access/"
-  trigger_patterns  = ["/terraform/deployments/cluster-access/**/*"]
+  organization           = var.organization
+  workspace_name         = "cluster-access-integration"
+  workspace_desc         = "This module manages user access to the EKS cluster"
+  workspace_tags         = ["integration", "cluster-access", "eks", "aws"]
+  terraform_version      = var.terraform_version
+  auto_apply             = true
+  auto_apply_run_trigger = true
+  execution_mode         = "remote"
+  working_directory      = "/terraform/deployments/cluster-access/"
+  trigger_patterns       = ["/terraform/deployments/cluster-access/**/*"]
 
   project_name = "govuk-infrastructure"
   vcs_repo = {
@@ -35,15 +36,16 @@ module "cluster-access-integration" {
 module "cluster-access-staging" {
   source = "github.com/alphagov/terraform-govuk-tfe-workspacer"
 
-  organization      = var.organization
-  workspace_name    = "cluster-access-staging"
-  workspace_desc    = "This module manages user access to the EKS cluster"
-  workspace_tags    = ["staging", "cluster-access", "eks", "aws"]
-  terraform_version = var.terraform_version
-  auto_apply        = true
-  execution_mode    = "remote"
-  working_directory = "/terraform/deployments/cluster-access/"
-  trigger_patterns  = ["/terraform/deployments/cluster-access/**/*"]
+  organization           = var.organization
+  workspace_name         = "cluster-access-staging"
+  workspace_desc         = "This module manages user access to the EKS cluster"
+  workspace_tags         = ["staging", "cluster-access", "eks", "aws"]
+  terraform_version      = var.terraform_version
+  auto_apply             = true
+  auto_apply_run_trigger = true
+  execution_mode         = "remote"
+  working_directory      = "/terraform/deployments/cluster-access/"
+  trigger_patterns       = ["/terraform/deployments/cluster-access/**/*"]
 
   project_name = "govuk-infrastructure"
   vcs_repo = {
@@ -68,15 +70,16 @@ module "cluster-access-staging" {
 module "cluster-access-production" {
   source = "github.com/alphagov/terraform-govuk-tfe-workspacer"
 
-  organization      = var.organization
-  workspace_name    = "cluster-access-production"
-  workspace_desc    = "This module manages user access to the EKS cluster"
-  workspace_tags    = ["production", "cluster-access", "eks", "aws"]
-  terraform_version = var.terraform_version
-  auto_apply        = true
-  execution_mode    = "remote"
-  working_directory = "/terraform/deployments/cluster-access/"
-  trigger_patterns  = ["/terraform/deployments/cluster-access/**/*"]
+  organization           = var.organization
+  workspace_name         = "cluster-access-production"
+  workspace_desc         = "This module manages user access to the EKS cluster"
+  workspace_tags         = ["production", "cluster-access", "eks", "aws"]
+  terraform_version      = var.terraform_version
+  auto_apply             = true
+  auto_apply_run_trigger = true
+  execution_mode         = "remote"
+  working_directory      = "/terraform/deployments/cluster-access/"
+  trigger_patterns       = ["/terraform/deployments/cluster-access/**/*"]
 
   project_name = "govuk-infrastructure"
   vcs_repo = {
