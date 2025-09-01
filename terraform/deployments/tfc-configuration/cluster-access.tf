@@ -28,6 +28,8 @@ module "cluster-access-integration" {
     module.variable-set-common.id,
     module.variable-set-integration.id
   ]
+
+  run_trigger_source_workspaces = ["govuk-aws-users-integration"]
 }
 
 module "cluster-access-staging" {
@@ -59,6 +61,8 @@ module "cluster-access-staging" {
     module.variable-set-common.id,
     module.variable-set-staging.id
   ]
+
+  run_trigger_source_workspaces = ["govuk-aws-users-staging"]
 }
 
 module "cluster-access-production" {
@@ -90,4 +94,6 @@ module "cluster-access-production" {
     module.variable-set-common.id,
     module.variable-set-production.id
   ]
+
+  run_trigger_source_workspaces = ["govuk-aws-users-production"]
 }
