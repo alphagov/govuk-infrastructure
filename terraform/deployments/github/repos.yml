@@ -91,6 +91,12 @@ repos:
         - Playwright / Run Tests
         - Vitest / Run Tests
 
+  content-block-manager:
+    can_be_deployed: true
+    homepage_url: "https://docs.publishing.service.gov.uk/apps/content-block-manager.html"
+    required_status_checks:
+      standard_contexts: *standard_govuk_rails_checks
+
   content-data-admin:
     can_be_deployed: true
     homepage_url: "https://docs.publishing.service.gov.uk/apps/content-data-admin.html"
@@ -314,12 +320,6 @@ repos:
     need_production_access_to_merge: false
     allow_squash_merge: true
     push_allowances: []
-
-  govuk-content-block-manager:
-    can_be_deployed: true
-    homepage_url: "https://docs.publishing.service.gov.uk/apps/govuk-content-block-manager.html"
-    required_status_checks:
-      standard_contexts: *standard_govuk_rails_checks
 
   govuk-dependabot-merger:
     required_status_checks:
