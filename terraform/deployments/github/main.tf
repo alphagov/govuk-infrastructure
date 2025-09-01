@@ -174,6 +174,11 @@ data "github_repository_pull_requests" "govuk_repos_prs" {
   state           = "open"
 }
 
+moved {
+  from = github_repository.govuk_repos["govuk-content-block-manager"]
+  to   = github_repository.govuk_repos["content-block-manager"]
+}
+
 resource "github_repository" "govuk_repos" {
   for_each = local.repositories
 
