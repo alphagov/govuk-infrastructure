@@ -58,6 +58,7 @@ locals {
     "govuk-e2e-tests",
     "govuk-fastly-diff-generator",
     "govuk-replatform-test-app",
+    "govuk-synthetic-test-app",
     "imminence",
     "licensify-backend",
     "licensify-feed",
