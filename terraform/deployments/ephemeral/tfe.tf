@@ -80,7 +80,7 @@ module "cluster_access" {
     ship_kubernetes_events_to_logit = false
   }
 
-  depends_on = [module.cluster_infrastructure, tfe_project.project]
+  depends_on = [module.cluster_infrastructure, module.cluster_services, tfe_project.project]
 }
 
 module "cluster_services" {
@@ -94,7 +94,7 @@ module "cluster_services" {
     ship_kubernetes_events_to_logit = false
   }
 
-  depends_on = [module.cluster_access, tfe_project.project]
+  depends_on = [module.cluster_infrastructure, tfe_project.project]
 }
 
 module "rds" {
