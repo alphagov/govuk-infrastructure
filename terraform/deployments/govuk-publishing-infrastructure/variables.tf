@@ -8,6 +8,11 @@ variable "govuk_environment" {
   description = "GOV.UK environment where resources are being deployed"
 }
 
+variable "publishing_service_domain" {
+  type        = string
+  description = "FQDN of the user-facing domain for the publishing apps, e.g. staging.publishing.service.gov.uk"
+}
+
 variable "force_destroy" {
   type        = bool
   description = "Setting for force_destroy on resources such as S3 buckets and Route53 zones. For use in non-production environments to allow for automated tear-down."
@@ -136,6 +141,12 @@ variable "backend_public_base_rate_warning" {
 variable "backend_public_base_rate_limit" {
   type        = number
   description = "An enforced rate limit threshold for the backend public web ACL"
+  default     = 1000
+}
+
+variable "chat_domain_base_rate_limit" {
+  type        = number
+  description = "An enforced rate limit threshold for the chat domain in the backend public web ACL"
   default     = 1000
 }
 

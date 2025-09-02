@@ -217,6 +217,102 @@ resource "aws_wafv2_web_acl" "backend_public" {
     }
   }
 
+  # Rate limit for chat domain traffic per IP looking back over the last 5 minutes
+  # this is checked every 30s
+  rule {
+    name     = "chat-domain-rate-limit"
+    priority = 25
+
+    action {
+      block {
+        custom_response {
+          response_code = 429
+
+          response_header {
+            name  = "Retry-After"
+            value = 30
+          }
+
+          response_header {
+            name  = "Cache-Control"
+            value = "max-age=0, private"
+          }
+
+          custom_response_body_key = "backend-public-rule-429"
+        }
+      }
+    }
+
+    statement {
+      and_statement {
+        statement {
+          byte_match_statement {
+            positional_constraint = "EXACTLY"
+            search_string         = "chat.${var.publishing_service_domain}"
+
+            field_to_match {
+              single_header {
+                name = "host"
+              }
+            }
+
+            text_transformation {
+              priority = 1
+              type     = "LOWERCASE"
+            }
+          }
+        }
+
+        statement {
+          rate_based_statement {
+            limit              = var.chat_domain_base_rate_limit
+            aggregate_key_type = "IP"
+          }
+        }
+      }
+    }
+
+    visibility_config {
+      cloudwatch_metrics_enabled = true
+      metric_name                = "chat-domain-rate-limit"
+      sampled_requests_enabled   = true
+    }
+  }
+
+  # Allow chat domain traffic to bypass further rate limiting rules
+  rule {
+    name     = "chat-domain-allow"
+    priority = 26
+
+    action {
+      allow {}
+    }
+
+    statement {
+      byte_match_statement {
+        positional_constraint = "EXACTLY"
+        search_string         = "chat.${var.publishing_service_domain}"
+
+        field_to_match {
+          single_header {
+            name = "host"
+          }
+        }
+
+        text_transformation {
+          priority = 1
+          type     = "LOWERCASE"
+        }
+      }
+    }
+
+    visibility_config {
+      cloudwatch_metrics_enabled = true
+      metric_name                = "chat-domain-allow"
+      sampled_requests_enabled   = true
+    }
+  }
+
   # This rule is intended for monitoring only
   # set a base rate limit per IP looking back over the last 5 minutes
   # this is checked every 30s
