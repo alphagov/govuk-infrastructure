@@ -273,6 +273,33 @@ resource "google_bigquery_table" "results" {
   }
 }
 
+# top level dataset to store VAIS (i.e. out-of-the-box) automated evaluation output
+resource "google_bigquery_dataset" "vais_evaluation_output" {
+  dataset_id                 = "vais_evaluation_output"
+  location                   = var.gcp_region
+  delete_contents_on_destroy = true
+}
+
+resource "google_bigquery_table" "vais_results" {
+  dataset_id          = google_bigquery_dataset.vais_evaluation_output.dataset_id
+  table_id            = "results"
+  description         = "Query-level results of Vertex AI Search evaluations"
+  depends_on          = [google_storage_bucket.vais_evaluation_output]
+  deletion_protection = false
+  external_data_configuration {
+    autodetect    = false
+    source_format = "NEWLINE_DELIMITED_JSON"
+    schema        = file("files/evaluation-list-results-schema.json")
+    source_uris = [
+      join("", [google_storage_bucket.automated_evaluation_output.url, "/", "*results.json"])
+    ]
+    hive_partitioning_options {
+      mode              = "CUSTOM"
+      source_uri_prefix = join("", [google_storage_bucket.vais_evaluation_output.url, "/{judgement_list:STRING}/{partition_date:DATE}/{create_time:TIMESTAMP}/{evaluation_id:STRING}"])
+    }
+  }
+}
+
 ### judgement lists
 resource "google_storage_bucket" "automated_evaluation_judgement_lists" {
   name     = "${var.gcp_project_id}_automated_evaluation_judgement_lists"
