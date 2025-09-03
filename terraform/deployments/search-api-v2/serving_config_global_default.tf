@@ -119,6 +119,9 @@ locals {
     # GOV.UK app beta (note double appearance of HTML publications)
     "/government/publications/govuk-app-testing-privacy-notice-how-we-use-your-data",
     "/government/publications/govuk-app-testing-privacy-notice-how-we-use-your-data/govuk-app-testing-privacy-notice-how-we-use-your-data",
+    # GOV.UK chat is restricted to a private, limited test and should not be easily discoverable
+    "/guidance/about-govuk-chat",
+    "/guidance/govuk-chat-terms-and-conditions",
   ]
   filtered_pages_expr = join(",", [for page in local.filtered_pages : "\"${page}\""])
 }
