@@ -30,7 +30,8 @@ data "aws_iam_policy_document" "bedrock_access" {
     sid = "BedrockAssumeRolePolicy"
     actions = [
       "bedrock:InvokeModel",
-      "bedrock:InvokeModelWithResponseStream"
+      "bedrock:InvokeModelWithResponseStream",
+      "bedrock:ListFoundationModels"
     ]
     effect    = "Allow"
     resources = ["*"]
