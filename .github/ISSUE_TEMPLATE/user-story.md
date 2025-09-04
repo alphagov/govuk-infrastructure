@@ -18,15 +18,15 @@ assignees: ''
 
 List anything the solution must do or be (behaviour, performance, security, UX, etc.).
 
-- [ ] 
+- [ ]
 
 ---
 
 ### Acceptance Criteria
 
-- [ ] Everything in **What’s Needed** is delivered.
-- [ ] Any changes during delivery are reflected in this story.
-- [ ] Impacted users have been informed appropriately (e.g. change logs, Slack, docs).
+Clear, measurable conditions to verify the story is complete and valuable.
+
+- [ ]
 
 ---
 
@@ -38,13 +38,13 @@ Briefly describe how you’ll let users know about the change.
 
 ### Assumptions (optional)
 
-- 
+-
 
 ---
 
 ### Risks & Mitigation (optional)
 
-- 
+-
 
 ---
 
@@ -62,17 +62,26 @@ I want (some action): The specific action, functionality, or change the user is 
 
 so that (some result): The benefit or reason behind the action.
 
-What’s Needed: A single list covering both functional and non-functional aspects—what the feature must do and how it must behave (performance, security, reliability, etc.).
+What’s Needed:
+A single list covering both functional and non-functional aspects—what the feature must do and how it must behave (performance, security, reliability, etc.).
 
-Acceptance Criteria: Clear, measurable conditions to verify the story is complete and valuable.
+Acceptance Criteria:
+Clear, measurable conditions to verify the story is complete and valuable.
+It's assumed that:
+- everything in **What’s Needed** is delivered.
+- impacted users have been informed appropriately (e.g. change logs, Slack, docs).
 
-User Comms Plan: How users will be made aware of relevant changes or impacts.
+User Comms Plan:
+How users will be made aware of relevant changes or impacts.
 
-Assumptions: Important assumptions informing delivery.
+Assumptions:
+Important assumptions informing delivery.
 
-Risks & Mitigation: Risks associated with the story and how they will be handled.
+Risks & Mitigation:
+Risks associated with the story and how they will be handled.
 
-Notes: Any other useful information.
+Notes:
+Any other useful information.
 
-Tip: Update this story if the scope changes during delivery to maintain clarity for everyone.
+Tip: Update this issue if the scope changes during delivery to maintain clarity for everyone.
 -->
