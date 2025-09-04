@@ -1,0 +1,222 @@
+[
+  {
+    "name": "judgement_list",
+    "type": "STRING",
+    "mode": "REQUIRED"
+  },
+  {
+    "name": "partition_date",
+    "type": "DATE",
+    "mode": "REQUIRED"
+  },
+  {
+    "name": "create_time",
+    "type": "TIMESTAMP",
+    "mode": "REQUIRED"
+  },
+  {
+    "name": "evaluation_id",
+    "type": "STRING",
+    "mode": "REQUIRED"
+  },
+  {
+    "name": "evaluation_results",
+    "type": "RECORD",
+    "mode": "REPEATED",
+    "fields": [
+      {
+        "name": "sample_query",
+        "type": "RECORD",
+        "mode": "NULLABLE",
+        "fields": [
+          {
+            "name": "name",
+            "type": "STRING",
+            "mode": "NULLABLE"
+          },
+          {
+            "name": "create_time",
+            "type": "TIMESTAMP",
+            "mode": "NULLABLE"
+          },
+          {
+            "name": "query_entry",
+            "type": "RECORD",
+            "mode": "NULLABLE",
+            "fields": [
+              {
+                "name": "query",
+                "type": "STRING",
+                "mode": "NULLABLE"
+              },
+              {
+                "name": "targets",
+                "type": "RECORD",
+                "mode": "REPEATED",
+                "fields": [
+                  {
+                    "name": "uri",
+                    "type": "STRING",
+                    "mode": "NULLABLE"
+                  },
+                  {
+                    "name": "page_numbers",
+                    "type": "INTEGER",
+                    "mode": "REPEATED"
+                  },
+                  {
+                    "name": "score",
+                    "type": "BIGNUMERIC",
+                    "mode": "NULLABLE"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "quality_metrics",
+        "type": "RECORD",
+        "mode": "NULLABLE",
+        "fields": [
+          {
+            "name": "doc_recall",
+            "type": "RECORD",
+            "mode": "NULLABLE",
+            "fields": [
+              {
+                "name": "top_1",
+                "type": "BIGNUMERIC",
+                "mode": "NULLABLE"
+              },
+              {
+                "name": "top_3",
+                "type": "BIGNUMERIC",
+                "mode": "NULLABLE"
+              },
+              {
+                "name": "top_5",
+                "type": "BIGNUMERIC",
+                "mode": "NULLABLE"
+              },
+              {
+                "name": "top_10",
+                "type": "BIGNUMERIC",
+                "mode": "NULLABLE"
+              }
+            ]
+          },
+          {
+            "name": "doc_precision",
+            "type": "RECORD",
+            "mode": "NULLABLE",
+            "fields": [
+              {
+                "name": "top_1",
+                "type": "BIGNUMERIC",
+                "mode": "NULLABLE"
+              },
+              {
+                "name": "top_10",
+                "type": "BIGNUMERIC",
+                "mode": "NULLABLE"
+              },
+              {
+                "name": "top_5",
+                "type": "BIGNUMERIC",
+                "mode": "NULLABLE"
+              },
+              {
+                "name": "top_3",
+                "type": "BIGNUMERIC",
+                "mode": "NULLABLE"
+              }
+            ]
+          },
+          {
+            "name": "doc_ndcg",
+            "type": "RECORD",
+            "mode": "NULLABLE",
+            "fields": [
+              {
+                "name": "top_1",
+                "type": "BIGNUMERIC",
+                "mode": "NULLABLE"
+              },
+              {
+                "name": "top_10",
+                "type": "BIGNUMERIC",
+                "mode": "NULLABLE"
+              },
+              {
+                "name": "top_5",
+                "type": "BIGNUMERIC",
+                "mode": "NULLABLE"
+              },
+              {
+                "name": "top_3",
+                "type": "BIGNUMERIC",
+                "mode": "NULLABLE"
+              }
+            ]
+          },
+          {
+            "name": "page_recall",
+            "type": "RECORD",
+            "mode": "NULLABLE",
+            "fields": [
+              {
+                "name": "top_1",
+                "type": "BIGNUMERIC",
+                "mode": "NULLABLE"
+              },
+              {
+                "name": "top_10",
+                "type": "BIGNUMERIC",
+                "mode": "NULLABLE"
+              },
+              {
+                "name": "top_5",
+                "type": "BIGNUMERIC",
+                "mode": "NULLABLE"
+              },
+              {
+                "name": "top_3",
+                "type": "BIGNUMERIC",
+                "mode": "NULLABLE"
+              }
+            ]
+          },
+          {
+            "name": "page_ndcg",
+            "type": "RECORD",
+            "mode": "NULLABLE",
+            "fields": [
+              {
+                "name": "top_1",
+                "type": "BIGNUMERIC",
+                "mode": "NULLABLE"
+              },
+              {
+                "name": "top_10",
+                "type": "BIGNUMERIC",
+                "mode": "NULLABLE"
+              },
+              {
+                "name": "top_5",
+                "type": "BIGNUMERIC",
+                "mode": "NULLABLE"
+              },
+              {
+                "name": "top_3",
+                "type": "BIGNUMERIC",
+                "mode": "NULLABLE"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]
