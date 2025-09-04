@@ -321,6 +321,9 @@ repos:
     allow_squash_merge: true
     push_allowances: []
 
+  govuk-data-science-workshop:
+      archived: true
+
   govuk-dependabot-merger:
     required_status_checks:
       standard_contexts: *standard_security_checks
@@ -975,7 +978,6 @@ repos:
         - "test"
 
   ckan-mock-harvest-sources: {}
-  govuk-data-science-workshop: {}
   govuk-mobile-backend: {}
   govuk-mobile-backend-config: {}
   govuk-pact-broker: {}
