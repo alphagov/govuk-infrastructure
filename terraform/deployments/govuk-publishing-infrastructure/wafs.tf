@@ -5,7 +5,7 @@
 
 module "infrastructure-sensitive_wafs" {
   source  = "app.terraform.io/govuk/infrastructure-sensitive/govuk//modules/wafs"
-  version = "0.0.23"
+  version = "0.0.24"
 
   cache_public_base_rate_limit = var.cache_public_base_rate_limit
   cache_public_post_rate_limit = var.cache_public_post_rate_limit
