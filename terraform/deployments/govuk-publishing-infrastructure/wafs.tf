@@ -125,14 +125,7 @@ resource "aws_wafv2_ip_set" "govuk_requesting_ips" {
   description        = "The IP addresses used by our infra to make requests that hit the cache LB."
   scope              = "REGIONAL"
   ip_address_version = "IPV4"
-  # addresses          = formatlist("%s/32", data.tfe_outputs.cluster_infrastructure.nonsensitive_values.public_nat_gateway_ips)
-
-  lifecycle {
-    ignore_changes = [
-      addresses
-    ]
-  }
-
+  addresses          = formatlist("%s/32", data.tfe_outputs.cluster_infrastructure.nonsensitive_values.public_nat_gateway_ips)
 }
 
 resource "aws_wafv2_ip_set" "high_request_rate" {
@@ -140,13 +133,7 @@ resource "aws_wafv2_ip_set" "high_request_rate" {
   description        = "Source addresses from which we allow a higher ratelimit."
   scope              = "REGIONAL"
   ip_address_version = "IPV4"
-  # addresses          = var.allow_high_request_rate_from_cidrs
-
-  lifecycle {
-    ignore_changes = [
-      addresses
-    ]
-  }
+  addresses          = var.allow_high_request_rate_from_cidrs
 }
 
 resource "aws_wafv2_web_acl" "backend_public" {
