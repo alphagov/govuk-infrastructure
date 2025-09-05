@@ -55,7 +55,6 @@ locals {
 
   extra_repositories = [
     "clamav",
-    "govuk-e2e-tests",
     "govuk-fastly-diff-generator",
     "govuk-replatform-test-app",
     "imminence",
@@ -66,6 +65,11 @@ locals {
     "publisher-on-pg",
     "search-api-learn-to-rank",
     "toolbox",
+  ]
+
+  // Add repos to this list if you want lambda to have permission to pull the image
+  allow_lambda_pull = [
+    "govuk-fastly-diff-generator"
   ]
 }
 
