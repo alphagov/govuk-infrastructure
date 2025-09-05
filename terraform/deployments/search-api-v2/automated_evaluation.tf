@@ -291,7 +291,7 @@ resource "google_bigquery_table" "vais_results" {
     source_format = "NEWLINE_DELIMITED_JSON"
     schema        = file("files/evaluation-list-results-schema.json")
     source_uris = [
-      join("", [google_storage_bucket.automated_evaluation_output.url, "/", "*results.json"])
+      join("", [google_storage_bucket.vais_evaluation_output.url, "/", "*results.json"])
     ]
     hive_partitioning_options {
       mode              = "CUSTOM"
