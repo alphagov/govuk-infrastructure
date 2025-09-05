@@ -67,6 +67,11 @@ locals {
     "search-api-learn-to-rank",
     "toolbox",
   ]
+
+  // Add repos to this list if you want lambda to have permission to pull the image
+  allow_lambda_pull = [
+    "govuk-fastly-diff-generator"
+  ]
 }
 
 data "aws_caller_identity" "current" {}
