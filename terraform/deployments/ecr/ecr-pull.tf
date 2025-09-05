@@ -1,5 +1,5 @@
 locals {
-  ecr_repos = toset([for repo in local.repositories : aws_ecr_repository.github_repositories[repo].name])
+  ecr_repos = { for repo in local.repositories : aws_ecr_repository.github_repositories[repo].name => repo }
 }
 
 data "aws_iam_policy_document" "allow_cross_account_pull_from_ecr" {
@@ -21,7 +21,7 @@ data "aws_iam_policy_document" "allow_cross_account_pull_from_ecr" {
   }
 
   dynamic "statement" {
-    for_each = contains(local.allow_lambda_pull, each.key) ? [each.key] : []
+    for_each = contains(local.allow_lambda_pull, each.value) ? [each.key] : []
 
     content {
       sid    = "AllowLambdaToPull"
