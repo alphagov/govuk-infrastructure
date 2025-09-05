@@ -14,10 +14,13 @@
     "terraform"
   ],
   "terraform": {
-    "fileMatch": [
-      "^/terraform/.*\\.tf$"
+    "managerFilePatterns": [
+      "/^/terraform/.*\\.tf$/"
     ]
   },
   "prHourlyLimit": 20,
-  "labels": ["dependencies", "renovate"]
+  "labels": [
+    "dependencies",
+    "renovate"
+  ]
 }
