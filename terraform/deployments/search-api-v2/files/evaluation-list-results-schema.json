@@ -1,21 +1,6 @@
 [
   {
-    "name": "judgement_list",
-    "type": "STRING",
-    "mode": "REQUIRED"
-  },
-  {
-    "name": "partition_date",
-    "type": "DATE",
-    "mode": "REQUIRED"
-  },
-  {
-    "name": "create_time",
-    "type": "TIMESTAMP",
-    "mode": "REQUIRED"
-  },
-  {
-    "name": "evaluation_id",
+    "name": "evaluation_name",
     "type": "STRING",
     "mode": "REQUIRED"
   },

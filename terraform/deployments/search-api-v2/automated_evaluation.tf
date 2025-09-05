@@ -295,7 +295,7 @@ resource "google_bigquery_table" "vais_results" {
     ]
     hive_partitioning_options {
       mode              = "CUSTOM"
-      source_uri_prefix = join("", [google_storage_bucket.vais_evaluation_output.url, "/{judgement_list:STRING}/{partition_date:DATE}/{create_time:TIMESTAMP}/{evaluation_id:STRING}"])
+      source_uri_prefix = join("", [google_storage_bucket.vais_evaluation_output.url, "/{judgement_list:STRING}/{partition_date:DATE}/{create_time:TIMESTAMP}"])
     }
   }
 }
