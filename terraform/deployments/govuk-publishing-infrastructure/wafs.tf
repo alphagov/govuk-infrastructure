@@ -29,12 +29,6 @@ resource "aws_wafv2_web_acl" "default" {
     allow {}
   }
 
-  lifecycle {
-    ignore_changes = [
-      rule
-    ]
-  }
-
   rule {
     name     = "x-always-block_web_acl_rule"
     priority = 1
@@ -142,12 +136,6 @@ resource "aws_wafv2_web_acl" "backend_public" {
 
   default_action {
     allow {}
-  }
-
-  lifecycle {
-    ignore_changes = [
-      rule
-    ]
   }
 
   # this rule matches any request that contains the header X-Always-Block: true
@@ -361,12 +349,6 @@ resource "aws_wafv2_web_acl" "bouncer_public" {
 
   default_action {
     allow {}
-  }
-
-  lifecycle {
-    ignore_changes = [
-      rule
-    ]
   }
 
   # this rule matches any request that contains the header X-Always-Block: true
