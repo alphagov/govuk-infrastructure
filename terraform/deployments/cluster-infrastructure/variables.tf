@@ -205,3 +205,15 @@ variable "authentication_mode" {
   default     = "API"
   description = "Authentication mode to use for the cluster"
 }
+
+variable "use_ecr_vpc_endpoints" {
+  type        = bool
+  description = "If true, create VPC endpoints for ECR and ECR Docker, to avoid using the NAT gateway for this traffic."
+  default     = false
+}
+
+variable "use_secretsmanager_endpoints" {
+  type        = bool
+  description = "If true, create VPC endpoints for Secrets Manager, to avoid using the NAT gateway for this traffic."
+  default     = false
+}
