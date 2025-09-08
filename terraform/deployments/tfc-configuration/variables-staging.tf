@@ -76,6 +76,9 @@ module "variable-set-staging" {
     licensify_backup_retention_period         = 1
     shared_documentdb_instance_count          = 1
     shared_documentdb_backup_retention_period = 1
+
+    use_ecr_vpc_endpoints        = true
+    use_secretsmanager_endpoints = true
   }
 }
 
