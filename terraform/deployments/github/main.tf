@@ -75,6 +75,11 @@ locals {
     for name, repo in local.repositories : data.github_repository.govuk["alphagov/${name}"]
     if try(repo.pact_publisher, false) && contains(keys(data.github_repository.govuk), "alphagov/${name}")
   ]
+
+  ithc_repos = [
+    for name, repo in local.repositories : name
+    if try(repo.teams.govuk_ithc, "") != ""
+  ]
 }
 
 resource "github_team" "govuk_ci_bots" {
@@ -116,32 +121,32 @@ data "github_team" "co_platform_engineering" {
 }
 
 resource "github_team_repository" "govuk_production_admin_repos" {
-  for_each   = local.repositories
+  for_each   = github_repository.govuk_repos
   repository = each.key
   team_id    = github_team.govuk_production_admin.id
-  permission = try(each.value.teams["govuk_production_admin"], "admin")
+  permission = try(local.repositories[each.key].teams["govuk_production_admin"], "admin")
 }
 
 resource "github_team_repository" "govuk_ci_bots_repos" {
-  for_each   = local.repositories
+  for_each   = github_repository.govuk_repos
   repository = each.key
   team_id    = github_team.govuk_ci_bots.id
-  permission = try(each.value.teams["govuk_ci_bots"], "admin")
+  permission = try(local.repositories[each.key].teams["govuk_ci_bots"], "admin")
 }
 
 resource "github_team_repository" "govuk_repos" {
-  for_each   = local.repositories
+  for_each   = github_repository.govuk_repos
   repository = each.key
   team_id    = github_team.govuk.id
-  permission = try(each.value.teams["govuk"], "push")
+  permission = try(local.repositories[each.key].teams["govuk"], "push")
 }
 
 resource "github_team_repository" "govuk_production_deploy_repos" {
-  for_each   = local.repositories
+  for_each   = github_repository.govuk_repos
   repository = each.key
   team_id    = github_team.govuk_production_deploy.id
   # give prod deploy the same permissions as the GOV.UK team
-  permission = try(each.value.teams["govuk"], "push")
+  permission = try(local.repositories[each.key].teams["govuk"], "push")
 }
 
 
@@ -155,13 +160,11 @@ resource "github_team_repository" "co_platform_engineering_repos" {
 resource "github_team_repository" "ithc_repos" {
   # Only grant ITHC access to repositories that have been explicitly configured
   # to be accessible by the ITHC team in repos.yml.
-  for_each = {
-    for name, repo in local.repositories : name => repo
-    if lookup(lookup(repo, "teams", {}), "govuk_ithc", "") != ""
-  }
+  for_each = { for name, repo in github_repository.govuk_repos : name => repo if contains(local.ithc_repos, name) }
+
   repository = each.key
   team_id    = github_team.govuk_ithc.id
-  permission = try(each.value.teams["govuk_ithc"], "pull")
+  permission = try(local.repositories[each.key].teams["govuk_ithc"], "pull")
 }
 
 data "github_repository_pull_requests" "govuk_repos_prs" {
