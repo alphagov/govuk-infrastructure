@@ -312,3 +312,8 @@ resource "github_actions_organization_secret_repositories" "slack_webhook_url" {
   secret_name             = "GOVUK_SLACK_WEBHOOK_URL" # pragma: allowlist secret
   selected_repository_ids = [for repo in data.github_repository.govuk : repo.repo_id]
 }
+
+import {
+  to = github_branch_protection.govuk_repos["router-api"]
+  id = "alphagov/router-api:main"
+}
