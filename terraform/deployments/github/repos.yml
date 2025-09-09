@@ -196,6 +196,9 @@ repos:
         - Lint Ruby / Run RuboCop
         - Test Ruby / Run RSpec
 
+  fastly-exporter:
+    archived: true
+
   feedback:
     can_be_deployed: true
     homepage_url: "https://docs.publishing.service.gov.uk/apps/feedback.html"
@@ -714,6 +717,9 @@ repos:
     required_status_checks:
       additional_contexts:
         - Test Go
+
+  router-api:
+    archived: true
 
   rubocop-govuk:
     publishes_gem: true

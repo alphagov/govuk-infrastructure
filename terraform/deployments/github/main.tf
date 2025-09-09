@@ -106,11 +106,6 @@ resource "github_team" "govuk_ithc" {
   description = "To grant temporary access to our GitHub repositories and services that require GitHub authentication to ITHC testers"
 }
 
-import {
-  to = github_team.govuk_production_deploy
-  id = "gov-uk-production-deploy"
-}
-
 resource "github_team" "govuk" {
   name    = "GOV.UK"
   privacy = "closed"
@@ -319,6 +314,11 @@ resource "github_actions_organization_secret_repositories" "slack_webhook_url" {
 }
 
 import {
-  to = github_repository.govuk_repos["govuk-synthetic-test-app"]
-  id = "govuk-synthetic-test-app"
+  to = github_repository.govuk_repos["router-api"]
+  id = "router-api"
+}
+
+import {
+  to = github_repository.govuk_repos["fastly-exporter"]
+  id = "fastly-exporter"
 }
