@@ -2,6 +2,7 @@ resource "google_project_iam_custom_role" "gds_bigquery_read_access" {
   description = "Permissions to read BigQuery datasets and tables"
   permissions = [
     "bigquery.datasets.get",
+    "bigquery.datasets.getIamPolicy",
     "bigquery.tables.get",
     "bigquery.tables.getData"
   ]
@@ -90,6 +91,7 @@ resource "google_project_iam_custom_role" "gds_bigquery_editor" {
     "bigquery.datasets.create",
     "bigquery.datasets.get",
     "bigquery.datasets.getIamPolicy",
+    "bigquery.datasets.setIamPolicy",
     "bigquery.datasets.update",
     "bigquery.datasets.updateTag",
     "bigquery.jobs.create",
