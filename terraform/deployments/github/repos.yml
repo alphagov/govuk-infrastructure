@@ -197,7 +197,7 @@ repos:
         - Test Ruby / Run RSpec
 
   fastly-exporter:
-    standard_contexts: *standard_security_checks
+    archived: true
 
   feedback:
     can_be_deployed: true
@@ -719,7 +719,7 @@ repos:
         - Test Go
 
   router-api:
-    standard_contexts: *standard_security_checks
+    archived: true
 
   rubocop-govuk:
     publishes_gem: true
