@@ -315,5 +315,5 @@ resource "github_actions_organization_secret_repositories" "slack_webhook_url" {
 
 import {
   to = github_branch_protection.govuk_repos["router-api"]
-  id = "alphagov/router-api:main"
+  id = "router-api:main"
 }
