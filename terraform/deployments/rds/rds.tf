@@ -102,9 +102,11 @@ resource "aws_db_snapshot" "unencrypted_snapshot" {
 }
 
 resource "aws_db_snapshot_copy" "encrypted_snapshot" {
-  for_each = aws_db_snapshot.unencrypted_snapshot
+  for_each = {
+    for db_name, db in var.databases : db_name => db if try(db.create_encrypted_snapshot, false)
+  }
 
-  source_db_snapshot_identifier = each.value.db_snapshot_identifier
+  source_db_snapshot_identifier = aws_db_snapshot.unencrypted_snapshot[each.key].db_snapshot_identifier
   target_db_snapshot_identifier = "${local.identifier_prefix}${each.value.name}-${each.value.engine}-post-encryption"
   kms_key_id                    = "alias/aws/rds"
 }
