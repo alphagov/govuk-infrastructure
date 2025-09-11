@@ -25,6 +25,7 @@ provider "aws" {
       owner                = "govuk-platform-engineering@digital.cabinet-office.gov.uk"
       repository           = "govuk-infrastructure"
       terraform-deployment = basename(abspath(path.root))
+      Service              = "govuk-chat"
     }
   }
 }
