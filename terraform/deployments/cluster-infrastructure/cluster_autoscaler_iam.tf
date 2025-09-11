@@ -2,7 +2,7 @@
 # APIs to manage autoscaling groups and instances.
 #
 # The k8s side of the autoscaler is in
-# ../cluster-services/cluster_autoscaler.tf.
+# https://github.com/alphagov/govuk-helm-charts/blob/main/charts/app-config/templates/cluster-autoscaler.yaml
 
 locals {
   cluster_autoscaler_service_account_namespace = "kube-system"
