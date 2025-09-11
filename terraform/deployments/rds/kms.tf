@@ -14,6 +14,64 @@ data "aws_region" "current" {}
 
 data "aws_iam_policy_document" "rds_kms" {
   statement {
+    sid = "Allow terraform cloud to manage the key"
+
+    principals {
+      type        = "AWS"
+      identifiers = ["arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/terraform-cloud"]
+    }
+
+    actions = [
+      "kms:CancelKeyDeletion",
+      "kms:Create*",
+      "kms:Delete*",
+      "kms:Describe*",
+      "kms:Disable*",
+      "kms:Enable*",
+      "kms:Get*",
+      "kms:List*",
+      "kms:Put*",
+      "kms:Revoke*",
+      "kms:ScheduleKeyDeletion",
+      "kms:Update*",
+    ]
+
+    resources = ["*"]
+  }
+
+  statement {
+    sid = "Allow fulladmin roles to manage the key"
+
+    principals {
+      type        = "AWS"
+      identifiers = ["*"]
+    }
+
+    actions = [
+      "kms:CancelKeyDeletion",
+      "kms:Create*",
+      "kms:Delete*",
+      "kms:Describe*",
+      "kms:Disable*",
+      "kms:Enable*",
+      "kms:Get*",
+      "kms:List*",
+      "kms:Put*",
+      "kms:Revoke*",
+      "kms:ScheduleKeyDeletion",
+      "kms:Update*",
+    ]
+
+    resources = ["*"]
+
+    condition {
+      test     = "StringLike"
+      variable = "aws:PrincipalArn"
+      values   = ["arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/*-fulladmin"]
+    }
+  }
+
+  statement {
     sid = "Allow access through RDS for all principals in the account that are authorized to use RDS"
 
     principals {
