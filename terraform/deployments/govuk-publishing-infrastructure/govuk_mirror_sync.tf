@@ -406,11 +406,6 @@ module "govuk_mirror_sync_iam_role" {
   }
 }
 
-moved {
-  from = module.govuk_mirror_sync_iam_role.aws_iam_role_policy_attachment.this["govuk_mirror_sync_policy"]
-  to   = module.govuk_mirror_sync_iam_role.aws_iam_role_policy_attachment.additional["govuk_mirror_sync_policy"]
-}
-
 data "aws_iam_policy_document" "govuk_mirror_sync" {
   statement {
     sid = "ReadWriteFromMirrorBucket"

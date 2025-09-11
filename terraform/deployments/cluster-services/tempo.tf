@@ -50,11 +50,6 @@ module "tempo_iam_role" {
   }
 }
 
-moved {
-  from = module.tempo_iam_role.aws_iam_role_policy_attachment.this["TempoPolicy"]
-  to   = module.tempo_iam_role.aws_iam_role_policy_attachment.additional["TempoPolicy"]
-}
-
 data "aws_iam_policy_document" "tempo" {
   statement {
     actions   = ["s3:ListBucket", "s3:?*Object", "s3:?*ObjectTagging"]

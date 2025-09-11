@@ -9,14 +9,22 @@ locals {
 }
 
 module "external_secrets_iam_role" {
-  source                        = "terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc"
-  version                       = "~> 5.0"
-  create_role                   = true
-  role_name                     = "${local.external_secrets_service_account_name}-${var.cluster_name}"
-  role_description              = "Role for External Secrets addon. Corresponds to ${local.external_secrets_service_account_name} k8s ServiceAccount."
-  provider_url                  = module.eks.oidc_provider
-  role_policy_arns              = [aws_iam_policy.external_secrets.arn]
-  oidc_fully_qualified_subjects = ["system:serviceaccount:${local.cluster_services_namespace}:${local.external_secrets_service_account_name}"]
+  source             = "terraform-aws-modules/iam/aws//modules/iam-role"
+  version            = "~> 6.0"
+  name               = "${local.external_secrets_service_account_name}-${var.cluster_name}"
+  use_name_prefix    = false
+  description        = "Role for External Secrets addon. Corresponds to ${local.external_secrets_service_account_name} k8s ServiceAccount."
+  enable_oidc        = true
+  oidc_provider_urls = [module.eks.oidc_provider]
+  policies = {
+    "${aws_iam_policy.external_secrets.name}" = aws_iam_policy.external_secrets.arn
+  }
+  oidc_subjects = ["system:serviceaccount:${local.cluster_services_namespace}:${local.external_secrets_service_account_name}"]
+}
+
+moved {
+  from = module.external_secrets_iam_role.aws_iam_role_policy_attachment.custom[0]
+  to   = module.external_secrets_iam_role.aws_iam_role_policy_attachment.this["EKSExternalSecrets-govuk"]
 }
 
 resource "aws_iam_policy" "external_secrets" {

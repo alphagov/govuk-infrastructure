@@ -27,11 +27,6 @@ module "db_backup_iam_role" {
   }
 }
 
-moved {
-  from = module.db_backup_iam_role.aws_iam_role_policy_attachment.this["policy"]
-  to   = module.db_backup_iam_role.aws_iam_role_policy_attachment.additional["db_backup_s3"]
-}
-
 data "aws_iam_policy_document" "db_backup_s3" {
   statement {
     sid = "Read"

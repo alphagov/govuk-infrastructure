@@ -85,8 +85,3 @@ module "govuk_reports_iam_role" {
   }
 }
 
-moved {
-  from = module.govuk_reports_iam_role.aws_iam_role_policy_attachment.this["govuk_reports_policy"]
-  to   = module.govuk_reports_iam_role.aws_iam_role_policy_attachment.additional["govuk-integration-reports-policy"]
-}
-
