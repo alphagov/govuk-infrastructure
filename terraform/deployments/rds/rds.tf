@@ -90,6 +90,25 @@ resource "aws_db_instance" "instance" {
   tags = { Name = "govuk-rds-${each.value.name}-${each.value.engine}", project = lookup(each.value, "project", "GOV.UK - Other") }
 }
 
+resource "aws_db_snapshot" "unencrypted_snapshot" {
+  for_each = {
+    for db_name, db in var.databases : db_name => db if db.create_encrypted_snapshot
+  }
+
+  # This is purposefully not using the actual terraform resource to ensure it doesn't get destroyed if the
+  # aws_db_instance gets destroyed
+  db_instance_identifier = "${local.identifier_prefix}${each.value.name}-${each.value.engine}"
+  db_snapshot_identifier = "${local.identifier_prefix}${each.value.name}-${each.value.engine}-pre-encryption"
+}
+
+resource "aws_db_snapshot_copy" "encrypted_snapshot" {
+  for_each = aws_db_snapshot.unencrypted_snapshot
+
+  source_db_snapshot_identifier = each.value.db_snapshot_identifier
+  target_db_snapshot_identifier = "${local.identifier_prefix}${each.value.name}-${each.value.engine}-post-encryption"
+  kms_key_id                    = "alias/aws/rds"
+}
+
 resource "aws_db_event_subscription" "subscription" {
   name      = "${var.govuk_environment}-rds-event-subscription"
   sns_topic = aws_sns_topic.rds_alerts.arn
