@@ -48,6 +48,28 @@ resource "aws_vpc_endpoint" "ecr_dkr" {
   }
 }
 
+import {
+  id = "vpce-08b2cec62e7f7e212"
+  to = aws_vpc_endpoint.s3[0]
+}
+
+resource "aws_vpc_endpoint" "s3" {
+  count             = var.use_s3_vpc_endpoints ? 1 : 0
+  vpc_id            = data.tfe_outputs.vpc.nonsensitive_values.id
+  service_name      = "com.amazonaws.${data.aws_region.current.name}.s3"
+  vpc_endpoint_type = "Gateway"
+
+  route_table_ids = concat(
+    [for rt in aws_route_table.eks_private : rt.id],
+    data.tfe_outputs.vpc.nonsensitive_values.private_subnet_route_table_ids,
+  )
+
+  tags = {
+    Name = "s3-endpoint-${var.govuk_environment}"
+  }
+}
+
+
 resource "aws_vpc_endpoint" "secretsmanager" {
   count               = var.use_secretsmanager_endpoints ? 1 : 0
   vpc_id              = data.tfe_outputs.vpc.nonsensitive_values.id

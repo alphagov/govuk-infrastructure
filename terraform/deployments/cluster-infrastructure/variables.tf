@@ -212,6 +212,12 @@ variable "use_ecr_vpc_endpoints" {
   default     = false
 }
 
+variable "use_s3_vpc_endpoints" {
+  type        = bool
+  description = "If true, create VPC endpoints for ECR and ECR Docker, to avoid using the NAT gateway for this traffic."
+  default     = false
+}
+
 variable "use_secretsmanager_endpoints" {
   type        = bool
   description = "If true, create VPC endpoints for Secrets Manager, to avoid using the NAT gateway for this traffic."
