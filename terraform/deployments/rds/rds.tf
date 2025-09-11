@@ -89,8 +89,8 @@ resource "aws_db_instance" "instance" {
   final_snapshot_identifier = "${each.value.name}-final-snapshot"
   skip_final_snapshot       = var.skip_final_snapshot
 
-  storage_encrypted = try(each.value.encryption_at_rest, false)
-  kms_key_id        = try(each.value.encryption_at_rest, false) ? aws_kms_alias.rds.name : null
+  storage_encrypted = try(each.value.encryption_at_rest, true)
+  kms_key_id        = try(each.value.encryption_at_rest, true) ? aws_kms_alias.rds.name : null
 
   tags = { Name = "govuk-rds-${each.value.name}-${each.value.engine}", project = lookup(each.value, "project", "GOV.UK - Other") }
 }
