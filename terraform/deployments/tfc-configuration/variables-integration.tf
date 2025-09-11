@@ -181,6 +181,7 @@ module "variable-set-rds-integration" {
         instance_class               = "db.t4g.medium"
         performance_insights_enabled = true
         project                      = "GOV.UK - Web"
+        encryption_at_rest           = false
       }
 
       authenticating_proxy = {
@@ -199,6 +200,7 @@ module "variable-set-rds-integration" {
         instance_class               = "db.t4g.micro"
         performance_insights_enabled = false
         project                      = "GOV.UK - Publishing"
+        encryption_at_rest           = false
       }
 
       chat = {
@@ -216,6 +218,7 @@ module "variable-set-rds-integration" {
         instance_class               = "db.t4g.small"
         performance_insights_enabled = false
         project                      = "GOV.UK - AI"
+        encryption_at_rest           = false
       }
 
       ckan = {
@@ -234,6 +237,7 @@ module "variable-set-rds-integration" {
         instance_class               = "db.m6g.large"
         performance_insights_enabled = true
         project                      = "GOV.UK - DGU"
+        encryption_at_rest           = false
       }
 
       collections_publisher = {
@@ -248,6 +252,7 @@ module "variable-set-rds-integration" {
         instance_class               = "db.t4g.micro"
         performance_insights_enabled = false
         project                      = "GOV.UK - Publishing"
+        encryption_at_rest           = false
       }
 
       content_block_manager = {
@@ -266,6 +271,7 @@ module "variable-set-rds-integration" {
         instance_class               = "db.t4g.small"
         performance_insights_enabled = true
         project                      = "GOV.UK - Publishing"
+        encryption_at_rest           = false
       }
 
       content_data_admin = {
@@ -283,6 +289,7 @@ module "variable-set-rds-integration" {
         instance_class               = "db.t4g.micro"
         performance_insights_enabled = false
         project                      = "GOV.UK - Publishing"
+        encryption_at_rest           = false
       }
 
       content_data_api = {
@@ -322,6 +329,7 @@ module "variable-set-rds-integration" {
         instance_class               = "db.m6g.large"
         performance_insights_enabled = false
         project                      = "GOV.UK - Publishing"
+        encryption_at_rest           = false
       }
 
       content_publisher = {
@@ -356,6 +364,7 @@ module "variable-set-rds-integration" {
         instance_class               = "db.t4g.small"
         performance_insights_enabled = false
         project                      = "GOV.UK - Publishing"
+        encryption_at_rest           = false
       }
 
       content_store = {
@@ -373,6 +382,7 @@ module "variable-set-rds-integration" {
         instance_class               = "db.m6g.large"
         performance_insights_enabled = true
         project                      = "GOV.UK - Publishing"
+        encryption_at_rest           = false
       }
 
       content_tagger = {
@@ -407,6 +417,7 @@ module "variable-set-rds-integration" {
         instance_class               = "db.t4g.small"
         performance_insights_enabled = false
         project                      = "GOV.UK - Publishing"
+        encryption_at_rest           = false
       }
 
       draft_content_store = {
@@ -424,6 +435,7 @@ module "variable-set-rds-integration" {
         instance_class               = "db.m6g.large"
         performance_insights_enabled = true
         project                      = "GOV.UK - Publishing"
+        encryption_at_rest           = false
       }
 
       email_alert_api = {
@@ -458,6 +470,7 @@ module "variable-set-rds-integration" {
         instance_class               = "db.m6g.large"
         performance_insights_enabled = true
         project                      = "GOV.UK - Web"
+        encryption_at_rest           = false
       }
 
       imminence = {
@@ -476,6 +489,7 @@ module "variable-set-rds-integration" {
         instance_class               = "db.t4g.medium"
         performance_insights_enabled = false
         project                      = "GOV.UK - Web"
+        encryption_at_rest           = false
       }
 
       link_checker_api = {
@@ -494,6 +508,7 @@ module "variable-set-rds-integration" {
         performance_insights_enabled = false
         project                      = "GOV.UK - Publishing"
         maintenance_window           = "Mon:00:00-Mon:01:00"
+        encryption_at_rest           = false
       }
 
       local_links_manager = {
@@ -528,6 +543,7 @@ module "variable-set-rds-integration" {
         instance_class               = "db.t4g.small"
         performance_insights_enabled = false
         project                      = "GOV.UK - Web"
+        encryption_at_rest           = false
       }
 
       locations_api = {
@@ -562,6 +578,7 @@ module "variable-set-rds-integration" {
         instance_class               = "db.m6g.large"
         performance_insights_enabled = true
         project                      = "GOV.UK - Web"
+        encryption_at_rest           = false
       }
 
       publishing_api = {
@@ -602,6 +619,7 @@ module "variable-set-rds-integration" {
         project                      = "GOV.UK - Publishing"
         backup_retention_period      = 1
         has_read_replica             = true
+        encryption_at_rest           = false
       }
 
       publisher = {
@@ -620,6 +638,7 @@ module "variable-set-rds-integration" {
         instance_class               = "db.t4g.small"
         performance_insights_enabled = true
         project                      = "GOV.UK - Publishing"
+        encryption_at_rest           = false
       }
 
       release = {
@@ -634,6 +653,7 @@ module "variable-set-rds-integration" {
         instance_class               = "db.t4g.micro"
         performance_insights_enabled = false
         project                      = "GOV.UK - Infrastructure"
+        encryption_at_rest           = false
       }
 
       search_admin = {
@@ -648,6 +668,7 @@ module "variable-set-rds-integration" {
         instance_class               = "db.t4g.micro"
         performance_insights_enabled = false
         project                      = "GOV.UK - Search"
+        encryption_at_rest           = false
       }
 
       service_manual_publisher = {
@@ -682,6 +703,7 @@ module "variable-set-rds-integration" {
         instance_class               = "db.t4g.small"
         performance_insights_enabled = false
         project                      = "GOV.UK - Publishing"
+        encryption_at_rest           = false
       }
 
       signon = {
@@ -696,6 +718,7 @@ module "variable-set-rds-integration" {
         instance_class               = "db.t4g.medium"
         performance_insights_enabled = true
         project                      = "GOV.UK - Publishing"
+        encryption_at_rest           = false
       }
 
       support_api = {
@@ -730,6 +753,7 @@ module "variable-set-rds-integration" {
         instance_class               = "db.t4g.medium"
         performance_insights_enabled = true
         project                      = "GOV.UK - Publishing"
+        encryption_at_rest           = false
       }
 
       transition = {
@@ -747,6 +771,7 @@ module "variable-set-rds-integration" {
         instance_class               = "db.m6g.large"
         performance_insights_enabled = true
         project                      = "GOV.UK - Publishing"
+        encryption_at_rest           = false
       }
 
       whitehall = {
@@ -761,6 +786,7 @@ module "variable-set-rds-integration" {
         instance_class               = "db.t4g.large"
         performance_insights_enabled = true
         project                      = "GOV.UK - Publishing"
+        encryption_at_rest           = false
       }
     }
   }
