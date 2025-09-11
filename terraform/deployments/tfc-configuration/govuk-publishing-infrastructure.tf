@@ -76,7 +76,6 @@ module "govuk-publishing-infrastructure-variable-set-integration" {
       { type = "CNAME", name = "manuals-publisher", ttl = 3600, value = ["manuals-publisher.eks.integration.govuk.digital."] },
       { type = "CNAME", name = "places-manager", ttl = 3600, value = ["places-manager.eks.integration.govuk.digital."] },
       { type = "CNAME", name = "publisher", ttl = 3600, value = ["publisher.eks.integration.govuk.digital."] },
-      { type = "CNAME", name = "publisher-on-pg", ttl = 3600, value = ["publisher-on-pg.eks.integration.govuk.digital."] },
       { type = "CNAME", name = "release", ttl = 3600, value = ["release.eks.integration.govuk.digital."] },
       { type = "CNAME", name = "search-admin", ttl = 3600, value = ["search-admin.eks.integration.govuk.digital."] },
       { type = "CNAME", name = "service-manual-publisher", ttl = 3600, value = ["service-manual-publisher.eks.integration.govuk.digital."] },

@@ -62,7 +62,6 @@ locals {
     "licensify-feed",
     "licensify-frontend",
     "mongodb",
-    "publisher-on-pg",
     "search-api-learn-to-rank",
     "toolbox",
   ]
