@@ -283,7 +283,6 @@ module "variable-set-rds-integration" {
         instance_class               = "db.t4g.micro"
         performance_insights_enabled = false
         project                      = "GOV.UK - Publishing"
-        create_encrypted_snapshot    = true
       }
 
       content_data_api = {
