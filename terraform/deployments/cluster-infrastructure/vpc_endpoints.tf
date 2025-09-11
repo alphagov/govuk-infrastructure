@@ -1,3 +1,11 @@
+locals {
+  s3_endpoint_ids = {
+    integration = "vpce-08b2cec62e7f7e212"
+    staging     = "vpce-012731b6ddd9675d2"
+    production  = "vpce-0146b3689d80a6848"
+  }
+}
+
 resource "aws_security_group" "vpc_endpoints" {
   name        = "vpc-endpoints-${var.govuk_environment}"
   description = "Allow ingress from VPC on port 443"
@@ -49,7 +57,7 @@ resource "aws_vpc_endpoint" "ecr_dkr" {
 }
 
 import {
-  id = "vpce-08b2cec62e7f7e212"
+  id = local.s3_endpoint_ids[var.govuk_environment]
   to = aws_vpc_endpoint.s3[0]
 }
 
