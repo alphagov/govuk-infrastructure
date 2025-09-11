@@ -49,6 +49,8 @@ resource "aws_db_parameter_group" "engine_params" {
 resource "aws_db_instance" "instance" {
   for_each = var.databases
 
+  # If snapshot_identifier is set when the instance is created, it will be restored from this snapshot
+  snapshot_identifier         = try(each.value.snapshot_identifier, null)
   engine                      = each.value.engine
   engine_version              = each.value.engine_version
   username                    = var.database_admin_username
@@ -86,6 +88,9 @@ resource "aws_db_instance" "instance" {
   deletion_protection       = try(each.value.deletion_protection, true)
   final_snapshot_identifier = "${each.value.name}-final-snapshot"
   skip_final_snapshot       = var.skip_final_snapshot
+
+  storage_encrypted = try(each.value.encryption_at_rest, false)
+  kms_key_id        = try(each.value.encryption_at_rest, false) ? aws_kms_alias.rds.name : null
 
   tags = { Name = "govuk-rds-${each.value.name}-${each.value.engine}", project = lookup(each.value, "project", "GOV.UK - Other") }
 }
