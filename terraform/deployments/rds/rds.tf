@@ -108,7 +108,7 @@ resource "aws_db_snapshot_copy" "encrypted_snapshot" {
 
   source_db_snapshot_identifier = aws_db_snapshot.unencrypted_snapshot[each.key].db_snapshot_identifier
   target_db_snapshot_identifier = "${local.identifier_prefix}${each.value.name}-${each.value.engine}-post-encryption"
-  kms_key_id                    = "alias/aws/rds"
+  kms_key_id                    = aws_kms_alias.rds.name
 }
 
 resource "aws_db_event_subscription" "subscription" {
