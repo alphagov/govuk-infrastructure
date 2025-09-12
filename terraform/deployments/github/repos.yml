@@ -765,6 +765,13 @@ repos:
   search-api-v2-dataform:
     homepage_url: "https://docs.publishing.service.gov.uk/repos/search-api-v2-dataform.html"
 
+  search-evaluation-service:
+    can_be_deployed: true
+    required_status_checks:
+      standard_contexts: *standard_govuk_rails_checks
+      additional_contexts:
+        - Test Ruby / Run RSpec
+
   search-v2-evaluator:
     can_be_deployed: true
 
