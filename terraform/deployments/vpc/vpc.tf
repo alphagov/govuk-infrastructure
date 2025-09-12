@@ -28,11 +28,3 @@ removed {
     destroy = false
   }
 }
-
-# S3 Gateway Endpoint: Moved to cluster-infrastructure module
-removed {
-  from = aws_vpc_endpoint.s3
-  lifecycle {
-    destroy = false
-  }
-}
