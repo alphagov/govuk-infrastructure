@@ -1,0 +1,1 @@
+ship_kubernetes_events_to_logit = false
