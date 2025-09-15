@@ -1,0 +1,43 @@
+---
+var_sources:
+  ## Dummy var source used to redact credentials in web UI and logs
+  ##
+  ## Bootstrap variables given so that credentials are available on a
+  ## local machine. In AWS the AWS metadata service will provider them.
+  - name: bootstrap_aws_credentials
+    type: dummy
+    config:
+      vars:
+        AWS_ACCESS_KEY_ID: ((BOOTSTRAP_AWS_ACCESS_KEY_ID))
+        AWS_SECRET_ACCESS_KEY: ((BOOTSTRAP_AWS_SECRET_ACCESS_KEY))
+        AWS_SESSION_TOKEN: ((BOOTSTRAP_AWS_SESSION_TOKEN))
+
+jobs:
+  - name: aws-identity-check
+    plan:
+      - task: verify-aws-identity
+        config:
+          platform: linux
+          image_resource:
+            type: registry-image
+            source:
+              repository: cgr.dev/chainguard/wolfi-base
+          params:
+            AWS_ACCESS_KEY_ID: ((bootstrap_aws_credentials:AWS_ACCESS_KEY_ID))
+            AWS_SECRET_ACCESS_KEY: ((bootstrap_aws_credentials:AWS_SECRET_ACCESS_KEY))
+            AWS_SESSION_TOKEN: ((bootstrap_aws_credentials:AWS_SESSION_TOKEN))
+          run:
+            path: sh
+            args:
+              - -euo pipefail
+              - |
+                env
+                
+                echo "Installing AWS CLI..."
+                apk update
+                apk add --no-cache --no-progress -q aws-cli
+                
+                echo "Verifying AWS identity..."
+                aws sts get-caller-identity
+                
+                echo "AWS identity verification complete!"

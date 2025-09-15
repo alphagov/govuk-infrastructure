@@ -1,0 +1,44 @@
+services:
+  concourse-db:
+    image: postgres
+    environment:
+      POSTGRES_DB: concourse
+      POSTGRES_PASSWORD: concourse_pass
+      POSTGRES_USER: concourse_user
+      PGDATA: /database
+      POSTGRES_HOST_AUTH_METHOD: trust #for healthcheck
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U concourse_user -d concourse"]
+      interval: 3s
+      timeout: 3s
+      retries: 5
+
+  concourse:
+    image: concourse/concourse
+    command: quickstart
+    privileged: true
+    cgroup: host
+    depends_on:
+      concourse-db:
+        condition: service_healthy
+    ports: ["8080:8080"]
+    environment:
+      CONCOURSE_POSTGRES_HOST: concourse-db
+      CONCOURSE_POSTGRES_USER: concourse_user
+      CONCOURSE_POSTGRES_PASSWORD: concourse_pass
+      CONCOURSE_POSTGRES_DATABASE: concourse
+      CONCOURSE_EXTERNAL_URL: http://localhost:8080
+      CONCOURSE_ADD_LOCAL_USER: bootstrap:govuk
+      CONCOURSE_MAIN_TEAM_LOCAL_USER: bootstrap
+      # instead of relying on the default "detect"
+      CONCOURSE_WORKER_BAGGAGECLAIM_DRIVER: overlay
+      CONCOURSE_CLIENT_SECRET: Y29uY291cnNlLXdlYgo=
+      CONCOURSE_TSA_CLIENT_SECRET: Y29uY291cnNlLXdvcmtlcgo=
+      CONCOURSE_CLUSTER_NAME: bootstrap
+      CONCOURSE_WORKER_CONTAINERD_DNS_SERVER: "8.8.8.8"
+      CONCOURSE_WORKER_RUNTIME: "containerd"
+      CONCOURSE_ENABLE_PIPELINE_INSTANCES: "true"
+      CONCOURSE_ENABLE_ACROSS_STEP: "true"
+      CONCOURSE_ENABLE_RESOURCE_CAUSALITY: "true"
+
+
