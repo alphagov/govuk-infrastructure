@@ -124,6 +124,11 @@ resource "aws_db_snapshot_copy" "encrypted_snapshot" {
   }
 }
 
+import {
+  to = aws_db_snapshot.unencrypted_snapshot["chat"]
+  id = "chat-postgres-pre-encryption"
+}
+
 resource "aws_db_event_subscription" "subscription" {
   name      = "${var.govuk_environment}-rds-event-subscription"
   sns_topic = aws_sns_topic.rds_alerts.arn
