@@ -104,6 +104,10 @@ resource "aws_db_snapshot" "unencrypted_snapshot" {
   # aws_db_instance gets destroyed.
   db_instance_identifier = "${local.identifier_prefix}${each.value.name}-${each.value.engine}"
   db_snapshot_identifier = "${local.identifier_prefix}${each.value.name}-${each.value.engine}-pre-encryption"
+
+  timeouts {
+    create = "2h"
+  }
 }
 
 resource "aws_db_snapshot_copy" "encrypted_snapshot" {
@@ -114,6 +118,10 @@ resource "aws_db_snapshot_copy" "encrypted_snapshot" {
   source_db_snapshot_identifier = aws_db_snapshot.unencrypted_snapshot[each.key].db_snapshot_arn
   target_db_snapshot_identifier = "${local.identifier_prefix}${each.value.name}-${each.value.engine}-post-encryption"
   kms_key_id                    = aws_kms_key.rds.arn
+
+  timeouts {
+    create = "2h"
+  }
 }
 
 resource "aws_db_event_subscription" "subscription" {
