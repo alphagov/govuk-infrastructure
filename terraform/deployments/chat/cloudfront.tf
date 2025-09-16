@@ -99,6 +99,11 @@ data "aws_iam_policy_document" "origin_service_disabled" {
       values   = ["${aws_cloudfront_distribution.chat_distribution[0].id}"]
       variable = "AWS:SourceArn"
     }
+    condition {
+      test     = "Bool"
+      variable = "aws:SecureTransport"
+      values   = ["true"]
+    }
   }
 }
 
