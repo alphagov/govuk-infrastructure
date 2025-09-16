@@ -91,7 +91,7 @@ resource "random_password" "grafana_db" {
 }
 
 locals {
-  rds_subnet_ids     = compact([for name, id in data.tfe_outputs.vpc.nonsensitive_values.private_subnet_ids : startswith(name, "rds_") ? id : ""])
+  rds_subnet_ids     = compact([for name, id in data.terraform_remote_state.vpc.outputs.private_subnet_ids : startswith(name, "rds_") ? id : ""])
   grafana_subnet_ids = startswith(var.govuk_environment, "eph-") ? [for sn in aws_subnet.eks_private : sn.id] : local.rds_subnet_ids
 }
 
@@ -110,7 +110,7 @@ module "grafana_db" {
 
   allow_major_version_upgrade = true
 
-  vpc_id                 = data.tfe_outputs.vpc.nonsensitive_values.id
+  vpc_id                 = data.terraform_remote_state.vpc.outputs.id
   subnets                = local.grafana_subnet_ids
   create_db_subnet_group = true
   create_security_group  = true
@@ -145,7 +145,7 @@ module "grafana_db" {
 resource "aws_route53_record" "grafana_db" {
   count = startswith(var.govuk_environment, "eph-") ? 0 : 1
 
-  zone_id = data.tfe_outputs.root_dns.nonsensitive_values.internal_root_zone_id
+  zone_id = data.terraform_remote_state.root_dns.outputs.internal_root_zone_id
   name    = "${local.grafana_db_name}-db.eks"
   type    = "CNAME"
   ttl     = 300

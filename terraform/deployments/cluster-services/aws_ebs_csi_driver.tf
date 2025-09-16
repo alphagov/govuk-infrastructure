@@ -12,7 +12,7 @@ resource "helm_release" "aws_ebs_csi_driver" {
         create = true
         name   = "ebs-csi-controller-sa"
         annotations = {
-          "eks.amazonaws.com/role-arn" = data.tfe_outputs.cluster_infrastructure.nonsensitive_values.aws_ebs_csi_driver_iam_role_arn
+          "eks.amazonaws.com/role-arn" = data.terraform_remote_state.cluster_infrastructure.outputs.aws_ebs_csi_driver_iam_role_arn
         }
       }
     }

@@ -2,13 +2,19 @@ data "aws_region" "current" {}
 
 data "aws_caller_identity" "current" {}
 
-
-data "tfe_outputs" "root_dns" {
-  organization = "govuk"
-  workspace    = startswith(var.govuk_environment, "eph-") ? "root-dns-ephemeral" : "root-dns-${var.govuk_environment}"
+data "terraform_remote_state" "root_dns" {
+  backend = "s3"
+  config = {
+    bucket = "govuk-ah-test-state-files"
+    key    = "root-dns.tfstate"
+  }
 }
 
-data "tfe_outputs" "vpc" {
-  organization = "govuk"
-  workspace    = "vpc-${var.govuk_environment}"
+
+data "terraform_remote_state" "vpc" {
+  backend = "s3"
+  config = {
+    bucket = "govuk-ah-test-state-files"
+    key    = "vpc.tfstate"
+  }
 }
