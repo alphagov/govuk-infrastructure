@@ -239,6 +239,8 @@ module "variable-set-rds-integration" {
         encryption_at_rest           = false
         create_encrypted_snapshot    = true
         deletion_protection          = false
+        encryption_at_rest           = true
+        snapshot_identifier          = "chat-postgres-post-encryption"
       }
 
       ckan = {
