@@ -62,6 +62,6 @@ resource "helm_release" "cluster_secrets" {
   name       = "cluster-secrets"
   namespace  = local.services_ns
   repository = "https://alphagov.github.io/govuk-helm-charts/"
-  version    = "0.11.0"
+  version    = "0.12.0"
   timeout    = var.helm_timeout_seconds
 }
