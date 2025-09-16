@@ -23,9 +23,9 @@ resource "helm_release" "external_secrets" {
   values = [yamlencode({
     replicaCount = var.desired_ha_replicas
     serviceAccount = {
-      name = data.tfe_outputs.cluster_infrastructure.nonsensitive_values.external_secrets_service_account_name
+      name = data.terraform_remote_state.cluster_infrastructure.outputs.external_secrets_service_account_name
       annotations = {
-        "eks.amazonaws.com/role-arn" = data.tfe_outputs.cluster_infrastructure.nonsensitive_values.external_secrets_role_arn
+        "eks.amazonaws.com/role-arn" = data.terraform_remote_state.cluster_infrastructure.outputs.external_secrets_role_arn
       }
     }
     certController = {
@@ -49,7 +49,7 @@ resource "helm_release" "cluster_secret_store" {
   timeout    = var.helm_timeout_seconds
   values = [yamlencode({
     awsRegion          = data.aws_region.current.region
-    serviceAccountName = data.tfe_outputs.cluster_infrastructure.nonsensitive_values.external_secrets_service_account_name
+    serviceAccountName = data.terraform_remote_state.cluster_infrastructure.outputs.external_secrets_service_account_name
   })]
 
   depends_on = [helm_release.external_secrets]

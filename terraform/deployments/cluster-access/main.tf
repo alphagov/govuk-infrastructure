@@ -45,11 +45,11 @@ data "aws_eks_cluster_auth" "cluster_token" {
 }
 
 provider "kubernetes" {
-  host                   = data.tfe_outputs.cluster_infrastructure.nonsensitive_values.cluster_endpoint
-  cluster_ca_certificate = base64decode(data.tfe_outputs.cluster_infrastructure.nonsensitive_values.cluster_certificate_authority_data)
+  host                   = data.terraform_remote_state.cluster_infrastructure.outputs.cluster_endpoint
+  cluster_ca_certificate = base64decode(data.terraform_remote_state.cluster_infrastructure.outputs.cluster_certificate_authority_data)
   token                  = data.aws_eks_cluster_auth.cluster_token.token
 }
 
 locals {
-  cluster_name = data.tfe_outputs.cluster_infrastructure.nonsensitive_values.cluster_id
+  cluster_name = data.terraform_remote_state.cluster_infrastructure.outputs.cluster_id
 }

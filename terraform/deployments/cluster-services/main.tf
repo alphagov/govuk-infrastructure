@@ -57,8 +57,8 @@ data "aws_eks_cluster_auth" "cluster_token" {
 }
 
 provider "kubernetes" {
-  host                   = data.tfe_outputs.cluster_infrastructure.nonsensitive_values.cluster_endpoint
-  cluster_ca_certificate = base64decode(data.tfe_outputs.cluster_infrastructure.nonsensitive_values.cluster_certificate_authority_data)
+  host                   = data.terraform_remote_state.cluster_infrastructure.outputs.cluster_endpoint
+  cluster_ca_certificate = base64decode(data.terraform_remote_state.cluster_infrastructure.outputs.cluster_certificate_authority_data)
   token                  = data.aws_eks_cluster_auth.cluster_token.token
 }
 
@@ -66,16 +66,16 @@ provider "helm" {
   # TODO: If/when TF makes provider configs a first-class language object,
   # reuse the identical config from above.
   kubernetes = {
-    host                   = data.tfe_outputs.cluster_infrastructure.nonsensitive_values.cluster_endpoint
-    cluster_ca_certificate = base64decode(data.tfe_outputs.cluster_infrastructure.nonsensitive_values.cluster_certificate_authority_data)
+    host                   = data.terraform_remote_state.cluster_infrastructure.outputs.cluster_endpoint
+    cluster_ca_certificate = base64decode(data.terraform_remote_state.cluster_infrastructure.outputs.cluster_certificate_authority_data)
     token                  = data.aws_eks_cluster_auth.cluster_token.token
   }
 }
 
 locals {
-  monitoring_ns          = data.tfe_outputs.cluster_infrastructure.nonsensitive_values.monitoring_namespace
-  services_ns            = data.tfe_outputs.cluster_infrastructure.nonsensitive_values.cluster_services_namespace
-  external_dns_zone_name = data.tfe_outputs.cluster_infrastructure.nonsensitive_values.external_dns_zone_name
+  monitoring_ns          = data.terraform_remote_state.cluster_infrastructure.outputs.monitoring_namespace
+  services_ns            = data.terraform_remote_state.cluster_infrastructure.outputs.cluster_services_namespace
+  external_dns_zone_name = data.terraform_remote_state.cluster_infrastructure.outputs.external_dns_zone_name
   alb_ingress_annotations = {
     "alb.ingress.kubernetes.io/scheme"       = "internet-facing"
     "alb.ingress.kubernetes.io/target-type"  = "ip"

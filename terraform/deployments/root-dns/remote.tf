@@ -1,4 +1,8 @@
-data "tfe_outputs" "vpc" {
-  organization = "govuk"
-  workspace    = "vpc-${var.govuk_environment}"
+data "terraform_remote_state" "vpc" {
+  backend = "s3"
+  config = {
+    bucket = "govuk-ah-test-state-files"
+    key    = "vpc.tfstate"
+  }
 }
+

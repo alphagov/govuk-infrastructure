@@ -14,7 +14,7 @@ resource "helm_release" "aws_lb_controller" {
   create_namespace = true
   timeout          = var.helm_timeout_seconds
   values = [yamlencode({
-    clusterName        = data.tfe_outputs.cluster_infrastructure.nonsensitive_values.cluster_id
+    clusterName        = data.terraform_remote_state.cluster_infrastructure.outputs.cluster_id
     defaultSSLPolicy   = "ELBSecurityPolicy-TLS13-1-2-2021-06"
     defaultTargetType  = "ip"
     ingressClass       = "aws-alb"
@@ -29,11 +29,11 @@ resource "helm_release" "aws_lb_controller" {
     serviceMonitor = {
       enabled = !startswith(var.govuk_environment, "eph-")
     }
-    vpcId = data.tfe_outputs.vpc.nonsensitive_values.id
+    vpcId = data.terraform_remote_state.vpc.outputs.id
     serviceAccount = {
-      name = data.tfe_outputs.cluster_infrastructure.nonsensitive_values.aws_lb_controller_service_account_name
+      name = data.terraform_remote_state.cluster_infrastructure.outputs.aws_lb_controller_service_account_name
       annotations = {
-        "eks.amazonaws.com/role-arn" = data.tfe_outputs.cluster_infrastructure.nonsensitive_values.aws_lb_controller_role_arn
+        "eks.amazonaws.com/role-arn" = data.terraform_remote_state.cluster_infrastructure.outputs.aws_lb_controller_role_arn
       }
     }
   })]

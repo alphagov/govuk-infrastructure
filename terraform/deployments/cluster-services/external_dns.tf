@@ -20,14 +20,14 @@ resource "helm_release" "external_dns" {
     serviceAccount = {
       name = "external-dns"
       annotations = {
-        "eks.amazonaws.com/role-arn" = data.tfe_outputs.cluster_infrastructure.nonsensitive_values.external_dns_role_arn
+        "eks.amazonaws.com/role-arn" = data.terraform_remote_state.cluster_infrastructure.outputs.external_dns_role_arn
       }
     }
     automountServiceAccountToken = true
     revisionHistoryLimit         = 10
     txtOwnerId                   = "govuk"
     domainFilters = [
-      data.tfe_outputs.cluster_infrastructure.nonsensitive_values.external_dns_zone_name
+      data.terraform_remote_state.cluster_infrastructure.outputs.external_dns_zone_name
     ]
     interval           = "5m"
     triggerLoopOnEvent = true
