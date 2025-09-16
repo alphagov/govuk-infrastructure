@@ -12,32 +12,51 @@ var_sources:
         AWS_SECRET_ACCESS_KEY: ((BOOTSTRAP_AWS_SECRET_ACCESS_KEY))
         AWS_SESSION_TOKEN: ((BOOTSTRAP_AWS_SESSION_TOKEN))
 
+resources:
+  - name: govuk-infrastructure
+    type: git
+    icon: github
+    source:
+      uri: "https://github.com/alphagov/govuk-infrastructure.git"
+      branch: firebreak_bootstrap_concourse
+
 jobs:
-  - name: aws-identity-check
+  - name: self-update-pipeline
     plan:
-      - task: verify-aws-identity
+      - get: govuk-infrastructure
+        trigger: true
+
+      - set_pipeline: bootstrap
+        file: govuk-infrastructure/pipelines/bootstrap.yml
+        # vars deliberately left empty to prevent the bootstrap
+        # credentials being persisted into the real Concourse
+
+  - name: terraform-vpc
+    plan:
+      - get: govuk-infrastructure
+        passed: [self-update-pipeline]
+        trigger: true
+
+      - task: apply-vpc
         config:
           platform: linux
-          image_resource:
+          image_resource: &terraform-image
             type: registry-image
             source:
-              repository: cgr.dev/chainguard/wolfi-base
-          params:
+              repository: public.ecr.aws/hashicorp/terraform
+              tag: 1.10
+          params: &aws-credentials
             AWS_ACCESS_KEY_ID: ((bootstrap_aws_credentials:AWS_ACCESS_KEY_ID))
             AWS_SECRET_ACCESS_KEY: ((bootstrap_aws_credentials:AWS_SECRET_ACCESS_KEY))
             AWS_SESSION_TOKEN: ((bootstrap_aws_credentials:AWS_SESSION_TOKEN))
+          inputs:
+            - name: govuk-infrastructure
           run:
             path: sh
             args:
               - -euo pipefail
               - |
-                env
+                cd govuk-infrastructure/terraform/deployments/vpc/
                 
-                echo "Installing AWS CLI..."
-                apk update
-                apk add --no-cache --no-progress -q aws-cli
-                
-                echo "Verifying AWS identity..."
-                aws sts get-caller-identity
-                
-                echo "AWS identity verification complete!"
+                terraform init -backend=false
+                terraform plan -var-file tfvars/type/test.tfvars -var-file tfvars/named/ah-test.tfvars
