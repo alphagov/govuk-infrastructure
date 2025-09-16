@@ -12,7 +12,7 @@ resource "helm_release" "aws_lb_controller" {
   version          = "1.13.4"
   namespace        = local.services_ns
   create_namespace = true
-  timeout          = var.helm_timeout_seconds
+  timeout          = local.helm_timeout_seconds
   values = [yamlencode({
     clusterName        = data.terraform_remote_state.cluster_infrastructure.outputs.cluster_id
     defaultSSLPolicy   = "ELBSecurityPolicy-TLS13-1-2-2021-06"
@@ -23,8 +23,8 @@ resource "helm_release" "aws_lb_controller" {
       # TODO: factor out ALB attributes that are common to all of our ingresses.
       # https://docs.aws.amazon.com/elasticloadbalancing/latest/application/application-load-balancers.html#load-balancer-attributes
     ] } }
-    podDisruptionBudget = var.desired_ha_replicas > 1 ? { minAvailable = 1 } : {}
-    replicaCount        = var.desired_ha_replicas
+    podDisruptionBudget = { minAvailable = 1 }
+    replicaCount        = 1
     region              = data.aws_region.current.region
     serviceMonitor = {
       enabled = !startswith(var.govuk_environment, "eph-")

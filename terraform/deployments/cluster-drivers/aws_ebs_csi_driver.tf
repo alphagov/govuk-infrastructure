@@ -5,7 +5,7 @@ resource "helm_release" "aws_ebs_csi_driver" {
   version          = "2.47.0"
   namespace        = "kube-system"
   create_namespace = true
-  timeout          = var.helm_timeout_seconds
+  timeout          = local.helm_timeout_seconds
   values = [yamlencode({
     controller = {
       serviceAccount = {

@@ -133,3 +133,7 @@ output "public_subnets" {
 output "control_plane_subnets" {
   value = [for sn in aws_subnet.eks_control_plane : sn.id]
 }
+
+output "concourse_web_url" {
+  value = "https://concourse.${local.external_dns_zone_name}"
+}
