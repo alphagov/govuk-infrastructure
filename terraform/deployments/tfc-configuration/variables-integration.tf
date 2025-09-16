@@ -162,6 +162,8 @@ module "variable-set-rds-integration" {
         performance_insights_enabled = false
         project                      = "GOV.UK - Test"
         encryption_at_rest           = false
+        create_encrypted_snapshot    = true
+        deletion_protection          = false
       }
 
       account_api = {
