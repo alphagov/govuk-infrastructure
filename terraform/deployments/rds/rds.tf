@@ -111,9 +111,9 @@ resource "aws_db_snapshot_copy" "encrypted_snapshot" {
     for db_name, db in var.databases : db_name => db if try(db.create_encrypted_snapshot, false)
   }
 
-  source_db_snapshot_identifier = aws_db_snapshot.unencrypted_snapshot[each.key].db_snapshot_identifier
+  source_db_snapshot_identifier = aws_db_snapshot.unencrypted_snapshot[each.key].db_snapshot_arn
   target_db_snapshot_identifier = "${local.identifier_prefix}${each.value.name}-${each.value.engine}-post-encryption"
-  kms_key_id                    = aws_kms_alias.rds.name
+  kms_key_id                    = aws_kms_key.rds.arn
 }
 
 resource "aws_db_event_subscription" "subscription" {
