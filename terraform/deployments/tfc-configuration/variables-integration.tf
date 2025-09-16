@@ -236,7 +236,6 @@ module "variable-set-rds-integration" {
         instance_class               = "db.t4g.small"
         performance_insights_enabled = false
         project                      = "GOV.UK - AI"
-        encryption_at_rest           = false
         create_encrypted_snapshot    = true
         deletion_protection          = false
         encryption_at_rest           = true
