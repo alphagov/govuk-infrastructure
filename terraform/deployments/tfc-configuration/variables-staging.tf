@@ -226,8 +226,6 @@ module "variable-set-rds-staging" {
         instance_class               = "db.t4g.small"
         performance_insights_enabled = false
         project                      = "GOV.UK - AI"
-        create_encrypted_snapshot    = true
-        deletion_protection          = false
         snapshot_identifier          = "chat-postgres-post-encryption"
         encryption_at_rest           = true
       }
