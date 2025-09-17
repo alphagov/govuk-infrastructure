@@ -227,6 +227,8 @@ module "variable-set-rds-staging" {
         performance_insights_enabled = false
         project                      = "GOV.UK - AI"
         encryption_at_rest           = false
+        create_encrypted_snapshot    = true
+        deletion_protection          = false
       }
 
       ckan = {
