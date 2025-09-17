@@ -251,7 +251,7 @@ module "variable-set-rds-production" {
         }
         engine_params_family         = "postgres14"
         name                         = "ckan"
-        allocated_storage            = 1000
+        allocated_storage            = 1250
         instance_class               = "db.m6g.2xlarge"
         performance_insights_enabled = true
         project                      = "GOV.UK - DGU"
