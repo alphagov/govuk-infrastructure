@@ -4,6 +4,10 @@
     "type": "STRING",
     "mode": "REQUIRED"
   },
+  { "name": "serving_configuration_name",   
+    "type": "STRING",  
+    "mode": "NULLABLE" 
+  },
   {
     "name": "evaluation_results",
     "type": "RECORD",
