@@ -237,8 +237,6 @@ module "variable-set-rds-production" {
         instance_class               = "db.m6g.large"
         performance_insights_enabled = false
         project                      = "GOV.UK - AI"
-        create_encrypted_snapshot    = true
-        deletion_protection          = false
         snapshot_identifier          = "chat-postgres-post-encryption"
         encryption_at_rest           = true
       }
