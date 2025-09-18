@@ -63,5 +63,10 @@ data "aws_iam_policy_document" "opensearch_snapshot_bucket_policy" {
       aws_s3_bucket.opensearch_snapshot.arn,
       "${aws_s3_bucket.opensearch_snapshot.arn}/*",
     ]
+    condition {
+      test     = "Bool"
+      variable = "aws:SecureTransport"
+      values   = ["true"]
+    }
   }
 }
