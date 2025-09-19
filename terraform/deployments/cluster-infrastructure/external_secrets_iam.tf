@@ -9,8 +9,8 @@ locals {
 }
 
 module "external_secrets_iam_role" {
-  source                        = "terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc"
-  version                       = "~> 5.0"
+  source                        = "terraform-aws-modules/iam/aws//modules/iam-role"
+  version                       = "~> 6.0"
   create_role                   = true
   role_name                     = "${local.external_secrets_service_account_name}-${var.cluster_name}"
   role_description              = "Role for External Secrets addon. Corresponds to ${local.external_secrets_service_account_name} k8s ServiceAccount."
