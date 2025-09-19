@@ -2,6 +2,11 @@ name: Release
 
 on:
   workflow_call:
+    inputs:
+      generate_release_notes:
+        required: false
+        type: boolean
+        default: false
     secrets:
       GH_TOKEN:
         required: true
@@ -80,5 +85,6 @@ jobs:
               tag_name: newTag,
               name: newTag,
               target_commitish: '${{ github.event.workflow_run.head_commit.id}}',
+              generate_release_notes: '${{ inputs.generate_release_notes }}',
               make_latest: "legacy",
             });
