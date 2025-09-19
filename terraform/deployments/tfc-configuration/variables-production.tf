@@ -682,7 +682,7 @@ module "variable-set-rds-production" {
 
       service_manual_publisher = {
         engine         = "postgres"
-        engine_version = "13"
+        engine_version = "14.18"
         engine_params = {
           log_min_duration_statement = { value = 10000 }
           log_statement              = { value = "all" }
@@ -705,7 +705,7 @@ module "variable-set-rds-production" {
             apply_method = "pending-reboot"
           }
         }
-        engine_params_family         = "postgres13"
+        engine_params_family         = "postgres14"
         name                         = "service-manual-publisher"
         allocated_storage            = 100
         instance_class               = "db.t4g.medium"
