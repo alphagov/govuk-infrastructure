@@ -152,15 +152,14 @@ module "variable-set-rds-staging" {
 
   name = "rds-staging"
   tfvars = {
-    backup_retention_period = 0
+    backup_retention_period = 1
     skip_final_snapshot     = true
     multi_az                = false
 
     databases = {
       account_api = {
-        engine                  = "postgres"
-        engine_version          = "13"
-        backup_retention_period = 1
+        engine         = "postgres"
+        engine_version = "13"
         engine_params = {
           log_min_duration_statement = { value = 10000 }
           log_statement              = { value = "all" }
@@ -301,9 +300,8 @@ module "variable-set-rds-staging" {
       }
 
       content_data_api = {
-        engine                  = "postgres"
-        engine_version          = "13"
-        backup_retention_period = 1
+        engine         = "postgres"
+        engine_version = "13"
         engine_params = {
           work_mem                             = { value = "GREATEST({DBInstanceClassMemory/${1024 * 16}},65536)" }
           autovacuum_max_workers               = { value = 1, apply_method = "pending-reboot" }
@@ -341,9 +339,8 @@ module "variable-set-rds-staging" {
       }
 
       content_publisher = {
-        engine                  = "postgres"
-        engine_version          = "13"
-        backup_retention_period = 1
+        engine         = "postgres"
+        engine_version = "13"
         engine_params = {
           log_min_duration_statement = { value = 10000 }
           log_statement              = { value = "all" }
@@ -394,9 +391,8 @@ module "variable-set-rds-staging" {
       }
 
       content_tagger = {
-        engine                  = "postgres"
-        engine_version          = "13"
-        backup_retention_period = 1
+        engine         = "postgres"
+        engine_version = "13"
         engine_params = {
           log_min_duration_statement = { value = 10000 }
           log_statement              = { value = "all" }
@@ -447,9 +443,8 @@ module "variable-set-rds-staging" {
       }
 
       email_alert_api = {
-        engine                  = "postgres"
-        engine_version          = "13"
-        backup_retention_period = 1
+        engine         = "postgres"
+        engine_version = "13"
         engine_params = {
           log_min_duration_statement = { value = 10000 }
           log_statement              = { value = "all" }
@@ -520,9 +515,8 @@ module "variable-set-rds-staging" {
       }
 
       local_links_manager = {
-        engine                  = "postgres"
-        engine_version          = "13"
-        backup_retention_period = 1
+        engine         = "postgres"
+        engine_version = "13"
         engine_params = {
           log_min_duration_statement = { value = 10000 }
           log_statement              = { value = "all" }
@@ -555,9 +549,8 @@ module "variable-set-rds-staging" {
       }
 
       locations_api = {
-        engine                  = "postgres"
-        engine_version          = "13"
-        backup_retention_period = 1
+        engine         = "postgres"
+        engine_version = "13"
         engine_params = {
           log_min_duration_statement = { value = 10000 }
           log_statement              = { value = "all" }
@@ -625,7 +618,6 @@ module "variable-set-rds-staging" {
         instance_class               = "db.m7g.2xlarge"
         performance_insights_enabled = true
         project                      = "GOV.UK - Publishing"
-        backup_retention_period      = 1
         has_read_replica             = true
         encryption_at_rest           = false
       }
@@ -713,9 +705,8 @@ module "variable-set-rds-staging" {
       }
 
       support_api = {
-        engine                  = "postgres"
-        engine_version          = "13"
-        backup_retention_period = 1
+        engine         = "postgres"
+        engine_version = "13"
         engine_params = {
           log_min_duration_statement = { value = 10000 }
           log_statement              = { value = "all" }
