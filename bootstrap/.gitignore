@@ -1,1 +1,2 @@
 fly
+./init-state-bucket/*.tfstate

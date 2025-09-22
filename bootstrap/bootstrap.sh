@@ -45,31 +45,96 @@ if [ -z "$env" ]; then
   usage
 fi
 
-if [ -z "$AWS_SESSION_TOKEN" ]; then
+if [ ! -n "${AWS_SESSION_TOKEN+_}" ]; then
   echo "Error: you do not have AWS session credentials in your environment" >&2
   exit 2
 fi
 
-echo "==> Starting Concourse"
-docker compose up -d
+TEXT_BOLD_RED="\x1b[1;31;40m"
+TEXT_RESET="\x1b[0m"
+cat <<EOF
+==> Bootstrapping a GOV.UK environment
+About to perform a minimal bootstrapping of a GOV.UK environment. This will
+result in an AWS VPC, DNS, and a minimally configured Kubernetes cluster.
 
-echo "==> Downloading Fly binary"
-curl 'http://localhost:8080/api/v1/cli?arch=amd64&platform=darwin' -o fly
-chmod +x ./fly
-FLY="./fly"
+The Kubernetes cluster will have a running instance of Concourse, with a
+pipeline which will complete the bootstrapping process.
 
-echo "==> Logging into Concourse"
-$FLY -t bootstrap login -c http://localhost:8080 -u bootstrap -p govuk
+To do all of this you $(echo -e "${TEXT_BOLD_RED}MUST${TEXT_RESET}") be using a using an admin role in AWS. If you are not,
+you are unlikely to have sufficient privilege to perform the bootstrapping process
+and it will break part way through.
 
-$FLY -t bootstrap set-pipeline -n -p bootstrap -c ../pipelines/bootstrap.yml \
-  -v BOOTSTRAP_AWS_ACCESS_KEY_ID="${AWS_ACCESS_KEY_ID}" \
-  -v BOOTSTRAP_AWS_SECRET_ACCESS_KEY="${AWS_SECRET_ACCESS_KEY}" \
-  -v BOOTSTRAP_AWS_SESSION_TOKEN="${AWS_SESSION_TOKEN}"
+EOF
 
-$FLY -t bootstrap unpause-pipeline -p bootstrap
+read -r -p "Continue (y/n)? " continue
+case "$(echo "$continue" | tr "[:lower:]" "[:upper:]")" in
+  y|Y ) : ;;
+  yes|YES ) : ;;
+  * ) exit 3 ;;
+esac
 
-open "$($FLY targets | grep bootstrap | awk '{print $2}')/teams/main/pipelines/bootstrap"
+echo "==> Initialising state bucket"
+(cd init-state-bucket; ./init.sh "${env}") 2>&1 | sed -E "s/^/(state-bucket) /"
 
-echo "==> Credentials"
-echo "==> Username: bootstrap"
-echo "==> Password: govuk"
+echo "==> Apply Terraform root: terraform/deployments/vpc/"
+(
+  cd ../terraform/deployments/vpc
+  terraform init
+  terraform apply -var-file tfvars/type/test.tfvars -var-file tfvars/named/ah-test.tfvars
+) 2>&1 | sed -E "s/^/(vpc) /"
+
+echo "==> Apply Terraform root: terraform/deployments/root-dns/"
+(
+  cd ../terraform/deployments/root-dns
+  terraform init
+  terraform apply -var-file tfvars/named/ah-test.tfvars
+) 2>&1 | sed -E "s/^/(root-dns) /"
+
+echo "==> Apply Terraform root: terraform/deployments/cluster-infrastructure/"
+(
+  cd ../terraform/deployments/cluster-infrastructure
+  terraform init
+  terraform apply -var-file tfvars/type/test.tfvars -var-file tfvars/named/ah-test.tfvars
+) 2>&1 | sed -E "s/^/(cluster-infrastructure) /"
+
+echo "==> Apply Terraform root: terraform/deployments/cluster-drivers/"
+(
+  cd ../terraform/deployments/cluster-drivers
+  terraform init
+  terraform apply -var-file tfvars/named/ah-test.tfvars
+) 2>&1 | sed -E "s/^/(cluster-drivers) /"
+
+echo "==> Apply Terraform root: terraform/deployments/concourse/"
+(
+  cd ../terraform/deployments/concourse
+  terraform init
+  terraform apply -var-file tfvars/named/ah-test.tfvars
+) 2>&1 | sed -E "s/^/(concourse) /"
+
+echo "==> Apply Terraform root: terraform/deployments/cluster-access/"
+(
+  cd ../terraform/deployments/cluster-access
+  terraform init
+  terraform apply -var-file tfvars/type/test.tfvars -var-file tfvars/named/ah-test.tfvars
+) 2>&1 | sed -E "s/^/(cluster-access) /"
+
+#echo "==> Downloading Fly binary"
+#curl 'http://localhost:8080/api/v1/cli?arch=amd64&platform=darwin' -o fly
+#chmod +x ./fly
+#FLY="./fly"
+#
+#echo "==> Logging into Concourse"
+#$FLY -t bootstrap login -c http://localhost:8080 -u bootstrap -p govuk
+#
+#$FLY -t bootstrap set-pipeline -n -p bootstrap -c ../pipelines/bootstrap.yml \
+#  -v BOOTSTRAP_AWS_ACCESS_KEY_ID="${AWS_ACCESS_KEY_ID}" \
+#  -v BOOTSTRAP_AWS_SECRET_ACCESS_KEY="${AWS_SECRET_ACCESS_KEY}" \
+#  -v BOOTSTRAP_AWS_SESSION_TOKEN="${AWS_SESSION_TOKEN}"
+#
+#$FLY -t bootstrap unpause-pipeline -p bootstrap
+#
+#open "$($FLY targets | grep bootstrap | awk '{print $2}')/teams/main/pipelines/bootstrap"
+#
+#echo "==> Credentials"
+#echo "==> Username: bootstrap"
+#echo "==> Password: govuk"
