@@ -29,12 +29,6 @@ module "variable-set-production" {
       c = { az = "eu-west-1c", cidr = "10.13.32.0/22" }
     }
 
-    legacy_public_subnets = {
-      a = { az = "eu-west-1a", cidr = "10.13.1.0/24" }
-      b = { az = "eu-west-1b", cidr = "10.13.2.0/24" }
-      c = { az = "eu-west-1c", cidr = "10.13.3.0/24" }
-    }
-
     legacy_private_subnets = {
       a = { az = "eu-west-1a", cidr = "10.13.4.0/24", nat = true }
       b = { az = "eu-west-1b", cidr = "10.13.5.0/24", nat = true }

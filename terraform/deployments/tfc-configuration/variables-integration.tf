@@ -29,12 +29,6 @@ module "variable-set-integration" {
       c = { az = "eu-west-1c", cidr = "10.1.32.0/22" }
     }
 
-    legacy_public_subnets = {
-      a = { az = "eu-west-1a", cidr = "10.1.1.0/24" }
-      b = { az = "eu-west-1b", cidr = "10.1.2.0/24" }
-      c = { az = "eu-west-1c", cidr = "10.1.3.0/24" }
-    }
-
     legacy_private_subnets = {
       a = { az = "eu-west-1a", cidr = "10.1.4.0/24", nat = true }
       b = { az = "eu-west-1b", cidr = "10.1.5.0/24", nat = true }
