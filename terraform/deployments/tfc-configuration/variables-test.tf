@@ -27,8 +27,6 @@ module "variable-set-ephemeral" {
       c = { az = "eu-west-1c", cidr = "10.10.96.0/19" }
     }
 
-    legacy_public_subnets = {}
-
     legacy_private_subnets = {}
 
     govuk_environment = "ephemeral"

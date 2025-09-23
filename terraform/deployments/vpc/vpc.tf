@@ -6,7 +6,7 @@ resource "aws_vpc" "vpc" {
   enable_dns_hostnames = true
 
   tags = {
-    Name = "govuk-${var.govuk_environment}"
+    Name = "govuk-vpc-${var.govuk_environment}"
   }
 
   lifecycle {
@@ -18,7 +18,7 @@ resource "aws_internet_gateway" "public" {
   vpc_id = aws_vpc.vpc.id
 
   tags = {
-    Name = "govuk-${var.govuk_environment}"
+    Name = "govuk-ig-${var.govuk_environment}"
   }
 }
 
