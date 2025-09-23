@@ -15,7 +15,7 @@ data "aws_iam_policy_document" "synthetic_test_assumed_assume" {
       effect  = "Allow"
       principals {
         type        = "AWS"
-        identifiers = [statement.key]
+        identifiers = local.assumed_identifiers
       }
     }
   }
