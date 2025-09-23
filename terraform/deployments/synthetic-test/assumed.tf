@@ -8,15 +8,12 @@ locals {
 }
 
 data "aws_iam_policy_document" "synthetic_test_assumed_assume" {
-  dynamic "statement" {
-    for_each = toset(local.assumed_identifiers)
-    content {
-      actions = ["sts:AssumeRole"]
-      effect  = "Allow"
-      principals {
-        type        = "AWS"
-        identifiers = local.assumed_identifiers
-      }
+  statement {
+    actions = ["sts:AssumeRole"]
+    effect  = "Allow"
+    principals {
+      type        = "AWS"
+      identifiers = local.assumed_identifiers
     }
   }
 }
