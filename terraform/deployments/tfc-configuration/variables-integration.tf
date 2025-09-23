@@ -95,13 +95,6 @@ module "variable-set-chat-integration" {
     chat_redis_cluster_multi_az_enabled           = false
     chat_redis_cluster_node_type                  = "cache.r6g.xlarge"
     chat_redis_cluster_num_cache_clusters         = "1"
-    cloudfront_create                             = true
-    cloudfront_enable                             = true
-    service_disabled                              = false
-    origin_chat_domain                            = "chat.eks.integration.govuk.digital"
-    origin_chat_id                                = "Chat origin"
-    cloudfront_chat_distribution_aliases          = ["chat.integration.publishing.service.gov.uk"]
-    chat_certificate_arn                          = "arn:aws:acm:us-east-1:210287912431:certificate/458b8373-08a4-4cdc-bb00-524bcc480b5b"
   }
 }
 

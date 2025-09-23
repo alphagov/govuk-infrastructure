@@ -36,36 +36,6 @@ variable "chat_redis_cluster_multi_az_enabled" {
   type        = bool
   description = "Specifies whether to enable Multi-AZ Support for the replication group."
 }
-variable "cloudfront_create" {
-  description = "Create Cloudfront resources."
-  type        = bool
-  default     = false
-}
-variable "cloudfront_enable" {
-  description = "Enable Cloudfront distributions."
-  type        = bool
-  default     = false
-}
-variable "service_disabled" {
-  description = "Disable GOV.UK Chat service by serving a static error page."
-  type        = bool
-  default     = false
-}
-variable "origin_chat_domain" {
-  type = string
-}
-variable "origin_chat_id" {
-  type = string
-}
-variable "cloudfront_chat_distribution_aliases" {
-  type        = list(any)
-  description = "Additional CNAMEs to create for the Chat CloudFront distribution."
-  default     = []
-}
-variable "chat_certificate_arn" {
-  type        = string
-  description = "ARN of the TLS cert to use for the Chat CloudFront distribution."
-}
 
 variable "chat_slack_channel_id" {
   type        = string
