@@ -27,6 +27,18 @@ locals {
   secrets_prefix             = "govuk" # pragma: allowlist secret
   monitoring_namespace       = "monitoring"
 
+  default_block_device_mappings = {
+    xvda = {
+      device_name = "/dev/xvda"
+      ebs = {
+        volume_size           = var.node_disk_size
+        volume_type           = "gp3"
+        encrypted             = true
+        delete_on_termination = true
+      }
+    }
+  }
+
   default_cluster_addons = {
     coredns        = { most_recent = true }
     kube-proxy     = { most_recent = true }
@@ -40,55 +52,17 @@ locals {
 
   enabled_cluster_addons = merge(local.default_cluster_addons, var.enable_kube_state_metrics ? local.kube_state_metrics_addon : {})
 
-  main_managed_node_group = {
-    main = {
-      name_prefix = var.cluster_name
-      # TODO: set iam_role_permissions_boundary
-      # TODO: apply provider default_tags to instances; might need to set launch_template_tags.
-      desired_size   = var.x86_workers_size_desired
-      max_size       = var.x86_workers_size_max
-      min_size       = var.x86_workers_size_min
-      instance_types = var.main_workers_instance_types
-      update_config  = { max_unavailable = 1 }
-      block_device_mappings = {
-        xvda = {
-          device_name = "/dev/xvda"
-          ebs = {
-            volume_size           = var.node_disk_size
-            volume_type           = "gp3"
-            encrypted             = true
-            delete_on_termination = true
-          }
-        }
-      }
-      additional_tags = {
-        "k8s.io/cluster-autoscaler/enabled"             = "true"
-        "k8s.io/cluster-autoscaler/${var.cluster_name}" = "owned"
-      }
-    }
-  }
-
   x86_managed_node_group = {
     x86 = {
       name_prefix = var.cluster_name
       # TODO: set iam_role_permissions_boundary
       # TODO: apply provider default_tags to instances; might need to set launch_template_tags.
-      desired_size   = var.x86_workers_size_desired
-      max_size       = var.x86_workers_size_max
-      min_size       = var.x86_workers_size_min
-      instance_types = var.x86_workers_instance_types
-      update_config  = { max_unavailable = 1 }
-      block_device_mappings = {
-        xvda = {
-          device_name = "/dev/xvda"
-          ebs = {
-            volume_size           = var.node_disk_size
-            volume_type           = "gp3"
-            encrypted             = true
-            delete_on_termination = true
-          }
-        }
-      }
+      desired_size          = var.x86_workers_size_desired
+      max_size              = var.x86_workers_size_max
+      min_size              = var.x86_workers_size_min
+      instance_types        = var.x86_workers_instance_types
+      update_config         = { max_unavailable = 1 }
+      block_device_mappings = local.default_block_device_mappings
       additional_tags = {
         "k8s.io/cluster-autoscaler/enabled"             = "true"
         "k8s.io/cluster-autoscaler/${var.cluster_name}" = "owned"
@@ -96,6 +70,24 @@ locals {
     }
   }
 
+  arm_managed_node_group_blue = {
+    arm_blue = {
+      ami_type              = "AL2023_ARM_64_STANDARD"
+      name_prefix           = "${var.cluster_name}-blue"
+      desired_size          = var.arm_workers_blue_size_desired
+      max_size              = var.arm_workers_blue_size_max
+      min_size              = var.arm_workers_blue_size_min
+      instance_types        = var.arm_workers_blue_instance_types
+      update_config         = { max_unavailable = 1 }
+      block_device_mappings = local.default_block_device_mappings
+      additional_tags = {
+        "k8s.io/cluster-autoscaler/enabled"             = "true"
+        "k8s.io/cluster-autoscaler/${var.cluster_name}" = "owned"
+      }
+    }
+  }
+
+  # This will be a "Green" Node Group once Blue has become primary
   arm_managed_node_group = {
     arm = {
       ami_type              = "AL2023_ARM_64_STANDARD"
@@ -105,7 +97,7 @@ locals {
       min_size              = var.arm_workers_size_min
       instance_types        = var.arm_workers_instance_types
       update_config         = { max_unavailable = 1 }
-      block_device_mappings = local.x86_managed_node_group.x86.block_device_mappings
+      block_device_mappings = local.default_block_device_mappings
       additional_tags = {
         "k8s.io/cluster-autoscaler/enabled"             = "true"
         "k8s.io/cluster-autoscaler/${var.cluster_name}" = "owned"
@@ -113,7 +105,8 @@ locals {
     }
   }
 
-  eks_managed_node_groups = merge(var.enable_main_workers ? local.main_managed_node_group : {}, var.enable_x86_workers ? local.x86_managed_node_group : {}, var.enable_arm_workers ? local.arm_managed_node_group : {})
+
+  eks_managed_node_groups = merge(var.enable_x86_workers ? local.x86_managed_node_group : {}, var.enable_arm_workers_blue ? local.arm_managed_node_group_blue : {}, var.enable_arm_workers ? local.arm_managed_node_group : {})
 }
 
 provider "aws" {

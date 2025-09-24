@@ -20,7 +20,6 @@ module "var_set" {
     publishing_service_domain = "${var.ephemeral_cluster_id}.publishing.service.gov.uk"
 
     enable_arm_workers         = true
-    enable_main_workers        = false
     enable_x86_workers         = false
     arm_workers_instance_types = ["m7g.2xlarge"]
 

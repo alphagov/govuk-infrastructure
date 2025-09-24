@@ -51,9 +51,8 @@ module "variable-set-staging" {
 
     enable_kube_state_metrics = false
 
-    enable_arm_workers  = true
-    enable_main_workers = false
-    enable_x86_workers  = true
+    enable_arm_workers = true
+    enable_x86_workers = true
 
     main_workers_instance_types = ["m6i.4xlarge", "m6a.4xlarge", "m6i.2xlarge", "m6a.2xlarge"]
 

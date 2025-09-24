@@ -63,13 +63,31 @@ variable "enable_arm_workers" {
   default     = false
 }
 
+variable "enable_arm_workers_blue" {
+  type        = bool
+  description = "Whether to enable the 'blue' ARM/Graviton-based Managed Node Group"
+  default     = false
+}
+
 variable "arm_workers_instance_types" {
   type        = list(string)
   description = "List of ARM-based instance types for the managed node group, in order of preference. The second and subsequent preferences are only relevant when using spot instances."
   default     = ["m7g.4xlarge", "m6g.4xlarge"]
 }
 
+variable "arm_workers_blue_instance_types" {
+  type        = list(string)
+  description = "List of ARM-based instance types for the 'blue' managed node group, in order of preference. The second and subsequent preferences are only relevant when using spot instances."
+  default     = ["m7g.4xlarge", "m6g.4xlarge"]
+}
+
 variable "arm_workers_default_capacity_type" {
+  type        = string
+  description = "Default capacity type for ARM-based managed node groups: SPOT or ON_DEMAND."
+  default     = "ON_DEMAND"
+}
+
+variable "arm_workers_blue_default_capacity_type" {
   type        = string
   description = "Default capacity type for ARM-based managed node groups: SPOT or ON_DEMAND."
   default     = "ON_DEMAND"
@@ -81,7 +99,19 @@ variable "arm_workers_size_desired" {
   default     = 6
 }
 
+variable "arm_workers_blue_size_desired" {
+  type        = number
+  description = "Desired capacity of ARM-based managed node autoscale group."
+  default     = 6
+}
+
 variable "arm_workers_size_min" {
+  type        = number
+  description = "Min capacity of ARM-based managed node autoscale group."
+  default     = 3
+}
+
+variable "arm_workers_blue_size_min" {
   type        = number
   description = "Min capacity of ARM-based managed node autoscale group."
   default     = 3
@@ -93,22 +123,16 @@ variable "arm_workers_size_max" {
   default     = 12
 }
 
-variable "enable_main_workers" {
-  type        = bool
-  description = "TEMPORARRY - Whether to enable the legacy Main-prefixed x86/AMD64 Managed Node Group"
-  default     = true
+variable "arm_workers_blue_size_max" {
+  type        = number
+  description = "Max capacity of ARM-based managed node autoscale group."
+  default     = 12
 }
 
 variable "enable_x86_workers" {
   type        = bool
   description = "Whether to enable the x86/AMD64 Managed Node Group"
   default     = true
-}
-
-variable "main_workers_instance_types" {
-  type        = list(string)
-  description = "TEMPORARY - List of instance types for the managed node group, in order of preference. The second and subsequent preferences are only relevant when using spot instances."
-  default     = ["m6i.4xlarge", "m6a.4xlarge", "m6i.2xlarge", "m6a.2xlarge"]
 }
 
 variable "x86_workers_instance_types" {
