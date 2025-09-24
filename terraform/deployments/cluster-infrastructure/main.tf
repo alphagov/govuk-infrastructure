@@ -87,7 +87,7 @@ locals {
     }
   }
 
-# This will be a "Green" Node Group once Blue has become primary
+  # This will be a "Green" Node Group once Blue has become primary
   arm_managed_node_group = {
     arm = {
       ami_type              = "AL2023_ARM_64_STANDARD"

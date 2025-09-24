@@ -51,8 +51,8 @@ module "variable-set-production" {
 
     enable_kube_state_metrics = false
 
-    enable_arm_workers  = true
-    enable_x86_workers  = true
+    enable_arm_workers = true
+    enable_x86_workers = true
 
     publishing_service_domain = "publishing.service.gov.uk"
 
