@@ -106,7 +106,7 @@ locals {
   }
 
 
-  eks_managed_node_groups = merge(var.enable_x86_workers ? local.x86_managed_node_group : {}, var.enable_arm_workers_blue ? local.arm_managed_node_group_blue : {}, var.enable_arm_workers ? local.arm_managed_node_group : {})
+  eks_managed_node_groups = merge(var.enable_x86_workers ? local.x86_managed_node_group : {}, var.enable_arm_workers_blue ? local.arm_managed_node_group_blue : {}, var.enable_arm_workers_green ? local.arm_managed_node_group_green : {})
 }
 
 provider "aws" {
