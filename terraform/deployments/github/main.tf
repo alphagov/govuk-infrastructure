@@ -188,7 +188,7 @@ resource "github_repository" "govuk_repos" {
   allow_merge_commit = false
 
   has_downloads        = true
-  vulnerability_alerts = true
+  vulnerability_alerts = !try(each.value.archived, false) # Archived repos cannot have vulnerability alerts
 
   delete_branch_on_merge = true
 
