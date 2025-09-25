@@ -626,6 +626,7 @@ repos:
 
   markdown-toolbar-element:
     archived: true
+    homepage_url: "https://alphagov.github.io/markdown-toolbar-element"
 
   miller-columns-element:
     archived: true
