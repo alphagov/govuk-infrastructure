@@ -370,6 +370,8 @@ repos:
     visibility: private
     strict: true
     up_to_date_branches: true
+    required_pull_request_reviews:
+      require_code_owner_reviews: true
     required_status_checks:
       additional_contexts:
         - test
@@ -387,11 +389,15 @@ repos:
     can_be_deployed: true
     strict: true
     up_to_date_branches: true
+    required_pull_request_reviews:
+      require_code_owner_reviews: true
 
   govuk-fastly-secrets:
     visibility: private
     strict: true
     up_to_date_branches: true
+    required_pull_request_reviews:
+      require_code_owner_reviews: true
 
   govuk-graphql:
     branch_protection: false
@@ -407,6 +413,8 @@ repos:
     visibility: private
     strict: true
     up_to_date_branches: true
+    required_pull_request_reviews:
+      require_code_owner_reviews: true
 
   terraform-govuk-tfe-workspacer:
     strict: true
