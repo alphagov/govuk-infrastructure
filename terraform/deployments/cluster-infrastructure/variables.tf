@@ -57,22 +57,16 @@ variable "enable_kube_state_metrics" {
   default     = false
 }
 
-variable "enable_arm_workers" {
-  type        = bool
-  description = "Whether to enable the ARM/Graviton-based Managed Node Group"
-  default     = false
-}
-
 variable "enable_arm_workers_blue" {
   type        = bool
   description = "Whether to enable the 'blue' ARM/Graviton-based Managed Node Group"
   default     = false
 }
 
-variable "arm_workers_instance_types" {
-  type        = list(string)
-  description = "List of ARM-based instance types for the managed node group, in order of preference. The second and subsequent preferences are only relevant when using spot instances."
-  default     = ["m7g.4xlarge", "m6g.4xlarge"]
+variable "enable_arm_workers_green" {
+  type        = bool
+  description = "Whether to enable the 'green' ARM/Graviton-based Managed Node Group"
+  default     = false
 }
 
 variable "arm_workers_blue_instance_types" {
@@ -81,51 +75,57 @@ variable "arm_workers_blue_instance_types" {
   default     = ["m7g.4xlarge", "m6g.4xlarge"]
 }
 
-variable "arm_workers_default_capacity_type" {
-  type        = string
-  description = "Default capacity type for ARM-based managed node groups: SPOT or ON_DEMAND."
-  default     = "ON_DEMAND"
+variable "arm_workers_green_instance_types" {
+  type        = list(string)
+  description = "List of ARM-based instance types for the 'green managed node group, in order of preference. The second and subsequent preferences are only relevant when using spot instances."
+  default     = ["m7g.4xlarge", "m6g.4xlarge"]
 }
 
 variable "arm_workers_blue_default_capacity_type" {
   type        = string
-  description = "Default capacity type for ARM-based managed node groups: SPOT or ON_DEMAND."
+  description = "Default capacity type for ARM-based 'blue' managed node groups: SPOT or ON_DEMAND."
   default     = "ON_DEMAND"
 }
 
-variable "arm_workers_size_desired" {
-  type        = number
-  description = "Desired capacity of ARM-based managed node autoscale group."
-  default     = 6
+variable "arm_workers_green_default_capacity_type" {
+  type        = string
+  description = "Default capacity type for ARM-based 'green' managed node groups: SPOT or ON_DEMAND."
+  default     = "ON_DEMAND"
 }
 
 variable "arm_workers_blue_size_desired" {
   type        = number
-  description = "Desired capacity of ARM-based managed node autoscale group."
+  description = "Desired capacity of ARM-based 'blue' managed node autoscale group."
   default     = 6
 }
 
-variable "arm_workers_size_min" {
+variable "arm_workers_green_size_desired" {
   type        = number
-  description = "Min capacity of ARM-based managed node autoscale group."
-  default     = 3
+  description = "Desired capacity of ARM-based 'green' managed node autoscale group."
+  default     = 6
 }
 
 variable "arm_workers_blue_size_min" {
   type        = number
-  description = "Min capacity of ARM-based managed node autoscale group."
+  description = "Min capacity of ARM-based 'blue' managed node autoscale group."
   default     = 3
 }
 
-variable "arm_workers_size_max" {
+variable "arm_workers_green_size_min" {
   type        = number
-  description = "Max capacity of ARM-based managed node autoscale group."
-  default     = 12
+  description = "Min capacity of ARM-based 'green' managed node autoscale group."
+  default     = 3
 }
 
 variable "arm_workers_blue_size_max" {
   type        = number
-  description = "Max capacity of ARM-based managed node autoscale group."
+  description = "Max capacity of ARM-based 'blue' managed node autoscale group."
+  default     = 12
+}
+
+variable "arm_workers_green_size_max" {
+  type        = number
+  description = "Max capacity of ARM-based 'green' managed node autoscale group."
   default     = 12
 }
 
