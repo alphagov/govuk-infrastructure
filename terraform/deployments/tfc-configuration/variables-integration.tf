@@ -52,10 +52,9 @@ module "variable-set-integration" {
 
     enable_kube_state_metrics = true
 
-    enable_arm_workers = true
-    enable_x86_workers = true
-
-    main_workers_instance_types = ["m6i.4xlarge", "m6a.4xlarge", "m6i.2xlarge", "m6a.2xlarge"]
+    enable_arm_workers      = true
+    enable_arm_workers_blue = true
+    enable_x86_workers      = true
 
     publishing_service_domain = "integration.publishing.service.gov.uk"
 
