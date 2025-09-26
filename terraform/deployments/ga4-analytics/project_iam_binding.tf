@@ -58,9 +58,6 @@ resource "google_project_iam_binding" "gds_bigquery_read_access" {
     "serviceAccount:analytics-events-pipeline@search-api-v2-integration.iam.gserviceaccount.com",
     "serviceAccount:analytics-events-pipeline@search-api-v2-production.iam.gserviceaccount.com",
     "serviceAccount:analytics-events-pipeline@search-api-v2-staging.iam.gserviceaccount.com",
-    "serviceAccount:chatbot-cloudrun@data-insights-experimentation.iam.gserviceaccount.com",
-    "serviceAccount:chatbot-cloudrun-dev@data-insights-experimentation.iam.gserviceaccount.com",
-    "serviceAccount:data-insights-experimentation@data-insights-experimentation.iam.gserviceaccount.com",
     "serviceAccount:govuk-content-data-ga4@govuk-content-data.iam.gserviceaccount.com",
     "serviceAccount:govuk-looker-poc@govuk-looker-poc.iam.gserviceaccount.com",
   ]
