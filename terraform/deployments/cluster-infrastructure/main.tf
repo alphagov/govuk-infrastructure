@@ -88,14 +88,14 @@ locals {
   }
 
   # This will be a "Green" Node Group once Blue has become primary
-  arm_managed_node_group = {
+  arm_managed_node_group_green = {
     arm = {
       ami_type              = "AL2023_ARM_64_STANDARD"
-      name_prefix           = var.cluster_name
-      desired_size          = var.arm_workers_size_desired
-      max_size              = var.arm_workers_size_max
-      min_size              = var.arm_workers_size_min
-      instance_types        = var.arm_workers_instance_types
+      name_prefix           = "${var.cluster_name}-green"
+      desired_size          = var.arm_workers_green_size_desired
+      max_size              = var.arm_workers_green_size_max
+      min_size              = var.arm_workers_green_size_min
+      instance_types        = var.arm_workers_green_instance_types
       update_config         = { max_unavailable = 1 }
       block_device_mappings = local.default_block_device_mappings
       additional_tags = {
@@ -106,7 +106,7 @@ locals {
   }
 
 
-  eks_managed_node_groups = merge(var.enable_x86_workers ? local.x86_managed_node_group : {}, var.enable_arm_workers_blue ? local.arm_managed_node_group_blue : {}, var.enable_arm_workers ? local.arm_managed_node_group : {})
+  eks_managed_node_groups = merge(var.enable_x86_workers ? local.x86_managed_node_group : {}, var.enable_arm_workers_blue ? local.arm_managed_node_group_blue : {}, var.enable_arm_workers_green ? local.arm_managed_node_group_green : {})
 }
 
 provider "aws" {
