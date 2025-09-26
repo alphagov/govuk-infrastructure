@@ -52,7 +52,7 @@ module "variable-set-staging" {
     enable_kube_state_metrics = false
 
     enable_arm_workers_blue  = true
-    enable_arm_workers_green = false
+    enable_arm_workers_green = true
     enable_x86_workers       = false
 
     publishing_service_domain = "staging.publishing.service.gov.uk"
