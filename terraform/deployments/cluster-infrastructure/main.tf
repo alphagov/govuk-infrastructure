@@ -89,7 +89,7 @@ locals {
 
   # This will be a "Green" Node Group once Blue has become primary
   arm_managed_node_group_green = {
-    arm = {
+    arm_green = {
       ami_type              = "AL2023_ARM_64_STANDARD"
       name_prefix           = "${var.cluster_name}-green"
       desired_size          = var.arm_workers_green_size_desired
