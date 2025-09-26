@@ -52,14 +52,14 @@ module "variable-set-production" {
     enable_kube_state_metrics = false
 
     enable_arm_workers_blue  = true
-    enable_arm_workers_green = false
+    enable_arm_workers_green = true
     enable_x86_workers       = false
 
     publishing_service_domain = "publishing.service.gov.uk"
 
-    arm_workers_blue_instance_types  = ["r8g.2xlarge"]
-    arm_workers_green_instance_types = ["r8g.2xlarge"]
-    x86_workers_instance_types       = ["r7i.large", "r7a.large", "m7i-flex.xlarge", "m6a.xlarge", "m6i.xlarge"]
+    arm_workers_blue_instance_types = ["r8g.2xlarge"]
+    # arm_workers_green_instance_types = ["m8g.4xlarge"]
+    x86_workers_instance_types = ["r7i.large", "r7a.large", "m7i-flex.xlarge", "m6a.xlarge", "m6i.xlarge"]
 
     frontend_memcached_node_type = "cache.r6g.large"
 
