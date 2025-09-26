@@ -54,7 +54,7 @@ module "variable-set-integration" {
 
     enable_arm_workers_blue  = true
     enable_arm_workers_green = false
-    enable_x86_workers       = true
+    enable_x86_workers       = false
 
     publishing_service_domain = "integration.publishing.service.gov.uk"
 
