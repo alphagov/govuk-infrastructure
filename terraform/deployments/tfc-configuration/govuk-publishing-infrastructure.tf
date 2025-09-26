@@ -139,14 +139,14 @@ module "govuk-publishing-infrastructure-variable-set-staging" {
     subdomain_delegation_name_servers = {}
     subdomain_dns_records = [
       { type = "A", name = "@", ttl = 3600, value = ["151.101.0.144", "151.101.64.144", "151.101.128.144", "151.101.192.144"] },
-      { type = "TXT", name = "@", ttl = 3600, value = ["globalsign-domain-verification=mA2HaIifSZB8-qKkj2IFzxpZcLA8rkZfS7Y9zSS5BQ", "google-site-verification=M5Q0yBeU28XdlP78DtIzUcc6m63GXzYS4Rrkf2Ab7Ng"] },
+      { type = "TXT", name = "@", ttl = 3600, value = ["globalsign-domain-verification=mA2HaIifSZB8-qKkj2IFzxpZcLA8rkZfS7Y9zSS5BQ", "google-site-verification=M5Q0yBeU28XdlP78DtIzUcc6m63GXzYS4Rrkf2Ab7Ng"] }, // pragma: allowlist secret
       { type = "CNAME", name = "_acme-challenge", ttl = 3600, value = ["swkxpvjulr7u0dfqxo.fastly-validations.com."] },
       { type = "CNAME", name = "chat", ttl = 3600, value = ["chat.eks.staging.govuk.digital."] },
       { type = "CNAME", name = "ckan", ttl = 3600, value = ["ckan.eks.staging.govuk.digital."] },
       { type = "CNAME", name = "govspeak-preview", ttl = 3600, value = ["govspeak-preview.eks.staging.govuk.digital."] },
       { type = "CNAME", name = "search", ttl = 3600, value = ["zd1o9hz5w5.execute-api.eu-west-1.amazonaws.com."] },
       { type = "CNAME", name = "asset-manager", ttl = 3600, value = ["assets-origin.eks.staging.govuk.digital."] },
-      { type = "CNAME", name = "assets", ttl = 3600, value = ["www-gov-uk.map.fastly.net."] },
+      { type = "CNAME", name = "assets", ttl = 60, value = ["www-gov-uk.map.fastly.net."] },
       { type = "CNAME", name = "assets-origin", ttl = 3600, value = ["assets-origin.eks.staging.govuk.digital."] },
       { type = "CNAME", name = "account-api", ttl = 3600, value = ["account-api.eks.staging.govuk.digital."] },
       { type = "CNAME", name = "bouncer", ttl = 3600, value = ["bouncer.eks.staging.govuk.digital."] },
@@ -182,9 +182,9 @@ module "govuk-publishing-infrastructure-variable-set-staging" {
       { type = "CNAME", name = "travel-advice-publisher", ttl = 3600, value = ["travel-advice-publisher.eks.staging.govuk.digital."] },
       { type = "CNAME", name = "try-new-search-engine", ttl = 3600, value = ["try-new-search-engine.eks.staging.govuk.digital."] },
       { type = "CNAME", name = "whitehall-admin", ttl = 3600, value = ["whitehall-admin.eks.staging.govuk.digital."] },
-      { type = "CNAME", name = "www", ttl = 3600, value = ["www-gov-uk.map.fastly.net."] },
+      { type = "CNAME", name = "www", ttl = 60, value = ["www-gov-uk.map.fastly.net."] },
       { type = "CNAME", name = "www-origin", ttl = 3600, value = ["www-origin.eks.staging.govuk.digital."] },
-      { type = "CNAME", name = "5384b32d193a6e103ffb2d5dfde19731", ttl = 10800, value = ["e23b6d9e6e00c1bc4b8732ec65360e2173a3ec9b.comodoca.com."] },
+      { type = "CNAME", name = "5384b32d193a6e103ffb2d5dfde19731", ttl = 10800, value = ["e23b6d9e6e00c1bc4b8732ec65360e2173a3ec9b.comodoca.com."] }, // pragma: allowlist secret
       { type = "CNAME", name = "_bbd4dea834d458f83ac60848ca01c40e", ttl = 10800, value = ["_bbf4a50f6274672e86d2b03bf2baf9cd.acm-validations.aws."] },
       { type = "CNAME", name = "_1bae2c761ad955829733a3676595703b", ttl = 3600, value = ["7d714034d77f2078a33396b112a162f5.b8bd6c48a8ba5d47f49d3daf50191d3d.1f8c4b6a0115a4617e28.comodoca.com."] },
       { type = "CNAME", name = "_4c690fcb01db7a39d9506a525be87761", ttl = 3600, value = ["4d13df04115ed231f76cbb4fc99258aa.6aee3d49400d9c78c16b489b62b609d8.9b09b014d728789be571.comodoca.com."] },
@@ -248,13 +248,13 @@ module "govuk-publishing-infrastructure-variable-set-production" {
       ]
     }
     subdomain_dns_records = [
-      { type = "TXT", name = "@", ttl = 3600, value = ["globalsign-domain-verification=INYQnRXIQfznLaHejAi-z4ZPb6W3Ez3H7BMdhfeAXx", "google-site-verification=M5Q0yBeU28XdlP78DtIzUcc6m63GXzYS4Rrkf2Ab7Ng", "v=spf1 -all"] },
+      { type = "TXT", name = "@", ttl = 3600, value = ["globalsign-domain-verification=INYQnRXIQfznLaHejAi-z4ZPb6W3Ez3H7BMdhfeAXx", "google-site-verification=M5Q0yBeU28XdlP78DtIzUcc6m63GXzYS4Rrkf2Ab7Ng", "v=spf1 -all"] }, // pragma: allowlist secret
       { type = "TXT", name = "_dmarc", ttl = 3600, value = ["v=DMARC1;p=reject;fo=1;rua=mailto:dmarc-rua@dmarc.service.gov.uk;ruf=mailto:dmarc-ruf@dmarc.service.gov.uk"] },
       { type = "TXT", name = "_asvdns-b7cd4a67-98f4-4056-b75b-eb5f94223809", ttl = 3600, value = ["asvdns_a9d18704-67b6-4da8-af63-32465b1754ca"] },
       { type = "CNAME", name = "_28fd670cd9a9d10a4a6cfca6a309db7a", ttl = 10800, value = ["_efcd9da28f32bcef6e8be5e96ce66eab.kirrbxfjtw.acm-validations.aws."] },
       { type = "CNAME", name = "_41a1880a12e2265d29ece89c0e163b94.test", ttl = 300, value = ["_cbace80e22b28b08c9b1253991dc3198.zjfbrrwmzc.acm-validations.aws."] },
       { type = "CNAME", name = "_ae8b61c8a7382b325c17a8468ef3cb06.ckan", ttl = 300, value = ["_42557f53f60fe3529e3d4e0115756709.wsbhgzrqgq.acm-validations.aws."] },
-      { type = "TXT", name = "_amazonses.travel-advice-publisher.alert", ttl = 3600, value = ["xRTTDO1uA0uuOHkKxaQH31n3uEI9QAEcjB/W54pOQ8U="] },
+      { type = "TXT", name = "_amazonses.travel-advice-publisher.alert", ttl = 3600, value = ["xRTTDO1uA0uuOHkKxaQH31n3uEI9QAEcjB/W54pOQ8U="] }, // pragma: allowlist secret
       { type = "CNAME", name = "_d58bf0ccfcf9b41fc9de0fedb51f0b9f.test", ttl = 10800, value = ["54e7aeeb59217b6185e3e1c3c9ffb428.fae5aab90a1fe75618dd4f802fe882d6.4f2663dcc42d6c774673.comodoca.com."] },
       { type = "CNAME", name = "account-api", ttl = 300, value = ["account-api.eks.production.govuk.digital."] },
       { type = "CNAME", name = "app", ttl = 3600, value = ["www-gov-uk.map.fastly.net."] },
@@ -280,7 +280,7 @@ module "govuk-publishing-infrastructure-variable-set-production" {
       { type = "CNAME", name = "govuk-kubernetes-cluster-user-docs", ttl = 3600, value = ["bouncer-cdn.production.govuk.service.gov.uk."] },
       { type = "TXT", name = "_fastly.govuk-kubernetes-cluster-user-docs", ttl = 3600, value = ["fastly-domain-delegation-qWiNqNqmqXcaseJh-2023-09-28"] },
       { type = "CNAME", name = "docs", ttl = 3600, value = ["alphagov.github.io."] },
-      { type = "TXT", name = "_github-pages-challenge-alphagov.docs", ttl = 3600, value = ["2c1424b07edc15b8c5f9f63218d4ac"] },
+      { type = "TXT", name = "_github-pages-challenge-alphagov.docs", ttl = 3600, value = ["2c1424b07edc15b8c5f9f63218d4ac"] }, // pragma: allowlist secret
       { type = "CNAME", name = "hmrc-manuals-api", ttl = 300, value = ["hmrc-manuals-api.eks.production.govuk.digital."] },
       { type = "CNAME", name = "licensify", ttl = 3600, value = ["licensify.eks.production.govuk.digital."] },
       { type = "CNAME", name = "licensify-admin", ttl = 300, value = ["licensify-admin.eks.production.govuk.digital."] },
@@ -307,14 +307,14 @@ module "govuk-publishing-infrastructure-variable-set-production" {
       { type = "CNAME", name = "surveys", ttl = 3600, value = ["customdomain.smartsurvey.co.uk."] },
       { type = "CNAME", name = "status", ttl = 3600, value = ["xcz7hfscrbjs.stspg-customer.com."] },
       { type = "CNAME", name = "_90d4726a667139e7fc892ef7d439bbc1.dev", ttl = 10800, value = ["83f67e2584e6647f05216064ebb78544.89752f1622f555ec2c9bd7d8bc458929.comodoca.com."] },
-      { type = "CNAME", name = "20018a471710f160ab3144a38023e155", ttl = 10800, value = ["41b1e2fd6551bb2c9f484a225184122cb6fad1f1.comodoca.com."] },
+      { type = "CNAME", name = "20018a471710f160ab3144a38023e155", ttl = 10800, value = ["41b1e2fd6551bb2c9f484a225184122cb6fad1f1.comodoca.com."] }, // pragma: allowlist secret
       { type = "CNAME", name = "_c24a8e44c6c094be91c86242bb551b8d", ttl = 3600, value = ["7fdbbdd49b55706b95c54bb18f11eeb2.efaa3bc1d00edbcd399b3e69676cfee3.21fc29fd6ec2b0dfe2d5.comodoca.com."] },
       { type = "CNAME", name = "docs.data-community", ttl = 3600, value = ["alphagov.github.io."] },
       { type = "CNAME", name = "_f0007b153fe893d93563eb3a1aa8f957.docs.data-community", ttl = 86400, value = ["_5128066b455eb200b84c908386353e7c.dxhlbxbsbv.acm-validations.aws."] },
       { type = "CNAME", name = "dns", ttl = 300, value = ["floating-blueberry-0v2fnhwrxrukdrmxzh1bio7m.herokudns.com."] },
-      { type = "TXT", name = "_github-pages-challenge-alphagov.design-guide", ttl = 300, value = ["5560788dce22fe8b93575626647f77"] },
+      { type = "TXT", name = "_github-pages-challenge-alphagov.design-guide", ttl = 300, value = ["5560788dce22fe8b93575626647f77"] }, // pragma: allowlist secret
       { type = "CNAME", name = "design-guide", ttl = 300, value = ["alphagov.github.io."] },
-      { type = "TXT", name = "_github-pages-challenge-alphagov.guidance", ttl = 300, value = ["ccb9432a9fba52e3163b5fbb73d5e7"] },
+      { type = "TXT", name = "_github-pages-challenge-alphagov.guidance", ttl = 300, value = ["ccb9432a9fba52e3163b5fbb73d5e7"] }, // pragma: allowlist secret
       { type = "CNAME", name = "guidance", ttl = 300, value = ["alphagov.github.io."] },
       { type = "CNAME", name = "whitehall-admin", ttl = 300, value = ["whitehall-admin.eks.production.govuk.digital."] },
       { type = "CNAME", name = "www-origin", ttl = 300, value = ["www-origin.eks.production.govuk.digital."] },
