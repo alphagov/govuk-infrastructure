@@ -146,7 +146,7 @@ module "govuk-publishing-infrastructure-variable-set-staging" {
       { type = "CNAME", name = "govspeak-preview", ttl = 3600, value = ["govspeak-preview.eks.staging.govuk.digital."] },
       { type = "CNAME", name = "search", ttl = 3600, value = ["zd1o9hz5w5.execute-api.eu-west-1.amazonaws.com."] },
       { type = "CNAME", name = "asset-manager", ttl = 3600, value = ["assets-origin.eks.staging.govuk.digital."] },
-      { type = "CNAME", name = "assets", ttl = 60, value = ["www-gov-uk.map.fastly.net."] },
+      { type = "CNAME", name = "assets", ttl = 3600, value = ["www-gov-uk.map.fastly.net."] },
       { type = "CNAME", name = "assets-origin", ttl = 3600, value = ["assets-origin.eks.staging.govuk.digital."] },
       { type = "CNAME", name = "account-api", ttl = 3600, value = ["account-api.eks.staging.govuk.digital."] },
       { type = "CNAME", name = "bouncer", ttl = 3600, value = ["bouncer.eks.staging.govuk.digital."] },
@@ -182,7 +182,7 @@ module "govuk-publishing-infrastructure-variable-set-staging" {
       { type = "CNAME", name = "travel-advice-publisher", ttl = 3600, value = ["travel-advice-publisher.eks.staging.govuk.digital."] },
       { type = "CNAME", name = "try-new-search-engine", ttl = 3600, value = ["try-new-search-engine.eks.staging.govuk.digital."] },
       { type = "CNAME", name = "whitehall-admin", ttl = 3600, value = ["whitehall-admin.eks.staging.govuk.digital."] },
-      { type = "CNAME", name = "www", ttl = 60, value = ["www-gov-uk.map.fastly.net."] },
+      { type = "CNAME", name = "www", ttl = 3600, value = ["www-gov-uk.map.fastly.net."] },
       { type = "CNAME", name = "www-origin", ttl = 3600, value = ["www-origin.eks.staging.govuk.digital."] },
       { type = "CNAME", name = "5384b32d193a6e103ffb2d5dfde19731", ttl = 10800, value = ["e23b6d9e6e00c1bc4b8732ec65360e2173a3ec9b.comodoca.com."] }, // pragma: allowlist secret
       { type = "CNAME", name = "_bbd4dea834d458f83ac60848ca01c40e", ttl = 10800, value = ["_bbf4a50f6274672e86d2b03bf2baf9cd.acm-validations.aws."] },
