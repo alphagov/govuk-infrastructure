@@ -92,33 +92,39 @@ Before merging your Pull Pequest, review the Terraform plan carefully.
 After the PR is merged, remember to review it again and to apply the Terraform changes. 
 
 
-## Removing repositories
+## Archiving repositories
 
-Before an archived repository can be removed from GOV.UK GitHub configuration, it needs to be manually removed from terraform state. 
+To archive a repository, you will need to raise **two** Pull Requests to update the repository's configuration in the [repos.yml)](/terraform/deployments/github/repos.yml) file.
 
-> Failing to do so will result in repository being deleted (rather than archived). If a repository is not removed by following those steps, it will be un-archived when the GitHub configuration is applied. 
+1. Remove all properties
 
-### 1. Remove relevant resource instances from terraform state
+Remove all prpoerties such as `required_status_checks` or `homepage_url`.
 
-Run the following commands to remove resource instances relevant to the retired repository:
-
-```
-cd terraform/deployments/github
-terraform login
-terraform init
-terraform state rm 'github_branch_protection.govuk_repos["repo-name"]' &&
-terraform state rm 'github_team_repository.govuk_repos["repo-name"]' &&
-terraform state rm 'github_team_repository.govuk_production_admin_repos["repo-name"]' &&
-terraform state rm 'github_team_repository.govuk_ci_bots_repos["repo-name"]' &&
-terraform state rm 'github_repository.govuk_repos["repo-name"]' &&
-terraform state rm 'aws_codecommit_repository.govuk_repos["alphagov/repo-name"]'
-```
-
-You can verify what other instances need to be removed by running:
-```
-terraform state list | grep repo-name
+```diff
+- my-repo:
+-  can_be_deployed: true
+-  homepage_url: "https://docs.publishing.service.gov.uk/repos/my-repo.html"
+-  required_status_checks:
+-    standard_contexts: *standard_govuk_rails_checks
+-    additional_contexts:
+-      - Test Ruby
+-      - Lint JavaScript / Run Standardx
+-      - Lint SCSS / Run Stylelint
++  my-repo: {}
 ```
 
-### 2. Raise a PR to remove repo from `deployments/github/repos.yml`
+Raise a Pull Request and review the Terraform plan carefully. Once approved, merge the PR. Remember to apply the Terraform changes after reviewing the plan output again in [Terraform Cloud GitHub workspace](https://app.terraform.io/app/govuk/workspaces/GitHub/runs).
 
-Ensure terraform plan shows "No changes" before merging the PR.
+2. Add the `archived: true` property
+
+```diff
+-  my-repo: {}
++  my-repo:
++    archived: true
+```
+
+Raise a Pull Pequest. Review the Terraform plan carefully.
+
+The Terraform Deployment will run a series of precondition checks to catch any outstanding PRs or unaddressed Github Pages configuration. If you have missed any, the Terraform Plan will fail and you should back go over previous steps in the [Retire a repo](https://docs.publishing.service.gov.uk/manual/retiring-a-repo.html) manual again to make sure nothing has been overlooked.
+
+Once the PR is approved, merge it. Then apply the Terraform changes after reviewing the plan output again in [Terraform Cloud GitHub workspace](https://app.terraform.io/app/govuk/workspaces/GitHub/runs).
