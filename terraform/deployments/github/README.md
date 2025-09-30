@@ -35,7 +35,7 @@ protecting the `main` branch.
   ```
 ## Adding existing repositories
 
-To manage an existing repository using the GOV.UK GitHub Infrastructure configuration, it needs to be imported into terraform state. Otherwise terraform apply will fail attempting to create a repository that already exists. 
+To manage an existing repository using the GOV.UK GitHub Infrastructure configuration, it needs to be imported into terraform state. Otherwise terraform apply will fail attempting to create a repository that already exists.
 
 To import the resource, use an import block:
 ```
@@ -47,11 +47,11 @@ import {
 
 [Example commit of importing an existing repository](https://github.com/alphagov/govuk-infrastructure/commit/c6774a7d42ca2eb9b0987a51cde8b57e13e0577f). Note that the code only has to run once so it's ok to remove old entries.
 
-### Private repositories 
+### Private repositories
 
-Private repositiores should be treated as exceptions. We should [make new source code open](https://www.gov.uk/service-manual/service-standard/point-12-make-new-source-code-open) in accordance with [point 3 of the Technology Code of Practice](https://www.gov.uk/guidance/the-technology-code-of-practice). Only create a private repository if there are legitimate [grounds for keeping the code closed](https://www.gov.uk/government/publications/open-source-guidance/when-code-should-be-open-or-closed). 
+Private repositiores should be treated as exceptions. We should [make new source code open](https://www.gov.uk/service-manual/service-standard/point-12-make-new-source-code-open) in accordance with [point 3 of the Technology Code of Practice](https://www.gov.uk/guidance/the-technology-code-of-practice). Only create a private repository if there are legitimate [grounds for keeping the code closed](https://www.gov.uk/government/publications/open-source-guidance/when-code-should-be-open-or-closed).
 
-To configure a `private` or `internal` repository, set the `visibility` explicitly: 
+To configure a `private` or `internal` repository, set the `visibility` explicitly:
 ```
   visibility: private
 ```
@@ -88,8 +88,8 @@ Note that private repositories can't use the predefined `standard_govuk_rails_ch
 
 ### Apply terraform changes
 
-Before merging your Pull Pequest, review the Terraform plan carefully. 
-After the PR is merged, remember to review it again and to apply the Terraform changes. 
+Before merging your Pull Pequest, review the Terraform plan carefully.
+After the PR is merged, remember to review it again and to apply the Terraform changes.
 
 
 ## Archiving repositories
@@ -98,7 +98,7 @@ To archive a repository, you will need to raise **two** Pull Requests to update 
 
 1. Remove all properties
 
-Remove all prpoerties such as `required_status_checks` or `homepage_url`.
+Remove all properties such as `required_status_checks` or `homepage_url`.
 
 ```diff
 - my-repo:
