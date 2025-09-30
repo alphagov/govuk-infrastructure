@@ -88,17 +88,17 @@ Note that private repositories can't use the predefined `standard_govuk_rails_ch
 
 ### Apply terraform changes
 
-Before merging your Pull Pequest, review the Terraform plan carefully. 
+Before merging your Pull Request, review the Terraform plan carefully. 
 After the PR is merged, remember to review it again and to apply the Terraform changes. 
 
 
 ## Archiving repositories
 
-To archive a repository, you will need to raise **two** Pull Requests to update the repository's configuration in the [repos.yml)](/terraform/deployments/github/repos.yml) file.
+To archive a repository, you will need to raise **two** Pull Requests to update the repository's configuration in the [repos.yml](/terraform/deployments/github/repos.yml) file.
 
 1. Remove all properties
 
-Remove all prpoerties such as `required_status_checks` or `homepage_url`.
+Remove all properties such as `required_status_checks` or `homepage_url`.
 
 ```diff
 - my-repo:
@@ -123,7 +123,7 @@ Raise a Pull Request and review the Terraform plan carefully. Once approved, mer
 +    archived: true
 ```
 
-Raise a Pull Pequest. Review the Terraform plan carefully.
+Raise a Pull Request. Review the Terraform plan carefully.
 
 The Terraform Deployment will run a series of precondition checks to catch any outstanding PRs or unaddressed Github Pages configuration. If you have missed any, the Terraform Plan will fail and you should back go over previous steps in the [Retire a repo](https://docs.publishing.service.gov.uk/manual/retiring-a-repo.html) manual again to make sure nothing has been overlooked.
 
