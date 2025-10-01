@@ -286,7 +286,7 @@ module "variable-set-rds-staging" {
 
       content_data_api = {
         engine         = "postgres"
-        engine_version = "13"
+        engine_version = "14.18"
         engine_params = {
           work_mem                             = { value = "GREATEST({DBInstanceClassMemory/${1024 * 16}},65536)" }
           autovacuum_max_workers               = { value = 1, apply_method = "pending-reboot" }
@@ -314,7 +314,7 @@ module "variable-set-rds-staging" {
             apply_method = "pending-reboot"
           }
         }
-        engine_params_family         = "postgres13"
+        engine_params_family         = "postgres14"
         name                         = "blue-content-data-api-postgresql-primary"
         allocated_storage            = 1024
         instance_class               = "db.m6g.large"
