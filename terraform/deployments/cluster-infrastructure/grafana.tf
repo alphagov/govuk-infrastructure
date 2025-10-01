@@ -4,8 +4,8 @@ locals {
 }
 
 module "grafana_iam_role" {
-  source                        = "terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc"
-  version                       = "~> 5.0"
+  source                        = "terraform-aws-modules/iam/aws//modules/iam-role"
+  version                       = "~> 6.0"
   create_role                   = true
   role_name                     = "${local.grafana_service_account}-${module.eks.cluster_name}"
   role_description              = "Role for Grafana to access AWS data sources. Corresponds to ${local.grafana_service_account} k8s ServiceAccount."
