@@ -40,69 +40,90 @@ locals {
   }
 
   default_cluster_addons = {
-    coredns        = { most_recent = true }
-    kube-proxy     = { most_recent = true }
-    metrics-server = { most_recent = true }
-    vpc-cni        = { most_recent = true }
+    coredns        = { most_recent = true, resolve_conflicts_on_create = "OVERWRITE" }
+    kube-proxy     = { most_recent = true, resolve_conflicts_on_create = "OVERWRITE" }
+    metrics-server = { most_recent = true, resolve_conflicts_on_create = "OVERWRITE" }
+    vpc-cni        = { most_recent = true, resolve_conflicts_on_create = "OVERWRITE" }
   }
 
   kube_state_metrics_addon = {
-    kube-state-metrics = { most_recent = true }
+    kube-state-metrics = { most_recent = true, resolve_conflicts_on_create = "OVERWRITE" }
   }
 
   enabled_cluster_addons = merge(local.default_cluster_addons, var.enable_kube_state_metrics ? local.kube_state_metrics_addon : {})
 
+  managed_node_group_defaults = {
+    capacity_type                  = var.x86_workers_default_capacity_type
+    subnet_ids                     = [for s in aws_subnet.eks_private : s.id]
+    create_security_group          = false
+    create_iam_role                = false
+    iam_role_arn                   = aws_iam_role.node.arn
+    enable_monitoring              = true
+    enable_efa_only                = false
+    use_latest_ami_release_version = false
+  }
+
   x86_managed_node_group = {
-    x86 = {
-      name_prefix = var.cluster_name
-      # TODO: set iam_role_permissions_boundary
-      # TODO: apply provider default_tags to instances; might need to set launch_template_tags.
-      desired_size          = var.x86_workers_size_desired
-      max_size              = var.x86_workers_size_max
-      min_size              = var.x86_workers_size_min
-      instance_types        = var.x86_workers_instance_types
-      update_config         = { max_unavailable = 1 }
-      block_device_mappings = local.default_block_device_mappings
-      additional_tags = {
-        "k8s.io/cluster-autoscaler/enabled"             = "true"
-        "k8s.io/cluster-autoscaler/${var.cluster_name}" = "owned"
+    x86 = merge(
+      local.managed_node_group_defaults,
+      {
+        ami_type    = "AL2023_x86_64_STANDARD"
+        name_prefix = var.cluster_name
+        # TODO: set iam_role_permissions_boundary
+        # TODO: apply provider default_tags to instances; might need to set launch_template_tags.
+        desired_size          = var.x86_workers_size_desired
+        max_size              = var.x86_workers_size_max
+        min_size              = var.x86_workers_size_min
+        instance_types        = var.x86_workers_instance_types
+        update_config         = { max_unavailable = 1 }
+        block_device_mappings = local.default_block_device_mappings
+        additional_tags = {
+          "k8s.io/cluster-autoscaler/enabled"             = "true"
+          "k8s.io/cluster-autoscaler/${var.cluster_name}" = "owned"
+        }
       }
-    }
+    )
   }
 
   arm_managed_node_group_blue = {
-    arm_blue = {
-      ami_type              = "AL2023_ARM_64_STANDARD"
-      name_prefix           = "${var.cluster_name}-blue"
-      desired_size          = var.arm_workers_blue_size_desired
-      max_size              = var.arm_workers_blue_size_max
-      min_size              = var.arm_workers_blue_size_min
-      instance_types        = var.arm_workers_blue_instance_types
-      update_config         = { max_unavailable = 1 }
-      block_device_mappings = local.default_block_device_mappings
-      additional_tags = {
-        "k8s.io/cluster-autoscaler/enabled"             = "true"
-        "k8s.io/cluster-autoscaler/${var.cluster_name}" = "owned"
+    arm_blue = merge(
+      local.managed_node_group_defaults,
+      {
+        ami_type              = "AL2023_ARM_64_STANDARD"
+        name_prefix           = "${var.cluster_name}-blue"
+        desired_size          = var.arm_workers_blue_size_desired
+        max_size              = var.arm_workers_blue_size_max
+        min_size              = var.arm_workers_blue_size_min
+        instance_types        = var.arm_workers_blue_instance_types
+        update_config         = { max_unavailable = 1 }
+        block_device_mappings = local.default_block_device_mappings
+        additional_tags = {
+          "k8s.io/cluster-autoscaler/enabled"             = "true"
+          "k8s.io/cluster-autoscaler/${var.cluster_name}" = "owned"
+        }
       }
-    }
+    )
   }
 
   # This will be a "Green" Node Group once Blue has become primary
   arm_managed_node_group_green = {
-    arm_green = {
-      ami_type              = "AL2023_ARM_64_STANDARD"
-      name_prefix           = "${var.cluster_name}-green"
-      desired_size          = var.arm_workers_green_size_desired
-      max_size              = var.arm_workers_green_size_max
-      min_size              = var.arm_workers_green_size_min
-      instance_types        = var.arm_workers_green_instance_types
-      update_config         = { max_unavailable = 1 }
-      block_device_mappings = local.default_block_device_mappings
-      additional_tags = {
-        "k8s.io/cluster-autoscaler/enabled"             = "true"
-        "k8s.io/cluster-autoscaler/${var.cluster_name}" = "owned"
+    arm_green = merge(
+      local.managed_node_group_defaults,
+      {
+        ami_type              = "AL2023_ARM_64_STANDARD"
+        name_prefix           = "${var.cluster_name}-green"
+        desired_size          = var.arm_workers_green_size_desired
+        max_size              = var.arm_workers_green_size_max
+        min_size              = var.arm_workers_green_size_min
+        instance_types        = var.arm_workers_green_instance_types
+        update_config         = { max_unavailable = 1 }
+        block_device_mappings = local.default_block_device_mappings
+        additional_tags = {
+          "k8s.io/cluster-autoscaler/enabled"             = "true"
+          "k8s.io/cluster-autoscaler/${var.cluster_name}" = "owned"
+        }
       }
-    }
+    )
   }
 
 
@@ -190,22 +211,22 @@ resource "aws_iam_role_policy_attachment" "node" {
 
 module "eks" {
   source  = "terraform-aws-modules/eks/aws"
-  version = "~> 20.0"
+  version = "~> 21.0"
 
-  cluster_name    = var.cluster_name
-  cluster_version = var.cluster_version
-  subnet_ids      = [for s in aws_subnet.eks_control_plane : s.id]
-  vpc_id          = data.tfe_outputs.vpc.nonsensitive_values.id
+  name               = var.cluster_name
+  kubernetes_version = var.cluster_version
+  subnet_ids         = [for s in aws_subnet.eks_control_plane : s.id]
+  vpc_id             = data.tfe_outputs.vpc.nonsensitive_values.id
 
-  cluster_addons = local.enabled_cluster_addons
+  addons = local.enabled_cluster_addons
 
-  cluster_endpoint_public_access         = true
+  endpoint_public_access                 = true
   cloudwatch_log_group_retention_in_days = var.cluster_log_retention_in_days
-  cluster_enabled_log_types = [
+  enabled_log_types = [
     "api", "audit", "authenticator", "controllerManager", "scheduler"
   ]
 
-  cluster_encryption_config = {
+  encryption_config = {
     provider_key_arn = aws_kms_key.eks.arn
     resources        = ["secrets"]
   }
@@ -213,20 +234,11 @@ module "eks" {
   kms_key_enable_default_policy = false
 
   # We're just using the cluster primary SG as created by EKS.
-  create_cluster_security_group = false
-  create_node_security_group    = false
+  create_security_group      = false
+  create_node_security_group = false
 
   authentication_mode                      = var.authentication_mode
   enable_cluster_creator_admin_permissions = true
-
-  eks_managed_node_group_defaults = {
-    ami_type              = "AL2023_x86_64_STANDARD"
-    capacity_type         = var.x86_workers_default_capacity_type
-    subnet_ids            = [for s in aws_subnet.eks_private : s.id]
-    create_security_group = false
-    create_iam_role       = false
-    iam_role_arn          = aws_iam_role.node.arn
-  }
 
   eks_managed_node_groups = local.eks_managed_node_groups
 }
