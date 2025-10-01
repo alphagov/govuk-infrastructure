@@ -61,6 +61,9 @@ locals {
     enable_monitoring              = true
     enable_efa_only                = false
     use_latest_ami_release_version = false
+    metadata_options = {
+      http_put_response_hop_limit = 2
+    }
   }
 
   x86_managed_node_group = {
