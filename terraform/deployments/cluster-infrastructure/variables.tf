@@ -69,8 +69,8 @@ variable "enable_arm_workers_green" {
   default     = false
 
   validation {
-    condition     = var.enable_arm_workers_blue == true || var.enable_arm_workers_green == true
-    error_message = "Either enable_arm_workers_blue or enable_arm_workers_green must be true"
+    condition     = var.enable_arm_workers_blue || var.enable_arm_workers_green || var.enable_x86_workers
+    error_message = "At least one of enable_arm_workers_blue, enable_arm_workers_green, or enable_x86_workers must be true"
   }
 }
 
