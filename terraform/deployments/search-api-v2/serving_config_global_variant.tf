@@ -10,13 +10,12 @@ module "serving_config_global_variant" {
     module.control_global_boost_freshness_general.id,
 
     # identical to serving_config_global_default
+    module.control_global_boost_promote_medium.id,
     module.control_global_boost_promote_low.id,
     module.control_global_boost_demote_low.id,
-    module.control_global_boost_demote_low_pages.id,
-    module.control_global_boost_promote_medium.id,
     module.control_global_boost_demote_medium.id,
+    module.control_global_boost_demote_pages.id,
     module.control_global_boost_demote_strong.id,
-    module.control_global_boost_demote_strong_pages.id,
   ]
   filter_control_ids = [
     # identical to serving_config_global_default
