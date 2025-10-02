@@ -19,7 +19,8 @@ module "var_set" {
     govuk_aws_state_bucket    = ""
     publishing_service_domain = "${var.ephemeral_cluster_id}.publishing.service.gov.uk"
 
-    enable_arm_workers         = true
+    enable_arm_workers_blue    = true
+    enable_arm_workers_green   = false
     enable_x86_workers         = false
     arm_workers_instance_types = ["m7g.2xlarge"]
 
