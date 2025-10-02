@@ -255,3 +255,8 @@ resource "aws_kms_key" "eks" {
   deletion_window_in_days = 7
   enable_key_rotation     = true
 }
+
+moved {
+  from = module.eks.aws_iam_role_policy_attachment.this["AmazonEKSVPCResourceController"]
+  to   = module.eks.aws_iam_role_policy_attachment.additional["AmazonEKSVPCResourceController"]
+}
