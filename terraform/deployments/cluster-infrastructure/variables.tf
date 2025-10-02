@@ -67,6 +67,11 @@ variable "enable_arm_workers_green" {
   type        = bool
   description = "Whether to enable the 'green' ARM/Graviton-based Managed Node Group"
   default     = false
+
+  validation {
+    condition     = var.enable_arm_workers_blue == true || var.enable_arm_workers_green == true
+    error_message = "Either enable_arm_workers_blue or enable_arm_workers_green must be true"
+  }
 }
 
 variable "arm_workers_blue_instance_types" {
