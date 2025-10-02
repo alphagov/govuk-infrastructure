@@ -475,7 +475,7 @@ module "variable-set-rds-integration" {
 
       local_links_manager = {
         engine         = "postgres"
-        engine_version = "13"
+        engine_version = "14.18"
         engine_params = {
           log_min_duration_statement = { value = 10000 }
           log_statement              = { value = "all" }
@@ -498,7 +498,7 @@ module "variable-set-rds-integration" {
             apply_method = "pending-reboot"
           }
         }
-        engine_params_family         = "postgres13"
+        engine_params_family         = "postgres14"
         name                         = "local-links-manager"
         allocated_storage            = 100
         instance_class               = "db.t4g.small"
