@@ -72,4 +72,5 @@ module "control_global_boost_freshness_general" {
       }
     }
   }
+  depends_on = [module.serving_config_global_default, module.serving_config_global_variant]
 }

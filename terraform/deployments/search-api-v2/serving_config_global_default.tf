@@ -35,6 +35,7 @@ module "control_global_boost_promote_low" {
       dataStore  = google_discovery_engine_data_store.govuk_content.name
     }
   }
+  depends_on = [module.serving_config_global_default, module.serving_config_global_variant]
 }
 
 module "control_global_boost_demote_low" {
@@ -50,6 +51,7 @@ module "control_global_boost_demote_low" {
       dataStore  = google_discovery_engine_data_store.govuk_content.name
     }
   }
+  depends_on = [module.serving_config_global_default, module.serving_config_global_variant]
 }
 
 locals {
@@ -77,6 +79,7 @@ module "control_global_boost_demote_low_pages" {
       dataStore  = google_discovery_engine_data_store.govuk_content.name
     }
   }
+  depends_on = [module.serving_config_global_default, module.serving_config_global_variant]
 }
 
 module "control_global_boost_promote_medium" {
@@ -92,6 +95,7 @@ module "control_global_boost_promote_medium" {
       dataStore  = google_discovery_engine_data_store.govuk_content.name
     }
   }
+  depends_on = [module.serving_config_global_default, module.serving_config_global_variant]
 }
 
 module "control_global_boost_demote_medium" {
@@ -107,6 +111,7 @@ module "control_global_boost_demote_medium" {
       dataStore  = google_discovery_engine_data_store.govuk_content.name
     }
   }
+  depends_on = [module.serving_config_global_default, module.serving_config_global_variant]
 }
 
 module "control_global_boost_demote_strong" {
@@ -122,6 +127,7 @@ module "control_global_boost_demote_strong" {
       dataStore  = google_discovery_engine_data_store.govuk_content.name
     }
   }
+  depends_on = [module.serving_config_global_default, module.serving_config_global_variant]
 }
 
 module "control_global_boost_demote_strong_pages" {
@@ -137,6 +143,7 @@ module "control_global_boost_demote_strong_pages" {
       dataStore  = google_discovery_engine_data_store.govuk_content.name
     }
   }
+  depends_on = [module.serving_config_global_default, module.serving_config_global_variant]
 }
 
 locals {
@@ -167,6 +174,7 @@ module "control_global_filter_temporary_exclusions" {
       dataStore = google_discovery_engine_data_store.govuk_content.name
     }
   }
+  depends_on = [module.serving_config_global_default, module.serving_config_global_variant]
 }
 
 module "control_global_synonym_hmrc" {
@@ -184,4 +192,5 @@ module "control_global_synonym_hmrc" {
       ]
     }
   }
+  depends_on = [module.serving_config_global_default, module.serving_config_global_variant]
 }
