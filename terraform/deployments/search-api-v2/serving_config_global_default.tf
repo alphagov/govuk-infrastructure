@@ -6,12 +6,13 @@ module "serving_config_global_default" {
   engine_id    = google_discovery_engine_search_engine.govuk_global.engine_id
 
   boost_control_ids = [
-    module.control_global_boost_demote_low.id,
-    module.control_global_boost_demote_medium.id,
-    module.control_global_boost_demote_pages.id,
-    module.control_global_boost_demote_strong.id,
     module.control_global_boost_promote_low.id,
+    module.control_global_boost_demote_low.id,
+    module.control_global_boost_demote_low_pages.id,
     module.control_global_boost_promote_medium.id,
+    module.control_global_boost_demote_medium.id,
+    module.control_global_boost_demote_strong.id,
+    module.control_global_boost_demote_strong_pages.id,
   ]
   filter_control_ids = [
     module.control_global_filter_temporary_exclusions.id,
@@ -19,21 +20,6 @@ module "serving_config_global_default" {
   synonyms_control_ids = [
     module.control_global_synonym_hmrc.id,
   ]
-}
-
-module "control_global_boost_promote_medium" {
-  source = "./modules/control"
-
-  id           = "boost_promote_medium"
-  display_name = "Boost: Promote medium"
-  engine_id    = google_discovery_engine_search_engine.govuk_global.engine_id
-  action = {
-    boostAction = {
-      filter     = "content_purpose_supergroup: ANY(\"services\") OR document_type: ANY(\"calendar\", \"detailed_guide\", \"document_collection\", \"external_content\", \"organisation\")",
-      fixedBoost = 0.2
-      dataStore  = google_discovery_engine_data_store.govuk_content.name
-    }
-  }
 }
 
 module "control_global_boost_promote_low" {
@@ -61,6 +47,48 @@ module "control_global_boost_demote_low" {
     boostAction = {
       filter     = "document_type: ANY(\"about\", \"taxon\", \"world_news_story\")",
       fixedBoost = -0.25
+      dataStore  = google_discovery_engine_data_store.govuk_content.name
+    }
+  }
+}
+
+locals {
+  # Pages to demote by 0.25
+  demote_pages_low = [
+    "/hmrc-internal-manuals/tax-credits-manual/tcm1000248",
+    "/hmrc-internal-manuals/tax-credits-manual/tcm1000267",
+    "/hmrc-internal-manuals/tax-credits-manual/tcm1000541",
+    "/hmrc-internal-manuals/tax-credits-manual/tcm1000659",
+    "/hmrc-internal-manuals/tax-credits-manual/tcm1000398"
+  ]
+  demote_pages_low_expr = join(",", [for page in local.demote_pages_low : "\"${page}\""])
+}
+
+module "control_global_boost_demote_low_pages" {
+  source = "./modules/control"
+
+  id           = "boost_demote_pages_low"
+  display_name = "Boost: Demote specific pages low"
+  engine_id    = google_discovery_engine_search_engine.govuk_global.engine_id
+  action = {
+    boostAction = {
+      filter     = "link: ANY(${local.demote_pages_low_expr})",
+      fixedBoost = -0.25
+      dataStore  = google_discovery_engine_data_store.govuk_content.name
+    }
+  }
+}
+
+module "control_global_boost_promote_medium" {
+  source = "./modules/control"
+
+  id           = "boost_promote_medium"
+  display_name = "Boost: Promote medium"
+  engine_id    = google_discovery_engine_search_engine.govuk_global.engine_id
+  action = {
+    boostAction = {
+      filter     = "content_purpose_supergroup: ANY(\"services\") OR document_type: ANY(\"calendar\", \"detailed_guide\", \"document_collection\", \"external_content\", \"organisation\")",
+      fixedBoost = 0.2
       dataStore  = google_discovery_engine_data_store.govuk_content.name
     }
   }
@@ -96,7 +124,7 @@ module "control_global_boost_demote_strong" {
   }
 }
 
-module "control_global_boost_demote_pages" {
+module "control_global_boost_demote_strong_pages" {
   source = "./modules/control"
 
   id           = "boost_demote_pages"
