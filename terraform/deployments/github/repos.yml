@@ -158,13 +158,11 @@ repos:
   data-community-tech-docs:
     homepage_url: "https://docs.data-community.publishing.service.gov.uk/"
     need_production_access_to_merge: false
-    allow_squash_merge: true
     push_allowances: []
 
   datagovuk-tech-docs:
     homepage_url: "https://guidance.data.gov.uk/"
     need_production_access_to_merge: false
-    allow_squash_merge: true
     push_allowances: []
 
   email-alert-api:
@@ -335,7 +333,6 @@ repos:
   govuk-content-api-docs:
     homepage_url: "https://content-api.publishing.service.gov.uk"
     need_production_access_to_merge: false
-    allow_squash_merge: true
     push_allowances: []
 
   govuk-data-science-workshop:
@@ -353,14 +350,12 @@ repos:
         - Test
 
   govuk-developer-docs:
-    allow_squash_merge: true
     can_be_deployed: true
     homepage_url: "https://docs.publishing.service.gov.uk"
     need_production_access_to_merge: false
 
   govuk-display-screen:
     need_production_access_to_merge: false
-    allow_squash_merge: true
     standard_contexts: *standard_security_checks
     teams: {
       govuk: "maintain"
@@ -421,44 +416,34 @@ repos:
     up_to_date_branches: true
 
   govuk-mobile-android-app:
-    allow_squash_merge: true
     branch_protection: false
 
   govuk-mobile-android-homepage:
-    allow_squash_merge: true
     branch_protection: false
 
   govuk-mobile-android-onboarding:
-    allow_squash_merge: true
     branch_protection: false
 
   govuk-mobile-android-services:
-    allow_squash_merge: true
     branch_protection: false
 
   govuk-mobile-ios-app:
-    allow_squash_merge: true
     branch_protection: false
 
   govuk-mobile-ios-homepage:
-    allow_squash_merge: true
     branch_protection: false
 
   govuk-mobile-ios-onboarding:
-    allow_squash_merge: true
     branch_protection: false
 
   govuk-mobile-ios-services:
-    allow_squash_merge: true
     branch_protection: false
 
   govuk-mobile-ios-ui-components:
-    allow_squash_merge: true
     branch_protection: false
 
   govuk-reports-prototype:
     need_production_access_to_merge: false
-    allow_squash_merge: true
     branch_protection: false
 
   govuk-rota-generator:
