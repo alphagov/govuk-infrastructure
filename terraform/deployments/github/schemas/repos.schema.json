@@ -45,6 +45,11 @@
               "type": "object",
               "additionalProperties": { "type": "string" }
             },
+            "topics": {
+              "description": "The list of topics of the repository. If omitted, defaults to ['govuk']",
+              "type": "array",
+               "items": { "type": "string", "enum": ["govuk"]}
+            },
             "required_status_checks": {
               "type": "object",
               "properties": {

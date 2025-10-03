@@ -177,6 +177,7 @@ resource "github_repository" "govuk_repos" {
   name = each.key
 
   visibility = try(each.value.visibility, "public")
+  topics     = try(each.value.topics, ["govuk"])
 
   allow_squash_merge = true
   allow_merge_commit = false
