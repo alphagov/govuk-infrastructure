@@ -144,7 +144,6 @@ resource "github_team_repository" "govuk_production_deploy_repos" {
   permission = try(local.repositories[each.key].teams["govuk"], "push")
 }
 
-
 resource "github_team_repository" "co_platform_engineering_repos" {
   for_each   = toset(["govuk-dns-tf", "govuk-dns", "govuk-dns-config"])
   repository = each.key
@@ -170,11 +169,6 @@ data "github_repository_pull_requests" "govuk_repos_prs" {
   }
   base_repository = each.key
   state           = "open"
-}
-
-moved {
-  from = github_repository.govuk_repos["govuk-content-block-manager"]
-  to   = github_repository.govuk_repos["content-block-manager"]
 }
 
 resource "github_repository" "govuk_repos" {
