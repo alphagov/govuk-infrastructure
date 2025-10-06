@@ -16,23 +16,46 @@
         "^[a-zA-Z0-9._-]+$": {
           "type": "object",
           "properties": {
-            "can_be_deployed": { "type": "boolean" },
-            "pact_publisher": { "type": "boolean" },
-            "publishes_gem": { "type": "boolean" },
+            "can_be_deployed": {
+              "description": "Sets up the necessary secrets for deployment and create an Elastic Container Registry repository with the same name. If omitted, defaults to false",
+              "type": "boolean" 
+            },
+            "pact_publisher": {
+              "description": "Sets up Pact broker credentials for contract testing. If omitted, defaults to false",
+              "type": "boolean" 
+            },
+            "publishes_gem": {
+              "description": "Sets up the necessary secrets for releasing Ruby gems. If omitted, defaults to false",
+              "type": "boolean" 
+            },
             "homepage_url": { "type": "string" },
             "visibility": { "type": "string", "enum": ["public", "private", "internal"] },
-            "branch_protection": { "type": "boolean" },
-            "allow_squash_merge": { "type": "boolean" },
-            "need_production_access_to_merge": { "type": "boolean" },
+            "branch_protection": {
+              "description": "Enforces configurable branch protection rules for the main branch. If omitted, defaults to true",
+              "type": "boolean" 
+            },
+            "allow_squash_merge": { 
+              "description": "If omitted, defaults to true",
+              "type": "boolean" 
+            },
+            "need_production_access_to_merge": { 
+              "description": "If omitted, defaults to true",
+              "type": "boolean" 
+            },
             "up_to_date_branches": { 
               "description": "Determines whether the branch is required to be up to date with the base branch before merging. If omitted, defaults to false",
               "type": "boolean" 
             },
             "required_pull_request_reviews": {
+              "description": "Enforce restrictions for pull request reviews. Requires at least 1 approval by default",
               "type": "object",
               "properties": {
-                "require_code_owner_reviews": { "type": "boolean" },
+                "require_code_owner_reviews": {
+                  "description": "Require an approved review in pull requests including files with a designated code owner. If omitted, defaults to false",
+                  "type": "boolean" 
+                },
                 "pull_request_bypassers": {
+                  "description": "The list of actor Names/IDs that are allowed to bypass pull request requirements. If omitted, defaults to null",
                   "type": "array",
                   "items": { "type": "string" }
                 }
@@ -40,10 +63,12 @@
               "additionalProperties": true
             },
             "push_allowances": {
+              "description": "A list of actor Names/IDs that may push to the main branch. If omitted, defaults to GOV.UK Production Admin and GOV.UK Production Deploy GitHub teams.",
               "type": "array",
               "items": { "type": "string" }
             },
             "teams": {
+              "description": "Sets up repository access permissions. If omitted defaults access in line with GOV.UK's production access rules", 
               "type": "object",
               "additionalProperties": { "type": "string" }
             },
@@ -53,6 +78,7 @@
                "items": { "type": "string", "enum": ["govuk"]}
             },
             "required_status_checks": {
+              "description": "Configures what status checks must pass before you can merge your branch into the protected main branch",
               "type": "object",
               "properties": {
                 "standard_contexts": {
