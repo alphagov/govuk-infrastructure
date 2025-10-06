@@ -24,8 +24,10 @@
             "branch_protection": { "type": "boolean" },
             "allow_squash_merge": { "type": "boolean" },
             "need_production_access_to_merge": { "type": "boolean" },
-            "strict": { "type": "boolean" },
-            "up_to_date_branches": { "type": "boolean" },
+            "up_to_date_branches": { 
+              "description": "Determines whether the branch is required to be up to date with the base branch before merging. If omitted, defaults to false",
+              "type": "boolean" 
+            },
             "required_pull_request_reviews": {
               "type": "object",
               "properties": {

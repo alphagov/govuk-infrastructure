@@ -257,7 +257,7 @@ resource "github_branch_protection" "govuk_repos" {
   }
 
   required_status_checks {
-    strict = try(each.value.strict, false)
+    strict = try(each.value.up_to_date_branches, false)
 
     contexts = concat(
       try(each.value["required_status_checks"]["standard_contexts"], []),

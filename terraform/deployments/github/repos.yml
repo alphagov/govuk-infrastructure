@@ -363,7 +363,6 @@ repos:
 
   govuk-dns-tf:
     visibility: private
-    strict: true
     up_to_date_branches: true
     required_pull_request_reviews:
       require_code_owner_reviews: true
@@ -382,14 +381,12 @@ repos:
 
   govuk-fastly:
     can_be_deployed: true
-    strict: true
     up_to_date_branches: true
     required_pull_request_reviews:
       require_code_owner_reviews: true
 
   govuk-fastly-secrets:
     visibility: private
-    strict: true
     up_to_date_branches: true
     required_pull_request_reviews:
       require_code_owner_reviews: true
@@ -399,20 +396,17 @@ repos:
     can_be_deployed: true
 
   govuk-infrastructure:
-    strict: true
     up_to_date_branches: true
     required_pull_request_reviews:
       require_code_owner_reviews: true
 
   terraform-govuk-infrastructure-sensitive:
     visibility: private
-    strict: true
     up_to_date_branches: true
     required_pull_request_reviews:
       require_code_owner_reviews: true
 
   terraform-govuk-tfe-workspacer:
-    strict: true
     up_to_date_branches: true
 
   govuk-mobile-android-app:
