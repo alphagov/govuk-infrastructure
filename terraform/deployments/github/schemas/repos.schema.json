@@ -88,8 +88,7 @@
                 "additional_contexts": {
                   "type": "array",
                   "items": { "type": "string" }
-                },
-                "ignore_jenkins": { "type": "boolean" }
+                }
               },
               "additionalProperties": true
             }

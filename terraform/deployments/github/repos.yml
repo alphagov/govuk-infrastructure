@@ -757,7 +757,6 @@ repos:
   search-api-v2:
     can_be_deployed: true
     required_status_checks:
-      ignore_jenkins: true
       standard_contexts: *standard_govuk_rails_checks
       additional_contexts:
         - Test Ruby
