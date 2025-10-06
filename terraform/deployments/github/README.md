@@ -1,16 +1,30 @@
 # GOV.UK GitHub Infrastructure configuration
 
-This module configures GitHub resources so that the platform can automatically give permissions to
-repositories with specific properties in the included YAML file.
+This module configures GitHub resources to automatically assign permissions to repositories based on properties defined in a YAML file. For example, setting `can_be_deployed: true` enables features like creating an ECR registry and granting push permissions.
 
-We no longer use GitHub topics (tags) on repositories (similar to
-annotations on Kubernetes resources) to configure or enable platform functionality.
+This module:
 
-Instead, creating an ECR registry and giving permissions to push to the
-registry might be enabled by setting `can_be_deployed` to `true` in the YAML file.
+🧰 Ensures all repositories are configured consistently:
+- Visibility, topics, merge settings, branch deletion on merge etc.
+- Enables security features like vulnerability alerts
+- Prevents archiving if there are open PRs or GitHub Pages are active
 
-This module configures repositories with sensible defaults such as
-protecting the `main` branch.
+🔐 Applies branch protection to the `main` branch for applicable repositories:
+- Requires PR reviews
+- Supports status checks and code owner reviews
+- Defines standard status checks
+- Restricts who can push to the `main` branch in line with [GOV.UK Production access rules](https://docs.publishing.service.gov.uk/manual/rules-for-getting-production-access.html).
+
+👥 Manages team access:
+- Manages GitHub teams access such as: `GOV.UK`, `GOV.UK CI Bots`, `GOV.UK Production Admin`, `GOV.UK Production Deploy` and `GOV.UK ITHC and Penetration Testing`
+- Grants team-based repository access
+- Adds access for the CO Platform Engineering team to specific DNS repos
+
+🔑 Grants repositories access to pre-existing organisation-level secrets based on their roles:
+- Deployable repos → Argo & CI secrets
+- Pact publishers → Pact Broker credentials
+- Gem publishers → govuk-ci GitHub API token
+- All repos → Slack webhook URL
 
 ## Applying Terraform
 
