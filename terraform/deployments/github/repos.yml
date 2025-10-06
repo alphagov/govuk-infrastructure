@@ -762,9 +762,6 @@ repos:
   search-api-v2-dataform:
     homepage_url: "https://docs.publishing.service.gov.uk/repos/search-api-v2-dataform.html"
 
-  search-v2-evaluator:
-    can_be_deployed: true
-
   service-manual-publisher:
     can_be_deployed: true
     homepage_url: "https://docs.publishing.service.gov.uk/apps/service-manual-publisher.html"
