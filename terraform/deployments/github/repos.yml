@@ -417,30 +417,39 @@ repos:
 
   govuk-mobile-android-app:
     branch_protection: false
+    topics: []
 
   govuk-mobile-android-homepage:
     branch_protection: false
+    topics: []
 
   govuk-mobile-android-onboarding:
     branch_protection: false
+    topics: []
 
   govuk-mobile-android-services:
     branch_protection: false
+    topics: []
 
   govuk-mobile-ios-app:
     branch_protection: false
+    topics: []
 
   govuk-mobile-ios-homepage:
     branch_protection: false
+    topics: []
 
   govuk-mobile-ios-onboarding:
     branch_protection: false
+    topics: []
 
   govuk-mobile-ios-services:
     branch_protection: false
+    topics: []
 
   govuk-mobile-ios-ui-components:
     branch_protection: false
+    topics: []
 
   govuk-reports-prototype:
     need_production_access_to_merge: false
