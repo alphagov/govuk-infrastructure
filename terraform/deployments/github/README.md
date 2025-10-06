@@ -1,8 +1,5 @@
 # GOV.UK GitHub Infrastructure configuration
 
-> **Note**: Currently this module can only be applied by an alphagov GitHub
-Organisation Admin.
-
 This module configures GitHub resources so that the platform can automatically give permissions to
 repositories with specific properties in the included YAML file.
 
