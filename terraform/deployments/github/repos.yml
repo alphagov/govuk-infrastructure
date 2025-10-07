@@ -363,7 +363,6 @@ repos:
 
   govuk-dns-tf:
     visibility: private
-    strict: true
     up_to_date_branches: true
     required_pull_request_reviews:
       require_code_owner_reviews: true
@@ -382,14 +381,12 @@ repos:
 
   govuk-fastly:
     can_be_deployed: true
-    strict: true
     up_to_date_branches: true
     required_pull_request_reviews:
       require_code_owner_reviews: true
 
   govuk-fastly-secrets:
     visibility: private
-    strict: true
     up_to_date_branches: true
     required_pull_request_reviews:
       require_code_owner_reviews: true
@@ -399,48 +396,54 @@ repos:
     can_be_deployed: true
 
   govuk-infrastructure:
-    strict: true
     up_to_date_branches: true
     required_pull_request_reviews:
       require_code_owner_reviews: true
 
   terraform-govuk-infrastructure-sensitive:
     visibility: private
-    strict: true
     up_to_date_branches: true
     required_pull_request_reviews:
       require_code_owner_reviews: true
 
   terraform-govuk-tfe-workspacer:
-    strict: true
     up_to_date_branches: true
 
   govuk-mobile-android-app:
     branch_protection: false
+    topics: []
 
   govuk-mobile-android-homepage:
     branch_protection: false
+    topics: []
 
   govuk-mobile-android-onboarding:
     branch_protection: false
+    topics: []
 
   govuk-mobile-android-services:
     branch_protection: false
+    topics: []
 
   govuk-mobile-ios-app:
     branch_protection: false
+    topics: []
 
   govuk-mobile-ios-homepage:
     branch_protection: false
+    topics: []
 
   govuk-mobile-ios-onboarding:
     branch_protection: false
+    topics: []
 
   govuk-mobile-ios-services:
     branch_protection: false
+    topics: []
 
   govuk-mobile-ios-ui-components:
     branch_protection: false
+    topics: []
 
   govuk-reports-prototype:
     need_production_access_to_merge: false
@@ -754,7 +757,6 @@ repos:
   search-api-v2:
     can_be_deployed: true
     required_status_checks:
-      ignore_jenkins: true
       standard_contexts: *standard_govuk_rails_checks
       additional_contexts:
         - Test Ruby
@@ -810,7 +812,6 @@ repos:
   smart-answers:
     can_be_deployed: true
     homepage_url: "https://docs.publishing.service.gov.uk/apps/smart-answers.html"
-    allow_squash_merge: true
     required_status_checks:
       standard_contexts: *standard_govuk_rails_checks
       additional_contexts:
