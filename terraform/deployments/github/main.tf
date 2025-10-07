@@ -272,6 +272,27 @@ resource "github_branch_protection" "govuk_repos" {
   }
 }
 
+removed {
+  from = github_repository.govuk_repos["markdown-toolbar-element"]
+  lifecycle {
+    destroy = false
+  }
+}
+
+removed {
+  from = github_repository.govuk_repos["miller-columns-element"]
+  lifecycle {
+    destroy = false
+  }
+}
+
+removed {
+  from = github_repository.govuk_repos["router-api"]
+  lifecycle {
+    destroy = false
+  }
+}
+
 #
 # Only the list of repositories which will have access to a secret is created/modified
 # here, the secret should have been created in the GitHub UI in advance by a
