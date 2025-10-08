@@ -974,3 +974,6 @@ repos:
       govuk: "maintain"
     }
   }
+
+  govuk-toolbox-image:
+    can_be_deployed: true
