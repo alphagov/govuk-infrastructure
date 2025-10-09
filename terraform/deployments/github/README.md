@@ -120,7 +120,10 @@ import {
 ### Apply terraform changes
 
 Before merging your Pull Request, review the Terraform plan carefully. 
-After the PR is merged, remember to review it again and to apply changes in [Terraform Cloud GitHub workspace](https://app.terraform.io/app/govuk/workspaces/GitHub/runs).
+After the PR is merged, remember to review it again and to apply changes in [Terraform Cloud GitHub workspace](https://app.terraform.io/app/govuk/workspaces/GitHub/runs). The first apply run will create a new repository (unless it already exists) and configure it.
+
+After the repository is created, you will need to manually trigger a new run and apply changes. It will create AWS commit repository and add organisation secrets to the repo.
+(This is something we are planning to automate: https://github.com/alphagov/govuk-infrastructure/issues/2955)
 
 
 ## Archiving repositories
