@@ -62,20 +62,25 @@ For other software use:
 standard_contexts: *standard_security_checks
 ```
 
-When defining additional required checks, make sure workflow jobs have names so they can be referenced directly. Alternatively, you can reference job IDs. For workflows which use reusable workflows, the pattern is `<initial_workflow.jobs.job.[name/id]> / <reused-workflow.jobs.job.[name/id]`
+When defining additional required checks, make sure workflow jobs have a `name` so they can be referenced directly. _Alternatively, you can reference job IDs._
+
+For workflows which use reusable workflows (these are the ones with `uses` property), the pattern is `<initial_workflow.jobs.job.[name/id]> / <reused-workflow.jobs.job.[name/id]`.
+[Example of a job](https://github.com/alphagov/publisher/blob/0bf1bd705c4a05a4df2b616474ea8cb831a049a4/.github/workflows/ci.yml#L54) where initial workflow job name is `Test JavaScript` and the [reused workflow name is `Run Jasmine`](https://github.com/alphagov/govuk-infrastructure/blob/77c3c94abf3f0b9e40125f186219bddfc0ec815a/.github/workflows/jasmine.yml#L1).
+
+[Example of a job defined directly in the ci.yml file](https://github.com/alphagov/publishing-api/blob/f2026bc5873a2f6ab5d7acd3b6522b4b18f18775/.github/workflows/ci.yml#L43-L60)
 
 Example configuration:
 ```
     required_status_checks:
       standard_contexts: *standard_govuk_rails_checks
       additional_contexts:
-        - Test features / Run Cucumber
-        - Lint JavaScript / Run Standardx
-        - Test JavaScript / Run Jasmine
-        - Test Ruby / Run RSpec
+        - Test JavaScript / Run Jasmine   # workflow that uses reusable workflows
+        - Test Ruby                       # workflow defined directly in the ci.yaml
 ```
 
 Note that private repositories can't use the predefined `standard_govuk_rails_checks` or `standard_security_checks`. In such cases, include a comment: `# standard security checks are disabled as not configured for a private repo`. You should define equivalent jobs in your repository’s CI workflow and reference them in the `additional_contexts` section of the required status checks.
+
+> 🛠️ If the status checks aren't working once you've configured the CI pipeline in your new repo, ensure that the job names defined in the repos.yml config are matching the names in the ci.yml file in your new repo.
 
 ### Private repositories
 
@@ -115,7 +120,10 @@ import {
 ### Apply terraform changes
 
 Before merging your Pull Request, review the Terraform plan carefully. 
-After the PR is merged, remember to review it again and to apply changes in [Terraform Cloud GitHub workspace](https://app.terraform.io/app/govuk/workspaces/GitHub/runs).
+After the PR is merged, remember to review it again and to apply changes in [Terraform Cloud GitHub workspace](https://app.terraform.io/app/govuk/workspaces/GitHub/runs). The first apply run will create a new repository (unless it already exists) and configure it.
+
+After the repository is created, you will need to manually trigger a new run and apply changes. It will create AWS commit repository and add organisation secrets to the repo.
+(This is something we are planning to automate: https://github.com/alphagov/govuk-infrastructure/issues/2955)
 
 
 ## Archiving repositories
