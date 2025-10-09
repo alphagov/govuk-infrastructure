@@ -180,7 +180,7 @@ resource "github_repository" "govuk_repos" {
   topics     = try(each.value.archived, false) ? null : try(each.value.topics, ["govuk"])
 
   allow_squash_merge = true
-  allow_merge_commit = false
+  allow_merge_commit = true
 
   has_downloads        = true
   vulnerability_alerts = !try(each.value.archived, false) # Archived repos cannot have vulnerability alerts
