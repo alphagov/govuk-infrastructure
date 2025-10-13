@@ -297,7 +297,7 @@ module "variable-set-rds-integration" {
         encryption_at_rest           = false
       }
 
-      content_data_api = {
+      jfharden_test_content_data_api = {
         engine         = "postgres"
         engine_version = "14.18"
         engine_params = {
@@ -724,7 +724,7 @@ module "variable-set-rds-integration" {
         encryption_at_rest           = false
       }
 
-      whitehall = {
+      jfharden_test_whitehall = {
         engine         = "mysql"
         engine_version = "8.0.42"
         engine_params = {
