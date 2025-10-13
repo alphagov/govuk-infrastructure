@@ -54,7 +54,7 @@ jobs:
         path: ~/.tflint.d/plugins
         key: tflint-${{ runner.os }}-${{ hashFiles('**/tflint.hcl') }}
 
-    - uses: terraform-linters/setup-tflint@a8a2cbdfb17397afadcc4fb3fcd64fdb215f0f9f # v6.1.0
+    - uses: terraform-linters/setup-tflint@acd1575d3c037258ce5b2dd01379dc49ce24c6b7 # v6.2.0
       name: Set up TFLint
       if: steps.changed-deployments.outputs.any_changed == 'true'
       with:
