@@ -297,7 +297,7 @@ module "variable-set-rds-integration" {
         encryption_at_rest           = false
       }
 
-      jfharden_test_content_data_api = {
+      jfharden_test_content_data_api_2 = {
         engine         = "postgres"
         engine_version = "14.18"
         engine_params = {
@@ -312,13 +312,114 @@ module "variable-set-rds-integration" {
           log_lock_waits                       = { value = 1 }
         }
         engine_params_family         = "postgres14"
-        name                         = "jfharden-test-content-data-api-001"
+        name                         = "jfharden-test-content-data-api-002"
         allocated_storage            = 500
         instance_class               = "db.m6g.large"
         performance_insights_enabled = false
         project                      = "GOV.UK - Publishing"
         encryption_at_rest           = false
         snapshot_identifier          = "jfharden-test-content-data-api-001"
+        multi_az                     = true
+        skip_final_snapshot          = true
+      }
+
+      jfharden_test_content_data_api_3 = {
+        engine         = "postgres"
+        engine_version = "14.18"
+        engine_params = {
+          work_mem                             = { value = "GREATEST({DBInstanceClassMemory/${1024 * 16}},65536)" }
+          autovacuum_max_workers               = { value = 1, apply_method = "pending-reboot" }
+          maintenance_work_mem                 = { value = "GREATEST({DBInstanceClassMemory/${1024 * 3}},65536)" }
+          "rds.force_autovacuum_logging_level" = { value = "log" }
+          log_autovacuum_min_duration          = { value = 10000 }
+          log_min_duration_statement           = { value = "10000" }
+          log_statement                        = { value = "all" }
+          deadlock_timeout                     = { value = 2500 }
+          log_lock_waits                       = { value = 1 }
+        }
+        engine_params_family         = "postgres14"
+        name                         = "jfharden-test-content-data-api-003"
+        allocated_storage            = 500
+        instance_class               = "db.m6g.large"
+        performance_insights_enabled = false
+        project                      = "GOV.UK - Publishing"
+        encryption_at_rest           = false
+        snapshot_identifier          = "jfharden-test-content-data-api-001"
+        multi_az                     = true
+        skip_final_snapshot          = true
+      }
+
+      jfharden_test_content_data_api_empty_1 = {
+        engine         = "postgres"
+        engine_version = "14.18"
+        engine_params = {
+          work_mem                             = { value = "GREATEST({DBInstanceClassMemory/${1024 * 16}},65536)" }
+          autovacuum_max_workers               = { value = 1, apply_method = "pending-reboot" }
+          maintenance_work_mem                 = { value = "GREATEST({DBInstanceClassMemory/${1024 * 3}},65536)" }
+          "rds.force_autovacuum_logging_level" = { value = "log" }
+          log_autovacuum_min_duration          = { value = 10000 }
+          log_min_duration_statement           = { value = "10000" }
+          log_statement                        = { value = "all" }
+          deadlock_timeout                     = { value = 2500 }
+          log_lock_waits                       = { value = 1 }
+        }
+        engine_params_family         = "postgres14"
+        name                         = "jfharden-test-content-data-api-empty-001"
+        allocated_storage            = 500
+        instance_class               = "db.m6g.large"
+        performance_insights_enabled = false
+        project                      = "GOV.UK - Publishing"
+        encryption_at_rest           = false
+        multi_az                     = true
+        skip_final_snapshot          = true
+      }
+
+      jfharden_test_content_data_api_empty_2 = {
+        engine         = "postgres"
+        engine_version = "14.18"
+        engine_params = {
+          work_mem                             = { value = "GREATEST({DBInstanceClassMemory/${1024 * 16}},65536)" }
+          autovacuum_max_workers               = { value = 1, apply_method = "pending-reboot" }
+          maintenance_work_mem                 = { value = "GREATEST({DBInstanceClassMemory/${1024 * 3}},65536)" }
+          "rds.force_autovacuum_logging_level" = { value = "log" }
+          log_autovacuum_min_duration          = { value = 10000 }
+          log_min_duration_statement           = { value = "10000" }
+          log_statement                        = { value = "all" }
+          deadlock_timeout                     = { value = 2500 }
+          log_lock_waits                       = { value = 1 }
+        }
+        engine_params_family         = "postgres14"
+        name                         = "jfharden-test-content-data-api-empty-002"
+        allocated_storage            = 500
+        instance_class               = "db.m6g.large"
+        performance_insights_enabled = false
+        project                      = "GOV.UK - Publishing"
+        encryption_at_rest           = false
+        multi_az                     = true
+        skip_final_snapshot          = true
+      }
+
+      jfharden_test_content_data_api_empty_3 = {
+        engine         = "postgres"
+        engine_version = "14.18"
+        engine_params = {
+          work_mem                             = { value = "GREATEST({DBInstanceClassMemory/${1024 * 16}},65536)" }
+          autovacuum_max_workers               = { value = 1, apply_method = "pending-reboot" }
+          maintenance_work_mem                 = { value = "GREATEST({DBInstanceClassMemory/${1024 * 3}},65536)" }
+          "rds.force_autovacuum_logging_level" = { value = "log" }
+          log_autovacuum_min_duration          = { value = 10000 }
+          log_min_duration_statement           = { value = "10000" }
+          log_statement                        = { value = "all" }
+          deadlock_timeout                     = { value = 2500 }
+          log_lock_waits                       = { value = 1 }
+        }
+        engine_params_family         = "postgres14"
+        name                         = "jfharden-test-content-data-api-empty-003"
+        allocated_storage            = 500
+        instance_class               = "db.m6g.large"
+        performance_insights_enabled = false
+        project                      = "GOV.UK - Publishing"
+        encryption_at_rest           = false
         multi_az                     = true
         skip_final_snapshot          = true
       }
@@ -724,14 +825,14 @@ module "variable-set-rds-integration" {
         encryption_at_rest           = false
       }
 
-      jfharden_test_whitehall = {
+      jfharden_test_whitehall_2 = {
         engine         = "mysql"
         engine_version = "8.0.42"
         engine_params = {
           max_allowed_packet = { value = 1073741824 }
         }
         engine_params_family         = "mysql8.0"
-        name                         = "jfharden-test-whitehall-001"
+        name                         = "jfharden-test-whitehall-002"
         allocated_storage            = 400
         instance_class               = "db.m7g.xlarge"
         performance_insights_enabled = true
@@ -742,6 +843,74 @@ module "variable-set-rds-integration" {
         skip_final_snapshot          = true
       }
 
+      jfharden_test_whitehall_3 = {
+        engine         = "mysql"
+        engine_version = "8.0.42"
+        engine_params = {
+          max_allowed_packet = { value = 1073741824 }
+        }
+        engine_params_family         = "mysql8.0"
+        name                         = "jfharden-test-whitehall-003"
+        allocated_storage            = 400
+        instance_class               = "db.m7g.xlarge"
+        performance_insights_enabled = true
+        project                      = "GOV.UK - Publishing"
+        encryption_at_rest           = false
+        snapshot_identifier          = "jfharden-test-whitehall-001"
+        multi_az                     = true
+        skip_final_snapshot          = true
+      }
+
+      jfharden_test_whitehall_empty_1 = {
+        engine         = "mysql"
+        engine_version = "8.0.42"
+        engine_params = {
+          max_allowed_packet = { value = 1073741824 }
+        }
+        engine_params_family         = "mysql8.0"
+        name                         = "jfharden-test-whitehall-empty-001"
+        allocated_storage            = 400
+        instance_class               = "db.m7g.xlarge"
+        performance_insights_enabled = true
+        project                      = "GOV.UK - Publishing"
+        encryption_at_rest           = false
+        multi_az                     = true
+        skip_final_snapshot          = true
+      }
+
+      jfharden_test_whitehall_empty_2 = {
+        engine         = "mysql"
+        engine_version = "8.0.42"
+        engine_params = {
+          max_allowed_packet = { value = 1073741824 }
+        }
+        engine_params_family         = "mysql8.0"
+        name                         = "jfharden-test-whitehall-empty-002"
+        allocated_storage            = 400
+        instance_class               = "db.m7g.xlarge"
+        performance_insights_enabled = true
+        project                      = "GOV.UK - Publishing"
+        encryption_at_rest           = false
+        multi_az                     = true
+        skip_final_snapshot          = true
+      }
+
+      jfharden_test_whitehall_empty_3 = {
+        engine         = "mysql"
+        engine_version = "8.0.42"
+        engine_params = {
+          max_allowed_packet = { value = 1073741824 }
+        }
+        engine_params_family         = "mysql8.0"
+        name                         = "jfharden-test-whitehall-empty-003"
+        allocated_storage            = 400
+        instance_class               = "db.m7g.xlarge"
+        performance_insights_enabled = true
+        project                      = "GOV.UK - Publishing"
+        encryption_at_rest           = false
+        multi_az                     = true
+        skip_final_snapshot          = true
+      }
     }
   }
 }
