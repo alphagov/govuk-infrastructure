@@ -914,6 +914,7 @@ repos:
     required_status_checks:
       additional_contexts:
         - Test
+    standard_contexts: *standard_security_checks
 
   govuk-user-reviewer:
     visibility: private
