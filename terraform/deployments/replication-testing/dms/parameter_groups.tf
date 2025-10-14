@@ -3,6 +3,24 @@ resource "aws_db_parameter_group" "content_data_api_source" {
   family = "postgres14"
 
   parameter {
+    apply_method = "pending-reboot"
+    name         = "rds.logical_replication"
+    value        = "1"
+  }
+
+  parameter {
+    apply_method = "pending-reboot"
+    name         = "max_worker_processes"
+    value        = "15"
+  }
+
+  parameter {
+    apply_method = "pending-reboot"
+    name         = "shared_preload_libraries"
+    value        = "pg_stat_statements,pglogical"
+  }
+
+  parameter {
     apply_method = "immediate"
     name         = "deadlock_timeout"
     value        = "2500"
@@ -47,6 +65,30 @@ resource "aws_db_parameter_group" "content_data_api_source" {
 resource "aws_db_parameter_group" "content_data_api_target" {
   name   = "integration-jfharden-test-content-data-api-empty-001-postgres-20251014105356211500000002"
   family = "postgres14"
+
+  parameter {
+    apply_method = "immediate"
+    name         = "session_replication_role"
+    value        = "replica"
+  }
+
+  parameter {
+    apply_method = "pending-reboot"
+    name         = "rds.logical_replication"
+    value        = "1"
+  }
+
+  parameter {
+    apply_method = "pending-reboot"
+    name         = "max_worker_processes"
+    value        = "15"
+  }
+
+  parameter {
+    apply_method = "pending-reboot"
+    name         = "shared_preload_libraries"
+    value        = "pg_stat_statements,pglogical"
+  }
 
   parameter {
     apply_method = "immediate"
