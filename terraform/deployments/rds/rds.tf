@@ -209,35 +209,3 @@ resource "aws_secretsmanager_secret_version" "database_passwords" {
     { for k, v in random_string.database_password : k => v.result }
   )
 }
-
-removed {
-  from = aws_db_instance.instance["jfharden_test_content_data_api"]
-}
-
-removed {
-  from = aws_db_instance.instance["jfharden_test_whitehall"]
-}
-
-removed {
-  from = aws_db_parameter_group.engine_params["jfharden_test_content_data_api"]
-}
-
-removed {
-  from = aws_db_parameter_group.engine_params["jfharden_test_whitehall"]
-}
-
-removed {
-  from = aws_security_group_rule.mysql["jfharden_test_whitehall"]
-}
-
-removed {
-  from = aws_security_group_rule.postgres["jfharden_test_content_data_api"]
-}
-
-removed {
-  from = aws_security_group.rds["jfharden_test_content_data_api"]
-}
-
-removed {
-  from = aws_security_group.rds["jfharden_test_whitehall"]
-}
