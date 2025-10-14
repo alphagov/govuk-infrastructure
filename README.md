@@ -6,7 +6,7 @@ The govuk-infrastructure repo contains:
 
 - [`terraform/`](terraform/): Terraform modules for turning up an Kubernetes
   cluster on EKS for GOV.UK.
-- [`images/`](images/): Container image definitions for utilities such as the _toolbox_ image.
+- [`images/`](images/): Container image definitions for utilities.
 - [`.github/`](.github/): GitHub Actions and workflows used by other GOV.UK
   repos, for example release automation, test runners and security analysis
   tools.
@@ -18,6 +18,8 @@ Helm charts for GOV.UK applications are in [alphagov/govuk-helm-charts](https://
 Base image definitions for GOV.UK Ruby apps are in [alphagov/govuk-ruby-images](https://github.com/alphagov/govuk-ruby-images/).
 
 Configuration of CDN services is stored in [alphagov/govuk-fastly](https://github.com/alphagov/govuk-fastly) and [alphagov/govuk-fastly-secrets](https://github.com/alphagov/govuk-fastly-secrets) (private) repos.
+
+Toolbox utility is stored in [alphagov/govuk-toolbox-image](https://github.com/alphagov/govuk-toolbox-image)
 
 ## Usage
 

@@ -63,7 +63,6 @@ locals {
     "licensify-frontend",
     "mongodb",
     "search-api-learn-to-rank",
-    "toolbox",
   ]
 
   // Add repos to this list if you want lambda to have permission to pull the image
