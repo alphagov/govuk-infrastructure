@@ -26,6 +26,7 @@ resource "google_project_iam_custom_role" "api" {
     "discoveryengine.documents.update",
     "discoveryengine.evaluations.create",
     "discoveryengine.evaluations.get",
+    "discoveryengine.evaluations.list",
     "discoveryengine.operations.get",
     "discoveryengine.sampleQueries.import",
     "discoveryengine.sampleQuerySets.create",
