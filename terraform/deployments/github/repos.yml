@@ -283,8 +283,7 @@ repos:
       additional_contexts:
         - test
 
-  govuk-analytics-engineering:
-    visibility: private
+  govuk-analytics-engineering: {}
 
   govuk-chat:
     can_be_deployed: true
