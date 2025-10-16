@@ -285,6 +285,7 @@ repos:
 
   govuk-analytics-engineering:
     visibility: private
+    archived: true
 
   govuk-chat:
     can_be_deployed: true
