@@ -133,6 +133,7 @@ To archive a repository, you will need to raise **two** Pull Requests to update 
 1. Remove all properties
 
 Remove all properties such as `required_status_checks` or `homepage_url`.
+You may want to keep the `visibility` property if you want to create a private or internal archive.
 
 ```diff
 - my-repo:
