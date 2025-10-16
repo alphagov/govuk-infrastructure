@@ -4,14 +4,17 @@ locals {
 }
 
 module "grafana_iam_role" {
-  source                        = "terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc"
-  version                       = "~> 5.0"
-  create_role                   = true
-  role_name                     = "${local.grafana_service_account}-${module.eks.cluster_name}"
-  role_description              = "Role for Grafana to access AWS data sources. Corresponds to ${local.grafana_service_account} k8s ServiceAccount."
-  provider_url                  = module.eks.oidc_provider
-  role_policy_arns              = [aws_iam_policy.grafana.arn]
-  oidc_fully_qualified_subjects = ["system:serviceaccount:${local.monitoring_namespace}:${local.grafana_service_account}"]
+  source             = "terraform-aws-modules/iam/aws//modules/iam-role"
+  version            = "~> 6.0"
+  create             = true
+  name               = "${local.grafana_service_account}-${module.eks.cluster_name}"
+  description        = "Role for Grafana to access AWS data sources. Corresponds to ${local.grafana_service_account} k8s ServiceAccount."
+  enable_oidc        = true
+  oidc_provider_urls = [module.eks.oidc_provider]
+  policies = {
+    "${aws_iam_policy.grafana.name}" = aws_iam_policy.grafana.arn
+  }
+  oidc_subjects = ["system:serviceaccount:${local.monitoring_namespace}:${local.grafana_service_account}"]
 }
 
 data "aws_iam_policy_document" "grafana" {
