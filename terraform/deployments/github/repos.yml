@@ -283,7 +283,9 @@ repos:
       additional_contexts:
         - test
 
-  govuk-analytics-engineering: {}
+  govuk-analytics-engineering:
+    visibility: private
+    archived: true
 
   govuk-chat:
     can_be_deployed: true
