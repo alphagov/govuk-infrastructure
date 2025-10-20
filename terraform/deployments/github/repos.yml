@@ -961,12 +961,7 @@ repos:
   govuk-knowledge-graph-gcp:
     homepage_url: "https://docs.data-community.publishing.service.gov.uk/tools/govgraph/"
 
-  github-trello-poster:
-    required_status_checks:
-      additional_contexts:
-        - "CodeQL SAST scan / Analyze"
-        - "Dependency Review scan / dependency-review-pr"
-        - "test"
+  github-trello-poster: {}
 
   ckan-mock-harvest-sources: {}
   govuk-pact-broker: {}
