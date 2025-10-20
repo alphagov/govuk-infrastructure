@@ -961,7 +961,8 @@ repos:
   govuk-knowledge-graph-gcp:
     homepage_url: "https://docs.data-community.publishing.service.gov.uk/tools/govgraph/"
 
-  github-trello-poster: {}
+  github-trello-poster:
+    archived: true
 
   ckan-mock-harvest-sources: {}
   govuk-pact-broker: {}
