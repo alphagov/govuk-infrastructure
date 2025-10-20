@@ -20,7 +20,7 @@ terraform {
     # do not add AWS resources to this module.
     aws = {
       source  = "hashicorp/aws"
-      version = "< 6.16.1"
+      version = "< 6.17.1"
     }
   }
 }
