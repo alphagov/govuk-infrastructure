@@ -758,7 +758,7 @@ module "variable-set-elasticsearch-integration" {
       throughput       = 250
       provisioned_iops = 3000
     }
-    engine_version         = "6.7"
+    engine_version         = "6.8"
     zone_awareness_enabled = true
 
     instance_count = 3
@@ -771,7 +771,7 @@ module "variable-set-elasticsearch-integration" {
 
     tls_security_policy = "Policy-Min-TLS-1-0-2019-07"
 
-    stackname = "blue"
+    stackname = "green"
 
     elasticsearch6_manual_snapshot_bucket_arns = [
       "arn:aws:s3:::govuk-staging-elasticsearch6-manual-snapshots",
