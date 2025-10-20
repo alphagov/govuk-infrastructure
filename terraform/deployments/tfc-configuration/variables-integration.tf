@@ -493,7 +493,7 @@ module "variable-set-rds-integration" {
 
       locations_api = {
         engine         = "postgres"
-        engine_version = "14"
+        engine_version = "14.18"
         engine_params = {
           log_min_duration_statement = { value = 10000 }
           log_statement              = { value = "all" }
