@@ -45,7 +45,7 @@ resource "aws_db_snapshot" "unencrypted_mass_test" {
   for_each = var.db_mass_test ? data.aws_db_instance.mass_db_lookup : {}
 
   db_instance_identifier = each.value.db_instance_identifier
-  db_snapshot_identifier = "${each.value.db_instance_identifier}-pre-encryption"
+  db_snapshot_identifier = "jfharden-mass-${each.value.db_instance_identifier}-pre-encryption"
 
   timeouts {
     create = "4h"
@@ -56,7 +56,7 @@ resource "aws_db_snapshot_copy" "encrypted_mass_db" {
   for_each = var.db_mass_test ? data.aws_db_instance.mass_db_lookup : {}
 
   source_db_snapshot_identifier = aws_db_snapshot.unencrypted_mass_test[each.key].db_snapshot_arn
-  target_db_snapshot_identifier = "${each.value.db_instance_identifier}-post-encryption"
+  target_db_snapshot_identifier = "jfharden-mass-${each.value.db_instance_identifier}-post-encryption"
   kms_key_id                    = aws_kms_key.rds.arn
 
   timeouts {
@@ -67,7 +67,7 @@ resource "aws_db_snapshot_copy" "encrypted_mass_db" {
 resource "aws_db_instance" "mass_create" {
   for_each = var.db_mass_test ? data.aws_db_instance.mass_db_lookup : {}
 
-  identifier            = each.value.db_instance_identifier
+  identifier            = "jfharden-mass-${each.value.db_instance_identifier}"
   engine                = each.value.engine
   engine_version        = each.value.engine_version
   instance_class        = each.value.db_instance_class
@@ -80,10 +80,18 @@ resource "aws_db_instance" "mass_create" {
   multi_az              = true
   allocated_storage     = each.value.allocated_storage
   parameter_group_name  = each.value.db_parameter_groups[0]
-  tags                  = each.value.tags
-  snapshot_identifier   = aws_db_snapshot_copy.encrypted_mass_db[each.key].target_db_snapshot_identifier
+  tags = merge(
+    each.value.tags,
+    {
+      TestType = "Mass Parallelism"
+    }
+  )
+  snapshot_identifier = aws_db_snapshot_copy.encrypted_mass_db[each.key].target_db_snapshot_identifier
+
+  storage_encrypted = true
+  kms_key_id        = aws_kms_key.rds.arn
 
   timeouts {
-    create = "1h"
+    create = "2h"
   }
 }

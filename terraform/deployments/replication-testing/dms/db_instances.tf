@@ -1,7 +1,7 @@
 variable "encrypt_databases" {
   type        = bool
   description = "Whether to create encrypted snapshots and launch new instances from those snapshots"
-  default     = true
+  default     = false
 }
 
 resource "aws_db_instance" "content_data_api_source" {
