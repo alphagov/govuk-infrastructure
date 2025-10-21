@@ -9,7 +9,10 @@ resource "aws_security_group" "rds" {
 }
 
 resource "aws_security_group_rule" "mysql" {
-  for_each          = { for name, data in var.databases : name => data if data.engine == "mysql" }
+  for_each = {
+    for name, data in var.databases : name => data
+    if data.engine == "mysql" && !try(data.isolate, false)
+  }
   security_group_id = aws_security_group.rds[each.key].id
   description       = "Access to MySQL database from EKS worker nodes"
 
@@ -22,7 +25,10 @@ resource "aws_security_group_rule" "mysql" {
 }
 
 resource "aws_security_group_rule" "postgres" {
-  for_each          = { for name, data in var.databases : name => data if data.engine == "postgres" }
+  for_each = {
+    for name, data in var.databases : name => data
+    if data.engine == "postgres" && !try(data.isolate, false)
+  }
   security_group_id = aws_security_group.rds[each.key].id
   description       = "Access to PostgreSQL database from EKS worker nodes"
 
