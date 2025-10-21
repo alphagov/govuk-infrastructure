@@ -1,25 +1,9 @@
-resource "aws_db_parameter_group" "locations_api_postgresql_14_green_params" {
+import {
+  to = aws_db_instance.instance["locations_api"]
+  id = "locations-api-postgres"
+}
 
-  name_prefix = "${var.govuk_environment}-locations-api-postgres-"
-  family      = "postgres14"
-
-  parameter {
-    name         = "rds.logical_replication"
-    value        = "1"
-    apply_method = "pending-reboot"
-  }
-
-  parameter {
-    name         = "max_logical_replication_workers"
-    value        = "20"
-    apply_method = "pending-reboot"
-  }
-
-  parameter {
-    name         = "max_worker_processes"
-    value        = "25"
-    apply_method = "pending-reboot"
-  }
-
-  lifecycle { create_before_destroy = true }
+import {
+  to = aws_db_parameter_group.engine_params["locations_api"]
+  id = "staging-locations-api-postgres-20250828115303735800000005"
 }
