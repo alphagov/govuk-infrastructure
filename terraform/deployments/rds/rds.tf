@@ -97,7 +97,8 @@ resource "aws_db_instance" "instance" {
 
 resource "aws_db_snapshot" "unencrypted_snapshot" {
   for_each = {
-    for db_name, db in var.databases : db_name => db if try(db.create_encrypted_snapshot, false)
+    for db_name, db in var.databases : db_name => db
+    if lookup(db, "launch_new_db", false)
   }
 
   # This is purposefully not using the actual terraform resource to ensure it doesn't get destroyed if the
@@ -112,7 +113,8 @@ resource "aws_db_snapshot" "unencrypted_snapshot" {
 
 resource "aws_db_snapshot_copy" "encrypted_snapshot" {
   for_each = {
-    for db_name, db in var.databases : db_name => db if try(db.create_encrypted_snapshot, false)
+    for db_name, db in var.databases : db_name => db
+    if lookup(db, "launch_new_db", false)
   }
 
   source_db_snapshot_identifier = aws_db_snapshot.unencrypted_snapshot[each.key].db_snapshot_arn
@@ -120,7 +122,61 @@ resource "aws_db_snapshot_copy" "encrypted_snapshot" {
   kms_key_id                    = aws_kms_key.rds.arn
 
   timeouts {
-    create = "2h"
+    create = "4h"
+  }
+}
+
+resource "aws_db_instance" "normalised_instance" {
+  for_each = {
+    for db_name, db in var.databases : db_name => db
+    if lookup(db, "launch_new_db", false)
+  }
+
+  snapshot_identifier         = aws_db_snapshot_copy.encrypted_snapshot[each.key].target_db_snapshot_identifier
+  engine                      = each.value.engine
+  engine_version              = each.value.engine_version
+  username                    = var.database_admin_username
+  password                    = random_string.database_password[each.key].result
+  instance_class              = each.value.instance_class
+  identifier                  = "${local.identifier_prefix}${lookup(each.value, "new_name", each.value.name)}-${var.govuk_environment}-${each.value.engine}"
+  db_subnet_group_name        = aws_db_subnet_group.subnet_group.name
+  multi_az                    = var.multi_az
+  parameter_group_name        = aws_db_parameter_group.engine_params[each.key].name
+  maintenance_window          = lookup(each.value, "maintenance_window", var.maintenance_window)
+  backup_retention_period     = lookup(each.value, "backup_retention_period", var.backup_retention_period)
+  backup_window               = var.backup_window
+  copy_tags_to_snapshot       = true
+  monitoring_interval         = 60
+  monitoring_role_arn         = data.tfe_outputs.logging.nonsensitive_values.rds_enhanced_monitoring_role_arn
+  vpc_security_group_ids      = [aws_security_group.rds[each.key].id]
+  ca_cert_identifier          = "rds-ca-rsa2048-g1"
+  apply_immediately           = var.govuk_environment != "production"
+  allow_major_version_upgrade = lookup(each.value, "allow_major_version_upgrade", false)
+
+  performance_insights_enabled          = each.value.performance_insights_enabled
+  performance_insights_retention_period = each.value.performance_insights_enabled ? 7 : 0
+
+  allocated_storage  = each.value.allocated_storage
+  iops               = try(each.value.iops, null)
+  storage_throughput = try(each.value.storage_throughput, null)
+  storage_type       = "gp3"
+
+  timeouts {
+    create = var.terraform_create_rds_timeout
+    delete = var.terraform_delete_rds_timeout
+    update = var.terraform_update_rds_timeout
+  }
+
+  deletion_protection       = try(each.value.deletion_protection, true)
+  final_snapshot_identifier = "${each.value.new_name}-${var.govuk_environment}-${each.value.engine}-final-snapshot"
+  skip_final_snapshot       = var.skip_final_snapshot
+
+  storage_encrypted = true
+  kms_key_id        = aws_kms_key.rds.arn
+
+  tags = {
+    Name    = "govuk-rds-${local.identifier_prefix}${each.value.name}-${var.govuk_environment}-${each.value.engine}",
+    project = lookup(each.value, "project", "GOV.UK - Other"),
   }
 }
 
@@ -128,8 +184,11 @@ resource "aws_db_event_subscription" "subscription" {
   name      = "${var.govuk_environment}-rds-event-subscription"
   sns_topic = aws_sns_topic.rds_alerts.arn
 
-  source_type      = "db-instance"
-  source_ids       = [for i in aws_db_instance.instance : i.identifier]
+  source_type = "db-instance"
+  source_ids = concat(
+    [for i in aws_db_instance.instance : i.identifier],
+    [for i in aws_db_instance.normalised_instance : i.idenfitier],
+  )
   event_categories = ["deletion", "failure", "low storage"]
 }
 
@@ -153,6 +212,30 @@ resource "aws_cloudwatch_metric_alarm" "rds_freestoragespace" {
   alarm_description = "Available storage space on ${aws_db_instance.instance[each.key].identifier} RDS is below ${lookup(each.value, "storage_alarm_threshold_percentage", 10)}%."
 }
 
+
+# Alarm if free storage space is below threshold (typically 10 GiB) for 10m.
+resource "aws_cloudwatch_metric_alarm" "normalised_rds_freestoragespace" {
+  for_each = {
+    for db_name, db in var.databases : db_name => db
+    if lookup(db, "launch_new_db", false)
+  }
+  dimensions = { DBInstanceIdentifier = aws_db_instance.normalised_instance[each.key].identifier }
+
+  alarm_name          = "${aws_db_instance.normalised_instance[each.key].identifier}-rds-freestoragespace"
+  comparison_operator = "LessThanThreshold"
+  evaluation_periods  = "10"
+  metric_name         = "FreeStorageSpace"
+  namespace           = "AWS/RDS"
+  period              = "60"
+  statistic           = "Minimum"
+  threshold = (
+    each.value.allocated_storage * (tonumber(lookup(each.value, "storage_alarm_threshold_percentage", 10)) / 100)
+    * 1024 * 1024 * 1024 # allocated_storage is in GB, metric value is in bytes
+  )
+  alarm_actions     = [aws_sns_topic.rds_alerts.arn]
+  alarm_description = "Available storage space on ${aws_db_instance.normalised_instance[each.key].identifier} RDS is below ${lookup(each.value, "storage_alarm_threshold_percentage", 10)}%."
+}
+
 resource "aws_route53_record" "instance_cname" {
   for_each = var.databases
 
@@ -161,7 +244,9 @@ resource "aws_route53_record" "instance_cname" {
   name    = aws_db_instance.instance[each.key].identifier
   type    = "CNAME"
   ttl     = 300
-  records = [aws_db_instance.instance[each.key].address]
+  records = [
+    lookup(each.value, "launch_new_db", false) ? aws_db_instance.normalised_instance[each.key].address : aws_db_instance.instance[each.key].address
+  ]
 }
 
 resource "aws_db_instance" "replica" {
@@ -185,6 +270,30 @@ resource "aws_db_instance" "replica" {
   }
 }
 
+resource "aws_db_instance" "normalised_replica" {
+  for_each = {
+    for key, value in var.databases : key => value
+    if lookup(value, "has_read_replica", false) && lookup(value, "launch_new_db", false) && lookup(value, "launch_new_replica", false)
+  }
+
+  instance_class = each.value.instance_class
+
+  identifier                            = "${aws_db_instance.normalised_instance[each.key].identifier}-replica"
+  replicate_source_db                   = aws_db_instance.normalised_instance[each.key].identifier
+  performance_insights_enabled          = aws_db_instance.normalised_instance[each.key].performance_insights_enabled
+  performance_insights_retention_period = aws_db_instance.normalised_instance[each.key].performance_insights_retention_period
+
+  skip_final_snapshot = true
+
+  tags = {
+    Name    = "govuk-rds-${aws_db_instance.normalised_instance[each.key].identifier}-replica",
+    project = lookup(each.value, "project", "GOV.UK - Other"),
+  }
+
+  storage_encrypted = true
+  kms_key_id        = aws_kms_key.rds.arn
+}
+
 resource "aws_route53_record" "replica_cname" {
   for_each = {
     for key, value in var.databases : key => value
@@ -196,7 +305,11 @@ resource "aws_route53_record" "replica_cname" {
   name    = aws_db_instance.replica[each.key].identifier
   type    = "CNAME"
   ttl     = 300
-  records = [aws_db_instance.replica[each.key].address]
+  records = [
+    lookup(each.value, "launch_new_db", false) && lookup(each.value, "launch_new_replica", false) ?
+    aws_db_instance.normalised_replica[each.key].address :
+    aws_db_instance.replica[each.key].address
+  ]
 }
 
 resource "aws_secretsmanager_secret" "database_passwords" {
