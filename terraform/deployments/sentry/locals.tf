@@ -43,7 +43,6 @@ locals {
     "search-api",
     "search-api-v2",
     "search-api-v2-beta-features",
-    "search-v2-evaluator",
     "service-manual-publisher",
     "short-url-manager",
     "signon",
