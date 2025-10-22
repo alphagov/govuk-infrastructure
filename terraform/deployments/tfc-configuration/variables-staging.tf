@@ -306,7 +306,7 @@ module "variable-set-rds-staging" {
           autovacuum_max_workers               = { value = 1, apply_method = "pending-reboot" }
           maintenance_work_mem                 = { value = "GREATEST({DBInstanceClassMemory/${1024 * 3}},65536)" }
           "rds.force_autovacuum_logging_level" = { value = "log" }
-          log_autovacuum_min_duration          = { value = 10000 }
+          log_autovacuum_min_duration          = { value = 10000, apply_method = "pending-reboot" }
           log_min_duration_statement           = { value = "10000" }
           log_statement                        = { value = "all" }
           deadlock_timeout                     = { value = 2500 }

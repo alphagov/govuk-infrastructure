@@ -318,7 +318,7 @@ module "variable-set-rds-production" {
           maintenance_work_mem                 = { value = "GREATEST({DBInstanceClassMemory/${1024 * 3}},65536)" }
           "rds.force_autovacuum_logging_level" = { value = "log" }
           log_autovacuum_min_duration          = { value = 10000 }
-          log_min_duration_statement           = { value = "10000" }
+          log_min_duration_statement           = { value = "10000", apply_method = "pending-reboot" }
           log_statement                        = { value = "all" }
           deadlock_timeout                     = { value = 2500 }
           log_lock_waits                       = { value = 1 }
