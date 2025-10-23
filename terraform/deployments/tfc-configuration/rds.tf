@@ -23,6 +23,11 @@ module "rds-integration" {
     "GOV.UK Production"           = "write"
   }
 
+  envvars = {
+    TF_CLI_ARGS_plan  = "-parallelism=30"
+    TF_CLI_ARGS_apply = "-parallelism=30"
+  }
+
   variable_set_ids = [
     local.aws_credentials["integration"],
     module.variable-set-common.id,
