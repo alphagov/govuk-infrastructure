@@ -168,7 +168,7 @@ resource "aws_db_instance" "normalised_instance" {
   }
 
   deletion_protection       = try(each.value.deletion_protection, true)
-  final_snapshot_identifier = "${each.value.new_name}-${var.govuk_environment}-${each.value.engine}-final-snapshot"
+  final_snapshot_identifier = "${lookup(each.value, "new_name", each.value.name)}-${var.govuk_environment}-${each.value.engine}-final-snapshot"
   skip_final_snapshot       = var.skip_final_snapshot
 
   storage_encrypted = true
