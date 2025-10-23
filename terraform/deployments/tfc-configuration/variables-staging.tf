@@ -176,6 +176,7 @@ module "variable-set-rds-staging" {
         encryption_at_rest           = false
         launch_new_db                = false
         isolate                      = false
+        cname_point_to_new_instance  = false
       }
 
       authenticating_proxy = {
@@ -197,6 +198,7 @@ module "variable-set-rds-staging" {
         encryption_at_rest           = false
         launch_new_db                = false
         isolate                      = false
+        cname_point_to_new_instance  = false
       }
 
       chat = {
@@ -218,6 +220,7 @@ module "variable-set-rds-staging" {
         encryption_at_rest           = true
         launch_new_db                = false
         isolate                      = false
+        cname_point_to_new_instance  = false
       }
 
       ckan = {
@@ -238,6 +241,7 @@ module "variable-set-rds-staging" {
         encryption_at_rest           = false
         launch_new_db                = false
         isolate                      = false
+        cname_point_to_new_instance  = false
       }
 
       collections_publisher = {
@@ -255,6 +259,7 @@ module "variable-set-rds-staging" {
         encryption_at_rest           = false
         launch_new_db                = false
         isolate                      = false
+        cname_point_to_new_instance  = false
       }
 
       content_block_manager = {
@@ -276,6 +281,7 @@ module "variable-set-rds-staging" {
         encryption_at_rest           = false
         launch_new_db                = false
         isolate                      = false
+        cname_point_to_new_instance  = false
       }
 
       content_data_admin = {
@@ -296,6 +302,7 @@ module "variable-set-rds-staging" {
         encryption_at_rest           = false
         launch_new_db                = false
         isolate                      = false
+        cname_point_to_new_instance  = false
       }
 
       content_data_api = {
@@ -322,6 +329,7 @@ module "variable-set-rds-staging" {
         encryption_at_rest           = false
         launch_new_db                = false
         isolate                      = false
+        cname_point_to_new_instance  = false
       }
 
       content_publisher = {
@@ -358,6 +366,7 @@ module "variable-set-rds-staging" {
         encryption_at_rest           = false
         launch_new_db                = false
         isolate                      = false
+        cname_point_to_new_instance  = false
       }
 
       content_store = {
@@ -378,6 +387,7 @@ module "variable-set-rds-staging" {
         encryption_at_rest           = false
         launch_new_db                = false
         isolate                      = false
+        cname_point_to_new_instance  = false
       }
 
       content_tagger = {
@@ -414,6 +424,7 @@ module "variable-set-rds-staging" {
         encryption_at_rest           = false
         launch_new_db                = false
         isolate                      = false
+        cname_point_to_new_instance  = false
       }
 
       draft_content_store = {
@@ -434,6 +445,7 @@ module "variable-set-rds-staging" {
         encryption_at_rest           = false
         launch_new_db                = false
         isolate                      = false
+        cname_point_to_new_instance  = false
       }
 
       email_alert_api = {
@@ -470,6 +482,7 @@ module "variable-set-rds-staging" {
         encryption_at_rest           = false
         launch_new_db                = false
         isolate                      = false
+        cname_point_to_new_instance  = false
       }
 
       imminence = {
@@ -492,6 +505,7 @@ module "variable-set-rds-staging" {
         encryption_at_rest           = false
         launch_new_db                = false
         isolate                      = false
+        cname_point_to_new_instance  = false
       }
 
       link_checker_api = {
@@ -513,6 +527,7 @@ module "variable-set-rds-staging" {
         encryption_at_rest           = false
         launch_new_db                = false
         isolate                      = false
+        cname_point_to_new_instance  = false
       }
 
       local_links_manager = {
@@ -549,6 +564,7 @@ module "variable-set-rds-staging" {
         encryption_at_rest           = false
         launch_new_db                = false
         isolate                      = false
+        cname_point_to_new_instance  = false
       }
 
       locations_api = {
@@ -569,6 +585,7 @@ module "variable-set-rds-staging" {
         encryption_at_rest           = false
         launch_new_db                = false
         isolate                      = false
+        cname_point_to_new_instance  = false
       }
 
       publishing_api = {
@@ -612,6 +629,7 @@ module "variable-set-rds-staging" {
         launch_new_db                = false
         launch_new_replica           = false
         isolate                      = false
+        cname_point_to_new_instance  = false
       }
 
       publisher = {
@@ -633,6 +651,7 @@ module "variable-set-rds-staging" {
         encryption_at_rest           = false
         launch_new_db                = false
         isolate                      = false
+        cname_point_to_new_instance  = false
       }
 
       release = {
@@ -650,6 +669,7 @@ module "variable-set-rds-staging" {
         encryption_at_rest           = false
         launch_new_db                = false
         isolate                      = false
+        cname_point_to_new_instance  = false
       }
 
       search_admin = {
@@ -667,6 +687,7 @@ module "variable-set-rds-staging" {
         encryption_at_rest           = false
         launch_new_db                = false
         isolate                      = false
+        cname_point_to_new_instance  = false
       }
 
       service_manual_publisher = {
@@ -687,6 +708,7 @@ module "variable-set-rds-staging" {
         encryption_at_rest           = false
         launch_new_db                = false
         isolate                      = false
+        cname_point_to_new_instance  = false
       }
 
       signon = {
@@ -704,6 +726,7 @@ module "variable-set-rds-staging" {
         encryption_at_rest           = false
         launch_new_db                = false
         isolate                      = false
+        cname_point_to_new_instance  = false
       }
 
       support_api = {
@@ -724,6 +747,7 @@ module "variable-set-rds-staging" {
         encryption_at_rest           = false
         launch_new_db                = false
         isolate                      = false
+        cname_point_to_new_instance  = false
       }
 
       transition = {
@@ -744,6 +768,7 @@ module "variable-set-rds-staging" {
         encryption_at_rest           = false
         launch_new_db                = false
         isolate                      = false
+        cname_point_to_new_instance  = false
       }
 
       whitehall = {
@@ -761,6 +786,7 @@ module "variable-set-rds-staging" {
         encryption_at_rest           = false
         launch_new_db                = false
         isolate                      = false
+        cname_point_to_new_instance  = false
       }
     }
   }
