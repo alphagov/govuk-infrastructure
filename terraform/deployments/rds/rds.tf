@@ -187,7 +187,7 @@ resource "aws_db_event_subscription" "subscription" {
   source_type = "db-instance"
   source_ids = concat(
     [for i in aws_db_instance.instance : i.identifier],
-    [for i in aws_db_instance.normalised_instance : i.idenfitier],
+    [for i in aws_db_instance.normalised_instance : i.identifier],
   )
   event_categories = ["deletion", "failure", "low storage"]
 }
