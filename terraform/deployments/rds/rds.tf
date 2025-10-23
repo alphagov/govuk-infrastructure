@@ -148,7 +148,7 @@ resource "aws_db_instance" "normalised_instance" {
   copy_tags_to_snapshot       = true
   monitoring_interval         = 60
   monitoring_role_arn         = data.tfe_outputs.logging.nonsensitive_values.rds_enhanced_monitoring_role_arn
-  vpc_security_group_ids      = [aws_security_group.rds[each.key].id]
+  vpc_security_group_ids      = [aws_security_group.normalised_rds[each.key].id]
   ca_cert_identifier          = "rds-ca-rsa2048-g1"
   apply_immediately           = var.govuk_environment != "production"
   allow_major_version_upgrade = lookup(each.value, "allow_major_version_upgrade", false)
