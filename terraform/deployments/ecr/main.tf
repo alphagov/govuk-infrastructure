@@ -57,6 +57,7 @@ locals {
     "clamav",
     "govuk-fastly-diff-generator",
     "govuk-replatform-test-app",
+    "govuk-synthetic-test-app",
     "imminence",
     "licensify-backend",
     "licensify-feed",
