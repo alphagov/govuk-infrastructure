@@ -245,7 +245,9 @@ resource "aws_route53_record" "instance_cname" {
   type    = "CNAME"
   ttl     = 300
   records = [
-    lookup(each.value, "launch_new_db", false) ? aws_db_instance.normalised_instance[each.key].address : aws_db_instance.instance[each.key].address
+    lookup(each.value, "cname_point_to_new_instance", false) && lookup(each.value, "launch_new_db", false) ?
+    aws_db_instance.normalised_instance[each.key].address :
+    aws_db_instance.instance[each.key].address
   ]
 }
 
@@ -306,7 +308,9 @@ resource "aws_route53_record" "replica_cname" {
   type    = "CNAME"
   ttl     = 300
   records = [
-    lookup(each.value, "launch_new_db", false) && lookup(each.value, "launch_new_replica", false) ?
+    lookup(each.value, "cname_point_to_new_instance", false) &&
+    lookup(each.value, "launch_new_db", false) &&
+    lookup(each.value, "launch_new_replica", false) ?
     aws_db_instance.normalised_replica[each.key].address :
     aws_db_instance.replica[each.key].address
   ]
