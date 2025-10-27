@@ -16,10 +16,6 @@ resource "aws_eip" "private_subnet_nat" {
     Name    = "${each.key}-nat"
     Purpose = "EIP Retained for Legacy ELMS Endpoints"
   }
-
-  lifecycle {
-    prevent_destroy = true
-  }
 }
 
 resource "aws_subnet" "private_subnet" {
