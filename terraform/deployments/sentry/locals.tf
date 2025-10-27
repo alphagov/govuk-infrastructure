@@ -12,7 +12,6 @@ locals {
     "content-block-manager",
     "content-data-admin",
     "content-data-api",
-    "content-publisher",
     "content-store",
     "content-store-proxy",
     "content-tagger",
