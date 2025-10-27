@@ -5,19 +5,21 @@ variable "encrypt_databases" {
 }
 
 resource "aws_db_instance" "content_data_api_source" {
-  identifier            = "jfharden-test-content-data-api-001-postgres"
-  engine                = "postgres"
-  engine_version        = "14.18"
-  instance_class        = "db.m6g.large"
-  deletion_protection   = false
-  apply_immediately     = true
-  copy_tags_to_snapshot = true
-  monitoring_interval   = 60
-  monitoring_role_arn   = "arn:aws:iam::210287912431:role/rds-monitoring-role"
-  skip_final_snapshot   = true
-  multi_az              = true
-  allocated_storage     = 1024
-  parameter_group_name  = aws_db_parameter_group.content_data_api_source.name
+  identifier             = "jfharden-test-content-data-api-001-postgres"
+  engine                 = "postgres"
+  engine_version         = "14.18"
+  instance_class         = "db.m6g.large"
+  deletion_protection    = false
+  apply_immediately      = true
+  copy_tags_to_snapshot  = true
+  monitoring_interval    = 60
+  monitoring_role_arn    = "arn:aws:iam::210287912431:role/rds-monitoring-role"
+  skip_final_snapshot    = true
+  multi_az               = true
+  allocated_storage      = 1024
+  parameter_group_name   = aws_db_parameter_group.content_data_api_source.name
+  vpc_security_group_ids = ["sg-0afc1877382f550a9"]
+  db_subnet_group_name   = "blue-govuk-rds-subnet"
   tags = {
     Name            = "jfharden-test-content-data-api-001-postgres"
     project         = "GOV.UK - Publishing"
@@ -30,19 +32,21 @@ resource "aws_db_instance" "content_data_api_source" {
 resource "aws_db_instance" "content_data_api_source_encrypted" {
   count = var.encrypt_databases ? 1 : 0
 
-  identifier            = "jfharden-test-content-data-api-001-postgres-encrypted"
-  engine                = "postgres"
-  engine_version        = "14.18"
-  instance_class        = "db.m6g.large"
-  deletion_protection   = false
-  apply_immediately     = true
-  copy_tags_to_snapshot = true
-  monitoring_interval   = 60
-  monitoring_role_arn   = "arn:aws:iam::210287912431:role/rds-monitoring-role"
-  skip_final_snapshot   = true
-  multi_az              = true
-  allocated_storage     = 1024
-  parameter_group_name  = aws_db_parameter_group.content_data_api_source.name
+  identifier             = "jfharden-test-content-data-api-001-postgres-encrypted"
+  engine                 = "postgres"
+  engine_version         = "14.18"
+  instance_class         = "db.m6g.large"
+  deletion_protection    = false
+  apply_immediately      = true
+  copy_tags_to_snapshot  = true
+  monitoring_interval    = 60
+  monitoring_role_arn    = "arn:aws:iam::210287912431:role/rds-monitoring-role"
+  skip_final_snapshot    = true
+  multi_az               = true
+  allocated_storage      = 1024
+  parameter_group_name   = aws_db_parameter_group.content_data_api_source.name
+  vpc_security_group_ids = ["sg-0afc1877382f550a9"]
+  db_subnet_group_name   = "blue-govuk-rds-subnet"
   tags = {
     Name            = "jfharden-test-content-data-api-001-postgres"
     project         = "GOV.UK - Publishing"
@@ -69,6 +73,8 @@ resource "aws_db_instance" "whitehall" {
   allocated_storage            = 400
   parameter_group_name         = aws_db_parameter_group.whitehall.name
   performance_insights_enabled = true
+  vpc_security_group_ids       = ["sg-039dbce87248e8d2b"]
+  db_subnet_group_name         = "blue-govuk-rds-subnet"
   tags = {
     Name            = "jfharden-test-whitehall-001-mysql"
     project         = "GOV.UK - Publishing"
@@ -94,32 +100,35 @@ resource "aws_db_instance" "whitehall_encrypted" {
   allocated_storage            = 400
   parameter_group_name         = aws_db_parameter_group.whitehall.name
   performance_insights_enabled = true
+  vpc_security_group_ids       = ["sg-039dbce87248e8d2b"]
+  db_subnet_group_name         = "blue-govuk-rds-subnet"
   tags = {
     Name            = "jfharden-test-whitehall-001-mysql"
     project         = "GOV.UK - Publishing"
     ReplicationType = "RecreateFromSnapshot"
   }
-  password = random_password.whitehall.result
-
+  password            = random_password.whitehall.result
   snapshot_identifier = aws_db_snapshot_copy.encrypted["jfharden-test-whitehall-001-mysql"].target_db_snapshot_identifier
   storage_encrypted   = true
   kms_key_id          = aws_kms_key.rds.arn
 }
 
 resource "aws_db_instance" "publishing_api" {
-  identifier            = "jfharden-test-publishing-api-postgres"
-  engine                = "postgres"
-  engine_version        = "13.20"
-  instance_class        = "db.m6g.large"
-  deletion_protection   = false
-  apply_immediately     = true
-  copy_tags_to_snapshot = true
-  monitoring_interval   = 60
-  monitoring_role_arn   = "arn:aws:iam::210287912431:role/rds-monitoring-role"
-  skip_final_snapshot   = true
-  multi_az              = true
-  allocated_storage     = 1000
-  parameter_group_name  = aws_db_parameter_group.publishing_api.name
+  identifier             = "jfharden-test-publishing-api-postgres"
+  engine                 = "postgres"
+  engine_version         = "13.20"
+  instance_class         = "db.m6g.large"
+  deletion_protection    = false
+  apply_immediately      = true
+  copy_tags_to_snapshot  = true
+  monitoring_interval    = 60
+  monitoring_role_arn    = "arn:aws:iam::210287912431:role/rds-monitoring-role"
+  skip_final_snapshot    = true
+  multi_az               = true
+  allocated_storage      = 1000
+  parameter_group_name   = aws_db_parameter_group.publishing_api.name
+  vpc_security_group_ids = ["sg-0f2891dce17600b5f"]
+  db_subnet_group_name   = "blue-govuk-rds-subnet"
   tags = {
     Name            = "jfharden-test-publishing-api-postgres"
     project         = "GOV.UK - Publishing"
@@ -148,19 +157,21 @@ resource "aws_db_instance" "publishing_api_replica" {
 resource "aws_db_instance" "publishing_api_encrypted" {
   count = var.encrypt_databases ? 1 : 0
 
-  identifier            = "jfharden-test-publishing-api-postgres-encrypted"
-  engine                = "postgres"
-  engine_version        = "13.20"
-  instance_class        = "db.m6g.4xlarge"
-  deletion_protection   = false
-  apply_immediately     = true
-  copy_tags_to_snapshot = true
-  monitoring_interval   = 60
-  monitoring_role_arn   = "arn:aws:iam::210287912431:role/rds-monitoring-role"
-  skip_final_snapshot   = true
-  multi_az              = true
-  allocated_storage     = 1000
-  parameter_group_name  = aws_db_parameter_group.publishing_api.name
+  identifier             = "jfharden-test-publishing-api-postgres-encrypted"
+  engine                 = "postgres"
+  engine_version         = "13.20"
+  instance_class         = "db.m6g.4xlarge"
+  deletion_protection    = false
+  apply_immediately      = true
+  copy_tags_to_snapshot  = true
+  monitoring_interval    = 60
+  monitoring_role_arn    = "arn:aws:iam::210287912431:role/rds-monitoring-role"
+  skip_final_snapshot    = true
+  multi_az               = true
+  allocated_storage      = 1000
+  parameter_group_name   = aws_db_parameter_group.publishing_api.name
+  vpc_security_group_ids = ["sg-0f2891dce17600b5f"]
+  db_subnet_group_name   = "blue-govuk-rds-subnet"
   tags = {
     Name            = "jfharden-test-publishing-api-postgres-encrypted"
     project         = "GOV.UK - Publishing"
