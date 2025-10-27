@@ -126,16 +126,7 @@ repos:
         - Prettier / Check
         - Playwright Tests / Run Tests
 
-  content-publisher:
-    can_be_deployed: true
-    homepage_url: "https://docs.publishing.service.gov.uk/apps/content-publisher.html"
-    required_status_checks:
-      standard_contexts: *standard_govuk_rails_checks
-      additional_contexts:
-        - Lint SCSS / Run Stylelint
-        - Lint JavaScript / Run Standardx
-        - Test JavaScript / Run Jasmine
-        - Test Ruby / Run RSpec
+  content-publisher: {}
 
   content-store:
     can_be_deployed: true
