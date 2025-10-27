@@ -367,6 +367,7 @@ module "variable-set-rds-staging" {
         launch_new_db                = false
         isolate                      = false
         cname_point_to_new_instance  = false
+        deletion_protection          = false
       }
 
       content_store = {
