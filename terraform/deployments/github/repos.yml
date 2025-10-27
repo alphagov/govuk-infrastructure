@@ -126,7 +126,8 @@ repos:
         - Prettier / Check
         - Playwright Tests / Run Tests
 
-  content-publisher: {}
+  content-publisher:
+    archived: true
 
   content-store:
     can_be_deployed: true
