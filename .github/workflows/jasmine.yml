@@ -32,7 +32,7 @@ jobs:
           BUNDLE_GITHUB__COM: "x-access-token:${{ secrets.BUNDLER_GITHUB_TOKEN }}"
 
       - name: Setup Node
-        uses: alphagov/govuk-infrastructure/.github/actions/setup-node@main
+        uses: alphagov/govuk-infrastructure/.github/actions/setup-node@corepack
 
       - name: Precompile Rails assets
         if: inputs.useWithRails
