@@ -122,7 +122,8 @@ data "aws_iam_policy_document" "tfc_policy" {
       "arn:aws:iam::*:role/rds-monitoring-role",
       "arn:aws:iam::*:role/govuk-*-csp-reports-firehose-role",
       "arn:aws:iam::*:role/govuk-chat-bedrock-access-role",
-      "arn:aws:iam::*:role/govuk-chat-bedrock-cloudwatch-role"
+      "arn:aws:iam::*:role/govuk-chat-bedrock-cloudwatch-role",
+      "arn:aws:iam::*:role/govuk-chat-eventbridge-health-alert"
     ]
   }
   statement {
