@@ -16,6 +16,7 @@ resource "aws_cloudwatch_event_target" "aws_service_health_alert" {
   rule      = aws_cloudwatch_event_rule.aws_service_health_alert.name
   arn       = aws_sns_topic.chat_alerts.arn
   target_id = "chat-aws-service-health-alert-target"
+  role_arn  = aws_iam_role.aws_service_health_alert.arn
 }
 
 resource "aws_iam_role" "aws_service_health_alert" {
