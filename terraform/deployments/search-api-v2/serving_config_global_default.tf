@@ -69,6 +69,7 @@ module "control_global_boost_demote_low" {
 locals {
   # Pages to demote by 0.5
   demote_pages_medium = [
+    "/hmrc-internal-manuals/self-assessment-manual/sam100130",
     "/hmrc-internal-manuals/tax-credits-manual/tcm1000248",
     "/hmrc-internal-manuals/tax-credits-manual/tcm1000267",
     "/hmrc-internal-manuals/tax-credits-manual/tcm1000541",
