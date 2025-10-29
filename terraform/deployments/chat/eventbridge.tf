@@ -47,6 +47,6 @@ resource "aws_iam_policy" "aws_service_health_alert" {
 }
 
 resource "aws_iam_role_policy_attachment" "aws_service_health_alert" {
-  role       = aws_iam_role.aws_service_health_alert.arn
+  role       = aws_iam_role.aws_service_health_alert.name
   policy_arn = aws_iam_policy.aws_service_health_alert.arn
 }
