@@ -98,7 +98,7 @@ resource "aws_db_instance" "instance" {
 resource "aws_db_snapshot" "unencrypted_snapshot" {
   for_each = {
     for db_name, db in var.databases : db_name => db
-    if lookup(db, "launch_new_db", false)
+    if lookup(db, "prepare_to_launch_new_db", false)
   }
 
   # This is purposefully not using the actual terraform resource to ensure it doesn't get destroyed if the
@@ -114,7 +114,7 @@ resource "aws_db_snapshot" "unencrypted_snapshot" {
 resource "aws_db_snapshot_copy" "encrypted_snapshot" {
   for_each = {
     for db_name, db in var.databases : db_name => db
-    if lookup(db, "launch_new_db", false)
+    if lookup(db, "prepare_to_launch_new_db", false)
   }
 
   source_db_snapshot_identifier = aws_db_snapshot.unencrypted_snapshot[each.key].db_snapshot_arn
