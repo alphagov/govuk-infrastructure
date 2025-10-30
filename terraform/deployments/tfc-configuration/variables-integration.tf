@@ -163,7 +163,7 @@ module "variable-set-rds-integration" {
         performance_insights_enabled = true
         project                      = "GOV.UK - Web"
         encryption_at_rest           = false
-        launch_new_db                = true
+        launch_new_db                = false
         isolate                      = false
         cname_point_to_new_instance  = false
       }
@@ -185,7 +185,7 @@ module "variable-set-rds-integration" {
         performance_insights_enabled = false
         project                      = "GOV.UK - Publishing"
         encryption_at_rest           = false
-        launch_new_db                = true
+        launch_new_db                = false
         isolate                      = false
         cname_point_to_new_instance  = false
       }
@@ -229,7 +229,7 @@ module "variable-set-rds-integration" {
         performance_insights_enabled = true
         project                      = "GOV.UK - DGU"
         encryption_at_rest           = false
-        launch_new_db                = true
+        launch_new_db                = false
         isolate                      = false
         cname_point_to_new_instance  = false
       }
@@ -247,7 +247,7 @@ module "variable-set-rds-integration" {
         performance_insights_enabled = false
         project                      = "GOV.UK - Publishing"
         encryption_at_rest           = false
-        launch_new_db                = true
+        launch_new_db                = false
         isolate                      = false
         cname_point_to_new_instance  = false
       }
@@ -269,7 +269,7 @@ module "variable-set-rds-integration" {
         performance_insights_enabled = true
         project                      = "GOV.UK - Publishing"
         encryption_at_rest           = false
-        launch_new_db                = true
+        launch_new_db                = false
         isolate                      = false
         cname_point_to_new_instance  = false
       }
@@ -290,7 +290,7 @@ module "variable-set-rds-integration" {
         performance_insights_enabled = false
         project                      = "GOV.UK - Publishing"
         encryption_at_rest           = false
-        launch_new_db                = true
+        launch_new_db                = false
         isolate                      = false
         cname_point_to_new_instance  = false
       }
@@ -317,7 +317,7 @@ module "variable-set-rds-integration" {
         performance_insights_enabled = false
         project                      = "GOV.UK - Publishing"
         encryption_at_rest           = false
-        launch_new_db                = true
+        launch_new_db                = false
         isolate                      = false
         cname_point_to_new_instance  = false
       }
@@ -338,7 +338,7 @@ module "variable-set-rds-integration" {
         performance_insights_enabled = true
         project                      = "GOV.UK - Publishing"
         encryption_at_rest           = false
-        launch_new_db                = true
+        launch_new_db                = false
         isolate                      = false
         cname_point_to_new_instance  = false
       }
@@ -375,7 +375,7 @@ module "variable-set-rds-integration" {
         performance_insights_enabled = false
         project                      = "GOV.UK - Publishing"
         encryption_at_rest           = false
-        launch_new_db                = true
+        launch_new_db                = false
         isolate                      = false
         cname_point_to_new_instance  = false
       }
@@ -396,7 +396,7 @@ module "variable-set-rds-integration" {
         performance_insights_enabled = true
         project                      = "GOV.UK - Publishing"
         encryption_at_rest           = false
-        launch_new_db                = true
+        launch_new_db                = false
         isolate                      = false
         cname_point_to_new_instance  = false
       }
@@ -433,7 +433,7 @@ module "variable-set-rds-integration" {
         performance_insights_enabled = true
         project                      = "GOV.UK - Web"
         encryption_at_rest           = false
-        launch_new_db                = true
+        launch_new_db                = false
         isolate                      = false
         cname_point_to_new_instance  = false
       }
@@ -456,7 +456,7 @@ module "variable-set-rds-integration" {
         performance_insights_enabled = false
         project                      = "GOV.UK - Web"
         encryption_at_rest           = false
-        launch_new_db                = true
+        launch_new_db                = false
         isolate                      = false
         cname_point_to_new_instance  = false
       }
@@ -478,7 +478,7 @@ module "variable-set-rds-integration" {
         project                      = "GOV.UK - Publishing"
         maintenance_window           = "Mon:00:00-Mon:01:00"
         encryption_at_rest           = false
-        launch_new_db                = true
+        launch_new_db                = false
         isolate                      = false
         cname_point_to_new_instance  = false
       }
@@ -499,7 +499,7 @@ module "variable-set-rds-integration" {
         performance_insights_enabled = false
         project                      = "GOV.UK - Web"
         encryption_at_rest           = false
-        launch_new_db                = true
+        launch_new_db                = false
         isolate                      = false
         cname_point_to_new_instance  = false
       }
@@ -520,7 +520,7 @@ module "variable-set-rds-integration" {
         performance_insights_enabled = true
         project                      = "GOV.UK - Web"
         encryption_at_rest           = false
-        launch_new_db                = true
+        launch_new_db                = false
         isolate                      = false
         cname_point_to_new_instance  = false
       }
@@ -563,7 +563,7 @@ module "variable-set-rds-integration" {
         project                      = "GOV.UK - Publishing"
         has_read_replica             = true
         encryption_at_rest           = false
-        launch_new_db                = true
+        launch_new_db                = false
         launch_new_replica           = false
         isolate                      = false
         cname_point_to_new_instance  = false
@@ -586,7 +586,7 @@ module "variable-set-rds-integration" {
         performance_insights_enabled = true
         project                      = "GOV.UK - Publishing"
         encryption_at_rest           = false
-        launch_new_db                = true
+        launch_new_db                = false
         isolate                      = false
         cname_point_to_new_instance  = false
       }
@@ -604,7 +604,7 @@ module "variable-set-rds-integration" {
         performance_insights_enabled = false
         project                      = "GOV.UK - Infrastructure"
         encryption_at_rest           = false
-        launch_new_db                = true
+        launch_new_db                = false
         isolate                      = false
         cname_point_to_new_instance  = false
       }
@@ -622,7 +622,7 @@ module "variable-set-rds-integration" {
         performance_insights_enabled = false
         project                      = "GOV.UK - Search"
         encryption_at_rest           = false
-        launch_new_db                = true
+        launch_new_db                = false
         isolate                      = false
         cname_point_to_new_instance  = false
       }
@@ -643,7 +643,7 @@ module "variable-set-rds-integration" {
         performance_insights_enabled = false
         project                      = "GOV.UK - Publishing"
         encryption_at_rest           = false
-        launch_new_db                = true
+        launch_new_db                = false
         isolate                      = false
         cname_point_to_new_instance  = false
       }
@@ -661,7 +661,7 @@ module "variable-set-rds-integration" {
         performance_insights_enabled = true
         project                      = "GOV.UK - Publishing"
         encryption_at_rest           = false
-        launch_new_db                = true
+        launch_new_db                = false
         isolate                      = false
         cname_point_to_new_instance  = false
       }
@@ -682,7 +682,7 @@ module "variable-set-rds-integration" {
         performance_insights_enabled = true
         project                      = "GOV.UK - Publishing"
         encryption_at_rest           = false
-        launch_new_db                = true
+        launch_new_db                = false
         isolate                      = false
         cname_point_to_new_instance  = false
       }
@@ -703,7 +703,7 @@ module "variable-set-rds-integration" {
         performance_insights_enabled = true
         project                      = "GOV.UK - Publishing"
         encryption_at_rest           = false
-        launch_new_db                = true
+        launch_new_db                = false
         isolate                      = false
         cname_point_to_new_instance  = false
       }
@@ -721,7 +721,7 @@ module "variable-set-rds-integration" {
         performance_insights_enabled = true
         project                      = "GOV.UK - Publishing"
         encryption_at_rest           = false
-        launch_new_db                = true
+        launch_new_db                = false
         isolate                      = false
         cname_point_to_new_instance  = false
       }
