@@ -4,7 +4,7 @@ locals {
 
 module "tag_image_iam_role" {
   source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
-  version = "~> 5.5"
+  version = "~> 6.0"
 
   role_name        = "${local.tag_image_service_account_name}-${data.tfe_outputs.cluster_infrastructure.nonsensitive_values.cluster_id}"
   role_description = "Role for the add-tag-to-image Argo Workflow. Corresponds to ${local.tag_image_service_account_name} k8s ServiceAccount."
