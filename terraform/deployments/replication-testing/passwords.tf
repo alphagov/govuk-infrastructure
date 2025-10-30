@@ -71,7 +71,7 @@ resource "aws_secretsmanager_secret_version" "content_data_api_target_replicatio
   })
 }
 
-resource "random_password" "whitehall" {
+resource "random_password" "whitehall_source" {
   length  = 32
   special = false
 }

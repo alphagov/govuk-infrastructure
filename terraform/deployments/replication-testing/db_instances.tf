@@ -28,7 +28,6 @@ resource "aws_db_instance" "content_data_api_source" {
   password = random_password.content_data_api_source.result
 }
 
-
 resource "aws_db_instance" "content_data_api_source_encrypted" {
   count = var.encrypt_databases ? 1 : 0
 
@@ -58,7 +57,7 @@ resource "aws_db_instance" "content_data_api_source_encrypted" {
   kms_key_id          = aws_kms_key.rds.arn
 }
 
-resource "aws_db_instance" "whitehall" {
+resource "aws_db_instance" "whitehall_source" {
   identifier                   = "jfharden-test-whitehall-001-mysql"
   engine                       = "mysql"
   engine_version               = "8.0.42"
@@ -71,7 +70,7 @@ resource "aws_db_instance" "whitehall" {
   skip_final_snapshot          = true
   multi_az                     = true
   allocated_storage            = 400
-  parameter_group_name         = aws_db_parameter_group.whitehall.name
+  parameter_group_name         = aws_db_parameter_group.whitehall_source.name
   performance_insights_enabled = true
   vpc_security_group_ids       = ["sg-039dbce87248e8d2b"]
   db_subnet_group_name         = "blue-govuk-rds-subnet"
@@ -80,7 +79,7 @@ resource "aws_db_instance" "whitehall" {
     project         = "GOV.UK - Publishing"
     ReplicationType = "RecreateFromSnapshot"
   }
-  password = random_password.whitehall.result
+  password = random_password.whitehall_source.result
 }
 
 resource "aws_db_instance" "whitehall_encrypted" {
@@ -98,7 +97,7 @@ resource "aws_db_instance" "whitehall_encrypted" {
   skip_final_snapshot          = true
   multi_az                     = true
   allocated_storage            = 400
-  parameter_group_name         = aws_db_parameter_group.whitehall.name
+  parameter_group_name         = aws_db_parameter_group.whitehall_source.name
   performance_insights_enabled = true
   vpc_security_group_ids       = ["sg-039dbce87248e8d2b"]
   db_subnet_group_name         = "blue-govuk-rds-subnet"
@@ -107,7 +106,7 @@ resource "aws_db_instance" "whitehall_encrypted" {
     project         = "GOV.UK - Publishing"
     ReplicationType = "RecreateFromSnapshot"
   }
-  password            = random_password.whitehall.result
+  password            = random_password.whitehall_source.result
   snapshot_identifier = aws_db_snapshot_copy.encrypted["jfharden-test-whitehall-001-mysql"].target_db_snapshot_identifier
   storage_encrypted   = true
   kms_key_id          = aws_kms_key.rds.arn

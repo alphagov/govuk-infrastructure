@@ -15,9 +15,9 @@ resource "aws_db_instance" "content_data_api_target" {
   vpc_security_group_ids = [data.aws_security_group.content_data_api_target.id]
   db_subnet_group_name   = "blue-govuk-rds-subnet"
   tags = {
-    Name            = "jfharden-test-content-data-api-001-postgres"
+    Name            = "jfharden-test-content-data-api-empty-001"
     project         = "GOV.UK - Publishing"
-    ReplicationType = "RecreateFromSnapshot"
+    ReplicationType = "DMS Homogenous Migration"
   }
   username          = "aws_db_admin"
   password          = random_password.content_data_api_target.result

@@ -133,7 +133,7 @@ resource "aws_db_parameter_group" "content_data_api_target" {
   }
 }
 
-resource "aws_db_parameter_group" "whitehall" {
+resource "aws_db_parameter_group" "whitehall_source" {
   name   = "integration-jfharden-test-whitehall-001-mysql-20251013162340018300000001"
   family = "mysql8.0"
 
