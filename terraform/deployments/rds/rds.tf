@@ -167,7 +167,7 @@ resource "aws_db_instance" "normalised_instance" {
     update = var.terraform_update_rds_timeout
   }
 
-  deletion_protection       = try(each.value.deletion_protection, true)
+  deletion_protection       = lookup(each.value, "new_db_deletion_protection", true)
   final_snapshot_identifier = "${lookup(each.value, "new_name", each.value.name)}-${var.govuk_environment}-${each.value.engine}-final-snapshot"
   skip_final_snapshot       = var.skip_final_snapshot
 
