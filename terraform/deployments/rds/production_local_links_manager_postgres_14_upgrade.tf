@@ -1,25 +1,9 @@
-resource "aws_db_parameter_group" "local_links_manager_postgresql_14_green_params" {
+import {
+  to = aws_db_instance.instance["local_links_manager"]
+  id = "local-links-manager-postgres"
+}
 
-  name_prefix = "${var.govuk_environment}-local-links-manager-postgres-"
-  family      = "postgres14"
-
-  parameter {
-    name         = "rds.logical_replication"
-    value        = "1"
-    apply_method = "pending-reboot"
-  }
-
-  parameter {
-    name         = "max_logical_replication_workers"
-    value        = "20"
-    apply_method = "pending-reboot"
-  }
-
-  parameter {
-    name         = "max_worker_processes"
-    value        = "25"
-    apply_method = "pending-reboot"
-  }
-
-  lifecycle { create_before_destroy = true }
+import {
+  to = aws_db_parameter_group.engine_params["local_links_manager"]
+  id = "production-local-links-manager-postgres-20250828115316247400000006"
 }
