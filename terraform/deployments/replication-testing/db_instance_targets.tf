@@ -12,8 +12,8 @@ resource "aws_db_instance" "content_data_api_target" {
   multi_az               = true
   allocated_storage      = 1024
   parameter_group_name   = aws_db_parameter_group.content_data_api_target.name
-  vpc_security_group_ids = aws_db_instance.content_data_api_source.vpc_security_group_ids
-  db_subnet_group_name   = aws_db_instance.content_data_api_source.db_subnet_group_name
+  vpc_security_group_ids = [data.aws_security_group.content_data_api_target.id]
+  db_subnet_group_name   = "blue-govuk-rds-subnet"
   tags = {
     Name            = "jfharden-test-content-data-api-001-postgres"
     project         = "GOV.UK - Publishing"

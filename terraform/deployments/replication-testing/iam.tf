@@ -12,6 +12,12 @@ data "aws_iam_policy_document" "dms_assume_role" {
       identifiers = ["dms.amazonaws.com"]
       type        = "Service"
     }
+
+    condition {
+      test     = "StringEquals"
+      variable = "aws:SourceAccount"
+      values   = [data.aws_caller_identity.current.account_id]
+    }
   }
 }
 
@@ -75,5 +81,68 @@ data "aws_iam_policy_document" "dms-pre-migration-assessment" {
     ]
 
     resources = [module.dms_test_s3_bucket.s3_bucket_arn]
+  }
+}
+
+resource "aws_iam_role" "dms-secret-access-role" {
+  name               = "dms-migration-secret-access"
+  assume_role_policy = data.aws_iam_policy_document.dms_assume_role.json
+}
+
+resource "aws_iam_role_policy" "dms-secret-access" {
+  name   = "secret-access"
+  role   = aws_iam_role.dms-secret-access-role.name
+  policy = data.aws_iam_policy_document.dms-secret-access.json
+}
+
+data "aws_iam_policy_document" "dms-secret-access" {
+  statement {
+    actions = [
+      "secretsmanager:DescribeSecret",
+      "secretsmanager:GetSecretValue",
+    ]
+
+    resources = [
+      aws_secretsmanager_secret.content_data_api_source_replication.arn,
+      aws_secretsmanager_secret.content_data_api_target_replication.arn,
+    ]
+  }
+}
+
+resource "aws_iam_role" "dms-homogenous-migration" {
+  name               = "jfharden-dms-homogenous-migration"
+  assume_role_policy = data.aws_iam_policy_document.dms_assume_role.json
+}
+
+resource "aws_iam_role_policy" "dms-homogenous-migrtion" {
+  name   = "dms-homogenous-migration"
+  role   = aws_iam_role.dms-homogenous-migration.name
+  policy = data.aws_iam_policy_document.dms-homogenous-migration.json
+}
+
+data "aws_iam_policy_document" "dms-homogenous-migration" {
+  statement {
+    actions = [
+      "ec2:DescribeVpcs"
+    ]
+    resources = ["*"]
+  }
+
+  statement {
+    actions   = ["logs:CreateLogGroup"]
+    resources = ["arn:aws:logs:*:*:log-group:dms-data-migration-*"]
+  }
+
+  statement {
+    actions = [
+      "logs:CreateLogStream",
+      "logs:PutLogEvents"
+    ]
+    resources = ["arn:aws:logs:*:*:log-group:dms-data-migration-*:log-stream:dms-data-migration-*"]
+  }
+
+  statement {
+    actions   = ["cloudwatch:PutMetricData"]
+    resources = ["*"]
   }
 }

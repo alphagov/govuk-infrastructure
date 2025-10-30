@@ -10,6 +10,10 @@ locals {
     "CreatedBy"            = "jonathan.harden@digital.cabinet-office.gov.uk"
     "CreatedFor"           = "Replication Testing"
   }
+  awscc_default_tags = [for k, v in local.default_tags : {
+    key   = k
+    value = v
+  }]
 }
 
 terraform {

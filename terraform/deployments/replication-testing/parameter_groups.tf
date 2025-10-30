@@ -76,6 +76,7 @@ resource "aws_db_parameter_group" "content_data_api_target" {
     apply_method = "immediate"
     name         = "session_replication_role"
     value        = "replica"
+    # value = "origin"
   }
 
   parameter {
