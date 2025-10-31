@@ -105,6 +105,8 @@ data "aws_iam_policy_document" "dms-secret-access" {
     resources = [
       aws_secretsmanager_secret.content_data_api_source_replication.arn,
       aws_secretsmanager_secret.content_data_api_target_replication.arn,
+      aws_secretsmanager_secret.whitehall_source_replication.arn,
+      aws_secretsmanager_secret.whitehall_target_replication.arn,
     ]
   }
 }

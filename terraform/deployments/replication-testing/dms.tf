@@ -15,6 +15,24 @@ resource "aws_dms_replication_subnet_group" "content_data_api" {
   depends_on = [aws_iam_role_policy_attachment.dms-vpc-role-AmazonDMSVPCManagementRole]
 }
 
+
+resource "aws_dms_replication_subnet_group" "whitehall" {
+  replication_subnet_group_description = "Subnet group for testing DMS replication for Whitehall"
+  replication_subnet_group_id          = "jfharden-test-dms-whitehall"
+
+  subnet_ids = [
+    aws_subnet.dms_a.id,
+    aws_subnet.dms_b.id,
+    aws_subnet.dms_c.id,
+  ]
+
+  tags = {
+    Name = "jfharden-test-dms-whitehall"
+  }
+
+  depends_on = [aws_iam_role_policy_attachment.dms-vpc-role-AmazonDMSVPCManagementRole]
+}
+
 # # Create a new replication instance
 # resource "aws_dms_replication_instance" "content_data_api" {
 #   allocated_storage           = 200

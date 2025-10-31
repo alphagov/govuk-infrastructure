@@ -133,6 +133,8 @@ resource "aws_db_parameter_group" "content_data_api_target" {
   }
 }
 
+// NOTE: Must run `call mysql.set_rds_configuration('binlog retention hours', 48)` inside the RDS instance
+// also
 resource "aws_db_parameter_group" "whitehall_source" {
   name   = "integration-jfharden-test-whitehall-001-mysql-20251013162340018300000001"
   family = "mysql8.0"
@@ -142,8 +144,54 @@ resource "aws_db_parameter_group" "whitehall_source" {
     name         = "max_allowed_packet"
     value        = "1073741824"
   }
+
+  parameter {
+    apply_method = "immediate"
+    name         = "binlog_format"
+    value        = "ROW"
+  }
+
+  parameter {
+    apply_method = "immediate"
+    name         = "binlog_row_image"
+    value        = "FULL"
+  }
+
+  parameter {
+    apply_method = "immediate"
+    name         = "binlog_checksum"
+    value        = "NONE"
+  }
 }
 
+resource "aws_db_parameter_group" "whitehall_target" {
+  name   = "jfharden-test-whitehall-001-target"
+  family = "mysql8.0"
+
+  parameter {
+    apply_method = "immediate"
+    name         = "max_allowed_packet"
+    value        = "1073741824"
+  }
+
+  parameter {
+    apply_method = "immediate"
+    name         = "binlog_format"
+    value        = "ROW"
+  }
+
+  parameter {
+    apply_method = "immediate"
+    name         = "binlog_row_image"
+    value        = "FULL"
+  }
+
+  parameter {
+    apply_method = "immediate"
+    name         = "binlog_checksum"
+    value        = "NONE"
+  }
+}
 
 resource "aws_db_parameter_group" "publishing_api" {
   name   = "integration-jfharden-test-publishing-api"
