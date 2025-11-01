@@ -2,7 +2,7 @@ resource "helm_release" "aws_ebs_csi_driver" {
   name             = "aws-ebs-csi-driver"
   repository       = "https://kubernetes-sigs.github.io/aws-ebs-csi-driver"
   chart            = "aws-ebs-csi-driver"
-  version          = "2.51.2"
+  version          = "2.52.1"
   namespace        = "kube-system"
   create_namespace = true
   timeout          = var.helm_timeout_seconds
