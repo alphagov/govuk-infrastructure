@@ -69,12 +69,10 @@ module "control_global_boost_demote_low" {
 
 locals {
   # Pages to demote by 0.25
+  # We do not have any pages that are demoted by -0.25 yet. This is a placeholder
+  # for when we do. Remove the dummy page when a real page is added.
   demote_pages_low = [
-    "/hmrc-internal-manuals/tax-credits-manual/tcm1000248",
-    "/hmrc-internal-manuals/tax-credits-manual/tcm1000267",
-    "/hmrc-internal-manuals/tax-credits-manual/tcm1000541",
-    "/hmrc-internal-manuals/tax-credits-manual/tcm1000659",
-    "/hmrc-internal-manuals/tax-credits-manual/tcm1000398"
+    "/this/page/does/not/exist"
   ]
   demote_pages_low_expr = join(",", [for page in local.demote_pages_low : "\"${page}\""])
 }
@@ -94,6 +92,19 @@ module "control_global_boost_demote_low_pages" {
   }
 }
 
+locals {
+  # Pages to demote by 0.5
+  demote_pages_medium = [
+    "/hmrc-internal-manuals/self-assessment-manual/sam100130",
+    "/hmrc-internal-manuals/tax-credits-manual/tcm1000248",
+    "/hmrc-internal-manuals/tax-credits-manual/tcm1000267",
+    "/hmrc-internal-manuals/tax-credits-manual/tcm1000541",
+    "/hmrc-internal-manuals/tax-credits-manual/tcm1000659",
+    "/hmrc-internal-manuals/tax-credits-manual/tcm1000398"
+  ]
+  demote_pages_medium_expr = join(",", [for page in local.demote_pages_medium : "\"${page}\""])
+}
+
 module "control_global_boost_demote_medium" {
   source = "./modules/control"
 
@@ -102,7 +113,7 @@ module "control_global_boost_demote_medium" {
   engine_id    = google_discovery_engine_search_engine.govuk_global.engine_id
   action = {
     boostAction = {
-      filter     = "document_type: ANY(\"employment_tribunal_decision\", \"foi_release\", \"service_standard_report\") OR organisation_state: ANY(\"devolved\", \"closed\")",
+      filter     = "link: ANY(${local.demote_pages_medium_expr}) OR document_type: ANY(\"employment_tribunal_decision\", \"foi_release\", \"service_standard_report\") OR organisation_state: ANY(\"devolved\", \"closed\")",
       fixedBoost = -0.5
       dataStore  = google_discovery_engine_data_store.govuk_content.name
     }
