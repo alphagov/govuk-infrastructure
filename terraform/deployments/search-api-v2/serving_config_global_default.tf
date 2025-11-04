@@ -8,6 +8,7 @@ module "serving_config_global_default" {
   boost_control_ids = [
     module.control_global_boost_demote_low.id,
     module.control_global_boost_demote_medium.id,
+    module.control_global_boost_demote_low_pages.id,
     module.control_global_boost_demote_pages.id,
     module.control_global_boost_demote_strong.id,
     module.control_global_boost_promote_low.id,
@@ -67,16 +68,30 @@ module "control_global_boost_demote_low" {
 }
 
 locals {
-  # Pages to demote by 0.5
-  demote_pages_medium = [
-    "/hmrc-internal-manuals/self-assessment-manual/sam100130",
+  # Pages to demote by 0.25
+  demote_pages_low = [
     "/hmrc-internal-manuals/tax-credits-manual/tcm1000248",
     "/hmrc-internal-manuals/tax-credits-manual/tcm1000267",
     "/hmrc-internal-manuals/tax-credits-manual/tcm1000541",
     "/hmrc-internal-manuals/tax-credits-manual/tcm1000659",
     "/hmrc-internal-manuals/tax-credits-manual/tcm1000398"
   ]
-  demote_pages_medium_expr = join(",", [for page in local.demote_pages_medium : "\"${page}\""])
+  demote_pages_low_expr = join(",", [for page in local.demote_pages_low : "\"${page}\""])
+}
+
+module "control_global_boost_demote_low_pages" {
+  source = "./modules/control"
+
+  id           = "boost_demote_pages_low"
+  display_name = "Boost: Demote specific pages low"
+  engine_id    = google_discovery_engine_search_engine.govuk_global.engine_id
+  action = {
+    boostAction = {
+      filter     = "link: ANY(${local.demote_pages_low_expr})",
+      fixedBoost = -0.25
+      dataStore  = google_discovery_engine_data_store.govuk_content.name
+    }
+  }
 }
 
 module "control_global_boost_demote_medium" {
@@ -87,7 +102,7 @@ module "control_global_boost_demote_medium" {
   engine_id    = google_discovery_engine_search_engine.govuk_global.engine_id
   action = {
     boostAction = {
-      filter     = "link: ANY(${local.demote_pages_medium_expr}) OR document_type: ANY(\"employment_tribunal_decision\", \"foi_release\", \"service_standard_report\") OR organisation_state: ANY(\"devolved\", \"closed\")",
+      filter     = "document_type: ANY(\"employment_tribunal_decision\", \"foi_release\", \"service_standard_report\") OR organisation_state: ANY(\"devolved\", \"closed\")",
       fixedBoost = -0.5
       dataStore  = google_discovery_engine_data_store.govuk_content.name
     }
