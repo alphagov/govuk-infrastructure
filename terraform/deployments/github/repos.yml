@@ -909,12 +909,7 @@ repos:
         - Test
     standard_contexts: *standard_security_checks
 
-  govuk-synthetic-test-runner:
-    can_be_deployed: true
-    required_status_checks:
-      additional_contexts:
-        - Test
-    standard_contexts: *standard_security_checks
+  govuk-synthetic-test-runner: {}
 
   govuk-user-reviewer:
     visibility: private
