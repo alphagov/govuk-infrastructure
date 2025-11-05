@@ -909,7 +909,8 @@ repos:
         - Test
     standard_contexts: *standard_security_checks
 
-  govuk-synthetic-test-runner: {}
+  govuk-synthetic-test-runner:
+    archived: true
 
   govuk-user-reviewer:
     visibility: private
