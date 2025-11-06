@@ -847,11 +847,11 @@ module "variable-set-elasticsearch-green-staging" {
     zone_awareness_enabled = true
 
     instance_count = 3
-    instance_type  = "r7g.2xlarge.elasticsearch"
+    instance_type  = "r7i.2xlarge.elasticsearch"
 
     dedicated_master = {
       instance_count = 3
-      instance_type  = "c7g.large.elasticsearch"
+      instance_type  = "c7i.large.elasticsearch"
     }
 
     tls_security_policy = "Policy-Min-TLS-1-0-2019-07"

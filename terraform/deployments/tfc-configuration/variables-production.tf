@@ -854,11 +854,11 @@ module "variable-set-elasticsearch-green-production" {
     zone_awareness_enabled = true
 
     instance_count = 3
-    instance_type  = "r7g.4xlarge.elasticsearch"
+    instance_type  = "r7i.4xlarge.elasticsearch"
 
     dedicated_master = {
       instance_count = 3
-      instance_type  = "c7g.xlarge.elasticsearch"
+      instance_type  = "c7i.xlarge.elasticsearch"
     }
 
     tls_security_policy = "Policy-Min-TLS-1-0-2019-07"
