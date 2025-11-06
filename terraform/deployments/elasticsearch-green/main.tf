@@ -75,13 +75,8 @@ resource "aws_cloudwatch_log_resource_policy" "opensearch_log_publishing_policy"
   policy_document = data.aws_iam_policy_document.opensearch_log_publishing_policy.json
 }
 
-resource "aws_iam_service_linked_role" "es_role" {
-  aws_service_name = "es.amazonaws.com"
-  custom_suffix    = "green"
-}
-
 resource "aws_elasticsearch_domain" "opensearch" {
-  depends_on = [aws_iam_service_linked_role.es_role]
+  # depends_on = [aws_iam_service_linked_role.es_role]
 
   domain_name           = local.domain
   elasticsearch_version = var.engine_version
