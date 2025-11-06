@@ -77,6 +77,7 @@ resource "aws_cloudwatch_log_resource_policy" "opensearch_log_publishing_policy"
 
 resource "aws_iam_service_linked_role" "es_role" {
   aws_service_name = "es.amazonaws.com"
+  custom_suffix    = "green"
 }
 
 resource "aws_elasticsearch_domain" "opensearch" {
