@@ -77,6 +77,10 @@ resource "aws_cloudwatch_log_resource_policy" "opensearch_log_publishing_policy"
 
 resource "aws_iam_service_linked_role" "es_role" {
   aws_service_name = "es.amazonaws.com"
+
+  lifecycle {
+    prevent_destroy = true
+  }
 }
 
 resource "aws_elasticsearch_domain" "opensearch" {
