@@ -49,3 +49,23 @@ Notes:
     * Remove session_replication_role so it goes back to the default of "origin"
  
 
+# Caveats
+
+* Neither postgres nor mysql migrate the users/roles, these need creating in advance, up front, with all the required permissions, for postgres you ALSO have to create the database first too
+
+# Database survey:
+
+## MySQL
+
+Caveats:
+
+* AWS DMS homogeneous data migrations creates unencrypted MySQL and MariaDB objects on the target Amazon RDS instances even if the source objects were encrypted. RDS for MySQL doesn't support the MySQL keyring_aws AWS Keyring Plugin required for encrypted objects. Refer to the MySQL Keyring Plugin not supported documentation in the Amazon RDS User Guide
+* AWS DMS does not use Global Transaction Identifiers (GTIDs) for for data replication even if the source data contains them.
+* In Amazon RDS, when you turn on automated backup for a MySQL/Maria database instance, you also turn on binary logging. When these settings are enabled, your data migration task may fail with the following error while creating secondary objects such as functions, procedures, and triggers on the target database. If your target database has binary logging enabled, then set log_bin_trust_function_creators to true in the database parameter group before starting the task.
+  ```
+    ERROR 1419 (HY000): You don't have the SUPER privilege and binary logging is enabled (you might want to use the less safe log_bin_trust_function_creators variable)
+  ```
+
+## PostgreSQL
+
+
