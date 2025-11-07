@@ -243,7 +243,7 @@ resource "aws_route53_record" "instance_cname" {
   zone_id = data.tfe_outputs.root_dns.nonsensitive_values.internal_root_zone_id
   name    = aws_db_instance.instance[each.key].identifier
   type    = "CNAME"
-  ttl     = 300
+  ttl     = 30
   records = [
     lookup(each.value, "cname_point_to_new_instance", false) && lookup(each.value, "launch_new_db", false) ?
     aws_db_instance.normalised_instance[each.key].address :
@@ -306,7 +306,7 @@ resource "aws_route53_record" "replica_cname" {
   zone_id = data.tfe_outputs.root_dns.nonsensitive_values.internal_root_zone_id
   name    = aws_db_instance.replica[each.key].identifier
   type    = "CNAME"
-  ttl     = 300
+  ttl     = 30
   records = [
     lookup(each.value, "cname_point_to_new_instance", false) &&
     lookup(each.value, "launch_new_db", false) &&
