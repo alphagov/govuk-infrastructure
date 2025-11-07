@@ -857,7 +857,9 @@ module "variable-set-elasticsearch-green-integration" {
 
     elasticsearch6_manual_snapshot_bucket_arns = [
       "arn:aws:s3:::govuk-staging-green-elasticsearch6-manual-snapshots",
-      "arn:aws:s3:::govuk-integration-green-elasticsearch6-manual-snapshots"
+      "arn:aws:s3:::govuk-integration-green-elasticsearch6-manual-snapshots",
+      "arn:aws:s3:::govuk-staging-elasticsearch6-manual-snapshots",
+      "arn:aws:s3:::govuk-integration-elasticsearch6-manual-snapshots"
     ]
 
     encryption_at_rest = true
