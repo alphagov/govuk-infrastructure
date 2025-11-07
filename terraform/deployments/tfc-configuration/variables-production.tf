@@ -170,7 +170,7 @@ module "variable-set-rds-production" {
         project                      = "GOV.UK - Web"
         encryption_at_rest           = false
         prepare_to_launch_new_db     = true
-        launch_new_db                = false
+        launch_new_db                = true
         isolate                      = false
         cname_point_to_new_instance  = false
       }
@@ -193,7 +193,7 @@ module "variable-set-rds-production" {
         project                      = "GOV.UK - Publishing"
         encryption_at_rest           = false
         prepare_to_launch_new_db     = true
-        launch_new_db                = false
+        launch_new_db                = true
         isolate                      = false
         cname_point_to_new_instance  = false
       }
@@ -216,7 +216,7 @@ module "variable-set-rds-production" {
         snapshot_identifier          = "chat-postgres-post-encryption"
         encryption_at_rest           = true
         prepare_to_launch_new_db     = true
-        launch_new_db                = false
+        launch_new_db                = true
         isolate                      = false
         cname_point_to_new_instance  = false
       }
@@ -238,7 +238,7 @@ module "variable-set-rds-production" {
         project                      = "GOV.UK - DGU"
         encryption_at_rest           = false
         prepare_to_launch_new_db     = false
-        launch_new_db                = false
+        launch_new_db                = true
         isolate                      = false
         cname_point_to_new_instance  = false
       }
@@ -257,7 +257,7 @@ module "variable-set-rds-production" {
         project                      = "GOV.UK - Publishing"
         encryption_at_rest           = false
         prepare_to_launch_new_db     = true
-        launch_new_db                = false
+        launch_new_db                = true
         isolate                      = false
         cname_point_to_new_instance  = false
       }
@@ -280,7 +280,7 @@ module "variable-set-rds-production" {
         project                      = "GOV.UK - Publishing"
         encryption_at_rest           = false
         prepare_to_launch_new_db     = true
-        launch_new_db                = false
+        launch_new_db                = true
         isolate                      = false
         cname_point_to_new_instance  = false
       }
@@ -302,7 +302,7 @@ module "variable-set-rds-production" {
         project                      = "GOV.UK - Publishing"
         encryption_at_rest           = false
         prepare_to_launch_new_db     = true
-        launch_new_db                = false
+        launch_new_db                = true
         isolate                      = false
         cname_point_to_new_instance  = false
       }
@@ -330,7 +330,7 @@ module "variable-set-rds-production" {
         project                      = "GOV.UK - Publishing"
         encryption_at_rest           = false
         prepare_to_launch_new_db     = true
-        launch_new_db                = false
+        launch_new_db                = true
         isolate                      = false
         cname_point_to_new_instance  = false
       }
@@ -352,7 +352,7 @@ module "variable-set-rds-production" {
         project                      = "GOV.UK - Publishing"
         encryption_at_rest           = false
         prepare_to_launch_new_db     = true
-        launch_new_db                = false
+        launch_new_db                = true
         isolate                      = false
         cname_point_to_new_instance  = false
       }
@@ -390,7 +390,7 @@ module "variable-set-rds-production" {
         project                      = "GOV.UK - Publishing"
         encryption_at_rest           = false
         prepare_to_launch_new_db     = true
-        launch_new_db                = false
+        launch_new_db                = true
         isolate                      = false
         cname_point_to_new_instance  = false
       }
@@ -412,7 +412,7 @@ module "variable-set-rds-production" {
         project                      = "GOV.UK - Publishing"
         encryption_at_rest           = false
         prepare_to_launch_new_db     = true
-        launch_new_db                = false
+        launch_new_db                = true
         isolate                      = false
         cname_point_to_new_instance  = false
       }
@@ -450,7 +450,7 @@ module "variable-set-rds-production" {
         project                      = "GOV.UK - Web"
         encryption_at_rest           = false
         prepare_to_launch_new_db     = true
-        launch_new_db                = false
+        launch_new_db                = true
         isolate                      = false
         cname_point_to_new_instance  = false
       }
@@ -474,7 +474,7 @@ module "variable-set-rds-production" {
         project                      = "GOV.UK - Web"
         encryption_at_rest           = false
         prepare_to_launch_new_db     = true
-        launch_new_db                = false
+        launch_new_db                = true
         isolate                      = false
         cname_point_to_new_instance  = false
       }
@@ -497,7 +497,7 @@ module "variable-set-rds-production" {
         maintenance_window           = "Mon:00:00-Mon:01:00"
         encryption_at_rest           = false
         prepare_to_launch_new_db     = true
-        launch_new_db                = false
+        launch_new_db                = true
         isolate                      = false
         cname_point_to_new_instance  = false
       }
@@ -519,7 +519,7 @@ module "variable-set-rds-production" {
         project                      = "GOV.UK - Web"
         encryption_at_rest           = false
         prepare_to_launch_new_db     = true
-        launch_new_db                = false
+        launch_new_db                = true
         isolate                      = false
         cname_point_to_new_instance  = false
       }
@@ -541,7 +541,7 @@ module "variable-set-rds-production" {
         project                      = "GOV.UK - Web"
         encryption_at_rest           = false
         prepare_to_launch_new_db     = true
-        launch_new_db                = false
+        launch_new_db                = true
         isolate                      = false
         cname_point_to_new_instance  = false
       }
@@ -582,7 +582,7 @@ module "variable-set-rds-production" {
         has_read_replica             = true
         encryption_at_rest           = false
         prepare_to_launch_new_db     = true
-        launch_new_db                = false
+        launch_new_db                = true
         launch_new_replica           = false
         isolate                      = false
         cname_point_to_new_instance  = false
@@ -606,7 +606,7 @@ module "variable-set-rds-production" {
         deletion_protection          = false
         encryption_at_rest           = false
         prepare_to_launch_new_db     = true
-        launch_new_db                = false
+        launch_new_db                = true
         isolate                      = false
         cname_point_to_new_instance  = false
       }
@@ -625,7 +625,7 @@ module "variable-set-rds-production" {
         project                      = "GOV.UK - Infrastructure"
         encryption_at_rest           = false
         prepare_to_launch_new_db     = true
-        launch_new_db                = false
+        launch_new_db                = true
         isolate                      = false
         cname_point_to_new_instance  = false
       }
@@ -644,7 +644,7 @@ module "variable-set-rds-production" {
         project                      = "GOV.UK - Search"
         encryption_at_rest           = false
         prepare_to_launch_new_db     = true
-        launch_new_db                = false
+        launch_new_db                = true
         isolate                      = false
         cname_point_to_new_instance  = false
       }
@@ -666,7 +666,7 @@ module "variable-set-rds-production" {
         project                      = "GOV.UK - Publishing"
         encryption_at_rest           = false
         prepare_to_launch_new_db     = true
-        launch_new_db                = false
+        launch_new_db                = true
         isolate                      = false
         cname_point_to_new_instance  = false
       }
@@ -685,7 +685,7 @@ module "variable-set-rds-production" {
         project                      = "GOV.UK - Publishing"
         encryption_at_rest           = false
         prepare_to_launch_new_db     = true
-        launch_new_db                = false
+        launch_new_db                = true
         isolate                      = false
         cname_point_to_new_instance  = false
       }
@@ -707,7 +707,7 @@ module "variable-set-rds-production" {
         project                      = "GOV.UK - Publishing"
         encryption_at_rest           = false
         prepare_to_launch_new_db     = true
-        launch_new_db                = false
+        launch_new_db                = true
         isolate                      = false
         cname_point_to_new_instance  = false
       }
@@ -729,7 +729,7 @@ module "variable-set-rds-production" {
         project                      = "GOV.UK - Publishing"
         encryption_at_rest           = false
         prepare_to_launch_new_db     = true
-        launch_new_db                = false
+        launch_new_db                = true
         isolate                      = false
         cname_point_to_new_instance  = false
       }
@@ -748,7 +748,7 @@ module "variable-set-rds-production" {
         project                      = "GOV.UK - Publishing"
         encryption_at_rest           = false
         prepare_to_launch_new_db     = true
-        launch_new_db                = false
+        launch_new_db                = true
         isolate                      = false
         cname_point_to_new_instance  = false
       }
