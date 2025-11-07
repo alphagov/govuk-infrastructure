@@ -238,7 +238,7 @@ module "variable-set-rds-production" {
         project                      = "GOV.UK - DGU"
         encryption_at_rest           = false
         prepare_to_launch_new_db     = false
-        launch_new_db                = true
+        launch_new_db                = false
         isolate                      = false
         cname_point_to_new_instance  = false
       }
