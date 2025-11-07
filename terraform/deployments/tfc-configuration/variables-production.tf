@@ -867,6 +867,7 @@ module "variable-set-elasticsearch-green-production" {
 
     elasticsearch6_manual_snapshot_bucket_arns = [
       "arn:aws:s3:::govuk-production-green-elasticsearch6-manual-snapshots",
+      "arn:aws:s3:::govuk-production-elasticsearch6-manual-snapshots"
     ]
 
     encryption_at_rest = true
