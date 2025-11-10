@@ -766,7 +766,7 @@ module "variable-set-rds-production" {
         }
         engine_params_family         = "mysql8.0"
         name                         = "whitehall"
-        allocated_storage            = 300
+        allocated_storage            = 400
         instance_class               = "db.m7g.xlarge"
         performance_insights_enabled = true
         project                      = "GOV.UK - Publishing"
