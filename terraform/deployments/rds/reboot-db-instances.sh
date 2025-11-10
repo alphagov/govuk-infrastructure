@@ -83,7 +83,7 @@ INSTANCES_FAILED_TO_REBOOT=()
 for DB in "${DBS[@]}"; do
   echo -n "Sending reboot command for ${DB}..."
   TMPFILE=$(mktemp)
-  if ! aws rds reboot-db-instance --db-instance-identifier "$DB" > "$TMPFILE" 2>&1; then
+  if ! aws rds reboot-db-instance --db-instance-identifier "$DB" --no-force-failover > "$TMPFILE" 2>&1; then
     echo "FAILED, output in $TMPFILE and below!"
     cat "$TMPFILE"
     INSTANCES_FAILED_TO_REBOOT+=("$DB")
