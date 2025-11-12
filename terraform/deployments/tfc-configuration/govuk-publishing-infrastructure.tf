@@ -258,7 +258,6 @@ module "govuk-publishing-infrastructure-variable-set-production" {
       { type = "CNAME", name = "app", ttl = 3600, value = ["www-gov-uk.map.fastly.net."] },
       { type = "CNAME", name = "assets", ttl = 300, value = ["www-gov-uk.map.fastly.net."] },
       { type = "CNAME", name = "assets-origin", ttl = 300, value = ["assets-origin.eks.production.govuk.digital."] },
-      { type = "CNAME", name = "ai-experiments", ttl = 3600, value = ["aquatic-mesa-7tplnrte33vmdttn9m1jjs44.herokudns.com."] },
       { type = "CNAME", name = "bouncer", ttl = 3600, value = ["bouncer.eks.production.govuk.digital."] },
       { type = "CNAME", name = "chat", ttl = 300, value = ["chat.eks.production.govuk.digital."] },
       { type = "CNAME", name = "ckan", ttl = 300, value = ["ckan.eks.production.govuk.digital."] },
