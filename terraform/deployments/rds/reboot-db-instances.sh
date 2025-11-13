@@ -67,7 +67,7 @@ LITTLE_7_DBS_NEW_NAMES=(
   "service-manual-publisher-${GOVUK_ENVIRONMENT}-postgres"  
 )
 
-DBS=("${LITTLE_7_DBS[@]}")
+DBS=("${BIG_20_DBS[@]}")
 
 function usage {
   echo
