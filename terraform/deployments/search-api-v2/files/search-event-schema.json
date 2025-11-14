@@ -25,6 +25,11 @@
     "mode": "REPEATED"
   },
   {
+    "name": "attributionToken",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
     "name": "documents",
     "type": "RECORD",
     "mode": "REPEATED",
