@@ -151,7 +151,7 @@ module "variable-set-rds-integration" {
         launch_new_db                = true
         isolate                      = true
         cname_point_to_new_instance  = false
-        new_db_deletion_protection   = false
+        new_db_deletion_protection   = true
       }
 
       authenticating_proxy = {
@@ -175,7 +175,7 @@ module "variable-set-rds-integration" {
         launch_new_db                = true
         isolate                      = true
         cname_point_to_new_instance  = false
-        new_db_deletion_protection   = false
+        new_db_deletion_protection   = true
       }
 
       chat = {
@@ -243,7 +243,7 @@ module "variable-set-rds-integration" {
         launch_new_db                = true
         isolate                      = true
         cname_point_to_new_instance  = false
-        new_db_deletion_protection   = false
+        new_db_deletion_protection   = true
       }
 
       content_block_manager = {
@@ -267,7 +267,7 @@ module "variable-set-rds-integration" {
         launch_new_db                = true
         isolate                      = true
         cname_point_to_new_instance  = false
-        new_db_deletion_protection   = false
+        new_db_deletion_protection   = true
       }
 
       content_data_admin = {
@@ -319,7 +319,7 @@ module "variable-set-rds-integration" {
         launch_new_db                = true
         isolate                      = true
         cname_point_to_new_instance  = false
-        new_db_deletion_protection   = false
+        new_db_deletion_protection   = true
       }
 
       content_store = {
@@ -342,7 +342,7 @@ module "variable-set-rds-integration" {
         launch_new_db                = true
         isolate                      = true
         cname_point_to_new_instance  = false
-        new_db_deletion_protection   = false
+        new_db_deletion_protection   = true
       }
 
       content_tagger = {
@@ -365,7 +365,7 @@ module "variable-set-rds-integration" {
         launch_new_db                = true
         isolate                      = true
         cname_point_to_new_instance  = false
-        new_db_deletion_protection   = false
+        new_db_deletion_protection   = true
       }
 
       draft_content_store = {
@@ -388,7 +388,7 @@ module "variable-set-rds-integration" {
         launch_new_db                = true
         isolate                      = true
         cname_point_to_new_instance  = false
-        new_db_deletion_protection   = false
+        new_db_deletion_protection   = true
       }
 
       email_alert_api = {
@@ -411,7 +411,7 @@ module "variable-set-rds-integration" {
         launch_new_db                = true
         isolate                      = true
         cname_point_to_new_instance  = false
-        new_db_deletion_protection   = false
+        new_db_deletion_protection   = true
       }
 
       imminence = {
@@ -436,7 +436,7 @@ module "variable-set-rds-integration" {
         launch_new_db                = true
         isolate                      = true
         cname_point_to_new_instance  = false
-        new_db_deletion_protection   = false
+        new_db_deletion_protection   = true
       }
 
       link_checker_api = {
@@ -483,7 +483,7 @@ module "variable-set-rds-integration" {
         launch_new_db                = true
         isolate                      = true
         cname_point_to_new_instance  = false
-        new_db_deletion_protection   = false
+        new_db_deletion_protection   = true
       }
 
       locations_api = {
@@ -506,7 +506,7 @@ module "variable-set-rds-integration" {
         launch_new_db                = true
         isolate                      = true
         cname_point_to_new_instance  = false
-        new_db_deletion_protection   = false
+        new_db_deletion_protection   = true
       }
 
       publishing_api = {
@@ -552,7 +552,7 @@ module "variable-set-rds-integration" {
         launch_new_replica           = false
         isolate                      = true
         cname_point_to_new_instance  = false
-        new_db_deletion_protection   = false
+        new_db_deletion_protection   = true
       }
 
       publisher = {
@@ -576,7 +576,7 @@ module "variable-set-rds-integration" {
         launch_new_db                = true
         isolate                      = true
         cname_point_to_new_instance  = false
-        new_db_deletion_protection   = false
+        new_db_deletion_protection   = true
       }
 
       release = {
@@ -616,7 +616,7 @@ module "variable-set-rds-integration" {
         launch_new_db                = true
         isolate                      = true
         cname_point_to_new_instance  = false
-        new_db_deletion_protection   = false
+        new_db_deletion_protection   = true
       }
 
       service_manual_publisher = {
@@ -659,7 +659,7 @@ module "variable-set-rds-integration" {
         launch_new_db                = true
         isolate                      = true
         cname_point_to_new_instance  = false
-        new_db_deletion_protection   = false
+        new_db_deletion_protection   = true
       }
 
       support_api = {
@@ -682,7 +682,7 @@ module "variable-set-rds-integration" {
         launch_new_db                = true
         isolate                      = true
         cname_point_to_new_instance  = false
-        new_db_deletion_protection   = false
+        new_db_deletion_protection   = true
       }
 
       transition = {
@@ -705,7 +705,7 @@ module "variable-set-rds-integration" {
         launch_new_db                = true
         isolate                      = true
         cname_point_to_new_instance  = false
-        new_db_deletion_protection   = false
+        new_db_deletion_protection   = true
       }
 
       whitehall = {
@@ -725,7 +725,7 @@ module "variable-set-rds-integration" {
         launch_new_db                = true
         isolate                      = true
         cname_point_to_new_instance  = false
-        new_db_deletion_protection   = false
+        new_db_deletion_protection   = true
       }
     }
   }
