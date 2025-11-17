@@ -549,7 +549,7 @@ module "variable-set-rds-integration" {
         encryption_at_rest           = false
         prepare_to_launch_new_db     = true
         launch_new_db                = true
-        launch_new_replica           = false
+        launch_new_replica           = true
         isolate                      = true
         cname_point_to_new_instance  = true
         new_db_deletion_protection   = true
