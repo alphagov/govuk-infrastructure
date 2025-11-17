@@ -149,7 +149,7 @@ module "variable-set-rds-integration" {
         encryption_at_rest           = false
         prepare_to_launch_new_db     = false
         launch_new_db                = false
-        isolate                      = false
+        isolate                      = true
         cname_point_to_new_instance  = false
         new_db_deletion_protection   = false
       }
@@ -173,7 +173,7 @@ module "variable-set-rds-integration" {
         encryption_at_rest           = false
         prepare_to_launch_new_db     = false
         launch_new_db                = false
-        isolate                      = false
+        isolate                      = true
         cname_point_to_new_instance  = false
         new_db_deletion_protection   = false
       }
@@ -241,7 +241,7 @@ module "variable-set-rds-integration" {
         encryption_at_rest           = false
         prepare_to_launch_new_db     = false
         launch_new_db                = false
-        isolate                      = false
+        isolate                      = true
         cname_point_to_new_instance  = false
         new_db_deletion_protection   = false
       }
@@ -265,7 +265,7 @@ module "variable-set-rds-integration" {
         encryption_at_rest           = false
         prepare_to_launch_new_db     = false
         launch_new_db                = false
-        isolate                      = false
+        isolate                      = true
         cname_point_to_new_instance  = false
         new_db_deletion_protection   = false
       }
@@ -317,7 +317,7 @@ module "variable-set-rds-integration" {
         encryption_at_rest           = false
         prepare_to_launch_new_db     = false
         launch_new_db                = false
-        isolate                      = false
+        isolate                      = true
         cname_point_to_new_instance  = false
         new_db_deletion_protection   = false
       }
@@ -340,7 +340,7 @@ module "variable-set-rds-integration" {
         encryption_at_rest           = false
         prepare_to_launch_new_db     = false
         launch_new_db                = false
-        isolate                      = false
+        isolate                      = true
         cname_point_to_new_instance  = false
         new_db_deletion_protection   = false
       }
@@ -363,7 +363,7 @@ module "variable-set-rds-integration" {
         encryption_at_rest           = false
         prepare_to_launch_new_db     = false
         launch_new_db                = false
-        isolate                      = false
+        isolate                      = true
         cname_point_to_new_instance  = false
         new_db_deletion_protection   = false
       }
@@ -386,7 +386,7 @@ module "variable-set-rds-integration" {
         encryption_at_rest           = false
         prepare_to_launch_new_db     = false
         launch_new_db                = false
-        isolate                      = false
+        isolate                      = true
         cname_point_to_new_instance  = false
         new_db_deletion_protection   = false
       }
@@ -409,7 +409,7 @@ module "variable-set-rds-integration" {
         encryption_at_rest           = false
         prepare_to_launch_new_db     = false
         launch_new_db                = false
-        isolate                      = false
+        isolate                      = true
         cname_point_to_new_instance  = false
         new_db_deletion_protection   = false
       }
@@ -434,7 +434,7 @@ module "variable-set-rds-integration" {
         encryption_at_rest           = false
         prepare_to_launch_new_db     = false
         launch_new_db                = false
-        isolate                      = false
+        isolate                      = true
         cname_point_to_new_instance  = false
         new_db_deletion_protection   = false
       }
@@ -481,7 +481,7 @@ module "variable-set-rds-integration" {
         encryption_at_rest           = false
         prepare_to_launch_new_db     = false
         launch_new_db                = false
-        isolate                      = false
+        isolate                      = true
         cname_point_to_new_instance  = false
         new_db_deletion_protection   = false
       }
@@ -504,7 +504,7 @@ module "variable-set-rds-integration" {
         encryption_at_rest           = false
         prepare_to_launch_new_db     = false
         launch_new_db                = false
-        isolate                      = false
+        isolate                      = true
         cname_point_to_new_instance  = false
         new_db_deletion_protection   = false
       }
@@ -550,7 +550,7 @@ module "variable-set-rds-integration" {
         prepare_to_launch_new_db     = false
         launch_new_db                = false
         launch_new_replica           = false
-        isolate                      = false
+        isolate                      = true
         cname_point_to_new_instance  = false
         new_db_deletion_protection   = false
       }
@@ -574,7 +574,7 @@ module "variable-set-rds-integration" {
         encryption_at_rest           = false
         prepare_to_launch_new_db     = false
         launch_new_db                = false
-        isolate                      = false
+        isolate                      = true
         cname_point_to_new_instance  = false
         new_db_deletion_protection   = false
       }
@@ -614,7 +614,7 @@ module "variable-set-rds-integration" {
         encryption_at_rest           = false
         prepare_to_launch_new_db     = false
         launch_new_db                = false
-        isolate                      = false
+        isolate                      = true
         cname_point_to_new_instance  = false
         new_db_deletion_protection   = false
       }
@@ -657,7 +657,7 @@ module "variable-set-rds-integration" {
         encryption_at_rest           = false
         prepare_to_launch_new_db     = false
         launch_new_db                = false
-        isolate                      = false
+        isolate                      = true
         cname_point_to_new_instance  = false
         new_db_deletion_protection   = false
       }
@@ -680,7 +680,7 @@ module "variable-set-rds-integration" {
         encryption_at_rest           = false
         prepare_to_launch_new_db     = false
         launch_new_db                = false
-        isolate                      = false
+        isolate                      = true
         cname_point_to_new_instance  = false
         new_db_deletion_protection   = false
       }
@@ -703,7 +703,7 @@ module "variable-set-rds-integration" {
         encryption_at_rest           = false
         prepare_to_launch_new_db     = false
         launch_new_db                = false
-        isolate                      = false
+        isolate                      = true
         cname_point_to_new_instance  = false
         new_db_deletion_protection   = false
       }
@@ -723,7 +723,7 @@ module "variable-set-rds-integration" {
         encryption_at_rest           = false
         prepare_to_launch_new_db     = false
         launch_new_db                = false
-        isolate                      = false
+        isolate                      = true
         cname_point_to_new_instance  = false
         new_db_deletion_protection   = false
       }
