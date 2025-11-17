@@ -52,19 +52,23 @@ BIG_20_DBS_NEW_NAMES=(
 # shellcheck disable=SC2034
 LITTLE_7_DBS=(
   "ckan-postgres"
+  "content-data-admin-postgres"
   "release-mysql"
   "search-admin-mysql"
   "link-checker-api-postgres"
   "service-manual-publisher-postgres"
+  "support-api-postgres"
 )
 
 # shellcheck disable=SC2034
 LITTLE_7_DBS_NEW_NAMES=(
   "ckan-${GOVUK_ENVIRONMENT}-postgres"
+  "content-data-admin-${GOVUK_ENVIRONMENT}-postgres"
   "release-${GOVUK_ENVIRONMENT}-mysql"
   "search-admin-${GOVUK_ENVIRONMENT}-mysql"
   "link-checker-api-${GOVUK_ENVIRONMENT}-postgres"
   "service-manual-publisher-${GOVUK_ENVIRONMENT}-postgres"  
+  "support-api-${GOVUK_ENVIRONMENT}-postgres"
 )
 
 DBS=("${BIG_20_DBS[@]}")
