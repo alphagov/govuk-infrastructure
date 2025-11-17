@@ -23,6 +23,7 @@ BIG_20_DBS=(
   "publishing-api-postgres"
   "search-admin-mysql"
   "signon-mysql"
+  "support-api-postgres"   
   "transition-postgres"
   "whitehall-mysql"
 )
@@ -45,6 +46,7 @@ BIG_20_DBS_NEW_NAMES=(
   "publishing-api-${GOVUK_ENVIRONMENT}-postgres"
   "search-admin-${GOVUK_ENVIRONMENT}-mysql"
   "signon-${GOVUK_ENVIRONMENT}-mysql"
+  "support-api-${GOVUK_ENVIRONMENT}-postgres"
   "transition-${GOVUK_ENVIRONMENT}-postgres"
   "whitehall-${GOVUK_ENVIRONMENT}-mysql"  
 )
@@ -52,6 +54,7 @@ BIG_20_DBS_NEW_NAMES=(
 # shellcheck disable=SC2034
 LITTLE_7_DBS=(
   "ckan-postgres"
+  "content-data-admin-postgres"
   "release-mysql"
   "search-admin-mysql"
   "link-checker-api-postgres"
@@ -61,6 +64,7 @@ LITTLE_7_DBS=(
 # shellcheck disable=SC2034
 LITTLE_7_DBS_NEW_NAMES=(
   "ckan-${GOVUK_ENVIRONMENT}-postgres"
+  "content-data-admin-${GOVUK_ENVIRONMENT}-postgres"
   "release-${GOVUK_ENVIRONMENT}-mysql"
   "search-admin-${GOVUK_ENVIRONMENT}-mysql"
   "link-checker-api-${GOVUK_ENVIRONMENT}-postgres"
