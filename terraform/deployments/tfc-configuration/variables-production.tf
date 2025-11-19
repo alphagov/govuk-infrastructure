@@ -414,7 +414,7 @@ module "variable-set-rds-production" {
 
       email_alert_api = {
         engine         = "postgres"
-        engine_version = "13"
+        engine_version = "14.18"
         engine_params = {
           log_min_duration_statement = { value = 10000 }
           log_statement              = { value = "all" }
@@ -437,7 +437,7 @@ module "variable-set-rds-production" {
             apply_method = "pending-reboot"
           }
         }
-        engine_params_family         = "postgres13"
+        engine_params_family         = "postgres14"
         name                         = "email-alert-api"
         allocated_storage            = 4500
         instance_class               = "db.m7g.2xlarge"
