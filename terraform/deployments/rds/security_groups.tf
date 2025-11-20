@@ -44,7 +44,7 @@ resource "aws_security_group_rule" "postgres" {
 resource "aws_security_group" "normalised_rds" {
   for_each = {
     for db_name, db in var.databases : db_name => db
-    if lookup(db, "prepare_to_launch_new_db", false)
+    if lookup(db, "launch_new_db", false)
   }
 
   name        = "${local.identifier_prefix}${lookup(each.value, "new_name", each.value.name)}-${var.govuk_environment}-${each.value.engine}-rds-access"
@@ -57,7 +57,7 @@ resource "aws_security_group" "normalised_rds" {
 resource "aws_security_group_rule" "normalised_rds_mysql" {
   for_each = {
     for db_name, db in var.databases : db_name => db
-    if lookup(db, "prepare_to_launch_new_db", false) &&
+    if lookup(db, "launch_new_db", false) &&
     db.engine == "mysql" &&
     !lookup(db, "isolate_new_db", false)
   }
@@ -76,7 +76,7 @@ resource "aws_security_group_rule" "normalised_rds_mysql" {
 resource "aws_security_group_rule" "normalised_rds_postgres" {
   for_each = {
     for db_name, db in var.databases : db_name => db
-    if lookup(db, "prepare_to_launch_new_db", false) &&
+    if lookup(db, "launch_new_db", false) &&
     db.engine == "postgres" &&
     !lookup(db, "isolate_new_db", false)
   }

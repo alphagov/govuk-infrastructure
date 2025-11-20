@@ -132,7 +132,9 @@ resource "aws_db_instance" "normalised_instance" {
     if lookup(db, "launch_new_db", false)
   }
 
-  snapshot_identifier         = aws_db_snapshot_copy.encrypted_snapshot[each.key].target_db_snapshot_identifier
+  // This is purposefully not referencing the resource so that we can create snapshots outside of terraform and use them to launch
+  // this instance
+  snapshot_identifier         = "${local.identifier_prefix}${each.value.name}-${each.value.engine}-post-encryption"
   engine                      = each.value.engine
   engine_version              = each.value.engine_version
   username                    = var.database_admin_username
