@@ -1,7 +1,6 @@
 #!/bin/bash
 
-# Change GOVUK_ENVIRONMENT and the DBS assignment on line 66 to choose which databases to reboot
-GOVUK_ENVIRONMENT=integration
+GOVUK_ENVIRONMENT="staging"
 
 # shellcheck disable=SC2034
 BIG_20_DBS=(
