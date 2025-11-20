@@ -11,7 +11,7 @@ resource "aws_s3_bucket" "tempo" {
 
 module "tempo_iam_role" {
   source  = "terraform-aws-modules/iam/aws//modules/iam-eks-role"
-  version = "~> 5.27"
+  version = "~> 6.0"
 
   role_name        = "${local.tempo_service_account}-${local.cluster_name}"
   role_description = "Role for Tempo to access AWS data sources. Corresponds to ${local.tempo_service_account} k8s ServiceAccount."
