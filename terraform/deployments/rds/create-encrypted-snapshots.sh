@@ -12,13 +12,8 @@ source ./db-maintenance-lists.sh
 
 GOVUK_ENVIRONMENT="test"
 
-DBS=(
-  "jfharden-test-1"
-  "jfharden-test-2"
-  "jfharden-test-3"
-)
-
-export KMS_KEY="alias/govuk/jfharden/rds"
+DBS=("${LITTLE_7_DBS[@]}")
+export KMS_KEY="alias/govuk/rds"
 
 function usage {
   echo
@@ -49,7 +44,7 @@ function account_name {
 }
 
 if [[ -z "${AWS_ACCESS_KEY_ID:-}" ]]; then
-  echo "Error: You execute this script with AWS credentials in your env"
+  echo "Error: You must execute this script with AWS credentials in your env"
   usage
 fi
 
@@ -123,7 +118,7 @@ function snapshot_state {
   local STATE
   while true; do
     if ! STATE=$(aws rds describe-db-snapshots --db-snapshot-identifier "$SNAPSHOT_IDENTIFIER" --query "DBSnapshots[0].Status" --output text 2>&1); then
-      >&2 echo -e "DB: Unknown error describing RDS snapshot, will retry:\n$STATE"
+      >&2 echo -e "$DB: Unknown error describing RDS snapshot, will retry:\n$STATE"
 
       sleep 5
       continue
@@ -259,7 +254,7 @@ function perform_snapshot {
       echo -e "$(colour_red "$DB: FAILED  to create encrypted snapshot copy!")"
       return 1
     fi
-  fi          
+  fi
 
   echo "$DB: waiting for snapshot copy from $UNENCRYPTED_SNAPSHOT_NAME to $ENCRYPTED_SNAPSHOT_NAME to complete"
   if ! STATE=$(wait_for_snapshot_terminal_state "$DB" "$ENCRYPTED_SNAPSHOT_NAME"); then
@@ -290,7 +285,7 @@ echo "STDERR log file, tail this if you want to see errors and also info output 
 
 if ! parallel --line-buffer perform_snapshot {} ::: "${DBS[@]}" 2>> "$FAILURE_LOG" | tee -a "$FULL_LOG_FILE"; then
   echo "-----------------------------------------------------------------------------------------------"
-  echo "ERRORS OCCURED: Some errors occured, see failure log file: $FAILURE_LOG"
+  echo "ERRORS OCCURRED: Some errors occured, see failure log file: $FAILURE_LOG"
   echo "-----------------------------------------------------------------------------------------------"
 fi
 

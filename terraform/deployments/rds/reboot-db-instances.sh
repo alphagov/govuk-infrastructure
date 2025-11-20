@@ -38,7 +38,7 @@ function account_name {
 }
 
 if [[ -z "${AWS_ACCESS_KEY_ID:-}" ]]; then
-  echo "Error: You execute this script with AWS credentials in your env"
+  echo "Error: You must execute this script with AWS credentials in your env"
   usage
 fi
 
