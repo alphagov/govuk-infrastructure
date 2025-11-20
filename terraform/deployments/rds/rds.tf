@@ -62,7 +62,7 @@ resource "aws_db_instance" "instance" {
   parameter_group_name        = aws_db_parameter_group.engine_params[each.key].name
   maintenance_window          = lookup(each.value, "maintenance_window", var.maintenance_window)
   backup_retention_period     = lookup(each.value, "backup_retention_period", var.backup_retention_period)
-  backup_window               = var.backup_window
+  backup_window               = lookup(each.value, "backup_window", var.backup_window)
   copy_tags_to_snapshot       = true
   monitoring_interval         = 60
   monitoring_role_arn         = data.tfe_outputs.logging.nonsensitive_values.rds_enhanced_monitoring_role_arn
@@ -146,7 +146,7 @@ resource "aws_db_instance" "normalised_instance" {
   parameter_group_name        = aws_db_parameter_group.engine_params[each.key].name
   maintenance_window          = lookup(each.value, "maintenance_window", var.maintenance_window)
   backup_retention_period     = lookup(each.value, "backup_retention_period", var.backup_retention_period)
-  backup_window               = var.backup_window
+  backup_window               = lookup(each.value, "backup_window", var.backup_window)
   copy_tags_to_snapshot       = true
   monitoring_interval         = 60
   monitoring_role_arn         = data.tfe_outputs.logging.nonsensitive_values.rds_enhanced_monitoring_role_arn

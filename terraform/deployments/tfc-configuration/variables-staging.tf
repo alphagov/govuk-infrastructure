@@ -159,6 +159,7 @@ module "variable-set-rds-staging" {
         project                      = "GOV.UK - Web"
         encryption_at_rest           = false
         prepare_to_launch_new_db     = false
+        backup_window                = "07:30-08:00"
         launch_new_db                = false
         isolate                      = false
         cname_point_to_new_instance  = false
@@ -182,6 +183,7 @@ module "variable-set-rds-staging" {
         project                      = "GOV.UK - Publishing"
         encryption_at_rest           = false
         prepare_to_launch_new_db     = false
+        backup_window                = "07:30-08:00"
         launch_new_db                = false
         isolate                      = false
         cname_point_to_new_instance  = false
@@ -246,6 +248,7 @@ module "variable-set-rds-staging" {
         project                      = "GOV.UK - Publishing"
         encryption_at_rest           = false
         prepare_to_launch_new_db     = false
+        backup_window                = "07:30-08:00"
         launch_new_db                = false
         isolate                      = false
         cname_point_to_new_instance  = false
@@ -269,6 +272,7 @@ module "variable-set-rds-staging" {
         project                      = "GOV.UK - Publishing"
         encryption_at_rest           = false
         prepare_to_launch_new_db     = false
+        backup_window                = "07:30-08:00"
         launch_new_db                = false
         isolate                      = false
         cname_point_to_new_instance  = false
@@ -319,6 +323,7 @@ module "variable-set-rds-staging" {
         project                      = "GOV.UK - Publishing"
         encryption_at_rest           = false
         prepare_to_launch_new_db     = false
+        backup_window                = "07:30-08:00"
         launch_new_db                = false
         isolate                      = false
         cname_point_to_new_instance  = false
@@ -341,6 +346,7 @@ module "variable-set-rds-staging" {
         project                      = "GOV.UK - Publishing"
         encryption_at_rest           = false
         prepare_to_launch_new_db     = false
+        backup_window                = "07:30-08:00"
         launch_new_db                = false
         isolate                      = false
         cname_point_to_new_instance  = false
@@ -363,6 +369,7 @@ module "variable-set-rds-staging" {
         project                      = "GOV.UK - Publishing"
         encryption_at_rest           = false
         prepare_to_launch_new_db     = false
+        backup_window                = "07:30-08:00"
         launch_new_db                = false
         isolate                      = false
         cname_point_to_new_instance  = false
@@ -385,6 +392,7 @@ module "variable-set-rds-staging" {
         project                      = "GOV.UK - Publishing"
         encryption_at_rest           = false
         prepare_to_launch_new_db     = false
+        backup_window                = "07:30-08:00"
         launch_new_db                = false
         isolate                      = false
         cname_point_to_new_instance  = false
@@ -407,6 +415,7 @@ module "variable-set-rds-staging" {
         project                      = "GOV.UK - Web"
         encryption_at_rest           = false
         prepare_to_launch_new_db     = false
+        backup_window                = "07:30-08:00"
         launch_new_db                = false
         isolate                      = false
         cname_point_to_new_instance  = false
@@ -431,6 +440,7 @@ module "variable-set-rds-staging" {
         project                      = "GOV.UK - Web"
         encryption_at_rest           = false
         prepare_to_launch_new_db     = false
+        backup_window                = "07:30-08:00"
         launch_new_db                = false
         isolate                      = false
         cname_point_to_new_instance  = false
@@ -476,6 +486,7 @@ module "variable-set-rds-staging" {
         project                      = "GOV.UK - Web"
         encryption_at_rest           = false
         prepare_to_launch_new_db     = false
+        backup_window                = "07:30-08:00"
         launch_new_db                = false
         isolate                      = false
         cname_point_to_new_instance  = false
@@ -498,6 +509,7 @@ module "variable-set-rds-staging" {
         project                      = "GOV.UK - Web"
         encryption_at_rest           = false
         prepare_to_launch_new_db     = false
+        backup_window                = "07:30-08:00"
         launch_new_db                = false
         isolate                      = false
         cname_point_to_new_instance  = false
@@ -542,6 +554,7 @@ module "variable-set-rds-staging" {
         has_read_replica             = true
         encryption_at_rest           = false
         prepare_to_launch_new_db     = false
+        backup_window                = "07:30-08:00"
         launch_new_db                = false
         launch_new_replica           = false
         isolate                      = false
@@ -566,6 +579,7 @@ module "variable-set-rds-staging" {
         deletion_protection          = false
         encryption_at_rest           = false
         prepare_to_launch_new_db     = false
+        backup_window                = "07:30-08:00"
         launch_new_db                = false
         isolate                      = false
         cname_point_to_new_instance  = false
@@ -645,6 +659,7 @@ module "variable-set-rds-staging" {
         project                      = "GOV.UK - Publishing"
         encryption_at_rest           = false
         prepare_to_launch_new_db     = false
+        backup_window                = "07:30-08:00"
         launch_new_db                = false
         isolate                      = false
         cname_point_to_new_instance  = false
@@ -667,6 +682,7 @@ module "variable-set-rds-staging" {
         project                      = "GOV.UK - Publishing"
         encryption_at_rest           = false
         prepare_to_launch_new_db     = false
+        backup_window                = "07:30-08:00"
         launch_new_db                = false
         isolate                      = false
         cname_point_to_new_instance  = false
@@ -689,6 +705,7 @@ module "variable-set-rds-staging" {
         project                      = "GOV.UK - Publishing"
         encryption_at_rest           = false
         prepare_to_launch_new_db     = false
+        backup_window                = "07:30-08:00"
         launch_new_db                = false
         isolate                      = false
         cname_point_to_new_instance  = false
@@ -708,6 +725,7 @@ module "variable-set-rds-staging" {
         project                      = "GOV.UK - Publishing"
         encryption_at_rest           = false
         prepare_to_launch_new_db     = false
+        backup_window                = "07:30-08:00"
         launch_new_db                = false
         isolate                      = false
         cname_point_to_new_instance  = false
