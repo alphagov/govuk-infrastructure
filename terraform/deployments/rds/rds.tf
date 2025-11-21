@@ -92,7 +92,13 @@ resource "aws_db_instance" "instance" {
   storage_encrypted = try(each.value.encryption_at_rest, true)
   kms_key_id        = try(each.value.encryption_at_rest, true) ? aws_kms_key.rds.arn : null
 
-  tags = { Name = "govuk-rds-${each.value.name}-${each.value.engine}", project = lookup(each.value, "project", "GOV.UK - Other") }
+  tags = merge(
+    {
+      Name    = "govuk-rds-${each.value.name}-${each.value.engine}",
+      project = lookup(each.value, "project", "GOV.UK - Other")
+    },
+    lookup(each.value, "additional_tags", {}),
+  )
 }
 
 resource "aws_db_snapshot" "unencrypted_snapshot" {
@@ -176,10 +182,13 @@ resource "aws_db_instance" "normalised_instance" {
   storage_encrypted = true
   kms_key_id        = aws_kms_key.rds.arn
 
-  tags = {
-    Name    = "govuk-rds-${local.identifier_prefix}${each.value.name}-${var.govuk_environment}-${each.value.engine}",
-    project = lookup(each.value, "project", "GOV.UK - Other"),
-  }
+  tags = merge(
+    {
+      Name    = "govuk-rds-${local.identifier_prefix}${each.value.name}-${var.govuk_environment}-${each.value.engine}",
+      project = lookup(each.value, "project", "GOV.UK - Other"),
+    },
+    lookup(each.value, "additional_tags", {}),
+  )
 }
 
 resource "aws_db_event_subscription" "subscription" {
@@ -212,6 +221,8 @@ resource "aws_cloudwatch_metric_alarm" "rds_freestoragespace" {
   )
   alarm_actions     = [aws_sns_topic.rds_alerts.arn]
   alarm_description = "Available storage space on ${aws_db_instance.instance[each.key].identifier} RDS is below ${lookup(each.value, "storage_alarm_threshold_percentage", 10)}%."
+
+  tags = lookup(each.value, "additional_tags", {})
 }
 
 
@@ -236,6 +247,8 @@ resource "aws_cloudwatch_metric_alarm" "normalised_rds_freestoragespace" {
   )
   alarm_actions     = [aws_sns_topic.rds_alerts.arn]
   alarm_description = "Available storage space on ${aws_db_instance.normalised_instance[each.key].identifier} RDS is below ${lookup(each.value, "storage_alarm_threshold_percentage", 10)}%."
+
+  tags = lookup(each.value, "additional_tags", {})
 }
 
 resource "aws_route53_record" "instance_cname" {
@@ -267,7 +280,13 @@ resource "aws_db_instance" "replica" {
 
   skip_final_snapshot = true
 
-  tags = { Name = "govuk-rds-${each.value.name}-${each.value.engine}-replica", project = lookup(each.value, "project", "GOV.UK - Other") }
+  tags = merge(
+    {
+      Name    = "govuk-rds-${each.value.name}-${each.value.engine}-replica",
+      project = lookup(each.value, "project", "GOV.UK - Other")
+    },
+    lookup(each.value, "additional_tags", {}),
+  )
 
   lifecycle {
     ignore_changes = [identifier]
@@ -289,10 +308,13 @@ resource "aws_db_instance" "normalised_replica" {
 
   skip_final_snapshot = true
 
-  tags = {
-    Name    = "govuk-rds-${aws_db_instance.normalised_instance[each.key].identifier}-replica",
-    project = lookup(each.value, "project", "GOV.UK - Other"),
-  }
+  tags = merge(
+    {
+      Name    = "govuk-rds-${aws_db_instance.normalised_instance[each.key].identifier}-replica",
+      project = lookup(each.value, "project", "GOV.UK - Other"),
+    },
+    lookup(each.value, "additional_tags", {}),
+  )
 
   storage_encrypted = true
   kms_key_id        = aws_kms_key.rds.arn
