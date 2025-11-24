@@ -400,7 +400,7 @@ module "govuk_mirror_sync_iam_role" {
 
 data "aws_iam_policy_document" "govuk_mirror_sync" {
   statement {
-    sid = "ReadWriteFromS3"
+    sid = "ReadWriteFromMirrorBucket"
     actions = [
       "s3:AbortMultipartUpload",
       "s3:DeleteObject",
@@ -424,6 +424,27 @@ data "aws_iam_policy_document" "govuk_mirror_sync" {
     resources = [
       "arn:aws:s3:::govuk-${var.govuk_environment}-mirror/*",
       "arn:aws:s3:::govuk-${var.govuk_environment}-mirror"
+    ]
+  }
+
+  statement {
+    sid = "MakeAthenaQueries"
+    actions = [
+      "athena:GetQueryExecution",
+      "athena:StartQueryExecution"
+    ]
+    resources = [
+      "arn:aws:athena:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:workgroup/*",
+    ]
+  }
+
+  statement {
+    sid = "ReadFromAthenaQueryResultsBucket"
+    actions = [
+      "s3:GetObject"
+    ]
+    resources = [
+      "${aws_s3_bucket.athena_query_results.arn}/*",
     ]
   }
 }
