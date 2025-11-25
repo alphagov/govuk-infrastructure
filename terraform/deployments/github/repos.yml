@@ -189,6 +189,18 @@ repos:
         - Lint Ruby / Run RuboCop
         - Test Ruby / Run RSpec
 
+  fact-check-manager:
+    can_be_deployed: true
+    required_pull_request_reviews:
+      require_code_owner_reviews: true
+    required_status_checks:
+      standard_contexts: *standard_govuk_rails_checks
+      additional_contexts:
+        - Lint JavaScript / Run Standardx
+        - Lint SCSS / Run Stylelint
+        - Test JavaScript / Run Jasmine
+        - Test Ruby / Run Minitest
+
   fastly-exporter:
     archived: true
 
