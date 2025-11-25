@@ -201,8 +201,7 @@ repos:
         - Test JavaScript / Run Jasmine
         - Test Ruby / Run Minitest
 
-  fastly-exporter:
-    archived: true
+  fastly-exporter: {}
 
   feedback:
     can_be_deployed: true
@@ -582,7 +581,6 @@ repos:
         - Test Ruby / Run RSpec
 
   markdown-toolbar-element:
-    archived: true
     homepage_url: "https://alphagov.github.io/markdown-toolbar-element"
 
   miller-columns-element:
@@ -968,8 +966,7 @@ repos:
   govuk-knowledge-graph-gcp:
     homepage_url: "https://docs.data-community.publishing.service.gov.uk/tools/govgraph/"
 
-  github-trello-poster:
-    archived: true
+  github-trello-poster: {}
 
   ckan-mock-harvest-sources: {}
   govuk-pact-broker: {}
