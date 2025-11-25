@@ -56,8 +56,12 @@ data "aws_iam_policy_document" "can_configure_es_snapshots" {
     actions   = ["iam:PassRole"]
     resources = [aws_iam_role.manual_snapshot_role.arn]
   }
-  statement {
-    actions   = ["es:ESHttpPut"]
-    resources = ["${aws_elasticsearch_domain.opensearch.arn}/*"]
+
+  dynamic "statement" {
+    for_each = length(aws_elasticsearch_domain.opensearch) == 1 ? [aws_elasticsearch_domain.opensearch[0]] : []
+    content {
+      actions   = ["es:ESHttpPut"]
+      resources = ["${statement.value.arn}/*"]
+    }
   }
 }
