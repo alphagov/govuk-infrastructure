@@ -412,6 +412,7 @@ data "aws_iam_policy_document" "govuk_mirror_sync" {
       "s3:GetObject",
       "s3:GetObjectVersion",
       "s3:GetObjectVersionTagging",
+      "s3:HeadObject",
       "s3:ListBucket",
       "s3:ListBucketMultipartUploads",
       "s3:ListBucketVersions",
