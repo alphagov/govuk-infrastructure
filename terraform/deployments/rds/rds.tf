@@ -70,6 +70,7 @@ resource "aws_db_instance" "instance" {
   ca_cert_identifier          = "rds-ca-rsa2048-g1"
   apply_immediately           = var.govuk_environment != "production"
   allow_major_version_upgrade = lookup(each.value, "allow_major_version_upgrade", false)
+  auto_minor_version_upgrade  = lookup(each.value, "auto_minor_version_upgrade", true)
 
   performance_insights_enabled          = each.value.performance_insights_enabled
   performance_insights_retention_period = each.value.performance_insights_enabled ? 7 : 0
@@ -154,6 +155,7 @@ resource "aws_db_instance" "normalised_instance" {
   ca_cert_identifier          = "rds-ca-rsa2048-g1"
   apply_immediately           = var.govuk_environment != "production"
   allow_major_version_upgrade = lookup(each.value, "allow_major_version_upgrade", false)
+  auto_minor_version_upgrade  = lookup(each.value, "auto_minor_version_upgrade", true)
 
   performance_insights_enabled          = each.value.performance_insights_enabled
   performance_insights_retention_period = each.value.performance_insights_enabled ? 7 : 0
