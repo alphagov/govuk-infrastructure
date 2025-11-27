@@ -170,7 +170,7 @@ module "variable-set-rds-production" {
         project                      = "GOV.UK - Web"
         encryption_at_rest           = false
         prepare_to_launch_new_db     = false
-        backup_window                = "22:00-22:30"
+        backup_window                = "20:00-20:30"
         maintenance_window           = "Sat:00:00-Sat:01:00"
         launch_new_db                = false
         isolate                      = false
@@ -196,7 +196,7 @@ module "variable-set-rds-production" {
         project                      = "GOV.UK - Publishing"
         encryption_at_rest           = false
         prepare_to_launch_new_db     = false
-        backup_window                = "22:00-22:30"
+        backup_window                = "20:00-20:30"
         maintenance_window           = "Sat:00:00-Sat:01:00"
         launch_new_db                = false
         isolate                      = false
@@ -265,7 +265,7 @@ module "variable-set-rds-production" {
         project                      = "GOV.UK - Publishing"
         encryption_at_rest           = false
         prepare_to_launch_new_db     = false
-        backup_window                = "22:00-22:30"
+        backup_window                = "20:00-20:30"
         maintenance_window           = "Sat:00:00-Sat:01:00"
         launch_new_db                = false
         isolate                      = false
@@ -291,7 +291,7 @@ module "variable-set-rds-production" {
         project                      = "GOV.UK - Publishing"
         encryption_at_rest           = false
         prepare_to_launch_new_db     = false
-        backup_window                = "22:00-22:30"
+        backup_window                = "20:00-20:30"
         maintenance_window           = "Sat:00:00-Sat:01:00"
         launch_new_db                = false
         isolate                      = false
@@ -345,7 +345,7 @@ module "variable-set-rds-production" {
         project                      = "GOV.UK - Publishing"
         encryption_at_rest           = false
         prepare_to_launch_new_db     = false
-        backup_window                = "22:00-22:30"
+        backup_window                = "20:00-20:30"
         maintenance_window           = "Sat:00:00-Sat:01:00"
         launch_new_db                = false
         isolate                      = false
@@ -370,7 +370,7 @@ module "variable-set-rds-production" {
         project                      = "GOV.UK - Publishing"
         encryption_at_rest           = false
         prepare_to_launch_new_db     = false
-        backup_window                = "22:00-22:30"
+        backup_window                = "20:00-20:30"
         maintenance_window           = "Sat:00:00-Sat:01:00"
         launch_new_db                = false
         isolate                      = false
@@ -395,7 +395,7 @@ module "variable-set-rds-production" {
         project                      = "GOV.UK - Publishing"
         encryption_at_rest           = false
         prepare_to_launch_new_db     = false
-        backup_window                = "22:00-22:30"
+        backup_window                = "20:00-20:30"
         maintenance_window           = "Sat:00:00-Sat:01:00"
         launch_new_db                = false
         isolate                      = false
@@ -420,7 +420,7 @@ module "variable-set-rds-production" {
         project                      = "GOV.UK - Publishing"
         encryption_at_rest           = false
         prepare_to_launch_new_db     = false
-        backup_window                = "22:00-22:30"
+        backup_window                = "20:00-20:30"
         maintenance_window           = "Sat:00:00-Sat:01:00"
         launch_new_db                = false
         isolate                      = false
@@ -445,7 +445,7 @@ module "variable-set-rds-production" {
         project                      = "GOV.UK - Web"
         encryption_at_rest           = false
         prepare_to_launch_new_db     = false
-        backup_window                = "22:00-22:30"
+        backup_window                = "20:00-20:30"
         maintenance_window           = "Sat:00:00-Sat:01:00"
         launch_new_db                = false
         isolate                      = false
@@ -472,7 +472,7 @@ module "variable-set-rds-production" {
         project                      = "GOV.UK - Web"
         encryption_at_rest           = false
         prepare_to_launch_new_db     = false
-        backup_window                = "22:00-22:30"
+        backup_window                = "20:00-20:30"
         maintenance_window           = "Sat:00:00-Sat:01:00"
         launch_new_db                = false
         isolate                      = false
@@ -521,7 +521,7 @@ module "variable-set-rds-production" {
         project                      = "GOV.UK - Web"
         encryption_at_rest           = false
         prepare_to_launch_new_db     = false
-        backup_window                = "22:00-22:30"
+        backup_window                = "20:00-20:30"
         maintenance_window           = "Sat:00:00-Sat:01:00"
         launch_new_db                = false
         isolate                      = false
@@ -546,7 +546,7 @@ module "variable-set-rds-production" {
         project                      = "GOV.UK - Web"
         encryption_at_rest           = false
         prepare_to_launch_new_db     = false
-        backup_window                = "22:00-22:30"
+        backup_window                = "20:00-20:30"
         maintenance_window           = "Sat:00:00-Sat:01:00"
         launch_new_db                = false
         isolate                      = false
@@ -590,7 +590,7 @@ module "variable-set-rds-production" {
         has_read_replica             = true
         encryption_at_rest           = false
         prepare_to_launch_new_db     = false
-        backup_window                = "22:00-22:30"
+        backup_window                = "20:00-20:30"
         maintenance_window           = "Sat:00:00-Sat:01:00"
         launch_new_db                = false
         launch_new_replica           = false
@@ -617,7 +617,7 @@ module "variable-set-rds-production" {
         deletion_protection          = false
         encryption_at_rest           = false
         prepare_to_launch_new_db     = false
-        backup_window                = "22:00-22:30"
+        backup_window                = "20:00-20:30"
         maintenance_window           = "Sat:00:00-Sat:01:00"
         launch_new_db                = false
         isolate                      = false
@@ -702,7 +702,7 @@ module "variable-set-rds-production" {
         project                      = "GOV.UK - Publishing"
         encryption_at_rest           = false
         prepare_to_launch_new_db     = false
-        backup_window                = "22:00-22:30"
+        backup_window                = "20:00-20:30"
         maintenance_window           = "Sat:00:00-Sat:01:00"
         launch_new_db                = false
         isolate                      = false
@@ -727,7 +727,7 @@ module "variable-set-rds-production" {
         project                      = "GOV.UK - Publishing"
         encryption_at_rest           = false
         prepare_to_launch_new_db     = false
-        backup_window                = "22:00-22:30"
+        backup_window                = "20:00-20:30"
         maintenance_window           = "Sat:00:00-Sat:01:00"
         launch_new_db                = false
         isolate                      = false
@@ -752,7 +752,7 @@ module "variable-set-rds-production" {
         project                      = "GOV.UK - Publishing"
         encryption_at_rest           = false
         prepare_to_launch_new_db     = false
-        backup_window                = "22:00-22:30"
+        backup_window                = "20:00-20:30"
         maintenance_window           = "Sat:00:00-Sat:01:00"
         launch_new_db                = false
         isolate                      = false
@@ -776,7 +776,7 @@ module "variable-set-rds-production" {
         project                      = "GOV.UK - Publishing"
         encryption_at_rest           = false
         prepare_to_launch_new_db     = false
-        backup_window                = "22:00-22:30"
+        backup_window                = "20:00-20:30"
         maintenance_window           = "Sat:00:00-Sat:01:00"
         launch_new_db                = false
         isolate                      = false
