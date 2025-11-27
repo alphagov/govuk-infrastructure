@@ -505,8 +505,7 @@ module "variable-set-rds-production" {
         instance_class               = "db.t4g.large"
         performance_insights_enabled = true
         project                      = "GOV.UK - Publishing"
-        maintenance_window           = "Mon:00:00-Mon:02:00"
-        auto_minor_version_upgrade   = false
+        maintenance_window           = "Mon:00:00-Mon:01:00"
         encryption_at_rest           = false
         prepare_to_launch_new_db     = false
         launch_new_db                = false
