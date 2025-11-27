@@ -172,6 +172,7 @@ module "variable-set-rds-production" {
         prepare_to_launch_new_db     = false
         backup_window                = "20:00-20:30"
         maintenance_window           = "Sat:00:00-Sat:02:00"
+        auto_minor_version_upgrade   = false
         launch_new_db                = false
         isolate                      = false
         cname_point_to_new_instance  = false
@@ -198,6 +199,7 @@ module "variable-set-rds-production" {
         prepare_to_launch_new_db     = false
         backup_window                = "20:00-20:30"
         maintenance_window           = "Sat:00:00-Sat:02:00"
+        auto_minor_version_upgrade   = false
         launch_new_db                = false
         isolate                      = false
         cname_point_to_new_instance  = false
@@ -267,6 +269,7 @@ module "variable-set-rds-production" {
         prepare_to_launch_new_db     = false
         backup_window                = "20:00-20:30"
         maintenance_window           = "Sat:00:00-Sat:02:00"
+        auto_minor_version_upgrade   = false
         launch_new_db                = false
         isolate                      = false
         cname_point_to_new_instance  = false
@@ -293,6 +296,7 @@ module "variable-set-rds-production" {
         prepare_to_launch_new_db     = false
         backup_window                = "20:00-20:30"
         maintenance_window           = "Sat:00:00-Sat:02:00"
+        auto_minor_version_upgrade   = false
         launch_new_db                = false
         isolate                      = false
         cname_point_to_new_instance  = false
@@ -347,6 +351,7 @@ module "variable-set-rds-production" {
         prepare_to_launch_new_db     = false
         backup_window                = "20:00-20:30"
         maintenance_window           = "Sat:00:00-Sat:02:00"
+        auto_minor_version_upgrade   = false
         launch_new_db                = false
         isolate                      = false
         cname_point_to_new_instance  = false
@@ -372,6 +377,7 @@ module "variable-set-rds-production" {
         prepare_to_launch_new_db     = false
         backup_window                = "20:00-20:30"
         maintenance_window           = "Sat:00:00-Sat:02:00"
+        auto_minor_version_upgrade   = false
         launch_new_db                = false
         isolate                      = false
         cname_point_to_new_instance  = false
@@ -397,6 +403,7 @@ module "variable-set-rds-production" {
         prepare_to_launch_new_db     = false
         backup_window                = "20:00-20:30"
         maintenance_window           = "Sat:00:00-Sat:02:00"
+        auto_minor_version_upgrade   = false
         launch_new_db                = false
         isolate                      = false
         cname_point_to_new_instance  = false
@@ -422,6 +429,7 @@ module "variable-set-rds-production" {
         prepare_to_launch_new_db     = false
         backup_window                = "20:00-20:30"
         maintenance_window           = "Sat:00:00-Sat:02:00"
+        auto_minor_version_upgrade   = false
         launch_new_db                = false
         isolate                      = false
         cname_point_to_new_instance  = false
@@ -447,6 +455,7 @@ module "variable-set-rds-production" {
         prepare_to_launch_new_db     = false
         backup_window                = "20:00-20:30"
         maintenance_window           = "Sat:00:00-Sat:02:00"
+        auto_minor_version_upgrade   = false
         launch_new_db                = false
         isolate                      = false
         cname_point_to_new_instance  = false
@@ -474,6 +483,7 @@ module "variable-set-rds-production" {
         prepare_to_launch_new_db     = false
         backup_window                = "20:00-20:30"
         maintenance_window           = "Sat:00:00-Sat:02:00"
+        auto_minor_version_upgrade   = false
         launch_new_db                = false
         isolate                      = false
         cname_point_to_new_instance  = false
@@ -496,6 +506,7 @@ module "variable-set-rds-production" {
         performance_insights_enabled = true
         project                      = "GOV.UK - Publishing"
         maintenance_window           = "Mon:00:00-Mon:02:00"
+        auto_minor_version_upgrade   = false
         encryption_at_rest           = false
         prepare_to_launch_new_db     = false
         launch_new_db                = false
@@ -523,6 +534,7 @@ module "variable-set-rds-production" {
         prepare_to_launch_new_db     = false
         backup_window                = "20:00-20:30"
         maintenance_window           = "Sat:00:00-Sat:02:00"
+        auto_minor_version_upgrade   = false
         launch_new_db                = false
         isolate                      = false
         cname_point_to_new_instance  = false
@@ -548,6 +560,7 @@ module "variable-set-rds-production" {
         prepare_to_launch_new_db     = false
         backup_window                = "20:00-20:30"
         maintenance_window           = "Sat:00:00-Sat:02:00"
+        auto_minor_version_upgrade   = false
         launch_new_db                = false
         isolate                      = false
         cname_point_to_new_instance  = false
@@ -592,6 +605,7 @@ module "variable-set-rds-production" {
         prepare_to_launch_new_db     = false
         backup_window                = "20:00-20:30"
         maintenance_window           = "Sat:00:00-Sat:02:00"
+        auto_minor_version_upgrade   = false
         launch_new_db                = false
         launch_new_replica           = false
         isolate                      = false
@@ -619,6 +633,7 @@ module "variable-set-rds-production" {
         prepare_to_launch_new_db     = false
         backup_window                = "20:00-20:30"
         maintenance_window           = "Sat:00:00-Sat:02:00"
+        auto_minor_version_upgrade   = false
         launch_new_db                = false
         isolate                      = false
         cname_point_to_new_instance  = false
@@ -704,6 +719,7 @@ module "variable-set-rds-production" {
         prepare_to_launch_new_db     = false
         backup_window                = "20:00-20:30"
         maintenance_window           = "Sat:00:00-Sat:02:00"
+        auto_minor_version_upgrade   = false
         launch_new_db                = false
         isolate                      = false
         cname_point_to_new_instance  = false
@@ -729,6 +745,7 @@ module "variable-set-rds-production" {
         prepare_to_launch_new_db     = false
         backup_window                = "20:00-20:30"
         maintenance_window           = "Sat:00:00-Sat:02:00"
+        auto_minor_version_upgrade   = false
         launch_new_db                = false
         isolate                      = false
         cname_point_to_new_instance  = false
@@ -754,6 +771,7 @@ module "variable-set-rds-production" {
         prepare_to_launch_new_db     = false
         backup_window                = "20:00-20:30"
         maintenance_window           = "Sat:00:00-Sat:02:00"
+        auto_minor_version_upgrade   = false
         launch_new_db                = false
         isolate                      = false
         cname_point_to_new_instance  = false
@@ -778,6 +796,7 @@ module "variable-set-rds-production" {
         prepare_to_launch_new_db     = false
         backup_window                = "20:00-20:30"
         maintenance_window           = "Sat:00:00-Sat:02:00"
+        auto_minor_version_upgrade   = false
         launch_new_db                = false
         isolate                      = false
         cname_point_to_new_instance  = false
