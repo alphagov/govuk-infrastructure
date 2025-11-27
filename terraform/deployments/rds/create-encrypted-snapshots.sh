@@ -283,7 +283,7 @@ FAILURE_LOG=$(mktemp -t create-snapshot-error-log)
 FULL_LOG_FILE=$(mktemp -t create-snapshot-log)
 echo "STDERR log file, tail this if you want to see errors and also info output showing the current snapshot status while waiting for them to complete: $FAILURE_LOG"
 
-if ! parallel --line-buffer perform_snapshot {} ::: "${DBS[@]}" 2>> "$FAILURE_LOG" | tee -a "$FULL_LOG_FILE"; then
+if ! parallel --jobs 20 --max-procs 20 --line-buffer perform_snapshot {} ::: "${DBS[@]}" 2>> "$FAILURE_LOG" | tee -a "$FULL_LOG_FILE"; then
   echo "-----------------------------------------------------------------------------------------------"
   echo "ERRORS OCCURRED: Some errors occured, see failure log file: $FAILURE_LOG"
   echo "-----------------------------------------------------------------------------------------------"
