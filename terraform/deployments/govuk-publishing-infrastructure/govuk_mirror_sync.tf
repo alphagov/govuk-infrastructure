@@ -442,9 +442,14 @@ data "aws_iam_policy_document" "govuk_mirror_sync" {
   statement {
     sid = "UseAthenaQueryResultsBucketViaAthena"
     actions = [
+      "s3:AbortMultipartUpload",
+      "s3:GetBucketLocation",
+      "s3:ListBucket",
+      "s3:ListMultipartUploadParts",
       "s3:*Object"
     ]
     resources = [
+      aws_s3_bucket.athena_query_results.arn,
       "${aws_s3_bucket.athena_query_results.arn}/*",
     ]
     condition {
