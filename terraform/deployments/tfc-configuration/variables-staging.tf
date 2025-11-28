@@ -216,7 +216,7 @@ module "variable-set-rds-staging" {
 
       ckan = {
         engine         = "postgres"
-        engine_version = "14.18"
+        engine_version = "14.19"
         engine_params = {
           log_min_duration_statement = { value = 10000 }
           log_statement              = { value = "all" }
@@ -225,15 +225,19 @@ module "variable-set-rds-staging" {
         }
         engine_params_family         = "postgres14"
         name                         = "ckan"
+        apply_immediately            = false
         allocated_storage            = 1000
         instance_class               = "db.m6g.large"
         performance_insights_enabled = true
         project                      = "GOV.UK - DGU"
         encryption_at_rest           = false
+        backup_window                = "08:00-08:30"
+        auto_minor_version_upgrade   = false
         prepare_to_launch_new_db     = false
-        launch_new_db                = false
         isolate                      = false
+        launch_new_db                = false
         cname_point_to_new_instance  = false
+        new_db_deletion_protection   = false
       }
 
       collections_publisher = {
@@ -284,7 +288,7 @@ module "variable-set-rds-staging" {
 
       content_data_admin = {
         engine         = "postgres"
-        engine_version = "14.18"
+        engine_version = "14.19"
         engine_params = {
           log_min_duration_statement = { value = 10000 }
           log_statement              = { value = "all" }
@@ -293,15 +297,19 @@ module "variable-set-rds-staging" {
         }
         engine_params_family         = "postgres14"
         name                         = "content-data-admin"
+        apply_immediately            = false
         allocated_storage            = 100
         instance_class               = "db.t4g.micro"
         performance_insights_enabled = false
         project                      = "GOV.UK - Publishing"
         encryption_at_rest           = false
+        backup_window                = "08:00-08:30"
+        auto_minor_version_upgrade   = false
         prepare_to_launch_new_db     = false
-        launch_new_db                = false
         isolate                      = false
+        launch_new_db                = false
         cname_point_to_new_instance  = false
+        new_db_deletion_protection   = false
       }
 
       content_data_api = {
@@ -458,7 +466,7 @@ module "variable-set-rds-staging" {
 
       link_checker_api = {
         engine         = "postgres"
-        engine_version = "14.18"
+        engine_version = "14.19"
         engine_params = {
           log_min_duration_statement = { value = 10000 }
           log_statement              = { value = "all" }
@@ -467,16 +475,20 @@ module "variable-set-rds-staging" {
         }
         engine_params_family         = "postgres14"
         name                         = "link-checker-api"
+        apply_immediately            = false
         allocated_storage            = 100
         instance_class               = "db.t4g.medium"
         performance_insights_enabled = false
         project                      = "GOV.UK - Publishing"
         maintenance_window           = "Mon:00:00-Mon:01:00"
         encryption_at_rest           = false
+        backup_window                = "08:00-08:30"
+        auto_minor_version_upgrade   = false
         prepare_to_launch_new_db     = false
-        launch_new_db                = false
         isolate                      = false
+        launch_new_db                = false
         cname_point_to_new_instance  = false
+        new_db_deletion_protection   = false
       }
 
       local_links_manager = {
@@ -603,45 +615,53 @@ module "variable-set-rds-staging" {
 
       release = {
         engine         = "mysql"
-        engine_version = "8.0"
+        engine_version = "8.0.43"
         engine_params = {
           max_allowed_packet = { value = 1073741824 }
         }
         engine_params_family         = "mysql8.0"
         name                         = "release"
+        apply_immediately            = false
         allocated_storage            = 100
         instance_class               = "db.t4g.micro"
         performance_insights_enabled = false
         project                      = "GOV.UK - Infrastructure"
         encryption_at_rest           = false
+        backup_window                = "08:00-08:30"
+        auto_minor_version_upgrade   = false
         prepare_to_launch_new_db     = false
-        launch_new_db                = false
         isolate                      = false
+        launch_new_db                = false
         cname_point_to_new_instance  = false
+        new_db_deletion_protection   = false
       }
 
       search_admin = {
         engine         = "mysql"
-        engine_version = "8.0"
+        engine_version = "8.0.43"
         engine_params = {
           max_allowed_packet = { value = 1073741824 }
         }
         engine_params_family         = "mysql8.0"
         name                         = "search-admin"
+        apply_immediately            = false
         allocated_storage            = 100
         instance_class               = "db.t4g.micro"
         performance_insights_enabled = false
         project                      = "GOV.UK - Search"
         encryption_at_rest           = false
+        backup_window                = "08:00-08:30"
+        auto_minor_version_upgrade   = false
         prepare_to_launch_new_db     = false
-        launch_new_db                = false
         isolate                      = false
+        launch_new_db                = false
         cname_point_to_new_instance  = false
+        new_db_deletion_protection   = false
       }
 
       service_manual_publisher = {
         engine         = "postgres"
-        engine_version = "14.18"
+        engine_version = "14.19"
         engine_params = {
           log_min_duration_statement = { value = 10000 }
           log_statement              = { value = "all" }
@@ -650,15 +670,19 @@ module "variable-set-rds-staging" {
         }
         engine_params_family         = "postgres14"
         name                         = "service-manual-publisher"
+        apply_immediately            = false
         allocated_storage            = 100
         instance_class               = "db.t4g.micro"
         performance_insights_enabled = false
         project                      = "GOV.UK - Publishing"
         encryption_at_rest           = false
+        backup_window                = "08:00-08:30"
+        auto_minor_version_upgrade   = false
         prepare_to_launch_new_db     = false
-        launch_new_db                = false
         isolate                      = false
+        launch_new_db                = false
         cname_point_to_new_instance  = false
+        new_db_deletion_protection   = false
       }
 
       signon = {

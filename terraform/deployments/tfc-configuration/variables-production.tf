@@ -232,7 +232,7 @@ module "variable-set-rds-production" {
 
       ckan = {
         engine         = "postgres"
-        engine_version = "14.18"
+        engine_version = "14.19"
         engine_params = {
           log_min_duration_statement = { value = 10000 }
           log_statement              = { value = "all" }
@@ -246,9 +246,11 @@ module "variable-set-rds-production" {
         performance_insights_enabled = true
         project                      = "GOV.UK - DGU"
         encryption_at_rest           = false
+        backup_window                = "08:00-08:30"
+        auto_minor_version_upgrade   = false
         prepare_to_launch_new_db     = false
-        launch_new_db                = false
         isolate                      = false
+        launch_new_db                = false
         cname_point_to_new_instance  = false
         new_db_deletion_protection   = false
       }
@@ -305,7 +307,7 @@ module "variable-set-rds-production" {
 
       content_data_admin = {
         engine         = "postgres"
-        engine_version = "14.18"
+        engine_version = "14.19"
         engine_params = {
           log_min_duration_statement = { value = 10000 }
           log_statement              = { value = "all" }
@@ -319,9 +321,11 @@ module "variable-set-rds-production" {
         performance_insights_enabled = true
         project                      = "GOV.UK - Publishing"
         encryption_at_rest           = false
+        backup_window                = "08:00-08:30"
+        auto_minor_version_upgrade   = false
         prepare_to_launch_new_db     = false
-        launch_new_db                = false
         isolate                      = false
+        launch_new_db                = false
         cname_point_to_new_instance  = false
         new_db_deletion_protection   = false
       }
@@ -507,9 +511,11 @@ module "variable-set-rds-production" {
         project                      = "GOV.UK - Publishing"
         maintenance_window           = "Mon:00:00-Mon:01:00"
         encryption_at_rest           = false
+        backup_window                = "08:00-08:30"
+        auto_minor_version_upgrade   = false
         prepare_to_launch_new_db     = false
-        launch_new_db                = false
         isolate                      = false
+        launch_new_db                = false
         cname_point_to_new_instance  = false
         new_db_deletion_protection   = false
       }
@@ -654,9 +660,11 @@ module "variable-set-rds-production" {
         performance_insights_enabled = false
         project                      = "GOV.UK - Infrastructure"
         encryption_at_rest           = false
+        backup_window                = "08:00-08:30"
+        auto_minor_version_upgrade   = false
         prepare_to_launch_new_db     = false
-        launch_new_db                = false
         isolate                      = false
+        launch_new_db                = false
         cname_point_to_new_instance  = false
         new_db_deletion_protection   = false
       }
@@ -674,9 +682,11 @@ module "variable-set-rds-production" {
         performance_insights_enabled = false
         project                      = "GOV.UK - Search"
         encryption_at_rest           = false
+        backup_window                = "08:00-08:30"
+        auto_minor_version_upgrade   = false
         prepare_to_launch_new_db     = false
-        launch_new_db                = false
         isolate                      = false
+        launch_new_db                = false
         cname_point_to_new_instance  = false
         new_db_deletion_protection   = false
       }
@@ -697,9 +707,11 @@ module "variable-set-rds-production" {
         performance_insights_enabled = true
         project                      = "GOV.UK - Publishing"
         encryption_at_rest           = false
+        backup_window                = "08:00-08:30"
+        auto_minor_version_upgrade   = false
         prepare_to_launch_new_db     = false
-        launch_new_db                = false
         isolate                      = false
+        launch_new_db                = false
         cname_point_to_new_instance  = false
         new_db_deletion_protection   = false
       }
