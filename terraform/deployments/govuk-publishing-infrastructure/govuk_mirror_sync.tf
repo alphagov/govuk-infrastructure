@@ -360,7 +360,7 @@ data "aws_iam_policy_document" "google_federated" {
       test     = "StringEquals"
       variable = "accounts.google.com:sub"
 
-      values = ["${data.google_storage_transfer_project_service_account.default.subject_id}"]
+      values = [data.google_storage_transfer_project_service_account.default.subject_id]
     }
   }
 }
@@ -390,7 +390,7 @@ module "govuk_mirror_sync_iam_role" {
   role_description = "Role for govuk-mirror-sync to access S3. Corresponds to govuk-mirror-sync k8s ServiceAccount."
 
   cluster_service_accounts = {
-    "${local.cluster_name}" = ["apps:mirror"]
+    (local.cluster_name) = ["apps:mirror"]
   }
 
   role_policy_arns = {
@@ -440,7 +440,22 @@ data "aws_iam_policy_document" "govuk_mirror_sync" {
   }
 
   statement {
-    sid = "ReadFromAthenaQueryResultsBucket"
+    sid = "UseAthenaQueryResultsBucketViaAthena"
+    actions = [
+      "s3:*Object"
+    ]
+    resources = [
+      "${aws_s3_bucket.athena_query_results.arn}/*",
+    ]
+    condition {
+      test     = "ForAnyValue:StringEquals"
+      values   = ["athena.amazonaws.com"]
+      variable = "aws:CalledVia"
+    }
+  }
+
+  statement {
+    sid = "RetrieveAthenaQueryResults"
     actions = [
       "s3:GetObject"
     ]
