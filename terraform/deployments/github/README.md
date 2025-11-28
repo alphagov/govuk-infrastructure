@@ -93,6 +93,17 @@ To configure a `private` or `internal` repository, set the `visibility` explicit
 
 Note: Private repositories can't use GitHub Actions workflows that upload SARIF files, and therefore can't use the predefined standard security checks.
 
+### Forked repositories
+
+To indicate that a repository is forked set the following properties in the `fork` object:
+
+```
+  fork:
+    enabled: true
+    source_owner: "github_fork_owner"
+    source_repo: "github_fork_repo"
+```
+
 ### Adding existing repositories 
 
 > Skip this step if you are creating a new repository.
