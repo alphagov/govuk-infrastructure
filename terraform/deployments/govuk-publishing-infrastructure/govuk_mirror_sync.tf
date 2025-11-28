@@ -440,7 +440,7 @@ data "aws_iam_policy_document" "govuk_mirror_sync" {
   }
 
   statement {
-    sid = "UseAthenaQueryResultsBucketViaAthena"
+    sid = "AthenaS3Permissions"
     actions = [
       "s3:AbortMultipartUpload",
       "s3:GetBucketLocation",
@@ -451,6 +451,22 @@ data "aws_iam_policy_document" "govuk_mirror_sync" {
     resources = [
       aws_s3_bucket.athena_query_results.arn,
       "${aws_s3_bucket.athena_query_results.arn}/*",
+    ]
+    condition {
+      test     = "ForAnyValue:StringEquals"
+      values   = ["athena.amazonaws.com"]
+      variable = "aws:CalledVia"
+    }
+  }
+
+  statement {
+    sid = "AthenaGluePermissions"
+    actions = [
+      "glue:GetDatbase"
+    ]
+    resources = [
+      "arn:aws:glue:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:catalog",
+      "arn:aws:glue:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:database/fastly-logs"
     ]
     condition {
       test     = "ForAnyValue:StringEquals"
