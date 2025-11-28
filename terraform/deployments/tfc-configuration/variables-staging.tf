@@ -231,9 +231,10 @@ module "variable-set-rds-staging" {
         project                      = "GOV.UK - DGU"
         encryption_at_rest           = false
         prepare_to_launch_new_db     = false
-        launch_new_db                = false
         isolate                      = false
+        launch_new_db                = false
         cname_point_to_new_instance  = false
+        new_db_deletion_protection   = false
       }
 
       collections_publisher = {
@@ -299,9 +300,10 @@ module "variable-set-rds-staging" {
         project                      = "GOV.UK - Publishing"
         encryption_at_rest           = false
         prepare_to_launch_new_db     = false
-        launch_new_db                = false
         isolate                      = false
+        launch_new_db                = false
         cname_point_to_new_instance  = false
+        new_db_deletion_protection   = false
       }
 
       content_data_api = {
@@ -474,9 +476,10 @@ module "variable-set-rds-staging" {
         maintenance_window           = "Mon:00:00-Mon:01:00"
         encryption_at_rest           = false
         prepare_to_launch_new_db     = false
-        launch_new_db                = false
         isolate                      = false
+        launch_new_db                = false
         cname_point_to_new_instance  = false
+        new_db_deletion_protection   = false
       }
 
       local_links_manager = {
@@ -613,9 +616,10 @@ module "variable-set-rds-staging" {
         project                      = "GOV.UK - Infrastructure"
         encryption_at_rest           = false
         prepare_to_launch_new_db     = false
-        launch_new_db                = false
         isolate                      = false
+        launch_new_db                = false
         cname_point_to_new_instance  = false
+        new_db_deletion_protection   = false
       }
 
       search_admin = {
@@ -632,9 +636,10 @@ module "variable-set-rds-staging" {
         project                      = "GOV.UK - Search"
         encryption_at_rest           = false
         prepare_to_launch_new_db     = false
-        launch_new_db                = false
         isolate                      = false
+        launch_new_db                = false
         cname_point_to_new_instance  = false
+        new_db_deletion_protection   = false
       }
 
       service_manual_publisher = {
@@ -654,9 +659,10 @@ module "variable-set-rds-staging" {
         project                      = "GOV.UK - Publishing"
         encryption_at_rest           = false
         prepare_to_launch_new_db     = false
-        launch_new_db                = false
         isolate                      = false
+        launch_new_db                = false
         cname_point_to_new_instance  = false
+        new_db_deletion_protection   = false
       }
 
       signon = {
