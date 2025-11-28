@@ -232,7 +232,7 @@ module "variable-set-rds-production" {
 
       ckan = {
         engine         = "postgres"
-        engine_version = "14.18"
+        engine_version = "14.19"
         engine_params = {
           log_min_duration_statement = { value = 10000 }
           log_statement              = { value = "all" }
@@ -305,7 +305,7 @@ module "variable-set-rds-production" {
 
       content_data_admin = {
         engine         = "postgres"
-        engine_version = "14.18"
+        engine_version = "14.19"
         engine_params = {
           log_min_duration_statement = { value = 10000 }
           log_statement              = { value = "all" }
@@ -492,7 +492,7 @@ module "variable-set-rds-production" {
 
       link_checker_api = {
         engine         = "postgres"
-        engine_version = "14.18"
+        engine_version = "14.19"
         engine_params = {
           log_min_duration_statement = { value = 10000 }
           log_statement              = { value = "all" }
@@ -641,7 +641,7 @@ module "variable-set-rds-production" {
 
       release = {
         engine         = "mysql"
-        engine_version = "8.0"
+        engine_version = "8.0.43"
         engine_params = {
           max_allowed_packet = { value = 1073741824 }
         }
@@ -661,7 +661,7 @@ module "variable-set-rds-production" {
 
       search_admin = {
         engine         = "mysql"
-        engine_version = "8.0"
+        engine_version = "8.0.43"
         engine_params = {
           max_allowed_packet = { value = 1073741824 }
         }
@@ -681,7 +681,7 @@ module "variable-set-rds-production" {
 
       service_manual_publisher = {
         engine         = "postgres"
-        engine_version = "14.18"
+        engine_version = "14.19"
         engine_params = {
           log_min_duration_statement = { value = 10000 }
           log_statement              = { value = "all" }

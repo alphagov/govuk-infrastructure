@@ -216,7 +216,7 @@ module "variable-set-rds-staging" {
 
       ckan = {
         engine         = "postgres"
-        engine_version = "14.18"
+        engine_version = "14.19"
         engine_params = {
           log_min_duration_statement = { value = 10000 }
           log_statement              = { value = "all" }
@@ -225,6 +225,7 @@ module "variable-set-rds-staging" {
         }
         engine_params_family         = "postgres14"
         name                         = "ckan"
+        apply_immediately            = false
         allocated_storage            = 1000
         instance_class               = "db.m6g.large"
         performance_insights_enabled = true
@@ -285,7 +286,7 @@ module "variable-set-rds-staging" {
 
       content_data_admin = {
         engine         = "postgres"
-        engine_version = "14.18"
+        engine_version = "14.19"
         engine_params = {
           log_min_duration_statement = { value = 10000 }
           log_statement              = { value = "all" }
@@ -294,6 +295,7 @@ module "variable-set-rds-staging" {
         }
         engine_params_family         = "postgres14"
         name                         = "content-data-admin"
+        apply_immediately            = false
         allocated_storage            = 100
         instance_class               = "db.t4g.micro"
         performance_insights_enabled = false
@@ -460,7 +462,7 @@ module "variable-set-rds-staging" {
 
       link_checker_api = {
         engine         = "postgres"
-        engine_version = "14.18"
+        engine_version = "14.19"
         engine_params = {
           log_min_duration_statement = { value = 10000 }
           log_statement              = { value = "all" }
@@ -469,6 +471,7 @@ module "variable-set-rds-staging" {
         }
         engine_params_family         = "postgres14"
         name                         = "link-checker-api"
+        apply_immediately            = false
         allocated_storage            = 100
         instance_class               = "db.t4g.medium"
         performance_insights_enabled = false
@@ -604,12 +607,13 @@ module "variable-set-rds-staging" {
 
       release = {
         engine         = "mysql"
-        engine_version = "8.0"
+        engine_version = "8.0.43"
         engine_params = {
           max_allowed_packet = { value = 1073741824 }
         }
         engine_params_family         = "mysql8.0"
         name                         = "release"
+        apply_immediately            = false
         allocated_storage            = 100
         instance_class               = "db.t4g.micro"
         performance_insights_enabled = false
@@ -624,12 +628,13 @@ module "variable-set-rds-staging" {
 
       search_admin = {
         engine         = "mysql"
-        engine_version = "8.0"
+        engine_version = "8.0.43"
         engine_params = {
           max_allowed_packet = { value = 1073741824 }
         }
         engine_params_family         = "mysql8.0"
         name                         = "search-admin"
+        apply_immediately            = false
         allocated_storage            = 100
         instance_class               = "db.t4g.micro"
         performance_insights_enabled = false
@@ -644,7 +649,7 @@ module "variable-set-rds-staging" {
 
       service_manual_publisher = {
         engine         = "postgres"
-        engine_version = "14.18"
+        engine_version = "14.19"
         engine_params = {
           log_min_duration_statement = { value = 10000 }
           log_statement              = { value = "all" }
@@ -653,6 +658,7 @@ module "variable-set-rds-staging" {
         }
         engine_params_family         = "postgres14"
         name                         = "service-manual-publisher"
+        apply_immediately            = false
         allocated_storage            = 100
         instance_class               = "db.t4g.micro"
         performance_insights_enabled = false
