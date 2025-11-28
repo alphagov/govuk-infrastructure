@@ -266,6 +266,11 @@ resource "aws_db_instance" "replica" {
   replicate_source_db                   = aws_db_instance.instance[each.key].identifier
   performance_insights_enabled          = aws_db_instance.instance[each.key].performance_insights_enabled
   performance_insights_retention_period = aws_db_instance.instance[each.key].performance_insights_retention_period
+  engine_version                        = lookup(each.value, "replica_engine_version", aws_db_instance.instance[each.key].engine_version)
+  apply_immediately                     = lookup(each.value, "replica_apply_immediately", aws_db_instance.instance[each.key].apply_immediately)
+  auto_minor_version_upgrade            = aws_db_instance.instance[each.key].auto_minor_version_upgrade
+  backup_window                         = aws_db_instance.instance[each.key].backup_window
+  maintenance_window                    = aws_db_instance.instance[each.key].maintenance_window
 
   skip_final_snapshot = true
 
@@ -288,6 +293,11 @@ resource "aws_db_instance" "normalised_replica" {
   replicate_source_db                   = aws_db_instance.normalised_instance[each.key].identifier
   performance_insights_enabled          = aws_db_instance.normalised_instance[each.key].performance_insights_enabled
   performance_insights_retention_period = aws_db_instance.normalised_instance[each.key].performance_insights_retention_period
+  engine_version                        = lookup(each.value, "new_replica_engine_version", aws_db_instance.normalised_instance[each.key].engine_version)
+  apply_immediately                     = lookup(each.value, "new_replica_apply_immediately", aws_db_instance.normalised_instance[each.key].apply_immediately)
+  auto_minor_version_upgrade            = aws_db_instance.normalised_instance[each.key].auto_minor_version_upgrade
+  backup_window                         = aws_db_instance.normalised_instance[each.key].backup_window
+  maintenance_window                    = aws_db_instance.normalised_instance[each.key].maintenance_window
 
   skip_final_snapshot = true
 
