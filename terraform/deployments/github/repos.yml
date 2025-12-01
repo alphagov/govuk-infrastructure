@@ -205,8 +205,8 @@ repos:
     archived: true
     fork:
       enabled: true
-      source_owner: "alexbasista"
-      source_repo: "terraform-tfe-workspacer"
+      source_owner: "fastly"
+      source_repo: "fastly-exporter"
 
   feedback:
     can_be_deployed: true
@@ -594,8 +594,8 @@ repos:
     homepage_url: "https://alphagov.github.io/markdown-toolbar-element"
     fork:
       enabled: true
-      source_owner: "alexbasista"
-      source_repo: "terraform-tfe-workspacer"
+      source_owner: "github"
+      source_repo: "markdown-toolbar-element"
 
   miller-columns-element:
     archived: true
@@ -984,8 +984,8 @@ repos:
     archived: true
     fork:
       enabled: true
-      source_owner: "alexbasista"
-      source_repo: "terraform-tfe-workspacer"
+      source_owner: "emmabeynon"
+      source_repo: "github-trello-poster"
 
   ckan-mock-harvest-sources: {}
   govuk-pact-broker: {}
