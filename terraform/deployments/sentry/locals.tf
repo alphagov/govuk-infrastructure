@@ -20,6 +20,7 @@ locals {
     "email-alert-api",
     "email-alert-frontend",
     "email-alert-service",
+    "fact-check-manager",
     "feedback",
     "finder-frontend",
     "frontend",
