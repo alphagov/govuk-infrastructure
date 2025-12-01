@@ -1,20 +1,14 @@
-
 import {
-  to = github_repository.govuk_repos["fastly-exporter"]
-  id = "fastly-exporter"
+  to = github_branch_protection.govuk_repos["fastly-exporter"]
+  id = "fastly-exporter:main"
 }
 
 import {
-  to = github_repository.govuk_repos["github-trello-poster"]
-  id = "github-trello-poster"
+  to = github_branch_protection.govuk_repos["github-trello-poster"]
+  id = "github-trello-poster:main"
 }
 
 import {
-  to = github_repository.govuk_repos["markdown-toolbar-element"]
-  id = "markdown-toolbar-element"
-}
-
-import {
-  to = github_repository.govuk_repos["terraform-govuk-tfe-workspacer"]
-  id = "terraform-govuk-tfe-workspacer"
+  to = github_branch_protection.govuk_repos["markdown-toolbar-element"]
+  id = "markdown-toolbar-element:main"
 }
