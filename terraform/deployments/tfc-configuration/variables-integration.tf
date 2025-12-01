@@ -610,7 +610,7 @@ module "variable-set-rds-integration" {
         isolate                      = false
         launch_new_db                = true
         cname_point_to_new_instance  = false
-        new_db_deletion_protection   = true
+        new_db_deletion_protection   = false
       }
 
       search_admin = {
