@@ -606,9 +606,10 @@ module "variable-set-rds-integration" {
         backup_window                = "08:00-08:30"
         auto_minor_version_upgrade   = false
         prepare_to_launch_new_db     = false
-        isolate                      = true
+        isolate_new_db               = true
+        isolate                      = false
         launch_new_db                = true
-        cname_point_to_new_instance  = true
+        cname_point_to_new_instance  = false
         new_db_deletion_protection   = true
       }
 
