@@ -5,8 +5,9 @@ set -euo pipefail
 source ./db-maintenance-lists.sh
 
 # Change GOVUK_ENVIRONMENT and the DBS assignment on line 66 to choose which databases to reboot
-GOVUK_ENVIRONMENT="staging"
-DBS=("${BIG_20_DBS[@]}")
+GOVUK_ENVIRONMENT="integration"
+# DBS=("${BIG_20_DBS[@]}")
+DBS=("release-mysql")
 
 function usage {
   echo
