@@ -38,6 +38,24 @@
               "description": "If omitted, defaults to true",
               "type": "boolean" 
             },
+            "fork": {
+              "description": "Describes whether the repository is a fork.",
+              "type": "object",
+              "properties": {
+                "enabled": {
+                  "description": "Describes whether the repository is a fork. If omitted, defaults to false",
+                  "type": "boolean"
+                },
+                "source_owner": {
+                  "description": "Describes the source owner of the fork.",
+                  "type": "string"
+                },
+                "source_repo": {
+                  "description": "Describes the source repository of the fork.",
+                  "type": "string"
+                }
+              }
+            },
             "need_production_access_to_merge": { 
               "description": "If omitted, defaults to true",
               "type": "boolean" 

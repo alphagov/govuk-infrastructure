@@ -179,6 +179,10 @@ resource "github_repository" "govuk_repos" {
   visibility = try(each.value.visibility, "public")
   topics     = try(each.value.archived, false) ? null : try(each.value.topics, ["govuk"])
 
+  fork         = try(each.value.fork.enabled, false)
+  source_owner = try(each.value.fork.source_owner, null)
+  source_repo  = try(each.value.fork.source_repo, null)
+
   allow_squash_merge = true
   allow_merge_commit = true
 
@@ -227,6 +231,14 @@ resource "github_repository" "govuk_repos" {
         try(length(data.github_repository.govuk[format("alphagov/%s", each.key)].pages), 0) == 0
       )
       error_message = "You cannot archive a Repo with an active GitHub Pages Configuration. Remove this first."
+    }
+
+    precondition {
+      condition = (
+        !try(each.value.fork.enabled, false) ||
+        (try(each.value.fork.source_owner, "") != "" && try(each.value.fork.source_repo, "") != "")
+      )
+      error_message = "You cannot set a repository as a fork with no source owner or source repository defined."
     }
   }
 }

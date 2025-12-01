@@ -203,6 +203,10 @@ repos:
 
   fastly-exporter:
     archived: true
+    fork:
+      enabled: true
+      source_owner: "alexbasista"
+      source_repo: "terraform-tfe-workspacer"
 
   feedback:
     can_be_deployed: true
@@ -413,6 +417,10 @@ repos:
 
   terraform-govuk-tfe-workspacer:
     up_to_date_branches: true
+    fork:
+      enabled: true
+      source_owner: "alexbasista"
+      source_repo: "terraform-tfe-workspacer"
 
   govuk-reports-prototype:
     need_production_access_to_merge: false
@@ -584,6 +592,10 @@ repos:
   markdown-toolbar-element:
     archived: true
     homepage_url: "https://alphagov.github.io/markdown-toolbar-element"
+    fork:
+      enabled: true
+      source_owner: "alexbasista"
+      source_repo: "terraform-tfe-workspacer"
 
   miller-columns-element:
     archived: true
@@ -970,6 +982,10 @@ repos:
 
   github-trello-poster:
     archived: true
+    fork:
+      enabled: true
+      source_owner: "alexbasista"
+      source_repo: "terraform-tfe-workspacer"
 
   ckan-mock-harvest-sources: {}
   govuk-pact-broker: {}
