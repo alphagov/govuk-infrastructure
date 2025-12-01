@@ -419,6 +419,30 @@ module "variable-set-rds-integration" {
         new_db_deletion_protection   = true
       }
 
+      fact_check_manager = {
+        engine                      = "postgres"
+        engine_version              = "17"
+        allow_major_version_upgrade = true
+        engine_params = {
+          log_min_duration_statement = { value = 10000 }
+          log_statement              = { value = "all" }
+          deadlock_timeout           = { value = 2500 }
+          log_lock_waits             = { value = 1 }
+        }
+        engine_params_family         = "postgres17"
+        name                         = "fact-check-manager"
+        allocated_storage            = 100
+        instance_class               = "db.t4g.small"
+        performance_insights_enabled = true
+        project                      = "GOV.UK - Publishing"
+        encryption_at_rest           = false
+        prepare_to_launch_new_db     = true
+        launch_new_db                = true
+        isolate                      = true
+        cname_point_to_new_instance  = true
+        new_db_deletion_protection   = true
+      }
+
       imminence = {
         engine         = "postgres"
         engine_version = "14"
