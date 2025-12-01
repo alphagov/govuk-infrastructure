@@ -43,7 +43,7 @@ provider "github" {
 }
 
 data "github_repositories" "govuk" {
-  query = "topic:govuk org:alphagov archived:false"
+  query = "topic:govuk org:alphagov archived:false fork:true"
 
   lifecycle {
     postcondition {
