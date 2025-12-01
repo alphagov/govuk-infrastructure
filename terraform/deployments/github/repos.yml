@@ -199,7 +199,7 @@ repos:
         - Lint JavaScript / Run Standardx
         - Lint SCSS / Run Stylelint
         - Test JavaScript / Run Jasmine
-        - Test Ruby / Run Minitest
+        - Test Ruby / Run RSpec
 
   fastly-exporter:
     archived: true
