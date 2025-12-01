@@ -1,6 +1,6 @@
 #!/bin/bash
 
-GOVUK_ENVIRONMENT="staging"
+GOVUK_ENVIRONMENT="production"
 
 # shellcheck disable=SC2034
 BIG_20_DBS=(
