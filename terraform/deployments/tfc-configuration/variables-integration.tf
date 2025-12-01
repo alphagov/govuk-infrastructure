@@ -608,7 +608,7 @@ module "variable-set-rds-integration" {
         prepare_to_launch_new_db     = false
         isolate                      = true
         launch_new_db                = true
-        cname_point_to_new_instance  = false
+        cname_point_to_new_instance  = true
         new_db_deletion_protection   = true
       }
 
