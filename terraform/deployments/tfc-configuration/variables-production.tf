@@ -174,8 +174,8 @@ module "variable-set-rds-production" {
         maintenance_window           = "Sat:00:00-Sat:02:00"
         auto_minor_version_upgrade   = false
         isolate                      = true
-        launch_new_db                = false
-        new_db_deletion_protection   = false
+        launch_new_db                = true
+        new_db_deletion_protection   = true
         cname_point_to_new_instance  = false
       }
 
@@ -201,8 +201,8 @@ module "variable-set-rds-production" {
         maintenance_window           = "Sat:00:00-Sat:02:00"
         auto_minor_version_upgrade   = false
         isolate                      = true
-        launch_new_db                = false
-        new_db_deletion_protection   = false
+        launch_new_db                = true
+        new_db_deletion_protection   = true
         cname_point_to_new_instance  = false
       }
 
@@ -273,8 +273,8 @@ module "variable-set-rds-production" {
         maintenance_window           = "Sat:00:00-Sat:02:00"
         auto_minor_version_upgrade   = false
         isolate                      = true
-        launch_new_db                = false
-        new_db_deletion_protection   = false
+        launch_new_db                = true
+        new_db_deletion_protection   = true
         cname_point_to_new_instance  = false
       }
 
@@ -300,8 +300,8 @@ module "variable-set-rds-production" {
         maintenance_window           = "Sat:00:00-Sat:02:00"
         auto_minor_version_upgrade   = false
         isolate                      = true
-        launch_new_db                = false
-        new_db_deletion_protection   = false
+        launch_new_db                = true
+        new_db_deletion_protection   = true
         cname_point_to_new_instance  = false
       }
 
@@ -357,8 +357,8 @@ module "variable-set-rds-production" {
         maintenance_window           = "Sat:00:00-Sat:02:00"
         auto_minor_version_upgrade   = false
         isolate                      = true
-        launch_new_db                = false
-        new_db_deletion_protection   = false
+        launch_new_db                = true
+        new_db_deletion_protection   = true
         cname_point_to_new_instance  = false
       }
 
@@ -383,8 +383,8 @@ module "variable-set-rds-production" {
         maintenance_window           = "Sat:00:00-Sat:02:00"
         auto_minor_version_upgrade   = false
         isolate                      = true
-        launch_new_db                = false
-        new_db_deletion_protection   = false
+        launch_new_db                = true
+        new_db_deletion_protection   = true
         cname_point_to_new_instance  = false
       }
 
@@ -409,8 +409,8 @@ module "variable-set-rds-production" {
         maintenance_window           = "Sat:00:00-Sat:02:00"
         auto_minor_version_upgrade   = false
         isolate                      = true
-        launch_new_db                = false
-        new_db_deletion_protection   = false
+        launch_new_db                = true
+        new_db_deletion_protection   = true
         cname_point_to_new_instance  = false
       }
 
@@ -435,8 +435,8 @@ module "variable-set-rds-production" {
         maintenance_window           = "Sat:00:00-Sat:02:00"
         auto_minor_version_upgrade   = false
         isolate                      = true
-        launch_new_db                = false
-        new_db_deletion_protection   = false
+        launch_new_db                = true
+        new_db_deletion_protection   = true
         cname_point_to_new_instance  = false
       }
 
@@ -461,8 +461,8 @@ module "variable-set-rds-production" {
         maintenance_window           = "Sat:00:00-Sat:02:00"
         auto_minor_version_upgrade   = false
         isolate                      = true
-        launch_new_db                = false
-        new_db_deletion_protection   = false
+        launch_new_db                = true
+        new_db_deletion_protection   = true
         cname_point_to_new_instance  = false
       }
 
@@ -489,8 +489,8 @@ module "variable-set-rds-production" {
         maintenance_window           = "Sat:00:00-Sat:02:00"
         auto_minor_version_upgrade   = false
         isolate                      = true
-        launch_new_db                = false
-        new_db_deletion_protection   = false
+        launch_new_db                = true
+        new_db_deletion_protection   = true
         cname_point_to_new_instance  = false
       }
 
@@ -541,8 +541,8 @@ module "variable-set-rds-production" {
         maintenance_window           = "Sat:00:00-Sat:02:00"
         auto_minor_version_upgrade   = false
         isolate                      = true
-        launch_new_db                = false
-        new_db_deletion_protection   = false
+        launch_new_db                = true
+        new_db_deletion_protection   = true
         cname_point_to_new_instance  = false
       }
 
@@ -567,8 +567,8 @@ module "variable-set-rds-production" {
         maintenance_window           = "Sat:00:00-Sat:02:00"
         auto_minor_version_upgrade   = false
         isolate                      = true
-        launch_new_db                = false
-        new_db_deletion_protection   = false
+        launch_new_db                = true
+        new_db_deletion_protection   = true
         cname_point_to_new_instance  = false
       }
 
@@ -614,8 +614,8 @@ module "variable-set-rds-production" {
         maintenance_window           = "Sat:00:00-Sat:02:00"
         auto_minor_version_upgrade   = false
         isolate                      = true
-        launch_new_db                = false
-        new_db_deletion_protection   = false
+        launch_new_db                = true
+        new_db_deletion_protection   = true
         cname_point_to_new_instance  = false
         launch_new_replica           = false
       }
@@ -642,8 +642,8 @@ module "variable-set-rds-production" {
         maintenance_window           = "Sat:00:00-Sat:02:00"
         auto_minor_version_upgrade   = false
         isolate                      = true
-        launch_new_db                = false
-        new_db_deletion_protection   = false
+        launch_new_db                = true
+        new_db_deletion_protection   = true
         cname_point_to_new_instance  = false
       }
 
@@ -734,8 +734,8 @@ module "variable-set-rds-production" {
         maintenance_window           = "Sat:00:00-Sat:02:00"
         auto_minor_version_upgrade   = false
         isolate                      = true
-        launch_new_db                = false
-        new_db_deletion_protection   = false
+        launch_new_db                = true
+        new_db_deletion_protection   = true
         cname_point_to_new_instance  = false
       }
 
@@ -760,8 +760,8 @@ module "variable-set-rds-production" {
         maintenance_window           = "Sat:00:00-Sat:02:00"
         auto_minor_version_upgrade   = false
         isolate                      = true
-        launch_new_db                = false
-        new_db_deletion_protection   = false
+        launch_new_db                = true
+        new_db_deletion_protection   = true
         cname_point_to_new_instance  = false
       }
 
@@ -786,8 +786,8 @@ module "variable-set-rds-production" {
         maintenance_window           = "Sat:00:00-Sat:02:00"
         auto_minor_version_upgrade   = false
         isolate                      = true
-        launch_new_db                = false
-        new_db_deletion_protection   = false
+        launch_new_db                = true
+        new_db_deletion_protection   = true
         cname_point_to_new_instance  = false
       }
 
@@ -811,8 +811,8 @@ module "variable-set-rds-production" {
         maintenance_window           = "Sat:00:00-Sat:02:00"
         auto_minor_version_upgrade   = false
         isolate                      = true
-        launch_new_db                = false
-        new_db_deletion_protection   = false
+        launch_new_db                = true
+        new_db_deletion_protection   = true
         cname_point_to_new_instance  = false
       }
     }
