@@ -607,9 +607,9 @@ module "variable-set-rds-integration" {
         auto_minor_version_upgrade   = false
         prepare_to_launch_new_db     = false
         isolate                      = true
-        launch_new_db                = false
+        launch_new_db                = true
         cname_point_to_new_instance  = false
-        new_db_deletion_protection   = false
+        new_db_deletion_protection   = true
       }
 
       search_admin = {
