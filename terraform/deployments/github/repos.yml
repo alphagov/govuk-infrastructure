@@ -330,6 +330,7 @@ repos:
 
   govuk-chat-gradio-user-research:
     visibility: private
+    archived: true
 
   govuk-content-api-docs:
     homepage_url: "https://content-api.publishing.service.gov.uk"
