@@ -330,14 +330,6 @@ repos:
 
   govuk-chat-gradio-user-research:
     visibility: private
-    homepage_url: "https://docs.publishing.service.gov.uk/repos/govuk-chat-gradio-user-research.html"
-    required_status_checks:
-      # standard security checks are disabled as not configured for a private repo
-      additional_contexts:
-        - Tests
-        - Lint
-        - Format
-        - Type checks
 
   govuk-content-api-docs:
     homepage_url: "https://content-api.publishing.service.gov.uk"
