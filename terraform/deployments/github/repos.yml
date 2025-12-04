@@ -376,10 +376,7 @@ repos:
     can_be_deployed: true
 
   govuk-exporter:
-    can_be_deployed: true
-    required_status_checks:
-      additional_contexts:
-        - Test Go
+    archived: true
 
   govuk-fastly:
     can_be_deployed: true
