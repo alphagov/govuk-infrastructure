@@ -936,3 +936,11 @@ module "variable-set-elasticsearch-green-production" {
     encryption_at_rest = true
   }
 }
+
+module "variable-set-gov-graph-production" {
+  source = "./variable-set"
+
+  name = "gov-graph-production"
+
+  tfvars = {}
+}
