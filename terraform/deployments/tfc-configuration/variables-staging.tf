@@ -898,3 +898,11 @@ module "variable-set-elasticsearch-green-staging" {
     encryption_at_rest = true
   }
 }
+
+module "variable-set-gov-graph-staging" {
+  source = "./variable-set"
+
+  name = "gov-graph-staging"
+
+  tfvars = {}
+}
