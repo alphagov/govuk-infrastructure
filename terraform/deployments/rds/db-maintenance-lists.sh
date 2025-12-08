@@ -1,6 +1,6 @@
 #!/bin/bash
 
-GOVUK_ENVIRONMENT="staging"
+GOVUK_ENVIRONMENT="integration"
 
 # shellcheck disable=SC2034
 BIG_20_DBS=(
@@ -57,6 +57,15 @@ LITTLE_7_DBS=(
 )
 
 # shellcheck disable=SC2034
+LITTLE_7_DBS_INTEGRATION=(
+  "ckan-postgres"
+  "content-data-admin-postgres"
+  "release-mysql"
+  "link-checker-api-postgres"
+  "service-manual-publisher-postgres"
+)
+
+# shellcheck disable=SC2034
 LITTLE_7_DBS_NEW_NAMES=(
   "ckan-${GOVUK_ENVIRONMENT}-postgres"
   "content-data-admin-${GOVUK_ENVIRONMENT}-postgres"
@@ -64,4 +73,13 @@ LITTLE_7_DBS_NEW_NAMES=(
   "search-admin-${GOVUK_ENVIRONMENT}-mysql"
   "link-checker-api-${GOVUK_ENVIRONMENT}-postgres"
   "service-manual-publisher-${GOVUK_ENVIRONMENT}-postgres"  
+)
+
+# shellcheck disable=SC2034
+LITTLE_7_DBS_INTEGRATION_NEW_NAMES=(
+  "ckan-${GOVUK_ENVIRONMENT}-postgres"
+  "content-data-admin-${GOVUK_ENVIRONMENT}-postgres"
+  "release-${GOVUK_ENVIRONMENT}-mysql"
+  "link-checker-api-${GOVUK_ENVIRONMENT}-postgres"
+  "service-manual-publisher-${GOVUK_ENVIRONMENT}-postgres"
 )

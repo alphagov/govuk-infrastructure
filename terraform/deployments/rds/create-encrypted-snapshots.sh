@@ -11,8 +11,7 @@ fi
 source ./db-maintenance-lists.sh
 
 GOVUK_ENVIRONMENT="integration"
-# DBS=("${BIG_20_DBS[@]}")
-DBS=("release-mysql")
+DBS=("${LITTLE_7_DBS_INTEGRATION[@]}")
 
 export KMS_KEY="alias/govuk/rds"
 
