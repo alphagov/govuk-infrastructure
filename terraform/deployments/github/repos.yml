@@ -332,6 +332,8 @@ repos:
     visibility: private
     archived: true
 
+  govuk-chat-opensearch: {}
+
   govuk-content-api-docs:
     homepage_url: "https://content-api.publishing.service.gov.uk"
     need_production_access_to_merge: false
