@@ -28,7 +28,7 @@ resource "aws_db_parameter_group" "engine_params" {
   for_each = var.databases
 
   name_prefix = "${var.govuk_environment}-${each.value.name}-${each.value.engine}-"
-  family      = merge({ engine_params_family = "${each.value.engine}${each.value.engine_version}" }, each.value)["engine_params_family"]
+  family      = each.value.engine_params_family != null ? each.value.engine_params_family : "${each.value.engine}${each.value.engine_version}"
 
   dynamic "parameter" {
     for_each = each.value.engine_params
@@ -36,12 +36,11 @@ resource "aws_db_parameter_group" "engine_params" {
     content {
       name         = parameter.key
       value        = parameter.value.value
-      apply_method = merge({ apply_method = "immediate" }, parameter.value)["apply_method"]
+      apply_method = parameter.value.apply_method
     }
   }
 
   lifecycle { create_before_destroy = true }
-
 }
 
 # this resource has no `var.govuk_environment` prefix in
@@ -50,7 +49,7 @@ resource "aws_db_instance" "instance" {
   for_each = var.databases
 
   # If snapshot_identifier is set when the instance is created, it will be restored from this snapshot
-  snapshot_identifier         = try(each.value.snapshot_identifier, null)
+  snapshot_identifier         = each.value.snapshot_identifier
   engine                      = each.value.engine
   engine_version              = each.value.engine_version
   username                    = var.database_admin_username
@@ -60,24 +59,24 @@ resource "aws_db_instance" "instance" {
   db_subnet_group_name        = aws_db_subnet_group.subnet_group.name
   multi_az                    = var.multi_az
   parameter_group_name        = aws_db_parameter_group.engine_params[each.key].name
-  maintenance_window          = lookup(each.value, "maintenance_window", var.maintenance_window)
-  backup_retention_period     = lookup(each.value, "backup_retention_period", var.backup_retention_period)
-  backup_window               = lookup(each.value, "backup_window", var.backup_window)
+  maintenance_window          = each.value.maintenance_window != null ? each.value.maintenance_window : var.maintenance_window
+  backup_retention_period     = each.value.backup_retention_period != null ? each.value.backup_retention_period : var.backup_retention_period
+  backup_window               = each.value.backup_window != null ? each.value.backup_window : var.backup_window
   copy_tags_to_snapshot       = true
   monitoring_interval         = 60
   monitoring_role_arn         = data.tfe_outputs.logging.nonsensitive_values.rds_enhanced_monitoring_role_arn
   vpc_security_group_ids      = [aws_security_group.rds[each.key].id]
   ca_cert_identifier          = "rds-ca-rsa2048-g1"
-  apply_immediately           = lookup(each.value, "apply_immediately", var.govuk_environment != "production")
-  allow_major_version_upgrade = lookup(each.value, "allow_major_version_upgrade", false)
-  auto_minor_version_upgrade  = lookup(each.value, "auto_minor_version_upgrade", true)
+  apply_immediately           = each.value.apply_immediately != null ? each.value.apply_immediately : var.govuk_environment != "production"
+  allow_major_version_upgrade = each.value.allow_major_version_upgrade
+  auto_minor_version_upgrade  = each.value.auto_minor_version_upgrade
 
   performance_insights_enabled          = each.value.performance_insights_enabled
   performance_insights_retention_period = each.value.performance_insights_enabled ? 7 : 0
 
   allocated_storage  = each.value.allocated_storage
-  iops               = try(each.value.iops, null)
-  storage_throughput = try(each.value.storage_throughput, null)
+  iops               = each.value.iops
+  storage_throughput = each.value.storage_throughput
   storage_type       = "gp3"
 
   timeouts {
@@ -86,20 +85,23 @@ resource "aws_db_instance" "instance" {
     update = var.terraform_update_rds_timeout
   }
 
-  deletion_protection       = try(each.value.deletion_protection, true)
+  deletion_protection       = each.value.deletion_protection
   final_snapshot_identifier = "${each.value.name}-final-snapshot"
   skip_final_snapshot       = var.skip_final_snapshot
 
-  storage_encrypted = try(each.value.encryption_at_rest, true)
-  kms_key_id        = try(each.value.encryption_at_rest, true) ? aws_kms_key.rds.arn : null
+  storage_encrypted = each.value.encryption_at_rest
+  kms_key_id        = each.value.encryption_at_rest ? aws_kms_key.rds.arn : null
 
-  tags = { Name = "govuk-rds-${each.value.name}-${each.value.engine}", project = lookup(each.value, "project", "GOV.UK - Other") }
+  tags = {
+    Name    = "govuk-rds-${each.value.name}-${each.value.engine}",
+    project = each.value.project
+  }
 }
 
 resource "aws_db_snapshot" "unencrypted_snapshot" {
   for_each = {
     for db_name, db in var.databases : db_name => db
-    if lookup(db, "prepare_to_launch_new_db", false)
+    if db.prepare_to_launch_new_db
   }
 
   # This is purposefully not using the actual terraform resource to ensure it doesn't get destroyed if the
@@ -115,7 +117,7 @@ resource "aws_db_snapshot" "unencrypted_snapshot" {
 resource "aws_db_snapshot_copy" "encrypted_snapshot" {
   for_each = {
     for db_name, db in var.databases : db_name => db
-    if lookup(db, "prepare_to_launch_new_db", false)
+    if db.prepare_to_launch_new_db
   }
 
   source_db_snapshot_identifier = aws_db_snapshot.unencrypted_snapshot[each.key].db_snapshot_arn
@@ -130,7 +132,7 @@ resource "aws_db_snapshot_copy" "encrypted_snapshot" {
 resource "aws_db_instance" "normalised_instance" {
   for_each = {
     for db_name, db in var.databases : db_name => db
-    if lookup(db, "launch_new_db", false)
+    if db.launch_new_db
   }
 
   // This is purposefully not referencing the resource so that we can create snapshots outside of terraform and use them to launch
@@ -141,28 +143,28 @@ resource "aws_db_instance" "normalised_instance" {
   username                    = var.database_admin_username
   password                    = random_string.database_password[each.key].result
   instance_class              = each.value.instance_class
-  identifier                  = "${local.identifier_prefix}${lookup(each.value, "new_name", each.value.name)}-${var.govuk_environment}-${each.value.engine}"
+  identifier                  = "${local.identifier_prefix}${each.value.new_name != null ? each.value.new_name : each.value.name}-${var.govuk_environment}-${each.value.engine}"
   db_subnet_group_name        = aws_db_subnet_group.subnet_group.name
   multi_az                    = var.multi_az
   parameter_group_name        = aws_db_parameter_group.engine_params[each.key].name
-  maintenance_window          = lookup(each.value, "maintenance_window", var.maintenance_window)
-  backup_retention_period     = lookup(each.value, "backup_retention_period", var.backup_retention_period)
-  backup_window               = lookup(each.value, "backup_window", var.backup_window)
+  maintenance_window          = each.value.maintenance_window != null ? each.value.maintenance_window : var.maintenance_window
+  backup_retention_period     = each.value.backup_retention_period != null ? each.value.backup_retention_period : var.backup_retention_period
+  backup_window               = each.value.backup_window != null ? each.value.backup_window : var.backup_window
   copy_tags_to_snapshot       = true
   monitoring_interval         = 60
   monitoring_role_arn         = data.tfe_outputs.logging.nonsensitive_values.rds_enhanced_monitoring_role_arn
   vpc_security_group_ids      = [aws_security_group.normalised_rds[each.key].id]
   ca_cert_identifier          = "rds-ca-rsa2048-g1"
-  apply_immediately           = lookup(each.value, "apply_immediately", var.govuk_environment != "production")
-  allow_major_version_upgrade = lookup(each.value, "allow_major_version_upgrade", false)
-  auto_minor_version_upgrade  = lookup(each.value, "auto_minor_version_upgrade", true)
+  apply_immediately           = each.value.apply_immediately != null ? each.value.apply_immediately : var.govuk_environment != "production"
+  allow_major_version_upgrade = each.value.allow_major_version_upgrade
+  auto_minor_version_upgrade  = each.value.auto_minor_version_upgrade
 
   performance_insights_enabled          = each.value.performance_insights_enabled
   performance_insights_retention_period = each.value.performance_insights_enabled ? 7 : 0
 
   allocated_storage  = each.value.allocated_storage
-  iops               = try(each.value.iops, null)
-  storage_throughput = try(each.value.storage_throughput, null)
+  iops               = each.value.iops
+  storage_throughput = each.value.storage_throughput
   storage_type       = "gp3"
 
   timeouts {
@@ -171,8 +173,8 @@ resource "aws_db_instance" "normalised_instance" {
     update = var.terraform_update_rds_timeout
   }
 
-  deletion_protection       = lookup(each.value, "new_db_deletion_protection", true)
-  final_snapshot_identifier = "${lookup(each.value, "new_name", each.value.name)}-${var.govuk_environment}-${each.value.engine}-final-snapshot"
+  deletion_protection       = each.value.new_db_deletion_protection
+  final_snapshot_identifier = "${each.value.new_name != null ? each.value.new_name : each.value.name}-${var.govuk_environment}-${each.value.engine}-final-snapshot"
   skip_final_snapshot       = var.skip_final_snapshot
 
   storage_encrypted = true
@@ -180,7 +182,7 @@ resource "aws_db_instance" "normalised_instance" {
 
   tags = {
     Name    = "govuk-rds-${local.identifier_prefix}${each.value.name}-${var.govuk_environment}-${each.value.engine}",
-    project = lookup(each.value, "project", "GOV.UK - Other"),
+    project = each.value.project,
   }
 }
 
@@ -209,11 +211,11 @@ resource "aws_cloudwatch_metric_alarm" "rds_freestoragespace" {
   period              = "60"
   statistic           = "Minimum"
   threshold = (
-    each.value.allocated_storage * (tonumber(lookup(each.value, "storage_alarm_threshold_percentage", 10)) / 100)
+    each.value.allocated_storage * (each.value.storage_alarm_threshold_percentage / 100)
     * 1024 * 1024 * 1024 # allocated_storage is in GB, metric value is in bytes
   )
   alarm_actions     = [aws_sns_topic.rds_alerts.arn]
-  alarm_description = "Available storage space on ${aws_db_instance.instance[each.key].identifier} RDS is below ${lookup(each.value, "storage_alarm_threshold_percentage", 10)}%."
+  alarm_description = "Available storage space on ${aws_db_instance.instance[each.key].identifier} RDS is below ${each.value.storage_alarm_threshold_percentage}%."
 }
 
 
@@ -221,7 +223,7 @@ resource "aws_cloudwatch_metric_alarm" "rds_freestoragespace" {
 resource "aws_cloudwatch_metric_alarm" "normalised_rds_freestoragespace" {
   for_each = {
     for db_name, db in var.databases : db_name => db
-    if lookup(db, "launch_new_db", false)
+    if db.launch_new_db
   }
   dimensions = { DBInstanceIdentifier = aws_db_instance.normalised_instance[each.key].identifier }
 
@@ -233,11 +235,11 @@ resource "aws_cloudwatch_metric_alarm" "normalised_rds_freestoragespace" {
   period              = "60"
   statistic           = "Minimum"
   threshold = (
-    each.value.allocated_storage * (tonumber(lookup(each.value, "storage_alarm_threshold_percentage", 10)) / 100)
+    each.value.allocated_storage * (each.value.storage_alarm_threshold_percentage / 100)
     * 1024 * 1024 * 1024 # allocated_storage is in GB, metric value is in bytes
   )
   alarm_actions     = [aws_sns_topic.rds_alerts.arn]
-  alarm_description = "Available storage space on ${aws_db_instance.normalised_instance[each.key].identifier} RDS is below ${lookup(each.value, "storage_alarm_threshold_percentage", 10)}%."
+  alarm_description = "Available storage space on ${aws_db_instance.normalised_instance[each.key].identifier} RDS is below ${each.value.storage_alarm_threshold_percentage}%."
 }
 
 resource "aws_route53_record" "instance_cname" {
@@ -249,7 +251,7 @@ resource "aws_route53_record" "instance_cname" {
   type    = "CNAME"
   ttl     = 30
   records = [
-    lookup(each.value, "cname_point_to_new_instance", false) && lookup(each.value, "launch_new_db", false) ?
+    each.value.cname_point_to_new_instance && each.value.launch_new_db ?
     aws_db_instance.normalised_instance[each.key].address :
     aws_db_instance.instance[each.key].address
   ]
@@ -258,7 +260,7 @@ resource "aws_route53_record" "instance_cname" {
 resource "aws_db_instance" "replica" {
   for_each = {
     for key, value in var.databases : key => value
-    if lookup(value, "has_read_replica", false)
+    if value.has_read_replica
   }
 
   instance_class                        = each.value.instance_class
@@ -266,15 +268,26 @@ resource "aws_db_instance" "replica" {
   replicate_source_db                   = aws_db_instance.instance[each.key].identifier
   performance_insights_enabled          = aws_db_instance.instance[each.key].performance_insights_enabled
   performance_insights_retention_period = aws_db_instance.instance[each.key].performance_insights_retention_period
-  engine_version                        = lookup(each.value, "replica_engine_version", aws_db_instance.instance[each.key].engine_version)
-  apply_immediately                     = lookup(each.value, "replica_apply_immediately", aws_db_instance.instance[each.key].apply_immediately)
-  auto_minor_version_upgrade            = aws_db_instance.instance[each.key].auto_minor_version_upgrade
-  backup_window                         = aws_db_instance.instance[each.key].backup_window
-  maintenance_window                    = aws_db_instance.instance[each.key].maintenance_window
+  engine_version = (
+    each.value.replica_engine_version != null
+    ? each.value.replica_engine_version
+    : aws_db_instance.instance[each.key].engine_version
+  )
+  apply_immediately = (
+    each.value.replica_apply_immediately != null
+    ? each.value.replica_apply_immediately
+    : aws_db_instance.instance[each.key].apply_immediately
+  )
+  auto_minor_version_upgrade = aws_db_instance.instance[each.key].auto_minor_version_upgrade
+  backup_window              = aws_db_instance.instance[each.key].backup_window
+  maintenance_window         = aws_db_instance.instance[each.key].maintenance_window
 
   skip_final_snapshot = true
 
-  tags = { Name = "govuk-rds-${each.value.name}-${each.value.engine}-replica", project = lookup(each.value, "project", "GOV.UK - Other") }
+  tags = {
+    Name    = "govuk-rds-${each.value.name}-${each.value.engine}-replica",
+    project = each.value.project
+  }
 
   lifecycle {
     ignore_changes = [identifier]
@@ -284,7 +297,7 @@ resource "aws_db_instance" "replica" {
 resource "aws_db_instance" "normalised_replica" {
   for_each = {
     for key, value in var.databases : key => value
-    if lookup(value, "has_read_replica", false) && lookup(value, "launch_new_db", false) && lookup(value, "launch_new_replica", false)
+    if value.has_read_replica && value.launch_new_db && value.launch_new_replica
   }
 
   instance_class = each.value.instance_class
@@ -293,17 +306,26 @@ resource "aws_db_instance" "normalised_replica" {
   replicate_source_db                   = aws_db_instance.normalised_instance[each.key].identifier
   performance_insights_enabled          = aws_db_instance.normalised_instance[each.key].performance_insights_enabled
   performance_insights_retention_period = aws_db_instance.normalised_instance[each.key].performance_insights_retention_period
-  engine_version                        = lookup(each.value, "new_replica_engine_version", aws_db_instance.normalised_instance[each.key].engine_version)
-  apply_immediately                     = lookup(each.value, "new_replica_apply_immediately", aws_db_instance.normalised_instance[each.key].apply_immediately)
-  auto_minor_version_upgrade            = aws_db_instance.normalised_instance[each.key].auto_minor_version_upgrade
-  backup_window                         = aws_db_instance.normalised_instance[each.key].backup_window
-  maintenance_window                    = aws_db_instance.normalised_instance[each.key].maintenance_window
+
+  engine_version = (
+    each.value.new_replica_engine_version != null
+    ? each.value.new_replica_engine_version
+    : aws_db_instance.normalised_instance[each.key].engine_version
+  )
+  apply_immediately = (
+    each.value.new_replica_apply_immediately != null
+    ? each.value.new_replica_apply_immediately
+    : aws_db_instance.normalised_instance[each.key].apply_immediately
+  )
+  auto_minor_version_upgrade = aws_db_instance.normalised_instance[each.key].auto_minor_version_upgrade
+  backup_window              = aws_db_instance.normalised_instance[each.key].backup_window
+  maintenance_window         = aws_db_instance.normalised_instance[each.key].maintenance_window
 
   skip_final_snapshot = true
 
   tags = {
     Name    = "govuk-rds-${aws_db_instance.normalised_instance[each.key].identifier}-replica",
-    project = lookup(each.value, "project", "GOV.UK - Other"),
+    project = each.value.project,
   }
 
   storage_encrypted = true
@@ -313,7 +335,7 @@ resource "aws_db_instance" "normalised_replica" {
 resource "aws_route53_record" "replica_cname" {
   for_each = {
     for key, value in var.databases : key => value
-    if lookup(value, "has_read_replica", false) == true
+    if value.has_read_replica
   }
 
   # Zone is <environment>.govuk-internal.digital.
@@ -322,11 +344,9 @@ resource "aws_route53_record" "replica_cname" {
   type    = "CNAME"
   ttl     = 30
   records = [
-    lookup(each.value, "cname_point_to_new_instance", false) &&
-    lookup(each.value, "launch_new_db", false) &&
-    lookup(each.value, "launch_new_replica", false) ?
-    aws_db_instance.normalised_replica[each.key].address :
-    aws_db_instance.replica[each.key].address
+    each.value.cname_point_to_new_instance && each.value.launch_new_db && each.value.launch_new_replica
+    ? aws_db_instance.normalised_replica[each.key].address
+    : aws_db_instance.replica[each.key].address
   ]
 }
 

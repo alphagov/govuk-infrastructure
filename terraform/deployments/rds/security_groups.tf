@@ -11,7 +11,7 @@ resource "aws_security_group" "rds" {
 resource "aws_security_group_rule" "mysql" {
   for_each = {
     for name, data in var.databases : name => data
-    if data.engine == "mysql" && !try(data.isolate, false)
+    if data.engine == "mysql" && !data.isolate
   }
   security_group_id = aws_security_group.rds[each.key].id
   description       = "Access to MySQL database from EKS worker nodes"
@@ -27,7 +27,7 @@ resource "aws_security_group_rule" "mysql" {
 resource "aws_security_group_rule" "postgres" {
   for_each = {
     for name, data in var.databases : name => data
-    if data.engine == "postgres" && !try(data.isolate, false)
+    if data.engine == "postgres" && !data.isolate
   }
   security_group_id = aws_security_group.rds[each.key].id
   description       = "Access to PostgreSQL database from EKS worker nodes"
@@ -44,10 +44,10 @@ resource "aws_security_group_rule" "postgres" {
 resource "aws_security_group" "normalised_rds" {
   for_each = {
     for db_name, db in var.databases : db_name => db
-    if lookup(db, "launch_new_db", false)
+    if db.launch_new_db
   }
 
-  name        = "${local.identifier_prefix}${lookup(each.value, "new_name", each.value.name)}-${var.govuk_environment}-${each.value.engine}-rds-access"
+  name        = "${local.identifier_prefix}${each.value.new_name != null ? each.value.new_name : each.value.name}-${var.govuk_environment}-${each.value.engine}-rds-access"
   vpc_id      = data.tfe_outputs.vpc.nonsensitive_values.id
   description = "Access to ${each.value.name} RDS"
 
@@ -57,9 +57,7 @@ resource "aws_security_group" "normalised_rds" {
 resource "aws_security_group_rule" "normalised_rds_mysql" {
   for_each = {
     for db_name, db in var.databases : db_name => db
-    if lookup(db, "launch_new_db", false) &&
-    db.engine == "mysql" &&
-    !lookup(db, "isolate_new_db", false)
+    if db.launch_new_db && db.engine == "mysql" && !db.isolate_new_db
   }
 
   security_group_id = aws_security_group.normalised_rds[each.key].id
@@ -76,9 +74,7 @@ resource "aws_security_group_rule" "normalised_rds_mysql" {
 resource "aws_security_group_rule" "normalised_rds_postgres" {
   for_each = {
     for db_name, db in var.databases : db_name => db
-    if lookup(db, "launch_new_db", false) &&
-    db.engine == "postgres" &&
-    !lookup(db, "isolate_new_db", false)
+    if db.launch_new_db && db.engine == "postgres" && !db.isolate_new_db
   }
 
   security_group_id = aws_security_group.normalised_rds[each.key].id
