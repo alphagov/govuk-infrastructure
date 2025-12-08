@@ -1,5 +1,8 @@
 resource "aws_security_group" "rds" {
-  for_each = var.databases
+  for_each = {
+    for name, db in var.databases : name => db
+    if !db.destroy_old_instance
+  }
 
   name        = "${var.govuk_environment}-${each.value.name}-rds-access"
   vpc_id      = data.tfe_outputs.vpc.nonsensitive_values.id
@@ -11,7 +14,7 @@ resource "aws_security_group" "rds" {
 resource "aws_security_group_rule" "mysql" {
   for_each = {
     for name, data in var.databases : name => data
-    if data.engine == "mysql" && !data.isolate
+    if data.engine == "mysql" && !data.isolate && !data.destroy_old_instance
   }
   security_group_id = aws_security_group.rds[each.key].id
   description       = "Access to MySQL database from EKS worker nodes"
@@ -27,7 +30,7 @@ resource "aws_security_group_rule" "mysql" {
 resource "aws_security_group_rule" "postgres" {
   for_each = {
     for name, data in var.databases : name => data
-    if data.engine == "postgres" && !data.isolate
+    if data.engine == "postgres" && !data.isolate && !data.destroy_old_instance
   }
   security_group_id = aws_security_group.rds[each.key].id
   description       = "Access to PostgreSQL database from EKS worker nodes"

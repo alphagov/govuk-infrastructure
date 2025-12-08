@@ -46,7 +46,10 @@ resource "aws_db_parameter_group" "engine_params" {
 # this resource has no `var.govuk_environment` prefix in
 # integration, staging and production
 resource "aws_db_instance" "instance" {
-  for_each = var.databases
+  for_each = {
+    for name, db in var.databases : name => db
+    if !db.destroy_old_instance
+  }
 
   # If snapshot_identifier is set when the instance is created, it will be restored from this snapshot
   snapshot_identifier         = each.value.snapshot_identifier
@@ -137,7 +140,7 @@ resource "aws_db_instance" "normalised_instance" {
 
   // This is purposefully not referencing the resource so that we can create snapshots outside of terraform and use them to launch
   // this instance
-  snapshot_identifier         = "${local.identifier_prefix}${each.value.name}-${each.value.engine}-post-encryption"
+  snapshot_identifier         = each.value.launch_new_db_from_snapshot ? "${local.identifier_prefix}${each.value.name}-${each.value.engine}-post-encryption" : null
   engine                      = each.value.engine
   engine_version              = each.value.engine_version
   username                    = var.database_admin_username
@@ -200,7 +203,7 @@ resource "aws_db_event_subscription" "subscription" {
 
 # Alarm if free storage space is below threshold (typically 10 GiB) for 10m.
 resource "aws_cloudwatch_metric_alarm" "rds_freestoragespace" {
-  for_each   = var.databases
+  for_each   = { for name, db in var.databases : name => db if !db.destroy_old_instance }
   dimensions = { DBInstanceIdentifier = aws_db_instance.instance[each.key].identifier }
 
   alarm_name          = "${aws_db_instance.instance[each.key].identifier}-rds-freestoragespace"
@@ -247,20 +250,27 @@ resource "aws_route53_record" "instance_cname" {
 
   # Zone is <environment>.govuk-internal.digital.
   zone_id = data.tfe_outputs.root_dns.nonsensitive_values.internal_root_zone_id
-  name    = aws_db_instance.instance[each.key].identifier
-  type    = "CNAME"
-  ttl     = 30
+
+  // Right now the names are stuck as the old names. Hopefuilly we can change this soon
+  name = "${local.identifier_prefix}${each.value.name}-${each.value.engine}"
+  type = "CNAME"
+  ttl  = 30
   records = [
     each.value.cname_point_to_new_instance && each.value.launch_new_db ?
     aws_db_instance.normalised_instance[each.key].address :
     aws_db_instance.instance[each.key].address
+  ]
+
+  depends_on = [
+    aws_db_instance.instance,
+    aws_db_instance.normalised_instance,
   ]
 }
 
 resource "aws_db_instance" "replica" {
   for_each = {
     for key, value in var.databases : key => value
-    if value.has_read_replica
+    if value.has_read_replica && !value.destroy_old_instance
   }
 
   instance_class                        = each.value.instance_class
@@ -340,13 +350,27 @@ resource "aws_route53_record" "replica_cname" {
 
   # Zone is <environment>.govuk-internal.digital.
   zone_id = data.tfe_outputs.root_dns.nonsensitive_values.internal_root_zone_id
-  name    = aws_db_instance.replica[each.key].identifier
-  type    = "CNAME"
-  ttl     = 30
+
+  // Right now the names are stuck as the old names.
+  // I also hate that I'm setting the name based on which specific DB it is, but
+  // in the RDS cleanup we will be doing soon we can sort out these cnames to fix it all
+  name = (
+    each.key == "publishing_api"
+    ? "${local.identifier_prefix}${var.govuk_environment}-${each.value.name}-${each.value.engine}-replica"
+    : "${local.identifier_prefix}${each.value.name}-${each.value.engine}-replica"
+  )
+  type = "CNAME"
+  ttl  = 30
   records = [
     each.value.cname_point_to_new_instance && each.value.launch_new_db && each.value.launch_new_replica
     ? aws_db_instance.normalised_replica[each.key].address
     : aws_db_instance.replica[each.key].address
+  ]
+
+
+  depends_on = [
+    aws_db_instance.replica,
+    aws_db_instance.normalised_replica,
   ]
 }
 

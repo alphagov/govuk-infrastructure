@@ -54,10 +54,12 @@ variable "databases" {
     isolate                     = optional(bool, false)
     prepare_to_launch_new_db    = optional(bool, false)
     launch_new_db               = optional(bool, false)
+    launch_new_db_from_snapshot = optional(bool, true)
     new_db_deletion_protection  = optional(bool, true)
     isolate_new_db              = optional(bool, false)
     cname_point_to_new_instance = optional(bool, false)
     launch_new_replica          = optional(bool, false)
+    destroy_old_instance        = optional(bool, false)
 
     // It would be better if all replica related things where grouped into an object
     // but for now I want to be able to get a clean plan without changes to tfc-configuration
