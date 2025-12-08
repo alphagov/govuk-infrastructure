@@ -868,3 +868,11 @@ module "variable-set-elasticsearch-green-integration" {
     encryption_at_rest = true
   }
 }
+
+module "variable-set-gov-graph-dev" {
+  source = "./variable-set"
+
+  name = "gov-graph-dev"
+
+  tfvars = {}
+}
