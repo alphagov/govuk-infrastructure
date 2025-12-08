@@ -435,6 +435,7 @@ module "variable-set-rds-integration" {
         performance_insights_enabled = true
         project                      = "GOV.UK - Publishing"
         launch_new_db                = true
+        launch_new_db_from_snapshot  = false
         new_db_deletion_protection   = true
         cname_point_to_new_instance  = true
         destroy_old_instance         = true
