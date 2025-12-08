@@ -16,6 +16,69 @@ variable "govuk_aws_state_bucket" {
 
 variable "databases" {
   description = "Databases to create and their configuration."
+
+  type = map(object({
+    name                               = string
+    project                            = optional(string, "GOV.UK - Other")
+    instance_class                     = string
+    allocated_storage                  = number
+    iops                               = optional(number)
+    storage_throughput                 = optional(number)
+    storage_alarm_threshold_percentage = optional(number, 10)
+    deletion_protection                = optional(bool, true)
+    encryption_at_rest                 = optional(bool, true)
+    engine                             = string
+    engine_version                     = string
+    engine_params = map(object({
+      value        = any
+      apply_method = optional(string, "immediate")
+    }))
+    engine_params_family         = optional(string)
+    maintenance_window           = optional(string)
+    backup_window                = optional(string)
+    backup_retention_period      = optional(number)
+    new_name                     = optional(string)
+    snapshot_identifier          = optional(string)
+    apply_immediately            = optional(bool)
+    allow_major_version_upgrade  = optional(bool, false)
+    auto_minor_version_upgrade   = optional(bool, true)
+    performance_insights_enabled = bool
+
+    // It would be better if all replica related things where grouped into an object
+    // but for now I want to be able to get a clean plan without changes to tfc-configuration
+    has_read_replica          = optional(bool, false)
+    replica_engine_version    = optional(string)
+    replica_apply_immediately = optional(string)
+
+    // Attributes for migration
+    isolate                     = optional(bool, false)
+    prepare_to_launch_new_db    = optional(bool, false)
+    launch_new_db               = optional(bool, false)
+    new_db_deletion_protection  = optional(bool, true)
+    isolate_new_db              = optional(bool, false)
+    cname_point_to_new_instance = optional(bool, false)
+    launch_new_replica          = optional(bool, false)
+
+    // It would be better if all replica related things where grouped into an object
+    // but for now I want to be able to get a clean plan without changes to tfc-configuration
+    new_replica_engine_version    = optional(string)
+    new_replica_apply_immediately = optional(bool)
+  }))
+
+  validation {
+    condition = alltrue([
+      for database in var.databases : alltrue([
+        for engine_param in database.engine_params :
+        contains(["immediate", "pending-reboot"], engine_param.apply_method)
+      ])]
+    )
+    error_message = "The engine_params objects apply_method must be either 'immediate' or 'pending-reboot'"
+  }
+
+  validation {
+    condition     = alltrue([for database in var.databases : contains(["mysql", "postgres"], database.engine)])
+    error_message = "The engine must be one of mysql or postgres"
+  }
 }
 
 variable "database_admin_username" {
