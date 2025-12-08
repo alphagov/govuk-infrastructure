@@ -351,8 +351,14 @@ resource "aws_route53_record" "replica_cname" {
   # Zone is <environment>.govuk-internal.digital.
   zone_id = data.tfe_outputs.root_dns.nonsensitive_values.internal_root_zone_id
 
-  // Right now the names are stuck as the old names. Hopefuilly we can change this soon
-  name = "${local.identifier_prefix}${each.value.name}-${each.value.engine}-replica"
+  // Right now the names are stuck as the old names.
+  // I also hate that I'm setting the name based on which specific DB it is, but
+  // in the RDS cleanup we will be doing soon we can sort out these cnames to fix it all
+  name = (
+    each.key == "publishing_api"
+    ? "${local.identifier_prefix}${var.govuk_environment}-${each.value.name}-${each.value.engine}-replica"
+    : "${local.identifier_prefix}${each.value.name}-${each.value.engine}-replica"
+  )
   type = "CNAME"
   ttl  = 30
   records = [
