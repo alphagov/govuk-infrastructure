@@ -54,6 +54,7 @@ variable "databases" {
     isolate                     = optional(bool, false)
     prepare_to_launch_new_db    = optional(bool, false)
     launch_new_db               = optional(bool, false)
+    launch_new_db_from_snapshot = optional(bool, true)
     new_db_deletion_protection  = optional(bool, true)
     isolate_new_db              = optional(bool, false)
     cname_point_to_new_instance = optional(bool, false)

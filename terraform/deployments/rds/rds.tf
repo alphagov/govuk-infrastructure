@@ -140,7 +140,7 @@ resource "aws_db_instance" "normalised_instance" {
 
   // This is purposefully not referencing the resource so that we can create snapshots outside of terraform and use them to launch
   // this instance
-  snapshot_identifier         = "${local.identifier_prefix}${each.value.name}-${each.value.engine}-post-encryption"
+  snapshot_identifier         = each.value.launch_new_db_from_snapshot ? "${local.identifier_prefix}${each.value.name}-${each.value.engine}-post-encryption" : null
   engine                      = each.value.engine
   engine_version              = each.value.engine_version
   username                    = var.database_admin_username
