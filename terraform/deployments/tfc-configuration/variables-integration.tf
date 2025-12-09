@@ -633,6 +633,7 @@ module "variable-set-rds-integration" {
         new_db_deletion_protection   = true
         cname_point_to_new_instance  = true
         deletion_protection          = false
+        destroy_old_instance         = true
       }
 
       search_admin = {
