@@ -147,7 +147,7 @@ module "variable-set-rds-integration" {
         performance_insights_enabled = true
         project                      = "GOV.UK - Web"
         encryption_at_rest           = false
-        prepare_to_launch_new_db     = true
+        prepare_to_launch_new_db     = false
         launch_new_db                = true
         isolate                      = true
         cname_point_to_new_instance  = true
@@ -173,7 +173,7 @@ module "variable-set-rds-integration" {
         performance_insights_enabled = false
         project                      = "GOV.UK - Publishing"
         encryption_at_rest           = false
-        prepare_to_launch_new_db     = true
+        prepare_to_launch_new_db     = false
         launch_new_db                = true
         isolate                      = true
         cname_point_to_new_instance  = true
@@ -247,7 +247,7 @@ module "variable-set-rds-integration" {
         performance_insights_enabled = false
         project                      = "GOV.UK - Publishing"
         encryption_at_rest           = false
-        prepare_to_launch_new_db     = true
+        prepare_to_launch_new_db     = false
         launch_new_db                = true
         isolate                      = true
         cname_point_to_new_instance  = true
@@ -273,7 +273,7 @@ module "variable-set-rds-integration" {
         performance_insights_enabled = true
         project                      = "GOV.UK - Publishing"
         encryption_at_rest           = false
-        prepare_to_launch_new_db     = true
+        prepare_to_launch_new_db     = false
         launch_new_db                = true
         isolate                      = true
         cname_point_to_new_instance  = true
@@ -332,7 +332,7 @@ module "variable-set-rds-integration" {
         performance_insights_enabled = false
         project                      = "GOV.UK - Publishing"
         encryption_at_rest           = false
-        prepare_to_launch_new_db     = true
+        prepare_to_launch_new_db     = false
         launch_new_db                = true
         isolate                      = true
         cname_point_to_new_instance  = true
@@ -357,7 +357,7 @@ module "variable-set-rds-integration" {
         performance_insights_enabled = true
         project                      = "GOV.UK - Publishing"
         encryption_at_rest           = false
-        prepare_to_launch_new_db     = true
+        prepare_to_launch_new_db     = false
         launch_new_db                = true
         isolate                      = true
         cname_point_to_new_instance  = true
@@ -382,7 +382,7 @@ module "variable-set-rds-integration" {
         performance_insights_enabled = false
         project                      = "GOV.UK - Publishing"
         encryption_at_rest           = false
-        prepare_to_launch_new_db     = true
+        prepare_to_launch_new_db     = false
         launch_new_db                = true
         isolate                      = true
         cname_point_to_new_instance  = true
@@ -407,7 +407,7 @@ module "variable-set-rds-integration" {
         performance_insights_enabled = true
         project                      = "GOV.UK - Publishing"
         encryption_at_rest           = false
-        prepare_to_launch_new_db     = true
+        prepare_to_launch_new_db     = false
         launch_new_db                = true
         isolate                      = true
         cname_point_to_new_instance  = true
@@ -432,7 +432,7 @@ module "variable-set-rds-integration" {
         performance_insights_enabled = true
         project                      = "GOV.UK - Web"
         encryption_at_rest           = false
-        prepare_to_launch_new_db     = true
+        prepare_to_launch_new_db     = false
         launch_new_db                = true
         isolate                      = true
         cname_point_to_new_instance  = true
@@ -481,7 +481,7 @@ module "variable-set-rds-integration" {
         performance_insights_enabled = false
         project                      = "GOV.UK - Web"
         encryption_at_rest           = false
-        prepare_to_launch_new_db     = true
+        prepare_to_launch_new_db     = false
         launch_new_db                = true
         isolate                      = true
         cname_point_to_new_instance  = true
@@ -535,7 +535,7 @@ module "variable-set-rds-integration" {
         performance_insights_enabled = false
         project                      = "GOV.UK - Web"
         encryption_at_rest           = false
-        prepare_to_launch_new_db     = true
+        prepare_to_launch_new_db     = false
         launch_new_db                = true
         isolate                      = true
         cname_point_to_new_instance  = true
@@ -560,7 +560,7 @@ module "variable-set-rds-integration" {
         performance_insights_enabled = true
         project                      = "GOV.UK - Web"
         encryption_at_rest           = false
-        prepare_to_launch_new_db     = true
+        prepare_to_launch_new_db     = false
         launch_new_db                = true
         isolate                      = true
         cname_point_to_new_instance  = true
@@ -608,7 +608,7 @@ module "variable-set-rds-integration" {
         project                      = "GOV.UK - Publishing"
         has_read_replica             = true
         encryption_at_rest           = false
-        prepare_to_launch_new_db     = true
+        prepare_to_launch_new_db     = false
         launch_new_db                = true
         launch_new_replica           = true
         isolate                      = true
@@ -636,7 +636,7 @@ module "variable-set-rds-integration" {
         performance_insights_enabled = true
         project                      = "GOV.UK - Publishing"
         encryption_at_rest           = false
-        prepare_to_launch_new_db     = true
+        prepare_to_launch_new_db     = false
         launch_new_db                = true
         isolate                      = true
         cname_point_to_new_instance  = true
@@ -686,7 +686,7 @@ module "variable-set-rds-integration" {
         encryption_at_rest           = false
         backup_window                = "08:00-08:30"
         auto_minor_version_upgrade   = false
-        prepare_to_launch_new_db     = true
+        prepare_to_launch_new_db     = false
         isolate                      = true
         launch_new_db                = true
         cname_point_to_new_instance  = true
@@ -736,7 +736,7 @@ module "variable-set-rds-integration" {
         performance_insights_enabled = true
         project                      = "GOV.UK - Publishing"
         encryption_at_rest           = false
-        prepare_to_launch_new_db     = true
+        prepare_to_launch_new_db     = false
         launch_new_db                = true
         isolate                      = true
         cname_point_to_new_instance  = true
@@ -761,7 +761,7 @@ module "variable-set-rds-integration" {
         performance_insights_enabled = true
         project                      = "GOV.UK - Publishing"
         encryption_at_rest           = false
-        prepare_to_launch_new_db     = true
+        prepare_to_launch_new_db     = false
         launch_new_db                = true
         isolate                      = true
         cname_point_to_new_instance  = true
@@ -786,7 +786,7 @@ module "variable-set-rds-integration" {
         performance_insights_enabled = true
         project                      = "GOV.UK - Publishing"
         encryption_at_rest           = false
-        prepare_to_launch_new_db     = true
+        prepare_to_launch_new_db     = false
         launch_new_db                = true
         isolate                      = true
         cname_point_to_new_instance  = true
@@ -808,7 +808,7 @@ module "variable-set-rds-integration" {
         performance_insights_enabled = true
         project                      = "GOV.UK - Publishing"
         encryption_at_rest           = false
-        prepare_to_launch_new_db     = true
+        prepare_to_launch_new_db     = false
         launch_new_db                = true
         isolate                      = true
         cname_point_to_new_instance  = true
