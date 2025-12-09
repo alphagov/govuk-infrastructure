@@ -240,6 +240,8 @@ resource "github_repository" "govuk_repos" {
       )
       error_message = "You cannot set a repository as a fork with no source owner or source repository defined."
     }
+
+    prevent_destroy = true
   }
 }
 
