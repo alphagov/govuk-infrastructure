@@ -1,6 +1,6 @@
 #!/bin/bash
 
-GOVUK_ENVIRONMENT="integration"
+GOVUK_ENVIRONMENT="staging"
 
 # shellcheck disable=SC2034
 BIG_20_DBS=(
