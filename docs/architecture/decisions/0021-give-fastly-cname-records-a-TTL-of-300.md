@@ -1,4 +1,4 @@
-# 21. GIve Fastly CNAME records a TTL of 300
+# 21. Give Fastly CNAME records a TTL of 300
 
 Date: 2026-10-27
 
