@@ -635,7 +635,6 @@ module "variable-set-rds-production" {
         instance_class               = "db.t4g.medium"
         performance_insights_enabled = true
         project                      = "GOV.UK - Publishing"
-        deletion_protection          = false
         encryption_at_rest           = false
         prepare_to_launch_new_db     = false
         backup_window                = "20:00-20:30"
