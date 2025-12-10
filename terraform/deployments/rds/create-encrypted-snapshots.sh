@@ -10,7 +10,7 @@ fi
 # shellcheck disable=SC1091
 source ./db-maintenance-lists.sh
 
-GOVUK_ENVIRONMENT="staging"
+GOVUK_ENVIRONMENT="production"
 DBS=("${LITTLE_7_DBS[@]}")
 
 export KMS_KEY="alias/govuk/rds"
