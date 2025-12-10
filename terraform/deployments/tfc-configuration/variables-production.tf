@@ -249,10 +249,10 @@ module "variable-set-rds-production" {
         backup_window                = "08:00-08:30"
         auto_minor_version_upgrade   = false
         prepare_to_launch_new_db     = false
-        isolate                      = false
+        isolate                      = true
         launch_new_db                = false
-        cname_point_to_new_instance  = false
         new_db_deletion_protection   = false
+        cname_point_to_new_instance  = false
       }
 
       collections_publisher = {
@@ -324,10 +324,10 @@ module "variable-set-rds-production" {
         backup_window                = "08:00-08:30"
         auto_minor_version_upgrade   = false
         prepare_to_launch_new_db     = false
-        isolate                      = false
+        isolate                      = true
         launch_new_db                = false
-        cname_point_to_new_instance  = false
         new_db_deletion_protection   = false
+        cname_point_to_new_instance  = false
       }
 
       content_data_api = {
@@ -514,10 +514,10 @@ module "variable-set-rds-production" {
         backup_window                = "08:00-08:30"
         auto_minor_version_upgrade   = false
         prepare_to_launch_new_db     = false
-        isolate                      = false
+        isolate                      = true
         launch_new_db                = false
-        cname_point_to_new_instance  = false
         new_db_deletion_protection   = false
+        cname_point_to_new_instance  = false
       }
 
       local_links_manager = {
@@ -662,10 +662,10 @@ module "variable-set-rds-production" {
         backup_window                = "08:00-08:30"
         auto_minor_version_upgrade   = false
         prepare_to_launch_new_db     = false
-        isolate                      = false
+        isolate                      = true
         launch_new_db                = false
-        cname_point_to_new_instance  = false
         new_db_deletion_protection   = false
+        cname_point_to_new_instance  = false
       }
 
       search_admin = {
@@ -684,10 +684,10 @@ module "variable-set-rds-production" {
         backup_window                = "08:00-08:30"
         auto_minor_version_upgrade   = false
         prepare_to_launch_new_db     = false
-        isolate                      = false
+        isolate                      = true
         launch_new_db                = false
-        cname_point_to_new_instance  = false
         new_db_deletion_protection   = false
+        cname_point_to_new_instance  = false
       }
 
       service_manual_publisher = {
@@ -709,10 +709,10 @@ module "variable-set-rds-production" {
         backup_window                = "08:00-08:30"
         auto_minor_version_upgrade   = false
         prepare_to_launch_new_db     = false
-        isolate                      = false
+        isolate                      = true
         launch_new_db                = false
-        cname_point_to_new_instance  = false
         new_db_deletion_protection   = false
+        cname_point_to_new_instance  = false
       }
 
       signon = {
