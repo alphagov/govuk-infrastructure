@@ -165,6 +165,7 @@ module "variable-set-rds-staging" {
         new_db_deletion_protection   = true
         cname_point_to_new_instance  = true
         deletion_protection          = false
+        destroy_old_instance         = true
       }
 
       authenticating_proxy = {
@@ -191,6 +192,7 @@ module "variable-set-rds-staging" {
         new_db_deletion_protection   = true
         cname_point_to_new_instance  = true
         deletion_protection          = false
+        destroy_old_instance         = true
       }
 
       chat = {
@@ -241,6 +243,7 @@ module "variable-set-rds-staging" {
         new_db_deletion_protection   = true
         cname_point_to_new_instance  = true
         deletion_protection          = false
+        destroy_old_instance         = true
       }
 
       collections_publisher = {
@@ -263,6 +266,7 @@ module "variable-set-rds-staging" {
         new_db_deletion_protection   = true
         cname_point_to_new_instance  = true
         deletion_protection          = false
+        destroy_old_instance         = true
       }
 
       content_block_manager = {
@@ -289,6 +293,7 @@ module "variable-set-rds-staging" {
         new_db_deletion_protection   = true
         cname_point_to_new_instance  = true
         deletion_protection          = false
+        destroy_old_instance         = true
       }
 
       content_data_admin = {
@@ -316,6 +321,7 @@ module "variable-set-rds-staging" {
         new_db_deletion_protection   = true
         cname_point_to_new_instance  = true
         deletion_protection          = false
+        destroy_old_instance         = true
       }
 
       content_data_api = {
@@ -347,6 +353,7 @@ module "variable-set-rds-staging" {
         new_db_deletion_protection   = true
         cname_point_to_new_instance  = true
         deletion_protection          = false
+        destroy_old_instance         = true
       }
 
       content_store = {
@@ -372,6 +379,7 @@ module "variable-set-rds-staging" {
         new_db_deletion_protection   = true
         cname_point_to_new_instance  = true
         deletion_protection          = false
+        destroy_old_instance         = true
       }
 
       content_tagger = {
@@ -397,6 +405,7 @@ module "variable-set-rds-staging" {
         new_db_deletion_protection   = true
         cname_point_to_new_instance  = true
         deletion_protection          = false
+        destroy_old_instance         = true
       }
 
       draft_content_store = {
@@ -422,6 +431,7 @@ module "variable-set-rds-staging" {
         new_db_deletion_protection   = true
         cname_point_to_new_instance  = true
         deletion_protection          = false
+        destroy_old_instance         = true
       }
 
       email_alert_api = {
@@ -447,6 +457,7 @@ module "variable-set-rds-staging" {
         new_db_deletion_protection   = true
         cname_point_to_new_instance  = true
         deletion_protection          = false
+        destroy_old_instance         = true
       }
 
       imminence = {
@@ -474,6 +485,7 @@ module "variable-set-rds-staging" {
         new_db_deletion_protection   = true
         cname_point_to_new_instance  = true
         deletion_protection          = false
+        destroy_old_instance         = true
       }
 
       link_checker_api = {
@@ -502,6 +514,7 @@ module "variable-set-rds-staging" {
         new_db_deletion_protection   = true
         cname_point_to_new_instance  = true
         deletion_protection          = false
+        destroy_old_instance         = true
       }
 
       local_links_manager = {
@@ -527,6 +540,7 @@ module "variable-set-rds-staging" {
         new_db_deletion_protection   = true
         cname_point_to_new_instance  = true
         deletion_protection          = false
+        destroy_old_instance         = true
       }
 
       locations_api = {
@@ -552,6 +566,7 @@ module "variable-set-rds-staging" {
         new_db_deletion_protection   = true
         cname_point_to_new_instance  = true
         deletion_protection          = false
+        destroy_old_instance         = true
       }
 
       publishing_api = {
@@ -602,6 +617,7 @@ module "variable-set-rds-staging" {
         cname_point_to_new_instance  = true
         new_replica_engine_version   = "13.22"
         deletion_protection          = false
+        destroy_old_instance         = true
       }
 
       publisher = {
@@ -619,7 +635,6 @@ module "variable-set-rds-staging" {
         instance_class               = "db.t4g.micro"
         performance_insights_enabled = false
         project                      = "GOV.UK - Publishing"
-        deletion_protection          = false
         encryption_at_rest           = false
         prepare_to_launch_new_db     = false
         backup_window                = "07:30-08:00"
@@ -628,6 +643,7 @@ module "variable-set-rds-staging" {
         new_db_deletion_protection   = true
         cname_point_to_new_instance  = true
         deletion_protection          = false
+        destroy_old_instance         = true
       }
 
       release = {
@@ -652,6 +668,7 @@ module "variable-set-rds-staging" {
         new_db_deletion_protection   = true
         cname_point_to_new_instance  = true
         deletion_protection          = false
+        destroy_old_instance         = true
       }
 
       search_admin = {
@@ -676,6 +693,7 @@ module "variable-set-rds-staging" {
         new_db_deletion_protection   = true
         cname_point_to_new_instance  = true
         deletion_protection          = false
+        destroy_old_instance         = true
       }
 
       service_manual_publisher = {
@@ -703,6 +721,7 @@ module "variable-set-rds-staging" {
         new_db_deletion_protection   = true
         cname_point_to_new_instance  = true
         deletion_protection          = false
+        destroy_old_instance         = true
       }
 
       signon = {
@@ -725,6 +744,7 @@ module "variable-set-rds-staging" {
         new_db_deletion_protection   = true
         cname_point_to_new_instance  = true
         deletion_protection          = false
+        destroy_old_instance         = true
       }
 
       support_api = {
@@ -750,6 +770,7 @@ module "variable-set-rds-staging" {
         new_db_deletion_protection   = true
         cname_point_to_new_instance  = true
         deletion_protection          = false
+        destroy_old_instance         = true
       }
 
       transition = {
@@ -775,6 +796,7 @@ module "variable-set-rds-staging" {
         new_db_deletion_protection   = true
         cname_point_to_new_instance  = true
         deletion_protection          = false
+        destroy_old_instance         = true
       }
 
       whitehall = {
@@ -797,6 +819,7 @@ module "variable-set-rds-staging" {
         new_db_deletion_protection   = true
         cname_point_to_new_instance  = true
         deletion_protection          = false
+        destroy_old_instance         = true
       }
     }
   }
