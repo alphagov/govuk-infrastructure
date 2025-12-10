@@ -1,4 +1,4 @@
-resource "kubernetes_role_binding" "poweruser" {
+resource "kubernetes_role_binding_v1" "poweruser" {
   metadata {
     name      = "poweruser-${var.datagovuk_namespace}"
     namespace = var.datagovuk_namespace

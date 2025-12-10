@@ -142,7 +142,7 @@ resource "aws_eks_access_policy_association" "ithctester" {
   ]
 }
 
-resource "kubernetes_cluster_role_binding" "cluster_admins" {
+resource "kubernetes_cluster_role_binding_v1" "cluster_admins" {
   metadata {
     name   = "cluster-admins"
     labels = { "app.kubernetes.io/managed-by" = "Terraform" }
@@ -159,7 +159,7 @@ resource "kubernetes_cluster_role_binding" "cluster_admins" {
   }
 }
 
-resource "kubernetes_cluster_role" "developer" {
+resource "kubernetes_cluster_role_v1" "developer" {
   metadata {
     name   = "developer"
     labels = { "app.kubernetes.io/managed-by" = "Terraform" }
@@ -184,7 +184,8 @@ resource "kubernetes_cluster_role" "developer" {
   }
 }
 
-resource "kubernetes_cluster_role_binding" "developer" {
+
+resource "kubernetes_cluster_role_binding_v1" "developer" {
   metadata {
     name   = "developer-cluster-binding"
     labels = { "app.kubernetes.io/managed-by" = "Terraform" }
@@ -192,7 +193,7 @@ resource "kubernetes_cluster_role_binding" "developer" {
   role_ref {
     api_group = "rbac.authorization.k8s.io"
     kind      = "ClusterRole"
-    name      = kubernetes_cluster_role.developer.metadata[0].name
+    name      = kubernetes_cluster_role_v1.developer.metadata[0].name
   }
   subject {
     kind      = "Group"
@@ -250,7 +251,7 @@ resource "kubernetes_role_binding" "developer" {
   }
 }
 
-resource "kubernetes_role" "licensing" {
+resource "kubernetes_role_v1" "licensing" {
   metadata {
     name      = "licensing"
     namespace = "licensify"
@@ -276,8 +277,8 @@ resource "kubernetes_role" "licensing" {
   }
 }
 
-resource "kubernetes_role_binding" "licensing" {
-  depends_on = [kubernetes_role.licensing]
+resource "kubernetes_role_binding_v1" "licensing" {
+  depends_on = [kubernetes_role_v1.licensing]
 
   metadata {
     name      = "licensing-binding"
@@ -296,7 +297,7 @@ resource "kubernetes_role_binding" "licensing" {
   }
 }
 
-resource "kubernetes_cluster_role" "readonly" {
+resource "kubernetes_cluster_role_v1" "readonly" {
   metadata {
     name   = "readonly"
     labels = { "app.kubernetes.io/managed-by" = "Terraform" }
@@ -327,7 +328,8 @@ resource "kubernetes_cluster_role" "readonly" {
   }
 }
 
-resource "kubernetes_cluster_role_binding" "readonly" {
+
+resource "kubernetes_cluster_role_binding_v1" "readonly" {
   metadata {
     name   = "readonly-cluster-binding"
     labels = { "app.kubernetes.io/managed-by" = "Terraform" }
@@ -335,7 +337,7 @@ resource "kubernetes_cluster_role_binding" "readonly" {
   role_ref {
     api_group = "rbac.authorization.k8s.io"
     kind      = "ClusterRole"
-    name      = kubernetes_cluster_role.readonly.metadata[0].name
+    name      = kubernetes_cluster_role_v1.readonly.metadata[0].name
   }
   subject {
     kind      = "Group"
@@ -344,7 +346,7 @@ resource "kubernetes_cluster_role_binding" "readonly" {
   }
 }
 
-resource "kubernetes_cluster_role" "ithctester" {
+resource "kubernetes_cluster_role_v1" "ithctester" {
   metadata {
     name   = "ithctester"
     labels = { "app.kubernetes.io/managed-by" = "Terraform" }
@@ -359,7 +361,7 @@ resource "kubernetes_cluster_role" "ithctester" {
 
 }
 
-resource "kubernetes_cluster_role_binding" "ithctester" {
+resource "kubernetes_cluster_role_binding_v1" "ithctester" {
   metadata {
     name   = "ithctester-cluster-binding"
     labels = { "app.kubernetes.io/managed-by" = "Terraform" }
@@ -367,7 +369,7 @@ resource "kubernetes_cluster_role_binding" "ithctester" {
   role_ref {
     api_group = "rbac.authorization.k8s.io"
     kind      = "ClusterRole"
-    name      = kubernetes_cluster_role.ithctester.metadata[0].name
+    name      = kubernetes_cluster_role_v1.ithctester.metadata[0].name
   }
   subject {
     kind      = "Group"
