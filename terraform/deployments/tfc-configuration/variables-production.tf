@@ -252,7 +252,7 @@ module "variable-set-rds-production" {
         isolate                      = true
         launch_new_db                = true
         new_db_deletion_protection   = true
-        cname_point_to_new_instance  = false
+        cname_point_to_new_instance  = true
       }
 
       collections_publisher = {
