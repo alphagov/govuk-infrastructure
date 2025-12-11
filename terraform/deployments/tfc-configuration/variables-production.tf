@@ -325,8 +325,8 @@ module "variable-set-rds-production" {
         auto_minor_version_upgrade   = false
         prepare_to_launch_new_db     = false
         isolate                      = true
-        launch_new_db                = false
-        new_db_deletion_protection   = false
+        launch_new_db                = true
+        new_db_deletion_protection   = true
         cname_point_to_new_instance  = false
       }
 
@@ -515,8 +515,8 @@ module "variable-set-rds-production" {
         auto_minor_version_upgrade   = false
         prepare_to_launch_new_db     = false
         isolate                      = true
-        launch_new_db                = false
-        new_db_deletion_protection   = false
+        launch_new_db                = true
+        new_db_deletion_protection   = true
         cname_point_to_new_instance  = false
       }
 
@@ -663,8 +663,8 @@ module "variable-set-rds-production" {
         auto_minor_version_upgrade   = false
         prepare_to_launch_new_db     = false
         isolate                      = true
-        launch_new_db                = false
-        new_db_deletion_protection   = false
+        launch_new_db                = true
+        new_db_deletion_protection   = true
         cname_point_to_new_instance  = false
       }
 
@@ -685,8 +685,8 @@ module "variable-set-rds-production" {
         auto_minor_version_upgrade   = false
         prepare_to_launch_new_db     = false
         isolate                      = true
-        launch_new_db                = false
-        new_db_deletion_protection   = false
+        launch_new_db                = true
+        new_db_deletion_protection   = true
         cname_point_to_new_instance  = false
       }
 
@@ -710,8 +710,8 @@ module "variable-set-rds-production" {
         auto_minor_version_upgrade   = false
         prepare_to_launch_new_db     = false
         isolate                      = true
-        launch_new_db                = false
-        new_db_deletion_protection   = false
+        launch_new_db                = true
+        new_db_deletion_protection   = true
         cname_point_to_new_instance  = false
       }
 
