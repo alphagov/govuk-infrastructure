@@ -253,6 +253,7 @@ module "variable-set-rds-production" {
         launch_new_db                = true
         new_db_deletion_protection   = true
         cname_point_to_new_instance  = true
+        deletion_protection          = false
       }
 
       collections_publisher = {
@@ -328,6 +329,7 @@ module "variable-set-rds-production" {
         launch_new_db                = true
         new_db_deletion_protection   = true
         cname_point_to_new_instance  = true
+        deletion_protection          = false
       }
 
       content_data_api = {
@@ -518,6 +520,7 @@ module "variable-set-rds-production" {
         launch_new_db                = true
         new_db_deletion_protection   = true
         cname_point_to_new_instance  = true
+        deletion_protection          = false
       }
 
       local_links_manager = {
@@ -666,6 +669,7 @@ module "variable-set-rds-production" {
         launch_new_db                = true
         new_db_deletion_protection   = true
         cname_point_to_new_instance  = true
+        deletion_protection          = false
       }
 
       search_admin = {
@@ -688,6 +692,7 @@ module "variable-set-rds-production" {
         launch_new_db                = true
         new_db_deletion_protection   = true
         cname_point_to_new_instance  = true
+        deletion_protection          = false
       }
 
       service_manual_publisher = {
@@ -713,6 +718,7 @@ module "variable-set-rds-production" {
         launch_new_db                = true
         new_db_deletion_protection   = true
         cname_point_to_new_instance  = true
+        deletion_protection          = false
       }
 
       signon = {
