@@ -85,6 +85,7 @@ resource "aws_iam_service_linked_role" "es_role" {
 
 resource "aws_elasticsearch_domain" "opensearch" {
   depends_on = [aws_iam_service_linked_role.es_role]
+  count      = var.elasticsearch_enabled ? 1 : 0
 
   domain_name           = local.domain
   elasticsearch_version = var.engine_version
@@ -173,9 +174,11 @@ data "aws_iam_policy_document" "domain_access_policy" {
 }
 
 resource "aws_route53_record" "service_record" {
+  count = var.elasticsearch_enabled ? 1 : 0
+
   zone_id = data.tfe_outputs.root_dns.nonsensitive_values.internal_root_zone_id
   name    = "elasticsearch6.${var.stackname}.${data.tfe_outputs.root_dns.nonsensitive_values.internal_root_zone_name}"
   type    = "CNAME"
   ttl     = 300
-  records = [aws_elasticsearch_domain.opensearch.endpoint]
+  records = [aws_elasticsearch_domain.opensearch[0].endpoint]
 }
