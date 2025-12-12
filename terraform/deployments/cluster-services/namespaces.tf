@@ -1,4 +1,4 @@
-resource "kubernetes_namespace" "apps" {
+resource "kubernetes_namespace_v1" "apps" {
   metadata {
     name = var.apps_namespace
     annotations = {
@@ -16,7 +16,7 @@ resource "kubernetes_namespace" "apps" {
   }
 }
 
-resource "kubernetes_namespace" "licensify" {
+resource "kubernetes_namespace_v1" "licensify" {
   metadata {
     name = var.licensify_namespace
     annotations = {
@@ -34,7 +34,7 @@ resource "kubernetes_namespace" "licensify" {
   }
 }
 
-resource "kubernetes_namespace" "datagovuk" {
+resource "kubernetes_namespace_v1" "datagovuk" {
   metadata {
     name = var.datagovuk_namespace
     annotations = {
