@@ -1,7 +1,7 @@
-resource "aws_db_parameter_group" "publishing_api_postgresql_14_green_params" {
+resource "aws_db_parameter_group" "publishing_api_postgresql_17_green_params" {
 
   name_prefix = "${var.govuk_environment}-publishing-api-postgres-"
-  family      = "postgres14"
+  family      = "postgres17"
 
   parameter {
     name         = "rds.logical_replication"
