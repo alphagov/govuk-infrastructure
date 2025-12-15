@@ -46,4 +46,20 @@ data "aws_iam_policy_document" "manual_snapshots_cross_account_access" {
       "${aws_s3_bucket.manual_snapshots.arn}/*",
     ]
   }
+
+  statement {
+    sid    = "DenyNonTLS"
+    effect = "Deny"
+    principals {
+      identifiers = ["*"]
+      type        = "AWS"
+    }
+    actions   = ["s3:*"]
+    resources = ["${aws_s3_bucket.manual_snapshots.arn}/*"]
+    condition {
+      test     = "Bool"
+      values   = [false]
+      variable = "aws:SecureTransport"
+    }
+  }
 }

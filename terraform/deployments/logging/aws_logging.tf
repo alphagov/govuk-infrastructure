@@ -12,6 +12,22 @@ data "aws_iam_policy_document" "s3_aws_logging" {
       identifiers = [data.aws_elb_service_account.main.arn]
     }
   }
+
+  statement {
+    sid    = "DenyNonTLS"
+    effect = "Deny"
+    principals {
+      identifiers = ["*"]
+      type        = "AWS"
+    }
+    actions   = ["s3:*"]
+    resources = ["arn:aws:s3:::govuk-${var.govuk_environment}-aws-logging/*"]
+    condition {
+      test     = "Bool"
+      values   = [false]
+      variable = "aws:SecureTransport"
+    }
+  }
 }
 
 data "aws_iam_policy_document" "s3_govuk_aws_logging_replication_policy" {
