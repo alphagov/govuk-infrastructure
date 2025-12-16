@@ -40,14 +40,14 @@ jobs:
       if: steps.changed-deployments.outputs.any_changed == 'true'
 
     - name: Cache Terraform plugins
-      uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
+      uses: actions/cache@9255dc7a253b0ccc959486e2bca901246202afeb # v5.0.1
       if: steps.changed-deployments.outputs.any_changed == 'true'
       with:
         path: ${{ env.TF_PLUGIN_CACHE_DIR }}
         key:
           terraform-plugins-${{ runner.os }}-${{ hashFiles('**/.terraform.lock.hcl') }}
 
-    - uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
+    - uses: actions/cache@9255dc7a253b0ccc959486e2bca901246202afeb # v5.0.1
       name: Cache TFLint plugins
       if: steps.changed-deployments.outputs.any_changed == 'true'
       with:
