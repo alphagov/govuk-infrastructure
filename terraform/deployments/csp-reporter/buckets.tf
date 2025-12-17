@@ -19,3 +19,26 @@ resource "aws_s3_bucket_lifecycle_configuration" "csp_reports_lifecycle" {
     }
   }
 }
+
+resource "aws_s3_bucket_policy" "csp_reports" {
+  bucket = aws_s3_bucket.csp_reports.id
+  policy = data.aws_iam_policy_document.csp_reports_bucket_policy.json
+}
+
+data "aws_iam_policy_document" "csp_reports_bucket_policy" {
+  statement {
+    sid    = "DenyNonTLS"
+    effect = "Deny"
+    principals {
+      identifiers = ["*"]
+      type        = "AWS"
+    }
+    actions   = ["s3:*"]
+    resources = ["${aws_s3_bucket.csp_reports.arn}/*"]
+    condition {
+      test     = "Bool"
+      values   = [false]
+      variable = "aws:SecureTransport"
+    }
+  }
+}

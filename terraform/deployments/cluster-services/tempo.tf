@@ -9,6 +9,29 @@ resource "aws_s3_bucket" "tempo" {
   force_destroy = var.force_destroy
 }
 
+resource "aws_s3_bucket_policy" "tempo_bucket_policy" {
+  bucket = aws_s3_bucket.tempo.id
+  policy = data.aws_iam_policy_document.tempo_bucket_policy.json
+}
+
+data "aws_iam_policy_document" "tempo_bucket_policy" {
+  statement {
+    sid    = "DenyNonTLS"
+    effect = "Deny"
+    principals {
+      identifiers = ["*"]
+      type        = "AWS"
+    }
+    actions   = ["s3:*"]
+    resources = ["${aws_s3_bucket.tempo.arn}/*"]
+    condition {
+      test     = "Bool"
+      values   = [false]
+      variable = "aws:SecureTransport"
+    }
+  }
+}
+
 module "tempo_iam_role" {
   source  = "terraform-aws-modules/iam/aws//modules/iam-eks-role"
   version = "~> 5.27"
