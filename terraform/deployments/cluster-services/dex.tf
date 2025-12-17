@@ -45,7 +45,7 @@ resource "random_password" "dex_cookie_secret" {
   numeric = true
 }
 
-resource "kubernetes_secret" "dex_client" {
+resource "kubernetes_secret_v1" "dex_client" {
   for_each = local.dex_clients_namespaces
   depends_on = [
     kubernetes_namespace_v1.apps,
@@ -56,6 +56,8 @@ resource "kubernetes_secret" "dex_client" {
     # create it implicitly
     helm_release.aws_lb_controller
   ]
+
+  wait_for_service_account_token = false
 
   metadata {
     name      = "dex-client-${each.value.client}"
@@ -85,9 +87,11 @@ resource "random_password" "eph_account" {
   numeric = true
 }
 
-resource "kubernetes_secret" "eph_account" {
+resource "kubernetes_secret_v1" "eph_account" {
   count      = startswith(var.govuk_environment, "eph-") ? 1 : 0
   depends_on = [helm_release.dex]
+
+  wait_for_service_account_token = false
 
   metadata {
     name      = "dex-account"

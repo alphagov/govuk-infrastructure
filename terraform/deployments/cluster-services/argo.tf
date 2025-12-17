@@ -39,7 +39,7 @@ locals {
 # https://argo-cd.readthedocs.io/en/stable/operator-manual/user-management/#alternative
 resource "kubernetes_labels" "argocd_secret" {
   for_each   = toset(local.dex_client_namespaces)
-  depends_on = [kubernetes_secret.dex_client]
+  depends_on = [kubernetes_secret_v1.dex_client]
 
   api_version = "v1"
   kind        = "Secret"
@@ -223,7 +223,7 @@ resource "helm_release" "argo_bootstrap_ephemeral" {
 
 resource "helm_release" "argo_workflows" {
   depends_on = [
-    kubernetes_secret.dex_client,
+    kubernetes_secret_v1.dex_client,
     helm_release.aws_lb_controller
   ]
 

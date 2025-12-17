@@ -49,3 +49,10 @@ import {
   to = kubernetes_namespace_v1.licensify
   id = var.licensify_namespace
 }
+
+import {
+  to = kubernetes_secret_v1.dex_client[each.key]
+  id = "${each.value.namespace}/dex-client-${each.value.client}"
+
+  for_each = local.dex_clients_namespaces
+}
