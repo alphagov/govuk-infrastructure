@@ -202,7 +202,7 @@ resource "kubernetes_cluster_role_binding_v1" "developer" {
   }
 }
 
-resource "kubernetes_role" "developer" {
+resource "kubernetes_role_v1" "developer" {
   for_each = toset(local.developer_namespaces)
 
   metadata {
@@ -230,9 +230,9 @@ resource "kubernetes_role" "developer" {
   }
 }
 
-resource "kubernetes_role_binding" "developer" {
+resource "kubernetes_role_binding_v1" "developer" {
   for_each   = toset(local.developer_namespaces)
-  depends_on = [kubernetes_role.developer]
+  depends_on = [kubernetes_role_v1.developer]
 
   metadata {
     name      = "developer-binding"
@@ -378,7 +378,7 @@ resource "kubernetes_cluster_role_binding_v1" "ithctester" {
   }
 }
 
-resource "kubernetes_role" "readonly" {
+resource "kubernetes_role_v1" "readonly" {
   for_each = toset(local.developer_namespaces)
 
   metadata {
@@ -400,9 +400,9 @@ resource "kubernetes_role" "readonly" {
   }
 }
 
-resource "kubernetes_role_binding" "readonly" {
+resource "kubernetes_role_binding_v1" "readonly" {
   for_each   = toset(local.developer_namespaces)
-  depends_on = [kubernetes_role.readonly]
+  depends_on = [kubernetes_role_v1.readonly]
 
   metadata {
     name      = "readonly-binding"
