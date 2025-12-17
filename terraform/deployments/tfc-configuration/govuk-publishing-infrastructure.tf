@@ -162,7 +162,6 @@ module "govuk-publishing-infrastructure-variable-set-staging" {
       { type = "CNAME", name = "draft-assets", ttl = 3600, value = ["draft-assets.eks.staging.govuk.digital."] },
       { type = "CNAME", name = "draft-origin", ttl = 3600, value = ["draft-origin.eks.staging.govuk.digital."] },
       { type = "CNAME", name = "email-alert-api-public", ttl = 3600, value = ["email-alert-api.eks.staging.govuk.digital."] },
-      { type = "CNAME", name = "fact-check-manager", ttl = 3600, value = ["fact-check-manager.eks.staging.govuk.digital."] },
       { type = "CNAME", name = "gov-search", ttl = 3600, value = ["gov-seach.eks.integration.govuk.digital."] },
       { type = "CNAME", name = "hmrc-manuals-api", ttl = 3600, value = ["hmrc-manuals-api.eks.staging.govuk.digital."] },
       { type = "CNAME", name = "licensify-admin.eks", ttl = 3600, value = ["licensify-admin.eks.staging.govuk.digital."] },
@@ -279,7 +278,6 @@ module "govuk-publishing-infrastructure-variable-set-production" {
       { type = "CNAME", name = "gov-search", ttl = 3600, value = ["gov-seach.eks.integration.govuk.digital."] },
       { type = "CNAME", name = "govspeak-preview", ttl = 3600, value = ["govspeak-preview.eks.production.govuk.digital."] },
       { type = "CNAME", name = "govuk-kubernetes-cluster-user-docs", ttl = 3600, value = ["bouncer-cdn.production.govuk.service.gov.uk."] },
-      { type = "CNAME", name = "fact-check-manager", ttl = 3600, value = ["fact-check-manager.eks.production.govuk.digital."] },
       { type = "TXT", name = "_fastly.govuk-kubernetes-cluster-user-docs", ttl = 3600, value = ["fastly-domain-delegation-qWiNqNqmqXcaseJh-2023-09-28"] },
       { type = "CNAME", name = "docs", ttl = 3600, value = ["alphagov.github.io."] },
       { type = "TXT", name = "_github-pages-challenge-alphagov.docs", ttl = 3600, value = ["2c1424b07edc15b8c5f9f63218d4ac"] }, // pragma: allowlist secret
