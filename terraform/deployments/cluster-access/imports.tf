@@ -117,3 +117,31 @@ import {
   id = "ithctester-cluster-binding"
 }
 
+
+import {
+  to = kubernetes_role_v1.developer[each.key]
+  id = "${each.key}/developer"
+
+  for_each = toset(local.developer_namespaces)
+}
+
+import {
+  to = kubernetes_role_binding_v1.developer[each.key]
+  id = "${each.key}/developer-binding"
+
+  for_each = toset(local.developer_namespaces)
+}
+
+import {
+  to = kubernetes_role_v1.readonly[each.key]
+  id = "${each.key}/readonly"
+
+  for_each = toset(local.developer_namespaces)
+}
+
+import {
+  to = kubernetes_role_binding_v1.readonly[each.key]
+  id = "${each.key}/readonly-binding"
+
+  for_each = toset(local.developer_namespaces)
+}
