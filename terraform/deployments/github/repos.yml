@@ -612,6 +612,13 @@ repos:
       additional_contexts:
         - test
 
+  nokodiff:
+    publishes_gem: true
+    required_status_checks:
+      standard_contexts: *standard_security_checks
+      additional_contexts:
+        - test
+
   optic14n:
     publishes_gem: true
     required_status_checks:
