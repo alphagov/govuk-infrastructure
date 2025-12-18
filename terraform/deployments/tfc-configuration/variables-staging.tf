@@ -571,8 +571,8 @@ module "variable-set-rds-staging" {
 
       publishing_api = {
         engine                 = "postgres"
-        engine_version         = "13"
-        replica_engine_version = "13.20"
+        engine_version         = "17.6"
+        replica_engine_version = "17.6"
         engine_params = {
           log_min_duration_statement = { value = 10000 }
           log_statement              = { value = "all" }
@@ -598,7 +598,7 @@ module "variable-set-rds-staging" {
             apply_method = "pending-reboot"
           }
         }
-        engine_params_family         = "postgres13"
+        engine_params_family         = "postgres17"
         name                         = "publishing-api"
         allocated_storage            = 1000
         iops                         = 24000
@@ -615,7 +615,7 @@ module "variable-set-rds-staging" {
         new_db_deletion_protection   = true
         launch_new_replica           = true
         cname_point_to_new_instance  = true
-        new_replica_engine_version   = "13.22"
+        new_replica_engine_version   = "17.6"
         deletion_protection          = false
         destroy_old_instance         = true
       }
