@@ -1,25 +1,14 @@
-resource "aws_db_parameter_group" "publishing_api_postgresql_17_green_params" {
+import {
+  to = aws_db_instance.normalised_instance["publishing_api"]
+  id = "publishing-api-integration-postgres"
+}
 
-  name_prefix = "${var.govuk_environment}-publishing-api-postgres-"
-  family      = "postgres17"
+import {
+  to = aws_db_parameter_group.engine_params["publishing_api"]
+  id = "integration-publishing-api-postgres-20251218115310078800000001"
+}
 
-  parameter {
-    name         = "rds.logical_replication"
-    value        = "1"
-    apply_method = "pending-reboot"
-  }
-
-  parameter {
-    name         = "max_logical_replication_workers"
-    value        = "20"
-    apply_method = "pending-reboot"
-  }
-
-  parameter {
-    name         = "max_worker_processes"
-    value        = "25"
-    apply_method = "pending-reboot"
-  }
-
-  lifecycle { create_before_destroy = true }
+import {
+  to = aws_db_instance.normalised_replica["publishing_api"]
+  id = "publishing-api-integration-postgres-replica"
 }
