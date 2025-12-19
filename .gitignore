@@ -8,3 +8,4 @@
 *.tfstate.backup
 *.lock.hcl
 lambdas/*.zip
+.vale/
