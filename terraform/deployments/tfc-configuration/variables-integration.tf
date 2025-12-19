@@ -581,22 +581,6 @@ module "variable-set-rds-integration" {
           checkpoint_timeout         = { value = 3600 }
           max_wal_size               = { value = 4096 }
           synchronous_commit         = { value = "off" }
-          "rds.logical_replication" = {
-            value        = 1,
-            apply_method = "pending-reboot"
-          }
-          max_wal_senders = {
-            value        = 35,
-            apply_method = "pending-reboot"
-          }
-          max_logical_replication_workers = {
-            value        = 20,
-            apply_method = "pending-reboot"
-          }
-          max_worker_processes = {
-            value        = 40,
-            apply_method = "pending-reboot"
-          }
         }
         engine_params_family         = "postgres17"
         name                         = "publishing-api"
