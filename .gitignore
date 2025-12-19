@@ -8,4 +8,5 @@
 *.tfstate.backup
 *.lock.hcl
 lambdas/*.zip
-.vale/
+.vale/styles/*
+!.vale/styles/GOVUK/
