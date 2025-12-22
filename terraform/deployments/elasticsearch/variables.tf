@@ -27,6 +27,11 @@ variable "engine_version" {
 variable "instance_type" { type = string }
 variable "instance_count" { type = number }
 
+variable "elasticsearch_enabled" {
+  type    = bool
+  default = true
+}
+
 variable "dedicated_master" {
   type = object({
     instance_count = number

@@ -864,6 +864,7 @@ module "variable-set-elasticsearch-integration" {
     }
     engine_version         = "6.7"
     zone_awareness_enabled = true
+    elasticsearch_enabled  = false
 
     instance_count = 3
     instance_type  = "r7i.xlarge.elasticsearch"
