@@ -1,5 +1,7 @@
+API
 AWS
 Cognito
+CRD(s?)
 Dex
 Dhall
 Fargate
@@ -23,6 +25,7 @@ aws
 config
 creds
 devops
+namespace[sd]
 repo
 repoint
 signon
