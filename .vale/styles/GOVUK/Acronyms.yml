@@ -5,12 +5,14 @@ message: |
   
   The first time you use an abbreviation on a page, explain it in full. You can then refer to it by initials only on 
   the rest of the page. For example, Personal Independence Payment (PIP) becomes PIP for the rest of the page.
+  
+  If the acronym would be widely understood by the team, add it to the vocabulary list.
 link: 'https://www.gov.uk/guidance/style-guide/a-to-z#abbreviations-acronyms-and-initialisms'
 level: suggestion
 ignorecase: false
 # Ensures that the existence of 'first' implies the existence of 'second'.
-first: '\b([A-Z]{3,5})\b'
-second: '(?:\b[A-Z][a-z]+ )+\(([A-Z]{3,5})\)'
+first: '\b([A-Z]{3,5}s?)\b'
+second: '(?:\b[A-Z][a-z]+ )+\(([A-Z]{3,5}s?)\)'
 # ... with the exception of these:
 exceptions:
   # well known to the public
