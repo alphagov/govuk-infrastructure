@@ -1,14 +1,13 @@
 # Kubernetes external secrets
 
-This project implements [external-secrets] as described in [ADR 8].
+This project implements [external-secrets] as described in [Architectural Decision Record (ADR) 8].
 
 AWS SecretsManager is the source of truth for most secrets.
 
-## How are SecretsManager Secrets accessed by applications in Kubernetes?
+## How are SecretsManager secrets accessed by applications in Kubernetes?
 
-The external-secrets operator (ESO) creates CRDs such as `ClusterSecretStore`
-and `ExternalSecret`. The ClusterSecretStore is not namespaced, and is used by
-all namespaces.
+The External Secrets Operator (ESO) creates Custom Resource Definitions (CRDs) such as `ClusterSecretStore`
+and `ExternalSecret`. The ClusterSecretStore is not namespaced, and all namespaces use it.
 
 The ClusterSecretStore is responsible for authenticating with AWS when we need
 to manage a secret in SecretsManager. It holds references to secrets which hold
@@ -28,7 +27,7 @@ and reference the associated Kubernetes Secret in the app’s Helm deployment.
 The platform team is responsible for providing the ClusterSecretStore. Service
 teams are responsible for defining ExternalSecrets.
 
-Not discussed here is how secrets are added to SecretsManager. It would be nice
+Not discussed here is how we add secrets to SecretsManager. It would be nice
 if we could avoid having Terraform config for every SecretsManager secret, and
 have this config live entirely in Kubernetes. But the lifecycle of secrets in
 SecretsManager is not the responsibility of ESO, so we need to figure out how
