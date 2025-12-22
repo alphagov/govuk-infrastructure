@@ -1,0 +1,10 @@
+extends: substitution
+message: "Product or service name spelled incorrectly. Use %s instead of %s."
+ignorecase: false
+level: error
+action:
+  name: replace
+swap:
+  aws: AWS
+  "[gG]it[hH]ub": GitHub
+  "[gG]it[hH]ub [aA]ctions": GitHub Actions
