@@ -15,8 +15,10 @@ Logit
 Pkl
 Pulumi
 SHA
+Terraform Cloud
 UI
 UIs
+VPC
 aws
 config
 creds
@@ -24,5 +26,4 @@ devops
 repo
 repoint
 signon
-VPC
 www

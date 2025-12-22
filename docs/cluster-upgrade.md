@@ -1,20 +1,25 @@
 # Upgrading the cluster
 
 This is a generic guide on how to upgrade the cluster to a newer version.
-As this cannot anticipate future changes, this should not be followed blindly and should be modified in accordance with the specific instructions that could arise for a particular version. Please consult AWS documentation and changelogs before using this procedure.
+As this cannot anticipate future changes, you should not follow it blindly. You should modify it in accordance with the 
+specific instructions that arise for a particular version. Please consult AWS documentation and changelogs before using 
+this procedure.
 
 ## General outline and things to know
 
 To use this guide you should know ['how to apply terraform.'](../terraform/docs/applying-terraform.md)
 We upgrade the cluster in place, starting with integration, followed by staging, and finally production. Integration and staging allow us to make sure that the upgrade goes without problems.
+
 You can only upgrade from one version to the next, 1.17 to 1.18 for example but not 1.17 to 1.21.
-Once an upgrade is done you cannot downgrade a cluster anymore, you will have to rebuild it from scratch if you want to downgrade.
+
+Once you have completed an upgrade, you cannot downgrade a cluster. You will have to rebuild it from scratch if you 
+want to downgrade.
 
 ## Preparing to upgrade
 
 As a pre-requisite for upgrading the cluster, there are two things you should do: 
 
-1. Check the [EKS upgrade insights](https://docs.aws.amazon.com/eks/latest/userguide/cluster-insights.html) for each cluster
+1. Check the Elastic Kubernetes Service (EKS) [upgrade insights](https://docs.aws.amazon.com/eks/latest/userguide/cluster-insights.html) for each cluster
 2. Read the release notes for the version you're about to upgrade to and note on the story any changes that might affect us. Consider using this template to keep things simple:
 ```markdown
 # Kubernetes VERSION notable changes
@@ -43,12 +48,12 @@ A one sentence summary of the changes and how/if they affect us
 
 If any of these steps point to an issue that would prevent you upgrading, you should stop here. 
 
-If any of these steps point to a change that needs to be made prior to the upgrade, raise it with the team and decide how
+If any of these steps point to a change that needs making prior to the upgrade, raise it with the team and decide how
 to proceed.
 
 
 ## Step-by-step procedure
-
+<!-- vale Google.WordList = NO --> 
 You can upgrade the EKS cluster by changing the version in Terraform and applying the change through Terraform Cloud. Terraform
 will first upgrade the control plane version, then the node groups, and finally any cluster add-ons. It will pick the most appropriate
 version for each component.
@@ -59,3 +64,4 @@ version for each component.
 4. Plan and apply a new run in the `cluster-infrastructure-<ENV>` workspace in Terraform Cloud.
 
 You should expect it to take 30-45 minutes to upgrade each cluster.  
+
