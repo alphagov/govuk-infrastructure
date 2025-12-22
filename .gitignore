@@ -10,4 +10,5 @@
 lambdas/*.zip
 .vale/styles/*
 !.vale/styles/GOVUK/
+!.vale/styles/PlatformEngineering/
 !.vale/styles/config/
