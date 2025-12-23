@@ -834,7 +834,8 @@ repos:
         - Test JavaScript / Run Jasmine
         - Test Ruby / Run RSpec
 
-  static: {}
+  static:
+    archived: true
 
   support:
     can_be_deployed: true
