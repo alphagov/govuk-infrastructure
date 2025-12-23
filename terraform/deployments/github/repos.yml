@@ -833,16 +833,7 @@ repos:
         - Test JavaScript / Run Jasmine
         - Test Ruby / Run RSpec
 
-  static:
-    can_be_deployed: true
-    homepage_url: "https://docs.publishing.service.gov.uk/apps/static.html"
-    required_status_checks:
-      standard_contexts: *standard_govuk_rails_checks
-      additional_contexts:
-        - Test Ruby
-        - Lint JavaScript / Run Standardx
-        - Lint SCSS / Run Stylelint
-        - Test JavaScript / Run Jasmine
+  static: {}
 
   support:
     can_be_deployed: true
