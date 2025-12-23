@@ -38,6 +38,7 @@ exceptions:
   - VAT
   - VPN
   - GOV # GOV is not an acronym, but included here to ensure that "GOV.UK" is not flagged as an unexplained acronym
+  - GDS
 
   # file types
   - JPG
