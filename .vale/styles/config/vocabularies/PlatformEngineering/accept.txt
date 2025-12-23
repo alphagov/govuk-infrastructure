@@ -1,4 +1,6 @@
+[aA]dmin
 API
+ArgoCD
 AWS
 Cognito
 CRD(s?)
@@ -11,17 +13,19 @@ GOV.UK
 GSuite
 Grafana
 ITHC
+JSON
 Jsonnet
 Kargo
 Logit
+OAuth
 Pkl
 Pulumi
 SHA
 Terraform Cloud
 UI
 UIs
+URL
 VPC
-aws
 config
 creds
 devops

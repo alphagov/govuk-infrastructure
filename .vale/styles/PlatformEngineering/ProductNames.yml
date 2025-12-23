@@ -5,7 +5,13 @@ level: error
 action:
   name: replace
 swap:
+  "[aA]rgo[cC][dD]": "ArgoCD"
   aws: AWS
+  "fastly": "Fastly"
   "[gG]it[hH]ub": GitHub
   "[gG]it[hH]ub [aA]ctions": GitHub Actions
+  "json": JSON
+  "[kK]8[sS]": "Kubernetes"
+  "OAUTH": "OAuth"
+  "[pP]ager ?[dD]uty": "PagerDuty"
   "Secrets Manager": SecretsManager
