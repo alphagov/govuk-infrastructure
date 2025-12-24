@@ -3,6 +3,7 @@ API
 ArgoCD
 AWS
 CI/CD
+CNAME
 Cognito
 CRD(s?)
 Dex
@@ -26,6 +27,7 @@ Pulumi
 SecretsManager
 SHA
 Terraform Cloud
+TLS
 UI
 UIs
 URL
