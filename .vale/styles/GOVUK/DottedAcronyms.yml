@@ -1,0 +1,6 @@
+extends: conditional
+message: "Do not use dots in acronyms"
+link: 'https://www.gov.uk/guidance/style-guide/a-to-z#abbreviations-acronyms-and-initialisms'
+level: error
+ignorecase: false
+first: '\b[A-Z]\.([A-Z]\.)+\b'

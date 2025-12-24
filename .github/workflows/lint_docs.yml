@@ -1,0 +1,30 @@
+on:
+  workflow_dispatch: {}
+  pull_request:
+    paths:
+      - "docs/**/*"
+
+env:
+  VALE_VERSION: "3.13.0"
+jobs:
+  lint_docs:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+        with:
+          show-progress: false
+
+      - name: "Setup Vale"
+        run: |
+          wget -q -O "vale.tar.gz" "https://github.com/errata-ai/vale/releases/download/v${{env.VALE_VERSION}}/vale_${{env.VALE_VERSION}}_Linux_64-bit.tar.gz"
+          
+          tar xzf "vale.tar.gz"
+          chmod +x ./vale
+          
+          # add current directory to $PATH so that the binary gets found
+          echo "${PWD}" >> "${GITHUB_PATH}"
+          
+
+      - name: "Run Vale"
+        run: |
+          make lint_docs
