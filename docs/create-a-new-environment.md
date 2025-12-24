@@ -8,13 +8,12 @@ account for the first time.
 You will need an AWS account for the new environment, and administrator access to that
 account.
 
-`govuk-infrastructure` depends on [govuk-aws] for some AWS resources and
+`govuk-infrastructure` depends on [the `govuk-aws` repository](https://github.com/alphagov/govuk-aws) for some AWS resources and
 essential services such as the VPC, databases, message queues and so on.
 Eventually all these resources will move to this repository. Until then we must
 deploy `govuk-infrastructure` into an existing GOV.UK AWS account
-containing the old [EC2/Puppet stack][govuk-puppet].
+containing the old [EC2 and Puppet stack][govuk-puppet].
 
-[govuk-aws]: https://github.com/alphagov/govuk-aws
 [govuk-puppet]: https://github.com/alphagov/govuk-puppet
 
 ## Terraform

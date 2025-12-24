@@ -1,7 +1,7 @@
 # Upgrading the cluster
 
 This is a generic guide on how to upgrade the cluster to a newer version.
-As this cannot anticipate future changes, you should not follow it blindly. You should modify it in accordance with the 
+As this cannot predict future changes, you should not follow it blindly. You should makes changes to it in accordance with the 
 specific instructions that arise for a particular version. Please consult AWS documentation and changelogs before using 
 this procedure.
 
@@ -12,8 +12,7 @@ We upgrade the cluster in place, starting with integration, followed by staging,
 
 You can only upgrade from one version to the next, 1.17 to 1.18 for example but not 1.17 to 1.21.
 
-Once you have completed an upgrade, you cannot downgrade a cluster. You will have to rebuild it from scratch if you 
-want to downgrade.
+Once you have completed a cluster upgrade, you cannot roll it back. You will have to rebuild it from scratch if you need to do so.
 
 ## Preparing to upgrade
 
@@ -48,20 +47,18 @@ A one sentence summary of the changes and how/if they affect us
 
 If any of these steps point to an issue that would prevent you upgrading, you should stop here. 
 
-If any of these steps point to a change that needs making prior to the upgrade, raise it with the team and decide how
+If any of these steps point to a change that needs making before the upgrade, raise it with the team and decide how
 to proceed.
 
 
 ## Step-by-step procedure
-<!-- vale Google.WordList = NO --> 
 You can upgrade the EKS cluster by changing the version in Terraform and applying the change through Terraform Cloud. Terraform
 will first upgrade the control plane version, then the node groups, and finally any cluster add-ons. It will pick the most appropriate
-version for each component.
+version for each <!-- vale RedHat.SimpleWords=OFF -->component<!-- vale RedHat.SimpleWords=ON -->.
 
 1. Increment `cluster_version` to the version you are upgrading to in `terraform/tfc-configuration/variables-<ENV>.tf`
 2. Raise the change as a PR, and merge it 
-3. Plan and apply a new run in the `tfc-configuration` workspace in Terraform Cloud. This will update the variable sets to the new cluster_version
+3. Plan and apply a new run in the `tfc-configuration` workspace in Terraform Cloud. This will update the variable sets to the new `cluster_version`
 4. Plan and apply a new run in the `cluster-infrastructure-<ENV>` workspace in Terraform Cloud.
 
-You should expect it to take 30-45 minutes to upgrade each cluster.  
-
+You should expect it to take 30-45 minutes to upgrade each cluster.

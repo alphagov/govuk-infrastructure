@@ -10,15 +10,15 @@ of the website.
 
 ### Configuration as code
 
-We use [Terraform] to manage those AWS resources which we don't (yet) manage
-via Kubernetes.
+We use [Terraform] to manage those AWS resources, which we don't (yet) manage
+with Kubernetes.
 
-This repo holds the Terraform configuration for the EKS clusters and some of
+This repository holds the Terraform configuration for the EKS clusters and some of
 the other AWS services that we use to run GOV.UK.
 
-Some GOV.UK services, such as managed databases and the static www mirrors, are
-still managed via the [legacy `govuk-aws`](https://github.com/alphagov/govuk-aws) 
-and [`govuk-aws-data` repositories](https://github.com/alphagov/govuk-aws-data).
+Some GOV.UK services, such as managed databases and the static `www` mirrors, are
+still managed by the [legacy `govuk-aws` repository](https://github.com/alphagov/govuk-aws) 
+and [the `govuk-aws-data` repository](https://github.com/alphagov/govuk-aws-data).
 
 There is a playbook for [deploying a new GOV.UK Kubernetes
 environment](create-a-new-environment.md).
