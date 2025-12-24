@@ -1,15 +1,21 @@
 .PHONY: lint_docs
 LINT_DOCS ?= docs/
+WATCH_DOCS ?= false
+
+fn_vale = vale --config ".vale.ini" --no-global --no-exit --glob "*.md" $(1)
 lint_docs:
-	@vale sync
-	@vale \
-		--config ".vale.ini" \
-		--glob='**/*.md' \
-		--no-global \
-		--no-exit \
-		${LINT_DOCS}
+	@$(call fn_vale,${LINT_DOCS})
 	@if [ ${LINT_DOCS} == "docs/" ]; then \
   		1>&2 echo ""; \
    		1>&2 echo "TIP: use the LINT_DOCS variable to target just the documents you want to lint"; \
    		1>&2 echo "\n\tmake lint_docs LINT_DOCS=./docs/README.md"; \
    	fi;
+	@if [ ${WATCH_DOCS} == true ]; then \
+		fswatch -r -e ".*" -i "\\.md$$" -i "\\.txt$$" -i "\\.yml$$" .vale/ ${LINT_DOCS} \
+		| xargs -I {} sh -c 'clear && $(call fn_vale,{})'; \
+  	else \
+  	  	1>&2 echo ""; \
+  	  	1>&2 echo "TIP: use WATCH_DOCS=true to re-run the linter whenever the files change"; \
+  	  	1>&2 echo "\n\tmake lint_docs WATCH_DOCS=true"; \
+  	  	1>&2 echo "\tmake lint_docs LINT_DOCS=./docs/README.md WATCH_DOCS=true"; \
+	fi;
