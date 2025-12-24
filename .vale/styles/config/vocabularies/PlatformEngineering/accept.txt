@@ -2,12 +2,14 @@
 API
 ArgoCD
 AWS
+CI/CD
 Cognito
 CRD(s?)
 Dex
 Dhall
 Fargate
 Fastly
+FileBeat
 Fluentd
 GOV.UK
 GSuite
@@ -18,8 +20,10 @@ Jsonnet
 Kargo
 Logit
 OAuth
+PagerDuty
 Pkl
 Pulumi
+SecretsManager
 SHA
 Terraform Cloud
 UI
@@ -29,6 +33,7 @@ VPC
 config
 creds
 devops
+legacy
 namespace[sd]
 repo
 repoint
