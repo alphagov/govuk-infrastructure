@@ -13,7 +13,9 @@ swap:
   "json": JSON
   "[kK]8[sS]": "Kubernetes"
   "[lL]et'?s ?[eE]ncrypt": "Let's Encrypt"
+  "LB(s?)": "load balancers"
   "OAUTH": "OAuth"
   "[pP]ager ?[dD]uty": "PagerDuty"
   "Secrets Manager": SecretsManager
   "[tT]erraform": Terraform
+  "TF": Terraform

@@ -36,6 +36,8 @@ UI
 UIs
 URL
 VPC
+be applied
+been applied
 config
 creds
 devops
