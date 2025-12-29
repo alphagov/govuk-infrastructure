@@ -1,4 +1,6 @@
 [aA]dmin
+ADR
+ADRs
 API
 ArgoCD
 AWS
@@ -20,9 +22,11 @@ JSON
 Jsonnet
 Kargo
 Logit
+Nygard
 OAuth
 PagerDuty
 Pkl
+Pryce
 Pulumi
 SecretsManager
 SHA
