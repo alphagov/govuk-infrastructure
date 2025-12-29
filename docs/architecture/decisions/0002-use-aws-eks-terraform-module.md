@@ -16,7 +16,7 @@ Adopt the [existing Terraform registry EKS module](https://registry.terraform.io
 
 ## Consequences
 
-We can define fully configured EKS clusters quickly and easily, as many module defaults will be fine for our purposes 
+We can define fully configured EKS clusters quickly and easily, because many module defaults will be fine for our purposes 
 for the foreseeable future.
 
 The EKS module has comprehensive support for many of the options for EKS cluster config (e.g. worker node types). 

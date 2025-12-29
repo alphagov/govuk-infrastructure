@@ -1,13 +1,13 @@
 # Upgrading the cluster
 
 This is a generic guide on how to upgrade the cluster to a newer version.
-As this cannot predict future changes, you should not follow it blindly. You should makes changes to it in accordance with the 
+This cannot predict future changes, so you should not follow it blindly. You should make changes to it in accordance with the 
 specific instructions that arise for a particular version. Please consult AWS documentation and changelogs before using 
 this procedure.
 
 ## General outline and things to know
 
-To use this guide you should know ['how to apply terraform.'](../terraform/docs/applying-terraform.md)
+To use this guide you should know ['how to apply Terraform.'](../terraform/docs/applying-terraform.md)
 We upgrade the cluster in place, starting with integration, followed by staging, and finally production. Integration and staging allow us to make sure that the upgrade goes without problems.
 
 You can only upgrade from one version to the next, 1.17 to 1.18 for example but not 1.17 to 1.21.

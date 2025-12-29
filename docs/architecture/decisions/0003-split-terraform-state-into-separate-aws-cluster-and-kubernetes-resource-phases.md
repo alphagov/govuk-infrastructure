@@ -56,7 +56,7 @@ This should also prevent failures when tearing down EKS clusters with deployed w
 in a destruction plan. It is not possible to delete an EKS cluster to which other AWS resources still point.
 
 This decision also introduces a clear boundary and separation of concerns between Kubernetes cluster provisioning, and 
-in-cluster resources and configuration. This is an important and useful separation to enforce, as it keeps the largely 
+in-cluster resources and configuration. This is an important and useful separation to enforce, because it keeps the largely 
 generic cluster infrastructure separate from the GOV.UK-specific configuration and supporting services. This, in principle,
 provides a path to switching from an EKS cluster to any other Kubernetes cluster in any environment. It also provides 
 a baseline EKS cluster that we could use for other non-GOV.UK purposes in the future.
