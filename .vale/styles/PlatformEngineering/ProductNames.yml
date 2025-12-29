@@ -16,3 +16,4 @@ swap:
   "OAUTH": "OAuth"
   "[pP]ager ?[dD]uty": "PagerDuty"
   "Secrets Manager": SecretsManager
+  "[tT]erraform": Terraform
