@@ -580,8 +580,8 @@ module "variable-set-rds-production" {
 
       publishing_api = {
         engine                    = "postgres"
-        engine_version            = "13.22"
-        replica_engine_version    = "13.22"
+        engine_version            = "17.6"
+        replica_engine_version    = "17.6"
         replica_apply_immediately = false
         engine_params = {
           log_min_duration_statement = { value = 10000 }
@@ -605,7 +605,7 @@ module "variable-set-rds-production" {
             apply_method = "pending-reboot"
           }
         }
-        engine_params_family         = "postgres13"
+        engine_params_family         = "postgres17"
         name                         = "publishing-api"
         allocated_storage            = 1000
         iops                         = 24000
