@@ -27,6 +27,7 @@ ITHC
 JSON
 Jsonnet
 Kargo
+Kibana
 Kustomize
 Logit
 Nygard
@@ -38,6 +39,7 @@ Pryce
 Pulumi
 SecretsManager
 SHA
+SSO
 Terraform
 Terraform Cloud
 TCP
