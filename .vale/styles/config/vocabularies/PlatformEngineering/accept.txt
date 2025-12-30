@@ -1,6 +1,8 @@
 [aA]dmin
 ADR
 ADRs
+AMI
+AMIs
 API
 ArgoCD
 AWS
@@ -41,6 +43,7 @@ UI
 UIs
 URL
 VPC
+autoscaling
 be applied
 been applied
 component
@@ -48,9 +51,11 @@ config
 creds
 destroy
 devops
+equivalent
 legacy
 modify
 namespace([sd]?)
+overhead
 repo
 repoint
 signon
