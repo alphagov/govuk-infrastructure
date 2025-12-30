@@ -9,7 +9,8 @@ CNAME
 Cognito
 CRD(s?)
 Dex
-Dhall
+Dhal
+DNS
 Fargate
 Fastly
 FileBeat
@@ -17,12 +18,15 @@ Fluentd
 GOV.UK
 GSuite
 Grafana
+HTTP
+HTTPS
 ITHC
 JSON
 Jsonnet
 Kargo
 Logit
 Nygard
+NLBs
 OAuth
 PagerDuty
 Pkl
@@ -31,6 +35,7 @@ Pulumi
 SecretsManager
 SHA
 Terraform Cloud
+TCP
 TLS
 UI
 UIs
@@ -38,11 +43,14 @@ URL
 VPC
 be applied
 been applied
+component
 config
 creds
+destroy
 devops
 legacy
-namespace[sd]
+modify
+namespace([sd]?)
 repo
 repoint
 signon
