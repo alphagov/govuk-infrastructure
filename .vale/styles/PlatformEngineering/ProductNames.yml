@@ -12,6 +12,7 @@ swap:
   "[gG]it[hH]ub [aA]ctions": GitHub Actions
   "json": JSON
   "[kK]8[sS]": "Kubernetes"
+  "kubernetes": "Kubernetes"
   "[lL]et'?s ?[eE]ncrypt": "Let's Encrypt"
   "LB(s?)": "load balancers"
   "OAUTH": "OAuth"
@@ -19,3 +20,4 @@ swap:
   "Secrets Manager": SecretsManager
   "[tT]erraform": Terraform
   "TF": Terraform
+  "[yY]aml": YAML

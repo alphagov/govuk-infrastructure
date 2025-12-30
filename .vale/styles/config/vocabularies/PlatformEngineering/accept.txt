@@ -7,6 +7,7 @@ API
 ArgoCD
 AWS
 CI/CD
+CircleCI
 CNAME
 Cognito
 CRD(s?)
@@ -26,6 +27,7 @@ ITHC
 JSON
 Jsonnet
 Kargo
+Kustomize
 Logit
 Nygard
 NLBs
@@ -36,6 +38,7 @@ Pryce
 Pulumi
 SecretsManager
 SHA
+Terraform
 Terraform Cloud
 TCP
 TLS
@@ -43,6 +46,7 @@ UI
 UIs
 URL
 VPC
+YAML
 autoscaling
 be applied
 been applied
@@ -53,6 +57,7 @@ destroy
 devops
 equivalent
 legacy
+maintain
 modify
 namespace([sd]?)
 overhead
