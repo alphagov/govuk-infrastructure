@@ -11,8 +11,12 @@ swap:
   "fastly": "Fastly"
   "[fF]luent ?[bB]it": Fluent Bit # this appears to be how the product is referred to in prose. fluentbit is how it appears in code?
   "[fF]luent[dD]": Fluentd
+  "git": Git
   "[gG]it[hH]ub": GitHub
   "[gG]it[hH]ub [aA]ctions": GitHub Actions
+  "[hH]ashi[cC]orp": HashiCorp
+  "[jJ][sS]": "JavaScript"
+  "[jJ]ava[sS]cript": "JavaScript"
   "json": JSON
   "[kK]8[sS]": "Kubernetes"
   "[kK]ibana": "Kibana"

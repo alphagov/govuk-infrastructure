@@ -4,6 +4,7 @@ ADRs
 AMI
 AMIs
 API
+APIs
 ArgoCD
 AWS
 CI/CD
@@ -21,9 +22,12 @@ Fluentd
 GOV.UK
 GSuite
 Grafana
+HashiCorp
 HTTP
 HTTPS
+IAM
 ITHC
+JavaScript
 JSON
 Jsonnet
 Kargo
