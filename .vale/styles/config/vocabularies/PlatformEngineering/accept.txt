@@ -1,6 +1,7 @@
 [aA]dmin
 ADR
 ADRs
+Alertmanager
 AMI
 AMIs
 API

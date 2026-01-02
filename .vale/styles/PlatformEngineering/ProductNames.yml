@@ -5,6 +5,7 @@ level: error
 action:
   name: replace
 swap:
+  "[aA]lert ?[mM]anager": Alertmanager
   "[aA]rgo[cC][dD]": "ArgoCD"
   aws: AWS
   "[eE]lasticsearch": Elasticsearch
