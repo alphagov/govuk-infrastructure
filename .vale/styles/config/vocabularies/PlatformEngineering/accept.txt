@@ -59,6 +59,7 @@ been applied
 component
 config
 creds
+declaratively
 destroy
 devops
 equivalent
