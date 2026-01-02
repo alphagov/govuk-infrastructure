@@ -8,13 +8,16 @@ swap:
   "[aA]lert ?[mM]anager": Alertmanager
   "[aA]rgo[cC][dD]": "ArgoCD"
   aws: AWS
+  "[cC]loud ?[tT]rail": CloudTrail
   "[eE]lasticsearch": Elasticsearch
   "fastly": "Fastly"
   "[fF]luent ?[bB]it": Fluent Bit # this appears to be how the product is referred to in prose. fluentbit is how it appears in code?
   "[fF]luent[dD]": Fluentd
+  "(gha|GHA)": GitHub Actions
   "git": Git
   "[gG]it[hH]ub": GitHub
   "[gG]it[hH]ub [aA]ctions": GitHub Actions
+  "[g]uard ?[dD]uty": GuardDuty
   "[hH]ashi[cC]orp": HashiCorp
   "[jJ][sS]": "JavaScript"
   "[jJ]ava[sS]cript": "JavaScript"

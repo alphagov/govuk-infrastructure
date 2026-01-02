@@ -12,6 +12,7 @@ Autoscaler?s?
 AWS
 CI/CD
 CircleCI
+CloudTrail
 CNAME
 Cognito
 CRD(s?)
@@ -27,6 +28,7 @@ Fluentd
 GOV.UK
 GSuite
 Grafana
+GuardDuty
 HashiCorp
 HTTP
 HTTPS
@@ -79,9 +81,11 @@ monitor
 namespace
 namespaced
 namespaces
+onboarding
 overhead
 repo
 repoint
 signon
 subsequent
+tooling
 www
