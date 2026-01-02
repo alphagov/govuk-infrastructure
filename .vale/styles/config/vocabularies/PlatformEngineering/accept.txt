@@ -48,6 +48,7 @@ Pryce
 Pulumi
 SecretsManager
 SHA
+Signon
 SSO
 Terraform
 Terraform Cloud
@@ -68,6 +69,7 @@ declaratively
 destroy
 devops
 equivalent
+favicon
 legacy
 maintain
 modify
