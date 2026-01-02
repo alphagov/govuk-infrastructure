@@ -9,3 +9,5 @@ swap:
   '([a-z]+)yze': "$1yse"
   '([a-z]+)ense': "$1ence"
   'color': 'colour'
+exceptions:
+  - size

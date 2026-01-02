@@ -4,6 +4,7 @@ ADRs
 Alertmanager
 AMI
 AMIs
+AMD
 API
 APIs
 ArgoCD
@@ -13,6 +14,8 @@ CircleCI
 CNAME
 Cognito
 CRD(s?)
+CPU
+CPUs
 Dex
 Dhal
 DNS
@@ -35,6 +38,7 @@ Kargo
 Kibana
 Kustomize
 Logit
+MacBooks?
 Nygard
 NLBs
 OAuth
