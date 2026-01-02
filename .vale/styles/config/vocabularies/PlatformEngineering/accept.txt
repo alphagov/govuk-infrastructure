@@ -8,6 +8,7 @@ AMD
 API
 APIs
 ArgoCD
+Autoscaler?s?
 AWS
 CI/CD
 CircleCI
@@ -48,6 +49,7 @@ Pryce
 Pulumi
 SecretsManager
 SHA
+Sidekiq
 Signon
 SSO
 Terraform
@@ -73,7 +75,10 @@ favicon
 legacy
 maintain
 modify
-namespace([sd]?)
+monitor
+namespace
+namespaced
+namespaces
 overhead
 repo
 repoint

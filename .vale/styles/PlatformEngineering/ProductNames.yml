@@ -27,6 +27,7 @@ swap:
   "OAUTH": "OAuth"
   "[pP]ager ?[dD]uty": "PagerDuty"
   "Secrets Manager": SecretsManager
+  "[sS]ide[kK]i([qQ]|ck)": "Sidekiq"
   "[tT]erraform": Terraform
   "TF": Terraform
   "[yY]aml": YAML
