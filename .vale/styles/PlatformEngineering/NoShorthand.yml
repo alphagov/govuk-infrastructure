@@ -1,0 +1,9 @@
+extends: substitution
+message: "Avoid using shorthand for common things. Use '%s' not '%s'."
+ignorecase: false
+level: error
+action:
+  name: replace
+swap:
+  "[rR]ep": repository
+  "infra": infrastructure
