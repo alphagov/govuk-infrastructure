@@ -291,6 +291,11 @@ resource "aws_db_instance" "replica" {
   auto_minor_version_upgrade = aws_db_instance.instance[each.key].auto_minor_version_upgrade
   backup_window              = aws_db_instance.instance[each.key].backup_window
   maintenance_window         = aws_db_instance.instance[each.key].maintenance_window
+  multi_az = (
+    each.value.replica_multi_az != null
+    ? each.value.replica_multi_az
+    : var.multi_az
+  )
 
   skip_final_snapshot = true
 
@@ -330,6 +335,11 @@ resource "aws_db_instance" "normalised_replica" {
   auto_minor_version_upgrade = aws_db_instance.normalised_instance[each.key].auto_minor_version_upgrade
   backup_window              = aws_db_instance.normalised_instance[each.key].backup_window
   maintenance_window         = aws_db_instance.normalised_instance[each.key].maintenance_window
+  multi_az = (
+    each.value.replica_multi_az != null
+    ? each.value.replica_multi_az
+    : var.multi_az
+  )
 
   skip_final_snapshot = true
 
