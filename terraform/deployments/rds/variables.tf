@@ -49,6 +49,7 @@ variable "databases" {
     has_read_replica          = optional(bool, false)
     replica_engine_version    = optional(string)
     replica_apply_immediately = optional(string)
+    replica_multi_az          = optional(bool)
 
     // Attributes for migration
     isolate                     = optional(bool, false)
