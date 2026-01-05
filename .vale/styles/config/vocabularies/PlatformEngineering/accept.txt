@@ -7,6 +7,7 @@ AMIs
 AMD
 API
 APIs
+Argo
 ArgoCD
 Autoscaler?s?
 AWS
@@ -86,8 +87,9 @@ namespaced
 namespaces
 onboarding
 overhead
-repo
 repoint
+[rR]ollouts?
+[sS]harding
 signon
 subsequent
 tooling
