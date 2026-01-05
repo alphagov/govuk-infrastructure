@@ -14,6 +14,7 @@ AWS
 CI/CD
 CircleCI
 CLI
+CloudFront
 CloudTrail
 CNAME
 CodeCommit
@@ -62,6 +63,7 @@ Terraform
 Terraform Cloud
 TCP
 TLS
+TTLs?
 UI
 UIs
 URL

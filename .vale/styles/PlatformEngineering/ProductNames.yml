@@ -8,6 +8,7 @@ swap:
   "[aA]lert ?[mM]anager": Alertmanager
   "[aA]rgo[cC][dD]": "ArgoCD"
   aws: AWS
+  "[cC]loud ?[fF]ront": CloudFront
   "[cC]loud ?[tT]rail": CloudTrail
   "[cC]ross ?[pP]lane": Crossplane
   "[eE]lasticsearch": Elasticsearch
