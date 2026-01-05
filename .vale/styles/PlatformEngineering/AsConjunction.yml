@@ -1,8 +1,9 @@
 extends: existence
 message: |
-  "As" being usd as a conjuction.
+  "As" being used as a conjunction.
   Consider replacing "as" with "because"
 level: error
 ignorecase: false
 raw:
   - ', as (?!\ba\b)'
+  - ', as (?!\bin\b)'

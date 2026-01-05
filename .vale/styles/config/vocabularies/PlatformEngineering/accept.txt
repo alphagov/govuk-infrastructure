@@ -24,7 +24,7 @@ CPUs
 CRD(s?)
 Crossplane
 Dex
-Dhal
+Dhall
 DNS
 Fargate
 Fastly
@@ -35,14 +35,17 @@ GSuite
 Grafana
 GuardDuty
 HashiCorp
+HCL
 HTTP
 HTTPS
 IAM
+IDEs?
 ITHC
 JavaScript
 JSON
 Jsonnet
 Kargo
+KCL
 Kibana
 Kustomize
 Logit
