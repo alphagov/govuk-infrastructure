@@ -67,7 +67,7 @@ module "govuk-publishing-infrastructure-variable-set-integration" {
       { type = "CNAME", name = "draft-origin", ttl = 3600, value = ["draft-origin.eks.integration.govuk.digital."] },
       { type = "CNAME", name = "email-alert-api-public", ttl = 3600, value = ["email-alert-api.eks.integration.govuk.digital."] },
       { type = "CNAME", name = "fact-check-manager", ttl = 3600, value = ["fact-check-manager.eks.integration.govuk.digital."] },
-      { type = "CNAME", name = "gov-search", ttl = 3600, value = ["gov-seach.eks.integration.govuk.digital."] },
+      { type = "CNAME", name = "gov-search", ttl = 3600, value = ["gov-search.eks.integration.govuk.digital."] },
       { type = "CNAME", name = "hmrc-manuals-api", ttl = 3600, value = ["hmrc-manuals-api.eks.integration.govuk.digital."] },
       { type = "CNAME", name = "licensify.eks", ttl = 3600, value = ["licensify.eks.integration.govuk.digital."] },
       { type = "CNAME", name = "licensify", ttl = 3600, value = ["licensify.eks.integration.govuk.digital."] },
