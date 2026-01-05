@@ -608,6 +608,7 @@ module "variable-set-rds-production" {
         isolate                      = false
         cname_point_to_new_instance  = false
         new_db_deletion_protection   = false
+        replica_apply_immediately    = true
       }
 
       publisher = {
