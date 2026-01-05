@@ -9,6 +9,7 @@ swap:
   "[aA]rgo[cC][dD]": "ArgoCD"
   aws: AWS
   "[cC]loud ?[tT]rail": CloudTrail
+  "[cC]ross ?[pP]lane": Crossplane
   "[eE]lasticsearch": Elasticsearch
   "fastly": "Fastly"
   "[fF]luent ?[bB]it": Fluent Bit # this appears to be how the product is referred to in prose. fluentbit is how it appears in code?

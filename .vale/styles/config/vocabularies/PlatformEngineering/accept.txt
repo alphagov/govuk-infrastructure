@@ -18,9 +18,10 @@ CloudTrail
 CNAME
 CodeCommit
 Cognito
-CRD(s?)
 CPU
 CPUs
+CRD(s?)
+Crossplane
 Dex
 Dhal
 DNS
@@ -73,6 +74,7 @@ been applied
 component
 config
 creds
+cron
 declaratively
 destroy
 devops
