@@ -15,6 +15,7 @@ CircleCI
 CLI
 CloudTrail
 CNAME
+CodeCommit
 Cognito
 CRD(s?)
 CPU
@@ -64,6 +65,7 @@ UIs
 URL
 VPC
 YAML
+automations
 autoscaling
 be applied
 been applied
