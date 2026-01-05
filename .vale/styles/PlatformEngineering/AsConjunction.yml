@@ -1,10 +1,8 @@
-extends: substitution
+extends: existence
 message: |
   "As" being usd as a conjuction.
   Consider replacing "as" with "because"
 level: error
-ignorecase: true
-action:
-  name: replace
-swap:
-  ", as": "because"
+ignorecase: false
+raw:
+  - ', as (?!\ba\b)'
