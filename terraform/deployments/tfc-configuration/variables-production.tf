@@ -171,7 +171,7 @@ module "variable-set-rds-production" {
         encryption_at_rest           = false
         prepare_to_launch_new_db     = false
         backup_window                = "20:00-20:30"
-        maintenance_window           = "Tue:00:00-Tue:02:00"
+        maintenance_window           = "Sat:00:00-Sat:02:00"
         auto_minor_version_upgrade   = false
         launch_new_db                = false
         isolate                      = false
@@ -198,7 +198,7 @@ module "variable-set-rds-production" {
         encryption_at_rest           = false
         prepare_to_launch_new_db     = false
         backup_window                = "20:00-20:30"
-        maintenance_window           = "Tue:00:00-Tue:02:00"
+        maintenance_window           = "Sat:00:00-Sat:02:00"
         auto_minor_version_upgrade   = false
         launch_new_db                = false
         isolate                      = false
@@ -272,7 +272,7 @@ module "variable-set-rds-production" {
         encryption_at_rest           = false
         prepare_to_launch_new_db     = false
         backup_window                = "20:00-20:30"
-        maintenance_window           = "Tue:00:00-Tue:02:00"
+        maintenance_window           = "Sat:00:00-Sat:02:00"
         auto_minor_version_upgrade   = false
         launch_new_db                = false
         isolate                      = false
@@ -299,7 +299,7 @@ module "variable-set-rds-production" {
         encryption_at_rest           = false
         prepare_to_launch_new_db     = false
         backup_window                = "20:00-20:30"
-        maintenance_window           = "Tue:00:00-Tue:02:00"
+        maintenance_window           = "Sat:00:00-Sat:02:00"
         auto_minor_version_upgrade   = false
         launch_new_db                = false
         isolate                      = false
@@ -358,7 +358,7 @@ module "variable-set-rds-production" {
         encryption_at_rest           = false
         prepare_to_launch_new_db     = false
         backup_window                = "20:00-20:30"
-        maintenance_window           = "Tue:00:00-Tue:02:00"
+        maintenance_window           = "Sat:00:00-Sat:02:00"
         auto_minor_version_upgrade   = false
         launch_new_db                = false
         isolate                      = false
@@ -384,7 +384,7 @@ module "variable-set-rds-production" {
         encryption_at_rest           = false
         prepare_to_launch_new_db     = false
         backup_window                = "20:00-20:30"
-        maintenance_window           = "Tue:00:00-Tue:02:00"
+        maintenance_window           = "Sat:00:00-Sat:02:00"
         auto_minor_version_upgrade   = false
         launch_new_db                = false
         isolate                      = false
@@ -410,7 +410,7 @@ module "variable-set-rds-production" {
         encryption_at_rest           = false
         prepare_to_launch_new_db     = false
         backup_window                = "20:00-20:30"
-        maintenance_window           = "Tue:00:00-Tue:02:00"
+        maintenance_window           = "Sat:00:00-Sat:02:00"
         auto_minor_version_upgrade   = false
         launch_new_db                = false
         isolate                      = false
@@ -436,7 +436,7 @@ module "variable-set-rds-production" {
         encryption_at_rest           = false
         prepare_to_launch_new_db     = false
         backup_window                = "20:00-20:30"
-        maintenance_window           = "Tue:00:00-Tue:02:00"
+        maintenance_window           = "Sat:00:00-Sat:02:00"
         auto_minor_version_upgrade   = false
         launch_new_db                = false
         isolate                      = false
@@ -462,7 +462,7 @@ module "variable-set-rds-production" {
         encryption_at_rest           = false
         prepare_to_launch_new_db     = false
         backup_window                = "20:00-20:30"
-        maintenance_window           = "Tue:00:00-Tue:02:00"
+        maintenance_window           = "Sat:00:00-Sat:02:00"
         auto_minor_version_upgrade   = false
         launch_new_db                = false
         isolate                      = false
@@ -490,7 +490,7 @@ module "variable-set-rds-production" {
         encryption_at_rest           = false
         prepare_to_launch_new_db     = false
         backup_window                = "20:00-20:30"
-        maintenance_window           = "Tue:00:00-Tue:02:00"
+        maintenance_window           = "Sat:00:00-Sat:02:00"
         auto_minor_version_upgrade   = false
         launch_new_db                = false
         isolate                      = false
@@ -544,7 +544,7 @@ module "variable-set-rds-production" {
         encryption_at_rest           = false
         prepare_to_launch_new_db     = false
         backup_window                = "20:00-20:30"
-        maintenance_window           = "Tue:00:00-Tue:02:00"
+        maintenance_window           = "Sat:00:00-Sat:02:00"
         auto_minor_version_upgrade   = false
         launch_new_db                = false
         isolate                      = false
@@ -570,7 +570,7 @@ module "variable-set-rds-production" {
         encryption_at_rest           = false
         prepare_to_launch_new_db     = false
         backup_window                = "20:00-20:30"
-        maintenance_window           = "Tue:00:00-Tue:02:00"
+        maintenance_window           = "Sat:00:00-Sat:02:00"
         auto_minor_version_upgrade   = false
         launch_new_db                = false
         isolate                      = false
@@ -601,7 +601,7 @@ module "variable-set-rds-production" {
         encryption_at_rest           = false
         prepare_to_launch_new_db     = false
         backup_window                = "20:00-20:30"
-        maintenance_window           = "Tue:00:00-Tue:02:00"
+        maintenance_window           = "Sat:00:00-Sat:02:00"
         auto_minor_version_upgrade   = false
         launch_new_db                = false
         launch_new_replica           = false
@@ -628,7 +628,7 @@ module "variable-set-rds-production" {
         encryption_at_rest           = false
         prepare_to_launch_new_db     = false
         backup_window                = "20:00-20:30"
-        maintenance_window           = "Tue:00:00-Tue:02:00"
+        maintenance_window           = "Sat:00:00-Sat:02:00"
         auto_minor_version_upgrade   = false
         launch_new_db                = false
         isolate                      = false
@@ -726,7 +726,7 @@ module "variable-set-rds-production" {
         encryption_at_rest           = false
         prepare_to_launch_new_db     = false
         backup_window                = "20:00-20:30"
-        maintenance_window           = "Tue:00:00-Tue:02:00"
+        maintenance_window           = "Sat:00:00-Sat:02:00"
         auto_minor_version_upgrade   = false
         launch_new_db                = false
         isolate                      = false
@@ -752,7 +752,7 @@ module "variable-set-rds-production" {
         encryption_at_rest           = false
         prepare_to_launch_new_db     = false
         backup_window                = "20:00-20:30"
-        maintenance_window           = "Tue:00:00-Tue:02:00"
+        maintenance_window           = "Sat:00:00-Sat:02:00"
         auto_minor_version_upgrade   = false
         launch_new_db                = false
         isolate                      = false
@@ -778,7 +778,7 @@ module "variable-set-rds-production" {
         encryption_at_rest           = false
         prepare_to_launch_new_db     = false
         backup_window                = "20:00-20:30"
-        maintenance_window           = "Tue:00:00-Tue:02:00"
+        maintenance_window           = "Sat:00:00-Sat:02:00"
         auto_minor_version_upgrade   = false
         launch_new_db                = false
         isolate                      = false
@@ -803,7 +803,7 @@ module "variable-set-rds-production" {
         encryption_at_rest           = false
         prepare_to_launch_new_db     = false
         backup_window                = "20:00-20:30"
-        maintenance_window           = "Tue:00:00-Tue:02:00"
+        maintenance_window           = "Sat:00:00-Sat:02:00"
         auto_minor_version_upgrade   = false
         launch_new_db                = false
         isolate                      = false
