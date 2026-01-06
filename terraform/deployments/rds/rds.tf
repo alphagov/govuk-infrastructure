@@ -218,6 +218,7 @@ resource "aws_cloudwatch_metric_alarm" "rds_freestoragespace" {
     * 1024 * 1024 * 1024 # allocated_storage is in GB, metric value is in bytes
   )
   alarm_actions     = [aws_sns_topic.rds_alerts.arn]
+  ok_actions        = [aws_sns_topic.rds_alerts.arn]
   alarm_description = "Available storage space on ${aws_db_instance.instance[each.key].identifier} RDS is below ${each.value.storage_alarm_threshold_percentage}%."
 }
 
@@ -242,6 +243,7 @@ resource "aws_cloudwatch_metric_alarm" "normalised_rds_freestoragespace" {
     * 1024 * 1024 * 1024 # allocated_storage is in GB, metric value is in bytes
   )
   alarm_actions     = [aws_sns_topic.rds_alerts.arn]
+  ok_actions        = [aws_sns_topic.rds_alerts.arn]
   alarm_description = "Available storage space on ${aws_db_instance.normalised_instance[each.key].identifier} RDS is below ${each.value.storage_alarm_threshold_percentage}%."
 }
 
