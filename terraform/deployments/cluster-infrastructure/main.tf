@@ -40,14 +40,14 @@ locals {
   }
 
   default_cluster_addons = {
-    coredns        = { most_recent = true, resolve_conflicts_on_create = "OVERWRITE" }
-    kube-proxy     = { most_recent = true, resolve_conflicts_on_create = "OVERWRITE" }
-    metrics-server = { most_recent = true, resolve_conflicts_on_create = "OVERWRITE" }
-    vpc-cni        = { most_recent = true, resolve_conflicts_on_create = "OVERWRITE" }
+    coredns        = { addon_version = "v1.12.4-eksbuild.1", resolve_conflicts_on_create = "OVERWRITE" }
+    kube-proxy     = { addon_version = "v1.33.5-eksbuild.2", resolve_conflicts_on_create = "OVERWRITE" }
+    metrics-server = { addon_version = "v0.8.0-eksbuild.6", resolve_conflicts_on_create = "OVERWRITE" }
+    vpc-cni        = { addon_version = "v1.21.1-eksbuild.1", resolve_conflicts_on_create = "OVERWRITE" }
   }
 
   kube_state_metrics_addon = {
-    kube-state-metrics = { most_recent = true, resolve_conflicts_on_create = "OVERWRITE" }
+    kube-state-metrics = { addon_version = "v2.17.0-eksbuild.6", resolve_conflicts_on_create = "OVERWRITE" }
   }
 
   enabled_cluster_addons = merge(local.default_cluster_addons, var.enable_kube_state_metrics ? local.kube_state_metrics_addon : {})
