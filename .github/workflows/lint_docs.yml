@@ -1,3 +1,4 @@
+name: "Lint documents"
 on:
   workflow_dispatch: {}
   pull_request:
