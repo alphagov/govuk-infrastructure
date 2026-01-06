@@ -30,6 +30,7 @@ resource "aws_cloudwatch_metric_alarm" "node_group_limit" {
   evaluation_periods  = 2
 
   alarm_actions = [aws_sns_topic.slack_channel.arn]
+  ok_actions    = [aws_sns_topic.slack_channel.arn]
 
   metric_query {
     id          = "count"
