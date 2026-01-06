@@ -29,6 +29,7 @@ swap:
   "kubernetes": "Kubernetes"
   "[lL]et'?s ?[eE]ncrypt": "Let's Encrypt"
   "LB(s?)": "load balancers"
+  "[lL]og ?[sS]tash": Logstash
   "OAUTH": "OAuth"
   "[pP]ager ?[dD]uty": "PagerDuty"
   "Secrets Manager": SecretsManager

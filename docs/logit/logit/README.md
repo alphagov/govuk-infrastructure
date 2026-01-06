@@ -1,7 +1,7 @@
 # Intro
 
-A collection of config files (mainly logstash) for use on logit.io.
+A collection of config files (mainly Logstash) for use on Logit.io.
 
 ## Usage
 
-Currently these are uploaded to Logit via the dashboard.
+Currently we upload these to Logit through the dashboard.
