@@ -61,6 +61,7 @@ SecretsManager
 SHA
 Sidekiq
 Signon
+Skaffold
 SSO
 Terraform
 Terraform Cloud
