@@ -4,6 +4,7 @@ WATCH_DOCS ?= false
 
 fn_vale = vale --config ".vale.ini" --no-global --glob "*.md" $(1)
 lint_docs:
+	@vale sync
 	@EXIT_CODE=0; \
 	$(call fn_vale,${LINT_DOCS}); \
 	EXIT_CODE=$$?; \
