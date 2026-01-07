@@ -5,6 +5,10 @@ on:
 env:
   TF_IN_AUTOMATION: true
   TF_PLUGIN_CACHE_DIR: ${{ github.workspace }}/.terraform.d/plugin-cache
+
+permissions:
+  contents: read
+
 jobs:
   tflint:
     runs-on: ubuntu-latest
