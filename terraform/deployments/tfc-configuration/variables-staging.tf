@@ -871,6 +871,7 @@ module "variable-set-elasticsearch-staging" {
     govuk_environment      = "staging"
     engine_version         = "6.7"
     zone_awareness_enabled = true
+    elasticsearch_enabled = false
 
     instance_count = 3
     instance_type  = "r5.2xlarge.elasticsearch"
