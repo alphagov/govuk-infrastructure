@@ -11,7 +11,7 @@ fi
 source ./db-maintenance-lists.sh
 
 GOVUK_ENVIRONMENT="production"
-DBS=("${LITTLE_7_DBS[@]}")
+DBS=("${BIG_20_DBS[@]}")
 
 export KMS_KEY="alias/govuk/rds"
 

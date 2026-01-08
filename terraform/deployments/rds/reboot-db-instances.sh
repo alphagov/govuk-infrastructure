@@ -6,7 +6,7 @@ source ./db-maintenance-lists.sh
 
 # Change GOVUK_ENVIRONMENT and the DBS assignment on line 66 to choose which databases to reboot
 GOVUK_ENVIRONMENT="production"
-DBS=("${LITTLE_7_DBS[@]}")
+DBS=("${BIG_20_DBS[@]}")
 
 function usage {
   echo
