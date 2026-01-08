@@ -607,7 +607,7 @@ module "variable-set-rds-production" {
         launch_new_db                = true
         new_db_deletion_protection   = true
         cname_point_to_new_instance  = true
-        launch_new_replica           = false
+        launch_new_replica           = true
       }
 
       publisher = {
