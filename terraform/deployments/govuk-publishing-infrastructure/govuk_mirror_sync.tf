@@ -466,7 +466,7 @@ data "aws_iam_policy_document" "govuk_mirror_sync" {
     ]
     resources = [
       "arn:aws:glue:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:catalog",
-      "arn:aws:glue:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:database/fastly-logs"
+      "arn:aws:glue:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:database/fastly_logs"
     ]
     condition {
       test     = "ForAnyValue:StringEquals"
