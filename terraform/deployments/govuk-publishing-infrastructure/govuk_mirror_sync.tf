@@ -462,11 +462,16 @@ data "aws_iam_policy_document" "govuk_mirror_sync" {
   statement {
     sid = "AthenaGluePermissions"
     actions = [
-      "glue:GetDatabase"
+      "glue:GetDatabase",
+      "glue:GetTable",
+      "glue:GetTables",
+      "glue:GetPartition",
+      "glue:GetPartitions",
     ]
     resources = [
       "arn:aws:glue:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:catalog",
-      "arn:aws:glue:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:database/fastly_logs"
+      "arn:aws:glue:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:database/fastly_logs",
+      "arn:aws:glue:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:database/fastly_logs/govuk_www",
     ]
     condition {
       test     = "ForAnyValue:StringEquals"
