@@ -16,6 +16,11 @@ lint_docs:
    		1>&2 echo -e "\n\tmake lint_docs LINT_DOCS=./docs/README.md"; \
    	fi; \
 	if [ "${WATCH_DOCS}" == true ]; then \
+	  	if ! which fswatch >/dev/null; then \
+	  		echo "fswatch not found in the path."; \
+	  		echo "fswatch is required for watching for file changes"; \
+	  		exit 1; \
+	  	fi; \
 		fswatch -r -e ".*" -i "\\.md$$" -i "\\.txt$$" -i "\\.yml$$" .vale/ ${LINT_DOCS} \
 		| xargs -I {} sh -c 'clear && $(call fn_vale,{})'; \
 		exit; \
