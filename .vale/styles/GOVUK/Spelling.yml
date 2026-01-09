@@ -1,0 +1,11 @@
+extends: spelling
+message: "Did you really mean '%s'?"
+level: error
+# This disables the built-in filters. If you omit this
+# key or set it to false, custom filters (see below) are
+# added on top of the built-in ones.
+custom: false
+filters:
+  # Ignore words that are all caps, followed by a lower "s"
+  # This will ignore plural acronyms
+  - '[A-Z]+s$'

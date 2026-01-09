@@ -1,0 +1,10 @@
+extends: conditional
+message: |
+  Sentence beginning with "As".
+  Consider rewording the paragraph to avoid starting a sentence with a conjunction, or otherwise begin the
+  sentence with "Because".
+level: error
+ignorecase: false
+first: '(. |^)\bAs\b(?! a )'
+exceptions:
+  - As a

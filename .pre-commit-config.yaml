@@ -13,3 +13,12 @@ repos:
     rev: v1.105.0
     hooks:
       - id: terraform_fmt
+  - repo: local
+    hooks:
+      - id: lint_docs
+        name: Lint docs
+        language: unsupported
+        entry: make
+        args: [lint_docs]
+        files: "docs/.*"
+        types: ["markdown"]
