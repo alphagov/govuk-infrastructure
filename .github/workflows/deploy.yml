@@ -33,36 +33,7 @@ jobs:
     env:
       ENVIRONMENT: ${{ inputs.environment || 'integration' }}
     steps:
-      - name: Check deploy permissions
-        id: deploy-permissions
-        env:
-          GH_TOKEN: ${{ secrets.GH_TOKEN }}
-          GITHUB_TEAM: gov-uk-production-deploy
-          GITHUB_USER: ${{ github.triggering_actor }}
+      - name: Deployments disabled
         run: |
-          TEAM_MEMBERSHIP=$(gh api "orgs/alphagov/teams/$GITHUB_TEAM/memberships/$GITHUB_USER" -q .state || echo false)
-
-          if [[ "$TEAM_MEMBERSHIP" != "active" && "$ENVIRONMENT" = "production" ]]; then
-            echo "::error title=Insufficient permissions to deploy::User $GITHUB_USER needs to be a member of the GOV.UK Production Deploy team"
-            exit 1
-          fi
-
-      - name: Trigger Argo Workflows
-        if: steps.deploy-permissions.outcome == 'success'
-        env:
-          IMAGE_TAG: ${{ inputs.imageTag }}
-          REPO_NAME: ${{ inputs.appName }}
-          PROMOTE_DEPLOYMENT: ${{ github.event_name == 'release' }}
-          WEBHOOK_TOKEN: ${{ secrets.WEBHOOK_TOKEN }}
-          WEBHOOK_URL: ${{ secrets.WEBHOOK_URL }}
-        run: |
-          curl --fail-with-body --silent \
-            -H "Content-Type: application/json" \
-            -H "Authorization: Bearer ${WEBHOOK_TOKEN}" \
-            -d "{
-              \"environment\": \"${ENVIRONMENT}\",
-              \"repoName\": \"${REPO_NAME}\",
-              \"imageTag\": \"${IMAGE_TAG}\",
-              \"promoteDeployment\": \"${PROMOTE_DEPLOYMENT}\"
-            }" \
-            "${WEBHOOK_URL}/update-image-tag"
+          echo "Deployments are currently disabled for all environments"
+          exit 1
