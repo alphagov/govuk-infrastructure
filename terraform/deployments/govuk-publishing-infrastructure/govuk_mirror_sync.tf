@@ -384,7 +384,7 @@ resource "aws_iam_policy_attachment" "govuk_mirror_gcp_storage_transfer" {
 
 module "govuk_mirror_sync_iam_role" {
   source  = "terraform-aws-modules/iam/aws//modules/iam-eks-role"
-  version = "~> 5.28"
+  version = "~> 6.0"
 
   role_name        = "govuk-mirror-sync"
   role_description = "Role for govuk-mirror-sync to access S3. Corresponds to govuk-mirror-sync k8s ServiceAccount."
