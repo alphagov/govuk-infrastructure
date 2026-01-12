@@ -28,6 +28,9 @@ resource "helm_release" "external_secrets" {
         "eks.amazonaws.com/role-arn" = data.tfe_outputs.cluster_infrastructure.nonsensitive_values.external_secrets_role_arn
       }
     }
+    serviceMonitor = {
+      enabled = true
+    }
     certController = {
       replicaCount = var.desired_ha_replicas
     }
