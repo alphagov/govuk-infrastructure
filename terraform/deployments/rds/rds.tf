@@ -92,8 +92,8 @@ resource "aws_db_instance" "instance" {
   final_snapshot_identifier = "${each.value.name}-final-snapshot"
   skip_final_snapshot       = var.skip_final_snapshot
 
-  storage_encrypted = each.value.encryption_at_rest
-  kms_key_id        = each.value.encryption_at_rest ? aws_kms_key.rds.arn : null
+  storage_encrypted = true
+  kms_key_id        = aws_kms_key.rds.arn
 
   tags = {
     Name    = "govuk-rds-${each.value.name}-${each.value.engine}",
@@ -300,6 +300,9 @@ resource "aws_db_instance" "replica" {
   )
 
   skip_final_snapshot = true
+
+  storage_encrypted = true
+  kms_key_id        = aws_kms_key.rds.arn
 
   tags = {
     Name    = "govuk-rds-${each.value.name}-${each.value.engine}-replica",

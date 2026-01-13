@@ -26,7 +26,6 @@ variable "databases" {
     storage_throughput                 = optional(number)
     storage_alarm_threshold_percentage = optional(number, 10)
     deletion_protection                = optional(bool, true)
-    encryption_at_rest                 = optional(bool, true)
     engine                             = string
     engine_version                     = string
     engine_params = map(object({
