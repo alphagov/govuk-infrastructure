@@ -25,4 +25,10 @@ data "tfe_outputs" "security" {
   workspace    = "security-${var.govuk_environment}"
 }
 
+data "tfe_outputs" "fastly_logs" {
+  organization = "govuk"
+  workspace    = "govuk-fastly-logs-${var.govuk_environment}"
+}
+
+
 data "fastly_ip_ranges" "fastly" {}
