@@ -146,7 +146,6 @@ module "variable-set-rds-integration" {
         instance_class               = "db.t4g.medium"
         performance_insights_enabled = true
         project                      = "GOV.UK - Web"
-        encryption_at_rest           = false
         prepare_to_launch_new_db     = false
         launch_new_db                = true
         isolate                      = true
@@ -172,7 +171,6 @@ module "variable-set-rds-integration" {
         instance_class               = "db.t4g.micro"
         performance_insights_enabled = false
         project                      = "GOV.UK - Publishing"
-        encryption_at_rest           = false
         prepare_to_launch_new_db     = false
         launch_new_db                = true
         isolate                      = true
@@ -197,7 +195,6 @@ module "variable-set-rds-integration" {
         instance_class               = "db.t4g.small"
         performance_insights_enabled = false
         project                      = "GOV.UK - AI"
-        encryption_at_rest           = true
         snapshot_identifier          = "chat-postgres-post-encryption"
         prepare_to_launch_new_db     = false
         launch_new_db                = false
@@ -222,7 +219,6 @@ module "variable-set-rds-integration" {
         instance_class               = "db.m6g.large"
         performance_insights_enabled = true
         project                      = "GOV.UK - DGU"
-        encryption_at_rest           = false
         prepare_to_launch_new_db     = false
         isolate                      = true
         launch_new_db                = true
@@ -244,7 +240,6 @@ module "variable-set-rds-integration" {
         instance_class               = "db.t4g.micro"
         performance_insights_enabled = false
         project                      = "GOV.UK - Publishing"
-        encryption_at_rest           = false
         prepare_to_launch_new_db     = false
         launch_new_db                = true
         isolate                      = true
@@ -270,7 +265,6 @@ module "variable-set-rds-integration" {
         instance_class               = "db.t4g.small"
         performance_insights_enabled = true
         project                      = "GOV.UK - Publishing"
-        encryption_at_rest           = false
         prepare_to_launch_new_db     = false
         launch_new_db                = true
         isolate                      = true
@@ -296,7 +290,6 @@ module "variable-set-rds-integration" {
         instance_class               = "db.t4g.micro"
         performance_insights_enabled = false
         project                      = "GOV.UK - Publishing"
-        encryption_at_rest           = false
         prepare_to_launch_new_db     = false
         isolate                      = true
         launch_new_db                = true
@@ -327,7 +320,6 @@ module "variable-set-rds-integration" {
         instance_class               = "db.m6g.large"
         performance_insights_enabled = false
         project                      = "GOV.UK - Publishing"
-        encryption_at_rest           = false
         prepare_to_launch_new_db     = false
         launch_new_db                = true
         isolate                      = true
@@ -352,7 +344,6 @@ module "variable-set-rds-integration" {
         instance_class               = "db.m6g.large"
         performance_insights_enabled = true
         project                      = "GOV.UK - Publishing"
-        encryption_at_rest           = false
         prepare_to_launch_new_db     = false
         launch_new_db                = true
         isolate                      = true
@@ -377,7 +368,6 @@ module "variable-set-rds-integration" {
         instance_class               = "db.t4g.small"
         performance_insights_enabled = false
         project                      = "GOV.UK - Publishing"
-        encryption_at_rest           = false
         prepare_to_launch_new_db     = false
         launch_new_db                = true
         isolate                      = true
@@ -402,7 +392,6 @@ module "variable-set-rds-integration" {
         instance_class               = "db.m6g.large"
         performance_insights_enabled = true
         project                      = "GOV.UK - Publishing"
-        encryption_at_rest           = false
         prepare_to_launch_new_db     = false
         launch_new_db                = true
         isolate                      = true
@@ -427,7 +416,6 @@ module "variable-set-rds-integration" {
         instance_class               = "db.m6g.large"
         performance_insights_enabled = true
         project                      = "GOV.UK - Web"
-        encryption_at_rest           = false
         prepare_to_launch_new_db     = false
         launch_new_db                = true
         isolate                      = true
@@ -476,7 +464,6 @@ module "variable-set-rds-integration" {
         instance_class               = "db.t4g.medium"
         performance_insights_enabled = false
         project                      = "GOV.UK - Web"
-        encryption_at_rest           = false
         prepare_to_launch_new_db     = false
         launch_new_db                = true
         isolate                      = true
@@ -503,7 +490,6 @@ module "variable-set-rds-integration" {
         performance_insights_enabled = false
         project                      = "GOV.UK - Publishing"
         maintenance_window           = "Mon:00:00-Mon:01:00"
-        encryption_at_rest           = false
         prepare_to_launch_new_db     = false
         isolate                      = true
         launch_new_db                = true
@@ -528,7 +514,6 @@ module "variable-set-rds-integration" {
         instance_class               = "db.t4g.small"
         performance_insights_enabled = false
         project                      = "GOV.UK - Web"
-        encryption_at_rest           = false
         prepare_to_launch_new_db     = false
         launch_new_db                = true
         isolate                      = true
@@ -553,7 +538,6 @@ module "variable-set-rds-integration" {
         instance_class               = "db.m6g.large"
         performance_insights_enabled = true
         project                      = "GOV.UK - Web"
-        encryption_at_rest           = false
         prepare_to_launch_new_db     = false
         launch_new_db                = true
         isolate                      = true
@@ -585,7 +569,6 @@ module "variable-set-rds-integration" {
         performance_insights_enabled = true
         project                      = "GOV.UK - Publishing"
         has_read_replica             = true
-        encryption_at_rest           = false
         prepare_to_launch_new_db     = false
         launch_new_db                = true
         launch_new_replica           = true
@@ -614,7 +597,6 @@ module "variable-set-rds-integration" {
         instance_class               = "db.t4g.small"
         performance_insights_enabled = true
         project                      = "GOV.UK - Publishing"
-        encryption_at_rest           = false
         prepare_to_launch_new_db     = false
         launch_new_db                = true
         isolate                      = true
@@ -637,7 +619,6 @@ module "variable-set-rds-integration" {
         instance_class               = "db.t4g.micro"
         performance_insights_enabled = false
         project                      = "GOV.UK - Infrastructure"
-        encryption_at_rest           = false
         prepare_to_launch_new_db     = false
         isolate                      = true
         launch_new_db                = true
@@ -660,7 +641,6 @@ module "variable-set-rds-integration" {
         instance_class               = "db.t4g.micro"
         performance_insights_enabled = false
         project                      = "GOV.UK - Search"
-        encryption_at_rest           = false
         prepare_to_launch_new_db     = false
         isolate                      = true
         launch_new_db                = true
@@ -686,7 +666,6 @@ module "variable-set-rds-integration" {
         instance_class               = "db.t4g.small"
         performance_insights_enabled = false
         project                      = "GOV.UK - Publishing"
-        encryption_at_rest           = false
         prepare_to_launch_new_db     = false
         isolate                      = true
         launch_new_db                = true
@@ -708,7 +687,6 @@ module "variable-set-rds-integration" {
         instance_class               = "db.t4g.medium"
         performance_insights_enabled = true
         project                      = "GOV.UK - Publishing"
-        encryption_at_rest           = false
         prepare_to_launch_new_db     = false
         launch_new_db                = true
         isolate                      = true
@@ -733,7 +711,6 @@ module "variable-set-rds-integration" {
         instance_class               = "db.t4g.medium"
         performance_insights_enabled = true
         project                      = "GOV.UK - Publishing"
-        encryption_at_rest           = false
         prepare_to_launch_new_db     = false
         launch_new_db                = true
         isolate                      = true
@@ -758,7 +735,6 @@ module "variable-set-rds-integration" {
         instance_class               = "db.m6g.large"
         performance_insights_enabled = true
         project                      = "GOV.UK - Publishing"
-        encryption_at_rest           = false
         prepare_to_launch_new_db     = false
         launch_new_db                = true
         isolate                      = true
@@ -780,7 +756,6 @@ module "variable-set-rds-integration" {
         instance_class               = "db.t4g.large"
         performance_insights_enabled = true
         project                      = "GOV.UK - Publishing"
-        encryption_at_rest           = false
         prepare_to_launch_new_db     = false
         launch_new_db                = true
         isolate                      = true
