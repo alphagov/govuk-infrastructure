@@ -191,16 +191,18 @@ module "variable-set-rds-integration" {
         }
         engine_params_family         = "postgres16"
         name                         = "chat"
+        identifier_override          = "chat-postgres"
         allocated_storage            = 100
         instance_class               = "db.t4g.small"
         performance_insights_enabled = false
         project                      = "GOV.UK - AI"
-        snapshot_identifier          = "chat-postgres-post-encryption"
         prepare_to_launch_new_db     = false
-        launch_new_db                = false
-        isolate                      = false
-        cname_point_to_new_instance  = false
-        new_db_deletion_protection   = false
+        launch_new_db                = true
+        launch_new_db_from_snapshot  = true
+        isolate                      = true
+        cname_point_to_new_instance  = true
+        new_db_deletion_protection   = true
+        destroy_old_instance         = true
       }
 
       ckan = {
