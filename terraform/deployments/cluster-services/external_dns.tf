@@ -24,8 +24,11 @@ resource "helm_release" "external_dns" {
       }
     }
     automountServiceAccountToken = true
-    revisionHistoryLimit         = 10
-    txtOwnerId                   = "govuk"
+    serviceMonitor = {
+      enabled = true
+    }
+    revisionHistoryLimit = 10
+    txtOwnerId           = "govuk"
     domainFilters = [
       data.tfe_outputs.cluster_infrastructure.nonsensitive_values.external_dns_zone_name
     ]
