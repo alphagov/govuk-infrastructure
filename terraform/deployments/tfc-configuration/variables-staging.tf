@@ -233,7 +233,6 @@ module "variable-set-rds-staging" {
         performance_insights_enabled = true
         project                      = "GOV.UK - DGU"
         encryption_at_rest           = false
-        auto_minor_version_upgrade   = false
         prepare_to_launch_new_db     = false
         isolate                      = true
         launch_new_db                = true
@@ -308,7 +307,6 @@ module "variable-set-rds-staging" {
         performance_insights_enabled = false
         project                      = "GOV.UK - Publishing"
         encryption_at_rest           = false
-        auto_minor_version_upgrade   = false
         prepare_to_launch_new_db     = false
         isolate                      = true
         launch_new_db                = true
@@ -494,7 +492,6 @@ module "variable-set-rds-staging" {
         project                      = "GOV.UK - Publishing"
         maintenance_window           = "Mon:00:00-Mon:01:00"
         encryption_at_rest           = false
-        auto_minor_version_upgrade   = false
         prepare_to_launch_new_db     = false
         isolate                      = true
         launch_new_db                = true
@@ -628,7 +625,6 @@ module "variable-set-rds-staging" {
         performance_insights_enabled = false
         project                      = "GOV.UK - Infrastructure"
         encryption_at_rest           = false
-        auto_minor_version_upgrade   = false
         prepare_to_launch_new_db     = false
         isolate                      = true
         launch_new_db                = true
@@ -652,7 +648,6 @@ module "variable-set-rds-staging" {
         performance_insights_enabled = false
         project                      = "GOV.UK - Search"
         encryption_at_rest           = false
-        auto_minor_version_upgrade   = false
         prepare_to_launch_new_db     = false
         isolate                      = true
         launch_new_db                = true
@@ -679,7 +674,6 @@ module "variable-set-rds-staging" {
         performance_insights_enabled = false
         project                      = "GOV.UK - Publishing"
         encryption_at_rest           = false
-        auto_minor_version_upgrade   = false
         prepare_to_launch_new_db     = false
         isolate                      = true
         launch_new_db                = true
