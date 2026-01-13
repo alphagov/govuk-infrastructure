@@ -8,6 +8,7 @@ resource "helm_release" "aws_ebs_csi_driver" {
   timeout          = var.helm_timeout_seconds
   values = [yamlencode({
     controller = {
+      enableMetrics = true
       serviceAccount = {
         create = true
         name   = "ebs-csi-controller-sa"
