@@ -1,0 +1,13 @@
+---
+extends: substitution
+message: "Use British English spellings"
+link: "https://www.gov.uk/guidance/style-guide/a-to-z#american-and-uk-english"
+level: error
+capitalize: true
+swap:
+  '([a-z]+)ize': "$1ise"
+  '([a-z]+)yze': "$1yse"
+  '([a-z]+)ense': "$1ence"
+  'color': 'colour'
+exceptions:
+  - size
