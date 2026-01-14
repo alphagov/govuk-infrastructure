@@ -1,4 +1,4 @@
-resource "aws_security_group" "normalised_rds" {
+resource "aws_security_group" "rds" {
   for_each = var.databases
 
   name        = "${local.identifier_prefix}${each.value.new_name != null ? each.value.new_name : each.value.name}-${var.govuk_environment}-${each.value.engine}-rds-access"
@@ -8,13 +8,13 @@ resource "aws_security_group" "normalised_rds" {
   lifecycle { create_before_destroy = true }
 }
 
-resource "aws_security_group_rule" "normalised_rds_mysql" {
+resource "aws_security_group_rule" "rds_mysql" {
   for_each = {
     for db_name, db in var.databases : db_name => db
     if db.engine == "mysql"
   }
 
-  security_group_id = aws_security_group.normalised_rds[each.key].id
+  security_group_id = aws_security_group.rds[each.key].id
   description       = "Access to MySQL database from EKS worker nodes"
 
   type      = "ingress"
@@ -25,13 +25,13 @@ resource "aws_security_group_rule" "normalised_rds_mysql" {
   source_security_group_id = data.tfe_outputs.cluster_infrastructure.nonsensitive_values.node_security_group_id
 }
 
-resource "aws_security_group_rule" "normalised_rds_postgres" {
+resource "aws_security_group_rule" "rds_postgres" {
   for_each = {
     for db_name, db in var.databases : db_name => db
     if db.engine == "postgres"
   }
 
-  security_group_id = aws_security_group.normalised_rds[each.key].id
+  security_group_id = aws_security_group.rds[each.key].id
   description       = "Access to PostgreSQL database from EKS worker nodes"
 
   type      = "ingress"

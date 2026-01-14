@@ -43,7 +43,7 @@ resource "aws_db_parameter_group" "engine_params" {
   lifecycle { create_before_destroy = true }
 }
 
-resource "aws_db_instance" "normalised_instance" {
+resource "aws_db_instance" "instance" {
   for_each = var.databases
 
   // This is purposefully not referencing the resource so that we can create snapshots outside of terraform and use them to launch
@@ -70,7 +70,7 @@ resource "aws_db_instance" "normalised_instance" {
   copy_tags_to_snapshot       = true
   monitoring_interval         = 60
   monitoring_role_arn         = data.tfe_outputs.logging.nonsensitive_values.rds_enhanced_monitoring_role_arn
-  vpc_security_group_ids      = [aws_security_group.normalised_rds[each.key].id]
+  vpc_security_group_ids      = [aws_security_group.rds[each.key].id]
   ca_cert_identifier          = "rds-ca-rsa2048-g1"
   apply_immediately           = each.value.apply_immediately != null ? each.value.apply_immediately : var.govuk_environment != "production"
   allow_major_version_upgrade = each.value.allow_major_version_upgrade
@@ -108,17 +108,17 @@ resource "aws_db_event_subscription" "subscription" {
   sns_topic = aws_sns_topic.rds_alerts.arn
 
   source_type      = "db-instance"
-  source_ids       = [for i in aws_db_instance.normalised_instance : i.identifier]
+  source_ids       = [for i in aws_db_instance.instance : i.identifier]
   event_categories = ["deletion", "failure", "low storage"]
 }
 
 # Alarm if free storage space is below threshold (typically 10 GiB) for 10m.
-resource "aws_cloudwatch_metric_alarm" "normalised_rds_freestoragespace" {
+resource "aws_cloudwatch_metric_alarm" "rds_freestoragespace" {
   for_each = var.databases
 
-  dimensions = { DBInstanceIdentifier = aws_db_instance.normalised_instance[each.key].identifier }
+  dimensions = { DBInstanceIdentifier = aws_db_instance.instance[each.key].identifier }
 
-  alarm_name          = "${aws_db_instance.normalised_instance[each.key].identifier}-rds-freestoragespace"
+  alarm_name          = "${aws_db_instance.instance[each.key].identifier}-rds-freestoragespace"
   comparison_operator = "LessThanThreshold"
   evaluation_periods  = "10"
   metric_name         = "FreeStorageSpace"
@@ -131,7 +131,7 @@ resource "aws_cloudwatch_metric_alarm" "normalised_rds_freestoragespace" {
   )
   alarm_actions     = [aws_sns_topic.rds_alerts.arn]
   ok_actions        = [aws_sns_topic.rds_alerts.arn]
-  alarm_description = "Available storage space on ${aws_db_instance.normalised_instance[each.key].identifier} RDS is below ${each.value.storage_alarm_threshold_percentage}%."
+  alarm_description = "Available storage space on ${aws_db_instance.instance[each.key].identifier} RDS is below ${each.value.storage_alarm_threshold_percentage}%."
 }
 
 resource "aws_route53_record" "instance_cname" {
@@ -144,10 +144,10 @@ resource "aws_route53_record" "instance_cname" {
   name    = "${local.identifier_prefix}${each.value.name}-${each.value.engine}"
   type    = "CNAME"
   ttl     = 30
-  records = [aws_db_instance.normalised_instance[each.key].address]
+  records = [aws_db_instance.instance[each.key].address]
 }
 
-resource "aws_db_instance" "normalised_replica" {
+resource "aws_db_instance" "replica" {
   for_each = {
     for key, value in var.databases : key => value
     if value.has_read_replica
@@ -155,21 +155,21 @@ resource "aws_db_instance" "normalised_replica" {
 
   instance_class = each.value.instance_class
 
-  identifier                            = "${aws_db_instance.normalised_instance[each.key].identifier}-replica"
-  replicate_source_db                   = aws_db_instance.normalised_instance[each.key].identifier
-  performance_insights_enabled          = aws_db_instance.normalised_instance[each.key].performance_insights_enabled
-  performance_insights_retention_period = aws_db_instance.normalised_instance[each.key].performance_insights_retention_period
+  identifier                            = "${aws_db_instance.instance[each.key].identifier}-replica"
+  replicate_source_db                   = aws_db_instance.instance[each.key].identifier
+  performance_insights_enabled          = aws_db_instance.instance[each.key].performance_insights_enabled
+  performance_insights_retention_period = aws_db_instance.instance[each.key].performance_insights_retention_period
 
   engine_version = (
     each.value.replica_engine_version != null
     ? each.value.replica_engine_version
-    : aws_db_instance.normalised_instance[each.key].engine_version
+    : aws_db_instance.instance[each.key].engine_version
   )
 
   apply_immediately          = each.value.replica_apply_immediately != null ? each.value.replica_apply_immediately : var.govuk_environment != "production"
-  auto_minor_version_upgrade = aws_db_instance.normalised_instance[each.key].auto_minor_version_upgrade
-  backup_window              = aws_db_instance.normalised_instance[each.key].backup_window
-  maintenance_window         = aws_db_instance.normalised_instance[each.key].maintenance_window
+  auto_minor_version_upgrade = aws_db_instance.instance[each.key].auto_minor_version_upgrade
+  backup_window              = aws_db_instance.instance[each.key].backup_window
+  maintenance_window         = aws_db_instance.instance[each.key].maintenance_window
   multi_az = (
     each.value.replica_multi_az != null
     ? each.value.replica_multi_az
@@ -179,7 +179,7 @@ resource "aws_db_instance" "normalised_replica" {
   skip_final_snapshot = true
 
   tags = {
-    Name    = "govuk-rds-${aws_db_instance.normalised_instance[each.key].identifier}-replica",
+    Name    = "govuk-rds-${aws_db_instance.instance[each.key].identifier}-replica",
     project = each.value.project,
   }
 
@@ -206,7 +206,7 @@ resource "aws_route53_record" "replica_cname" {
   )
   type    = "CNAME"
   ttl     = 30
-  records = [aws_db_instance.normalised_replica[each.key].address]
+  records = [aws_db_instance.replica[each.key].address]
 }
 
 resource "aws_secretsmanager_secret" "database_passwords" {
