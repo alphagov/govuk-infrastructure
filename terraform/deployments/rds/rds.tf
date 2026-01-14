@@ -140,13 +140,22 @@ resource "aws_db_instance" "normalised_instance" {
 
   // This is purposefully not referencing the resource so that we can create snapshots outside of terraform and use them to launch
   // this instance
-  snapshot_identifier         = each.value.launch_new_db_from_snapshot ? "${local.identifier_prefix}${each.value.name}-${each.value.engine}-post-encryption" : null
-  engine                      = each.value.engine
-  engine_version              = each.value.engine_version
-  username                    = var.database_admin_username
-  password                    = random_string.database_password[each.key].result
-  instance_class              = each.value.instance_class
-  identifier                  = "${local.identifier_prefix}${each.value.new_name != null ? each.value.new_name : each.value.name}-${var.govuk_environment}-${each.value.engine}"
+  snapshot_identifier = each.value.launch_new_db_from_snapshot ? "${local.identifier_prefix}${each.value.name}-${each.value.engine}-post-encryption" : null
+  engine              = each.value.engine
+  engine_version      = each.value.engine_version
+  username            = var.database_admin_username
+  password            = random_string.database_password[each.key].result
+  instance_class      = each.value.instance_class
+  // This will simplify again once we rename the chat RDS instance to match the naming scheme
+  identifier = (
+    each.value.identifier_override != null
+    ? each.value.identifier_override
+    : (
+      "${local.identifier_prefix}${each.value.new_name != null
+        ? each.value.new_name
+      : each.value.name}-${var.govuk_environment}-${each.value.engine}"
+    )
+  )
   db_subnet_group_name        = aws_db_subnet_group.subnet_group.name
   multi_az                    = var.multi_az
   parameter_group_name        = aws_db_parameter_group.engine_params[each.key].name
