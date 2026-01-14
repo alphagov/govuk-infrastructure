@@ -19,6 +19,7 @@ variable "databases" {
 
   type = map(object({
     name                               = string
+    identifier_override                = optional(string)
     project                            = optional(string, "GOV.UK - Other")
     instance_class                     = string
     allocated_storage                  = number
