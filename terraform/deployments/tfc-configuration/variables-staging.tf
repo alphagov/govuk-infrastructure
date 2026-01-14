@@ -157,6 +157,7 @@ module "variable-set-rds-staging" {
         instance_class               = "db.t4g.medium"
         performance_insights_enabled = true
         project                      = "GOV.UK - Web"
+        snapshot_identifier          = "account-api-postgres-post-encryption"
       }
 
       authenticating_proxy = {
@@ -175,6 +176,7 @@ module "variable-set-rds-staging" {
         instance_class               = "db.t4g.micro"
         performance_insights_enabled = false
         project                      = "GOV.UK - Publishing"
+        snapshot_identifier          = "authenticating-proxy-postgres-post-encryption"
       }
 
       chat = {
@@ -192,6 +194,7 @@ module "variable-set-rds-staging" {
         instance_class               = "db.t4g.small"
         performance_insights_enabled = false
         project                      = "GOV.UK - AI"
+        snapshot_identifier          = "chat-postgres-post-encryption"
       }
 
       ckan = {
@@ -209,6 +212,7 @@ module "variable-set-rds-staging" {
         instance_class               = "db.m6g.large"
         performance_insights_enabled = true
         project                      = "GOV.UK - DGU"
+        snapshot_identifier          = "ckan-postgres-post-encryption"
       }
 
       collections_publisher = {
@@ -223,6 +227,7 @@ module "variable-set-rds-staging" {
         instance_class               = "db.t4g.micro"
         performance_insights_enabled = false
         project                      = "GOV.UK - Publishing"
+        snapshot_identifier          = "collections-publisher-mysql-post-encryption"
       }
 
       content_block_manager = {
@@ -241,6 +246,7 @@ module "variable-set-rds-staging" {
         instance_class               = "db.t4g.small"
         performance_insights_enabled = true
         project                      = "GOV.UK - Publishing"
+        snapshot_identifier          = "content-block-manager-postgres-post-encryption"
       }
 
       content_data_admin = {
@@ -258,6 +264,7 @@ module "variable-set-rds-staging" {
         instance_class               = "db.t4g.micro"
         performance_insights_enabled = false
         project                      = "GOV.UK - Publishing"
+        snapshot_identifier          = "content-data-admin-postgres-post-encryption"
       }
 
       content_data_api = {
@@ -281,6 +288,7 @@ module "variable-set-rds-staging" {
         instance_class               = "db.m6g.large"
         performance_insights_enabled = false
         project                      = "GOV.UK - Publishing"
+        snapshot_identifier          = "blue-content-data-api-postgresql-primary-postgres-post-encryption"
       }
 
       content_store = {
@@ -298,6 +306,7 @@ module "variable-set-rds-staging" {
         instance_class               = "db.m6g.large"
         performance_insights_enabled = true
         project                      = "GOV.UK - Publishing"
+        snapshot_identifier          = "content-store-postgres-post-encryption"
       }
 
       content_tagger = {
@@ -315,6 +324,7 @@ module "variable-set-rds-staging" {
         instance_class               = "db.t4g.small"
         performance_insights_enabled = false
         project                      = "GOV.UK - Publishing"
+        snapshot_identifier          = "content-tagger-postgres-post-encryption"
       }
 
       draft_content_store = {
@@ -332,6 +342,7 @@ module "variable-set-rds-staging" {
         instance_class               = "db.m6g.large"
         performance_insights_enabled = true
         project                      = "GOV.UK - Publishing"
+        snapshot_identifier          = "draft-content-store-postgres-post-encryption"
       }
 
       email_alert_api = {
@@ -349,6 +360,7 @@ module "variable-set-rds-staging" {
         instance_class               = "db.m6g.xlarge"
         performance_insights_enabled = true
         project                      = "GOV.UK - Web"
+        snapshot_identifier          = "email-alert-api-postgres-post-encryption"
       }
 
       imminence = {
@@ -368,6 +380,7 @@ module "variable-set-rds-staging" {
         instance_class               = "db.t4g.medium"
         performance_insights_enabled = false
         project                      = "GOV.UK - Web"
+        snapshot_identifier          = "imminence-postgres-post-encryption"
       }
 
       link_checker_api = {
@@ -386,6 +399,7 @@ module "variable-set-rds-staging" {
         performance_insights_enabled = false
         project                      = "GOV.UK - Publishing"
         maintenance_window           = "Mon:00:00-Mon:01:00"
+        snapshot_identifier          = "link-checker-api-postgres-post-encryption"
       }
 
       local_links_manager = {
@@ -403,6 +417,7 @@ module "variable-set-rds-staging" {
         instance_class               = "db.t4g.small"
         performance_insights_enabled = false
         project                      = "GOV.UK - Web"
+        snapshot_identifier          = "local-links-manager-postgres-post-encryption"
       }
 
       locations_api = {
@@ -420,6 +435,7 @@ module "variable-set-rds-staging" {
         instance_class               = "db.m6g.large"
         performance_insights_enabled = true
         project                      = "GOV.UK - Web"
+        snapshot_identifier          = "locations-api-postgres-post-encryption"
       }
 
       publishing_api = {
@@ -461,6 +477,7 @@ module "variable-set-rds-staging" {
         instance_class               = "db.t4g.micro"
         performance_insights_enabled = false
         project                      = "GOV.UK - Publishing"
+        snapshot_identifier          = "publisher-postgres-post-encryption"
       }
 
       release = {
@@ -475,6 +492,7 @@ module "variable-set-rds-staging" {
         instance_class               = "db.t4g.micro"
         performance_insights_enabled = false
         project                      = "GOV.UK - Infrastructure"
+        snapshot_identifier          = "release-mysql-post-encryption"
       }
 
       search_admin = {
@@ -489,6 +507,7 @@ module "variable-set-rds-staging" {
         instance_class               = "db.t4g.micro"
         performance_insights_enabled = false
         project                      = "GOV.UK - Search"
+        snapshot_identifier          = "search-admin-mysql-post-encryption"
       }
 
       service_manual_publisher = {
@@ -506,6 +525,7 @@ module "variable-set-rds-staging" {
         instance_class               = "db.t4g.micro"
         performance_insights_enabled = false
         project                      = "GOV.UK - Publishing"
+        snapshot_identifier          = "service-manual-publisher-postgres-post-encryption"
       }
 
       signon = {
@@ -520,6 +540,7 @@ module "variable-set-rds-staging" {
         instance_class               = "db.t4g.medium"
         performance_insights_enabled = true
         project                      = "GOV.UK - Publishing"
+        snapshot_identifier          = "signon-mysql-post-encryption"
       }
 
       support_api = {
@@ -537,6 +558,7 @@ module "variable-set-rds-staging" {
         instance_class               = "db.t4g.medium"
         performance_insights_enabled = true
         project                      = "GOV.UK - Publishing"
+        snapshot_identifier          = "support-api-postgres-post-encryption"
       }
 
       transition = {
@@ -554,6 +576,7 @@ module "variable-set-rds-staging" {
         instance_class               = "db.m6g.large"
         performance_insights_enabled = true
         project                      = "GOV.UK - Publishing"
+        snapshot_identifier          = "transition-postgres-post-encryption"
       }
 
       whitehall = {
@@ -568,6 +591,7 @@ module "variable-set-rds-staging" {
         instance_class               = "db.m6g.large"
         performance_insights_enabled = true
         project                      = "GOV.UK - Publishing"
+        snapshot_identifier          = "whitehall-mysql-post-encryption"
       }
     }
   }
