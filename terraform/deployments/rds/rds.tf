@@ -43,100 +43,8 @@ resource "aws_db_parameter_group" "engine_params" {
   lifecycle { create_before_destroy = true }
 }
 
-# this resource has no `var.govuk_environment` prefix in
-# integration, staging and production
-resource "aws_db_instance" "instance" {
-  for_each = {
-    for name, db in var.databases : name => db
-    if !db.destroy_old_instance
-  }
-
-  # If snapshot_identifier is set when the instance is created, it will be restored from this snapshot
-  snapshot_identifier         = each.value.snapshot_identifier
-  engine                      = each.value.engine
-  engine_version              = each.value.engine_version
-  username                    = var.database_admin_username
-  password                    = random_string.database_password[each.key].result
-  instance_class              = each.value.instance_class
-  identifier                  = "${local.identifier_prefix}${each.value.name}-${each.value.engine}"
-  db_subnet_group_name        = aws_db_subnet_group.subnet_group.name
-  multi_az                    = var.multi_az
-  parameter_group_name        = aws_db_parameter_group.engine_params[each.key].name
-  maintenance_window          = each.value.maintenance_window != null ? each.value.maintenance_window : var.maintenance_window
-  backup_retention_period     = each.value.backup_retention_period != null ? each.value.backup_retention_period : var.backup_retention_period
-  backup_window               = each.value.backup_window != null ? each.value.backup_window : var.backup_window
-  copy_tags_to_snapshot       = true
-  monitoring_interval         = 60
-  monitoring_role_arn         = data.tfe_outputs.logging.nonsensitive_values.rds_enhanced_monitoring_role_arn
-  vpc_security_group_ids      = [aws_security_group.rds[each.key].id]
-  ca_cert_identifier          = "rds-ca-rsa2048-g1"
-  apply_immediately           = each.value.apply_immediately != null ? each.value.apply_immediately : var.govuk_environment != "production"
-  allow_major_version_upgrade = each.value.allow_major_version_upgrade
-  auto_minor_version_upgrade  = each.value.auto_minor_version_upgrade
-
-  performance_insights_enabled          = each.value.performance_insights_enabled
-  performance_insights_retention_period = each.value.performance_insights_enabled ? 7 : 0
-
-  allocated_storage  = each.value.allocated_storage
-  iops               = each.value.iops
-  storage_throughput = each.value.storage_throughput
-  storage_type       = "gp3"
-
-  timeouts {
-    create = var.terraform_create_rds_timeout
-    delete = var.terraform_delete_rds_timeout
-    update = var.terraform_update_rds_timeout
-  }
-
-  deletion_protection       = each.value.deletion_protection
-  final_snapshot_identifier = "${each.value.name}-final-snapshot"
-  skip_final_snapshot       = var.skip_final_snapshot
-
-  storage_encrypted = true
-  kms_key_id        = aws_kms_key.rds.arn
-
-  tags = {
-    Name    = "govuk-rds-${each.value.name}-${each.value.engine}",
-    project = each.value.project
-  }
-}
-
-resource "aws_db_snapshot" "unencrypted_snapshot" {
-  for_each = {
-    for db_name, db in var.databases : db_name => db
-    if db.prepare_to_launch_new_db
-  }
-
-  # This is purposefully not using the actual terraform resource to ensure it doesn't get destroyed if the
-  # aws_db_instance gets destroyed.
-  db_instance_identifier = "${local.identifier_prefix}${each.value.name}-${each.value.engine}"
-  db_snapshot_identifier = "${local.identifier_prefix}${each.value.name}-${each.value.engine}-pre-encryption"
-
-  timeouts {
-    create = "2h"
-  }
-}
-
-resource "aws_db_snapshot_copy" "encrypted_snapshot" {
-  for_each = {
-    for db_name, db in var.databases : db_name => db
-    if db.prepare_to_launch_new_db
-  }
-
-  source_db_snapshot_identifier = aws_db_snapshot.unencrypted_snapshot[each.key].db_snapshot_arn
-  target_db_snapshot_identifier = "${local.identifier_prefix}${each.value.name}-${each.value.engine}-post-encryption"
-  kms_key_id                    = aws_kms_key.rds.arn
-
-  timeouts {
-    create = "4h"
-  }
-}
-
 resource "aws_db_instance" "normalised_instance" {
-  for_each = {
-    for db_name, db in var.databases : db_name => db
-    if db.launch_new_db
-  }
+  for_each = var.databases
 
   // This is purposefully not referencing the resource so that we can create snapshots outside of terraform and use them to launch
   // this instance
@@ -146,15 +54,12 @@ resource "aws_db_instance" "normalised_instance" {
   username            = var.database_admin_username
   password            = random_string.database_password[each.key].result
   instance_class      = each.value.instance_class
-  // This will simplify again once we rename the chat RDS instance to match the naming scheme
   identifier = (
-    each.value.identifier_override != null
-    ? each.value.identifier_override
-    : (
-      "${local.identifier_prefix}${each.value.new_name != null
-        ? each.value.new_name
-      : each.value.name}-${var.govuk_environment}-${each.value.engine}"
-    )
+    "${local.identifier_prefix}${
+      each.value.new_name != null
+      ? each.value.new_name
+      : each.value.name
+    }-${var.govuk_environment}-${each.value.engine}"
   )
   db_subnet_group_name        = aws_db_subnet_group.subnet_group.name
   multi_az                    = var.multi_az
@@ -185,7 +90,7 @@ resource "aws_db_instance" "normalised_instance" {
     update = var.terraform_update_rds_timeout
   }
 
-  deletion_protection       = each.value.new_db_deletion_protection
+  deletion_protection       = each.value.deletion_protection
   final_snapshot_identifier = "${each.value.new_name != null ? each.value.new_name : each.value.name}-${var.govuk_environment}-${each.value.engine}-final-snapshot"
   skip_final_snapshot       = var.skip_final_snapshot
 
@@ -202,42 +107,15 @@ resource "aws_db_event_subscription" "subscription" {
   name      = "${var.govuk_environment}-rds-event-subscription"
   sns_topic = aws_sns_topic.rds_alerts.arn
 
-  source_type = "db-instance"
-  source_ids = concat(
-    [for i in aws_db_instance.instance : i.identifier],
-    [for i in aws_db_instance.normalised_instance : i.identifier],
-  )
+  source_type      = "db-instance"
+  source_ids       = [for i in aws_db_instance.normalised_instance : i.identifier]
   event_categories = ["deletion", "failure", "low storage"]
 }
 
 # Alarm if free storage space is below threshold (typically 10 GiB) for 10m.
-resource "aws_cloudwatch_metric_alarm" "rds_freestoragespace" {
-  for_each   = { for name, db in var.databases : name => db if !db.destroy_old_instance }
-  dimensions = { DBInstanceIdentifier = aws_db_instance.instance[each.key].identifier }
-
-  alarm_name          = "${aws_db_instance.instance[each.key].identifier}-rds-freestoragespace"
-  comparison_operator = "LessThanThreshold"
-  evaluation_periods  = "10"
-  metric_name         = "FreeStorageSpace"
-  namespace           = "AWS/RDS"
-  period              = "60"
-  statistic           = "Minimum"
-  threshold = (
-    each.value.allocated_storage * (each.value.storage_alarm_threshold_percentage / 100)
-    * 1024 * 1024 * 1024 # allocated_storage is in GB, metric value is in bytes
-  )
-  alarm_actions     = [aws_sns_topic.rds_alerts.arn]
-  ok_actions        = [aws_sns_topic.rds_alerts.arn]
-  alarm_description = "Available storage space on ${aws_db_instance.instance[each.key].identifier} RDS is below ${each.value.storage_alarm_threshold_percentage}%."
-}
-
-
-# Alarm if free storage space is below threshold (typically 10 GiB) for 10m.
 resource "aws_cloudwatch_metric_alarm" "normalised_rds_freestoragespace" {
-  for_each = {
-    for db_name, db in var.databases : db_name => db
-    if db.launch_new_db
-  }
+  for_each = var.databases
+
   dimensions = { DBInstanceIdentifier = aws_db_instance.normalised_instance[each.key].identifier }
 
   alarm_name          = "${aws_db_instance.normalised_instance[each.key].identifier}-rds-freestoragespace"
@@ -263,70 +141,16 @@ resource "aws_route53_record" "instance_cname" {
   zone_id = data.tfe_outputs.root_dns.nonsensitive_values.internal_root_zone_id
 
   // Right now the names are stuck as the old names. Hopefuilly we can change this soon
-  name = "${local.identifier_prefix}${each.value.name}-${each.value.engine}"
-  type = "CNAME"
-  ttl  = 30
-  records = [
-    each.value.cname_point_to_new_instance && each.value.launch_new_db ?
-    aws_db_instance.normalised_instance[each.key].address :
-    aws_db_instance.instance[each.key].address
-  ]
-
-  depends_on = [
-    aws_db_instance.instance,
-    aws_db_instance.normalised_instance,
-  ]
-}
-
-resource "aws_db_instance" "replica" {
-  for_each = {
-    for key, value in var.databases : key => value
-    if value.has_read_replica && !value.destroy_old_instance
-  }
-
-  instance_class                        = each.value.instance_class
-  identifier                            = "${local.identifier_prefix}${each.value.name}-${each.value.engine}-replica"
-  replicate_source_db                   = aws_db_instance.instance[each.key].identifier
-  performance_insights_enabled          = aws_db_instance.instance[each.key].performance_insights_enabled
-  performance_insights_retention_period = aws_db_instance.instance[each.key].performance_insights_retention_period
-  engine_version = (
-    each.value.replica_engine_version != null
-    ? each.value.replica_engine_version
-    : aws_db_instance.instance[each.key].engine_version
-  )
-  apply_immediately = (
-    each.value.replica_apply_immediately != null
-    ? each.value.replica_apply_immediately
-    : aws_db_instance.instance[each.key].apply_immediately
-  )
-  auto_minor_version_upgrade = aws_db_instance.instance[each.key].auto_minor_version_upgrade
-  backup_window              = aws_db_instance.instance[each.key].backup_window
-  maintenance_window         = aws_db_instance.instance[each.key].maintenance_window
-  multi_az = (
-    each.value.replica_multi_az != null
-    ? each.value.replica_multi_az
-    : var.multi_az
-  )
-
-  skip_final_snapshot = true
-
-  storage_encrypted = true
-  kms_key_id        = aws_kms_key.rds.arn
-
-  tags = {
-    Name    = "govuk-rds-${each.value.name}-${each.value.engine}-replica",
-    project = each.value.project
-  }
-
-  lifecycle {
-    ignore_changes = [identifier]
-  }
+  name    = "${local.identifier_prefix}${each.value.name}-${each.value.engine}"
+  type    = "CNAME"
+  ttl     = 30
+  records = [aws_db_instance.normalised_instance[each.key].address]
 }
 
 resource "aws_db_instance" "normalised_replica" {
   for_each = {
     for key, value in var.databases : key => value
-    if value.has_read_replica && value.launch_new_db && value.launch_new_replica
+    if value.has_read_replica
   }
 
   instance_class = each.value.instance_class
@@ -337,15 +161,12 @@ resource "aws_db_instance" "normalised_replica" {
   performance_insights_retention_period = aws_db_instance.normalised_instance[each.key].performance_insights_retention_period
 
   engine_version = (
-    each.value.new_replica_engine_version != null
-    ? each.value.new_replica_engine_version
+    each.value.replica_engine_version != null
+    ? each.value.replica_engine_version
     : aws_db_instance.normalised_instance[each.key].engine_version
   )
-  apply_immediately = (
-    each.value.new_replica_apply_immediately != null
-    ? each.value.new_replica_apply_immediately
-    : aws_db_instance.normalised_instance[each.key].apply_immediately
-  )
+
+  apply_immediately          = each.value.replica_apply_immediately
   auto_minor_version_upgrade = aws_db_instance.normalised_instance[each.key].auto_minor_version_upgrade
   backup_window              = aws_db_instance.normalised_instance[each.key].backup_window
   maintenance_window         = aws_db_instance.normalised_instance[each.key].maintenance_window
@@ -383,19 +204,9 @@ resource "aws_route53_record" "replica_cname" {
     ? "${local.identifier_prefix}${var.govuk_environment}-${each.value.name}-${each.value.engine}-replica"
     : "${local.identifier_prefix}${each.value.name}-${each.value.engine}-replica"
   )
-  type = "CNAME"
-  ttl  = 30
-  records = [
-    each.value.cname_point_to_new_instance && each.value.launch_new_db && each.value.launch_new_replica
-    ? aws_db_instance.normalised_replica[each.key].address
-    : aws_db_instance.replica[each.key].address
-  ]
-
-
-  depends_on = [
-    aws_db_instance.replica,
-    aws_db_instance.normalised_replica,
-  ]
+  type    = "CNAME"
+  ttl     = 30
+  records = [aws_db_instance.normalised_replica[each.key].address]
 }
 
 resource "aws_secretsmanager_secret" "database_passwords" {
