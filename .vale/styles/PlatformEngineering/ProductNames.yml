@@ -1,0 +1,39 @@
+extends: substitution
+message: "Product or service name spelled incorrectly. Use %s instead of %s."
+ignorecase: false
+level: error
+action:
+  name: replace
+swap:
+  "[aA]lert ?[mM]anager": Alertmanager
+  "[aA]rgo[cC][dD]": "ArgoCD"
+  aws: AWS
+  "[cC]loud ?[fF]ront": CloudFront
+  "[cC]loud ?[tT]rail": CloudTrail
+  "[cC]ross ?[pP]lane": Crossplane
+  "[eE]lasticsearch": Elasticsearch
+  "fastly": "Fastly"
+  "[fF]luent ?[bB]it": Fluent Bit # this appears to be how the product is referred to in prose. fluentbit is how it appears in code?
+  "[fF]luent[dD]": Fluentd
+  "(gha|GHA)": GitHub Actions
+  "git": Git
+  "[gG]it[hH]ub": GitHub
+  "[gG]it[hH]ub [aA]ctions": GitHub Actions
+  "[g]uard ?[dD]uty": GuardDuty
+  "[hH]ashi[cC]orp": HashiCorp
+  "[jJ][sS]": "JavaScript"
+  "[jJ]ava[sS]cript": "JavaScript"
+  "json": JSON
+  "[kK]8[sS]": "Kubernetes"
+  "[kK]ibana": "Kibana"
+  "kubernetes": "Kubernetes"
+  "[lL]et'?s ?[eE]ncrypt": "Let's Encrypt"
+  "LB(s?)": "load balancers"
+  "[lL]og ?[sS]tash": Logstash
+  "OAUTH": "OAuth"
+  "[pP]ager ?[dD]uty": "PagerDuty"
+  "Secrets Manager": SecretsManager
+  "[sS]ide[kK]i([qQ]|ck)": "Sidekiq"
+  "[tT]erraform": Terraform
+  "TF": Terraform
+  "[yY]aml": YAML

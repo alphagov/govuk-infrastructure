@@ -1,0 +1,10 @@
+extends: substitution
+message: "Avoid using shorthand for common things. Use '%s' not '%s'."
+ignorecase: false
+level: error
+action:
+  name: replace
+swap:
+  "config": configuration
+  "infra": infrastructure
+  "[rR]epo": repository

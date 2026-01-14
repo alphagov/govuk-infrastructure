@@ -1,0 +1,6 @@
+extends: conditional
+message: |
+  "Auth" is ambiguous. Do you mean authentication or authorisation? If you mean both, consider using "auth'n".
+level: error
+ignorecase: false
+first: '\b[aA]uth\b'
