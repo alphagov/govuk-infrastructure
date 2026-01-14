@@ -191,7 +191,6 @@ module "variable-set-rds-integration" {
         }
         engine_params_family         = "postgres16"
         name                         = "chat"
-        identifier_override          = "chat-postgres"
         allocated_storage            = 100
         instance_class               = "db.t4g.small"
         performance_insights_enabled = false

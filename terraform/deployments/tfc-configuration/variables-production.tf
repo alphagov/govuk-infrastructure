@@ -213,7 +213,6 @@ module "variable-set-rds-production" {
         }
         engine_params_family         = "postgres16"
         name                         = "chat"
-        identifier_override          = "chat-postgres"
         allocated_storage            = 100
         instance_class               = "db.m6g.large"
         performance_insights_enabled = false
