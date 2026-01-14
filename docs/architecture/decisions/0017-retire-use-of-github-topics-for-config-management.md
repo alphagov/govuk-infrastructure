@@ -1,4 +1,4 @@
-# 17. Retire Use of GitHub Topics for Config Management
+# 17. Retire use of GitHub topics for configuration management
 
 Date: 2026-08-06
 
@@ -8,21 +8,27 @@ Accepted
 
 ## Context
 
-Historically, GOV.UK has used GitHub Topic Tags (like labels) in order to select and configure multiple Repositories for things such as enforcing standard configurations or granting variables (including secrets) to sets of Repositories.
+Historically, GOV.UK has used GitHub topic tags to select and configure repositories for things such as enforcing standard
+configurations or granting variables (including secrets) to sets of repositories.
 
-This has been highlighted as an issue for several reasons, including:
+An ITHC highlighted this as an issue for several reasons, including:
 
-* Use of Topics is not access-controlled or restricted - they can be assigned by anyone who has access to a Repository, making it possible to accidentally (or intentionally) bring an unexpected or undesired repo into configuration scope.
-* GitHub incidents have resulted in the GitHub Search API returning unexpected (or no) results, negatively impacting Terraform runs and resulting in the undesired removal of ECR Repositories or CodeCommit mirrors.
+* Use of topics is not access-controlled or restricted. Anyone who has access to a repository can assign them, making it
+  possible to accidentally (or intentionally) bring an unexpected or undesired repository into configuration scope.
+* GitHub incidents have resulted in the GitHub search API returning unexpected (or no) results, negatively impacting
+  Terraform runs and resulting in the undesired removal of Elastic Container Registry repositories or CodeCommit mirrors.
 
 ## Decision
 
-We have decided to stop using GitHub Topics as selectors or identifiers for our automation scripts (including Terraform). As a consequence, we must now configure our GitHub Repositories using configuration files or in code, explicitly rather than implicitly through remotely-managed tags or labels.
+We have decided to stop using GitHub topics as selectors or identifiers for our automation scripts, including
+Terraform. As a consequence, we must now configure our GitHub repositories using configuration files or in code 
+explicitly, rather than implicitly through remotely-managed tags or labels.
 
-The changes spurred from this decision have been documented in the [GOV.UK Developer Docs](https://github.com/alphagov/govuk-developer-docs/pull/5187) and predominantly affect the 
-[Github Terraform Deployment](https://github.com/alphagov/govuk-infrastructure/tree/main/terraform/deployments/github).
+We have documented the changes spurred from this decision have in the [GOV.UK Developer Docs](https://github.com/alphagov/govuk-developer-docs/pull/5187).
+They predominantly affect the [GitHub Terraform deployment](https://github.com/alphagov/govuk-infrastructure/tree/main/terraform/deployments/github).
 
-Topics can still be set by Repository owners for the purpose of making Repositories easier to filter, search or organise, however, must no longer be used as selectors for automations or scripts.
+Repository owners can still set topics for the purpose of making repositories easier to filter, search or
+organise. However, owners must no longer use them as selectors for automations or scripts.
 
 ## Consequences
 
