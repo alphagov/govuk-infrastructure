@@ -38,7 +38,6 @@ variable "databases" {
     backup_retention_period      = optional(number)
     new_name                     = optional(string)
     snapshot_identifier          = optional(string)
-    launch_new_db_from_snapshot  = optional(bool, true)
     apply_immediately            = optional(bool)
     allow_major_version_upgrade  = optional(bool, false)
     auto_minor_version_upgrade   = optional(bool, true)
