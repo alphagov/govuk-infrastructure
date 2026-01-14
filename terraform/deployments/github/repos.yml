@@ -112,8 +112,9 @@ repos:
     required_status_checks:
       standard_contexts: *standard_govuk_rails_checks
       additional_contexts:
-        - Test Ruby / Run Minitest
+        - Test Ruby / Run Rspec
         - Test features / Run Cucumber
+        - Check coverage / Combine coverage
 
   content-data-admin:
     can_be_deployed: true
