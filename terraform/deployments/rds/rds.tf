@@ -166,7 +166,7 @@ resource "aws_db_instance" "normalised_replica" {
     : aws_db_instance.normalised_instance[each.key].engine_version
   )
 
-  apply_immediately          = each.value.replica_apply_immediately
+  apply_immediately          = each.value.replica_apply_immediately != null ? each.value.replica_apply_immediately : var.govuk_environment != "production"
   auto_minor_version_upgrade = aws_db_instance.normalised_instance[each.key].auto_minor_version_upgrade
   backup_window              = aws_db_instance.normalised_instance[each.key].backup_window
   maintenance_window         = aws_db_instance.normalised_instance[each.key].maintenance_window

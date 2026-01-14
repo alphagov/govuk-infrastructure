@@ -47,7 +47,7 @@ variable "databases" {
     // but for now I want to be able to get a clean plan without changes to tfc-configuration
     has_read_replica          = optional(bool, false)
     replica_engine_version    = optional(string)
-    replica_apply_immediately = optional(string)
+    replica_apply_immediately = optional(bool)
     replica_multi_az          = optional(bool)
   }))
 
