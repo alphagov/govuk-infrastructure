@@ -157,13 +157,6 @@ module "variable-set-rds-staging" {
         instance_class               = "db.t4g.medium"
         performance_insights_enabled = true
         project                      = "GOV.UK - Web"
-        prepare_to_launch_new_db     = false
-        isolate                      = true
-        launch_new_db                = true
-        new_db_deletion_protection   = true
-        cname_point_to_new_instance  = true
-        deletion_protection          = false
-        destroy_old_instance         = true
       }
 
       authenticating_proxy = {
@@ -182,13 +175,6 @@ module "variable-set-rds-staging" {
         instance_class               = "db.t4g.micro"
         performance_insights_enabled = false
         project                      = "GOV.UK - Publishing"
-        prepare_to_launch_new_db     = false
-        isolate                      = true
-        launch_new_db                = true
-        new_db_deletion_protection   = true
-        cname_point_to_new_instance  = true
-        deletion_protection          = false
-        destroy_old_instance         = true
       }
 
       chat = {
@@ -206,13 +192,6 @@ module "variable-set-rds-staging" {
         instance_class               = "db.t4g.small"
         performance_insights_enabled = false
         project                      = "GOV.UK - AI"
-        prepare_to_launch_new_db     = false
-        launch_new_db                = true
-        launch_new_db_from_snapshot  = true
-        isolate                      = true
-        cname_point_to_new_instance  = true
-        new_db_deletion_protection   = true
-        destroy_old_instance         = true
       }
 
       ckan = {
@@ -226,18 +205,10 @@ module "variable-set-rds-staging" {
         }
         engine_params_family         = "postgres14"
         name                         = "ckan"
-        apply_immediately            = false
         allocated_storage            = 1000
         instance_class               = "db.m6g.large"
         performance_insights_enabled = true
         project                      = "GOV.UK - DGU"
-        prepare_to_launch_new_db     = false
-        isolate                      = true
-        launch_new_db                = true
-        new_db_deletion_protection   = true
-        cname_point_to_new_instance  = true
-        deletion_protection          = false
-        destroy_old_instance         = true
       }
 
       collections_publisher = {
@@ -252,13 +223,6 @@ module "variable-set-rds-staging" {
         instance_class               = "db.t4g.micro"
         performance_insights_enabled = false
         project                      = "GOV.UK - Publishing"
-        prepare_to_launch_new_db     = false
-        isolate                      = true
-        launch_new_db                = true
-        new_db_deletion_protection   = true
-        cname_point_to_new_instance  = true
-        deletion_protection          = false
-        destroy_old_instance         = true
       }
 
       content_block_manager = {
@@ -277,13 +241,6 @@ module "variable-set-rds-staging" {
         instance_class               = "db.t4g.small"
         performance_insights_enabled = true
         project                      = "GOV.UK - Publishing"
-        prepare_to_launch_new_db     = false
-        isolate                      = true
-        launch_new_db                = true
-        new_db_deletion_protection   = true
-        cname_point_to_new_instance  = true
-        deletion_protection          = false
-        destroy_old_instance         = true
       }
 
       content_data_admin = {
@@ -297,18 +254,10 @@ module "variable-set-rds-staging" {
         }
         engine_params_family         = "postgres14"
         name                         = "content-data-admin"
-        apply_immediately            = false
         allocated_storage            = 100
         instance_class               = "db.t4g.micro"
         performance_insights_enabled = false
         project                      = "GOV.UK - Publishing"
-        prepare_to_launch_new_db     = false
-        isolate                      = true
-        launch_new_db                = true
-        new_db_deletion_protection   = true
-        cname_point_to_new_instance  = true
-        deletion_protection          = false
-        destroy_old_instance         = true
       }
 
       content_data_api = {
@@ -332,13 +281,6 @@ module "variable-set-rds-staging" {
         instance_class               = "db.m6g.large"
         performance_insights_enabled = false
         project                      = "GOV.UK - Publishing"
-        prepare_to_launch_new_db     = false
-        isolate                      = true
-        launch_new_db                = true
-        new_db_deletion_protection   = true
-        cname_point_to_new_instance  = true
-        deletion_protection          = false
-        destroy_old_instance         = true
       }
 
       content_store = {
@@ -356,13 +298,6 @@ module "variable-set-rds-staging" {
         instance_class               = "db.m6g.large"
         performance_insights_enabled = true
         project                      = "GOV.UK - Publishing"
-        prepare_to_launch_new_db     = false
-        isolate                      = true
-        launch_new_db                = true
-        new_db_deletion_protection   = true
-        cname_point_to_new_instance  = true
-        deletion_protection          = false
-        destroy_old_instance         = true
       }
 
       content_tagger = {
@@ -380,13 +315,6 @@ module "variable-set-rds-staging" {
         instance_class               = "db.t4g.small"
         performance_insights_enabled = false
         project                      = "GOV.UK - Publishing"
-        prepare_to_launch_new_db     = false
-        isolate                      = true
-        launch_new_db                = true
-        new_db_deletion_protection   = true
-        cname_point_to_new_instance  = true
-        deletion_protection          = false
-        destroy_old_instance         = true
       }
 
       draft_content_store = {
@@ -404,13 +332,6 @@ module "variable-set-rds-staging" {
         instance_class               = "db.m6g.large"
         performance_insights_enabled = true
         project                      = "GOV.UK - Publishing"
-        prepare_to_launch_new_db     = false
-        isolate                      = true
-        launch_new_db                = true
-        new_db_deletion_protection   = true
-        cname_point_to_new_instance  = true
-        deletion_protection          = false
-        destroy_old_instance         = true
       }
 
       email_alert_api = {
@@ -428,13 +349,6 @@ module "variable-set-rds-staging" {
         instance_class               = "db.m6g.xlarge"
         performance_insights_enabled = true
         project                      = "GOV.UK - Web"
-        prepare_to_launch_new_db     = false
-        isolate                      = true
-        launch_new_db                = true
-        new_db_deletion_protection   = true
-        cname_point_to_new_instance  = true
-        deletion_protection          = false
-        destroy_old_instance         = true
       }
 
       imminence = {
@@ -454,13 +368,6 @@ module "variable-set-rds-staging" {
         instance_class               = "db.t4g.medium"
         performance_insights_enabled = false
         project                      = "GOV.UK - Web"
-        prepare_to_launch_new_db     = false
-        isolate                      = true
-        launch_new_db                = true
-        new_db_deletion_protection   = true
-        cname_point_to_new_instance  = true
-        deletion_protection          = false
-        destroy_old_instance         = true
       }
 
       link_checker_api = {
@@ -474,19 +381,11 @@ module "variable-set-rds-staging" {
         }
         engine_params_family         = "postgres14"
         name                         = "link-checker-api"
-        apply_immediately            = false
         allocated_storage            = 100
         instance_class               = "db.t4g.medium"
         performance_insights_enabled = false
         project                      = "GOV.UK - Publishing"
         maintenance_window           = "Mon:00:00-Mon:01:00"
-        prepare_to_launch_new_db     = false
-        isolate                      = true
-        launch_new_db                = true
-        new_db_deletion_protection   = true
-        cname_point_to_new_instance  = true
-        deletion_protection          = false
-        destroy_old_instance         = true
       }
 
       local_links_manager = {
@@ -504,13 +403,6 @@ module "variable-set-rds-staging" {
         instance_class               = "db.t4g.small"
         performance_insights_enabled = false
         project                      = "GOV.UK - Web"
-        prepare_to_launch_new_db     = false
-        isolate                      = true
-        launch_new_db                = true
-        new_db_deletion_protection   = true
-        cname_point_to_new_instance  = true
-        deletion_protection          = false
-        destroy_old_instance         = true
       }
 
       locations_api = {
@@ -528,13 +420,6 @@ module "variable-set-rds-staging" {
         instance_class               = "db.m6g.large"
         performance_insights_enabled = true
         project                      = "GOV.UK - Web"
-        prepare_to_launch_new_db     = false
-        isolate                      = true
-        launch_new_db                = true
-        new_db_deletion_protection   = true
-        cname_point_to_new_instance  = true
-        deletion_protection          = false
-        destroy_old_instance         = true
       }
 
       publishing_api = {
@@ -559,16 +444,6 @@ module "variable-set-rds-staging" {
         performance_insights_enabled = true
         project                      = "GOV.UK - Publishing"
         has_read_replica             = true
-        prepare_to_launch_new_db     = false
-        isolate                      = true
-        launch_new_db_from_snapshot  = false
-        launch_new_db                = true
-        new_db_deletion_protection   = true
-        launch_new_replica           = true
-        cname_point_to_new_instance  = true
-        new_replica_engine_version   = "17.6"
-        deletion_protection          = false
-        destroy_old_instance         = true
       }
 
       publisher = {
@@ -586,13 +461,6 @@ module "variable-set-rds-staging" {
         instance_class               = "db.t4g.micro"
         performance_insights_enabled = false
         project                      = "GOV.UK - Publishing"
-        prepare_to_launch_new_db     = false
-        isolate                      = true
-        launch_new_db                = true
-        new_db_deletion_protection   = true
-        cname_point_to_new_instance  = true
-        deletion_protection          = false
-        destroy_old_instance         = true
       }
 
       release = {
@@ -603,18 +471,10 @@ module "variable-set-rds-staging" {
         }
         engine_params_family         = "mysql8.0"
         name                         = "release"
-        apply_immediately            = false
         allocated_storage            = 100
         instance_class               = "db.t4g.micro"
         performance_insights_enabled = false
         project                      = "GOV.UK - Infrastructure"
-        prepare_to_launch_new_db     = false
-        isolate                      = true
-        launch_new_db                = true
-        new_db_deletion_protection   = true
-        cname_point_to_new_instance  = true
-        deletion_protection          = false
-        destroy_old_instance         = true
       }
 
       search_admin = {
@@ -625,18 +485,10 @@ module "variable-set-rds-staging" {
         }
         engine_params_family         = "mysql8.0"
         name                         = "search-admin"
-        apply_immediately            = false
         allocated_storage            = 100
         instance_class               = "db.t4g.micro"
         performance_insights_enabled = false
         project                      = "GOV.UK - Search"
-        prepare_to_launch_new_db     = false
-        isolate                      = true
-        launch_new_db                = true
-        new_db_deletion_protection   = true
-        cname_point_to_new_instance  = true
-        deletion_protection          = false
-        destroy_old_instance         = true
       }
 
       service_manual_publisher = {
@@ -650,18 +502,10 @@ module "variable-set-rds-staging" {
         }
         engine_params_family         = "postgres14"
         name                         = "service-manual-publisher"
-        apply_immediately            = false
         allocated_storage            = 100
         instance_class               = "db.t4g.micro"
         performance_insights_enabled = false
         project                      = "GOV.UK - Publishing"
-        prepare_to_launch_new_db     = false
-        isolate                      = true
-        launch_new_db                = true
-        new_db_deletion_protection   = true
-        cname_point_to_new_instance  = true
-        deletion_protection          = false
-        destroy_old_instance         = true
       }
 
       signon = {
@@ -676,13 +520,6 @@ module "variable-set-rds-staging" {
         instance_class               = "db.t4g.medium"
         performance_insights_enabled = true
         project                      = "GOV.UK - Publishing"
-        prepare_to_launch_new_db     = false
-        isolate                      = true
-        launch_new_db                = true
-        new_db_deletion_protection   = true
-        cname_point_to_new_instance  = true
-        deletion_protection          = false
-        destroy_old_instance         = true
       }
 
       support_api = {
@@ -700,13 +537,6 @@ module "variable-set-rds-staging" {
         instance_class               = "db.t4g.medium"
         performance_insights_enabled = true
         project                      = "GOV.UK - Publishing"
-        prepare_to_launch_new_db     = false
-        isolate                      = true
-        launch_new_db                = true
-        new_db_deletion_protection   = true
-        cname_point_to_new_instance  = true
-        deletion_protection          = false
-        destroy_old_instance         = true
       }
 
       transition = {
@@ -724,13 +554,6 @@ module "variable-set-rds-staging" {
         instance_class               = "db.m6g.large"
         performance_insights_enabled = true
         project                      = "GOV.UK - Publishing"
-        prepare_to_launch_new_db     = false
-        isolate                      = true
-        launch_new_db                = true
-        new_db_deletion_protection   = true
-        cname_point_to_new_instance  = true
-        deletion_protection          = false
-        destroy_old_instance         = true
       }
 
       whitehall = {
@@ -745,13 +568,6 @@ module "variable-set-rds-staging" {
         instance_class               = "db.m6g.large"
         performance_insights_enabled = true
         project                      = "GOV.UK - Publishing"
-        prepare_to_launch_new_db     = false
-        isolate                      = true
-        launch_new_db                = true
-        new_db_deletion_protection   = true
-        cname_point_to_new_instance  = true
-        deletion_protection          = false
-        destroy_old_instance         = true
       }
     }
   }
