@@ -1,0 +1,26 @@
+name: Validate renovate.json is using the correct k8s version
+on:
+  push:
+    paths: ['terraform/deployments/tfc-configuration/variables-production.tf']
+jobs:
+  k8s_version_validate:
+    name: Validate renovate.json is using the correct k8s version
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+        with:
+          show-progress: false
+
+      - name: Validate YAML Schema
+        run: |
+          K8S_VERSION=$(grep cluster_version terraform/deployments/tfc-configuration/variables-production.tf | awk '{print $3}' | tr -d '"')
+          if grep -wq ".*kubernetesVersion.*:.*${K8S_VERSION}.*" renovate.json; then
+              echo "using correct k8s version ${K8S_VERSION} in \"renovate.json\""
+              exit 0
+          else
+              echo "using incorrect k8s version ${K8S_VERSION} in \"renovate.json\" please update the {\"kubernetesVersion\": \"<insert_new_version_here>\"}"
+              exit 1
+          fi
+
