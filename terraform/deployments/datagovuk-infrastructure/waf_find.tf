@@ -21,8 +21,8 @@ variable "waf_log_retention_days" {
 # Data source to find Find ALB using Kubernetes tags
 data "aws_lb" "find" {
   tags = {
-    "elbv2.k8s.aws/cluster"  = "govuk"
-    "ingress.k8s.aws/stack"  = "datagovuk/find"
+    "elbv2.k8s.aws/cluster" = "govuk"
+    "ingress.k8s.aws/stack" = "datagovuk/find"
   }
 }
 
@@ -40,7 +40,7 @@ resource "aws_wafv2_web_acl" "find" {
     name     = "find-rate-limit-warning"
     priority = 1
     action {
-      count {}  
+      count {}
     }
     statement {
       rate_based_statement {
@@ -235,7 +235,7 @@ resource "aws_wafv2_web_acl_logging_configuration" "find_waf" {
     default_behavior = "DROP"
     # Keep COUNT actions (warning threshold hits)
     filter {
-      behavior = "KEEP"
+      behavior    = "KEEP"
       requirement = "MEETS_ANY"
       condition {
         action_condition {
@@ -245,7 +245,7 @@ resource "aws_wafv2_web_acl_logging_configuration" "find_waf" {
     }
     # Keep BLOCK actions (actual rate limit blocks)
     filter {
-      behavior = "KEEP"
+      behavior    = "KEEP"
       requirement = "MEETS_ANY"
       condition {
         action_condition {
