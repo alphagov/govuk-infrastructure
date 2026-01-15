@@ -135,6 +135,152 @@ resource "aws_cloudwatch_metric_alarm" "rds_freestoragespace" {
 }
 
 resource "aws_route53_record" "instance_cname" {
+  // This is very temporary and given I'll remove it today or tomorrow it seems much easier
+  // to special case the if for now, which also means I'll get sane valid plans from the
+  // rds-* workspaces instead of needing merges of tfc-configuration each time
+  for_each = {
+    for db_name, db in var.databases : db_name => db
+    if db_name == "content_data_api" || db_name == "imminence"
+  }
+
+  # Zone is <environment>.govuk-internal.digital.
+  zone_id = data.tfe_outputs.root_dns.nonsensitive_values.internal_root_zone_id
+
+  // Right now the names are stuck as the old names. Hopefuilly we can change this soon
+  name    = "${local.identifier_prefix}${each.value.name}-${each.value.engine}"
+  type    = "CNAME"
+  ttl     = 30
+  records = [aws_db_instance.instance[each.key].address]
+}
+
+// All these moved blocks will be removed in the next PR after they have been applied
+moved {
+  from = aws_route53_record.instance_cname["account_api"]
+  to   = aws_route53_record.normalised_instance_cname["account_api"]
+}
+
+moved {
+  from = aws_route53_record.instance_cname["authenticating_proxy"]
+  to   = aws_route53_record.normalised_instance_cname["authenticating_proxy"]
+}
+
+moved {
+  from = aws_route53_record.instance_cname["chat"]
+  to   = aws_route53_record.normalised_instance_cname["chat"]
+}
+
+moved {
+  from = aws_route53_record.instance_cname["ckan"]
+  to   = aws_route53_record.normalised_instance_cname["ckan"]
+}
+
+moved {
+  from = aws_route53_record.instance_cname["collections_publisher"]
+  to   = aws_route53_record.normalised_instance_cname["collections_publisher"]
+}
+
+moved {
+  from = aws_route53_record.instance_cname["content_block_manager"]
+  to   = aws_route53_record.normalised_instance_cname["content_block_manager"]
+}
+
+moved {
+  from = aws_route53_record.instance_cname["content_data_admin"]
+  to   = aws_route53_record.normalised_instance_cname["content_data_admin"]
+}
+
+moved {
+  from = aws_route53_record.instance_cname["content_store"]
+  to   = aws_route53_record.normalised_instance_cname["content_store"]
+}
+
+moved {
+  from = aws_route53_record.instance_cname["content_tagger"]
+  to   = aws_route53_record.normalised_instance_cname["content_tagger"]
+}
+
+moved {
+  from = aws_route53_record.instance_cname["draft_content_store"]
+  to   = aws_route53_record.normalised_instance_cname["draft_content_store"]
+}
+
+moved {
+  from = aws_route53_record.instance_cname["email_alert_api"]
+  to   = aws_route53_record.normalised_instance_cname["email_alert_api"]
+}
+
+/*
+I cannot include this one since it only exists in integration and there is no way
+currently to do a conditional moved block.
+
+I will manually terraform state mv this single one in integration before applying the terraform
+moved {
+  from = aws_route53_record.instance_cname["fact_check_manager"]
+  to   = aws_route53_record.normalised_instance_cname["fact_check_manager"]
+}
+*/
+
+moved {
+  from = aws_route53_record.instance_cname["link_checker_api"]
+  to   = aws_route53_record.normalised_instance_cname["link_checker_api"]
+}
+
+moved {
+  from = aws_route53_record.instance_cname["local_links_manager"]
+  to   = aws_route53_record.normalised_instance_cname["local_links_manager"]
+}
+
+moved {
+  from = aws_route53_record.instance_cname["locations_api"]
+  to   = aws_route53_record.normalised_instance_cname["locations_api"]
+}
+
+moved {
+  from = aws_route53_record.instance_cname["publisher"]
+  to   = aws_route53_record.normalised_instance_cname["publisher"]
+}
+
+moved {
+  from = aws_route53_record.instance_cname["publishing_api"]
+  to   = aws_route53_record.normalised_instance_cname["publishing_api"]
+}
+
+moved {
+  from = aws_route53_record.instance_cname["release"]
+  to   = aws_route53_record.normalised_instance_cname["release"]
+}
+
+moved {
+  from = aws_route53_record.instance_cname["search_admin"]
+  to   = aws_route53_record.normalised_instance_cname["search_admin"]
+}
+
+moved {
+  from = aws_route53_record.instance_cname["service_manual_publisher"]
+  to   = aws_route53_record.normalised_instance_cname["service_manual_publisher"]
+}
+
+moved {
+  from = aws_route53_record.instance_cname["signon"]
+  to   = aws_route53_record.normalised_instance_cname["signon"]
+}
+
+moved {
+  from = aws_route53_record.instance_cname["support_api"]
+  to   = aws_route53_record.normalised_instance_cname["support_api"]
+}
+
+moved {
+  from = aws_route53_record.instance_cname["transition"]
+  to   = aws_route53_record.normalised_instance_cname["transition"]
+}
+
+moved {
+  from = aws_route53_record.instance_cname["whitehall"]
+  to   = aws_route53_record.normalised_instance_cname["whitehall"]
+}
+
+resource "aws_route53_record" "normalised_instance_cname" {
   for_each = var.databases
 
   # Zone is <environment>.govuk-internal.digital.
