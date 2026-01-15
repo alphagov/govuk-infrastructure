@@ -1,7 +1,7 @@
 name: Validate renovate.json is using the correct k8s version
 on:
   push:
-    paths: ['terraform/deployments/tfc-configuration/variables-production.tf']
+    paths: ['terraform/deployments/tfc-configuration/variables-production.tf', 'renovate.json']
 jobs:
   k8s_version_validate:
     name: Validate renovate.json is using the correct k8s version
