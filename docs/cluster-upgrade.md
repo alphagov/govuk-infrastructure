@@ -56,6 +56,10 @@ version for each component.
 1. Increment `cluster_version` to the version you are upgrading to in `terraform/tfc-configuration/variables-<ENV>.tf`
 2. Raise the change as a PR, and merge it 
 3. Plan and apply a new run in the `tfc-configuration` workspace in Terraform Cloud. This will update the variable sets to the new cluster_version
-4. Plan and apply a new run in the `cluster-infrastructure-<ENV>` workspace in Terraform Cloud.
+4. Plan and apply a new run in the `cluster-infrastructure-<ENV>` workspace in Terraform Cloud (You should expect it to take 30-45 minutes to upgrade each cluster).
+5. Lastly, once production is upgraded successfully, update the kubernetes version in `renovate.json`. [This github action will fail](.github/workflows/validate-renovate-k8s-version.yml) if the version is not correctly updated. This is the line in `renovate.json` you need to update eg.
 
-You should expect it to take 30-45 minutes to upgrade each cluster.  
+```
+  "packageNameTemplate": "{\"kubernetesVersion\": \"$UPDATE_NEW_KUBERNETES_VERSION_HERE\", \"addonName\": \"{{depName}}\", \"region\": \"eu-west-1\"}",
+```
+
