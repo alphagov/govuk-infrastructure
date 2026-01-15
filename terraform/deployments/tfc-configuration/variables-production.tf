@@ -155,7 +155,7 @@ module "variable-set-rds-production" {
     databases = {
       account_api = {
         engine         = "postgres"
-        engine_version = "14.19"
+        engine_version = "14"
         engine_params = {
           log_min_duration_statement = { value = 10000 }
           log_statement              = { value = "all" }
@@ -173,7 +173,7 @@ module "variable-set-rds-production" {
 
       authenticating_proxy = {
         engine         = "postgres"
-        engine_version = "14.19"
+        engine_version = "14"
         engine_params = {
           log_min_duration_statement = { value = 10000 }
           log_statement              = { value = "all" }
@@ -192,7 +192,7 @@ module "variable-set-rds-production" {
 
       chat = {
         engine         = "postgres"
-        engine_version = "16.10"
+        engine_version = "16"
         engine_params = {
           log_min_duration_statement = { value = 10000 }
           log_statement              = { value = "all" }
@@ -210,7 +210,7 @@ module "variable-set-rds-production" {
 
       ckan = {
         engine         = "postgres"
-        engine_version = "14.19"
+        engine_version = "14"
         engine_params = {
           log_min_duration_statement = { value = 10000 }
           log_statement              = { value = "all" }
@@ -228,7 +228,7 @@ module "variable-set-rds-production" {
 
       collections_publisher = {
         engine         = "mysql"
-        engine_version = "8.0.43"
+        engine_version = "8.0"
         engine_params = {
           max_allowed_packet = { value = 1073741824 }
         }
@@ -243,7 +243,7 @@ module "variable-set-rds-production" {
 
       content_block_manager = {
         engine                      = "postgres"
-        engine_version              = "17.6"
+        engine_version              = "17"
         allow_major_version_upgrade = true
         engine_params = {
           log_min_duration_statement = { value = 10000 }
@@ -262,7 +262,7 @@ module "variable-set-rds-production" {
 
       content_data_admin = {
         engine         = "postgres"
-        engine_version = "14.19"
+        engine_version = "14"
         engine_params = {
           log_min_duration_statement = { value = 10000 }
           log_statement              = { value = "all" }
@@ -280,7 +280,7 @@ module "variable-set-rds-production" {
 
       content_data_api = {
         engine         = "postgres"
-        engine_version = "14.19"
+        engine_version = "14"
         engine_params = {
           work_mem                             = { value = "GREATEST({DBInstanceClassMemory/${1024 * 16}},65536)" }
           autovacuum_max_workers               = { value = 1, apply_method = "pending-reboot" }
@@ -304,7 +304,7 @@ module "variable-set-rds-production" {
 
       content_store = {
         engine         = "postgres"
-        engine_version = "14.19"
+        engine_version = "14"
         engine_params = {
           log_min_duration_statement = { value = 10000 }
           log_statement              = { value = "all" }
@@ -322,7 +322,7 @@ module "variable-set-rds-production" {
 
       content_tagger = {
         engine         = "postgres"
-        engine_version = "14.19"
+        engine_version = "14"
         engine_params = {
           log_min_duration_statement = { value = 10000 }
           log_statement              = { value = "all" }
@@ -340,7 +340,7 @@ module "variable-set-rds-production" {
 
       draft_content_store = {
         engine         = "postgres"
-        engine_version = "14.19"
+        engine_version = "14"
         engine_params = {
           log_min_duration_statement = { value = 10000 }
           log_statement              = { value = "all" }
@@ -358,7 +358,7 @@ module "variable-set-rds-production" {
 
       email_alert_api = {
         engine         = "postgres"
-        engine_version = "14.19"
+        engine_version = "14"
         engine_params = {
           log_min_duration_statement = { value = 10000 }
           log_statement              = { value = "all" }
@@ -376,7 +376,7 @@ module "variable-set-rds-production" {
 
       imminence = {
         engine         = "postgres"
-        engine_version = "14.19"
+        engine_version = "14"
         engine_params = {
           log_min_duration_statement = { value = 10000 }
           log_statement              = { value = "all" }
@@ -396,7 +396,7 @@ module "variable-set-rds-production" {
 
       link_checker_api = {
         engine         = "postgres"
-        engine_version = "14.19"
+        engine_version = "14"
         engine_params = {
           log_min_duration_statement = { value = 10000 }
           log_statement              = { value = "all" }
@@ -415,7 +415,7 @@ module "variable-set-rds-production" {
 
       local_links_manager = {
         engine         = "postgres"
-        engine_version = "14.19"
+        engine_version = "14"
         engine_params = {
           log_min_duration_statement = { value = 10000 }
           log_statement              = { value = "all" }
@@ -433,7 +433,7 @@ module "variable-set-rds-production" {
 
       locations_api = {
         engine         = "postgres"
-        engine_version = "14.19"
+        engine_version = "14"
         engine_params = {
           log_min_duration_statement = { value = 10000 }
           log_statement              = { value = "all" }
@@ -451,8 +451,8 @@ module "variable-set-rds-production" {
 
       publishing_api = {
         engine                    = "postgres"
-        engine_version            = "17.6"
-        replica_engine_version    = "17.6"
+        engine_version            = "17"
+        replica_engine_version    = "17"
         replica_apply_immediately = false
         engine_params = {
           log_min_duration_statement = { value = 10000 }
@@ -474,7 +474,7 @@ module "variable-set-rds-production" {
 
       publisher = {
         engine         = "postgres"
-        engine_version = "17.6"
+        engine_version = "17"
         engine_params = {
           log_min_duration_statement = { value = 10000 }
           log_statement              = { value = "all" }
@@ -492,7 +492,7 @@ module "variable-set-rds-production" {
 
       release = {
         engine         = "mysql"
-        engine_version = "8.0.43"
+        engine_version = "8.0"
         engine_params = {
           max_allowed_packet = { value = 1073741824 }
         }
@@ -507,7 +507,7 @@ module "variable-set-rds-production" {
 
       search_admin = {
         engine         = "mysql"
-        engine_version = "8.0.43"
+        engine_version = "8.0"
         engine_params = {
           max_allowed_packet = { value = 1073741824 }
         }
@@ -522,7 +522,7 @@ module "variable-set-rds-production" {
 
       service_manual_publisher = {
         engine         = "postgres"
-        engine_version = "14.19"
+        engine_version = "14"
         engine_params = {
           log_min_duration_statement = { value = 10000 }
           log_statement              = { value = "all" }
@@ -540,7 +540,7 @@ module "variable-set-rds-production" {
 
       signon = {
         engine         = "mysql"
-        engine_version = "8.0.43"
+        engine_version = "8.0"
         engine_params = {
           max_allowed_packet = { value = 1073741824 }
         }
@@ -555,7 +555,7 @@ module "variable-set-rds-production" {
 
       support_api = {
         engine         = "postgres"
-        engine_version = "14.19"
+        engine_version = "14"
         engine_params = {
           log_min_duration_statement = { value = 10000 }
           log_statement              = { value = "all" }
@@ -573,7 +573,7 @@ module "variable-set-rds-production" {
 
       transition = {
         engine         = "postgres"
-        engine_version = "14.19"
+        engine_version = "14"
         engine_params = {
           log_min_duration_statement = { value = 10000 }
           log_statement              = { value = "all" }
@@ -591,7 +591,7 @@ module "variable-set-rds-production" {
 
       whitehall = {
         engine         = "mysql"
-        engine_version = "8.0.43"
+        engine_version = "8.0"
         engine_params = {
           max_allowed_packet = { value = 1073741824 }
         }
