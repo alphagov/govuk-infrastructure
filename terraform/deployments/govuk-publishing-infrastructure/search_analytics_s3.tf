@@ -1,6 +1,6 @@
 resource "aws_s3_bucket" "search_analytics" {
   bucket        = "govuk-search-analytics-${var.govuk_environment}"
-  force_destroy = var.force_destroy
+  force_destroy = true
   tags = {
     System = "Search"
     Name   = "Search analytics reports for ${var.govuk_environment}"
