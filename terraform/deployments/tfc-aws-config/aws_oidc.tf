@@ -48,6 +48,7 @@ data "aws_iam_policy_document" "tfc_policy" {
       "chatbot:*",
       "cloudfront:*",
       "cloudwatch:*",
+      "codecommit:*",
       "ec2:*",
       "ecr:*",
       "eks:*",
