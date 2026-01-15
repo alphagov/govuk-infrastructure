@@ -11,7 +11,8 @@
   "enabledManagers": [
     "github-actions",
     "pre-commit",
-    "terraform"
+    "terraform",
+    "regex"
   ],
   "terraform": {
     "managerFilePatterns": [
@@ -22,5 +23,27 @@
   "labels": [
     "dependencies",
     "renovate"
+  ],
+  "packageRules": [
+    {
+      "matchDatasources": [
+        "aws-eks-addon"
+      ]
+    }
+  ],
+  "customManagers": [
+    {
+      "customType": "regex",
+      "managerFilePatterns": [
+        "/.*cluster-infrastructure\\/main\\.tf/"
+      ],
+      "matchStrings": [
+        "(?<depName>kube-proxy|metrics-server|vpc-cni|coredns|kube-state-metrics)\\s+=\\s+\\{\\s+addon_version\\s+=\\s+\"(?<currentValue>[a-zA-Z0-9-_.]+)\""
+      ],
+      "packageNameTemplate": "{\"kubernetesVersion\": \"1.33\", \"addonName\": \"{{depName}}\", \"region\": \"eu-west-1\"}",
+      "depNameTemplate": "{{depName}}",
+      "datasourceTemplate": "aws-eks-addon",
+      "versioningTemplate": "aws-eks-addon"
+    }
   ]
 }
