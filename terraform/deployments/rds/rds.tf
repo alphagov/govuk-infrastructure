@@ -287,7 +287,7 @@ resource "aws_route53_record" "normalised_instance_cname" {
   zone_id = data.tfe_outputs.root_dns.nonsensitive_values.internal_root_zone_id
 
   // Right now the names are stuck as the old names. Hopefuilly we can change this soon
-  name    = "${local.identifier_prefix}${each.value.name}-${each.value.engine}"
+  name    = "${local.identifier_prefix}${each.value.new_name != null ? each.value.new_name : each.value.name}-${each.value.engine}"
   type    = "CNAME"
   ttl     = 30
   records = [aws_db_instance.instance[each.key].address]
