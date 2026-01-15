@@ -209,6 +209,20 @@ resource "aws_route53_record" "replica_cname" {
   records = [aws_db_instance.replica[each.key].address]
 }
 
+resource "aws_route53_record" "normalised_replica_cname" {
+  for_each = {
+    for key, value in var.databases : key => value
+    if value.has_read_replica
+  }
+
+  # Zone is <environment>.govuk-internal.digital.
+  zone_id = data.tfe_outputs.root_dns.nonsensitive_values.internal_root_zone_id
+  name    = "${local.identifier_prefix}${each.value.name}-${each.value.engine}-replica"
+  type    = "CNAME"
+  ttl     = 30
+  records = [aws_db_instance.replica[each.key].address]
+}
+
 resource "aws_secretsmanager_secret" "database_passwords" {
   name = "${var.govuk_environment}-rds-admin-passwords"
 }
