@@ -27,7 +27,7 @@ jobs:
         safe_output: false
 
     - name: Determine Terraform version to use
-      uses: dflook/terraform-version@c397d406dba225ea3a19d04a7308a310f0fc83f1
+      uses: dflook/terraform-version@8ee89d962417ed259f9d75e7529e262637c7e5a8
       id: terraform-version
       if: steps.changed-deployments.outputs.any_changed == 'true'
       with:
