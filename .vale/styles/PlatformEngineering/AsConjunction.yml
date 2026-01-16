@@ -1,0 +1,9 @@
+extends: existence
+message: |
+  "As" being used as a conjunction.
+  Consider replacing "as" with "because"
+level: error
+ignorecase: false
+raw:
+  - ', as (?!\ba\b)'
+  - ', as (?!\bin\b)'
