@@ -12,6 +12,12 @@ resource "aws_docdb_cluster_parameter_group" "licensify_parameter_group" {
   name        = "licensify-parameter-group"
   description = "Licensify DocumentDB cluster parameter group"
 
+  parameter {
+    name         = "audit_logs"
+    value        = "disabled"
+    apply_method = "pending-reboot"
+  }
+
   # Licensify doesn't support connecting to MongoDB via TLS
   parameter {
     name  = "tls"

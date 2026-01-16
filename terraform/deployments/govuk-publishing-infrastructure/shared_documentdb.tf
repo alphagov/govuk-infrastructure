@@ -23,6 +23,12 @@ resource "aws_docdb_cluster_parameter_group" "shared_parameter_group" {
   description = "Shared DocumentDB cluster parameter group"
 
   parameter {
+    name         = "audit_logs"
+    value        = "disabled"
+    apply_method = "pending-reboot"
+  }
+
+  parameter {
     name  = "tls"
     value = "disabled"
   }
