@@ -43,3 +43,22 @@ variable "organogram_bucket_cors_origins" {
     "https://find.eph-aaa113.ephemeral.govuk.digital"
   ]
 }
+
+# Variables for rate limiting configuration
+variable "find_rate_limit_per_5min" {
+  description = "Rate limit for Find app per IP per 5 minutes"
+  type        = number
+  default     = 100
+}
+
+variable "find_rate_limit_warning_per_5min" {
+  description = "Warning threshold before blocking (this is for monitoring only)"
+  type        = number
+  default     = 80
+}
+
+variable "waf_log_retention_days" {
+  description = "CloudWatch log retention for WAF logs in days"
+  type        = number
+  default     = 30
+}
