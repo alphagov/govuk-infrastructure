@@ -1,30 +1,20 @@
 # AWS WAF for Find application rate limiting
 # This is to implement and add WAF to nginx ingress to address 503 errors
 
-# Variables for rate limiting configuration
-variable "find_rate_limit_per_5min" {
-  description = "Rate limit for Find app per IP per 5 minutes"
-  type        = number
-  default     = 100
-}
-variable "find_rate_limit_warning_per_5min" {
-  description = "Warning threshold before blocking (this is for monitoring only)"
-  type        = number
-  default     = 80
-}
-variable "waf_log_retention_days" {
-  description = "CloudWatch log retention for WAF logs in days"
-  type        = number
-  default     = 30
-}
+# ===========================================================
+# Data sources to find Find ALB using Kubernetes tags
+# ===========================================================
 
-# Data source to find Find ALB using Kubernetes tags
 data "aws_lb" "find" {
   tags = {
     "elbv2.k8s.aws/cluster" = "govuk"
     "ingress.k8s.aws/stack" = "datagovuk/find"
   }
 }
+
+# ===========================================================
+# WAF Web ACL and Rules for Find application
+# ===========================================================
 
 # Main WAF Web ACL for Find application
 resource "aws_wafv2_web_acl" "find" {
@@ -208,6 +198,10 @@ HTML
   }
 }
 
+# ===========================================================
+# WAF Association and CloudWatch Logging Configuration
+# ===========================================================
+
 # Associate WAF with Find ALB and this attaches the WAF rules to the ALB
 resource "aws_wafv2_web_acl_association" "find_alb" {
   resource_arn = data.aws_lb.find.arn
@@ -265,21 +259,4 @@ resource "aws_wafv2_web_acl_logging_configuration" "find_waf" {
       name = "cookie"
     }
   }
-}
-# Outputs for reference and debugging
-output "find_waf_arn" {
-  description = "ARN of the Find WAF Web ACL"
-  value       = aws_wafv2_web_acl.find.arn
-}
-output "find_waf_id" {
-  description = "ID of the Find WAF Web ACL"
-  value       = aws_wafv2_web_acl.find.id
-}
-output "find_alb_arn" {
-  description = "ARN of the Find ALB"
-  value       = data.aws_lb.find.arn
-}
-output "find_cloudwatch_log_group" {
-  description = "CloudWatch Log Group for WAF logs"
-  value       = aws_cloudwatch_log_group.find_waf.name
 }
