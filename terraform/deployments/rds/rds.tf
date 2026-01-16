@@ -140,7 +140,9 @@ resource "aws_route53_record" "instance_cname" {
   // rds-* workspaces instead of needing merges of tfc-configuration each time
   for_each = {
     for db_name, db in var.databases : db_name => db
-    if db_name == "content_data_api" || db_name == "imminence"
+    if var.govuk_environment != "staging" && (
+      db_name == "content_data_api" || db_name == "imminence"
+    )
   }
 
   # Zone is <environment>.govuk-internal.digital.
