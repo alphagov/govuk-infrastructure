@@ -420,3 +420,33 @@ resource "kubernetes_role_binding_v1" "readonly" {
     api_group = "rbac.authorization.k8s.io"
   }
 }
+
+module "dguengineer" {
+  source = "./modules/access-entry"
+
+  name = "dguengineer"
+
+  cluster_name = local.cluster_name
+
+  access_policy_arn        = "arn:aws:eks::aws:cluster-access-policy/AmazonEKSAdminPolicy"
+  access_policy_scope      = "namespace"
+  access_policy_namespaces = ["datagovuk"]
+
+  role_rules = [
+    {
+      api_groups = ["", "apps"],
+      resources  = ["pods", "pods/logs", "deployments", "replicasets", "statefulsets"]
+      verbs      = ["get", "list", "watch", "create", "update", "patch", "delete"]
+    },
+    {
+      api_groups = ["batch"]
+      resources  = ["jobs", "cronjobs"]
+      verbs      = ["get", "list", "watch", "create", "update", "patch", "delete"]
+    },
+    {
+      api_groups = [""]
+      resources  = ["pods/exec"]
+      verbs      = ["create"]
+    }
+  ]
+}
