@@ -338,7 +338,7 @@ resource "aws_db_instance" "replica" {
 resource "aws_route53_record" "replica_cname" {
   for_each = {
     for key, value in var.databases : key => value
-    if value.has_read_replica
+    if value.has_read_replica && var.govuk_environment != "staging"
   }
 
   # Zone is <environment>.govuk-internal.digital.
