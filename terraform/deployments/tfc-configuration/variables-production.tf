@@ -450,10 +450,9 @@ module "variable-set-rds-production" {
       }
 
       publishing_api = {
-        engine                    = "postgres"
-        engine_version            = "17"
-        replica_engine_version    = "17"
-        replica_apply_immediately = false
+        engine                 = "postgres"
+        engine_version         = "17"
+        replica_engine_version = "17"
         engine_params = {
           log_min_duration_statement = { value = 10000 }
           log_statement              = { value = "all" }
