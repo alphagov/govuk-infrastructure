@@ -36,7 +36,7 @@ resource "aws_wafv2_web_acl" "find" {
       rate_based_statement {
         limit              = var.find_rate_limit_warning_per_5min
         aggregate_key_type = "FORWARDED_IP"
-        # Fastly CDN passes real client IP in x-forwarded-for header
+        # Fastly CDN passes real client IP in True-Client-IP header
         # This ensures we rate limit per actual client IP, not Fastly's IPs
         forwarded_ip_config {
           fallback_behavior = "MATCH"
