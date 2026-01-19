@@ -143,9 +143,8 @@ module "variable-set-rds-staging" {
 
     databases = {
       account_api = {
-        engine            = "postgres"
-        engine_version    = "14"
-        apply_immediately = false
+        engine         = "postgres"
+        engine_version = "14"
         engine_params = {
           log_min_duration_statement = { value = 10000 }
           log_statement              = { value = "all" }
@@ -269,9 +268,8 @@ module "variable-set-rds-staging" {
       }
 
       content_data_api = {
-        engine            = "postgres"
-        engine_version    = "14"
-        apply_immediately = false
+        engine         = "postgres"
+        engine_version = "14"
         engine_params = {
           work_mem                             = { value = "GREATEST({DBInstanceClassMemory/${1024 * 16}},65536)" }
           autovacuum_max_workers               = { value = 1, apply_method = "pending-reboot" }
@@ -312,9 +310,8 @@ module "variable-set-rds-staging" {
       }
 
       content_tagger = {
-        engine            = "postgres"
-        engine_version    = "14"
-        apply_immediately = false
+        engine         = "postgres"
+        engine_version = "14"
         engine_params = {
           log_min_duration_statement = { value = 10000 }
           log_statement              = { value = "all" }
@@ -349,9 +346,8 @@ module "variable-set-rds-staging" {
       }
 
       email_alert_api = {
-        engine            = "postgres"
-        engine_version    = "14"
-        apply_immediately = false
+        engine         = "postgres"
+        engine_version = "14"
         engine_params = {
           log_min_duration_statement = { value = 10000 }
           log_statement              = { value = "all" }
@@ -407,9 +403,8 @@ module "variable-set-rds-staging" {
       }
 
       local_links_manager = {
-        engine            = "postgres"
-        engine_version    = "14"
-        apply_immediately = false
+        engine         = "postgres"
+        engine_version = "14"
         engine_params = {
           log_min_duration_statement = { value = 10000 }
           log_statement              = { value = "all" }
@@ -426,9 +421,8 @@ module "variable-set-rds-staging" {
       }
 
       locations_api = {
-        engine            = "postgres"
-        engine_version    = "14"
-        apply_immediately = false
+        engine         = "postgres"
+        engine_version = "14"
         engine_params = {
           log_min_duration_statement = { value = 10000 }
           log_statement              = { value = "all" }
@@ -517,9 +511,8 @@ module "variable-set-rds-staging" {
       }
 
       service_manual_publisher = {
-        engine            = "postgres"
-        engine_version    = "14"
-        apply_immediately = false
+        engine         = "postgres"
+        engine_version = "14"
         engine_params = {
           log_min_duration_statement = { value = 10000 }
           log_statement              = { value = "all" }
@@ -551,9 +544,8 @@ module "variable-set-rds-staging" {
       }
 
       support_api = {
-        engine            = "postgres"
-        engine_version    = "14"
-        apply_immediately = false
+        engine         = "postgres"
+        engine_version = "14"
         engine_params = {
           log_min_duration_statement = { value = 10000 }
           log_statement              = { value = "all" }
@@ -570,9 +562,8 @@ module "variable-set-rds-staging" {
       }
 
       transition = {
-        engine            = "postgres"
-        engine_version    = "14"
-        apply_immediately = false
+        engine         = "postgres"
+        engine_version = "14"
         engine_params = {
           log_min_duration_statement = { value = 10000 }
           log_statement              = { value = "all" }
