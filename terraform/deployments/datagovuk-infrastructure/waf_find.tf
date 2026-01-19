@@ -36,11 +36,11 @@ resource "aws_wafv2_web_acl" "find" {
       rate_based_statement {
         limit              = var.find_rate_limit_warning_per_5min
         aggregate_key_type = "FORWARDED_IP"
-        # Fastly CDN passes real client IP in true-client-ip header
+        # Fastly CDN passes real client IP in True-Client-IP header
         # This ensures we rate limit per actual client IP, not Fastly's IPs
         forwarded_ip_config {
           fallback_behavior = "MATCH"
-          header_name       = "true-client-ip"
+          header_name       = "True-Client-IP"
         }
         # Only apply rate limiting to Find hostname requests
         scope_down_statement {
@@ -95,7 +95,7 @@ resource "aws_wafv2_web_acl" "find" {
         aggregate_key_type = "FORWARDED_IP"
         forwarded_ip_config {
           fallback_behavior = "MATCH"
-          header_name       = "true-client-ip"
+          header_name       = "True-Client-IP"
         }
         scope_down_statement {
           byte_match_statement {
