@@ -37,7 +37,7 @@ variable "access_policy_namespaces" {
   }
 }
 
-variable "role_rules" {
+variable "namespace_role_rules" {
   type = list(
     object({
       api_groups = list(string)
@@ -45,5 +45,18 @@ variable "role_rules" {
       verbs      = list(string)
     })
   )
-  description = "List of rules to apply to kubernetes role resources"
+  description = "List of rules to apply to kubernetes namespace role resources"
+  default     = []
+}
+
+variable "cluster_role_rules" {
+  type = list(
+    object({
+      api_groups = list(string)
+      resources  = list(string)
+      verbs      = list(string)
+    })
+  )
+  description = "List of rules to apply to kubernetes cluster role resources"
+  default     = []
 }
