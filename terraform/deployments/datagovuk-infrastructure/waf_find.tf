@@ -40,7 +40,7 @@ resource "aws_wafv2_web_acl" "find" {
         # This ensures we rate limit per actual client IP, not Fastly's IPs
         forwarded_ip_config {
           fallback_behavior = "MATCH"
-          header_name       = "x-forwarded-for"
+          header_name       = "True-Client-IP"
         }
         # Only apply rate limiting to Find hostname requests
         scope_down_statement {
@@ -95,7 +95,7 @@ resource "aws_wafv2_web_acl" "find" {
         aggregate_key_type = "FORWARDED_IP"
         forwarded_ip_config {
           fallback_behavior = "MATCH"
-          header_name       = "x-forwarded-for"
+          header_name       = "True-Client-IP"
         }
         scope_down_statement {
           byte_match_statement {
