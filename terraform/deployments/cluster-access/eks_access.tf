@@ -432,7 +432,7 @@ module "dguengineer" {
   access_policy_scope      = "namespace"
   access_policy_namespaces = ["datagovuk"]
 
-  role_rules = [
+  namespace_role_rules = [
     {
       api_groups = ["", "apps"],
       resources  = ["pods", "pods/logs", "deployments", "replicasets", "statefulsets"]

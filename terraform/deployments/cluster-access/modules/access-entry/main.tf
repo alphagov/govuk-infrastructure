@@ -1,3 +1,20 @@
+locals {
+  namespace_role_rules = concat(
+    [],
+    var.namespace_role_rules
+  )
+  cluster_role_rules = concat(
+    [
+      {
+        api_groups = [""],
+        resources  = ["namespaces"],
+        verbs      = ["get", "list", "watch"]
+      }
+    ],
+    var.cluster_role_rules
+  )
+}
+
 data "aws_iam_roles" "roles" {
   name_regex = "\\..*-${var.name}$"
 }
@@ -38,15 +55,13 @@ resource "aws_eks_access_policy_association" "entry" {
 }
 
 resource "kubernetes_cluster_role_v1" "cluster_role" {
-  count = var.access_policy_scope == "scope" ? 1 : 0
-
   metadata {
     name   = var.name
     labels = { "app.kubernetes.io/managed-by" = "Terraform" }
   }
 
   dynamic "rule" {
-    for_each = toset(var.role_rules)
+    for_each = toset(local.cluster_role_rules)
 
     content {
       api_groups = rule.key.api_groups
@@ -57,8 +72,6 @@ resource "kubernetes_cluster_role_v1" "cluster_role" {
 }
 
 resource "kubernetes_cluster_role_binding_v1" "cluster_role" {
-  count = var.access_policy_scope == "scope" ? 1 : 0
-
   metadata {
     name   = "${var.name}-binding"
     labels = { "app.kubernetes.io/managed-by" = "Terraform" }
@@ -67,7 +80,7 @@ resource "kubernetes_cluster_role_binding_v1" "cluster_role" {
   role_ref {
     api_group = "rbac.authorization.k8s.io"
     kind      = "ClusterRole"
-    name      = kubernetes_cluster_role_v1.cluster_role[0].metadata[0].name
+    name      = kubernetes_cluster_role_v1.cluster_role.metadata[0].name
   }
 
   subject {
@@ -80,7 +93,7 @@ resource "kubernetes_cluster_role_binding_v1" "cluster_role" {
 }
 
 resource "kubernetes_role_v1" "namespace_role" {
-  for_each = var.access_policy_scope == "namespace" ? toset(var.access_policy_namespaces) : []
+  for_each = toset(var.access_policy_namespaces)
 
   metadata {
     name      = var.name
@@ -89,7 +102,7 @@ resource "kubernetes_role_v1" "namespace_role" {
   }
 
   dynamic "rule" {
-    for_each = toset(var.role_rules)
+    for_each = toset(local.namespace_role_rules)
 
     content {
       api_groups = rule.key.api_groups
@@ -100,7 +113,7 @@ resource "kubernetes_role_v1" "namespace_role" {
 }
 
 resource "kubernetes_role_binding_v1" "namespace_role" {
-  for_each = var.access_policy_scope == "namespace" ? toset(var.access_policy_namespaces) : []
+  for_each = toset(var.access_policy_namespaces)
 
   metadata {
     name      = "${var.name}-binding"
