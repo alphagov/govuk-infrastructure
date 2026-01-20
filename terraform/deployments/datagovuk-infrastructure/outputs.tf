@@ -15,3 +15,11 @@ output "find_cloudwatch_log_group" {
   description = "CloudWatch Log Group for WAF logs"
   value       = aws_cloudwatch_log_group.find_waf.name
 }
+output "find_waf_rate_limits" {
+  description = "Current rate limit configuration for Find WAF"
+  value = {
+    environment = var.govuk_environment
+    warning     = local.waf_rate_limits.warning
+    block       = local.waf_rate_limits.block
+  }
+}
