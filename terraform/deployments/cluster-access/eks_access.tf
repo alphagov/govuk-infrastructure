@@ -1,51 +1,24 @@
-
-data "aws_iam_roles" "cluster-admin" { name_regex = "\\..*-platformengineer$" }
-
 locals {
   developer_namespaces = ["apps", "datagovuk", "licensify"]
 }
 
-resource "aws_eks_access_entry" "cluster-admin" {
-  for_each = data.aws_iam_roles.cluster-admin.arns
+module "platformengineer" {
+  source = "./modules/access-entry"
+
+  name = "platformengineer"
 
   cluster_name = local.cluster_name
 
-  principal_arn     = each.value
-  kubernetes_groups = ["cluster-admins"]
-  type              = "STANDARD"
-}
+  access_policy_arn   = "arn:aws:eks::aws:cluster-access-policy/AmazonEKSClusterAdminPolicy"
+  access_policy_scope = "cluster"
 
-resource "aws_eks_access_policy_association" "cluster_admin" {
-  for_each = data.aws_iam_roles.cluster-admin.arns
-
-  cluster_name  = local.cluster_name
-  policy_arn    = "arn:aws:eks::aws:cluster-access-policy/AmazonEKSClusterAdminPolicy"
-  principal_arn = each.value
-
-  access_scope {
-    type = "cluster"
-  }
-
-  depends_on = [
-    aws_eks_access_entry.cluster-admin
+  cluster_role_rules = [
+    {
+      api_groups = ["*"]
+      resources  = ["*"]
+      verbs      = ["*"]
+    }
   ]
-}
-
-resource "kubernetes_cluster_role_binding_v1" "cluster_admins" {
-  metadata {
-    name   = "cluster-admins"
-    labels = { "app.kubernetes.io/managed-by" = "Terraform" }
-  }
-  role_ref {
-    api_group = "rbac.authorization.k8s.io"
-    kind      = "ClusterRole"
-    name      = "cluster-admin"
-  }
-  subject {
-    kind      = "Group"
-    name      = "cluster-admins"
-    api_group = "rbac.authorization.k8s.io"
-  }
 }
 
 module "fulladmin" {
