@@ -1,0 +1,48 @@
+module "sentry" {
+  source = "github.com/alphagov/terraform-govuk-tfe-workspacer"
+
+  organization        = var.organization
+  workspace_name      = "govuk-sentry"
+  workspace_desc      = "This module manages user access to Sentry"
+  workspace_tags      = ["sentry"]
+  assessments_enabled = true
+  terraform_version   = var.terraform_version
+  execution_mode      = "remote"
+  working_directory   = "/terraform/deployments/sentry/"
+  trigger_patterns    = ["/terraform/deployments/sentry/**/*"]
+
+  project_name = "govuk-sentry"
+  vcs_repo = {
+    identifier     = "alphagov/govuk-infrastructure"
+    branch         = "main"
+    oauth_token_id = data.tfe_oauth_client.github.oauth_token_id
+  }
+
+  team_access = {
+    "GOV.UK Production" = "write"
+  }
+}
+
+resource "tfe_project" "sentry" {
+  name = "govuk-sentry"
+}
+
+import {
+  to = module.sentry.tfe_workspace.ws
+  id = "ws-tCAkk87eGV2xvnss"
+}
+
+import {
+  to = tfe_project.sentry
+  id = "prj-WA5cQXmTdaCyjkT3"
+}
+
+import {
+  to = module.sentry.tfe_workspace_settings.ws
+  id = "ws-tCAkk87eGV2xvnss"
+}
+
+import {
+  to = module.sentry.tfe_team_access.managed["GOV.UK Production"]
+  id = "govuk/govuk-sentry/tws-1QpMzN2mckjysN4k"
+}
