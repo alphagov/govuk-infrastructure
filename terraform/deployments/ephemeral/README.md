@@ -2,13 +2,16 @@ This module is used to provision ephemeral EKS clusters via Terraform Cloud.
 
 ## Basic Usage
 
-Set an ephemeral cluster ID before doing anything: `export EPH_CLUSTER_ID=eph-aaa111`
-
+1. `export EPH_CLUSTER_ID=eph-aaa111`
+1. ensure you are in the correct dir `terraform/deployments/ephemeral`
 1. Ensure you have logged in to Terraform Cloud via the Terraform CLI (`terraform login`)
-2. Do a `terraform init`
-3. Run an apply with your chosen ephemeral cluster ID (this isn't generated for you)
+1. Do a `terraform init`
+1. `terraform workspace new ${EPH_CLUSTER_ID}`
+1. check you're in the correct terraform workspace `terraform workspace list` and change to the correct one if needed `terraform workspace select ${EPH_CLUSTER_ID}`
+1. Run an apply with your chosen ephemeral cluster ID (this isn't generated for you)
    `terraform apply -var ephemeral_cluster_id=${EPH_CLUSTER_ID}`
-4. Once all the Terraform workspaces have successfully applied, log into the cluster and 
+1. When `cluster_access` has applied successfully you can gain access to the cluster with `aws eks update-kubeconfig --name ${EPH_CLUSTER_ID} --kubeconfig <optional_new_kube_config>`
+1. Once all the Terraform workspaces have successfully applied, log into the cluster and
    run `./validate.sh` to test that the cluster is functioning and able to accept ingress.
 
 State for the ephemeral module is stored locally for now.
@@ -27,18 +30,20 @@ If the shutdown script fails or is in a pending state you can still remove the e
 
 1. During the run of the `shutdown.sh` script, click on the terrform cloud link during the running of the shutdown.sh script to monitor the status of the run, it might be in a `pending` state if there are other runs blocking the destroy run so you will need to force and unlock the workspace and discard earlier runs for the shutdown script to continue.
 2. For any remaining ephemeral resources managed by terraform cloud, locate them using the `eph-` search on workspaces and under the `Settings/Destruction and Deletion` section:
-  - manually queue a deletion of your ephemeral cluster infrastructure and monitor it`s progress on the terraform cloud website.
-  - when the infrastructure resources have been deleted then delete the workspace itself.
+   - manually queue a deletion of your ephemeral cluster infrastructure and monitor it`s progress on the terraform cloud website.
+   - when the infrastructure resources have been deleted then delete the workspace itself.
+
 3. If there are still some ephemeral resources remaining you will need to use the terraform cli to remove these last resources:
-  - update your local terraform state
+
+- update your local terraform state
     `terraform refresh -var "ephemeral_cluster_id=$EPH_CLUSTER_ID"`
-  - list the resources 
+- list the resources
     `terraform state list`
-  - inspect the resources to make sure that you are destroying your ephemeral resources
+- inspect the resources to make sure that you are destroying your ephemeral resources
     `terrform show <resource name>`
-  - if only ephemeral resources remain then run
+- if only ephemeral resources remain then run
     `terraform destroy`
-  - NOTE - terraform cloud workspaces may need to be removed manually on the terraform cloud website under the `Settings/Destruction and Deletion` section.
+- NOTE - terraform cloud workspaces may need to be removed manually on the terraform cloud website under the `Settings/Destruction and Deletion` section.
 
 ### Alertmanager, Prometheus and Grafana
 
@@ -62,6 +67,7 @@ password: test1234
 
 5. Click on the `Harvest` tab
 6. Click on `Add Harvest Source` and fill in the fields with these details
+
 ```
 URL: http://environment.data.gov.uk/discover/ea/csw
 Title: Environment Agency
@@ -79,4 +85,3 @@ Sometimes you want to test out a change to `argo-bootstrap-ephemeral` in `govuk-
 1. Increment `version` in `Chart.yaml`
 2. Run `helm upgrade -n cluster-services argo-bootstrap-ephemeral ./charts/argo-bootstrap-ephemeral --reuse-values`
 3. After you have finished testing your changes create a Terraform run in `cluster-services-eph-da2f44` to downgrade the Helm chart
-
