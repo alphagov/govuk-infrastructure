@@ -134,7 +134,12 @@ resource "aws_cloudwatch_metric_alarm" "rds_freestoragespace" {
   alarm_description = "Available storage space on ${aws_db_instance.instance[each.key].identifier} RDS is below ${each.value.storage_alarm_threshold_percentage}%."
 }
 
-resource "aws_route53_record" "normalised_instance_cname" {
+moved {
+  from = aws_route53_record.normalised_instance_cname
+  to   = aws_route53_record.instance_cname
+}
+
+resource "aws_route53_record" "instance_cname" {
   for_each = var.databases
 
   # Zone is <environment>.govuk-internal.digital.
@@ -187,7 +192,12 @@ resource "aws_db_instance" "replica" {
   kms_key_id        = aws_kms_key.rds.arn
 }
 
-resource "aws_route53_record" "normalised_replica_cname" {
+moved {
+  from = aws_route53_record.normalised_replica_cname
+  to   = aws_route53_record.replica_cname
+}
+
+resource "aws_route53_record" "replica_cname" {
   for_each = {
     for key, value in var.databases : key => value
     if value.has_read_replica
