@@ -899,6 +899,11 @@ repos:
     required_status_checks:
       additional_contexts:
         - test
+    push_allowances: [
+      "alphagov/gov-uk-production-admin",
+      "alphagov/gov-uk-production-deploy",
+      "alphagov/national-data-library"
+    ]
 
   govuk-browser-extension:
     required_status_checks:
