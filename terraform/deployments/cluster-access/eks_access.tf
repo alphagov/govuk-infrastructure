@@ -1,5 +1,5 @@
 
-data "aws_iam_roles" "cluster-admin" { name_regex = "(\\..*-fulladmin$|\\..*-platformengineer$)" }
+data "aws_iam_roles" "cluster-admin" { name_regex = "\\..*-platformengineer$" }
 
 locals {
   developer_namespaces = ["apps", "datagovuk", "licensify"]
@@ -46,6 +46,25 @@ resource "kubernetes_cluster_role_binding_v1" "cluster_admins" {
     name      = "cluster-admins"
     api_group = "rbac.authorization.k8s.io"
   }
+}
+
+module "fulladmin" {
+  source = "./modules/access-entry"
+
+  name = "fulladmin"
+
+  cluster_name = local.cluster_name
+
+  access_policy_arn   = "arn:aws:eks::aws:cluster-access-policy/AmazonEKSClusterAdminPolicy"
+  access_policy_scope = "cluster"
+
+  cluster_role_rules = [
+    {
+      api_groups = ["*"]
+      resources  = ["*"]
+      verbs      = ["*"]
+    }
+  ]
 }
 
 module "developer" {
