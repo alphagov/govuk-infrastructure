@@ -805,12 +805,7 @@ repos:
       additional_contexts:
         - test
 
-  slimmer:
-    publishes_gem: true
-    required_status_checks:
-      standard_contexts: *standard_security_checks
-      additional_contexts:
-        - test
+  slimmer: {}
 
   smart-answers:
     can_be_deployed: true
