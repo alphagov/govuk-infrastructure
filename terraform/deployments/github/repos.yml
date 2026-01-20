@@ -71,6 +71,11 @@ repos:
       enabled: true
       source_owner: "ckan"
       source_repo: "ckanext-spatial"
+    push_allowances: [
+      "alphagov/gov-uk-production-admin",
+      "alphagov/gov-uk-production-deploy",
+      "alphagov/national-data-library"
+    ]
 
   collections:
     can_be_deployed: true
@@ -171,7 +176,11 @@ repos:
   datagovuk-tech-docs:
     homepage_url: "https://guidance.data.gov.uk/"
     need_production_access_to_merge: false
-    push_allowances: []
+    push_allowances: [
+      "alphagov/gov-uk-production-admin",
+      "alphagov/gov-uk-production-deploy",
+      "alphagov/national-data-library"
+    ]
 
   email-alert-api:
     can_be_deployed: true
@@ -894,6 +903,11 @@ repos:
     required_status_checks:
       additional_contexts:
         - test
+    push_allowances: [
+      "alphagov/gov-uk-production-admin",
+      "alphagov/gov-uk-production-deploy",
+      "alphagov/national-data-library"
+    ]
 
   datagovuk_find:
     required_status_checks:
@@ -999,7 +1013,13 @@ repos:
       source_owner: "emmabeynon"
       source_repo: "github-trello-poster"
 
-  ckan-mock-harvest-sources: {}
+  ckan-mock-harvest-sources:
+    push_allowances: [
+      "alphagov/gov-uk-production-admin",
+      "alphagov/gov-uk-production-deploy",
+      "alphagov/national-data-library"
+    ]
+
   govuk-pact-broker: {}
   govuk-rfcs: {}
   govuk-s3-mirror: {}
