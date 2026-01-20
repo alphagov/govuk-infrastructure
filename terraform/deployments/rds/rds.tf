@@ -160,6 +160,7 @@ resource "aws_db_instance" "replica" {
   instance_class = each.value.instance_class
 
   identifier                            = "${aws_db_instance.instance[each.key].identifier}-replica"
+  parameter_group_name                  = aws_db_instance.instance[each.key].parameter_group_name
   replicate_source_db                   = aws_db_instance.instance[each.key].identifier
   performance_insights_enabled          = aws_db_instance.instance[each.key].performance_insights_enabled
   performance_insights_retention_period = aws_db_instance.instance[each.key].performance_insights_retention_period
