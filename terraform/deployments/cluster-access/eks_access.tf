@@ -1,7 +1,6 @@
 
 data "aws_iam_roles" "cluster-admin" { name_regex = "(\\..*-fulladmin$|\\..*-platformengineer$)" }
 data "aws_iam_roles" "developer" { name_regex = "\\..*-developer$" }
-data "aws_iam_roles" "licensing" { name_regex = "\\..*-licensinguser$" }
 
 locals {
   developer_namespaces = ["apps", "datagovuk", "licensify"]
@@ -24,16 +23,6 @@ resource "aws_eks_access_entry" "developer" {
 
   principal_arn     = each.value
   kubernetes_groups = ["developers"]
-  type              = "STANDARD"
-}
-
-resource "aws_eks_access_entry" "licensing" {
-  for_each = data.aws_iam_roles.licensing.arns
-
-  cluster_name = local.cluster_name
-
-  principal_arn     = each.value
-  kubernetes_groups = ["licensing"]
   type              = "STANDARD"
 }
 
@@ -67,23 +56,6 @@ resource "aws_eks_access_policy_association" "developer" {
 
   depends_on = [
     aws_eks_access_entry.developer
-  ]
-}
-
-resource "aws_eks_access_policy_association" "licensing" {
-  for_each = data.aws_iam_roles.licensing.arns
-
-  cluster_name  = local.cluster_name
-  policy_arn    = "arn:aws:eks::aws:cluster-access-policy/AmazonEKSAdminPolicy"
-  principal_arn = each.value
-
-  access_scope {
-    type       = "namespace"
-    namespaces = ["licensify"]
-  }
-
-  depends_on = [
-    aws_eks_access_entry.licensing
   ]
 }
 
@@ -196,50 +168,34 @@ resource "kubernetes_role_binding_v1" "developer" {
   }
 }
 
-resource "kubernetes_role_v1" "licensing" {
-  metadata {
-    name      = "licensing"
-    namespace = "licensify"
-    labels    = { "app.kubernetes.io/managed-by" = "Terraform" }
-  }
+module "licensinguser" {
+  source = "./modules/access-entry"
 
-  rule {
-    api_groups = ["", "apps"]
-    resources  = ["pods", "pods/logs", "deployments", "replicasets", "statefulsets"]
-    verbs      = ["get", "list", "watch"]
-  }
+  name = "licensinguser"
 
-  rule {
-    api_groups = ["batch"]
-    resources  = ["jobs", "cronjobs"]
-    verbs      = ["get", "list", "watch"]
-  }
+  cluster_name = local.cluster_name
 
-  rule {
-    api_groups = [""]
-    resources  = ["pods/exec"]
-    verbs      = ["create"]
-  }
-}
+  access_policy_arn        = "arn:aws:eks::aws:cluster-access-policy/AmazonEKSAdminPolicy"
+  access_policy_scope      = "namespace"
+  access_policy_namespaces = ["licensify"]
 
-resource "kubernetes_role_binding_v1" "licensing" {
-  depends_on = [kubernetes_role_v1.licensing]
-
-  metadata {
-    name      = "licensing-binding"
-    namespace = "licensify"
-    labels    = { "app.kubernetes.io/managed-by" = "Terraform" }
-  }
-  role_ref {
-    api_group = "rbac.authorization.k8s.io"
-    kind      = "Role"
-    name      = "licensing"
-  }
-  subject {
-    kind      = "Group"
-    name      = "licensing"
-    api_group = "rbac.authorization.k8s.io"
-  }
+  namespace_role_rules = [
+    {
+      api_groups = ["", "apps"]
+      resources  = ["pods", "pods/logs", "deployments", "replicasets", "statefulsets"]
+      verbs      = ["get", "list", "watch"]
+    },
+    {
+      api_groups = ["batch"]
+      resources  = ["jobs", "cronjobs"]
+      verbs      = ["get", "list", "watch"]
+    },
+    {
+      api_groups = [""]
+      resources  = ["pods/exec"]
+      verbs      = ["create"]
+    }
+  ]
 }
 
 module "ithctester" {
