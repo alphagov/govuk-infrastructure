@@ -93,7 +93,7 @@ resource "kubernetes_cluster_role_binding_v1" "cluster_role" {
 }
 
 resource "kubernetes_role_v1" "namespace_role" {
-  for_each = toset(var.access_policy_namespaces)
+  for_each = length(local.namespace_role_rules) > 0 ? toset(var.access_policy_namespaces) : []
 
   metadata {
     name      = var.name
@@ -113,7 +113,7 @@ resource "kubernetes_role_v1" "namespace_role" {
 }
 
 resource "kubernetes_role_binding_v1" "namespace_role" {
-  for_each = toset(var.access_policy_namespaces)
+  for_each = length(local.namespace_role_rules) > 0 ? toset(var.access_policy_namespaces) : []
 
   metadata {
     name      = "${var.name}-binding"
