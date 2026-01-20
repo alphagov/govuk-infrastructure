@@ -805,7 +805,8 @@ repos:
       additional_contexts:
         - test
 
-  slimmer: {}
+  slimmer:
+    archived: true
 
   smart-answers:
     can_be_deployed: true
