@@ -2,7 +2,6 @@
 data "aws_iam_roles" "cluster-admin" { name_regex = "(\\..*-fulladmin$|\\..*-platformengineer$)" }
 data "aws_iam_roles" "developer" { name_regex = "\\..*-developer$" }
 data "aws_iam_roles" "licensing" { name_regex = "\\..*-licensinguser$" }
-data "aws_iam_roles" "ithctester" { name_regex = "\\..*-ithctester$" }
 
 locals {
   developer_namespaces = ["apps", "datagovuk", "licensify"]
@@ -35,16 +34,6 @@ resource "aws_eks_access_entry" "licensing" {
 
   principal_arn     = each.value
   kubernetes_groups = ["licensing"]
-  type              = "STANDARD"
-}
-
-resource "aws_eks_access_entry" "ithctester" {
-  for_each = data.aws_iam_roles.ithctester.arns
-
-  cluster_name = local.cluster_name
-
-  principal_arn     = each.value
-  kubernetes_groups = ["ithctester"]
   type              = "STANDARD"
 }
 
@@ -95,22 +84,6 @@ resource "aws_eks_access_policy_association" "licensing" {
 
   depends_on = [
     aws_eks_access_entry.licensing
-  ]
-}
-
-resource "aws_eks_access_policy_association" "ithctester" {
-  for_each = data.aws_iam_roles.ithctester.arns
-
-  cluster_name  = local.cluster_name
-  policy_arn    = "arn:aws:eks::aws:cluster-access-policy/AmazonEKSViewPolicy"
-  principal_arn = each.value
-
-  access_scope {
-    type = "cluster"
-  }
-
-  depends_on = [
-    aws_eks_access_entry.ithctester
   ]
 }
 
@@ -269,36 +242,23 @@ resource "kubernetes_role_binding_v1" "licensing" {
   }
 }
 
-resource "kubernetes_cluster_role_v1" "ithctester" {
-  metadata {
-    name   = "ithctester"
-    labels = { "app.kubernetes.io/managed-by" = "Terraform" }
-  }
+module "ithctester" {
+  source = "./modules/access-entry"
 
-  # Grant read-only access to certain custom resources
-  rule {
-    api_groups = ["argoproj.io", "external-secrets.io"]
-    resources  = ["*"]
-    verbs      = ["get", "list", "watch"]
-  }
+  name = "ithctester"
 
-}
+  cluster_name = local.cluster_name
 
-resource "kubernetes_cluster_role_binding_v1" "ithctester" {
-  metadata {
-    name   = "ithctester-cluster-binding"
-    labels = { "app.kubernetes.io/managed-by" = "Terraform" }
-  }
-  role_ref {
-    api_group = "rbac.authorization.k8s.io"
-    kind      = "ClusterRole"
-    name      = kubernetes_cluster_role_v1.ithctester.metadata[0].name
-  }
-  subject {
-    kind      = "Group"
-    name      = "ithctester"
-    api_group = "rbac.authorization.k8s.io"
-  }
+  access_policy_arn   = "arn:aws:eks::aws:cluster-access-policy/AmazonEKSViewPolicy"
+  access_policy_scope = "cluster"
+
+  cluster_role_rules = [
+    {
+      api_groups = ["argoproj.io", "external-secrets.io"]
+      resources  = ["*"]
+      verbs      = ["get", "list", "watch"]
+    }
+  ]
 }
 
 module "readonly" {
