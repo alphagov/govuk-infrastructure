@@ -2,7 +2,6 @@
 data "aws_iam_roles" "cluster-admin" { name_regex = "(\\..*-fulladmin$|\\..*-platformengineer$)" }
 data "aws_iam_roles" "developer" { name_regex = "\\..*-developer$" }
 data "aws_iam_roles" "licensing" { name_regex = "\\..*-licensinguser$" }
-data "aws_iam_roles" "readonly" { name_regex = "\\..*-readonly$" }
 data "aws_iam_roles" "ithctester" { name_regex = "\\..*-ithctester$" }
 
 locals {
@@ -36,16 +35,6 @@ resource "aws_eks_access_entry" "licensing" {
 
   principal_arn     = each.value
   kubernetes_groups = ["licensing"]
-  type              = "STANDARD"
-}
-
-resource "aws_eks_access_entry" "readonly" {
-  for_each = data.aws_iam_roles.readonly.arns
-
-  cluster_name = local.cluster_name
-
-  principal_arn     = each.value
-  kubernetes_groups = ["readonly"]
   type              = "STANDARD"
 }
 
@@ -106,23 +95,6 @@ resource "aws_eks_access_policy_association" "licensing" {
 
   depends_on = [
     aws_eks_access_entry.licensing
-  ]
-}
-
-resource "aws_eks_access_policy_association" "readonly" {
-  for_each = data.aws_iam_roles.readonly.arns
-
-  cluster_name  = local.cluster_name
-  policy_arn    = "arn:aws:eks::aws:cluster-access-policy/AmazonEKSViewPolicy"
-  principal_arn = each.value
-
-  access_scope {
-    type       = "namespace"
-    namespaces = local.developer_namespaces
-  }
-
-  depends_on = [
-    aws_eks_access_entry.readonly
   ]
 }
 
@@ -297,55 +269,6 @@ resource "kubernetes_role_binding_v1" "licensing" {
   }
 }
 
-resource "kubernetes_cluster_role_v1" "readonly" {
-  metadata {
-    name   = "readonly"
-    labels = { "app.kubernetes.io/managed-by" = "Terraform" }
-  }
-
-  rule {
-    api_groups = [""]
-    resources  = ["namespaces", "pods", "pods/logs", "services", "configmaps", "endpoints", "events"]
-    verbs      = ["get", "list", "watch"]
-  }
-
-  rule {
-    api_groups = [""]
-    resources  = ["secrets"]
-    verbs      = ["list"]
-  }
-
-  rule {
-    api_groups = ["apps", "batch"]
-    resources  = ["deployments", "replicasets", "statefulsets", "jobs", "cronjobs"]
-    verbs      = ["get", "list", "watch"]
-  }
-
-  rule {
-    api_groups = ["networking.k8s.io"]
-    resources  = ["ingresses"]
-    verbs      = ["get", "list", "watch"]
-  }
-}
-
-
-resource "kubernetes_cluster_role_binding_v1" "readonly" {
-  metadata {
-    name   = "readonly-cluster-binding"
-    labels = { "app.kubernetes.io/managed-by" = "Terraform" }
-  }
-  role_ref {
-    api_group = "rbac.authorization.k8s.io"
-    kind      = "ClusterRole"
-    name      = kubernetes_cluster_role_v1.readonly.metadata[0].name
-  }
-  subject {
-    kind      = "Group"
-    name      = "readonly"
-    api_group = "rbac.authorization.k8s.io"
-  }
-}
-
 resource "kubernetes_cluster_role_v1" "ithctester" {
   metadata {
     name   = "ithctester"
@@ -378,47 +301,39 @@ resource "kubernetes_cluster_role_binding_v1" "ithctester" {
   }
 }
 
-resource "kubernetes_role_v1" "readonly" {
-  for_each = toset(local.developer_namespaces)
+module "readonly" {
+  source = "./modules/access-entry"
 
-  metadata {
-    name      = "readonly"
-    namespace = each.key
-    labels    = { "app.kubernetes.io/managed-by" = "Terraform" }
-  }
+  name = "readonly"
 
-  rule {
-    api_groups = ["", "apps"]
-    resources  = ["pods", "pods/logs", "deployments", "replicasets", "statefulsets"]
-    verbs      = ["get", "list", "watch"]
-  }
+  cluster_name = local.cluster_name
 
-  rule {
-    api_groups = ["batch"]
-    resources  = ["jobs", "cronjobs"]
-    verbs      = ["get", "list", "watch"]
-  }
-}
+  access_policy_arn        = "arn:aws:eks::aws:cluster-access-policy/AmazonEKSViewPolicy"
+  access_policy_scope      = "namespace"
+  access_policy_namespaces = local.developer_namespaces
 
-resource "kubernetes_role_binding_v1" "readonly" {
-  for_each   = toset(local.developer_namespaces)
-  depends_on = [kubernetes_role_v1.readonly]
-
-  metadata {
-    name      = "readonly-binding"
-    namespace = each.key
-    labels    = { "app.kubernetes.io/managed-by" = "Terraform" }
-  }
-  role_ref {
-    api_group = "rbac.authorization.k8s.io"
-    kind      = "Role"
-    name      = "readonly"
-  }
-  subject {
-    kind      = "Group"
-    name      = "readonly"
-    api_group = "rbac.authorization.k8s.io"
-  }
+  cluster_role_rules = [
+    {
+      api_groups = [""]
+      resources  = ["namespaces", "pods", "pods/logs", "services", "configmaps", "endpoints", "events"]
+      verbs      = ["get", "list", "watch"]
+    },
+    {
+      api_groups = [""]
+      resources  = ["secrets"]
+      verbs      = ["list"]
+    },
+    {
+      api_groups = ["apps", "batch"]
+      resources  = ["deployments", "replicasets", "statefulsets", "jobs", "cronjobs"]
+      verbs      = ["get", "list", "watch"]
+    },
+    {
+      api_groups = ["networking.k8s.io"]
+      resources  = ["ingresses"]
+      verbs      = ["get", "list", "watch"]
+    }
+  ]
 }
 
 module "dguengineer" {
