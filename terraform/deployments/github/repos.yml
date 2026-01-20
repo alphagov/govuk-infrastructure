@@ -1032,3 +1032,9 @@ repos:
 
   govuk-toolbox-image:
     can_be_deployed: true
+
+  govuk-ai-accelerator:
+    can_be_deployed: true
+    required_pull_request_reviews:
+      require_code_owner_reviews: true
+    standard_contexts: *standard_security_checks
