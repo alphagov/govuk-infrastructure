@@ -47,25 +47,6 @@ resource "aws_db_parameter_group" "normalised_engine_params" {
   lifecycle { create_before_destroy = true }
 }
 
-resource "aws_db_parameter_group" "engine_params" {
-  for_each = var.databases
-
-  name_prefix = "${var.govuk_environment}-${each.value.name}-${each.value.engine}-"
-  family      = each.value.engine_params_family != null ? each.value.engine_params_family : "${each.value.engine}${each.value.engine_version}"
-
-  dynamic "parameter" {
-    for_each = each.value.engine_params
-
-    content {
-      name         = parameter.key
-      value        = parameter.value.value
-      apply_method = parameter.value.apply_method
-    }
-  }
-
-  lifecycle { create_before_destroy = true }
-}
-
 resource "aws_db_instance" "instance" {
   for_each = var.databases
 
@@ -157,11 +138,6 @@ resource "aws_cloudwatch_metric_alarm" "rds_freestoragespace" {
   alarm_description = "Available storage space on ${aws_db_instance.instance[each.key].identifier} RDS is below ${each.value.storage_alarm_threshold_percentage}%."
 }
 
-moved {
-  from = aws_route53_record.normalised_instance_cname
-  to   = aws_route53_record.instance_cname
-}
-
 resource "aws_route53_record" "instance_cname" {
   for_each = var.databases
 
@@ -213,11 +189,6 @@ resource "aws_db_instance" "replica" {
 
   storage_encrypted = true
   kms_key_id        = aws_kms_key.rds.arn
-}
-
-moved {
-  from = aws_route53_record.normalised_replica_cname
-  to   = aws_route53_record.replica_cname
 }
 
 resource "aws_route53_record" "replica_cname" {
