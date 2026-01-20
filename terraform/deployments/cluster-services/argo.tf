@@ -185,7 +185,7 @@ resource "helm_release" "argo_bootstrap" {
     iamRoleServiceAccounts = {
       tagImageWorkflow = {
         name       = local.tag_image_service_account_name
-        iamRoleArn = module.tag_image_iam_role.iam_role_arn
+        iamRoleArn = module.tag_image_iam_role.arn
       }
     }
   })]
@@ -215,7 +215,7 @@ resource "helm_release" "argo_bootstrap_ephemeral" {
     iamRoleServiceAccounts = {
       tagImageWorkflow = {
         name       = local.tag_image_service_account_name
-        iamRoleArn = module.tag_image_iam_role.iam_role_arn
+        iamRoleArn = module.tag_image_iam_role.arn
       }
     }
   })]
