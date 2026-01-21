@@ -106,6 +106,12 @@ resource "github_team" "govuk_ithc" {
   description = "To grant temporary access to our GitHub repositories and services that require GitHub authentication to ITHC testers"
 }
 
+resource "github_team" "govuk_ai_accelerator" {
+  name        = "GOV.UK AI Accelerator alpha team"
+  privacy     = "closed"
+  description = "Grants access to a limited set of repos to allow managed service collegues to work on the GOV.UK publishing AI Alpha"
+}
+
 resource "github_team" "govuk" {
   name    = "GOV.UK"
   privacy = "closed"
@@ -113,6 +119,12 @@ resource "github_team" "govuk" {
 
 data "github_team" "co_platform_engineering" {
   slug = "co-platform-engineering"
+}
+
+resource "github_team_repository" "govuk_ai_accelerator_repos" {
+  repository = github_repository.govuk_repos["govuk-ai-accelerator"]
+  team_id    = github_team.govuk_ai_accelerator.id
+  permission = "push"
 }
 
 resource "github_team_repository" "govuk_production_admin_repos" {
