@@ -373,25 +373,6 @@ module "variable-set-rds-production" {
         snapshot_identifier          = "email-alert-api-postgres-post-encryption"
       }
 
-      imminence = {
-        engine         = "postgres"
-        engine_version = "14"
-        engine_params = {
-          log_min_duration_statement = { value = 10000 }
-          log_statement              = { value = "all" }
-          deadlock_timeout           = { value = 2500 }
-          log_lock_waits             = { value = 1 }
-          password_encryption        = { value = "md5" }
-        }
-        engine_params_family         = "postgres14"
-        name                         = "places-manager"
-        allocated_storage            = 100
-        instance_class               = "db.m6g.large"
-        performance_insights_enabled = true
-        project                      = "GOV.UK - Web"
-        snapshot_identifier          = "imminence-postgres-post-encryption"
-      }
-
       link_checker_api = {
         engine         = "postgres"
         engine_version = "14"
@@ -447,6 +428,43 @@ module "variable-set-rds-production" {
         snapshot_identifier          = "locations-api-postgres-post-encryption"
       }
 
+      places_manager = {
+        engine         = "postgres"
+        engine_version = "14"
+        engine_params = {
+          log_min_duration_statement = { value = 10000 }
+          log_statement              = { value = "all" }
+          deadlock_timeout           = { value = 2500 }
+          log_lock_waits             = { value = 1 }
+          password_encryption        = { value = "md5" }
+        }
+        engine_params_family         = "postgres14"
+        name                         = "places-manager"
+        allocated_storage            = 100
+        instance_class               = "db.m6g.large"
+        performance_insights_enabled = true
+        project                      = "GOV.UK - Web"
+        snapshot_identifier          = "imminence-postgres-post-encryption"
+      }
+
+      publisher = {
+        engine         = "postgres"
+        engine_version = "17"
+        engine_params = {
+          log_min_duration_statement = { value = 10000 }
+          log_statement              = { value = "all" }
+          deadlock_timeout           = { value = 2500 }
+          log_lock_waits             = { value = 1 }
+        }
+        engine_params_family         = "postgres17"
+        name                         = "publisher"
+        allocated_storage            = 100
+        instance_class               = "db.t4g.medium"
+        performance_insights_enabled = true
+        project                      = "GOV.UK - Publishing"
+        snapshot_identifier          = "publisher-postgres-post-encryption"
+      }
+
       publishing_api = {
         engine                 = "postgres"
         engine_version         = "17"
@@ -467,24 +485,6 @@ module "variable-set-rds-production" {
         project                      = "GOV.UK - Publishing"
         has_read_replica             = true
         snapshot_identifier          = "publishing-api-postgres-post-encryption"
-      }
-
-      publisher = {
-        engine         = "postgres"
-        engine_version = "17"
-        engine_params = {
-          log_min_duration_statement = { value = 10000 }
-          log_statement              = { value = "all" }
-          deadlock_timeout           = { value = 2500 }
-          log_lock_waits             = { value = 1 }
-        }
-        engine_params_family         = "postgres17"
-        name                         = "publisher"
-        allocated_storage            = 100
-        instance_class               = "db.t4g.medium"
-        performance_insights_enabled = true
-        project                      = "GOV.UK - Publishing"
-        snapshot_identifier          = "publisher-postgres-post-encryption"
       }
 
       release = {

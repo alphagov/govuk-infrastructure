@@ -13,6 +13,11 @@ resource "random_string" "database_password" {
   lifecycle { ignore_changes = [length, special] }
 }
 
+moved {
+  from = random_string.database_password["imminence"]
+  to   = random_string.database_password["places_manager"]
+}
+
 # this resource is called `blue-govuk-rds-subnet` in
 # integration, staging and production
 resource "aws_db_subnet_group" "subnet_group" {
@@ -41,6 +46,11 @@ resource "aws_db_parameter_group" "normalised_engine_params" {
   }
 
   lifecycle { create_before_destroy = true }
+}
+
+moved {
+  from = aws_db_parameter_group.normalised_engine_params["imminence"]
+  to   = aws_db_parameter_group.normalised_engine_params["places_manager"]
 }
 
 resource "aws_db_instance" "instance" {
@@ -99,6 +109,11 @@ resource "aws_db_instance" "instance" {
   }
 }
 
+moved {
+  from = aws_db_instance.instance["imminence"]
+  to   = aws_db_instance.instance["places_manager"]
+}
+
 resource "aws_db_event_subscription" "subscription" {
   name      = "${var.govuk_environment}-rds-event-subscription"
   sns_topic = aws_sns_topic.rds_alerts.arn
@@ -130,6 +145,11 @@ resource "aws_cloudwatch_metric_alarm" "rds_freestoragespace" {
   alarm_description = "Available storage space on ${aws_db_instance.instance[each.key].identifier} RDS is below ${each.value.storage_alarm_threshold_percentage}%."
 }
 
+moved {
+  from = aws_cloudwatch_metric_alarm.rds_freestoragespace["imminence"]
+  to   = aws_cloudwatch_metric_alarm.rds_freestoragespace["places_manager"]
+}
+
 resource "aws_route53_record" "instance_cname" {
   for_each = var.databases
 
@@ -141,6 +161,12 @@ resource "aws_route53_record" "instance_cname" {
   type    = "CNAME"
   ttl     = 30
   records = [aws_db_instance.instance[each.key].address]
+}
+
+
+moved {
+  from = aws_route53_record.instance_cname["imminence"]
+  to   = aws_route53_record.instance_cname["places_manager"]
 }
 
 resource "aws_db_instance" "replica" {
