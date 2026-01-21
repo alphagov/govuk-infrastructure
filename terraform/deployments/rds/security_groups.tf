@@ -14,7 +14,7 @@ resource "aws_security_group_rule" "mysql" {
     if db.engine == "mysql"
   }
 
-  security_group_id = aws_security_group.rds[each.key].id
+  security_group_id = aws_security_group.instance[each.key].id
   description       = "Access to MySQL database from EKS worker nodes"
 
   type      = "ingress"
@@ -31,7 +31,7 @@ resource "aws_security_group_rule" "postgres" {
     if db.engine == "postgres"
   }
 
-  security_group_id = aws_security_group.rds[each.key].id
+  security_group_id = aws_security_group.instance[each.key].id
   description       = "Access to PostgreSQL database from EKS worker nodes"
 
   type      = "ingress"
