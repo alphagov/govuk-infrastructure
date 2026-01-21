@@ -43,11 +43,6 @@ resource "aws_db_parameter_group" "engine_params" {
   lifecycle { create_before_destroy = true }
 }
 
-moved {
-  from = aws_db_parameter_group.normalised_engine_params
-  to   = aws_db_parameter_group.engine_params
-}
-
 resource "aws_db_instance" "instance" {
   for_each = var.databases
 
