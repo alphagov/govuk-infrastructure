@@ -8,6 +8,11 @@ resource "aws_security_group" "instance" {
   lifecycle { create_before_destroy = true }
 }
 
+moved {
+  from = aws_security_group.instance["imminence"]
+  to   = aws_security_group.instance["places_manager"]
+}
+
 resource "aws_security_group_rule" "mysql" {
   for_each = {
     for db_name, db in var.databases : db_name => db
@@ -40,4 +45,9 @@ resource "aws_security_group_rule" "postgres" {
   to_port   = 5432
 
   source_security_group_id = data.tfe_outputs.cluster_infrastructure.nonsensitive_values.node_security_group_id
+}
+
+moved {
+  from = aws_security_group_rule.postgres["imminence"]
+  to   = aws_security_group_rule.postgres["places_manager"]
 }
