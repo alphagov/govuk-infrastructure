@@ -1,14 +1,14 @@
-resource "aws_security_group" "instance" {
+resource "aws_security_group" "rds" {
   for_each = var.databases
 
-  name        = "${local.identifier_prefix}${each.value.new_name != null ? each.value.new_name : each.value.name}-${var.govuk_environment}-${each.value.engine}-rds"
+  name        = "${local.identifier_prefix}${each.value.new_name != null ? each.value.new_name : each.value.name}-${var.govuk_environment}-${each.value.engine}-rds-access"
   vpc_id      = data.tfe_outputs.vpc.nonsensitive_values.id
-  description = "Access to ${each.value.new_name != null ? each.value.new_name : each.value.name} RDS"
+  description = "Access to ${each.value.name} RDS"
 
   lifecycle { create_before_destroy = true }
 }
 
-resource "aws_security_group_rule" "mysql" {
+resource "aws_security_group_rule" "rds_mysql" {
   for_each = {
     for db_name, db in var.databases : db_name => db
     if db.engine == "mysql"
@@ -25,7 +25,7 @@ resource "aws_security_group_rule" "mysql" {
   source_security_group_id = data.tfe_outputs.cluster_infrastructure.nonsensitive_values.node_security_group_id
 }
 
-resource "aws_security_group_rule" "postgres" {
+resource "aws_security_group_rule" "rds_postgres" {
   for_each = {
     for db_name, db in var.databases : db_name => db
     if db.engine == "postgres"
@@ -41,3 +41,4 @@ resource "aws_security_group_rule" "postgres" {
 
   source_security_group_id = data.tfe_outputs.cluster_infrastructure.nonsensitive_values.node_security_group_id
 }
+
