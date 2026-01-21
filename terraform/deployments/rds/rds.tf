@@ -74,7 +74,7 @@ resource "aws_db_instance" "instance" {
   copy_tags_to_snapshot       = true
   monitoring_interval         = 60
   monitoring_role_arn         = data.tfe_outputs.logging.nonsensitive_values.rds_enhanced_monitoring_role_arn
-  vpc_security_group_ids      = [aws_security_group.rds[each.key].id, aws_security_group.instance[each.key].id]
+  vpc_security_group_ids      = [aws_security_group.instance[each.key].id]
   ca_cert_identifier          = "rds-ca-rsa2048-g1"
   apply_immediately           = each.value.apply_immediately != null ? each.value.apply_immediately : var.govuk_environment != "production"
   allow_major_version_upgrade = each.value.allow_major_version_upgrade
@@ -164,7 +164,7 @@ resource "aws_db_instance" "replica" {
   replicate_source_db                   = aws_db_instance.instance[each.key].identifier
   performance_insights_enabled          = aws_db_instance.instance[each.key].performance_insights_enabled
   performance_insights_retention_period = aws_db_instance.instance[each.key].performance_insights_retention_period
-  vpc_security_group_ids                = [aws_security_group.rds[each.key].id, aws_security_group.instance[each.key].id]
+  vpc_security_group_ids                = [aws_security_group.instance[each.key].id]
 
   engine_version = (
     each.value.replica_engine_version != null

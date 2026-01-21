@@ -20,5 +20,5 @@ output "rds_address" {
 
 output "sg_rds" {
   description = "RDS instance security groups"
-  value       = { for k, v in aws_security_group.rds : k => v.id }
+  value       = { for k, v in aws_security_group.instance : k => v.id }
 }
