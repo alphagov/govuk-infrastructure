@@ -11,6 +11,7 @@ module "workspace" {
   trigger_patterns    = ["/terraform/deployments/${var.name}/**/*"]
   global_remote_state = true
   queue_all_runs      = false
+  force_delete        = true
 
   project_name = var.ephemeral_cluster_id
   vcs_repo = {
