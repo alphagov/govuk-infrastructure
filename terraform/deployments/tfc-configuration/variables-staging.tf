@@ -282,8 +282,7 @@ module "variable-set-rds-staging" {
           log_lock_waits                       = { value = 1 }
         }
         engine_params_family         = "postgres14"
-        name                         = "blue-content-data-api-postgresql-primary"
-        new_name                     = "content-data-api"
+        name                         = "content-data-api"
         allocated_storage            = 1024
         instance_class               = "db.m6g.large"
         performance_insights_enabled = false
@@ -374,8 +373,7 @@ module "variable-set-rds-staging" {
           password_encryption        = { value = "md5" }
         }
         engine_params_family         = "postgres14"
-        name                         = "imminence"
-        new_name                     = "places-manager"
+        name                         = "places-manager"
         allocated_storage            = 100
         instance_class               = "db.t4g.medium"
         performance_insights_enabled = false

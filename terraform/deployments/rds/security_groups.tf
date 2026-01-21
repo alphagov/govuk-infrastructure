@@ -1,9 +1,9 @@
 resource "aws_security_group" "instance" {
   for_each = var.databases
 
-  name        = "${local.identifier_prefix}${each.value.new_name != null ? each.value.new_name : each.value.name}-${var.govuk_environment}-${each.value.engine}-rds"
+  name        = "${local.identifier_prefix}${each.value.name}-${var.govuk_environment}-${each.value.engine}-rds"
   vpc_id      = data.tfe_outputs.vpc.nonsensitive_values.id
-  description = "Access to ${each.value.new_name != null ? each.value.new_name : each.value.name} RDS"
+  description = "Access to ${each.value.name} RDS"
 
   lifecycle { create_before_destroy = true }
 }
