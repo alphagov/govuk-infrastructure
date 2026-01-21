@@ -36,7 +36,6 @@ variable "databases" {
     maintenance_window           = optional(string)
     backup_window                = optional(string)
     backup_retention_period      = optional(number)
-    new_name                     = optional(string)
     snapshot_identifier          = optional(string)
     apply_immediately            = optional(bool)
     allow_major_version_upgrade  = optional(bool, false)

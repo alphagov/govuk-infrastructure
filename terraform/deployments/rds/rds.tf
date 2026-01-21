@@ -27,12 +27,8 @@ resource "aws_db_subnet_group" "subnet_group" {
 resource "aws_db_parameter_group" "normalised_engine_params" {
   for_each = var.databases
 
-  name_prefix = "${var.govuk_environment}-${
-    each.value.new_name != null
-    ? each.value.new_name
-    : each.value.name
-  }-${each.value.engine}-"
-  family = each.value.engine_params_family != null ? each.value.engine_params_family : "${each.value.engine}${each.value.engine_version}"
+  name_prefix = "${var.govuk_environment}-${each.value.name}-${each.value.engine}-"
+  family      = each.value.engine_params_family != null ? each.value.engine_params_family : "${each.value.engine}${each.value.engine_version}"
 
   dynamic "parameter" {
     for_each = each.value.engine_params
@@ -59,11 +55,7 @@ resource "aws_db_instance" "instance" {
   password            = random_string.database_password[each.key].result
   instance_class      = each.value.instance_class
   identifier = (
-    "${local.identifier_prefix}${
-      each.value.new_name != null
-      ? each.value.new_name
-      : each.value.name
-    }-${var.govuk_environment}-${each.value.engine}"
+    "${local.identifier_prefix}${each.value.name}-${var.govuk_environment}-${each.value.engine}"
   )
   db_subnet_group_name        = aws_db_subnet_group.subnet_group.name
   multi_az                    = var.multi_az
@@ -95,7 +87,7 @@ resource "aws_db_instance" "instance" {
   }
 
   deletion_protection       = each.value.deletion_protection
-  final_snapshot_identifier = "${each.value.new_name != null ? each.value.new_name : each.value.name}-${var.govuk_environment}-${each.value.engine}-final-snapshot"
+  final_snapshot_identifier = "${each.value.name}-${var.govuk_environment}-${each.value.engine}-final-snapshot"
   skip_final_snapshot       = var.skip_final_snapshot
 
   storage_encrypted = true
@@ -145,7 +137,7 @@ resource "aws_route53_record" "instance_cname" {
   zone_id = data.tfe_outputs.root_dns.nonsensitive_values.internal_root_zone_id
 
   // Right now the names are stuck as the old names. Hopefuilly we can change this soon
-  name    = "${local.identifier_prefix}${each.value.new_name != null ? each.value.new_name : each.value.name}-${each.value.engine}"
+  name    = "${local.identifier_prefix}${each.value.name}-${each.value.engine}"
   type    = "CNAME"
   ttl     = 30
   records = [aws_db_instance.instance[each.key].address]
