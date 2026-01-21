@@ -64,7 +64,7 @@ resource "aws_db_instance" "instance" {
   )
   db_subnet_group_name        = aws_db_subnet_group.subnet_group.name
   multi_az                    = var.multi_az
-  parameter_group_name        = aws_db_parameter_group.normalised_engine_params[each.key].name
+  parameter_group_name        = aws_db_parameter_group.engine_params[each.key].name
   maintenance_window          = each.value.maintenance_window != null ? each.value.maintenance_window : var.maintenance_window
   backup_retention_period     = each.value.backup_retention_period != null ? each.value.backup_retention_period : var.backup_retention_period
   backup_window               = each.value.backup_window != null ? each.value.backup_window : var.backup_window
