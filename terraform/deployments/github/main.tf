@@ -122,7 +122,7 @@ data "github_team" "co_platform_engineering" {
 }
 
 resource "github_team_repository" "govuk_ai_accelerator_repos" {
-  repository = github_repository.govuk_repos["govuk-ai-accelerator"]
+  repository = "govuk-ai-accelerator"
   team_id    = github_team.govuk_ai_accelerator.id
   permission = "push"
 }
