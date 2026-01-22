@@ -1,5 +1,5 @@
 locals {
-  developer_namespaces = ["apps", "datagovuk", "licensify"]
+  developer_namespaces = ["apps", "licensify"]
 }
 
 module "platformengineer" {
