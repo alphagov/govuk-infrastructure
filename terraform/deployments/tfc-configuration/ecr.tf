@@ -26,4 +26,6 @@ module "ecr-production" {
     module.variable-set-production.id,
     module.variable-set-ecr-production.id
   ]
+
+  run_trigger_source_workspaces = ["GitHub"]
 }
