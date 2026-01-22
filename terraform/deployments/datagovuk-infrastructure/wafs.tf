@@ -291,13 +291,11 @@ resource "aws_wafv2_web_acl" "ckan" {
     statement {
       rate_based_statement {
         limit              = local.ckan_rate_limits.warning
-        aggregate_key_type = "FORWARDED_IP"
-        # Fastly CDN passes real client IP in True-Client-IP header
-        # This ensures we rate limit per actual client IP, not Fastly's IPs
-        forwarded_ip_config {
-          fallback_behavior = "MATCH"
-          header_name       = "True-Client-IP"
-        }
+        aggregate_key_type = "IP"
+        # CKAN traffic does NOT go through Fastly CDN (unlike Find)
+        # It goes directly to ALB, so we use source IP for rate limiting
+        # No forwarded_ip_config needed as there's no CDN in front
+        
         # Only apply rate limiting to CKAN hostname requests
         scope_down_statement {
           byte_match_statement {
@@ -348,11 +346,11 @@ resource "aws_wafv2_web_acl" "ckan" {
     statement {
       rate_based_statement {
         limit              = local.ckan_rate_limits.block
-        aggregate_key_type = "FORWARDED_IP"
-        forwarded_ip_config {
-          fallback_behavior = "MATCH"
-          header_name       = "True-Client-IP"
-        }
+        aggregate_key_type = "IP"
+        # CKAN traffic does NOT go through Fastly CDN (unlike Find)
+        # It goes directly to ALB, so we use source IP for rate limiting
+        # No forwarded_ip_config needed as there's no CDN in front
+        
         # Only apply rate limiting to CKAN hostname requests
         scope_down_statement {
           byte_match_statement {
