@@ -25,28 +25,10 @@ module "github" {
   variable_set_ids = [
     local.aws_credentials["tools"],
   ]
+
+  run_trigger_source_workspaces = ["ecr-production"]
 }
 
 resource "tfe_project" "github" {
   name = "govuk-github"
-}
-
-import {
-  to = module.github.tfe_workspace.ws
-  id = "ws-DBicPsBVXrHAqGmC"
-}
-
-import {
-  to = tfe_project.github
-  id = "prj-2VUNgc12nAZA3zkP"
-}
-
-import {
-  to = module.github.tfe_workspace_settings.ws
-  id = "ws-DBicPsBVXrHAqGmC"
-}
-
-import {
-  to = module.github.tfe_team_access.managed["GOV.UK Production"]
-  id = "govuk/Github/tws-mfwVh5vf98AE21Po"
 }
