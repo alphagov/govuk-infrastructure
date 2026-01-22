@@ -295,7 +295,7 @@ resource "aws_wafv2_web_acl" "ckan" {
         # CKAN traffic does NOT go through Fastly CDN (unlike Find)
         # It goes directly to ALB, so we use source IP for rate limiting
         # No forwarded_ip_config needed as there's no CDN in front
-        
+
         # Only apply rate limiting to CKAN hostname requests
         scope_down_statement {
           byte_match_statement {
@@ -350,7 +350,7 @@ resource "aws_wafv2_web_acl" "ckan" {
         # CKAN traffic does NOT go through Fastly CDN (unlike Find)
         # It goes directly to ALB, so we use source IP for rate limiting
         # No forwarded_ip_config needed as there's no CDN in front
-        
+
         # Only apply rate limiting to CKAN hostname requests
         scope_down_statement {
           byte_match_statement {
