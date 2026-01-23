@@ -6,8 +6,6 @@ This module is used to provision ephemeral EKS clusters via Terraform Cloud.
 1. ensure you are in the correct dir `terraform/deployments/ephemeral`
 1. Ensure you have logged in to Terraform Cloud via the Terraform CLI (`terraform login`)
 1. Do a `terraform init`
-1. `terraform workspace new ${EPH_CLUSTER_ID}`
-1. check you're in the correct terraform workspace `terraform workspace list` and change to the correct one if needed `terraform workspace select ${EPH_CLUSTER_ID}`
 1. Run an apply with your chosen ephemeral cluster ID (this isn't generated for you)
    `terraform apply -var ephemeral_cluster_id=${EPH_CLUSTER_ID}`
 1. When `cluster_access` has applied successfully you can gain access to the cluster with `aws eks update-kubeconfig --name ${EPH_CLUSTER_ID} --kubeconfig <optional_new_kube_config>`
