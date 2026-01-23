@@ -25,8 +25,6 @@ module "github" {
   variable_set_ids = [
     local.aws_credentials["tools"],
   ]
-
-  run_trigger_source_workspaces = ["ecr-production"]
 }
 
 resource "tfe_project" "github" {
