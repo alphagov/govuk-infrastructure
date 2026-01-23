@@ -69,19 +69,6 @@ module "cluster_infrastructure" {
   depends_on = [module.vpc, tfe_project.project]
 }
 
-module "cluster_access" {
-  source = "./ws"
-
-  name                 = "cluster-access"
-  ephemeral_cluster_id = var.ephemeral_cluster_id
-  variable_set_id      = module.var_set.id
-
-  tfvars = {
-    ship_kubernetes_events_to_logit = false
-  }
-
-  depends_on = [module.cluster_infrastructure, module.cluster_services, tfe_project.project]
-}
 
 module "cluster_services" {
   source = "./ws"
@@ -95,6 +82,20 @@ module "cluster_services" {
   }
 
   depends_on = [module.cluster_infrastructure, tfe_project.project]
+}
+
+module "cluster_access" {
+  source = "./ws"
+
+  name                 = "cluster-access"
+  ephemeral_cluster_id = var.ephemeral_cluster_id
+  variable_set_id      = module.var_set.id
+
+  tfvars = {
+    ship_kubernetes_events_to_logit = false
+  }
+
+  depends_on = [module.cluster_infrastructure, module.cluster_services, tfe_project.project]
 }
 
 /*
