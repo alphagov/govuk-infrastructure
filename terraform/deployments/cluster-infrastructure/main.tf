@@ -212,11 +212,6 @@ resource "aws_iam_role_policy_attachment" "node" {
   role       = aws_iam_role.node.name
 }
 
-moved {
-  from = module.eks.aws_eks_addon.this["vpc-cni"]
-  to   = module.eks.aws_eks_addon.before_compute["vpc-cni"]
-}
-
 module "eks" {
   source  = "terraform-aws-modules/eks/aws"
   version = "~> 21.0"
