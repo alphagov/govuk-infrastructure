@@ -62,3 +62,16 @@ variable "waf_log_retention_days" {
   type        = number
   default     = 30
 }
+
+# Variables for CKAN rate limiting configuration
+variable "ckan_rate_limit_per_5min" {
+  description = "Rate limit for CKAN app per IP per 5 minutes"
+  type        = number
+  default     = 1000
+}
+
+variable "ckan_rate_limit_warning_per_5min" {
+  description = "Warning threshold before blocking (this is for monitoring only)"
+  type        = number
+  default     = 800
+}
