@@ -28,20 +28,18 @@ If the shutdown script fails or is in a pending state you can still remove the e
 
 1. During the run of the `shutdown.sh` script, click on the terrform cloud link during the running of the shutdown.sh script to monitor the status of the run, it might be in a `pending` state if there are other runs blocking the destroy run so you will need to force and unlock the workspace and discard earlier runs for the shutdown script to continue.
 2. For any remaining ephemeral resources managed by terraform cloud, locate them using the `eph-` search on workspaces and under the `Settings/Destruction and Deletion` section:
-   - manually queue a deletion of your ephemeral cluster infrastructure and monitor it`s progress on the terraform cloud website.
-   - when the infrastructure resources have been deleted then delete the workspace itself.
-
+   a. manually queue a deletion of your ephemeral cluster infrastructure and monitor it`s progress on the terraform cloud website.
+   b. when the infrastructure resources have been deleted then delete the workspace itself.
 3. If there are still some ephemeral resources remaining you will need to use the terraform cli to remove these last resources:
-
-- update your local terraform state
-    `terraform refresh -var "ephemeral_cluster_id=$EPH_CLUSTER_ID"`
-- list the resources
-    `terraform state list`
-- inspect the resources to make sure that you are destroying your ephemeral resources
-    `terrform show <resource name>`
-- if only ephemeral resources remain then run
-    `terraform destroy`
-- NOTE - terraform cloud workspaces may need to be removed manually on the terraform cloud website under the `Settings/Destruction and Deletion` section.
+   a. update your local terraform state
+       `terraform refresh -var "ephemeral_cluster_id=$EPH_CLUSTER_ID"`
+   b. list the resources
+       `terraform state list`
+   c. inspect the resources to make sure that you are destroying your ephemeral resources
+       `terrform show <resource name>`
+   d. if only ephemeral resources remain then run
+       `terraform destroy`
+   e. NOTE - terraform cloud workspaces may need to be removed manually on the terraform cloud website under the `Settings/Destruction and Deletion` section.
 
 ### Alertmanager, Prometheus and Grafana
 
