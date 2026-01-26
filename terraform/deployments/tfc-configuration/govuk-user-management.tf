@@ -38,28 +38,3 @@ module "govuk-user-management" {
 resource "tfe_project" "govuk-user-management" {
   name = "govuk-user-management"
 }
-
-import {
-  to = module.govuk-user-management.tfe_workspace.ws
-  id = "ws-MnwZqzrMxschrrkD"
-}
-
-import {
-  to = tfe_project.govuk-user-management
-  id = "prj-NbYmntuGrcpe47Ho"
-}
-
-import {
-  to = module.govuk-user-management.tfe_workspace_settings.ws
-  id = "ws-MnwZqzrMxschrrkD"
-}
-
-import {
-  to = module.govuk-user-management.tfe_team_access.custom["GOV.UK Production"]
-  id = "govuk/govuk-user-management/tws-zwt11uDQdvvUx9Ce"
-}
-
-import {
-  to = module.govuk-user-management.tfe_team_access.managed["GOV.UK Senior Tech"]
-  id = "govuk/govuk-user-management/tws-qp3Ha1n6J5P6pGg4"
-}

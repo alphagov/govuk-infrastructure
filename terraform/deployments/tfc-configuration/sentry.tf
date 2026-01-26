@@ -26,23 +26,3 @@ module "sentry" {
 resource "tfe_project" "sentry" {
   name = "govuk-sentry"
 }
-
-import {
-  to = module.sentry.tfe_workspace.ws
-  id = "ws-tCAkk87eGV2xvnss"
-}
-
-import {
-  to = tfe_project.sentry
-  id = "prj-WA5cQXmTdaCyjkT3"
-}
-
-import {
-  to = module.sentry.tfe_workspace_settings.ws
-  id = "ws-tCAkk87eGV2xvnss"
-}
-
-import {
-  to = module.sentry.tfe_team_access.managed["GOV.UK Production"]
-  id = "govuk/govuk-sentry/tws-1QpMzN2mckjysN4k"
-}

@@ -22,23 +22,8 @@ module "govuk-fastly-secrets" {
   ]
 }
 
-import {
-  to = module.govuk-fastly-secrets.tfe_workspace.ws
-  id = "ws-AhhvhyjXYmiw3f2H"
-}
-
-import {
-  to = module.govuk-fastly-secrets.tfe_workspace_settings.ws
-  id = "ws-AhhvhyjXYmiw3f2H"
-}
-
 resource "tfe_project" "govuk-fastly" {
   name = "govuk-fastly"
-}
-
-import {
-  to = tfe_project.govuk-fastly
-  id = "prj-W6heeg89HJyX7w9p"
 }
 
 data "tfe_team" "production" {
@@ -50,9 +35,4 @@ resource "tfe_team_project_access" "production" {
   access     = "admin"
   team_id    = data.tfe_team.production.id
   project_id = tfe_project.govuk-fastly.id
-}
-
-import {
-  to = tfe_team_project_access.production
-  id = "tprj-cG8tTUvBMmrnkRhs"
 }
