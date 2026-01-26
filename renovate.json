@@ -20,7 +20,8 @@
     ],
     "packageRules": [
       {
-        "matchDepTypes": ["helm_release", "provider", "modules", "required_providers"]
+        "matchDepTypes": ["helm_release", "provider", "modules", "required_provider", "required_version"],
+        "rangeStrategy": "bump"
       }
     ]
   },
