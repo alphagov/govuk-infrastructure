@@ -94,18 +94,3 @@ module "cluster-services-production" {
 
   run_trigger_source_workspaces = ["cluster-services-staging"]
 }
-
-import {
-  to = module.cluster-services-integration.tfe_run_trigger.rt["govuk-user-management"]
-  id = "rt-QG5dJ7mgszV33D18"
-}
-
-import {
-  to = module.cluster-services-staging.tfe_run_trigger.rt["govuk-user-management"]
-  id = "rt-TxjmoeQWmmxcLCCd"
-}
-
-import {
-  to = module.cluster-services-production.tfe_run_trigger.rt["cluster-services-staging"]
-  id = "rt-hiFdm9BTshymKcTX"
-}
