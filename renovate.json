@@ -17,6 +17,11 @@
   "terraform": {
     "managerFilePatterns": [
       "/^/terraform/.*\\.tf$/"
+    ],
+    "packageRules": [
+      {
+        "matchDepTypes": ["helm_release", "provider", "modules", "required_providers"]
+      }
     ]
   },
   "prHourlyLimit": 20,
