@@ -51,6 +51,19 @@
       "depNameTemplate": "{{depName}}",
       "datasourceTemplate": "aws-eks-addon",
       "versioningTemplate": "aws-eks-addon"
+    },
+    {
+      "customType": "regex",
+      "managerFilePatterns": [
+        "/.*tfc-configuration\\/variables\\.tf/"
+      ],
+      "matchStrings": [
+        "default\\s+=\\s+\"~>\\s+(?<currentValue>[0-9.]+)\""
+      ],
+      "packageNameTemplate": "hashicorp/terraform",
+      "depNameTemplate": "Terraform Version",
+      "datasourceTemplate": "github-releases",
+      "versioningTemplate": "github-releases"
     }
   ]
 }
