@@ -18,7 +18,7 @@ terraform {
     }
     aws = {
       source  = "hashicorp/aws"
-      version = "~> 6.0"
+      version = "~> 6.28"
     }
     fastly = {
       source  = "fastly/fastly"
