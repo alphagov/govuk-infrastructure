@@ -20,12 +20,13 @@
     ],
     "packageRules": [
       {
-        "matchDepTypes": ["helm_release", "provider", "modules", "required_provider", "required_version"],
+        "matchDepTypes": ["required_version"],
         "rangeStrategy": "bump"
       }
     ]
   },
   "prHourlyLimit": 20,
+  "prConcurrentLimit": 20,
   "labels": [
     "dependencies",
     "renovate"
