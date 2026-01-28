@@ -12,7 +12,7 @@
     "github-actions",
     "pre-commit",
     "terraform",
-    "regex"
+    "custom.regex"
   ],
   "terraform": {
     "managerFilePatterns": [
@@ -20,7 +20,9 @@
     ],
     "packageRules": [
       {
-        "matchDepTypes": ["required_version"],
+        "matchDepTypes": [
+          "required_version"
+        ],
         "rangeStrategy": "bump"
       }
     ]
