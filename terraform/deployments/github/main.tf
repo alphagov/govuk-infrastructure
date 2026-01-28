@@ -82,11 +82,6 @@ locals {
   ]
 }
 
-moved {
-  from = github_team_repository.govuk_ai_accelerator_repos
-  to = github_team_repository.govuk_ai_accelerator_repos["govuk-ai-accelerator"]
-}
-
 resource "github_team" "govuk_ci_bots" {
   name        = "GOV.UK CI Bots"
   privacy     = "closed"
@@ -124,6 +119,11 @@ resource "github_team" "govuk" {
 
 data "github_team" "co_platform_engineering" {
   slug = "co-platform-engineering"
+}
+
+moved {
+  from = github_team_repository.govuk_ai_accelerator_repos
+  to = github_team_repository.govuk_ai_accelerator_repos["govuk-ai-accelerator"]
 }
 
 resource "github_team_repository" "govuk_ai_accelerator_repos" {
