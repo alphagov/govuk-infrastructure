@@ -40,6 +40,12 @@ variable "github_ithc_team" {
   default     = "alphagov:gov-uk-ithc-and-penetration-testing"
 }
 
+variable "github_national_data_library_team" {
+  type        = string
+  description = "Name of the GitHub team for the National Data Library team to have read-only access to Dex SSO-enabled applications"
+  default     = "alphagov:national-data-library"
+}
+
 variable "helm_timeout_seconds" {
   type        = number
   description = "Timeout for helm install/upgrade operations."
