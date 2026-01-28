@@ -121,12 +121,6 @@ data "github_team" "co_platform_engineering" {
   slug = "co-platform-engineering"
 }
 
-variable "govuk_ai_accelerator_repo_names" {
-  # repos to be used in the GOV.UK Publishing AI alpha
-  type    = list(string)
-  default = ["govuk-ai-accelerator", "govuk-ai-accelerator-tooling"]
-}
-
 moved {
   from = github_team_repository.govuk_ai_accelerator_repos
   to  = github_team_repository.govuk_ai_accelerator_repos["govuk-ai-accelerator"]
