@@ -55,7 +55,8 @@
     {
       "customType": "regex",
       "managerFilePatterns": [
-        "/.*tfc-configuration\\/variables\\.tf/"
+        "/.*tfc-configuration\\/variables\\.tf/",
+        "/.*ws\\/variables\\.tf/"
       ],
       "matchStrings": [
         "default\\s+=\\s+\"~>\\s+(?<currentValue>[0-9.]+)\""
