@@ -515,3 +515,8 @@ resource "aws_iam_policy" "govuk_mirror_sync" {
 
   policy = data.aws_iam_policy_document.govuk_mirror_sync.json
 }
+
+resource "aws_secretsmanager_secret" "mirror_slack_webhook" {
+  name        = "govuk/mirror/slack-webhook"
+  description = "The Slack incoming webhook URL used by the mirror drift detector"
+}
