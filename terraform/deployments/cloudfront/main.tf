@@ -5,7 +5,7 @@ terraform {
       tags = ["cloudfront", "eks", "aws"]
     }
   }
-  required_version = "~> 1.12"
+  required_version = "~> 1.14"
   required_providers {
     aws = {
       source  = "hashicorp/aws"

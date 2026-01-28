@@ -5,7 +5,7 @@ terraform {
       tags = ["ga4-analytics", "gcp", "production"]
     }
   }
-  required_version = "~> 1.12"
+  required_version = "~> 1.14"
   required_providers {
     google = {
       source  = "hashicorp/google"
