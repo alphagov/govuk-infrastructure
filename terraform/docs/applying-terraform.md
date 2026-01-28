@@ -64,7 +64,7 @@ kubectl get nodes
 Terraform versions in Terraform Cloud is configured by 
 [terraform_version](https://github.com/alphagov/govuk-infrastructure/blob/main/terraform/deployments/tfc-configuration/variables.tf#L70) variable.
 
-Renovate is automatically configured to open PRs to bump the `terraform_version` and update the  `required_version` blocks.
+Renovate is automatically configured to open PRs to bump the `terraform_version` and update the `required_version` blocks.
 
 1. If there are breaking changes in the newer Terraform versions make the relevant changes to:
    1. [govuk-infrastructure](https://github.com/alphagov/govuk-infrastructure)
@@ -76,7 +76,7 @@ Renovate is automatically configured to open PRs to bump the `terraform_version`
 2. Manually update the Terraform version for `tfc-configuration` and trigger a plan manually
 3. Re-run the Terraform plans in the [Renovate PR](https://github.com/alphagov/govuk-infrastructure/pull/3581) using the new Terraform version for 
 critical workspaces (e.g. `cluster-infrastructure`, `cluster-services`, `govuk-dns-tf` etc...)
-4. Merge the PR and apply the run in `tfc-configuration`
-5. Merge other Renovate PRs in the above repositories
+4. Merge the [terraform_version PR](https://github.com/alphagov/govuk-infrastructure/pull/3597) and apply the run in `tfc-configuration`
+5. Merge the [required_version PR](https://github.com/alphagov/govuk-infrastructure/pull/3581) and other Renovate PRs in the above repositories
 
 [adr-3]: https://github.com/alphagov/govuk-infrastructure/blob/main/docs/architecture/decisions/0003-split-terraform-state-into-separate-aws-cluster-and-kubernetes-resource-phases.md
