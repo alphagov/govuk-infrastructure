@@ -17,14 +17,6 @@
   "terraform": {
     "managerFilePatterns": [
       "/^/terraform/.*\\.tf$/"
-    ],
-    "packageRules": [
-      {
-        "matchDepTypes": [
-          "required_version"
-        ],
-        "rangeStrategy": "bump"
-      }
     ]
   },
   "prHourlyLimit": 20,
@@ -38,6 +30,21 @@
       "matchDatasources": [
         "aws-eks-addon"
       ]
+    },
+    {
+      "matchManagers": ["custom.regex"],
+      "matchDepNames": [
+        "Terraform Version"
+      ],
+      "groupName": "Terraform Version"
+    },
+    {
+      "matchManagers": ["terraform"],
+      "matchDepTypes": [
+        "required_version"
+      ],
+      "rangeStrategy": "bump",
+      "groupName": "Terraform required_version"
     }
   ],
   "customManagers": [
