@@ -6,7 +6,7 @@ module "renovate_irsa" {
   count = (var.govuk_environment == "production" ? 1 : 0)
 
   source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
-  version = "~> 5.20"
+  version = "~> 6.0"
 
   role_name            = "${local.renovate_service_account_name}-${data.tfe_outputs.cluster_infrastructure.nonsensitive_values.cluster_id}"
   role_description     = "AWS Role and EKS service account that allows renovate to query the AWS API through the AWS SDK for EKS the latest EKS addon versions"
