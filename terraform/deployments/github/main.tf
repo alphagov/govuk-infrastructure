@@ -121,8 +121,14 @@ data "github_team" "co_platform_engineering" {
   slug = "co-platform-engineering"
 }
 
+moved {
+  from = github_team_repository.govuk_ai_accelerator_repos
+  to   = github_team_repository.govuk_ai_accelerator_repos["govuk-ai-accelerator"]
+}
+
 resource "github_team_repository" "govuk_ai_accelerator_repos" {
-  repository = "govuk-ai-accelerator"
+  for_each   = toset(var.govuk_ai_accelerator_repo_names)
+  repository = each.value
   team_id    = github_team.govuk_ai_accelerator.id
   permission = "push"
 }
