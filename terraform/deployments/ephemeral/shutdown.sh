@@ -2,18 +2,34 @@
 
 set -eu
 
+function usage {
+  echo "Shut down and destroy a GOV.UK ephemeral cluster"
+  echo
+  echo "Usage:"
+  echo "  $0 <eph-cluster-id>"
+  echo
+  echo "Example:"
+  echo "  $0 eph-jfharden-2026-01-22"
+  echo
+  exit 1
+}
+
+if [ "$#" -ne 1 ]; then
+  usage
+fi
+
 CLUSTER_ID="${1}"
 
 if [ "${CLUSTER_ID:0:4}" != "eph-" ] && [ "${IGNORE_BAD_CLUSTER_ID}" != "true" ]; then
   echo "Provided cluster ID is invalid: ${CLUSTER_ID}"
   echo "Set IGNORE_BAD_CLUSTER_ID=true or provide a valid cluster ID (e.g. eph-123abc)"
-  exit 1
+  usage
 fi
 
 if [ "$(aws sts get-caller-identity --query Account --output text)" != "430354129336" ] && [ "${IGNORE_BAD_ACCOUNT_ID}" != "true" ]; then
   echo "Current AWS credentials ($(aws sts get-caller-identity --query Arn --output text)) are not for the test account"
   echo "Set IGNORE_BAD_ACCOUNT_ID=true or assume credentials in the test account"
-  exit 1
+  usage
 fi
 
 # list all ArgoCD Application resources that are managed by Helm
