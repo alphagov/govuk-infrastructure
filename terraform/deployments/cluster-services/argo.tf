@@ -30,6 +30,7 @@ locals {
     "policy.csv" = <<-EOT
     g, ${var.github_read_only_team}, role:readonly
     g, ${var.github_ithc_team}, role:readonly
+    g, ${var.github_national_data_library_team}, role:readonly
     g, ${var.github_read_write_team}, role:admin
     EOT
   }
