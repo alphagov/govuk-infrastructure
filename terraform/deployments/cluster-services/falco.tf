@@ -31,8 +31,7 @@ resource "helm_release" "falco" {
         desc: Audit all shell commands executed in containers
         condition: >
           container.id != host and
-          evt.type = execve and
-          proc.args exists
+          evt.type = execve
         output: >
           Shell command executed (user=%user.name container=%container.name shell=%proc.name parent=%proc.pname cmdline=%proc.cmdline)
         priority: NOTICE
