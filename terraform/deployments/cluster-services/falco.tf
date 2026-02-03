@@ -1,6 +1,6 @@
 resource "helm_release" "falco" {
   name             = "flaco"
-  repository       = "https://falcosecurity.github.io/charts/falcosecurity"
+  repository       = "https://falcosecurity.github.io/charts"
   chart            = "falco"
   version          = "8.0.0"
   namespace        = local.services_ns
