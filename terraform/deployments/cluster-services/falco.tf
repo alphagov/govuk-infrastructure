@@ -25,19 +25,9 @@ resource "helm_release" "falco" {
   create_namespace = false
 
   values = [yamlencode({
-    "mounts.volumes" = [{
-      name : "kernel-debug"
-      hostPath : {
-        path : "/sys/kernel/debug"
-      }
-    }],
-    "mounts.volumeMounts" = [
-      {
-        name : "kernel-debug"
-        mountPath : "/sys/kernel/debug"
-        readOnly : true
-      }
-    ],
+    "falco.file_output" = {
+      enabled = true
+    }
     tty                               = true,
     "customRules.execve_audit\\.yaml" = <<-EOT
       - rule: Audit Shell Commands
