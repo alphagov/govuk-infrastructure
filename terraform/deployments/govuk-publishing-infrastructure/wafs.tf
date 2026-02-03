@@ -16,11 +16,6 @@ module "infrastructure-sensitive_wafs" {
 }
 
 
-moved {
-  from = aws_wafv2_web_acl.cache_public
-  to   = module.infrastructure-sensitive_wafs.aws_wafv2_web_acl.cache_public
-}
-
 resource "aws_wafv2_web_acl" "default" {
   name  = "x-always-block_web_acl"
   scope = "REGIONAL"

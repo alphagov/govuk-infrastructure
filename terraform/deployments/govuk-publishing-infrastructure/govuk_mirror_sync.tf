@@ -443,7 +443,7 @@ data "aws_iam_policy_document" "govuk_mirror_sync" {
       "athena:StartQueryExecution"
     ]
     resources = [
-      "arn:aws:athena:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:workgroup/*",
+      "arn:aws:athena:${data.aws_region.current.region}:${data.aws_caller_identity.current.account_id}:workgroup/*",
     ]
   }
 
@@ -495,9 +495,9 @@ data "aws_iam_policy_document" "govuk_mirror_sync" {
       "glue:GetPartitions",
     ]
     resources = [
-      "arn:aws:glue:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:catalog",
-      "arn:aws:glue:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:database/fastly_logs",
-      "arn:aws:glue:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:table/fastly_logs/govuk_www",
+      "arn:aws:glue:${data.aws_region.current.region}:${data.aws_caller_identity.current.account_id}:catalog",
+      "arn:aws:glue:${data.aws_region.current.region}:${data.aws_caller_identity.current.account_id}:database/fastly_logs",
+      "arn:aws:glue:${data.aws_region.current.region}:${data.aws_caller_identity.current.account_id}:table/fastly_logs/govuk_www",
     ]
     condition {
       test     = "ForAnyValue:StringEquals"

@@ -16,11 +16,6 @@ module "aws_ebs_csi_driver_iam_role" {
   oidc_subjects = ["system:serviceaccount:kube-system:${local.ebs_csi_driver_controller_service_account_name}"]
 }
 
-moved {
-  from = module.aws_ebs_csi_driver_iam_role.aws_iam_role_policy_attachment.custom[0]
-  to   = module.aws_ebs_csi_driver_iam_role.aws_iam_role_policy_attachment.this["AWSEbsCsiController-govuk"]
-}
-
 data "aws_iam_policy_document" "aws_ebs_csi_driver" {
   statement {
     effect = "Allow"

@@ -22,11 +22,6 @@ module "renovate_irsa" {
   }
 }
 
-moved {
-  from = module.renovate_irsa[0].aws_iam_role_policy_attachment.this["policy"]
-  to   = module.renovate_irsa[0].aws_iam_role_policy_attachment.additional["policy"]
-}
-
 data "aws_iam_policy_document" "renovate_eks_describe_addons" {
   statement {
     sid    = "AllowDescribeEKSAddonVersions"

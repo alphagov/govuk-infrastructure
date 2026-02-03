@@ -17,11 +17,6 @@ module "grafana_iam_role" {
   oidc_subjects = ["system:serviceaccount:${local.monitoring_namespace}:${local.grafana_service_account}"]
 }
 
-moved {
-  from = module.grafana_iam_role.aws_iam_role_policy_attachment.custom[0]
-  to   = module.grafana_iam_role.aws_iam_role_policy_attachment.this["grafana-govuk"]
-}
-
 data "aws_iam_policy_document" "grafana" {
   statement {
     sid    = "AllowReadingMetricsFromCloudWatch"
