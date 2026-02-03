@@ -46,6 +46,12 @@ variable "github_national_data_library_team" {
   default     = "alphagov:national-data-library"
 }
 
+variable "github_licensing_team" {
+  type        = string
+  description = "Name of the GitHub team for the team maintaining Licensify to have read-only access to Dex SSO-enabled applications"
+  default     = "alphagov:gov-uk-licensing-support"
+}
+
 variable "helm_timeout_seconds" {
   type        = number
   description = "Timeout for helm install/upgrade operations."
