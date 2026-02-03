@@ -17,19 +17,19 @@ variable "boost_control_ids" {
   description = "The IDs of the boost controls to attach to the serving config"
   type        = list(string)
   # VAIS internally uses null instead of an empty array, so we do the same to avoid drift
-  default     = null
+  default = null
 }
 
 variable "filter_control_ids" {
   description = "The IDs of the filter controls to attach to the serving config"
   type        = list(string)
   # VAIS internally uses null instead of an empty array, so we do the same to avoid drift
-  default     = null
+  default = null
 }
 
 variable "synonyms_control_ids" {
   description = "The IDs of the synonym controls to attach to the serving config"
   type        = list(string)
   # VAIS internally uses null instead of an empty array, so we do the same to avoid drift
-  default     = null
+  default = null
 }
