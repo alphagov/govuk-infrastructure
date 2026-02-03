@@ -8,20 +8,28 @@ locals {
 }
 
 module "db_backup_iam_role" {
-  source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
-  version = "~> 5.20"
+  source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts"
+  version = "~> 6.0"
 
-  role_name            = "${local.db_backup_service_account_name}-${data.tfe_outputs.cluster_infrastructure.nonsensitive_values.cluster_id}"
-  role_description     = "Role for database backup jobs. Corresponds to ${local.db_backup_service_account_name} k8s ServiceAccount."
+  name                 = "${local.db_backup_service_account_name}-${data.tfe_outputs.cluster_infrastructure.nonsensitive_values.cluster_id}"
+  use_name_prefix      = false
+  description          = "Role for database backup jobs. Corresponds to ${local.db_backup_service_account_name} k8s ServiceAccount."
   max_session_duration = 28800
 
-  role_policy_arns = { policy = aws_iam_policy.db_backup_s3.arn }
+  policies = {
+    "${aws_iam_policy.db_backup_s3.name}" = aws_iam_policy.db_backup_s3.arn
+  }
   oidc_providers = {
     main = {
       provider_arn               = data.tfe_outputs.cluster_infrastructure.nonsensitive_values.cluster_oidc_provider_arn
       namespace_service_accounts = ["apps:${local.db_backup_service_account_name}"]
     }
   }
+}
+
+moved {
+  from = module.db_backup_iam_role.aws_iam_role_policy_attachment.this["policy"]
+  to   = module.db_backup_iam_role.aws_iam_role_policy_attachment.additional["db_backup_s3"]
 }
 
 data "aws_iam_policy_document" "db_backup_s3" {

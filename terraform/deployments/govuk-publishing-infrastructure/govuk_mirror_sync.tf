@@ -1,3 +1,7 @@
+locals {
+  provider_arn = data.tfe_outputs.cluster_infrastructure.nonsensitive_values.cluster_oidc_provider_arn
+}
+
 resource "aws_s3_bucket" "govuk_mirror" {
   provider = aws.replica
   bucket   = "govuk-${var.govuk_environment}-mirror"
@@ -383,19 +387,28 @@ resource "aws_iam_policy_attachment" "govuk_mirror_gcp_storage_transfer" {
 }
 
 module "govuk_mirror_sync_iam_role" {
-  source  = "terraform-aws-modules/iam/aws//modules/iam-eks-role"
-  version = "~> 5.28"
+  source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts"
+  version = "~> 6.0"
 
-  role_name        = "govuk-mirror-sync"
-  role_description = "Role for govuk-mirror-sync to access S3. Corresponds to govuk-mirror-sync k8s ServiceAccount."
+  name            = "govuk-mirror-sync"
+  use_name_prefix = false
+  description     = "Role for govuk-mirror-sync to access S3. Corresponds to govuk-mirror-sync k8s ServiceAccount."
 
-  cluster_service_accounts = {
-    (local.cluster_name) = ["apps:mirror"]
+  oidc_providers = {
+    "${local.cluster_name}" = {
+      provider_arn               = local.provider_arn
+      namespace_service_accounts = ["apps:mirror"]
+    }
   }
 
-  role_policy_arns = {
+  policies = {
     govuk_mirror_sync_policy = aws_iam_policy.govuk_mirror_sync.arn
   }
+}
+
+moved {
+  from = module.govuk_mirror_sync_iam_role.aws_iam_role_policy_attachment.this["govuk_mirror_sync_policy"]
+  to   = module.govuk_mirror_sync_iam_role.aws_iam_role_policy_attachment.additional["govuk_mirror_sync_policy"]
 }
 
 data "aws_iam_policy_document" "govuk_mirror_sync" {
