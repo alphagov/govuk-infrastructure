@@ -1,6 +1,7 @@
 locals {
   tempo_service_account = "tempo"
   cluster_name          = data.tfe_outputs.cluster_infrastructure.nonsensitive_values.cluster_id
+  provider_arn          = data.tfe_outputs.cluster_infrastructure.nonsensitive_values.cluster_oidc_provider_arn
 }
 
 resource "aws_s3_bucket" "tempo" {
@@ -33,16 +34,25 @@ data "aws_iam_policy_document" "tempo_bucket_policy" {
 }
 
 module "tempo_iam_role" {
-  source  = "terraform-aws-modules/iam/aws//modules/iam-eks-role"
-  version = "~> 5.27"
+  source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts"
+  version = "~> 6.0"
 
-  role_name        = "${local.tempo_service_account}-${local.cluster_name}"
-  role_description = "Role for Tempo to access AWS data sources. Corresponds to ${local.tempo_service_account} k8s ServiceAccount."
-  role_policy_arns = { TempoPolicy = aws_iam_policy.tempo.arn }
+  name            = "${local.tempo_service_account}-${local.cluster_name}"
+  use_name_prefix = false
+  description     = "Role for Tempo to access AWS data sources. Corresponds to ${local.tempo_service_account} k8s ServiceAccount."
+  policies        = { TempoPolicy = aws_iam_policy.tempo.arn }
 
-  cluster_service_accounts = {
-    "${local.cluster_name}" = ["${local.monitoring_ns}:${local.tempo_service_account}"]
+  oidc_providers = {
+    "${local.cluster_name}" = {
+      provider_arn               = local.provider_arn
+      namespace_service_accounts = ["${local.monitoring_ns}:${local.tempo_service_account}"]
+    }
   }
+}
+
+moved {
+  from = module.tempo_iam_role.aws_iam_role_policy_attachment.this["TempoPolicy"]
+  to   = module.tempo_iam_role.aws_iam_role_policy_attachment.additional["TempoPolicy"]
 }
 
 data "aws_iam_policy_document" "tempo" {

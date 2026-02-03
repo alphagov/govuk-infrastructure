@@ -3,11 +3,12 @@ locals {
 }
 
 module "tag_image_iam_role" {
-  source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
-  version = "~> 5.5"
+  source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts"
+  version = "~> 6.0"
 
-  role_name        = "${local.tag_image_service_account_name}-${data.tfe_outputs.cluster_infrastructure.nonsensitive_values.cluster_id}"
-  role_description = "Role for the add-tag-to-image Argo Workflow. Corresponds to ${local.tag_image_service_account_name} k8s ServiceAccount."
+  name            = "${local.tag_image_service_account_name}-${data.tfe_outputs.cluster_infrastructure.nonsensitive_values.cluster_id}"
+  use_name_prefix = false
+  description     = "Role for the add-tag-to-image Argo Workflow. Corresponds to ${local.tag_image_service_account_name} k8s ServiceAccount."
 
   oidc_providers = {
     main = {
@@ -40,6 +41,6 @@ resource "aws_iam_policy" "tag_image" {
 }
 
 resource "aws_iam_role_policy_attachment" "tag_image" {
-  role       = module.tag_image_iam_role.iam_role_name
+  role       = module.tag_image_iam_role.name
   policy_arn = aws_iam_policy.tag_image.arn
 }
