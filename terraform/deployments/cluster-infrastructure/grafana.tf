@@ -102,7 +102,7 @@ module "grafana_db" {
   count = startswith(var.govuk_environment, "eph-") ? 0 : 1
 
   source  = "terraform-aws-modules/rds-aurora/aws"
-  version = "~> 9.0"
+  version = "~> 10.0"
 
   name              = local.grafana_db_name
   database_name     = "grafana"
@@ -117,12 +117,13 @@ module "grafana_db" {
   subnets                = local.grafana_subnet_ids
   create_db_subnet_group = true
   create_security_group  = true
-  security_group_rules = {
-    from_cluster = { source_security_group_id = module.eks.cluster_primary_security_group_id }
+  security_group_ingress_rules = {
+    from_cluster = { referenced_security_group_id = module.eks.cluster_primary_security_group_id }
   }
-  manage_master_user_password = false
   master_username             = "root"
-  master_password             = random_password.grafana_db[count.index].result
+  manage_master_user_password = false
+  master_password_wo          = random_password.grafana_db[count.index].result
+  master_password_wo_version  = 1
 
   serverlessv2_scaling_configuration = {
     max_capacity             = 256
@@ -130,7 +131,7 @@ module "grafana_db" {
     seconds_until_auto_pause = 300
   }
 
-  instance_class = "db.serverless"
+  cluster_instance_class = "db.serverless"
   instances = {
     one = {
       identifier = "${local.grafana_db_name}-instance-1"
@@ -143,6 +144,12 @@ module "grafana_db" {
   final_snapshot_identifier    = "${local.grafana_db_name}-final"
   preferred_backup_window      = "02:00-03:00"
   preferred_maintenance_window = "sun:04:00-sun:05:00"
+}
+
+# For integration only
+import {
+  id = "sgr-09b907ad4da42f64e"
+  to = module.grafana_db[0].aws_vpc_security_group_ingress_rule.this["from_cluster"]
 }
 
 resource "aws_route53_record" "grafana_db" {
@@ -170,7 +177,7 @@ resource "aws_secretsmanager_secret_version" "grafana_db" {
     "engine"   = "aurora"
     "host"     = aws_route53_record.grafana_db[count.index].fqdn
     "username" = module.grafana_db[count.index].cluster_master_username
-    "password" = module.grafana_db[count.index].cluster_master_password
+    "password" = random_password.grafana_db[count.index].result
     "dbname"   = local.grafana_db_name
     "port"     = module.grafana_db[count.index].cluster_port
   })
