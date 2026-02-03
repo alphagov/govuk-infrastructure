@@ -25,14 +25,8 @@ resource "helm_release" "falco" {
   create_namespace = false
 
   values = [yamlencode({
-    env = [
-      {
-        name  = "tty"
-        value = true
-      },
-      {
-        name  = "customRules.execve_audit\\.yaml"
-        value = <<-EOT
+    tty                               = true,
+    "customRules.execve_audit\\.yaml" = <<-EOT
       - rule: Audit Shell Commands
         desc: Audit all shell commands executed in containers
         condition: >
@@ -45,13 +39,12 @@ resource "helm_release" "falco" {
         source: syscall
         tags: [exec, process]
     EOT
-      },
-      # Fix schema validation for file_output
-      {
-        name  = "falco.file_output.enabled"
-        value = "true"
-      }
-    ]
+
+    # # Fix schema validation for file_output
+    # {
+    #   name  = "falco.file_output.enabled"
+    #   value = "true"
+    # }
   })]
 
 
