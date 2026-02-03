@@ -97,3 +97,9 @@ variable "ship_kubernetes_events_to_logit" {
   description = "Whether to deploy the kubernetes-events-shipper helm chart which ships kubernetes events to logit"
   default     = true
 }
+
+variable "ext_dns_enable_service_monitor" {
+  type        = bool
+  description = "Whether to enable service monitors for external dns"
+  default     = true
+}
