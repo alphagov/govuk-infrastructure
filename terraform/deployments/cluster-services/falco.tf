@@ -25,6 +25,9 @@ resource "helm_release" "falco" {
   create_namespace = false
 
   values = [yamlencode({
+    volumeMounts = [
+      "/sys/kernel/debug:/sys/kernel/debug"
+    ],
     tty                               = true,
     "customRules.execve_audit\\.yaml" = <<-EOT
       - rule: Audit Shell Commands
