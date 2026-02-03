@@ -15,7 +15,7 @@ output "worker_iam_role_name" {
 
 output "aws_ebs_csi_driver_iam_role_arn" {
   description = "IAM role ARN for AWS EBS CSI controller role"
-  value       = module.aws_ebs_csi_driver_iam_role.iam_role_arn
+  value       = module.aws_ebs_csi_driver_iam_role.arn
 }
 
 output "control_plane_security_group_id" {
@@ -35,7 +35,7 @@ output "cluster_autoscaler_service_account_name" {
 
 output "cluster_autoscaler_role_arn" {
   description = "IAM role ARN corresponding to the k8s service account for the AWS Load Balancer Controller."
-  value       = module.cluster_autoscaler_iam_role.iam_role_arn
+  value       = module.cluster_autoscaler_iam_role.arn
 }
 
 output "cluster_id" {
@@ -70,7 +70,7 @@ output "external_dns_service_account_name" {
 
 output "external_dns_role_arn" {
   description = "IAM role ARN corresponding to the k8s service account for the external-dns addon."
-  value       = module.external_dns_iam_role.iam_role_arn
+  value       = module.external_dns_iam_role.arn
 }
 
 output "external_dns_zone_id" {
@@ -90,12 +90,12 @@ output "external_secrets_service_account_name" {
 
 output "external_secrets_role_arn" {
   description = "IAM role ARN corresponding to the k8s service account for external-secrets."
-  value       = module.external_secrets_iam_role.iam_role_arn
+  value       = module.external_secrets_iam_role.arn
 }
 
 output "aws_lb_controller_role_arn" {
   description = "IAM role ARN corresponding to the k8s service account for the AWS Load Balancer Controller."
-  value       = module.aws_lb_controller_iam_role.iam_role_arn
+  value       = module.aws_lb_controller_iam_role.arn
 }
 
 output "aws_lb_controller_service_account_name" {
@@ -110,7 +110,7 @@ output "aws_ebs_csi_driver_controller_service_account_name" {
 
 output "grafana_iam_role_arn" {
   description = "IAM role ARN corresponding to the k8s service account for Grafana."
-  value       = module.grafana_iam_role.iam_role_arn
+  value       = module.grafana_iam_role.arn
 }
 
 output "monitoring_namespace" {

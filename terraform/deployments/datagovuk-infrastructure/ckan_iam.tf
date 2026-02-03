@@ -31,8 +31,3 @@ data "aws_iam_policy_document" "ckan" {
     ]
   }
 }
-
-moved {
-  from = module.ckan_iam_role.aws_iam_role_policy_attachment.custom[0]
-  to   = module.ckan_iam_role.aws_iam_role_policy_attachment.this["EKS-CKAN-govuk"]
-}

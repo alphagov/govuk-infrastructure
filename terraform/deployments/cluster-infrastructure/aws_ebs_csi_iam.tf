@@ -3,14 +3,22 @@ locals {
 }
 
 module "aws_ebs_csi_driver_iam_role" {
-  source                        = "terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc"
-  version                       = "~> 5.0"
-  create_role                   = true
-  role_name                     = "${local.ebs_csi_driver_controller_service_account_name}-${var.cluster_name}"
-  role_description              = "Role for the AWS EBS CSI driver controller. Corresponds to ${local.ebs_csi_driver_controller_service_account_name} k8s ServiceAccount."
-  provider_url                  = module.eks.oidc_provider
-  role_policy_arns              = [aws_iam_policy.aws_ebs_csi_driver.arn]
-  oidc_fully_qualified_subjects = ["system:serviceaccount:kube-system:${local.ebs_csi_driver_controller_service_account_name}"]
+  source             = "terraform-aws-modules/iam/aws//modules/iam-role"
+  version            = "~> 6.0"
+  name               = "${local.ebs_csi_driver_controller_service_account_name}-${var.cluster_name}"
+  use_name_prefix    = false
+  description        = "Role for the AWS EBS CSI driver controller. Corresponds to ${local.ebs_csi_driver_controller_service_account_name} k8s ServiceAccount."
+  enable_oidc        = true
+  oidc_provider_urls = [module.eks.oidc_provider]
+  policies = {
+    "${aws_iam_policy.aws_ebs_csi_driver.name}" = aws_iam_policy.aws_ebs_csi_driver.arn
+  }
+  oidc_subjects = ["system:serviceaccount:kube-system:${local.ebs_csi_driver_controller_service_account_name}"]
+}
+
+moved {
+  from = module.aws_ebs_csi_driver_iam_role.aws_iam_role_policy_attachment.custom[0]
+  to   = module.aws_ebs_csi_driver_iam_role.aws_iam_role_policy_attachment.this["AWSEbsCsiController-govuk"]
 }
 
 data "aws_iam_policy_document" "aws_ebs_csi_driver" {
