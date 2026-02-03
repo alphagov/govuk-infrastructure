@@ -32,6 +32,29 @@ resource "helm_release" "falco" {
       }
     ]
   })]
+  set {
+    name  = "customRules.execve_audit\\.yaml"
+    value = <<-EOT
+      - rule: Audit Shell Commands
+        desc: Audit all shell commands executed in containers
+        condition: >
+          container.id != host and
+          evt.type = execve and
+          proc.args exists
+        output: >
+          Shell command executed (user=%user.name container=%container.name shell=%proc.name parent=%proc.pname cmdline=%proc.cmdline)
+        priority: NOTICE
+        source: syscall
+        tags: [exec, process]
+    EOT
+  }
+
+  # Fix schema validation for file_output
+  set {
+    name  = "falco.file_output.enabled"
+    value = "true"
+  }
+
 
   depends_on = [kubernetes_namespace_v1.falco]
 }
