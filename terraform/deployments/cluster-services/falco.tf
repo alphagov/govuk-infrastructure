@@ -29,12 +29,10 @@ resource "helm_release" "falco" {
       {
         name  = "tty"
         value = true
-      }
-    ]
-  })]
-  set {
-    name  = "customRules.execve_audit\\.yaml"
-    value = <<-EOT
+      },
+      {
+        name  = "customRules.execve_audit\\.yaml"
+        value = <<-EOT
       - rule: Audit Shell Commands
         desc: Audit all shell commands executed in containers
         condition: >
@@ -47,13 +45,15 @@ resource "helm_release" "falco" {
         source: syscall
         tags: [exec, process]
     EOT
-  }
+      },
+      # Fix schema validation for file_output
+      {
+        name  = "falco.file_output.enabled"
+        value = "true"
+      }
+    ]
+  })]
 
-  # Fix schema validation for file_output
-  set {
-    name  = "falco.file_output.enabled"
-    value = "true"
-  }
 
 
   depends_on = [kubernetes_namespace_v1.falco]

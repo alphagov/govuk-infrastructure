@@ -1,3 +1,10 @@
+# removed {
+#   from = kubernetes_namespace_v1.apps
+#   lifecycle {
+#     destroy = false
+#   }
+# }
+
 resource "kubernetes_namespace_v1" "apps" {
   metadata {
     name = var.apps_namespace
@@ -16,6 +23,13 @@ resource "kubernetes_namespace_v1" "apps" {
   }
 }
 
+# removed {
+#   from = kubernetes_namespace_v1.licensify
+#   lifecycle {
+#     destroy = false
+#   }
+# }
+
 resource "kubernetes_namespace_v1" "licensify" {
   metadata {
     name = var.licensify_namespace
@@ -33,6 +47,13 @@ resource "kubernetes_namespace_v1" "licensify" {
     }
   }
 }
+
+# removed {
+#   from = kubernetes_namespace_v1.datagovuk
+#   lifecycle {
+#     destroy = false
+#   }
+# }
 
 resource "kubernetes_namespace_v1" "datagovuk" {
   metadata {
