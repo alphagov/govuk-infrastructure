@@ -222,181 +222,181 @@ resource "helm_release" "argo_bootstrap_ephemeral" {
   })]
 }
 
-resource "helm_release" "argo_workflows" {
-  depends_on = [
-    kubernetes_secret_v1.dex_client,
-    helm_release.aws_lb_controller
-  ]
-
-  chart            = "argo-workflows"
-  name             = "argo-workflows"
-  namespace        = local.services_ns
-  create_namespace = true
-  repository       = "https://argoproj.github.io/argo-helm"
-  version          = "0.47.2"
-  timeout          = var.helm_timeout_seconds
-  values = [yamlencode({
-    controller = {
-      metricsConfig = {
-        enabled = true
-        secure  = false
-      }
-      podSecurityContext = {
-        runAsNonRoot = true
-        seccompProfile = {
-          type = "RuntimeDefault"
-        }
-      }
-      securityContext = {
-        readOnlyRootFilesystem   = true
-        allowPrivilegeEscalation = false
-        capabilities = {
-          drop = ["ALL"]
-        }
-      }
-      workflowNamespaces = concat([local.services_ns], var.argo_workflows_namespaces)
-      workflowDefaults = {
-        spec = {
-          # The default service account is managed by argo-services in govuk-helm-charts
-          serviceAccountName    = "argo-workflow-default"
-          activeDeadlineSeconds = 7200
-          ttlStrategy = {
-            secondsAfterFailure    = 259200
-            secondsAfterSuccess    = 259200
-            secondsAfterCompletion = 259200
-          }
-          podGC = { strategy = "OnWorkflowSuccess" }
-          securityContext = {
-            runAsNonRoot = true
-            runAsUser    = 1001
-            runAsGroup   = 1001
-            fsGroup      = 1001
-            seccompProfile = {
-              type = "RuntimeDefault"
-            }
-          }
-          podSpecPatch = yamlencode({
-            containers = [
-              {
-                name = "main"
-                resources = {
-                  requests = {
-                    cpu    = "100m"
-                    memory = "64Mi"
-                  }
-                  limits = {
-                    cpu    = "500m"
-                    memory = "256Mi"
-                  }
-                }
-              }
-            ]
-          })
-        }
-      }
-      resources = {
-        requests = {
-          cpu    = "500m"
-          memory = "1Gi"
-        }
-        limits = {
-          cpu    = "1"
-          memory = "2Gi"
-        }
-      }
-      workflowWorkers = 128
-      replicas        = var.desired_ha_replicas
-    }
-
-    executor = {
-      resources = {
-        requests = {
-          cpu    = "100m"
-          memory = "64Mi"
-        }
-        limits = {
-          cpu    = "500m"
-          memory = "512Mi"
-        }
-      }
-      securityContext = {
-        readOnlyRootFileSystem   = true
-        allowPrivilegeEscalation = false
-        capabilities = {
-          drop = ["ALL"]
-        }
-      }
-    }
-
-    mainContainer = {
-      securityContext = {
-        readOnlyRootFileSystem   = true
-        allowPrivilegeEscalation = false
-        capabilities = {
-          drop = ["ALL"]
-        }
-      }
-    }
-
-    workflow = {
-      serviceAccount = { create = false }
-      rbac           = { create = false }
-    }
-
-    server = {
-      authModes = ["client", "sso"]
-      ingress = {
-        enabled = true
-        annotations = {
-          "alb.ingress.kubernetes.io/group.name"         = "argo-workflows${local.elb_name_suffix}"
-          "alb.ingress.kubernetes.io/scheme"             = "internet-facing"
-          "alb.ingress.kubernetes.io/target-type"        = "ip"
-          "alb.ingress.kubernetes.io/load-balancer-name" = "argo-workflows${local.elb_name_suffix}"
-          "alb.ingress.kubernetes.io/listen-ports"       = jsonencode([{ "HTTP" : 80 }, { "HTTPS" : 443 }])
-          "alb.ingress.kubernetes.io/ssl-redirect"       = "443"
-        }
-        ingressClassName = "aws-alb"
-        hosts            = [local.argo_workflows_host]
-      }
-      sso = {
-        enabled = true
-        issuer  = "https://${local.dex_host}"
-        clientId = {
-          name = "dex-client-argo-workflows"
-          key  = "clientID"
-        }
-        clientSecret = {
-          name = "dex-client-argo-workflows"
-          key  = "clientSecret"
-        }
-        redirectUrl = "https://${local.argo_workflows_host}/oauth2/callback"
-        scopes      = ["groups"]
-        rbac        = { enabled = true }
-      }
-      resources = {
-        requests = {
-          cpu    = "200m"
-          memory = "256Mi"
-        }
-        limits = {
-          cpu    = "500m"
-          memory = "512Mi"
-        }
-      }
-      podSecurityContext = {
-        runAsNonRoot = true
-        seccompProfile = {
-          type = "RuntimeDefault"
-        }
-      }
-      securityContext = {
-        readOnlyRootFilesystem   = true
-        allowPrivilegeEscalation = false
-        capabilities = {
-          drop = ["ALL"]
-        }
-      }
-      replicas = var.desired_ha_replicas
-    }
-  })]
-}
+# resource "helm_release" "argo_workflows" {
+#   depends_on = [
+#     kubernetes_secret_v1.dex_client,
+#     helm_release.aws_lb_controller
+#   ]
+#
+#   chart            = "argo-workflows"
+#   name             = "argo-workflows"
+#   namespace        = local.services_ns
+#   create_namespace = true
+#   repository       = "https://argoproj.github.io/argo-helm"
+#   version          = "0.47.2"
+#   timeout          = var.helm_timeout_seconds
+#   values = [yamlencode({
+#     controller = {
+#       metricsConfig = {
+#         enabled = true
+#         secure  = false
+#       }
+#       podSecurityContext = {
+#         runAsNonRoot = true
+#         seccompProfile = {
+#           type = "RuntimeDefault"
+#         }
+#       }
+#       securityContext = {
+#         readOnlyRootFilesystem   = true
+#         allowPrivilegeEscalation = false
+#         capabilities = {
+#           drop = ["ALL"]
+#         }
+#       }
+#       workflowNamespaces = concat([local.services_ns], var.argo_workflows_namespaces)
+#       workflowDefaults = {
+#         spec = {
+#           # The default service account is managed by argo-services in govuk-helm-charts
+#           serviceAccountName    = "argo-workflow-default"
+#           activeDeadlineSeconds = 7200
+#           ttlStrategy = {
+#             secondsAfterFailure    = 259200
+#             secondsAfterSuccess    = 259200
+#             secondsAfterCompletion = 259200
+#           }
+#           podGC = { strategy = "OnWorkflowSuccess" }
+#           securityContext = {
+#             runAsNonRoot = true
+#             runAsUser    = 1001
+#             runAsGroup   = 1001
+#             fsGroup      = 1001
+#             seccompProfile = {
+#               type = "RuntimeDefault"
+#             }
+#           }
+#           podSpecPatch = yamlencode({
+#             containers = [
+#               {
+#                 name = "main"
+#                 resources = {
+#                   requests = {
+#                     cpu    = "100m"
+#                     memory = "64Mi"
+#                   }
+#                   limits = {
+#                     cpu    = "500m"
+#                     memory = "256Mi"
+#                   }
+#                 }
+#               }
+#             ]
+#           })
+#         }
+#       }
+#       resources = {
+#         requests = {
+#           cpu    = "500m"
+#           memory = "1Gi"
+#         }
+#         limits = {
+#           cpu    = "1"
+#           memory = "2Gi"
+#         }
+#       }
+#       workflowWorkers = 128
+#       replicas        = var.desired_ha_replicas
+#     }
+#
+#     executor = {
+#       resources = {
+#         requests = {
+#           cpu    = "100m"
+#           memory = "64Mi"
+#         }
+#         limits = {
+#           cpu    = "500m"
+#           memory = "512Mi"
+#         }
+#       }
+#       securityContext = {
+#         readOnlyRootFileSystem   = true
+#         allowPrivilegeEscalation = false
+#         capabilities = {
+#           drop = ["ALL"]
+#         }
+#       }
+#     }
+#
+#     mainContainer = {
+#       securityContext = {
+#         readOnlyRootFileSystem   = true
+#         allowPrivilegeEscalation = false
+#         capabilities = {
+#           drop = ["ALL"]
+#         }
+#       }
+#     }
+#
+#     workflow = {
+#       serviceAccount = { create = false }
+#       rbac           = { create = false }
+#     }
+#
+#     server = {
+#       authModes = ["client", "sso"]
+#       ingress = {
+#         enabled = true
+#         annotations = {
+#           "alb.ingress.kubernetes.io/group.name"         = "argo-workflows${local.elb_name_suffix}"
+#           "alb.ingress.kubernetes.io/scheme"             = "internet-facing"
+#           "alb.ingress.kubernetes.io/target-type"        = "ip"
+#           "alb.ingress.kubernetes.io/load-balancer-name" = "argo-workflows${local.elb_name_suffix}"
+#           "alb.ingress.kubernetes.io/listen-ports"       = jsonencode([{ "HTTP" : 80 }, { "HTTPS" : 443 }])
+#           "alb.ingress.kubernetes.io/ssl-redirect"       = "443"
+#         }
+#         ingressClassName = "aws-alb"
+#         hosts            = [local.argo_workflows_host]
+#       }
+#       sso = {
+#         enabled = true
+#         issuer  = "https://${local.dex_host}"
+#         clientId = {
+#           name = "dex-client-argo-workflows"
+#           key  = "clientID"
+#         }
+#         clientSecret = {
+#           name = "dex-client-argo-workflows"
+#           key  = "clientSecret"
+#         }
+#         redirectUrl = "https://${local.argo_workflows_host}/oauth2/callback"
+#         scopes      = ["groups"]
+#         rbac        = { enabled = true }
+#       }
+#       resources = {
+#         requests = {
+#           cpu    = "200m"
+#           memory = "256Mi"
+#         }
+#         limits = {
+#           cpu    = "500m"
+#           memory = "512Mi"
+#         }
+#       }
+#       podSecurityContext = {
+#         runAsNonRoot = true
+#         seccompProfile = {
+#           type = "RuntimeDefault"
+#         }
+#       }
+#       securityContext = {
+#         readOnlyRootFilesystem   = true
+#         allowPrivilegeEscalation = false
+#         capabilities = {
+#           drop = ["ALL"]
+#         }
+#       }
+#       replicas = var.desired_ha_replicas
+#     }
+#   })]
+# }
