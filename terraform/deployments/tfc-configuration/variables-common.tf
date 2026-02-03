@@ -8,8 +8,9 @@ module "variable-set-common" {
       name = "alphagov"
       teams = [
         "gov-uk",
-        "gov-uk-production-deploy",
         "gov-uk-ithc-and-penetration-testing",
+        "gov-uk-licensing-support",
+        "gov-uk-production-deploy",
         "national-data-library",
       ]
     }]
