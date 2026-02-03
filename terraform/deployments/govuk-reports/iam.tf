@@ -59,15 +59,16 @@ resource "aws_iam_policy" "govuk_reports" {
 
 # IRSA role for govuk-reports service account
 module "govuk_reports_iam_role" {
-  source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
-  version = "~> 5.20"
+  source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts"
+  version = "~> 6.0"
 
-  role_name            = "${local.govuk_reports_service_account_name}-${data.tfe_outputs.cluster_infrastructure.nonsensitive_values.cluster_id}"
-  role_description     = "Role for govuk-reports application. Corresponds to ${local.govuk_reports_service_account_name} k8s ServiceAccount."
+  name                 = "${local.govuk_reports_service_account_name}-${data.tfe_outputs.cluster_infrastructure.nonsensitive_values.cluster_id}"
+  use_name_prefix      = false
+  description          = "Role for govuk-reports application. Corresponds to ${local.govuk_reports_service_account_name} k8s ServiceAccount."
   max_session_duration = 28800
 
-  role_policy_arns = {
-    govuk_reports_policy = aws_iam_policy.govuk_reports.arn
+  policies = {
+    "${aws_iam_policy.govuk_reports.name}" = aws_iam_policy.govuk_reports.arn
   }
 
   oidc_providers = {
@@ -82,5 +83,10 @@ module "govuk_reports_iam_role" {
     environment = var.govuk_environment
     application = "govuk-reports"
   }
+}
+
+moved {
+  from = module.govuk_reports_iam_role.aws_iam_role_policy_attachment.this["govuk_reports_policy"]
+  to   = module.govuk_reports_iam_role.aws_iam_role_policy_attachment.additional["govuk-integration-reports-policy"]
 }
 
