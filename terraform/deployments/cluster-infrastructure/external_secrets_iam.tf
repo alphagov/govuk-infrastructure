@@ -22,10 +22,6 @@ module "external_secrets_iam_role" {
   oidc_subjects = ["system:serviceaccount:${local.cluster_services_namespace}:${local.external_secrets_service_account_name}"]
 }
 
-moved {
-  from = module.external_secrets_iam_role.aws_iam_role_policy_attachment.custom[0]
-  to   = module.external_secrets_iam_role.aws_iam_role_policy_attachment.this["EKSExternalSecrets-govuk"]
-}
 
 resource "aws_iam_policy" "external_secrets" {
   name        = "EKSExternalSecrets-${var.cluster_name}"

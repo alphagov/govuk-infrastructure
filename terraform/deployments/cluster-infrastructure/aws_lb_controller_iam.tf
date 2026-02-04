@@ -23,10 +23,6 @@ module "aws_lb_controller_iam_role" {
   oidc_subjects = ["system:serviceaccount:${local.cluster_services_namespace}:${local.aws_lb_controller_service_account_name}"]
 }
 
-moved {
-  from = module.aws_lb_controller_iam_role.aws_iam_role_policy_attachment.custom[0]
-  to   = module.aws_lb_controller_iam_role.aws_iam_role_policy_attachment.this["AWSLoadBalancerController-govuk"]
-}
 
 resource "aws_iam_policy" "aws_lb_controller" {
   name        = "AWSLoadBalancerController-${var.cluster_name}"

@@ -34,10 +34,6 @@ module "cluster_autoscaler_iam_role" {
   oidc_subjects = ["system:serviceaccount:${local.cluster_autoscaler_service_account_namespace}:${local.cluster_autoscaler_service_account_name}"]
 }
 
-moved {
-  from = module.cluster_autoscaler_iam_role.aws_iam_role_policy_attachment.custom[0]
-  to   = module.cluster_autoscaler_iam_role.aws_iam_role_policy_attachment.this["EKSClusterAutoscaler-govuk"]
-}
 
 resource "aws_iam_policy" "cluster_autoscaler" {
   name        = "EKSClusterAutoscaler-${var.cluster_name}"

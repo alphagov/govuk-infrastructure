@@ -25,10 +25,6 @@ module "external_dns_iam_role" {
   oidc_subjects = ["system:serviceaccount:${local.cluster_services_namespace}:${local.external_dns_service_account_name}"]
 }
 
-moved {
-  from = module.external_dns_iam_role.aws_iam_role_policy_attachment.custom[0]
-  to   = module.external_dns_iam_role.aws_iam_role_policy_attachment.this["EKSExternalDNS-govuk"]
-}
 
 resource "aws_iam_policy" "external_dns" {
   name        = "EKSExternalDNS-${var.cluster_name}"
