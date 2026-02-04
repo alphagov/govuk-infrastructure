@@ -102,7 +102,7 @@ module "grafana_db" {
   count = startswith(var.govuk_environment, "eph-") ? 0 : 1
 
   source  = "terraform-aws-modules/rds-aurora/aws"
-  version = "~> 9.0"
+  version = "~> 10.0"
 
   name              = local.grafana_db_name
   database_name     = "grafana"
