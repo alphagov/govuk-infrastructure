@@ -48,7 +48,6 @@ resource "random_password" "dex_cookie_secret" {
 resource "kubernetes_secret_v1" "dex_client" {
   for_each = local.dex_clients_namespaces
   depends_on = [
-    kubernetes_namespace_v1.apps,
     kubernetes_namespace_v1.monitoring,
     # we depend on the namespace existing
     # but aren't managing it explicitly in TF

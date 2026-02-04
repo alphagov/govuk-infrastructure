@@ -40,6 +40,34 @@ provider "aws" {
   }
 }
 
+data "aws_iam_roles" "fulladmin" {
+  name_regex = "\\..*-fulladmin$"
+}
+
+data "aws_iam_roles" "platformengineer" {
+  name_regex = "\\..*platformengineer$"
+}
+
+data "aws_iam_roles" "developer" {
+  name_regex = "\\..*developer$"
+}
+
+data "aws_iam_roles" "licensinguser" {
+  name_regex = "\\..*licensinguser$"
+}
+
+data "aws_iam_roles" "ithctester" {
+  name_regex = "\\..*ithctester$"
+}
+
+data "aws_iam_roles" "readonly" {
+  name_regex = "\\..*readonly$"
+}
+
+data "aws_iam_roles" "dguengineer" {
+  name_regex = "\\..*dguengineer$"
+}
+
 data "aws_eks_cluster_auth" "cluster_token" {
   name = var.cluster_name
 }

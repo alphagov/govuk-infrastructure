@@ -60,3 +60,8 @@ variable "cluster_role_rules" {
   description = "List of rules to apply to kubernetes cluster role resources"
   default     = []
 }
+
+variable "aws_iam_role_arns" {
+  type        = list(string)
+  description = "List of aws iam roles to create access policies with"
+}
