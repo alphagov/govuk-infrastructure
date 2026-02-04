@@ -9,6 +9,7 @@ module "platformengineer" {
 
   cluster_name = local.cluster_name
 
+  aws_iam_role_arns   = data.aws_iam_roles.platformengineer.arns
   access_policy_arn   = "arn:aws:eks::aws:cluster-access-policy/AmazonEKSClusterAdminPolicy"
   access_policy_scope = "cluster"
 
@@ -30,6 +31,7 @@ module "fulladmin" {
 
   cluster_name = local.cluster_name
 
+  aws_iam_role_arns   = data.aws_iam_roles.fulladmin.arns
   access_policy_arn   = "arn:aws:eks::aws:cluster-access-policy/AmazonEKSClusterAdminPolicy"
   access_policy_scope = "cluster"
 
@@ -51,6 +53,7 @@ module "developer" {
 
   cluster_name = local.cluster_name
 
+  aws_iam_role_arns        = data.aws_iam_roles.developer.arns
   access_policy_arn        = "arn:aws:eks::aws:cluster-access-policy/AmazonEKSAdminPolicy"
   access_policy_scope      = "namespace"
   access_policy_namespaces = local.developer_namespaces
@@ -101,6 +104,7 @@ module "licensinguser" {
 
   cluster_name = local.cluster_name
 
+  aws_iam_role_arns        = data.aws_iam_roles.licensinguser.arns
   access_policy_arn        = "arn:aws:eks::aws:cluster-access-policy/AmazonEKSAdminPolicy"
   access_policy_scope      = "namespace"
   access_policy_namespaces = ["licensify"]
@@ -133,6 +137,7 @@ module "ithctester" {
 
   cluster_name = local.cluster_name
 
+  aws_iam_role_arns   = data.aws_iam_roles.ithctester.arns
   access_policy_arn   = "arn:aws:eks::aws:cluster-access-policy/AmazonEKSViewPolicy"
   access_policy_scope = "cluster"
 
@@ -154,6 +159,7 @@ module "readonly" {
 
   cluster_name = local.cluster_name
 
+  aws_iam_role_arns        = data.aws_iam_roles.readonly.arns
   access_policy_arn        = "arn:aws:eks::aws:cluster-access-policy/AmazonEKSViewPolicy"
   access_policy_scope      = "namespace"
   access_policy_namespaces = local.developer_namespaces
@@ -191,6 +197,7 @@ module "dguengineer" {
 
   cluster_name = local.cluster_name
 
+  aws_iam_role_arns        = data.aws_iam_roles.dguengineer.arns
   access_policy_arn        = "arn:aws:eks::aws:cluster-access-policy/AmazonEKSAdminPolicy"
   access_policy_scope      = "namespace"
   access_policy_namespaces = ["datagovuk"]

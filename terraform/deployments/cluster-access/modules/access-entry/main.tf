@@ -15,12 +15,8 @@ locals {
   )
 }
 
-data "aws_iam_roles" "roles" {
-  name_regex = "\\..*-${var.name}$"
-}
-
 resource "aws_eks_access_entry" "entry" {
-  for_each = data.aws_iam_roles.roles.arns
+  for_each = toset(var.aws_iam_role_arns)
 
   cluster_name = var.cluster_name
 
@@ -30,7 +26,7 @@ resource "aws_eks_access_entry" "entry" {
 }
 
 resource "aws_eks_access_policy_association" "entry" {
-  for_each = data.aws_iam_roles.roles.arns
+  for_each = toset(var.aws_iam_role_arns)
 
   cluster_name  = var.cluster_name
   policy_arn    = var.access_policy_arn
