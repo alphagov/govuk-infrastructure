@@ -19,6 +19,8 @@ module "platformengineer" {
       verbs      = ["*"]
     }
   ]
+
+  depends_on = [kubernetes_namespace_v1.apps, kubernetes_namespace_v1.datagovuk, kubernetes_namespace_v1.licensify]
 }
 
 module "fulladmin" {
@@ -38,6 +40,8 @@ module "fulladmin" {
       verbs      = ["*"]
     }
   ]
+
+  depends_on = [kubernetes_namespace_v1.apps, kubernetes_namespace_v1.datagovuk, kubernetes_namespace_v1.licensify]
 }
 
 module "developer" {
@@ -86,6 +90,8 @@ module "developer" {
       verbs      = ["create"]
     }
   ]
+
+  depends_on = [kubernetes_namespace_v1.apps, kubernetes_namespace_v1.datagovuk, kubernetes_namespace_v1.licensify]
 }
 
 module "licensinguser" {
@@ -116,6 +122,8 @@ module "licensinguser" {
       verbs      = ["create"]
     }
   ]
+
+  depends_on = [kubernetes_namespace_v1.apps, kubernetes_namespace_v1.datagovuk, kubernetes_namespace_v1.licensify]
 }
 
 module "ithctester" {
@@ -135,6 +143,8 @@ module "ithctester" {
       verbs      = ["get", "list", "watch"]
     }
   ]
+
+  depends_on = [kubernetes_namespace_v1.apps, kubernetes_namespace_v1.datagovuk, kubernetes_namespace_v1.licensify]
 }
 
 module "readonly" {
@@ -170,6 +180,8 @@ module "readonly" {
       verbs      = ["get", "list", "watch"]
     }
   ]
+
+  depends_on = [kubernetes_namespace_v1.apps, kubernetes_namespace_v1.datagovuk, kubernetes_namespace_v1.licensify]
 }
 
 module "dguengineer" {
@@ -200,4 +212,6 @@ module "dguengineer" {
       verbs      = ["create"]
     }
   ]
+
+  depends_on = [kubernetes_namespace_v1.apps, kubernetes_namespace_v1.datagovuk, kubernetes_namespace_v1.licensify]
 }
