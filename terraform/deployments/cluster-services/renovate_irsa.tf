@@ -5,20 +5,26 @@ locals {
 module "renovate_irsa" {
   count = (var.govuk_environment == "production" ? 1 : 0)
 
-  source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
-  version = "~> 5.20"
+  source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts"
+  version = "~> 6.0"
 
-  role_name            = "${local.renovate_service_account_name}-${data.tfe_outputs.cluster_infrastructure.nonsensitive_values.cluster_id}"
-  role_description     = "AWS Role and EKS service account that allows renovate to query the AWS API through the AWS SDK for EKS the latest EKS addon versions"
+  name                 = "${local.renovate_service_account_name}-${data.tfe_outputs.cluster_infrastructure.nonsensitive_values.cluster_id}"
+  use_name_prefix      = false
+  description          = "AWS Role and EKS service account that allows renovate to query the AWS API through the AWS SDK for EKS the latest EKS addon versions"
   max_session_duration = 7200
 
-  role_policy_arns = { policy = aws_iam_policy.renovate_eks_describe_addons[0].arn }
+  policies = { policy = aws_iam_policy.renovate_eks_describe_addons[0].arn }
   oidc_providers = {
     main = {
       provider_arn               = data.tfe_outputs.cluster_infrastructure.nonsensitive_values.cluster_oidc_provider_arn
       namespace_service_accounts = ["cluster-services:${local.renovate_service_account_name}"]
     }
   }
+}
+
+moved {
+  from = module.renovate_irsa[0].aws_iam_role_policy_attachment.this["policy"]
+  to   = module.renovate_irsa[0].aws_iam_role_policy_attachment.additional["policy"]
 }
 
 data "aws_iam_policy_document" "renovate_eks_describe_addons" {
