@@ -24,9 +24,10 @@ module "var_set" {
     enable_x86_workers         = false
     arm_workers_instance_types = ["m7g.2xlarge"]
 
-    backup_retention_period = 0
-    skip_final_snapshot     = true
-    multi_az                = true
+    backup_retention_period        = 0
+    skip_final_snapshot            = true
+    multi_az                       = true
+    ext_dns_enable_service_monitor = false
 
     databases = {
       ckan = {
