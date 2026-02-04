@@ -1,8 +1,3 @@
-import {
-  to = kubernetes_namespace_v1.apps
-  id = "apps"
-}
-
 resource "kubernetes_namespace_v1" "apps" {
   metadata {
     name = var.apps_namespace
@@ -21,11 +16,6 @@ resource "kubernetes_namespace_v1" "apps" {
   }
 }
 
-import {
-  to = kubernetes_namespace_v1.licensify
-  id = "licensify"
-}
-
 resource "kubernetes_namespace_v1" "licensify" {
   metadata {
     name = var.licensify_namespace
@@ -42,11 +32,6 @@ resource "kubernetes_namespace_v1" "licensify" {
       "pod-security.kubernetes.io/warn"         = "restricted"
     }
   }
-}
-
-import {
-  to = kubernetes_namespace_v1.datagovuk
-  id = "datagovuk"
 }
 
 resource "kubernetes_namespace_v1" "datagovuk" {
