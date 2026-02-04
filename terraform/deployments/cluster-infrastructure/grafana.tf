@@ -146,12 +146,6 @@ module "grafana_db" {
   preferred_maintenance_window = "sun:04:00-sun:05:00"
 }
 
-# For prod only
-import {
-  id = "sgr-008e356f1ccd92627"
-  to = module.grafana_db[0].aws_vpc_security_group_ingress_rule.this["from_cluster"]
-}
-
 resource "aws_route53_record" "grafana_db" {
   count = startswith(var.govuk_environment, "eph-") ? 0 : 1
 
