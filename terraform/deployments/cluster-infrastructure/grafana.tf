@@ -146,9 +146,9 @@ module "grafana_db" {
   preferred_maintenance_window = "sun:04:00-sun:05:00"
 }
 
-# For integration only
+# For staging only
 import {
-  id = "sgr-09b907ad4da42f64e"
+  id = "sgr-0b2b080fb739041f4"
   to = module.grafana_db[0].aws_vpc_security_group_ingress_rule.this["from_cluster"]
 }
 
