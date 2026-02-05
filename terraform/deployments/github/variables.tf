@@ -16,6 +16,6 @@ variable "github_app_pem_file" {
 variable "govuk_ai_accelerator_repo_names" {
   # repos to be used in the GOV.UK Publishing AI alpha
   type    = list(string)
-  default = ["govuk-ai-accelerator", "govuk-ai-accelerator-tooling"]
+  default = ["govuk-ai-accelerator", "govuk-ai-accelerator-tooling", "govuk-ai-accelerator-tw-accelerator"]
 }
 

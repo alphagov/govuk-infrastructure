@@ -353,6 +353,14 @@ repos:
         - Format
         - Type checks
 
+  govuk-chat-v1-iterations-2026:
+    visibility: private
+    required_status_checks:
+      # standard security checks are disabled as not configured for a private repo
+      additional_contexts:
+        - Lint
+        - Format
+
   govuk-chat-gradio-user-research:
     visibility: private
     archived: true
@@ -1041,3 +1049,9 @@ repos:
     # standard security checks are disabled as not configured for a private repo
     can_be_deployed: false
     visibility: private
+
+  govuk-ai-accelerator-tw-accelerator:
+    # standard security checks are disabled as not configured for a private repo
+    can_be_deployed: false
+    visibility: private
+    
