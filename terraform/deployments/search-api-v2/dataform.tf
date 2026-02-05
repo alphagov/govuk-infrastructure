@@ -24,6 +24,13 @@ resource "google_service_account" "dataform_service_account" {
   project      = var.gcp_project_id
 }
 
+# Grant the dataform service account the predefined Service Account User role
+resource "google_service_account_iam_member" "dataform_sa_user_role" {
+  service_account_id = google_service_account.dataform_service_account.id
+  role               = "roles/iam.serviceAccountUser"
+  member             = "serviceAccount:${google_service_account.dataform_service_account.email}"
+}
+
 # Create Dataform repository with GitHub integration
 resource "google_dataform_repository" "search_api_v2" {
   provider = google-beta
