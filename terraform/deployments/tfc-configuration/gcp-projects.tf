@@ -38,8 +38,8 @@ module "gcp-ga4-aggregate-analytics" {
   workspace_tags      = ["production", "ga4-aggregate-analytics", "gcp"]
   terraform_version   = var.terraform_version
   execution_mode      = "remote"
-  working_directory   = "/terraform/deployments/ga4-aggregate-analytics/"
-  trigger_patterns    = ["/terraform/deployments/ga4-aggregate-analytics/**/*"]
+  working_directory   = "/terraform/deployments/gcp-ga4-aggregate-analytics/"
+  trigger_patterns    = ["/terraform/deployments/gcp-ga4-aggregate-analytics/**/*"]
   global_remote_state = true
 
   project_name = "govuk-data-engineering"
