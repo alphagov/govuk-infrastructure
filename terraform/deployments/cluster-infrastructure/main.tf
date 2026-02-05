@@ -42,7 +42,7 @@ locals {
   default_cluster_addons = {
     coredns        = { addon_version = "v1.13.1-eksbuild.1", resolve_conflicts_on_create = "OVERWRITE" }
     kube-proxy     = { addon_version = "v1.33.7-eksbuild.2", resolve_conflicts_on_create = "OVERWRITE" }
-    metrics-server = { addon_version = "v0.8.0-eksbuild.6", resolve_conflicts_on_create = "OVERWRITE" }
+    metrics-server = { addon_version = "v0.8.1-eksbuild.1", resolve_conflicts_on_create = "OVERWRITE" }
     vpc-cni        = { addon_version = "v1.21.1-eksbuild.3", resolve_conflicts_on_create = "OVERWRITE", before_compute = true }
   }
 
