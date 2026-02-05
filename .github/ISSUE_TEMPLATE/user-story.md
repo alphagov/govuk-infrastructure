@@ -14,6 +14,12 @@ assignees: ''
 
 ---
 
+### Context
+
+(Add any extra context, links, diagrams, stakeholder interviews, etc.)
+
+---
+
 ### What’s Needed
 
 List anything the solution must do or be (behaviour, performance, security, UX, etc.).
@@ -48,12 +54,6 @@ Briefly describe how you’ll let users know about the change.
 
 ---
 
-### Notes
-
-(Add any extra context, links, diagrams, stakeholder interviews, etc.)
-
----
-
 <!-- Field explanations:
 
 As a (type of user): The role the stakeholder or user plays (developer, PM, security team, etc.).
@@ -61,6 +61,10 @@ As a (type of user): The role the stakeholder or user plays (developer, PM, secu
 I want (some action): The specific action, functionality, or change the user is requesting.
 
 so that (some result): The benefit or reason behind the action.
+
+Context:
+Provide the background and other important context that the user story lives in. Why are we doing it? Is there something
+particularly important to consider?
 
 What’s Needed:
 A single list covering both functional and non-functional aspects—what the feature must do and how it must behave (performance, security, reliability, etc.).
@@ -79,9 +83,6 @@ Important assumptions informing delivery.
 
 Risks & Mitigation:
 Risks associated with the story and how they will be handled.
-
-Notes:
-Any other useful information.
 
 Tip: Update this issue if the scope changes during delivery to maintain clarity for everyone.
 -->
