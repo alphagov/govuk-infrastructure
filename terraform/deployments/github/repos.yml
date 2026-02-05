@@ -1049,3 +1049,9 @@ repos:
     # standard security checks are disabled as not configured for a private repo
     can_be_deployed: false
     visibility: private
+
+  govuk-ai-accelerator-tw-accelerator:
+    # standard security checks are disabled as not configured for a private repo
+    can_be_deployed: false
+    visibility: private
+    
