@@ -39,8 +39,8 @@ data "aws_iam_policy_document" "https_only" {
     effect  = "Deny"
     actions = ["s3:*"]
     resources = [
-      aws_s3_bucket.this.arn,
-      "${aws_s3_bucket.this.arn}/*"
+      aws_s3_bucket.govuk_ai_accelerator_data.arn,
+      "${aws_s3_bucket.govuk_ai_accelerator_data.arn}/*"
     ]
     condition {
       test     = "Bool"
