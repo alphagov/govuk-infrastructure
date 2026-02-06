@@ -372,6 +372,11 @@ repos:
     need_production_access_to_merge: false
     push_allowances: []
 
+  govuk-cookie-consent:
+    need_production_access_to_merge: false
+    required_status_checks:
+      standard_contexts: *standard_security_checks
+
   govuk-data-science-workshop:
       archived: true
 
