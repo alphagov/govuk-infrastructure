@@ -61,7 +61,7 @@ data "aws_iam_policy_document" "https_only" {
 
 resource "aws_s3_bucket_policy" "govuk_ai_accelerator_data_bucket_policy" {
   bucket = aws_s3_bucket.govuk_ai_accelerator_data[0].id
-  policy = data.aws_iam_policy_document.https_only.json
+  policy = data.aws_iam_policy_document.https_only[0].json
 
   count = var.govuk_environment == "integration" ? 1 : 0
 }
