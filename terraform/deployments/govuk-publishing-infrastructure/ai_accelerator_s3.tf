@@ -1,6 +1,6 @@
 resource "aws_s3_bucket" "govuk_ai_accelerator_data" {
-  bucket = "govuk-ai-accelerator-data-integration"  
-  count = var.govuk_environment == "integration" ? 1 : 0
+  bucket = "govuk-ai-accelerator-data-integration"
+  count  = var.govuk_environment == "integration" ? 1 : 0
 }
 
 resource "aws_s3_bucket_public_access_block" "govuk_ai_accelerator_data_access_block" {
