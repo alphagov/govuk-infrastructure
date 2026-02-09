@@ -283,7 +283,7 @@ module "variable-set-rds-staging" {
         }
         engine_params_family         = "postgres14"
         name                         = "content-data-api"
-        allocated_storage            = 1024
+        allocated_storage            = 1280
         instance_class               = "db.m6g.large"
         performance_insights_enabled = false
         project                      = "GOV.UK - Publishing"
