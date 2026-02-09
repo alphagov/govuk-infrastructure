@@ -7,7 +7,8 @@ data "google_project" "project" {}
 resource "google_project_service" "enable" {
   for_each = toset([
     "cloudresourcemanager.googleapis.com",
-    "iamcredentials.googleapis.com"
+    "iamcredentials.googleapis.com",
+    "cloudbilling.googleapis.com"
   ])
   service = each.key
 }
