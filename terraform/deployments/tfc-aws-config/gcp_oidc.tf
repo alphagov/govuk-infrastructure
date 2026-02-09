@@ -52,11 +52,6 @@ data "google_iam_policy" "tfc" {
     role    = "roles/resourcemanager.projectCreator"
     members = [local.tfc_identity_principal]
   }
-
-  binding {
-    role    = "roles/billing.user"
-    members = [local.tfc_identity_principal]
-  }
 }
 
 resource "google_service_account_iam_policy" "tfc" {
