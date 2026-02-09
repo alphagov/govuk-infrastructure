@@ -1,5 +1,6 @@
 locals {
-  google_project = var.govuk_environment == "staging" ? "govuk-staging-160211" : "govuk-${var.govuk_environment}"
+  google_project         = var.govuk_environment == "staging" ? "govuk-staging-160211" : "govuk-${var.govuk_environment}"
+  tfc_identity_principal = "principal://iam.googleapis.com/projects/${data.google_project.project.number}/locations/global/workloadIdentityPools/terraform-cloud-${var.govuk_environment}/subject/govuk"
 }
 
 data "google_project" "project" {}
@@ -43,10 +44,18 @@ resource "google_project_iam_member" "tfc" {
 
 data "google_iam_policy" "tfc" {
   binding {
-    role = "roles/iam.workloadIdentityUser"
-    members = [
-      "principal://iam.googleapis.com/projects/${data.google_project.project.number}/locations/global/workloadIdentityPools/terraform-cloud-${var.govuk_environment}/subject/govuk"
-    ]
+    role    = "roles/iam.workloadIdentityUser"
+    members = [local.tfc_identity_principal]
+  }
+
+  binding {
+    role    = "roles/resourcemanager.projectCreator"
+    members = [local.tfc_identity_principal]
+  }
+
+  binding {
+    role    = "roles/billing.user"
+    members = [local.tfc_identity_principal]
   }
 }
 
