@@ -38,7 +38,7 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "govuk_ai_accelera
 
 data "aws_iam_policy_document" "https_only" {
   count = var.govuk_environment == "integration" ? 1 : 0
-  
+
   statement {
     principals {
       type        = "*"
