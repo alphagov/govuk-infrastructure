@@ -36,6 +36,12 @@ resource "google_service_account" "tfc" {
   account_id = "terraform-cloud-${var.govuk_environment}"
 }
 
+resource "google_billing_account_iam_member" "tfc" {
+  billing_account_id = var.billing_account_id
+  role               = "roles/billing.user"
+  member             = "serviceAccount:${google_service_account.tfc.email}"
+}
+
 resource "google_project_iam_member" "tfc" {
   project = local.google_project
   role    = "roles/owner"
@@ -50,6 +56,11 @@ data "google_iam_policy" "tfc" {
 
   binding {
     role    = "roles/resourcemanager.projectCreator"
+    members = [local.tfc_identity_principal]
+  }
+
+  binding {
+    role    = "roles/billing.projectManager"
     members = [local.tfc_identity_principal]
   }
 }
