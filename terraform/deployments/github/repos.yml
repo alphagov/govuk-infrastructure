@@ -175,6 +175,9 @@ repos:
 
   datagovuk-tech-docs:
     homepage_url: "https://guidance.data.gov.uk/"
+    topics:
+      - govuk
+      - datagovuk
     need_production_access_to_merge: false
     push_allowances: [
       "alphagov/gov-uk-production-admin",
@@ -909,6 +912,9 @@ repos:
         - Prettier / Run Prettier
 
   ckanext-datagovuk:
+    topics:
+      - govuk
+      - datagovuk
     required_status_checks:
       additional_contexts:
         - test
@@ -919,6 +925,9 @@ repos:
     ]
 
   datagovuk_find:
+    topics:
+      - govuk
+      - datagovuk
     required_status_checks:
       additional_contexts:
         - test
