@@ -57,26 +57,6 @@ repos:
 
   bulk-merger: {}
 
-  ckanext-spatial:
-    can_be_deployed: false
-    homepage_url: "https://docs.publishing.service.gov.uk/repos/ckanext-spatial.html"
-    topics:
-      - govuk
-      - datagovuk
-    required_status_checks:
-      standard_contexts: *standard_security_checks
-      additional_contexts:
-        - Test
-    fork:
-      enabled: true
-      source_owner: "ckan"
-      source_repo: "ckanext-spatial"
-    push_allowances: [
-      "alphagov/gov-uk-production-admin",
-      "alphagov/gov-uk-production-deploy",
-      "alphagov/national-data-library"
-    ]
-
   collections:
     can_be_deployed: true
     homepage_url: "https://docs.publishing.service.gov.uk/apps/collections.html"
@@ -172,18 +152,6 @@ repos:
     homepage_url: "https://docs.data-community.publishing.service.gov.uk/"
     need_production_access_to_merge: false
     push_allowances: []
-
-  datagovuk-tech-docs:
-    homepage_url: "https://guidance.data.gov.uk/"
-    topics:
-      - govuk
-      - datagovuk
-    need_production_access_to_merge: false
-    push_allowances: [
-      "alphagov/gov-uk-production-admin",
-      "alphagov/gov-uk-production-deploy",
-      "alphagov/national-data-library"
-    ]
 
   email-alert-api:
     can_be_deployed: true
@@ -911,32 +879,6 @@ repos:
         - Lint ERB / Run ERB lint
         - Prettier / Run Prettier
 
-  ckanext-datagovuk:
-    topics:
-      - govuk
-      - datagovuk
-    required_status_checks:
-      additional_contexts:
-        - test
-    push_allowances: [
-      "alphagov/gov-uk-production-admin",
-      "alphagov/gov-uk-production-deploy",
-      "alphagov/national-data-library"
-    ]
-
-  datagovuk_find:
-    topics:
-      - govuk
-      - datagovuk
-    required_status_checks:
-      additional_contexts:
-        - test
-    push_allowances: [
-      "alphagov/gov-uk-production-admin",
-      "alphagov/gov-uk-production-deploy",
-      "alphagov/national-data-library"
-    ]
-
   govuk-browser-extension:
     required_status_checks:
       additional_contexts:
@@ -1030,13 +972,6 @@ repos:
       enabled: true
       source_owner: "emmabeynon"
       source_repo: "github-trello-poster"
-
-  ckan-mock-harvest-sources:
-    push_allowances: [
-      "alphagov/gov-uk-production-admin",
-      "alphagov/gov-uk-production-deploy",
-      "alphagov/national-data-library"
-    ]
 
   govuk-pact-broker: {}
   govuk-rfcs: {}
