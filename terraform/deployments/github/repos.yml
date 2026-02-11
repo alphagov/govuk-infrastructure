@@ -472,6 +472,15 @@ repos:
         - Run RSpec
         - Test GOV.UK Chat / Run RSpec
 
+  govuk_content_item_loader:
+    can_be_deployed: true
+    homepage_url: "https://rubygems.org/gems/govuk_content_item_loader"
+    publishes_gem: true
+    required_status_checks:
+      standard_contexts: *standard_security_checks
+      additional_contexts:
+        - test
+
   govuk_document_types:
     homepage_url: "https://docs.publishing.service.gov.uk/document-types.html"
     publishes_gem: true
