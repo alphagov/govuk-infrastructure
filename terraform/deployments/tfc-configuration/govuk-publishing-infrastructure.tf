@@ -49,6 +49,7 @@ module "govuk-publishing-infrastructure-variable-set-integration" {
       { type = "CNAME", name = "ckan", ttl = 3600, value = ["ckan.eks.integration.govuk.digital."] },
       { type = "CNAME", name = "govspeak-preview", ttl = 3600, value = ["govspeak-preview.eks.integration.govuk.digital."] },
       { type = "CNAME", name = "govuk-graphql", ttl = 3600, value = ["govuk-graphql.eks.integration.govuk.digital."] },
+      { type = "CNAME", name = "govuk-ai-accelerator", ttl = 3600, value = ["govuk-ai-accelerator-app.eks.integration.govuk.digital."] },
       { type = "CNAME", name = "search", ttl = 3600, value = ["otxkvx7dv3.execute-api.eu-west-1.amazonaws.com."] },
       { type = "CNAME", name = "app", ttl = 3600, value = ["www-gov-uk.map.fastly.net."] },
       { type = "CNAME", name = "assets", ttl = 300, value = ["www-gov-uk.map.fastly.net."] },
