@@ -125,7 +125,7 @@ resource "github_team_repository" "govuk_ai_accelerator_repos" {
   for_each   = toset(var.govuk_ai_accelerator_repo_names)
   repository = each.value
   team_id    = github_team.govuk_ai_accelerator.id
-  permission = "push"
+  permission = "maintain"
 }
 
 resource "github_team_repository" "govuk_production_admin_repos" {
