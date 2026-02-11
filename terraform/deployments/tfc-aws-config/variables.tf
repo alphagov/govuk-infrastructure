@@ -14,9 +14,3 @@ variable "tfc_organization_name" {
   default     = "govuk"
   description = "The name of the Terraform Cloud organization"
 }
-
-variable "billing_account_id" {
-  type        = string
-  default     = "015C7A-FAF970-B0D375"
-  description = "The id of the gcp billing account"
-}
