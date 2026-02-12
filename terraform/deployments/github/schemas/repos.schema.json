@@ -112,7 +112,7 @@
               "type": "array",
               "items": {
                 "type": "string",
-                "enum": ["govuk"]
+                "enum": ["govuk", "prototype"]
               }
             },
             "required_status_checks": {
