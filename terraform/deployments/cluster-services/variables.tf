@@ -59,7 +59,18 @@ variable "govuk_environment" {
 variable "dex_github_orgs_teams" {
   type        = list(object({ name = string, teams = list(string) }))
   description = "List of GitHub orgs and associated teams that Dex authorises. Format [{name='github_org', teams=['github_team_name']}] "
-  default     = [{ name = "alphagov", teams = ["gov-uk-production-deploy"] }]
+  default = [
+    {
+      name = "alphagov",
+      teams = [
+        "gov-uk",
+        "gov-uk-ithc-and-penetration-testing",
+        "gov-uk-licensing-support",
+        "gov-uk-production-deploy",
+        "national-data-library",
+      ]
+    }
+  ]
 }
 
 variable "desired_ha_replicas" {

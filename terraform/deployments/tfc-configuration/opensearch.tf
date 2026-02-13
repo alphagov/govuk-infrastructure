@@ -24,7 +24,6 @@ module "opensearch-integration" {
 
   variable_set_ids = [
     local.aws_credentials["integration"],
-    module.variable-set-common.id,
     module.variable-set-integration.id,
     module.variable-set-opensearch-integration.id
   ]
@@ -55,7 +54,6 @@ module "opensearch-staging" {
 
   variable_set_ids = [
     local.aws_credentials["staging"],
-    module.variable-set-common.id,
     module.variable-set-staging.id,
     module.variable-set-opensearch-staging.id
   ]
@@ -86,7 +84,6 @@ module "opensearch-production" {
 
   variable_set_ids = [
     local.aws_credentials["production"],
-    module.variable-set-common.id,
     module.variable-set-production.id,
     module.variable-set-opensearch-production.id
   ]
