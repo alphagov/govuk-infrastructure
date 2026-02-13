@@ -70,7 +70,7 @@ variable "workspace_tags" {
 variable "terraform_version" {
   type        = string
   description = "Version constraint for Terraform for this workspace."
-  default     = "~> 1.14.4"
+  default     = "~> 1.14.5"
 }
 
 variable "trigger_patterns" {
