@@ -598,6 +598,24 @@ module "variable-set-rds-integration" {
         project                      = "GOV.UK - Publishing"
         snapshot_identifier          = "whitehall-mysql-post-encryption"
       }
+
+      govuk_ai_accelerator = {
+        engine         = "postgres"
+        engine_version = "17"
+        engine_params = {
+          log_min_duration_statement = { value = 10000 }
+          log_statement              = { value = "all" }
+          deadlock_timeout           = { value = 2500 }
+          log_lock_waits             = { value = 1 }
+        }
+        engine_params_family         = "postgres17"
+        name                         = "govuk-ai-accelerator"
+        allocated_storage            = 1000
+        instance_class               = "db.m6g.large"
+        performance_insights_enabled = true
+        project                      = "GOV.UK - AI Accelerator"
+        snapshot_identifier          = "govuk-ai-accelerator-postgres-post-encryption"
+      }
     }
   }
 }
