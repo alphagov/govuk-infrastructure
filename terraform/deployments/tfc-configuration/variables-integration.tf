@@ -383,7 +383,6 @@ module "variable-set-rds-integration" {
         instance_class               = "db.m6g.large"
         performance_insights_enabled = true
         project                      = "GOV.UK - AI Accelerator"
-        snapshot_identifier          = "govuk-ai-accelerator-postgres-post-encryption"
       }
 
       link_checker_api = {
