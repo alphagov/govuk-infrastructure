@@ -61,6 +61,10 @@ jobs:
       contents: read
       packages: write
     steps:
+      - uses: docker/setup-docker-action@e43656e248c0bd0647d3f5c195d116aacf6fcaf4 # v4.7.0
+        with:
+          version: "version=28.5.2"
+
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           ref: ${{ inputs.gitRef }}
@@ -131,6 +135,10 @@ jobs:
       contents: read
       packages: write
     steps:
+      - uses: docker/setup-docker-action@e43656e248c0bd0647d3f5c195d116aacf6fcaf4 # v4.7.0
+        with:
+          version: "version=28.5.2"
+
       - name: Download Digests
         uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7.0.0
         with:
