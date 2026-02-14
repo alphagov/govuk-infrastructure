@@ -25,7 +25,6 @@ module "cdn-analytics-integration" {
 
   variable_set_ids = [
     local.gcp_credentials["integration"],
-    module.variable-set-common.id,
     module.variable-set-integration.id
   ]
 }
@@ -56,7 +55,6 @@ module "cdn-analytics-staging" {
 
   variable_set_ids = [
     local.gcp_credentials["staging"],
-    module.variable-set-common.id,
     module.variable-set-staging.id
   ]
 }
@@ -87,7 +85,6 @@ module "cdn-analytics-production" {
 
   variable_set_ids = [
     local.gcp_credentials["production"],
-    module.variable-set-common.id,
     module.variable-set-production.id
   ]
 }

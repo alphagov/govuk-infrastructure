@@ -25,7 +25,6 @@ module "govuk-reports-integration" {
 
   variable_set_ids = [
     local.aws_credentials["integration"],
-    module.variable-set-common.id,
     module.variable-set-integration.id
   ]
 }

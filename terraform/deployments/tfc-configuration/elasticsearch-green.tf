@@ -24,7 +24,6 @@ module "elasticsearch-green-integration" {
 
   variable_set_ids = [
     local.aws_credentials["integration"],
-    module.variable-set-common.id,
     module.variable-set-integration.id,
     module.variable-set-elasticsearch-green-integration.id
   ]
@@ -56,7 +55,6 @@ module "elasticsearch-green-staging" {
 
   variable_set_ids = [
     local.aws_credentials["staging"],
-    module.variable-set-common.id,
     module.variable-set-staging.id,
     module.variable-set-elasticsearch-green-staging.id
   ]
@@ -88,7 +86,6 @@ module "elasticsearch-green-production" {
 
   variable_set_ids = [
     local.aws_credentials["production"],
-    module.variable-set-common.id,
     module.variable-set-production.id,
     module.variable-set-elasticsearch-green-production.id
   ]
