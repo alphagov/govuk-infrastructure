@@ -24,7 +24,8 @@ resource "google_project_iam_binding" "analytics_write" {
   project = var.gcp_project_id
   members = [
     google_service_account.analytics_events_pipeline.member,
-    "serviceAccount:service-${var.gcp_dataform_project_number}@gcp-sa-dataform.iam.gserviceaccount.com"
+    "serviceAccount:service-${var.gcp_dataform_project_number}@gcp-sa-dataform.iam.gserviceaccount.com",
+    google_service_account.dataform_service_account.member
   ]
 }
 
