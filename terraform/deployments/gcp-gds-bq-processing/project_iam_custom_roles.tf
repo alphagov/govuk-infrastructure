@@ -1,0 +1,52 @@
+resource "google_project_iam_custom_role" "code_viewer" {
+  description = "Permissions to read code but restricted from viewing BigQuery data"
+  permissions = [
+    // These permissions are equivalent to https://docs.cloud.google.com/iam/docs/roles-permissions/dataform#dataform.viewer
+    "dataform.commentThreads.get",
+    "dataform.commentThreads.list",
+    "dataform.comments.get",
+    "dataform.comments.list",
+    "dataform.compilationResults.get",
+    "dataform.compilationResults.list",
+    "dataform.compilationResults.query",
+    "dataform.config.get",
+    "dataform.folders.get",
+    "dataform.folders.getIamPolicy",
+    "dataform.folders.queryContents",
+    "dataform.locations.get",
+    "dataform.locations.list",
+    "dataform.operations.get",
+    "dataform.operations.list",
+    "dataform.releaseConfigs.get",
+    "dataform.releaseConfigs.list",
+    "dataform.repositories.computeAccessTokenStatus",
+    "dataform.repositories.fetchHistory",
+    "dataform.repositories.fetchRemoteBranches",
+    "dataform.repositories.get",
+    "dataform.repositories.getIamPolicy",
+    "dataform.repositories.list",
+    "dataform.repositories.queryDirectoryContents",
+    "dataform.repositories.readFile",
+    "dataform.teamFolders.get",
+    "dataform.teamFolders.getIamPolicy",
+    "dataform.workflowConfigs.get",
+    "dataform.workflowConfigs.list",
+    "dataform.workflowInvocations.get",
+    "dataform.workflowInvocations.list",
+    "dataform.workflowInvocations.query",
+    "dataform.workspaces.fetchFileDiff",
+    "dataform.workspaces.fetchFileGitStatuses",
+    "dataform.workspaces.fetchGitAheadBehind",
+    "dataform.workspaces.get",
+    "dataform.workspaces.getIamPolicy",
+    "dataform.workspaces.list",
+    "dataform.workspaces.queryDirectoryContents",
+    "dataform.workspaces.readFile",
+    "dataform.workspaces.searchFiles",
+    "resourcemanager.projects.get",
+    "resourcemanager.projects.list",
+    //
+  ]
+  role_id = "code_viewer"
+  title   = "Code Viewer"
+}
