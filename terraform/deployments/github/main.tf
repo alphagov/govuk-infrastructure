@@ -333,3 +333,8 @@ resource "github_actions_organization_secret_repositories" "slack_webhook_url" {
   secret_name             = "GOVUK_SLACK_WEBHOOK_URL" # pragma: allowlist secret
   selected_repository_ids = [for repo in data.github_repository.govuk : repo.repo_id]
 }
+
+resource "github_actions_organization_secret_repositories" "rubygems_api_key" {
+  secret_name             = "ALPHAGOV_RUBYGEMS_API_KEY" # pragma: allowlist secret
+  selected_repository_ids = [for repo in local.gems : repo.repo_id]
+}
