@@ -1,7 +1,6 @@
 variable "govuk_environment" {
   type        = string
   description = "Acceptable values are test, integration, staging, production"
-  // add data validation here
 }
 
 variable "provider_arn" {

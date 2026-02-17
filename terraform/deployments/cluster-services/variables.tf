@@ -96,5 +96,4 @@ variable "enable_tetragon" {
   type        = bool
   description = "Whether to enable Tetragon daemonset to the cluster"
   default     = false
-
 }

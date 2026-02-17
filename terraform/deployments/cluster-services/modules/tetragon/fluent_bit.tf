@@ -24,7 +24,7 @@ resource "helm_release" "fluent_bit" {
   values = [yamlencode({
     image = {
       repositoty = "cr.fluentbit.io/fluent/fluent-bit"
-      pullPolicy = "Always"
+      pullPolicy = "IfNotPresent"
       tag        = "-"
     }
 
@@ -40,12 +40,12 @@ resource "helm_release" "fluent_bit" {
     }
 
     securityContext = {
-      privileged               = true
-      allowPrivilegeEscalation = true
-      runAsNonRoot             = false
-      runAsUser                = 0
-      runAsGroup               = 0
-      fsGroup                  = 0
+      privileged               = false
+      allowPrivilegeEscalation = false
+      runAsNonRoot             = true
+      runAsUser                = 1000
+      runAsGroup               = 1000
+      fsGroup                  = 1000
       capabilities = {
         drop = ["NET_RAW"]
       }
@@ -81,7 +81,7 @@ resource "helm_release" "fluent_bit" {
     config = {
       service = <<-EOF
       [SERVICE]
-          Log_Level debug
+          Log_Level info
           Health_Check On
           HTTP_Server On
       EOF
@@ -109,6 +109,4 @@ resource "helm_release" "fluent_bit" {
 
   depends_on = [helm_release.tetragon]
 }
-
-
 

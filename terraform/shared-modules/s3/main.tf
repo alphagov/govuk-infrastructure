@@ -7,6 +7,7 @@ resource "aws_s3_bucket" "this" {
 }
 
 resource "aws_s3_bucket_lifecycle_configuration" "this" {
+  count  = length(var.lifecycle_rules) > 0 ? 1 : 0
   bucket = aws_s3_bucket.this.id
 
   dynamic "rule" {
@@ -105,7 +106,6 @@ resource "aws_s3_bucket_versioning" "this" {
 }
 
 resource "aws_s3_bucket_server_side_encryption_configuration" "this" {
-  count  = var.AES256_encryption_configuration ? 1 : 0
   bucket = aws_s3_bucket.this.id
 
   rule {
@@ -139,8 +139,8 @@ data "aws_iam_policy_document" "s3_combined_policy" {
 }
 
 resource "aws_iam_policy" "this" {
-  name        = "govuk-${var.govuk_environment}-eks-exec-audit-logs"
-  description = "S3 access for fluent-bit to ship eks exec audit logs"
+  name        = var.name
+  description = "S3 IAM policy for ${var.name}"
   policy      = data.aws_iam_policy_document.s3_combined_policy.json
 }
 

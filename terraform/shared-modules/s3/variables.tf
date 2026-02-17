@@ -1,18 +1,12 @@
 variable "name" {
-  type = string
+  type        = string
+  description = "The bucket and IAM policy name. NOTE: This must be a globally unique name for AWS S3"
 }
 
 variable "extra_bucket_policies" {
   type        = list(string)
-  description = "extra bucket policies to apply to this bucket. List of json policies"
+  description = "Extra bucket policies to apply to this bucket. List of json policies"
   default     = []
-}
-
-variable "AES256_encryption_configuration" {
-  type        = bool
-  description = "Whether to use AES256 as the algorithm for server side encryption. If false, the caller should set their own configuration"
-  default     = true
-  nullable    = false
 }
 
 variable "versioning_enabled" {
@@ -20,11 +14,6 @@ variable "versioning_enabled" {
   description = "Whether S3 bucket object versioning should be enabled"
   default     = true
   nullable    = false
-}
-
-variable "govuk_environment" {
-  type        = string
-  description = "Acceptable values are test, integration, staging, production"
 }
 
 variable "lifecycle_rules" {
