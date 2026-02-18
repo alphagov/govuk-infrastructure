@@ -28,6 +28,7 @@ module "var_set" {
     skip_final_snapshot            = true
     multi_az                       = true
     ext_dns_enable_service_monitor = false
+    enable_tetragon                = false
 
     databases = {
       ckan = {
@@ -120,5 +121,4 @@ module "datagovuk_infrastructure" {
 
   depends_on = [module.cluster_services, tfe_project.project]
 }
-
 
