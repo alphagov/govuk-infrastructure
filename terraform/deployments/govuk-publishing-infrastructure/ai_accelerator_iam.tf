@@ -1,19 +1,27 @@
 data "aws_iam_policy_document" "govuk_ai_accelerator_bedrock_access" {
   statement {
-    sid = "BedrockAssumeRolePolicy"
+    sid = "BedrockAssumeInvokeModelsRolePolicy"
     actions = [
       "bedrock:InvokeModel",
-      "bedrock:InvokeModelWithResponseStream",
-      "bedrock:ListFoundationModels"
+      "bedrock:InvokeModelWithResponseStream"
     ]
     effect    = "Allow"
     resources = ["arn:aws:bedrock:eu-west-1:${data.aws_caller_identity.current.account_id}:*"]
+  }
+
+  statement {
+    sid = "BedrockAssumeListModelsRolePolicy"
+    actions = [
+      "bedrock:ListFoundationModels"
+    ]
+    effect    = "Allow"
+    resources = ["*"]
   }
 }
 
 data "aws_iam_policy_document" "govuk_ai_accelerator_s3_access" {
   statement {
-    sid = "GovukAiAcceleratorS3RootAccessPolicy"
+    sid       = "GovukAiAcceleratorS3RootAccessPolicy"
     actions   = ["s3:GetBucketLocation", "s3:ListBucket"]
     resources = [aws_s3_bucket.govuk_ai_accelerator_data[0].arn]
   }
