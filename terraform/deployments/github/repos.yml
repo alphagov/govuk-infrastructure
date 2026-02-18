@@ -1004,22 +1004,22 @@ repos:
   govuk-ai-accelerator:
     can_be_deployed: true
     standard_contexts: *standard_security_checks
-    push_allowances: ["alphagov/gov-uk-ai-accelerator-alpha-team"]
+    push_allowances: ["alphagov/gov-uk-ai-accelerator-alpha-team", "alphagov/gov-uk-production-admin", "alphagov/gov-uk-production-deploy"]
 
   govuk-ai-accelerator-tooling:
     # standard security checks are disabled as not configured for a private repo
     can_be_deployed: false
     visibility: private
-    push_allowances: ["alphagov/gov-uk-ai-accelerator-alpha-team"]
+    push_allowances: ["alphagov/gov-uk-ai-accelerator-alpha-team", "alphagov/gov-uk-production-admin", "alphagov/gov-uk-production-deploy"]
 
   govuk-ai-accelerator-tw-accelerator:
     # standard security checks are disabled as not configured for a private repo
     can_be_deployed: false
     visibility: private
-    push_allowances: ["alphagov/gov-uk-ai-accelerator-alpha-team"]
+    push_allowances: ["alphagov/gov-uk-ai-accelerator-alpha-team", "alphagov/gov-uk-production-admin", "alphagov/gov-uk-production-deploy"]
     
   govuk-ai-accelerator-generator-e2e-testing-framework:
     # standard security checks are disabled as not configured for a private repo
     can_be_deployed: false
     visibility: private
-    push_allowances: ["alphagov/gov-uk-ai-accelerator-alpha-team"]
+    push_allowances: ["alphagov/gov-uk-ai-accelerator-alpha-team", "alphagov/gov-uk-production-admin", "alphagov/gov-uk-production-deploy"]
