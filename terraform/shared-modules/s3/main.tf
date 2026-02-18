@@ -117,6 +117,10 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "this" {
 
 data "aws_iam_policy_document" "https_only" {
   statement {
+    principals {
+      type        = "*"
+      identifiers = ["*"]
+    }
     sid     = "httpsOnly"
     effect  = "Deny"
     actions = ["s3:*"]
@@ -136,12 +140,6 @@ data "aws_iam_policy_document" "s3_combined_policy" {
   source_policy_documents = flatten([
     data.aws_iam_policy_document.https_only.json,
   var.extra_bucket_policies])
-}
-
-resource "aws_iam_policy" "this" {
-  name        = var.name
-  description = "S3 IAM policy for ${var.name}"
-  policy      = data.aws_iam_policy_document.s3_combined_policy.json
 }
 
 resource "aws_s3_bucket_policy" "bucket_policy" {

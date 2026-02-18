@@ -19,6 +19,5 @@
 | Name | Description |
 |------|-------------|
 | <a name="output_arn"></a> [arn](#output\_arn) | n/a |
-| <a name="output_irsa_policy_arn"></a> [irsa\_policy\_arn](#output\_irsa\_policy\_arn) | IAM policy ARN for access to the S3 bucket |
 | <a name="output_name"></a> [name](#output\_name) | n/a |
 <!-- END_TF_DOCS -->
