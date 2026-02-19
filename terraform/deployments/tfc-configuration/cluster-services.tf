@@ -94,3 +94,4 @@ module "cluster-services-production" {
 
   run_trigger_source_workspaces = ["cluster-services-staging"]
 }
+

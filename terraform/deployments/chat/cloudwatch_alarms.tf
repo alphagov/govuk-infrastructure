@@ -8,7 +8,12 @@ locals {
 # Bedrock token usage over 50% alarm
 resource "aws_cloudwatch_metric_alarm" "bedrock_token_threshold_50" {
   alarm_name          = "govuk-chat-${var.govuk_environment}-bedrock-token-threshold-50"
-  alarm_description   = "WARNING - The current ${var.govuk_environment} Bedrock token usage > 50%"
+  alarm_description   = <<-EOF
+  WARNING - The current ${var.govuk_environment} Bedrock token usage > 50%
+
+  Runbook:
+  https://docs.publishing.service.gov.uk/manual/alerts/chat-ai-alerts.html#bedrock-token-threshold-alerts
+  EOF
   comparison_operator = "GreaterThanOrEqualToThreshold"
   threshold           = 50
   evaluation_periods  = 1
@@ -69,7 +74,12 @@ resource "aws_cloudwatch_metric_alarm" "bedrock_token_threshold_50" {
 # Bedrock token usage over 100% alarm
 resource "aws_cloudwatch_metric_alarm" "bedrock_token_threshold_100" {
   alarm_name          = "govuk-chat-${var.govuk_environment}-bedrock-token-threshold-100"
-  alarm_description   = "CRITICAL - The current ${var.govuk_environment} Bedrock token usage > 100%"
+  alarm_description   = <<-EOF
+  CRITICAL - The current ${var.govuk_environment} Bedrock token usage > 100%
+
+  Runbook:
+  https://docs.publishing.service.gov.uk/manual/alerts/chat-ai-alerts.html#bedrock-token-threshold-alerts
+  EOF
   comparison_operator = "GreaterThanOrEqualToThreshold"
   threshold           = 100
   evaluation_periods  = 1
