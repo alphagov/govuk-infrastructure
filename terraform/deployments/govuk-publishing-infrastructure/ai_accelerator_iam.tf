@@ -5,7 +5,7 @@ locals {
 }
 
 data "aws_iam_policy_document" "govuk_ai_accelerator_bedrock_access" {
-  count = var.govuk_environment == "integration" ? 1 : 0
+  count = var.enable_govuk_ai_accelerator ? 1 : 0
 
   statement {
     sid = "BedrockAssumeInvokeModelsRolePolicy"
@@ -28,7 +28,7 @@ data "aws_iam_policy_document" "govuk_ai_accelerator_bedrock_access" {
 }
 
 data "aws_iam_policy_document" "govuk_ai_accelerator_s3_access" {
-  count = var.govuk_environment == "integration" ? 1 : 0
+  count = var.enable_govuk_ai_accelerator ? 1 : 0
 
   statement {
     sid       = "GovukAiAcceleratorS3RootAccessPolicy"
@@ -49,7 +49,7 @@ data "aws_iam_policy_document" "govuk_ai_accelerator_s3_access" {
 }
 
 resource "aws_iam_policy" "govuk_ai_accelerator_s3_access_policy" {
-  count = var.govuk_environment == "integration" ? 1 : 0
+  count = var.enable_govuk_ai_accelerator ? 1 : 0
 
   name        = "govuk-${var.govuk_environment}-govuk-ai-accelerator-s3-policy"
   description = "Policy for govuk-ai-accelerator application with access to S3"
@@ -57,7 +57,7 @@ resource "aws_iam_policy" "govuk_ai_accelerator_s3_access_policy" {
 }
 
 resource "aws_iam_policy" "govuk_ai_accelerator_bedrock_access_policy" {
-  count = var.govuk_environment == "integration" ? 1 : 0
+  count = var.enable_govuk_ai_accelerator ? 1 : 0
 
   name        = "govuk-${var.govuk_environment}-govuk-ai-accelerator-bedrock-policy"
   description = "Policy for govuk-ai-accelerator application with access to bedrock"
@@ -66,6 +66,8 @@ resource "aws_iam_policy" "govuk_ai_accelerator_bedrock_access_policy" {
 
 # IRSA role for GOVUK AI Accelerator service account
 module "govuk_reports_iam_role" {
+  count = var.enable_govuk_ai_accelerator ? 1 : 0
+
   source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts"
   version = "~> 6.0"
 
@@ -75,7 +77,7 @@ module "govuk_reports_iam_role" {
   max_session_duration = 28800
 
   policies = {
-    "${aws_iam_policy.govuk_ai_accelerator_s3_access_policy.name}" = aws_iam_policy.govuk_ai_accelerator_s3_access_policy.arn,
+    "${aws_iam_policy.govuk_ai_accelerator_s3_access_policy.name}"      = aws_iam_policy.govuk_ai_accelerator_s3_access_policy.arn,
     "${aws_iam_policy.govuk_ai_accelerator_bedrock_access_policy.name}" = aws_iam_policy.govuk_ai_accelerator_bedrock_access_policy.arn
   }
 

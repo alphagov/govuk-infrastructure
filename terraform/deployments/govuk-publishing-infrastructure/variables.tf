@@ -219,3 +219,10 @@ variable "subdomain_delegation_name_servers" {
     error_message = "Lists of name servers must contain at least one entry"
   }
 }
+
+variable "enable_govuk_ai_accelerator" {
+  type        = bool
+  default     = false
+  description = "Should the GOVUK AI accelerator infrastucture be deployed. Only enable on integration for the Alpha."
+}
+

@@ -39,7 +39,10 @@ module "govuk-publishing-infrastructure-variable-set-integration" {
 
   name = "govuk-publishing-infrastructure-integration-non-sensitive"
 
+
+
   tfvars = {
+    enable_govuk_ai_accelerator       = true
     subdomain_delegation_name_servers = {}
     subdomain_dns_records = [
       { type = "A", name = "@", ttl = 10800, value = ["151.101.0.144", "151.101.64.144", "151.101.128.144", "151.101.192.144"] },
