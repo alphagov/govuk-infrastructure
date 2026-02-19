@@ -52,7 +52,7 @@ module "variable-set-integration" {
     force_destroy     = true
 
     enable_govuk_ai_accelerator = true
-    enable_kube_state_metrics = true
+    enable_kube_state_metrics   = true
 
     enable_arm_workers_blue  = false
     enable_arm_workers_green = true
