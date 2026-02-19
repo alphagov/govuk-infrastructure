@@ -42,3 +42,5 @@ variable "chat_slack_channel_id" {
   description = "ID of Slack channel for CloudWatch Alarms"
   default     = "C06AWTPNJMV"
 }
+
+

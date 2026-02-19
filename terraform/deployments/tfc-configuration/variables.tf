@@ -126,3 +126,8 @@ variable "variable_set_names" {
   description = "List of names of existing Variable Sets to add to the workspace."
   default     = []
 }
+
+variable "chat_token_limits_per_minute" {
+  type        = map(number)
+  description = "A map of model names to AWS Bedrock token limits per minute for GOV.UK Chat."
+}
