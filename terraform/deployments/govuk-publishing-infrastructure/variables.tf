@@ -223,6 +223,6 @@ variable "subdomain_delegation_name_servers" {
 variable "enable_govuk_ai_accelerator" {
   type        = bool
   default     = false
-  description = "Should the GOVUK AI accelerator infrastucture be deployed. Only enable on integration for the Alpha."
+  description = "Should the GOVUK AI accelerator infrastucture be deployed. Should only enable on integration for the Alpha."
 }
 
