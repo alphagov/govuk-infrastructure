@@ -51,6 +51,7 @@ module "variable-set-integration" {
     govuk_environment = "integration"
     force_destroy     = true
 
+    enable_govuk_ai_accelerator = true
     enable_kube_state_metrics = true
 
     enable_arm_workers_blue  = false
@@ -80,15 +81,6 @@ module "variable-set-integration" {
     licensify_backup_retention_period         = 1
     shared_documentdb_instance_count          = 1
     shared_documentdb_backup_retention_period = 1
-  }
-}
-
-module "variable-set-govuk-ai-accelerator-integration" {
-  source = "./variable-set"
-  name   = "govuk-ai-accelerator-integration"
-
-  tfvars = {
-    enable_govuk_ai_accelerator = true
   }
 }
 
