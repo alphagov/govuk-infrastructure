@@ -10,7 +10,7 @@ resource "restapi_object" "google_discovery_engine_data_store_completion_config"
     maxSuggestions          = 5,
     minPrefixLength         = 3,
     queryFrequencyThreshold = 250,
-    numUniqueUsersThreshold = 10,
+    numUniqueUsersThreshold = 100,
     queryModel              = "automatic",
     enableMode              = "AUTOMATIC"
   })
