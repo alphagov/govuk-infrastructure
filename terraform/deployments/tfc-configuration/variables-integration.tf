@@ -3,6 +3,7 @@ module "variable-set-integration" {
 
   name = "common-integration"
   tfvars = {
+
     govuk_aws_state_bucket              = "govuk-terraform-steppingstone-integration"
     cluster_infrastructure_state_bucket = "govuk-terraform-integration"
 
@@ -79,6 +80,15 @@ module "variable-set-integration" {
     licensify_backup_retention_period         = 1
     shared_documentdb_instance_count          = 1
     shared_documentdb_backup_retention_period = 1
+  }
+}
+
+module "variable-set-govuk-ai-accelerator" {
+  source = "./variable-set"
+  name   = "govuk-ai-accelerator-integration"
+
+  tfvars = {
+    enable_govuk_ai_accelerator = true
   }
 }
 
