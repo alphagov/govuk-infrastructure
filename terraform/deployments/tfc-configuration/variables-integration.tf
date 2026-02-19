@@ -83,7 +83,7 @@ module "variable-set-integration" {
   }
 }
 
-module "variable-set-govuk-ai-accelerator" {
+module "variable-set-govuk-ai-accelerator-integration" {
   source = "./variable-set"
   name   = "govuk-ai-accelerator-integration"
 
