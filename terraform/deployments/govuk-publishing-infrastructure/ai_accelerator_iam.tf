@@ -77,8 +77,8 @@ module "govuk_reports_iam_role" {
   max_session_duration = 28800
 
   policies = {
-    "${aws_iam_policy.govuk_ai_accelerator_s3_access_policy.name}"      = aws_iam_policy.govuk_ai_accelerator_s3_access_policy.arn,
-    "${aws_iam_policy.govuk_ai_accelerator_bedrock_access_policy.name}" = aws_iam_policy.govuk_ai_accelerator_bedrock_access_policy.arn
+    "${aws_iam_policy.govuk_ai_accelerator_s3_access_policy[0].name}"      = aws_iam_policy.govuk_ai_accelerator_s3_access_policy[0].arn,
+    "${aws_iam_policy.govuk_ai_accelerator_bedrock_access_policy[0].name}" = aws_iam_policy.govuk_ai_accelerator_bedrock_access_policy[0].arn
   }
 
   oidc_providers = {
