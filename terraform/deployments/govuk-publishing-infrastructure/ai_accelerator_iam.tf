@@ -53,7 +53,7 @@ resource "aws_iam_policy" "govuk_ai_accelerator_s3_access_policy" {
 
   name        = "govuk-${var.govuk_environment}-govuk-ai-accelerator-s3-policy"
   description = "Policy for govuk-ai-accelerator application with access to S3"
-  policy      = data.aws_iam_policy_document.govuk_ai_accelerator_s3_access.json
+  policy      = data.aws_iam_policy_document.govuk_ai_accelerator_s3_access[0].json
 }
 
 resource "aws_iam_policy" "govuk_ai_accelerator_bedrock_access_policy" {
@@ -61,7 +61,7 @@ resource "aws_iam_policy" "govuk_ai_accelerator_bedrock_access_policy" {
 
   name        = "govuk-${var.govuk_environment}-govuk-ai-accelerator-bedrock-policy"
   description = "Policy for govuk-ai-accelerator application with access to bedrock"
-  policy      = data.aws_iam_policy_document.govuk_ai_accelgovuk_ai_accelerator_bedrock_accesserator_s3_access.json
+  policy      = data.aws_iam_policy_document.govuk_ai_accelgovuk_ai_accelerator_bedrock_accesserator_s3_access[0].json
 }
 
 # IRSA role for GOVUK AI Accelerator service account
