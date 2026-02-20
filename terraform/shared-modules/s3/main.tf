@@ -6,6 +6,25 @@ resource "aws_s3_bucket" "this" {
   }
 }
 
+resource "aws_s3_bucket_object_lock_configuration" "this" {
+  count  = length(var.object_lock_config) > 0 ? 1 : 0
+  bucket = aws_s3_bucket.this.id
+
+  dynamic "rule" {
+    for_each = var.object_lock_config
+    content {
+      dynamic "default_retention" {
+        for_each = try(rule.value.rule, null)[*]
+        content {
+          mode  = default_retention.value.default_retention.mode
+          days  = try(default_retention.value.default_retention.days, null)
+          years = try(default_retention.value.default_retention.years, null)
+        }
+      }
+    }
+  }
+}
+
 resource "aws_s3_bucket_lifecycle_configuration" "this" {
   count  = length(var.lifecycle_rules) > 0 ? 1 : 0
   bucket = aws_s3_bucket.this.id
@@ -89,6 +108,8 @@ resource "aws_s3_bucket_lifecycle_configuration" "this" {
 }
 
 resource "aws_s3_bucket_public_access_block" "this" {
+  count = var.enable_public_access_block ? 1 : 0
+
   bucket = aws_s3_bucket.this.id
 
   block_public_acls       = true
@@ -151,5 +172,30 @@ resource "aws_s3_bucket_ownership_controls" "owner" {
   bucket = aws_s3_bucket.this.id
   rule {
     object_ownership = "BucketOwnerEnforced"
+  }
+}
+
+resource "aws_s3_bucket_logging" "this" {
+  count  = var.access_logging_config == null ? 0 : 1
+  bucket = aws_s3_bucket.this.id
+
+  target_bucket = var.access_logging_config.target_bucket
+  target_prefix = var.access_logging_config.target_prefix
+
+  dynamic "target_object_key_format" {
+    for_each = try(var.access_logging_config, null)[*]
+    content {
+      dynamic "simple_prefix" {
+        for_each = try(target_object_key_format.value.target_object_key_format.simple_prefix, null)[*]
+        content {
+        }
+      }
+      dynamic "partitioned_prefix" {
+        for_each = try(target_object_key_format.value.target_object_key_format.partitioned_prefix, null)[*]
+        content {
+          partition_date_source = partitioned_prefix.value.partition_date_source
+        }
+      }
+    }
   }
 }
