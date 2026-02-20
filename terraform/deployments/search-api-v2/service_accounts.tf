@@ -95,3 +95,20 @@ resource "google_service_account" "analytics_events_pipeline" {
   display_name = "analytics-events-pipeline"
   description  = "Service account for reading GA4 search events data and importing events into our project"
 }
+
+## Read only service account for local development
+
+resource "google_service_account" "postman" {
+  account_id   = "postman-read-only"
+  display_name = "postman-read-only"
+  description  = "Service account to provide read only access to Postman"
+}
+
+resource "google_project_iam_binding" "postman" {
+  project = var.gcp_project_id
+  role    = "roles/discoveryengine.viewer"
+
+  members = [
+    google_service_account.postman.member
+  ]
+}
