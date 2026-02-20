@@ -14,4 +14,4 @@ module "secure_s3_bucket" {
 }
 ```
 
-Find our shared modules [here](https://github.com/alphagov/govuk-infrastructure/tree/main/terraform/shared-modules).
+The shared modules are in [the `terraform/shared-modules` directory](https://github.com/alphagov/govuk-infrastructure/tree/main/terraform/shared-modules) in this repository.
