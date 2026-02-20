@@ -24,7 +24,6 @@ module "csp-reporter-integration" {
 
   variable_set_ids = [
     local.aws_credentials["integration"],
-    module.variable-set-common.id,
     module.variable-set-integration.id
   ]
 }
@@ -54,7 +53,6 @@ module "csp-reporter-staging" {
 
   variable_set_ids = [
     local.aws_credentials["staging"],
-    module.variable-set-common.id,
     module.variable-set-staging.id
   ]
 }
@@ -84,7 +82,6 @@ module "csp-reporter-production" {
 
   variable_set_ids = [
     local.aws_credentials["production"],
-    module.variable-set-common.id,
     module.variable-set-production.id
   ]
 }

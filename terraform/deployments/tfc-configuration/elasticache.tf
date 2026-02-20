@@ -25,7 +25,6 @@ module "elasticache-integration" {
 
   variable_set_ids = [
     local.aws_credentials["integration"],
-    module.variable-set-common.id,
     module.variable-set-integration.id,
     module.variable-set-elasticache-integration.id
   ]
@@ -58,7 +57,6 @@ module "elasticache-staging" {
 
   variable_set_ids = [
     local.aws_credentials["staging"],
-    module.variable-set-common.id,
     module.variable-set-staging.id,
     module.variable-set-elasticache-staging.id
   ]
@@ -90,7 +88,6 @@ module "elasticache-production" {
 
   variable_set_ids = [
     local.aws_credentials["production"],
-    module.variable-set-common.id,
     module.variable-set-production.id,
     module.variable-set-elasticache-production.id
   ]

@@ -28,7 +28,6 @@ module "gov-graph-dev" {
 
   variable_set_ids = [
     local.aws_credentials["integration"],
-    module.variable-set-common.id,
     module.variable-set-integration.id,
     module.variable-set-gov-graph-dev.id
   ]
@@ -62,7 +61,6 @@ module "gov-graph-staging" {
 
   variable_set_ids = [
     local.aws_credentials["staging"],
-    module.variable-set-common.id,
     module.variable-set-staging.id,
     module.variable-set-gov-graph-staging.id
   ]
@@ -96,7 +94,6 @@ module "gov-graph-production" {
 
   variable_set_ids = [
     local.aws_credentials["production"],
-    module.variable-set-common.id,
     module.variable-set-production.id,
     module.variable-set-gov-graph-production.id
   ]

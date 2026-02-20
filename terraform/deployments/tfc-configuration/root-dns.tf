@@ -25,7 +25,6 @@ module "root-dns-ephemeral" {
 
   variable_set_ids = [
     local.aws_credentials["test"],
-    module.variable-set-common.id,
     module.variable-set-ephemeral.id
   ]
 }
@@ -58,7 +57,6 @@ module "root-dns-integration" {
   variable_set_ids = [
     local.aws_credentials["integration"],
     local.gcp_credentials["integration"],
-    module.variable-set-common.id,
     module.variable-set-integration.id
   ]
 }
@@ -90,7 +88,6 @@ module "root-dns-staging" {
   variable_set_ids = [
     local.aws_credentials["staging"],
     local.gcp_credentials["staging"],
-    module.variable-set-common.id,
     module.variable-set-staging.id
   ]
 }
@@ -122,7 +119,6 @@ module "root-dns-production" {
   variable_set_ids = [
     local.aws_credentials["production"],
     local.gcp_credentials["production"],
-    module.variable-set-common.id,
     module.variable-set-production.id
   ]
 }
