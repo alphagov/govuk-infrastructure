@@ -3,6 +3,7 @@ module "variable-set-integration" {
 
   name = "common-integration"
   tfvars = {
+
     govuk_aws_state_bucket              = "govuk-terraform-steppingstone-integration"
     cluster_infrastructure_state_bucket = "govuk-terraform-integration"
 
