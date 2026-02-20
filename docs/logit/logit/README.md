@@ -1,6 +1,6 @@
 # Intro
 
-A collection of config files (mainly Logstash) for use on https://logit.io.
+A collection of config files (mainly Logstash) for use on logit.io.
 
 ## Usage
 
