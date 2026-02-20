@@ -7,7 +7,7 @@ module "variable-set-staging" {
     cluster_infrastructure_state_bucket = "govuk-terraform-staging"
 
     cluster_version               = "1.33"
-    cluster_log_retention_in_days = 728
+    cluster_log_retention_in_days = 731
 
     vpc_cidr = "10.12.0.0/16"
 

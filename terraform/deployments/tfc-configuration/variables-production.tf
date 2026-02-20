@@ -7,7 +7,7 @@ module "variable-set-production" {
     cluster_infrastructure_state_bucket = "govuk-terraform-production"
 
     cluster_version               = "1.33" # Don't forget to change this in variables-test.tf too
-    cluster_log_retention_in_days = 728
+    cluster_log_retention_in_days = 731
 
     vpc_cidr = "10.13.0.0/16"
 
