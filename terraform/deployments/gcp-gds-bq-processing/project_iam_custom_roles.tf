@@ -43,8 +43,6 @@ resource "google_project_iam_custom_role" "code_viewer" {
     "dataform.workspaces.queryDirectoryContents",
     "dataform.workspaces.readFile",
     "dataform.workspaces.searchFiles",
-    "resourcemanager.projects.get",
-    "resourcemanager.projects.list",
     //
   ]
   role_id = "code_viewer"
