@@ -42,3 +42,9 @@ variable "chat_slack_channel_id" {
   description = "ID of Slack channel for CloudWatch Alarms"
   default     = "C06AWTPNJMV"
 }
+
+variable "chat_token_limits_per_minute" {
+  type        = map(number)
+  description = "A map of model names to AWS Bedrock token limits per minute."
+  default     = {}
+}
