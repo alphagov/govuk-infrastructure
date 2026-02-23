@@ -182,15 +182,14 @@ resource "aws_s3_bucket_logging" "this" {
   target_prefix = var.access_logging_config.target_prefix == null ? "s3/${aws_s3_bucket.this.bucket}/" : var.access_logging_config.target_prefix
 
   dynamic "target_object_key_format" {
-    for_each = try(var.access_logging_config, null)[*]
+    for_each = var.access_logging_config.target_object_key_format == null ? [] : [var.access_logging_config.target_object_key_format]
     content {
       dynamic "simple_prefix" {
-        for_each = try(target_object_key_format.value.target_object_key_format.simple_prefix, null)[*]
-        content {
-        }
+        for_each = target_object_key_format.value.simple_prefix == null ? [] : [target_object_key_format.value.simple_prefix]
+        content {}
       }
       dynamic "partitioned_prefix" {
-        for_each = try(target_object_key_format.value.target_object_key_format.partitioned_prefix, null)[*]
+        for_each = target_object_key_format.value.partitioned_prefix == null ? [] : [target_object_key_format.value.partitioned_prefix]
         content {
           partition_date_source = partitioned_prefix.value.partition_date_source
         }

@@ -784,3 +784,22 @@ module "variable-set-ai-accelerator-integration" {
     aws_region = "eu-west-1"
   }
 }
+
+module "variable-set-ai-accelerator" {
+  source = "./variable-set"
+
+  name = "ai-accelerator"
+
+  tfvars = {
+    current_live_domain = "blue"
+    launch_blue_domain  = true
+    launch_green_domain = false
+    blue_cluster_options = {
+      engine         = "OpenSearch"
+      engine_version = "3.1"
+      instance_count = 1
+      instance_type  = "t3.small.search"
+    }
+    aws_region = "eu-west-1"
+  }
+}
