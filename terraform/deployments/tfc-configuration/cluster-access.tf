@@ -26,7 +26,6 @@ module "cluster-access-integration" {
 
   variable_set_ids = [
     local.aws_credentials["integration"],
-    module.variable-set-common.id,
     module.variable-set-integration.id
   ]
 
@@ -60,7 +59,6 @@ module "cluster-access-staging" {
 
   variable_set_ids = [
     local.aws_credentials["staging"],
-    module.variable-set-common.id,
     module.variable-set-staging.id
   ]
 
@@ -94,7 +92,6 @@ module "cluster-access-production" {
 
   variable_set_ids = [
     local.aws_credentials["production"],
-    module.variable-set-common.id,
     module.variable-set-production.id
   ]
 

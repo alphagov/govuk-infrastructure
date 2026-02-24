@@ -22,7 +22,6 @@ module "ecr-production" {
 
   variable_set_ids = [
     local.aws_credentials["production"],
-    module.variable-set-common.id,
     module.variable-set-production.id,
     module.variable-set-ecr-production.id
   ]
