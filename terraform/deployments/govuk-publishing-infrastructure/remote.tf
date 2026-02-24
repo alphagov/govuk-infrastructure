@@ -10,6 +10,12 @@ data "tfe_outputs" "rds" {
   workspace    = "rds-${var.govuk_environment}"
 }
 
+data "tfe_outputs" "neptune" {
+  count        = var.enable_govuk_ai_accelerator ? 1 : 0
+  organization = "govuk"
+  workspace    = "neptune-${var.govuk_environment}"
+}
+
 data "tfe_outputs" "root_dns" {
   organization = "govuk"
   workspace    = "root-dns-${var.govuk_environment}"
