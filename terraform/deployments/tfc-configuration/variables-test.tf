@@ -27,7 +27,11 @@ module "variable-set-ephemeral" {
       c = { az = "eu-west-1c", cidr = "10.10.96.0/19" }
     }
 
-    legacy_private_subnets = {}
+    legacy_private_subnets = {
+      elasticsearch_a = { az = "eu-west-1a", cidr = "10.10.16.0/24", nat = false }
+      elasticsearch_b = { az = "eu-west-1b", cidr = "10.10.17.0/24", nat = false }
+      elasticsearch_c = { az = "eu-west-1c", cidr = "10.10.18.0/24", nat = false }
+    }
 
     govuk_environment = "ephemeral"
   }
