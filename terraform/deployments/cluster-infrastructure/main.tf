@@ -47,7 +47,7 @@ locals {
   }
 
   kube_state_metrics_addon = {
-    kube-state-metrics = { addon_version = "v2.17.0-eksbuild.6", resolve_conflicts_on_create = "OVERWRITE" }
+    kube-state-metrics = { addon_version = "v2.18.0-eksbuild.1", resolve_conflicts_on_create = "OVERWRITE" }
   }
 
   enabled_cluster_addons = merge(local.default_cluster_addons, var.enable_kube_state_metrics ? local.kube_state_metrics_addon : {})
