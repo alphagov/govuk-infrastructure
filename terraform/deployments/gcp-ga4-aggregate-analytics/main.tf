@@ -1,3 +1,7 @@
+locals {
+  gcp_project_id = "ga4-aggregate-analytics"
+}
+
 terraform {
   cloud {
     organization = "govuk"
@@ -17,9 +21,13 @@ terraform {
   required_version = "~> 1.14"
 }
 
+provider "google" {
+  project = local.gcp_project_id
+}
+
 resource "google_project" "project" {
-  name            = "ga4-aggregate-analytics"
-  project_id      = "ga4-aggregate-analytics"
+  name            = local.gcp_project_id
+  project_id      = local.gcp_project_id
   folder_id       = "278098142879"
   billing_account = "015C7A-FAF970-B0D375"
 }
