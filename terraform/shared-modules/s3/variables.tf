@@ -1,3 +1,9 @@
+variable "govuk_environment" {
+  type        = string
+  description = "The GOV.UK AWS Environment this bucket is being deployed into"
+  nullable    = false
+}
+
 variable "name" {
   type        = string
   description = "The bucket and IAM policy name. NOTE: This must be a globally unique name for AWS S3"
@@ -97,8 +103,8 @@ variable "enable_public_access_block" {
 
 variable "access_logging_config" {
   type = object({
-    target_bucket = string
-    target_prefix = string
+    target_bucket = optional(string)
+    target_prefix = optional(string)
     target_object_key_format = optional(object({
       simple_prefix = optional(bool)
       partitioned_prefix = optional(object({
@@ -106,6 +112,7 @@ variable "access_logging_config" {
       }))
     }))
   })
-  description = "Ship S3 access logging to another target bucket"
-  default     = null
+  description = "Ship S3 access logging to another target bucket, all optional values will default to the GOV.UK standards"
+  default     = {}
+  nullable    = false
 }

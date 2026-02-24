@@ -176,11 +176,10 @@ resource "aws_s3_bucket_ownership_controls" "owner" {
 }
 
 resource "aws_s3_bucket_logging" "this" {
-  count  = var.access_logging_config == null ? 0 : 1
   bucket = aws_s3_bucket.this.id
 
-  target_bucket = var.access_logging_config.target_bucket
-  target_prefix = var.access_logging_config.target_prefix
+  target_bucket = var.access_logging_config.target_bucket == null ? "govuk-${var.govuk_environment}-aws-logging" : var.access_logging_config.target_bucket
+  target_prefix = var.access_logging_config.target_prefix == null ? "s3/${aws_s3_bucket.this.name}/" : var.access_logging_config.target_prefix
 
   dynamic "target_object_key_format" {
     for_each = try(var.access_logging_config, null)[*]
