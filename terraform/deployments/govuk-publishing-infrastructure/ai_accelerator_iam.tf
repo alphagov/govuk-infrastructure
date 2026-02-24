@@ -14,7 +14,7 @@ data "aws_iam_policy_document" "govuk_ai_accelerator_bedrock_access" {
       "bedrock:InvokeModelWithResponseStream"
     ]
     effect    = "Allow"
-    resources = ["arn:aws:bedrock:eu-west-1:${data.aws_caller_identity.current.account_id}:*"]
+    resources = ["arn:aws:bedrock:eu-west-1:${data.aws_caller_identity.current.account_id}:foundation-model/*"]
   }
 
   statement {
