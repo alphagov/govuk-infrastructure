@@ -50,7 +50,6 @@ variable "neptune_dbs" {
     deletion_protection            = bool
     enable_cloudwatch_logs_exports = bool
     snapshot_identifier            = optional(string)
-    apply_immediately              = optional(bool)
     allow_major_version_upgrade    = optional(bool, false)
     port                           = optional(number, 8182)
     storage_type                   = optional(string, "standard")
