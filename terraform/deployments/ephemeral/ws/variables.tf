@@ -23,7 +23,7 @@ variable "variable_set_id" {
 variable "git_branch" {
   type        = string
   description = "The branch of the source repo to deploy"
-  default     = "main"
+  default     = "add-neptune-module"
 }
 
 variable "tfvars" {
