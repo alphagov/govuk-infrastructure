@@ -151,13 +151,13 @@ module "rds" {
 }
 */
 
-module "datagovuk_infrastructure" {
-  source = "./ws"
-
-  name                 = "datagovuk-infrastructure"
-  ephemeral_cluster_id = var.ephemeral_cluster_id
-  variable_set_id      = module.var_set.id
-
-  depends_on = [module.cluster_services, tfe_project.project]
-}
-
+# module "datagovuk_infrastructure" {
+#   source = "./ws"
+#
+#   name                 = "datagovuk-infrastructure"
+#   ephemeral_cluster_id = var.ephemeral_cluster_id
+#   variable_set_id      = module.var_set.id
+#
+#   depends_on = [module.cluster_services, tfe_project.project]
+# }
+#
