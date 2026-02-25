@@ -54,8 +54,16 @@ variable "neptune_dbs" {
     allow_major_version_upgrade    = optional(bool, false)
     port                           = optional(number, 8182)
     storage_type                   = optional(string, "standard")
-    project                        = string
     })
   )
 }
 
+# validation {
+#   condition = alltrue([
+#     for database in var.databases : alltrue([
+#       for engine_param in database.engine_params :
+#       contains(["immediate", "pending-reboot"], engine_param.apply_method)
+#     ])]
+#   )
+#   error_message = "The engine_params objects apply_method must be either 'immediate' or 'pending-reboot'"
+# }
