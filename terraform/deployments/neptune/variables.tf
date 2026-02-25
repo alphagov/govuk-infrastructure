@@ -15,17 +15,33 @@ variable "govuk_aws_state_bucket" {
 }
 
 variable "neptune_dbs" {
-  description = "Databases to create and their configuration."
+  description = "Neptune databases to create and their configuration."
 
   type = map(object({
-    name                           = string
-    project                        = optional(string, "GOV.UK - Other")
-    instance_class                 = string
-    cluster_identifier             = string
-    engine                         = string
-    engine_version                 = string
-    cluster_parameter_group_name   = string
-    instance_parameter_group_name  = string
+    name               = string
+    project            = optional(string, "GOV.UK - Other")
+    instance_class     = string
+    cluster_identifier = string
+    engine             = string
+    engine_version     = string
+    family             = string
+    serverless_config = optional(object({
+      max_capacity = number
+      min_capacity = number
+    }))
+    cluster_parameter_group_name = string
+    cluster_parameter_group = object({
+      name         = string
+      value        = string
+      apply_method = string
+    })
+    instance_parameter_group_name = string
+    instance_parameter_group = object({
+      name         = string
+      value        = string
+      apply_method = string
+    })
+    iam_roles                      = list(string)
     parameter_group_name           = string
     apply_immediately              = optional(bool, true)
     preferred_maintenance_window   = optional(string)
@@ -38,79 +54,8 @@ variable "neptune_dbs" {
     allow_major_version_upgrade    = optional(bool, false)
     port                           = number
     storage_type                   = string
-    max_capacity                   = number
-    min_capacity                   = number
     project                        = string
-
-  }))
-
-  validation {
-    condition = alltrue([
-      for database in var.databases : alltrue([
-        for engine_param in database.engine_params :
-        contains(["immediate", "pending-reboot"], engine_param.apply_method)
-      ])]
-    )
-    error_message = "The engine_params objects apply_method must be either 'immediate' or 'pending-reboot'"
-  }
-
-  validation {
-    condition     = alltrue([for database in var.databases : contains(["mysql", "postgres"], database.engine)])
-    error_message = "The engine must be one of mysql or postgres"
-  }
-}
-
-variable "database_admin_username" {
-  type        = string
-  default     = "aws_db_admin"
-  description = "RDS root account username."
-}
-
-variable "multi_az" {
-  type        = bool
-  description = "Set to true to deploy the RDS instance in multiple AZs."
-  default     = false
-}
-
-variable "maintenance_window" {
-  type        = string
-  description = "The window to perform maintenance in"
-  default     = "Mon:04:00-Mon:06:00"
-}
-
-variable "backup_window" {
-  type        = string
-  description = "The daily time range during which automated backups are created if automated backups are enabled."
-  default     = "01:00-03:00"
-}
-
-variable "backup_retention_period" {
-  type        = number
-  description = "Backup retention period in days."
-  default     = 7
-}
-
-variable "skip_final_snapshot" {
-  type        = bool
-  description = "Set to true to NOT create a final snapshot when the cluster is deleted."
-  default     = false
-}
-
-variable "terraform_create_rds_timeout" {
-  type        = string
-  description = "Set the timeout time for AWS RDS creation."
-  default     = "2h"
-}
-
-variable "terraform_update_rds_timeout" {
-  type        = string
-  description = "Set the timeout time for AWS RDS modification."
-  default     = "2h"
-}
-
-variable "terraform_delete_rds_timeout" {
-  type        = string
-  description = "Set the timeout time for AWS RDS deletion."
-  default     = "2h"
+    })
+  )
 }
 

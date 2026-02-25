@@ -46,6 +46,10 @@ module "variable-set-integration" {
       elasticsearch_a = { az = "eu-west-1a", cidr = "10.1.16.0/24", nat = false }
       elasticsearch_b = { az = "eu-west-1b", cidr = "10.1.17.0/24", nat = false }
       elasticsearch_c = { az = "eu-west-1c", cidr = "10.1.18.0/24", nat = false }
+
+      nepture_a = { az = "eu-west-1a", cidr = "10.1.33.0/24", nat = false }
+      nepture_b = { az = "eu-west-1b", cidr = "10.1.34.0/24", nat = false }
+      neptune_c = { az = "eu-west-1c", cidr = "10.1.35.0/24", nat = false }
     }
 
     govuk_environment = "integration"
