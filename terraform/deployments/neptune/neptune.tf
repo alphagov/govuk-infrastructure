@@ -63,7 +63,7 @@ resource "aws_neptune_parameter_group" "this" {
 resource "aws_neptune_cluster" "this" {
   for_each = var.neptune_dbs
 
-  vpc_security_group_ids = [aws_security_group.instance[each.key].id]
+  vpc_security_group_ids = [aws_security_group.this[each.key].id]
 
   cluster_identifier                    = each.value.cluster_name
   engine                                = each.value.engine
