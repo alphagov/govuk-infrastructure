@@ -53,6 +53,7 @@ module "var_set" {
       ep_jas_240226 = {
         name               = "eph-jas-240226"
         instance_class     = "t4g.medium"
+        instance_count     = 3
         cluster_identifier = "eph-jas-240426"
         engine             = "neptune"
         engine_version     = "1.4.6.3"

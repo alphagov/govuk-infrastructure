@@ -3,16 +3,6 @@ data "tfe_outputs" "cluster_infrastructure" {
   workspace    = "cluster-infrastructure-${var.govuk_environment}"
 }
 
-data "tfe_outputs" "logging" {
-  organization = "govuk"
-  workspace    = "logging-${var.govuk_environment}"
-}
-
-data "tfe_outputs" "root_dns" {
-  organization = "govuk"
-  workspace    = "root-dns-${var.govuk_environment}"
-}
-
 data "tfe_outputs" "vpc" {
   organization = "govuk"
   workspace    = "vpc-${var.govuk_environment}"
