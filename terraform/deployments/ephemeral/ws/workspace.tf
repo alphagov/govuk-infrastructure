@@ -27,7 +27,6 @@ module "workspace" {
   variable_set_ids = [var.variable_set_id]
   variable_set_names = [
     "aws-credentials-test",
-    "common",
     "common-ephemeral"
   ]
 
