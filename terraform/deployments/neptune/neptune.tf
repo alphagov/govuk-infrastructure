@@ -5,12 +5,12 @@ locals {
   is_ephemeral      = startswith(var.govuk_environment, "eph-")
   identifier_prefix = local.is_ephemeral ? "${var.govuk_environment}-" : ""
 
-  neptune_instances = flatten([
-    for db in var.neptune_dbs : [{
-      num_of_instances = db.num_of_instances
-      instance_class   = db.instance_class
-    }]
-  ])
+  # neptune_instances = flatten([
+  #   for db in var.neptune_dbs : [{
+  #     num_of_instances = db.num_of_instances
+  #     instance_class   = db.instance_class
+  #   }]
+  # ])
 }
 
 resource "aws_neptune_subnet_group" "this" {
@@ -103,8 +103,11 @@ resource "aws_neptune_cluster" "this" {
 }
 
 resource "aws_neptune_cluster_instance" "this" {
-  for_each = local.neptune_instances
+  for_each = var.neptune_dbs
+
+  count = each.value.instance_count
 
   cluster_identifier = aws_neptune_cluster.this.cluster_identifier
   instance_class     = each.value.instance_class
+  apply_immediately  = each.value.apply_immediately != null ? each.value.apply_immediately : var.govuk_environment != "production"
 }
