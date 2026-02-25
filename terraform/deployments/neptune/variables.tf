@@ -20,7 +20,7 @@ variable "neptune_dbs" {
   type = map(object({
     name               = string
     project            = optional(string, "GOV.UK - Other")
-    instance_class     = string
+    instance_class     = optional(string, "t4g.medium")
     cluster_identifier = string
     engine             = string
     engine_version     = string
@@ -30,19 +30,19 @@ variable "neptune_dbs" {
       min_capacity = number
     }))
     cluster_parameter_group_name = string
-    cluster_parameter_group = object({
+    cluster_parameter_group = list(object({
       name         = string
       value        = string
       apply_method = string
-    })
+    }))
     instance_parameter_group_name = string
-    instance_parameter_group = object({
+    instance_parameter_group = list(object({
       name         = string
-      value        = string
+      value        = any
       apply_method = string
-    })
+    }))
+    instance_count                 = number
     iam_roles                      = list(string)
-    parameter_group_name           = string
     apply_immediately              = optional(bool, true)
     preferred_maintenance_window   = optional(string)
     preferred_backup_window        = optional(string)
@@ -52,8 +52,8 @@ variable "neptune_dbs" {
     snapshot_identifier            = optional(string)
     apply_immediately              = optional(bool)
     allow_major_version_upgrade    = optional(bool, false)
-    port                           = number
-    storage_type                   = string
+    port                           = optional(number, 8182)
+    storage_type                   = optional(string, "standard")
     project                        = string
     })
   )
