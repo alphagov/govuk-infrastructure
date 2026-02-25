@@ -11,8 +11,8 @@ module "variable-set-ephemeral" {
 
     eks_control_plane_subnets = {
       a = { az = "eu-west-1a", cidr = "10.10.19.0/28" }
-      b = { az = "eu-west-1b", cidr = "10.10.19.0/28" }
-      c = { az = "eu-west-1c", cidr = "10.10.19.0/28" }
+      b = { az = "eu-west-1b", cidr = "10.10.19.16/28" }
+      c = { az = "eu-west-1c", cidr = "10.10.19.32/28" }
     }
 
     eks_public_subnets = {
