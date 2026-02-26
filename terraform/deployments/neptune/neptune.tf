@@ -100,8 +100,8 @@ resource "aws_neptune_cluster" "this" {
   dynamic "serverless_v2_scaling_configuration" {
     for_each = try(each.value.serverless_config, null)[*]
     content {
-      max_capacity = serverless_config.max_capacity
-      min_capacity = serverless_config.min_capacity
+      max_capacity = each.value.serverless_config.max_capacity
+      min_capacity = each.value.serverless_config.min_capacity
     }
   }
 
