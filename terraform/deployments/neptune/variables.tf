@@ -30,17 +30,17 @@ variable "neptune_dbs" {
       min_capacity = number
     }))
     cluster_parameter_group_name = string
-    cluster_parameter_group = list(object({
+    cluster_parameter_group = optional(list(object({
       name         = string
       value        = string
       apply_method = string
-    }))
+    })))
     instance_parameter_group_name = string
-    instance_parameter_group = list(object({
+    instance_parameter_group = optional(list(object({
       name         = string
       value        = any
       apply_method = string
-    }))
+    })))
     instance_count                 = number
     iam_roles                      = list(string)
     apply_immediately              = optional(bool, true)

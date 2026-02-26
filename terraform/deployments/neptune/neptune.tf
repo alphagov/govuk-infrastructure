@@ -36,10 +36,10 @@ resource "aws_neptune_cluster_parameter_group" "this" {
   name   = each.value.name
 
   dynamic "parameter" {
-    for_each = each.value.cluster_parameter_group
+    for_each = try(each.value.cluster_parameter_group, null)[*]
 
     content {
-      name         = parameter.key
+      name         = parameter.value.name
       value        = parameter.value.value
       apply_method = parameter.value.apply_method
     }
@@ -55,10 +55,10 @@ resource "aws_neptune_parameter_group" "this" {
   name   = each.value.name
 
   dynamic "parameter" {
-    for_each = each.value.instance_parameter_group
+    for_each = try(each.value.instance_parameter_group, null)[*]
 
     content {
-      name         = parameter.key
+      name         = parameter.value.name
       value        = parameter.value.value
       apply_method = parameter.value.apply_method
     }
@@ -117,4 +117,6 @@ resource "aws_neptune_cluster_instance" "this" {
   cluster_identifier = each.value.cluster_identifier
   instance_class     = each.value.instance_class
   apply_immediately  = each.value.apply_immediately != null ? each.value.apply_immediately : var.govuk_environment != "production"
+
+  depends_on = [aws_neptune_cluster.this[*].id]
 }
