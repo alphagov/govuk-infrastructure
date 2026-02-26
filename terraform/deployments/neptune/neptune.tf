@@ -1,5 +1,5 @@
 locals {
-  neptune_subnet_ids = compact([for name, id in data.tfe_outputs.vpc.nonsensitive_values.private_subnet_ids : startswith(name, "neptune_") ? id : ""])
+  neptune_subnet_ids = compact([for name, id in data.tfe_outputs.vpc.nonsensitive_values.private_subnet_ids : startswith(name, "nepture_") ? id : ""])
   azs                = ["eu-west-1a", "eu-west-1b", "eu-west-1c"]
 
   is_ephemeral      = startswith(var.govuk_environment, "eph-")
