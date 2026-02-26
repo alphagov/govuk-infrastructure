@@ -64,18 +64,16 @@ module "var_set" {
         }
         cluster_parameter_group_name = "clust_eph_jas_240426"
         cluster_parameter_group = [{
-          name         = "neptune_enable_audit_log"
-          value        = 1
-          apply_method = "immediate"
+          name  = "neptune_enable_audit_log"
+          value = 1
         }]
         iam_roles                      = []
         deletion_protection            = false
         enable_cloudwatch_logs_exports = []
         instance_parameter_group_name  = "inst_eph_jas_240426"
         instance_parameter_group = [{
-          name         = "neptune_query_timeout"
-          value        = "25"
-          apply_method = "immediate"
+          name  = "neptune_query_timeout"
+          value = "25"
         }]
       }
     }
