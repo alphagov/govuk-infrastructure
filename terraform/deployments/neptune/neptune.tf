@@ -111,6 +111,28 @@ resource "aws_neptune_cluster" "this" {
   }
 }
 
+resource "aws_route53_record" "reader_cname" {
+  for_each = var.neptune_dbs
+
+  # Zone is <environment>.govuk-internal.digital.
+  zone_id = data.tfe_outputs.root_dns.nonsensitive_values.internal_root_zone_id
+  name    = "${local.identifier_prefix}${each.value.cluster_identifier}-${each.value.engine}-reader"
+  type    = "CNAME"
+  ttl     = 30
+  records = [aws_neptune_cluster.this[each.key].reader_endpoint]
+}
+
+resource "aws_route53_record" "writer_cname" {
+  for_each = var.neptune_dbs
+
+  # Zone is <environment>.govuk-internal.digital.
+  zone_id = data.tfe_outputs.root_dns.nonsensitive_values.internal_root_zone_id
+  name    = "${local.identifier_prefix}${each.value.cluster_identifier}-${each.value.engine}-writer"
+  type    = "CNAME"
+  ttl     = 30
+  records = [aws_db_instance.replica[each.key].address]
+}
+
 resource "aws_neptune_cluster_instance" "this" {
   for_each = local.neptune_instances_map
 
