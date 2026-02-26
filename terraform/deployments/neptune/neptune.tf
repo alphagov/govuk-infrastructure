@@ -112,7 +112,10 @@ resource "aws_neptune_cluster" "this" {
 }
 
 resource "aws_route53_record" "reader_cname" {
-  for_each = var.neptune_dbs
+  for_each = {
+    for k, v in var.neptune_dbs : k => v
+    if var.internal_cname_domains_enabled
+  }
 
   # Zone is <environment>.govuk-internal.digital.
   zone_id = data.tfe_outputs.root_dns.nonsensitive_values.internal_root_zone_id
@@ -123,7 +126,10 @@ resource "aws_route53_record" "reader_cname" {
 }
 
 resource "aws_route53_record" "writer_cname" {
-  for_each = var.neptune_dbs
+  for_each = {
+    for k, v in var.neptune_dbs : k => v
+    if var.internal_cname_domains_enabled
+  }
 
   # Zone is <environment>.govuk-internal.digital.
   zone_id = data.tfe_outputs.root_dns.nonsensitive_values.internal_root_zone_id

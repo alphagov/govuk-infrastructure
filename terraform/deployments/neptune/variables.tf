@@ -77,3 +77,9 @@ variable "neptune_dbs" {
   }
 }
 
+variable "internal_cname_domains_enabled" {
+  description = "Flag to enable cname domains <environment>.govuk-internal.digital. Disable in test as root dns does not exist"
+  type        = bool
+  default     = false
+}
+

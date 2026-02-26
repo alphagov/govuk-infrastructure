@@ -5,6 +5,7 @@ data "tfe_outputs" "cluster_infrastructure" {
 
 
 data "tfe_outputs" "root_dns" {
+  count        = var.internal_cname_domains_enabled ? 1 : 0
   organization = "govuk"
   workspace    = "root-dns-${var.govuk_environment}"
 }
