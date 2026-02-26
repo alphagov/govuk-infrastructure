@@ -5,7 +5,6 @@ locals {
   is_ephemeral      = startswith(var.govuk_environment, "eph-")
   identifier_prefix = local.is_ephemeral ? "${var.govuk_environment}-" : ""
 
-
   neptune_instances = flatten([
     for db in var.neptune_dbs : [
       for i in range(db.instance_count) : {
@@ -69,11 +68,11 @@ resource "aws_neptune_parameter_group" "this" {
 }
 
 resource "aws_neptune_cluster" "this" {
-  for_each = local.neptune_instances_map
+  for_each = var.neptune_dbs
 
   vpc_security_group_ids = [aws_security_group.this[each.key].id]
 
-  cluster_identifier                    = each.value.cluster_name
+  cluster_identifier                    = each.value.cluster_identifier
   engine                                = each.value.engine
   engine_version                        = each.value.engine_version
   neptune_cluster_parameter_group_name  = aws_neptune_cluster_parameter_group.this[each.key].name
