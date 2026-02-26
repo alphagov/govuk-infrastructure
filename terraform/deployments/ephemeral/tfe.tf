@@ -70,7 +70,7 @@ module "var_set" {
         }]
         iam_roles                      = []
         deletion_protection            = false
-        enable_cloudwatch_logs_exports = false
+        enable_cloudwatch_logs_exports = []
         instance_parameter_group_name  = "inst_eph_jas_240426"
         instance_parameter_group = [{
           name         = "neptune_query_timeout"

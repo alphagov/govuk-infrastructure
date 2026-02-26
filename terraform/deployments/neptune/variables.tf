@@ -48,7 +48,7 @@ variable "neptune_dbs" {
     preferred_backup_window        = optional(string)
     backup_retention_period        = optional(number)
     deletion_protection            = bool
-    enable_cloudwatch_logs_exports = bool
+    enable_cloudwatch_logs_exports = optional(list(string), [])
     snapshot_identifier            = optional(string)
     allow_major_version_upgrade    = optional(bool, false)
     port                           = optional(number, 8182)
