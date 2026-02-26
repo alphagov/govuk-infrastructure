@@ -8,9 +8,8 @@ locals {
 
   neptune_instances = flatten([
     for db in var.neptune_dbs : [
-      for i in range(db.num_of_instances) : {
+      for i in range(db.instance_count) : {
         key                = "${db.name}-${i}"
-        num_of_instances   = db.instance_count
         instance_class     = db.instance_class
         apply_immediately  = db.apply_immediately
         cluster_identifier = db.cluster_identifier
