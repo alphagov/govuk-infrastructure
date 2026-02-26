@@ -33,7 +33,7 @@ resource "aws_neptune_cluster_parameter_group" "this" {
   for_each = var.neptune_dbs
 
   family = each.value.family
-  name   = each.value.name
+  name   = "cluster-${each.value.name}"
 
   dynamic "parameter" {
     for_each = try(each.value.cluster_parameter_group, null)[*]
@@ -52,7 +52,7 @@ resource "aws_neptune_parameter_group" "this" {
   for_each = var.neptune_dbs
 
   family = each.value.family
-  name   = each.value.name
+  name   = "instance-${each.value.name}"
 
   dynamic "parameter" {
     for_each = try(each.value.instance_parameter_group, null)[*]
