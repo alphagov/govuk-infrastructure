@@ -52,7 +52,7 @@ module "var_set" {
     neptune_dbs = {
       ep_jas_240226 = {
         name               = "eph-jas-240226"
-        instance_class     = "t4g.medium"
+        instance_class     = "db.t4g.medium"
         instance_count     = 3
         cluster_identifier = "eph-jas-240426"
         engine             = "neptune"
@@ -64,16 +64,18 @@ module "var_set" {
         }
         cluster_parameter_group_name = "clust_eph_jas_240426"
         cluster_parameter_group = [{
-          name  = "neptune_enable_audit_log"
-          value = 1
+          name         = "neptune_enable_audit_log"
+          value        = 1
+          apply_method = "pending-reboot"
         }]
         iam_roles                      = []
         deletion_protection            = false
         enable_cloudwatch_logs_exports = []
         instance_parameter_group_name  = "inst_eph_jas_240426"
         instance_parameter_group = [{
-          name  = "neptune_query_timeout"
-          value = "25"
+          name         = "neptune_query_timeout"
+          value        = "25"
+          apply_method = "pending-reboot"
         }]
       }
     }

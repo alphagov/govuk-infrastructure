@@ -55,14 +55,25 @@ variable "neptune_dbs" {
     storage_type                   = optional(string, "standard")
     })
   )
+
+  validation {
+    condition = alltrue([
+      for db in var.neptune_dbs : alltrue([
+        for cpg in db.instance_parameter_group :
+        contains(["immediate", "pending-reboot"], cpg.apply_method)
+      ])]
+    )
+    error_message = "The instance_parameter_group objects apply_method must be either 'immediate' or 'pending-reboot'"
+  }
+
+  validation {
+    condition = alltrue([
+      for db in var.neptune_dbs : alltrue([
+        for cpg in db.cluster_parameter_group :
+        contains(["immediate", "pending-reboot"], cpg.apply_method)
+      ])]
+    )
+    error_message = "The cluster_parameter_group objects apply_method must be either 'immediate' or 'pending-reboot'"
+  }
 }
 
-# validation {
-#   condition = alltrue([
-#     for database in var.databases : alltrue([
-#       for engine_param in database.engine_params :
-#       contains(["immediate", "pending-reboot"], engine_param.apply_method)
-#     ])]
-#   )
-#   error_message = "The engine_params objects apply_method must be either 'immediate' or 'pending-reboot'"
-# }
