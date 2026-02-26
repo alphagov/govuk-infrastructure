@@ -30,6 +30,8 @@ module "workspace" {
     "common-ephemeral"
   ]
 
+  force_delete = true
+
   tfvars = var.tfvars
 }
 
