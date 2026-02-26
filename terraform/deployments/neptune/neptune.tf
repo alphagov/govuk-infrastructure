@@ -113,7 +113,7 @@ resource "aws_neptune_cluster" "this" {
 }
 
 resource "aws_neptune_cluster_instance" "this" {
-  for_each = local.neptune_instances
+  for_each = local.neptune_instances_map
 
   cluster_identifier = each.value.cluster_identifier
   instance_class     = each.value.instance_class
