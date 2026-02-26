@@ -118,5 +118,5 @@ resource "aws_neptune_cluster_instance" "this" {
   instance_class     = each.value.instance_class
   apply_immediately  = each.value.apply_immediately != null ? each.value.apply_immediately : var.govuk_environment != "production"
 
-  depends_on = [aws_neptune_cluster.this[*].id]
+  depends_on = [aws_neptune_cluster.this]
 }
