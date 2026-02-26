@@ -758,3 +758,22 @@ module "variable-set-gov-graph-dev" {
     project_id                   = "govuk-knowledge-graph-dev"
   }
 }
+
+module "variable-set-ai-accelerator-integration" {
+  source = "./variable-set"
+
+  name = "ai-accelerator"
+
+  tfvars = {
+    current_live_domain = "blue"
+    launch_blue_domain  = true
+    launch_green_domain = false
+    blue_cluster_options = {
+      engine         = "OpenSearch"
+      engine_version = "3.1"
+      instance_count = 1
+      instance_type  = "t3.small.search"
+    }
+    aws_region = "eu-west-1"
+  }
+}
