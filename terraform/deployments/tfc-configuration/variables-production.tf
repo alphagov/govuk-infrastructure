@@ -735,5 +735,8 @@ module "variable-set-gov-graph-production" {
 
   name = "gov-graph-production"
 
-  tfvars = {}
+  tfvars = {
+    google_cloud_folder          = "278098142879"
+    google_cloud_billing_account = "015C7A-FAF970-B0D375"
+  }
 }
