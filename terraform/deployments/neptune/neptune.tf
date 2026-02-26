@@ -130,7 +130,7 @@ resource "aws_route53_record" "writer_cname" {
   name    = "${local.identifier_prefix}${each.value.cluster_identifier}-${each.value.engine}-writer"
   type    = "CNAME"
   ttl     = 30
-  records = [aws_db_instance.replica[each.key].address]
+  records = [aws_neptune_cluster.this[each.key].endpoint]
 }
 
 resource "aws_neptune_cluster_instance" "this" {
