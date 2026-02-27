@@ -18,7 +18,7 @@ See the examples below, and see [USAGE.md](./USAGE.md) for a complete list of al
 ### Just launch a blue domain with minimal config
 ```tf
 module "opensearch" {
-  source = "../../shared-modules/opensearch-blue-green-deployment"
+  source = "github.com/alphagov/govuk-infrastructure/terraform/shared-modules/opensearch-blue-green-deployment?ref=<sha_of_main_branch>"
 
   opensearch_domain_name = "ai-accelerator"
 
@@ -53,7 +53,7 @@ module "opensearch" {
 
 ```tf
 module "opensearch" {
-  source = "../../shared-modules/opensearch-blue-green-deployment"
+  source = "github.com/alphagov/govuk-infrastructure/terraform/shared-modules/opensearch-blue-green-deployment?ref=<sha_of_main_branch>"
 
   opensearch_domain_name = "ai-accelerator"
 
@@ -78,7 +78,6 @@ module "opensearch" {
     }
   }
 
-
   green_cluster_options = {
     engine         = "OpenSearch"
     engine_version = "3.1"
@@ -99,7 +98,7 @@ module "opensearch" {
 
 ```tf
 module "opensearch" {
-  source = "../../shared-modules/opensearch-blue-green-deployment"
+  source = "github.com/alphagov/govuk-infrastructure/terraform/shared-modules/opensearch-blue-green-deployment?ref=<sha_of_main_branch>"
 
   opensearch_domain_name = "ai-accelerator"
 

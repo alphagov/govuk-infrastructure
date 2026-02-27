@@ -4,8 +4,7 @@ locals {
 }
 
 module "snapshot_bucket" {
-  # soource = "github.com/alphagov/govuk-infrastructure/terraform/shared-modules/s3?depth=1&ref=main"
-  source = "../s3"
+  source = "github.com/alphagov/govuk-infrastructure/terraform/shared-modules/s3?ref=136062481db579d76723705c698c087582cad157"
 
   name              = local.snapshot_bucket_name
   govuk_environment = var.govuk_environment
