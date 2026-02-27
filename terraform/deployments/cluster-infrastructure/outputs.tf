@@ -98,6 +98,11 @@ output "aws_lb_controller_role_arn" {
   value       = module.aws_lb_controller_iam_role.arn
 }
 
+output "aws_vpc_cni_role_arn" {
+  description = "IAM role ARN corresponding to the Kubernetes service account for the AWS VPC CNI plugin"
+  value = module.aws_vpc_cni_iam_role.arn
+}
+
 output "aws_lb_controller_service_account_name" {
   description = "Name of the k8s service account for the AWS Load Balancer Controller."
   value       = local.aws_lb_controller_service_account_name
