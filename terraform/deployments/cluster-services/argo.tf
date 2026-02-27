@@ -33,6 +33,9 @@ locals {
     g, ${var.github_national_data_library_team}, role:readonly
     g, ${var.github_read_only_team}, role:readonly
     g, ${var.github_read_write_team}, role:admin
+    p, role:nationaldatalibrary, applications, update, datagovuk/*, allow
+    p, role:nationaldatalibrary, applications, update, default/dgu-app-of-apps, allow
+    g, ${var.github_national_data_library_team}, role:nationaldatalibrary
     EOT
   }
 }
