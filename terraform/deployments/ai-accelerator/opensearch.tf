@@ -1,5 +1,5 @@
 module "opensearch" {
-  source = "../../shared-modules/opensearch-blue-green-deployment"
+  source = "github.com/alphagov/govuk-infrastructure/terraform/shared-modules/opensearch-blue-green-deployment?ref=136062481db579d76723705c698c087582cad157"
 
   opensearch_domain_name = "ai-accelerator"
 

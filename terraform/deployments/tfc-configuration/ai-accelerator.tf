@@ -11,13 +11,14 @@ module "ai-accelerator-integration" {
   trigger_patterns = [
     "/terraform/deployments/ai-accelerator/**/*",
     "/terraform/shared-modules/opensearch-blue-green-deployment/**/*",
+    "/terraform/shared-modules/s3/**/*",
   ]
   global_remote_state = true
 
   project_name = "govuk-infrastructure"
   vcs_repo = {
     identifier     = "alphagov/govuk-infrastructure"
-    branch         = "add-opensearch-deployment" ## FIXME: Change to main
+    branch         = "main"
     oauth_token_id = data.tfe_oauth_client.github.oauth_token_id
   }
 
