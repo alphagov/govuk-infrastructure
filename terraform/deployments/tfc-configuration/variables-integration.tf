@@ -774,12 +774,11 @@ module "variable-set-ai-accelerator-integration" {
       engine_version = "3.1"
       instance_count = 3
       instance_type  = "t3.small.search"
-    }
-
-    ebs_options = {
-      volume_size = 90
-      volume_type = "gp3"
-      throughput  = 250
+      ebs_options = {
+        volume_size = 90
+        volume_type = "gp3"
+        throughput  = 250
+      }
     }
 
     aws_region = "eu-west-1"
