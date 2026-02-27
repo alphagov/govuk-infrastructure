@@ -18,7 +18,7 @@ resource "helm_release" "fluent_bit" {
   name       = "fluent-bit"
   chart      = "fluent-bit"
   repository = "https://fluent.github.io/helm-charts"
-  version    = "0.55.0"
+  version    = "0.56.0"
   namespace  = kubernetes_namespace_v1.fluent_bit.id
 
   values = [yamlencode({
