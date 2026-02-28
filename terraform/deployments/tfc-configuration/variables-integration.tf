@@ -684,7 +684,7 @@ module "variable-set-elasticsearch-integration" {
       throughput       = 250
       provisioned_iops = 3000
     }
-    engine_version         = "6.7"
+    engine_version         = "6.8"
     zone_awareness_enabled = true
     elasticsearch_enabled  = false
 
