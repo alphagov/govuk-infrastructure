@@ -1,7 +1,7 @@
 module "aws_vpc_cni_iam_role" {
   source             = "terraform-aws-modules/iam/aws//modules/iam-role"
   version            = "~> 6.0"
-  name               = "aws-vpc-cni-${var.cluster_name}"
+  name               = "aws-vpc-cni-${var.govuk_environment}"
   use_name_prefix    = false
   description        = "Role used by the AWS VPC CNI for address management"
   enable_oidc        = true
