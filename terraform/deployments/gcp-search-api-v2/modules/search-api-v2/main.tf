@@ -36,9 +36,16 @@ resource "google_project" "environment_project" {
   }
 }
 
+locals {
+  base_role = "roles/owner"
+  integration_only_roles = terraform.workspace == "integration" ? ["roles/iam.serviceAccountTokenCreator"] : []
+  all_roles = concat(local.base_role, local.integration_only_roles)
+}
+
 resource "google_project_iam_member" "environment_project_owner" {
+  for_each = toset(local.all_roles)
   project = google_project.environment_project.project_id
-  role    = "roles/owner"
+  role    = each.key
 
   member = "group:${var.access_group_name}@digital.cabinet-office.gov.uk"
 }
