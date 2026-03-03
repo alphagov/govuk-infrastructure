@@ -753,6 +753,7 @@ repos:
       additional_contexts:
         - Lint Ruby / Run RuboCop
         - Test Ruby / Run RSpec
+        - Run Pact tests / Verify pact tests
 
   search-api-v2:
     can_be_deployed: true
