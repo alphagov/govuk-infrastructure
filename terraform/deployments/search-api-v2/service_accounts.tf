@@ -40,13 +40,25 @@ resource "google_project_iam_custom_role" "api" {
   ]
 }
 
-resource "google_project_iam_binding" "api" {
-  project = var.gcp_project_id
-  role    = google_project_iam_custom_role.api.id
+locals {
+  custom_search_api_v2_role = google_project_iam_custom_role.search_api_v2.id
 
+  token_creator_role  = "roles/iam.serviceAccountTokenCreator"
+
+  active_roles = concat(
+    [local.custom_search_api_v2_role],
+    terraform.workspace == "integration" ? [local.token_creator_role] : []
+  )
+}
+
+resource "google_project_iam_binding" "api" {
+  for_each = toset(local.active_roles)
+
+  project = var.gcp_project_id
+  role    = each.key
   members = [
-    google_service_account.api.member
-  ]
+     google_service_account.api.member
+   ]
 }
 
 # Creates and configures service accounts, IAM roles, role bindings, and keys for `search-admin` to
