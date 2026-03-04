@@ -1,3 +1,10 @@
+# Create a service account for Dataform
+resource "google_service_account" "dataform_service_account" {
+  account_id   = "dataform-sa"
+  display_name = "Dataform Service Account"
+  project      = var.gcp_project_id
+}
+
 variable "search_dataform_github_repository_url" {
   description = "URL of the GitHub repository to link with Dataform"
   type        = string
@@ -15,13 +22,6 @@ resource "google_secret_manager_secret_iam_member" "member" {
   secret_id = "github_search_v2_api_dataform_ssh_key"
   role      = "roles/secretmanager.secretAccessor"
   member    = "serviceAccount:service-${var.gcp_project_number}@gcp-sa-dataform.iam.gserviceaccount.com"
-}
-
-# Create a service account for Dataform
-resource "google_service_account" "dataform_service_account" {
-  account_id   = "dataform-sa"
-  display_name = "Dataform Service Account"
-  project      = var.gcp_project_id
 }
 
 # Create Dataform repository with GitHub integration
