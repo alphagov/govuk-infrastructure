@@ -2,7 +2,6 @@
 
 locals {
   govuk_ai_accelerator_service_account_name = "govuk-ai-accelerator-app"
-  neptune_map_key                           = "ai_accelerator"
 }
 
 data "aws_iam_policy_document" "govuk_ai_accelerator_bedrock_access" {
@@ -78,9 +77,9 @@ module "govuk_reports_iam_role" {
   max_session_duration = 28800
 
   policies = {
-    "${data.tfe_outputs.neptune[0].nonsensitive_values[local.neptune_map_key].name}" = data.tfe_outputs.neptune[0].nonsensitive_values[local.neptune_map_key].arn,
-    "${aws_iam_policy.govuk_ai_accelerator_s3_access_policy[0].name}"                = aws_iam_policy.govuk_ai_accelerator_s3_access_policy[0].arn,
-    "${aws_iam_policy.govuk_ai_accelerator_bedrock_access_policy[0].name}"           = aws_iam_policy.govuk_ai_accelerator_bedrock_access_policy[0].arn
+    neptune                                                                = data.tfe_outputs.neptune[0].nonsensitive_values.neptune_policy_arn["ai_accelerator"],
+    "${aws_iam_policy.govuk_ai_accelerator_s3_access_policy[0].name}"      = aws_iam_policy.govuk_ai_accelerator_s3_access_policy[0].arn,
+    "${aws_iam_policy.govuk_ai_accelerator_bedrock_access_policy[0].name}" = aws_iam_policy.govuk_ai_accelerator_bedrock_access_policy[0].arn
   }
 
   oidc_providers = {
