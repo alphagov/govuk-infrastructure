@@ -44,9 +44,9 @@ module "variable-set-ephemeral" {
       elasticsearch_b = { az = "eu-west-1b", cidr = "10.10.17.0/24", nat = false }
       elasticsearch_c = { az = "eu-west-1c", cidr = "10.10.18.0/24", nat = false }
 
-      neptune_a = { az = "eu-west-1a", cidr = "10.1.33.0/24", nat = false }
-      neptune_b = { az = "eu-west-1b", cidr = "10.1.34.0/24", nat = false }
-      neptune_c = { az = "eu-west-1c", cidr = "10.1.35.0/24", nat = false }
+      neptune_a = { az = "eu-west-1a", cidr = "10.10.36.0/24", nat = false }
+      neptune_b = { az = "eu-west-1b", cidr = "10.10.37.0/24", nat = false }
+      neptune_c = { az = "eu-west-1c", cidr = "10.10.38.0/24", nat = false }
     }
 
     govuk_environment = "ephemeral"
