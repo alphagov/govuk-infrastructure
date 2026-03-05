@@ -57,6 +57,7 @@ module "vpc" {
   name                 = "vpc"
   ephemeral_cluster_id = var.ephemeral_cluster_id
   variable_set_id      = module.var_set.id
+  git_branch           = var.git_branch
 
   depends_on = [tfe_project.project]
 }
@@ -67,6 +68,7 @@ module "cluster_infrastructure" {
   name                 = "cluster-infrastructure"
   ephemeral_cluster_id = var.ephemeral_cluster_id
   variable_set_id      = module.var_set.id
+  git_branch           = var.git_branch
 
   depends_on = [module.vpc, tfe_project.project]
 }
@@ -77,6 +79,7 @@ module "cluster_access" {
   name                 = "cluster-access"
   ephemeral_cluster_id = var.ephemeral_cluster_id
   variable_set_id      = module.var_set.id
+  git_branch           = var.git_branch
 
   tfvars = {
     ship_kubernetes_events_to_logit = false
@@ -91,6 +94,7 @@ module "cluster_services" {
   name                 = "cluster-services"
   ephemeral_cluster_id = var.ephemeral_cluster_id
   variable_set_id      = module.var_set.id
+  git_branch           = var.git_branch
 
   tfvars = {
     ship_kubernetes_events_to_logit = false
@@ -118,6 +122,7 @@ module "datagovuk_infrastructure" {
   name                 = "datagovuk-infrastructure"
   ephemeral_cluster_id = var.ephemeral_cluster_id
   variable_set_id      = module.var_set.id
+  git_branch           = var.git_branch
 
   depends_on = [module.cluster_services, tfe_project.project]
 }
