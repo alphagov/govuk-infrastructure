@@ -6,8 +6,16 @@ This module is used to provision ephemeral EKS clusters via Terraform Cloud.
 1. ensure you are in the correct dir `terraform/deployments/ephemeral`
 1. Ensure you have logged in to Terraform Cloud via the Terraform CLI (`terraform login`)
 1. Do a `terraform init`
-1. Run an apply with your chosen ephemeral cluster ID (this isn't generated for you)
-   `terraform apply -var ephemeral_cluster_id=${EPH_CLUSTER_ID}`
+1. Run an apply with your chosen ephemeral cluster ID (this isn't generated for you):
+   ```
+   terraform apply -var ephemeral_cluster_id=${EPH_CLUSTER_ID}`
+   ``` 
+   If your new ephemeral cluster should be based on a branch other than `main`, provide the `git_branch` variable:
+
+   ```
+   terraform apply -var ephemeral_cluster_id=${EPH_CLUSTER_ID} -var git_branch="$(git branch --show-current)"
+   ```
+   
 1. When `cluster_access` has applied successfully you can gain access to the cluster with `aws eks update-kubeconfig --name ${EPH_CLUSTER_ID} --kubeconfig <optional_new_kube_config>`
 1. Once all the Terraform workspaces have successfully applied, log into the cluster and
    run `./validate.sh` to test that the cluster is functioning and able to accept ingress.
