@@ -147,14 +147,14 @@ module "cluster_services" {
   depends_on = [module.cluster_infrastructure, module.cluster_access, tfe_project.project]
 }
 
-module "nepture" {
-  source = "./ws"
-
-  name                 = "neptune"
-  ephemeral_cluster_id = var.ephemeral_cluster_id
-  variable_set_id      = module.var_set.id
-  depends_on           = [module.cluster_infrastructure, module.cluster_access, tfe_project.project]
-}
+# module "nepture" {
+#   source = "./ws"
+#
+#   name                 = "neptune"
+#   ephemeral_cluster_id = var.ephemeral_cluster_id
+#   variable_set_id      = module.var_set.id
+#   depends_on           = [module.cluster_infrastructure, module.cluster_access, tfe_project.project]
+# }
 
 /*
  * Commented out because it doesn't work, but the workspace it makes
