@@ -46,6 +46,10 @@ module "variable-set-integration" {
       elasticsearch_a = { az = "eu-west-1a", cidr = "10.1.16.0/24", nat = false }
       elasticsearch_b = { az = "eu-west-1b", cidr = "10.1.17.0/24", nat = false }
       elasticsearch_c = { az = "eu-west-1c", cidr = "10.1.18.0/24", nat = false }
+
+      neptune_a = { az = "eu-west-1a", cidr = "10.1.33.0/24", nat = false }
+      neptune_b = { az = "eu-west-1b", cidr = "10.1.34.0/24", nat = false }
+      neptune_c = { az = "eu-west-1c", cidr = "10.1.35.0/24", nat = false }
     }
 
     govuk_environment = "integration"
@@ -782,5 +786,48 @@ module "variable-set-ai-accelerator-integration" {
     }
 
     aws_region = "eu-west-1"
+  }
+}
+
+module "variable-set-neptune-integration" {
+  source = "./variable-set"
+
+  name = "neptune-integration"
+
+  tfvars = {
+    govuk_environment = "integration"
+    aws_region        = "eu-west-1"
+
+    neptune_dbs = {
+      ai_accelerator = {
+        name               = "ai-accelerator"
+        instance_class     = "db.t4g.medium"
+        instance_count     = 3
+        cluster_identifier = "ai-accelerator"
+        engine             = "neptune"
+        engine_version     = "1.4.6.3"
+        family             = "neptune1.4"
+        serverless_config = {
+          max_capacity = 128
+          min_capacity = 1
+        }
+        cluster_parameter_group_name = "clust_ai_accelerator"
+        cluster_parameter_group = [{
+          name         = "neptune_enable_audit_log"
+          value        = 1
+          apply_method = "pending-reboot"
+        }]
+        iam_roles                      = []
+        deletion_protection            = true
+        enable_cloudwatch_logs_exports = ["audit"]
+        internal_cname_domains_enabled = true
+        instance_parameter_group_name  = "inst_eph_ai_accelerator"
+        instance_parameter_group = [{
+          name         = "neptune_query_timeout"
+          value        = "25"
+          apply_method = "pending-reboot"
+        }]
+      }
+    }
   }
 }

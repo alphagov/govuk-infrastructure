@@ -1,0 +1,80 @@
+variable "govuk_environment" {
+  type        = string
+  description = "Environment name"
+}
+
+variable "aws_region" {
+  type        = string
+  description = "AWS region"
+  default     = "eu-west-1"
+}
+
+variable "neptune_dbs" {
+  description = "Neptune databases to create and their configuration."
+
+  type = map(object({
+    name               = string
+    project            = optional(string, "GOV.UK - Other")
+    instance_class     = optional(string, "t4g.medium")
+    cluster_identifier = string
+    engine             = string
+    engine_version     = string
+    family             = string
+    serverless_config = optional(object({
+      max_capacity = number
+      min_capacity = number
+    }))
+    cluster_parameter_group_name = string
+    cluster_parameter_group = optional(list(object({
+      name         = string
+      value        = string
+      apply_method = string
+    })))
+    instance_parameter_group_name = string
+    instance_parameter_group = optional(list(object({
+      name         = string
+      value        = any
+      apply_method = string
+    })))
+    instance_count                 = number
+    iam_roles                      = list(string)
+    internal_cname_domains_enabled = optional(bool, false)
+    apply_immediately              = optional(bool, true)
+    preferred_maintenance_window   = optional(string)
+    preferred_backup_window        = optional(string)
+    backup_retention_period        = optional(number)
+    deletion_protection            = bool
+    enable_cloudwatch_logs_exports = optional(list(string), [])
+    snapshot_identifier            = optional(string)
+    allow_major_version_upgrade    = optional(bool, false)
+    port                           = optional(number, 8182)
+    storage_type                   = optional(string, "standard")
+    })
+  )
+
+  validation {
+    condition = alltrue([
+      for db in var.neptune_dbs : alltrue([
+        for cpg in db.instance_parameter_group :
+        contains(["immediate", "pending-reboot"], cpg.apply_method)
+      ])]
+    )
+    error_message = "The instance_parameter_group objects apply_method must be either 'immediate' or 'pending-reboot'"
+  }
+
+  validation {
+    condition = alltrue([
+      for db in var.neptune_dbs : alltrue([
+        for cpg in db.cluster_parameter_group :
+        contains(["immediate", "pending-reboot"], cpg.apply_method)
+      ])]
+    )
+    error_message = "The cluster_parameter_group objects apply_method must be either 'immediate' or 'pending-reboot'"
+  }
+
+  validation {
+    condition     = (!contains(["integration", "staging", "production"], var.govuk_environment) && alltrue([for db in var.neptune_dbs : db.internal_cname_domains_enabled == false]))
+    error_message = "Internal cname domains can only be created in either integration, staging or production because root_dns only exists in those environments. You are currently deploying into ${var.govuk_environment}"
+  }
+}
+
