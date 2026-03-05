@@ -48,6 +48,54 @@ module "var_set" {
         project                      = "GOV.UK - DGU"
       }
     }
+
+    neptune_dbs = {
+      ep_jas_240226 = {
+        name               = "eph-jas-240226"
+        instance_class     = "db.t4g.medium"
+        instance_count     = 3
+        cluster_identifier = "eph-jas-240426"
+        engine             = "neptune"
+        engine_version     = "1.4.6.3"
+        family             = "neptune1.4"
+        serverless_config = {
+          max_capacity = 128
+          min_capacity = 1
+        }
+        cluster_parameter_group_name = "clust_eph_jas_240426"
+        cluster_parameter_group = [{
+          name         = "neptune_enable_audit_log"
+          value        = 1
+          apply_method = "pending-reboot"
+        }]
+        iam_roles                      = []
+        deletion_protection            = false
+        enable_cloudwatch_logs_exports = ["audit"]
+        internal_cname_domains_enabled = false
+        instance_parameter_group_name  = "inst_eph_jas_240426"
+        instance_parameter_group = [{
+          name         = "neptune_query_timeout"
+          value        = "25"
+          apply_method = "pending-reboot"
+        }]
+
+        serviceaccount_rules = [
+          {
+            api_groups = [""]
+            resources = [
+              "namespaces",
+              "pods",
+              "events"
+            ]
+            verbs = [
+              "get",
+              "list",
+              "watch"
+            ]
+          },
+        ]
+      }
+    }
   }
 }
 
@@ -99,6 +147,15 @@ module "cluster_services" {
   depends_on = [module.cluster_infrastructure, module.cluster_access, tfe_project.project]
 }
 
+module "nepture" {
+  source = "./ws"
+
+  name                 = "neptune"
+  ephemeral_cluster_id = var.ephemeral_cluster_id
+  variable_set_id      = module.var_set.id
+  depends_on           = [module.cluster_infrastructure, module.cluster_access, tfe_project.project]
+}
+
 /*
  * Commented out because it doesn't work, but the workspace it makes
  * causes every RDS PR to show it is failing the build
@@ -112,13 +169,13 @@ module "rds" {
 }
 */
 
-module "datagovuk_infrastructure" {
-  source = "./ws"
-
-  name                 = "datagovuk-infrastructure"
-  ephemeral_cluster_id = var.ephemeral_cluster_id
-  variable_set_id      = module.var_set.id
-
-  depends_on = [module.cluster_services, tfe_project.project]
-}
-
+# module "datagovuk_infrastructure" {
+#   source = "./ws"
+#
+#   name                 = "datagovuk-infrastructure"
+#   ephemeral_cluster_id = var.ephemeral_cluster_id
+#   variable_set_id      = module.var_set.id
+#
+#   depends_on = [module.cluster_services, tfe_project.project]
+# }
+#
