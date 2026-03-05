@@ -73,7 +73,7 @@ variable "neptune_dbs" {
   }
 
   validation {
-    condition     = (!contains(["integration", "staging", "production"], var.govuk_environment) && alltrue([for db in var.neptune_dbs : db.internal_cname_domains_enabled == false]))
+    condition     = alltrue([for db in var.neptune_dbs : !db.internal_cname_domains_enabled]) || contains(["integration", "staging", "production"], var.govuk_environment)
     error_message = "Internal cname domains can only be created in either integration, staging or production because root_dns only exists in those environments. You are currently deploying into ${var.govuk_environment}"
   }
 }
