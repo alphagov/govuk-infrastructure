@@ -30,3 +30,16 @@ variable "tfe_project_name" {
   default     = "govuk-data-engineering"
   description = "The  name of the overarching terraform cloud project for all workspaces"
 }
+
+variable "region" {
+  type = string
+}
+
+variable "zone" {
+  type = string
+}
+
+variable "location" {
+  type = string
+  description = "Google Cloud Storage location"
+}
