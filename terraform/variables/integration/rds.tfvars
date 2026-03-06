@@ -3,6 +3,22 @@ skip_final_snapshot     = true
 multi_az                = false
 
 databases = {
+  example_db = {
+    engine         = "postgres"
+    engine_version = "14"
+    engine_params = {
+      log_min_duration_statement = { value = 10000 }
+      log_statement              = { value = "all" }
+      deadlock_timeout           = { value = 2500 }
+      log_lock_waits             = { value = 1 }
+    }
+    engine_params_family         = "postgres14"
+    name                         = "example-db"
+    allocated_storage            = 100
+    instance_class               = "db.t4g.medium"
+    performance_insights_enabled = true
+    project                      = "GOV.UK - Web"
+  }
   account_api = {
     engine         = "postgres"
     engine_version = "14"
