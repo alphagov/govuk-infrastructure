@@ -28,9 +28,14 @@ module "rds-integration" {
   }
 
   envvars = {
-    TF_CLI_ARGS_plan  = "-parallelism=30 -var-file=../../variables/integration/common.tfvars -var-file=../../variables/integration/rds.tfvars"
-    TF_CLI_ARGS_apply = "-parallelism=30 -var-file=../../variables/integration/common.tfvars -var-file=../../variables/integration/rds.tfvars"
+    TF_CLI_ARGS_plan  = "-parallelism=30"
+    TF_CLI_ARGS_apply = "-parallelism=30"
   }
+
+  tfvars_files = [
+    "integration/common.tfvars",
+    "integration/rds.tfvars"
+  ]
 
   variable_set_ids = [
     local.aws_credentials["integration"]
