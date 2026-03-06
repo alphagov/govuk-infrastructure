@@ -1,0 +1,54 @@
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  name: jobrequests.platform.gov.uk
+spec:
+  group: platform.gov.uk
+  versions:
+    - name: v1alpha1
+      served: true
+      storage: true
+      subresources:
+        status: {}
+      additionalPrinterColumns:
+        - name: Status
+          type: string
+          jsonPath: .status.requestStatus
+        - name: CreatedBy
+          type: string
+          jsonPath: .status.createdBy
+        - name: ApprovedBy
+          type: string
+          jsonPath: .status.approvedBy
+        - name: Job
+          type: string
+          jsonPath: .status.jobName
+      schema:
+        openAPIV3Schema:
+          type: object
+          properties:
+            spec:
+              type: object
+              properties:
+                image:
+                  type: string
+                command:
+                  type: string
+            status:
+              type: object
+              properties:
+                createdBy:
+                  type: string
+                approvedBy:
+                  type: string
+                requestStatus:
+                  type: string
+                jobName:
+                  type: string
+  scope: Namespaced
+  names:
+    plural: jobrequests
+    singular: jobrequest
+    kind: JobRequest
+    shortNames:
+      - jr

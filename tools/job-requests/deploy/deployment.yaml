@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jobrequest-server
+  namespace: jobrequest-system
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: jobrequest-server
+  template:
+    metadata:
+      labels:
+        app: jobrequest-server
+    spec:
+      serviceAccountName: jobrequest-controller
+      containers:
+        - name: server
+          image: k3d-jr.localhost:64864/jobrequest-server:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8443
+          readinessProbe:
+            httpGet:
+              path: /healthz
+              port: 8443
+              scheme: HTTPS
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          volumeMounts:
+            - name: tls-certs
+              mountPath: /etc/webhook/certs
+              readOnly: true
+          env:
+            - name: DISABLE_APPROVER_CHECK
+              value: "true"
+      volumes:
+        - name: tls-certs
+          secret:
+            secretName: jobrequest-webhook-tls

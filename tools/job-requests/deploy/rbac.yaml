@@ -1,0 +1,33 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: jobrequest-controller
+  namespace: jobrequest-system
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: jobrequest-controller
+rules:
+  - apiGroups: ["platform.gov.uk"]
+    resources: ["jobrequests"]
+    verbs: ["get", "list", "watch", "update", "patch"]
+  - apiGroups: ["platform.gov.uk"]
+    resources: ["jobrequests/status"]
+    verbs: ["get", "update", "patch"]
+  - apiGroups: ["batch"]
+    resources: ["jobs"]
+    verbs: ["create", "get", "list", "watch"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: jobrequest-controller
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: jobrequest-controller
+subjects:
+  - kind: ServiceAccount
+    name: jobrequest-controller
+    namespace: jobrequest-system

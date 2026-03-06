@@ -1,0 +1,53 @@
+apiVersion: admissionregistration.k8s.io/v1
+kind: MutatingWebhookConfiguration
+metadata:
+  name: jobrequest-mutating
+webhooks:
+  - name: jobrequest-mutate-create.platform.gov.uk
+    clientConfig:
+      service:
+        name: jobrequest-webhook
+        namespace: jobrequest-system
+        path: /mutate
+    rules:
+      - operations: ["CREATE"]
+        apiGroups: ["platform.gov.uk"]
+        apiVersions: ["v1alpha1"]
+        resources: ["jobrequests"]
+    admissionReviewVersions: ["v1"]
+    sideEffects: None
+    failurePolicy: Fail
+  - name: jobrequest-mutate-approve.platform.gov.uk
+    clientConfig:
+      service:
+        name: jobrequest-webhook
+        namespace: jobrequest-system
+        path: /mutate
+    rules:
+      - operations: ["UPDATE"]
+        apiGroups: ["platform.gov.uk"]
+        apiVersions: ["v1alpha1"]
+        resources: ["jobrequests/status"]
+    admissionReviewVersions: ["v1"]
+    sideEffects: None
+    failurePolicy: Fail
+---
+apiVersion: admissionregistration.k8s.io/v1
+kind: ValidatingWebhookConfiguration
+metadata:
+  name: jobrequest-validating
+webhooks:
+  - name: jobrequest-validate.platform.gov.uk
+    clientConfig:
+      service:
+        name: jobrequest-webhook
+        namespace: jobrequest-system
+        path: /validate
+    rules:
+      - operations: ["UPDATE"]
+        apiGroups: ["platform.gov.uk"]
+        apiVersions: ["v1alpha1"]
+        resources: ["jobrequests/status"]
+    admissionReviewVersions: ["v1"]
+    sideEffects: None
+    failurePolicy: Fail
