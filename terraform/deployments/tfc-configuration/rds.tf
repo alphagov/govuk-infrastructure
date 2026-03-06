@@ -28,8 +28,8 @@ module "rds-integration" {
   }
 
   envvars = {
-    TF_CLI_ARGS_plan  = "-parallelism=30"
-    TF_CLI_ARGS_apply = "-parallelism=30"
+    TF_CLI_ARGS_plan  = "-parallelism=30 -var-file=/terraform/variables/integration/common.tfvars -var-file=/terraform/variables/integration/rds.tfvars"
+    TF_CLI_ARGS_apply = "-parallelism=30 -var-file=/terraform/variables/integration/common.tfvars -var-file=/terraform/variables/integration/rds.tfvars"
   }
 
   variable_set_ids = [
