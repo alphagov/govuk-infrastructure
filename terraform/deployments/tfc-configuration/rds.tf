@@ -28,14 +28,12 @@ module "rds-integration" {
   }
 
   envvars = {
-    TF_CLI_ARGS_plan  = "-parallelism=30 -var-file=/terraform/variables/integration/common.tfvars -var-file=/terraform/variables/integration/rds.tfvars"
-    TF_CLI_ARGS_apply = "-parallelism=30 -var-file=/terraform/variables/integration/common.tfvars -var-file=/terraform/variables/integration/rds.tfvars"
+    TF_CLI_ARGS_plan  = "-parallelism=30 -var-file=../../variables/integration/common.tfvars -var-file=../../variables/integration/rds.tfvars"
+    TF_CLI_ARGS_apply = "-parallelism=30 -var-file=../../variables/integration/common.tfvars -var-file=../../variables/integration/rds.tfvars"
   }
 
   variable_set_ids = [
-    local.aws_credentials["integration"],
-    module.variable-set-integration.id,
-    module.variable-set-rds-integration.id
+    local.aws_credentials["integration"]
   ]
 }
 
