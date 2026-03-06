@@ -1,14 +1,18 @@
 module "rds-integration" {
   source = "github.com/alphagov/terraform-govuk-tfe-workspacer"
 
-  organization        = var.organization
-  workspace_name      = "rds-integration"
-  workspace_desc      = "This module manages AWS resources for creating RDS databases."
-  workspace_tags      = ["integration", "rds", "eks", "aws"]
-  terraform_version   = var.terraform_version
-  execution_mode      = "remote"
-  working_directory   = "/terraform/deployments/rds/"
-  trigger_patterns    = ["/terraform/deployments/rds/**/*"]
+  organization      = var.organization
+  workspace_name    = "rds-integration"
+  workspace_desc    = "This module manages AWS resources for creating RDS databases."
+  workspace_tags    = ["integration", "rds", "eks", "aws"]
+  terraform_version = var.terraform_version
+  execution_mode    = "remote"
+  working_directory = "/terraform/deployments/rds/"
+  trigger_patterns = [
+    "/terraform/deployments/rds/**/*",
+    "/terraform/variables/integration/common.tfvars",
+    "/terraform/variables/integration/rds.tfvars"
+  ]
   global_remote_state = true
 
   project_name = "govuk-infrastructure"
@@ -28,10 +32,13 @@ module "rds-integration" {
     TF_CLI_ARGS_apply = "-parallelism=30"
   }
 
+  tfvars_files = [
+    "integration/common.tfvars",
+    "integration/rds.tfvars"
+  ]
+
   variable_set_ids = [
-    local.aws_credentials["integration"],
-    module.variable-set-integration.id,
-    module.variable-set-rds-integration.id
+    local.aws_credentials["integration"]
   ]
 }
 
