@@ -1,5 +1,5 @@
 module "rds-integration" {
-  source = "github.com/alphagov/terraform-govuk-tfe-workspacer"
+  source = "git::github.com/alphagov/terraform-govuk-tfe-workspacer.git?ref=samsimpson1/tfvars-files"
 
   organization        = var.organization
   workspace_name      = "rds-integration"
