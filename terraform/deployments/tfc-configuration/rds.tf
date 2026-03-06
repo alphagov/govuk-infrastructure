@@ -18,7 +18,7 @@ module "rds-integration" {
   project_name = "govuk-infrastructure"
   vcs_repo = {
     identifier     = "alphagov/govuk-infrastructure"
-    branch         = "main"
+    branch         = "samsimpson1/tfvars"
     oauth_token_id = data.tfe_oauth_client.github.oauth_token_id
   }
 
