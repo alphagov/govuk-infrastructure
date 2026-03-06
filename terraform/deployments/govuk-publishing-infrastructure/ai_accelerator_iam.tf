@@ -48,6 +48,25 @@ data "aws_iam_policy_document" "govuk_ai_accelerator_s3_access" {
   }
 }
 
+data "aws_iam_policy_document" "govuk_ai_accelerator_opensearch" {
+  count = var.enable_govuk_ai_accelerator ? 1 : 0
+
+  statement {
+    sid     = "GovukAiAcceleratorOpenSearchAccessPolicy"
+    actions = ["es:*"]
+
+    resources = ["arn:aws:es:${data.aws_region.current.region}:${data.aws_caller_identity.current.account_id}:domain/ai-accelerator-blue"]
+  }
+}
+
+resource "aws_iam_policy" "govuk_ai_accelerator_opensearch_policy" {
+  count = var.enable_govuk_ai_accelerator ? 1 : 0
+
+  name        = "govuk-${var.govuk_environment}-govuk-ai-accelerator-opensearch-policy"
+  description = "Policy for govuk-ai-accelerator application with access to OpenSearch"
+  policy      = data.aws_iam_policy_document.govuk_ai_accelerator_opensearch[0].json
+}
+
 resource "aws_iam_policy" "govuk_ai_accelerator_s3_access_policy" {
   count = var.enable_govuk_ai_accelerator ? 1 : 0
 
@@ -77,6 +96,7 @@ module "govuk_reports_iam_role" {
   max_session_duration = 28800
 
   policies = {
+    opensearch                                                             = aws_iam_policy.govuk_ai_accelerator_opensearch_policy[0].arn
     neptune                                                                = data.tfe_outputs.neptune[0].nonsensitive_values.neptune_policy_arn["ai_accelerator"],
     "${aws_iam_policy.govuk_ai_accelerator_s3_access_policy[0].name}"      = aws_iam_policy.govuk_ai_accelerator_s3_access_policy[0].arn,
     "${aws_iam_policy.govuk_ai_accelerator_bedrock_access_policy[0].name}" = aws_iam_policy.govuk_ai_accelerator_bedrock_access_policy[0].arn
