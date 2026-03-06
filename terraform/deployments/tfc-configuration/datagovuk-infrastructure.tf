@@ -8,7 +8,10 @@ module "datagovuk-infrastructure-integration" {
   terraform_version = var.terraform_version
   execution_mode    = "remote"
   working_directory = "/terraform/deployments/datagovuk-infrastructure/"
-  trigger_patterns  = ["/terraform/deployments/datagovuk-infrastructure/**/*"]
+  trigger_patterns = [
+    "/terraform/deployments/datagovuk-infrastructure/**/*",
+    "/terraform/variables/integration/common.tfvars"
+  ]
 
   project_name = "govuk-infrastructure"
   vcs_repo = {
@@ -22,9 +25,12 @@ module "datagovuk-infrastructure-integration" {
     "GOV.UK Production"           = "write"
   }
 
+  tfvars_files = [
+    "integration/common.tfvars"
+  ]
+
   variable_set_ids = [
-    local.aws_credentials["integration"],
-    module.variable-set-integration.id
+    local.aws_credentials["integration"]
   ]
 }
 
@@ -38,7 +44,10 @@ module "datagovuk-infrastructure-staging" {
   terraform_version = var.terraform_version
   execution_mode    = "remote"
   working_directory = "/terraform/deployments/datagovuk-infrastructure/"
-  trigger_patterns  = ["/terraform/deployments/datagovuk-infrastructure/**/*"]
+  trigger_patterns = [
+    "/terraform/deployments/datagovuk-infrastructure/**/*",
+    "/terraform/variables/staging/common.tfvars"
+  ]
 
   project_name = "govuk-infrastructure"
   vcs_repo = {
@@ -51,9 +60,12 @@ module "datagovuk-infrastructure-staging" {
     "GOV.UK Production" = "write"
   }
 
+  tfvars_files = [
+    "staging/common.tfvars"
+  ]
+
   variable_set_ids = [
-    local.aws_credentials["staging"],
-    module.variable-set-staging.id
+    local.aws_credentials["staging"]
   ]
 }
 
@@ -67,7 +79,10 @@ module "datagovuk-infrastructure-production" {
   terraform_version = var.terraform_version
   execution_mode    = "remote"
   working_directory = "/terraform/deployments/datagovuk-infrastructure/"
-  trigger_patterns  = ["/terraform/deployments/datagovuk-infrastructure/**/*"]
+  trigger_patterns = [
+    "/terraform/deployments/datagovuk-infrastructure/**/*",
+    "/terraform/variables/production/common.tfvars"
+  ]
 
   project_name = "govuk-infrastructure"
   vcs_repo = {
@@ -80,8 +95,11 @@ module "datagovuk-infrastructure-production" {
     "GOV.UK Production" = "write"
   }
 
+  tfvars_files = [
+    "production/common.tfvars"
+  ]
+
   variable_set_ids = [
-    local.aws_credentials["production"],
-    module.variable-set-production.id
+    local.aws_credentials["production"]
   ]
 }

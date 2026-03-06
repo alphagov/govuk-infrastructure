@@ -12,7 +12,10 @@ module "gov-graph-dev" {
   terraform_version = var.terraform_version
   execution_mode    = "remote"
   working_directory = "/terraform/deployments/gcp-gov-graph/"
-  trigger_patterns  = ["/terraform/deployments/gcp-gov-graph/**/*"]
+  trigger_patterns = [
+    "/terraform/deployments/gcp-gov-graph/**/*",
+    "/terraform/variables/integration/common.tfvars"
+  ]
 
   project_name = "govuk-data-engineering"
   vcs_repo = {
@@ -26,9 +29,12 @@ module "gov-graph-dev" {
     "GOV.UK Production"           = "write"
   }
 
+  tfvars_files = [
+    "integration/common.tfvars"
+  ]
+
   variable_set_ids = [
     local.gcp_credentials["integration"],
-    module.variable-set-integration.id,
     module.variable-set-gov-graph-dev.id
   ]
 
@@ -45,7 +51,10 @@ module "gov-graph-staging" {
   terraform_version = var.terraform_version
   execution_mode    = "remote"
   working_directory = "/terraform/deployments/gcp-gov-graph/"
-  trigger_patterns  = ["/terraform/deployments/gcp-gov-graph/**/*"]
+  trigger_patterns = [
+    "/terraform/deployments/gcp-gov-graph/**/*",
+    "/terraform/variables/staging/common.tfvars"
+  ]
 
   project_name = "govuk-data-engineering"
   vcs_repo = {
@@ -59,9 +68,12 @@ module "gov-graph-staging" {
     "GOV.UK Production"           = "write"
   }
 
+  tfvars_files = [
+    "staging/common.tfvars"
+  ]
+
   variable_set_ids = [
     local.gcp_credentials["staging"],
-    module.variable-set-staging.id,
     module.variable-set-gov-graph-staging.id
   ]
 
@@ -78,7 +90,10 @@ module "gov-graph-production" {
   terraform_version = var.terraform_version
   execution_mode    = "remote"
   working_directory = "/terraform/deployments/gcp-gov-graph/"
-  trigger_patterns  = ["/terraform/deployments/gcp-gov-graph/**/*"]
+  trigger_patterns = [
+    "/terraform/deployments/gcp-gov-graph/**/*",
+    "/terraform/variables/production/common.tfvars"
+  ]
 
   project_name = "govuk-data-engineering"
   vcs_repo = {
@@ -92,9 +107,12 @@ module "gov-graph-production" {
     "GOV.UK Production"           = "write"
   }
 
+  tfvars_files = [
+    "production/common.tfvars"
+  ]
+
   variable_set_ids = [
     local.gcp_credentials["production"],
-    module.variable-set-production.id,
     module.variable-set-gov-graph-production.id
   ]
 

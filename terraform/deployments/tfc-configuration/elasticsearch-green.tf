@@ -8,7 +8,10 @@ module "elasticsearch-green-integration" {
   terraform_version = var.terraform_version
   execution_mode    = "remote"
   working_directory = "/terraform/deployments/elasticsearch-green/"
-  trigger_patterns  = ["/terraform/deployments/elasticsearch-green/**/*"]
+  trigger_patterns = [
+    "/terraform/deployments/elasticsearch-green/**/*",
+    "/terraform/variables/integration/common.tfvars"
+  ]
 
   project_name = "govuk-infrastructure"
   vcs_repo = {
@@ -22,9 +25,12 @@ module "elasticsearch-green-integration" {
     "GOV.UK Production"           = "write"
   }
 
+  tfvars_files = [
+    "integration/common.tfvars"
+  ]
+
   variable_set_ids = [
     local.aws_credentials["integration"],
-    module.variable-set-integration.id,
     module.variable-set-elasticsearch-green-integration.id
   ]
 }
@@ -39,7 +45,10 @@ module "elasticsearch-green-staging" {
   terraform_version = var.terraform_version
   execution_mode    = "remote"
   working_directory = "/terraform/deployments/elasticsearch-green/"
-  trigger_patterns  = ["/terraform/deployments/elasticsearch-green/**/*"]
+  trigger_patterns = [
+    "/terraform/deployments/elasticsearch-green/**/*",
+    "/terraform/variables/staging/common.tfvars"
+  ]
 
   project_name = "govuk-infrastructure"
   vcs_repo = {
@@ -53,9 +62,12 @@ module "elasticsearch-green-staging" {
     "GOV.UK Production"           = "write"
   }
 
+  tfvars_files = [
+    "staging/common.tfvars"
+  ]
+
   variable_set_ids = [
     local.aws_credentials["staging"],
-    module.variable-set-staging.id,
     module.variable-set-elasticsearch-green-staging.id
   ]
 }
@@ -70,7 +82,10 @@ module "elasticsearch-green-production" {
   terraform_version = var.terraform_version
   execution_mode    = "remote"
   working_directory = "/terraform/deployments/elasticsearch-green/"
-  trigger_patterns  = ["/terraform/deployments/elasticsearch-green/**/*"]
+  trigger_patterns = [
+    "/terraform/deployments/elasticsearch-green/**/*",
+    "/terraform/variables/production/common.tfvars"
+  ]
 
   project_name = "govuk-infrastructure"
   vcs_repo = {
@@ -84,9 +99,12 @@ module "elasticsearch-green-production" {
     "GOV.UK Production"           = "write"
   }
 
+  tfvars_files = [
+    "production/common.tfvars"
+  ]
+
   variable_set_ids = [
     local.aws_credentials["production"],
-    module.variable-set-production.id,
     module.variable-set-elasticsearch-green-production.id
   ]
 }

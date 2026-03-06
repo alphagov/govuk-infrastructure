@@ -1,14 +1,17 @@
 module "govuk-reports-integration" {
   source = "github.com/alphagov/terraform-govuk-tfe-workspacer"
 
-  organization        = var.organization
-  workspace_name      = "govuk-reports-integration"
-  workspace_desc      = "This module manages the IAM resources needed for the govuk-reports prototype application"
-  workspace_tags      = ["integration", "govuk-reports", "aws"]
-  terraform_version   = var.terraform_version
-  execution_mode      = "remote"
-  working_directory   = "/terraform/deployments/govuk-reports/"
-  trigger_patterns    = ["/terraform/deployments/govuk-reports/**/*"]
+  organization      = var.organization
+  workspace_name    = "govuk-reports-integration"
+  workspace_desc    = "This module manages the IAM resources needed for the govuk-reports prototype application"
+  workspace_tags    = ["integration", "govuk-reports", "aws"]
+  terraform_version = var.terraform_version
+  execution_mode    = "remote"
+  working_directory = "/terraform/deployments/govuk-reports/"
+  trigger_patterns = [
+    "/terraform/deployments/govuk-reports/**/*",
+    "/terraform/variables/integration/common.tfvars"
+  ]
   global_remote_state = true
 
   project_name = "govuk-infrastructure"
@@ -23,9 +26,12 @@ module "govuk-reports-integration" {
     "GOV.UK Production"           = "write"
   }
 
+  tfvars_files = [
+    "integration/common.tfvars"
+  ]
+
   variable_set_ids = [
-    local.aws_credentials["integration"],
-    module.variable-set-integration.id
+    local.aws_credentials["integration"]
   ]
 }
 

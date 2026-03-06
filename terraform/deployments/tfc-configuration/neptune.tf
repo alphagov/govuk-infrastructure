@@ -1,14 +1,17 @@
 module "neptune-integration" {
   source = "github.com/alphagov/terraform-govuk-tfe-workspacer"
 
-  organization        = var.organization
-  workspace_name      = "neptune-integration"
-  workspace_desc      = "This module manages AWS resources for creating Neptune graph databases."
-  workspace_tags      = ["integration", "neptune", "eks", "aws"]
-  terraform_version   = var.terraform_version
-  execution_mode      = "remote"
-  working_directory   = "/terraform/deployments/neptune/"
-  trigger_patterns    = ["/terraform/deployments/neptune/**/*"]
+  organization      = var.organization
+  workspace_name    = "neptune-integration"
+  workspace_desc    = "This module manages AWS resources for creating Neptune graph databases."
+  workspace_tags    = ["integration", "neptune", "eks", "aws"]
+  terraform_version = var.terraform_version
+  execution_mode    = "remote"
+  working_directory = "/terraform/deployments/neptune/"
+  trigger_patterns = [
+    "/terraform/deployments/neptune/**/*",
+    "/terraform/variables/integration/common.tfvars"
+  ]
   global_remote_state = true
 
   project_name = "govuk-infrastructure"
@@ -28,9 +31,12 @@ module "neptune-integration" {
     TF_CLI_ARGS_apply = "-parallelism=30"
   }
 
+  tfvars_files = [
+    "integration/common.tfvars"
+  ]
+
   variable_set_ids = [
     local.aws_credentials["integration"],
-    module.variable-set-integration.id,
     module.variable-set-neptune-integration.id
   ]
 }

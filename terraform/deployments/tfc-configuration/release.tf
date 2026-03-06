@@ -1,14 +1,17 @@
 module "release-integration" {
   source = "github.com/alphagov/terraform-govuk-tfe-workspacer"
 
-  organization        = var.organization
-  workspace_name      = "release-integration"
-  workspace_desc      = "Manages IAM roles and policies for the Release app"
-  workspace_tags      = ["integration", "release", "aws"]
-  terraform_version   = var.terraform_version
-  execution_mode      = "remote"
-  working_directory   = "/terraform/deployments/release/"
-  trigger_patterns    = ["/terraform/deployments/release/**/*"]
+  organization      = var.organization
+  workspace_name    = "release-integration"
+  workspace_desc    = "Manages IAM roles and policies for the Release app"
+  workspace_tags    = ["integration", "release", "aws"]
+  terraform_version = var.terraform_version
+  execution_mode    = "remote"
+  working_directory = "/terraform/deployments/release/"
+  trigger_patterns = [
+    "/terraform/deployments/release/**/*",
+    "/terraform/variables/integration/common.tfvars"
+  ]
   global_remote_state = true
 
   project_name = "govuk-infrastructure"
@@ -23,23 +26,29 @@ module "release-integration" {
     "GOV.UK Production"           = "write"
   }
 
+  tfvars_files = [
+    "integration/common.tfvars"
+  ]
+
   variable_set_ids = [
-    local.aws_credentials["integration"],
-    module.variable-set-integration.id
+    local.aws_credentials["integration"]
   ]
 }
 
 module "release-staging" {
   source = "github.com/alphagov/terraform-govuk-tfe-workspacer"
 
-  organization        = var.organization
-  workspace_name      = "release-staging"
-  workspace_desc      = "Manages IAM roles and policies for the Release app"
-  workspace_tags      = ["staging", "release", "aws"]
-  terraform_version   = var.terraform_version
-  execution_mode      = "remote"
-  working_directory   = "/terraform/deployments/release/"
-  trigger_patterns    = ["/terraform/deployments/release/**/*"]
+  organization      = var.organization
+  workspace_name    = "release-staging"
+  workspace_desc    = "Manages IAM roles and policies for the Release app"
+  workspace_tags    = ["staging", "release", "aws"]
+  terraform_version = var.terraform_version
+  execution_mode    = "remote"
+  working_directory = "/terraform/deployments/release/"
+  trigger_patterns = [
+    "/terraform/deployments/release/**/*",
+    "/terraform/variables/staging/common.tfvars"
+  ]
   global_remote_state = true
 
   project_name = "govuk-infrastructure"
@@ -53,23 +62,29 @@ module "release-staging" {
     "GOV.UK Production" = "write"
   }
 
+  tfvars_files = [
+    "staging/common.tfvars"
+  ]
+
   variable_set_ids = [
-    local.aws_credentials["staging"],
-    module.variable-set-staging.id
+    local.aws_credentials["staging"]
   ]
 }
 
 module "release-production" {
   source = "github.com/alphagov/terraform-govuk-tfe-workspacer"
 
-  organization        = var.organization
-  workspace_name      = "release-production"
-  workspace_desc      = "Manages IAM roles and policies for the Release app"
-  workspace_tags      = ["production", "release", "aws"]
-  terraform_version   = var.terraform_version
-  execution_mode      = "remote"
-  working_directory   = "/terraform/deployments/release/"
-  trigger_patterns    = ["/terraform/deployments/release/**/*"]
+  organization      = var.organization
+  workspace_name    = "release-production"
+  workspace_desc    = "Manages IAM roles and policies for the Release app"
+  workspace_tags    = ["production", "release", "aws"]
+  terraform_version = var.terraform_version
+  execution_mode    = "remote"
+  working_directory = "/terraform/deployments/release/"
+  trigger_patterns = [
+    "/terraform/deployments/release/**/*",
+    "/terraform/variables/production/common.tfvars"
+  ]
   global_remote_state = true
 
   project_name = "govuk-infrastructure"
@@ -83,8 +98,11 @@ module "release-production" {
     "GOV.UK Production" = "write"
   }
 
+  tfvars_files = [
+    "production/common.tfvars"
+  ]
+
   variable_set_ids = [
-    local.aws_credentials["production"],
-    module.variable-set-production.id
+    local.aws_credentials["production"]
   ]
 }

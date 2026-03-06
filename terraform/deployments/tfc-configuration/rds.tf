@@ -45,14 +45,17 @@ module "rds-integration" {
 module "rds-staging" {
   source = "github.com/alphagov/terraform-govuk-tfe-workspacer"
 
-  organization        = var.organization
-  workspace_name      = "rds-staging"
-  workspace_desc      = "This module manages AWS resources for creating RDS databases."
-  workspace_tags      = ["staging", "rds", "eks", "aws"]
-  terraform_version   = var.terraform_version
-  execution_mode      = "remote"
-  working_directory   = "/terraform/deployments/rds/"
-  trigger_patterns    = ["/terraform/deployments/rds/**/*"]
+  organization      = var.organization
+  workspace_name    = "rds-staging"
+  workspace_desc    = "This module manages AWS resources for creating RDS databases."
+  workspace_tags    = ["staging", "rds", "eks", "aws"]
+  terraform_version = var.terraform_version
+  execution_mode    = "remote"
+  working_directory = "/terraform/deployments/rds/"
+  trigger_patterns = [
+    "/terraform/deployments/rds/**/*",
+    "/terraform/variables/staging/common.tfvars"
+  ]
   global_remote_state = true
 
   project_name = "govuk-infrastructure"
@@ -71,9 +74,12 @@ module "rds-staging" {
     TF_CLI_ARGS_apply = "-parallelism=30"
   }
 
+  tfvars_files = [
+    "staging/common.tfvars"
+  ]
+
   variable_set_ids = [
     local.aws_credentials["staging"],
-    module.variable-set-staging.id,
     module.variable-set-rds-staging.id
   ]
 }
@@ -81,14 +87,17 @@ module "rds-staging" {
 module "rds-production" {
   source = "github.com/alphagov/terraform-govuk-tfe-workspacer"
 
-  organization        = var.organization
-  workspace_name      = "rds-production"
-  workspace_desc      = "This module manages AWS resources for creating RDS databases."
-  workspace_tags      = ["production", "rds", "eks", "aws"]
-  terraform_version   = var.terraform_version
-  execution_mode      = "remote"
-  working_directory   = "/terraform/deployments/rds/"
-  trigger_patterns    = ["/terraform/deployments/rds/**/*"]
+  organization      = var.organization
+  workspace_name    = "rds-production"
+  workspace_desc    = "This module manages AWS resources for creating RDS databases."
+  workspace_tags    = ["production", "rds", "eks", "aws"]
+  terraform_version = var.terraform_version
+  execution_mode    = "remote"
+  working_directory = "/terraform/deployments/rds/"
+  trigger_patterns = [
+    "/terraform/deployments/rds/**/*",
+    "/terraform/variables/production/common.tfvars"
+  ]
   global_remote_state = true
 
   project_name = "govuk-infrastructure"
@@ -107,9 +116,12 @@ module "rds-production" {
     TF_CLI_ARGS_apply = "-parallelism=30"
   }
 
+  tfvars_files = [
+    "production/common.tfvars"
+  ]
+
   variable_set_ids = [
     local.aws_credentials["production"],
-    module.variable-set-production.id,
     module.variable-set-rds-production.id
   ]
 }
