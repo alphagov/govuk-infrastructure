@@ -315,6 +315,7 @@ repos:
 
   govuk-chat-gradio-prototype:
     visibility: private
+    archived: true
 
   govuk-chat-v1-iterations-2026:
     visibility: private
