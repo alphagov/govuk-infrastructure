@@ -8,7 +8,11 @@ module "rds-integration" {
   terraform_version   = var.terraform_version
   execution_mode      = "remote"
   working_directory   = "/terraform/deployments/rds/"
-  trigger_patterns    = ["/terraform/deployments/rds/**/*"]
+  trigger_patterns    = [
+    "/terraform/deployments/rds/**/*",
+    "/terraform/variables/integration/common.tfvars",
+    "/terraform/variables/integration/rds.tfvars"
+  ]
   global_remote_state = true
 
   project_name = "govuk-infrastructure"
