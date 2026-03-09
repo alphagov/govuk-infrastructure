@@ -10,6 +10,7 @@ module "gcp-ga4-analytics" {
   working_directory   = "/terraform/deployments/ga4-analytics/"
   trigger_patterns    = ["/terraform/deployments/ga4-analytics/**/*"]
   global_remote_state = true
+  assessments_enabled = true
 
   project_name = "govuk-infrastructure"
   vcs_repo = {
@@ -41,6 +42,7 @@ module "gcp-ga4-aggregate-analytics" {
   working_directory   = "/terraform/deployments/gcp-ga4-aggregate-analytics/"
   trigger_patterns    = ["/terraform/deployments/gcp-ga4-aggregate-analytics/**/*"]
   global_remote_state = true
+  assessments_enabled = true
 
   project_name = "govuk-data-engineering"
   vcs_repo = {
@@ -71,6 +73,7 @@ module "gcp-gds-bq-processing" {
   working_directory   = "/terraform/deployments/gcp-gds-bq-processing/"
   trigger_patterns    = ["/terraform/deployments/gcp-gds-bq-processing/**/*"]
   global_remote_state = true
+  assessments_enabled = true
 
   project_name = "govuk-data-engineering"
   vcs_repo = {
