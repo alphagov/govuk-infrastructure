@@ -1,0 +1,14 @@
+hosted_zone_name         = "chat"
+engine_version           = "2.13"
+security_options_enabled = true
+volume_type              = "gp3"
+throughput               = 250
+ebs_enabled              = true
+ebs_volume_size          = 90
+service                  = "chat"
+instance_type            = "r6g.2xlarge.search"
+instance_count           = 3
+dedicated_master_enabled = true
+dedicated_master_count   = 3
+dedicated_master_type    = "m6g.large.search"
+zone_awareness_enabled   = true

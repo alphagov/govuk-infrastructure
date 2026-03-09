@@ -8,7 +8,11 @@ module "opensearch-integration" {
   terraform_version = var.terraform_version
   execution_mode    = "remote"
   working_directory = "/terraform/deployments/opensearch/"
-  trigger_patterns  = ["/terraform/deployments/opensearch/**/*"]
+  trigger_patterns = [
+    "/terraform/deployments/opensearch/**/*",
+    "/terraform/variables/integration/common.tfvars",
+    "/terraform/variables/integration/opensearch.tfvars"
+  ]
 
   project_name = "govuk-infrastructure"
   vcs_repo = {
@@ -22,10 +26,13 @@ module "opensearch-integration" {
     "GOV.UK Production"           = "write"
   }
 
+  tfvars_files = [
+    "integration/common.tfvars",
+    "integration/opensearch.tfvars"
+  ]
+
   variable_set_ids = [
-    local.aws_credentials["integration"],
-    module.variable-set-integration.id,
-    module.variable-set-opensearch-integration.id
+    local.aws_credentials["integration"]
   ]
 }
 
@@ -39,7 +46,11 @@ module "opensearch-staging" {
   terraform_version = var.terraform_version
   execution_mode    = "remote"
   working_directory = "/terraform/deployments/opensearch/"
-  trigger_patterns  = ["/terraform/deployments/opensearch/**/*"]
+  trigger_patterns = [
+    "/terraform/deployments/opensearch/**/*",
+    "/terraform/variables/staging/common.tfvars",
+    "/terraform/variables/staging/opensearch.tfvars"
+  ]
 
   project_name = "govuk-infrastructure"
   vcs_repo = {
@@ -52,10 +63,13 @@ module "opensearch-staging" {
     "GOV.UK Production" = "write"
   }
 
+  tfvars_files = [
+    "staging/common.tfvars",
+    "staging/opensearch.tfvars"
+  ]
+
   variable_set_ids = [
-    local.aws_credentials["staging"],
-    module.variable-set-staging.id,
-    module.variable-set-opensearch-staging.id
+    local.aws_credentials["staging"]
   ]
 }
 
@@ -69,7 +83,11 @@ module "opensearch-production" {
   terraform_version = var.terraform_version
   execution_mode    = "remote"
   working_directory = "/terraform/deployments/opensearch/"
-  trigger_patterns  = ["/terraform/deployments/opensearch/**/*"]
+  trigger_patterns = [
+    "/terraform/deployments/opensearch/**/*",
+    "/terraform/variables/production/common.tfvars",
+    "/terraform/variables/production/opensearch.tfvars"
+  ]
 
   project_name = "govuk-infrastructure"
   vcs_repo = {
@@ -82,9 +100,12 @@ module "opensearch-production" {
     "GOV.UK Production" = "write"
   }
 
+  tfvars_files = [
+    "production/common.tfvars",
+    "production/opensearch.tfvars"
+  ]
+
   variable_set_ids = [
-    local.aws_credentials["production"],
-    module.variable-set-production.id,
-    module.variable-set-opensearch-production.id
+    local.aws_credentials["production"]
   ]
 }
