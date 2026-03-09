@@ -32,14 +32,17 @@ module "root-dns-ephemeral" {
 module "root-dns-integration" {
   source = "github.com/alphagov/terraform-govuk-tfe-workspacer"
 
-  organization        = var.organization
-  workspace_name      = "root-dns-integration"
-  workspace_desc      = "Internal and external DNS zones for integration environment"
-  workspace_tags      = ["integration", "root-dns", "aws"]
-  terraform_version   = var.terraform_version
-  execution_mode      = "remote"
-  working_directory   = "/terraform/deployments/root-dns/"
-  trigger_patterns    = ["/terraform/deployments/root-dns/**/*"]
+  organization      = var.organization
+  workspace_name    = "root-dns-integration"
+  workspace_desc    = "Internal and external DNS zones for integration environment"
+  workspace_tags    = ["integration", "root-dns", "aws"]
+  terraform_version = var.terraform_version
+  execution_mode    = "remote"
+  working_directory = "/terraform/deployments/root-dns/"
+  trigger_patterns = [
+    "/terraform/deployments/root-dns/**/*",
+    "/terraform/variables/integration/common.tfvars"
+  ]
   global_remote_state = true
 
   project_name = "govuk-infrastructure"
@@ -54,24 +57,30 @@ module "root-dns-integration" {
     "GOV.UK Production"           = "write"
   }
 
+  tfvars_files = [
+    "integration/common.tfvars"
+  ]
+
   variable_set_ids = [
     local.aws_credentials["integration"],
-    local.gcp_credentials["integration"],
-    module.variable-set-integration.id
+    local.gcp_credentials["integration"]
   ]
 }
 
 module "root-dns-staging" {
   source = "github.com/alphagov/terraform-govuk-tfe-workspacer"
 
-  organization        = var.organization
-  workspace_name      = "root-dns-staging"
-  workspace_desc      = "Internal and external DNS zones for staging environment"
-  workspace_tags      = ["staging", "root-dns", "aws"]
-  terraform_version   = var.terraform_version
-  execution_mode      = "remote"
-  working_directory   = "/terraform/deployments/root-dns/"
-  trigger_patterns    = ["/terraform/deployments/root-dns/**/*"]
+  organization      = var.organization
+  workspace_name    = "root-dns-staging"
+  workspace_desc    = "Internal and external DNS zones for staging environment"
+  workspace_tags    = ["staging", "root-dns", "aws"]
+  terraform_version = var.terraform_version
+  execution_mode    = "remote"
+  working_directory = "/terraform/deployments/root-dns/"
+  trigger_patterns = [
+    "/terraform/deployments/root-dns/**/*",
+    "/terraform/variables/staging/common.tfvars"
+  ]
   global_remote_state = true
 
   project_name = "govuk-infrastructure"
@@ -85,24 +94,30 @@ module "root-dns-staging" {
     "GOV.UK Production" = "write"
   }
 
+  tfvars_files = [
+    "staging/common.tfvars"
+  ]
+
   variable_set_ids = [
     local.aws_credentials["staging"],
-    local.gcp_credentials["staging"],
-    module.variable-set-staging.id
+    local.gcp_credentials["staging"]
   ]
 }
 
 module "root-dns-production" {
   source = "github.com/alphagov/terraform-govuk-tfe-workspacer"
 
-  organization        = var.organization
-  workspace_name      = "root-dns-production"
-  workspace_desc      = "Internal and external DNS zones for production environment"
-  workspace_tags      = ["production", "root-dns", "aws"]
-  terraform_version   = var.terraform_version
-  execution_mode      = "remote"
-  working_directory   = "/terraform/deployments/root-dns/"
-  trigger_patterns    = ["/terraform/deployments/root-dns/**/*"]
+  organization      = var.organization
+  workspace_name    = "root-dns-production"
+  workspace_desc    = "Internal and external DNS zones for production environment"
+  workspace_tags    = ["production", "root-dns", "aws"]
+  terraform_version = var.terraform_version
+  execution_mode    = "remote"
+  working_directory = "/terraform/deployments/root-dns/"
+  trigger_patterns = [
+    "/terraform/deployments/root-dns/**/*",
+    "/terraform/variables/production/common.tfvars"
+  ]
   global_remote_state = true
 
   project_name = "govuk-infrastructure"
@@ -116,9 +131,12 @@ module "root-dns-production" {
     "GOV.UK Production" = "write"
   }
 
+  tfvars_files = [
+    "production/common.tfvars"
+  ]
+
   variable_set_ids = [
     local.aws_credentials["production"],
-    local.gcp_credentials["production"],
-    module.variable-set-production.id
+    local.gcp_credentials["production"]
   ]
 }
