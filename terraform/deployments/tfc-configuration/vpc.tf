@@ -1,14 +1,17 @@
 module "vpc-integration" {
   source = "github.com/alphagov/terraform-govuk-tfe-workspacer"
 
-  organization        = var.organization
-  workspace_name      = "vpc-integration"
-  workspace_desc      = "This module manages foundational cloud resources that are required by most other modules (VPC)"
-  workspace_tags      = ["integration", "vpc", "eks", "aws"]
-  terraform_version   = var.terraform_version
-  execution_mode      = "remote"
-  working_directory   = "/terraform/deployments/vpc/"
-  trigger_patterns    = ["/terraform/deployments/vpc/**/*"]
+  organization      = var.organization
+  workspace_name    = "vpc-integration"
+  workspace_desc    = "This module manages foundational cloud resources that are required by most other modules (VPC)"
+  workspace_tags    = ["integration", "vpc", "eks", "aws"]
+  terraform_version = var.terraform_version
+  execution_mode    = "remote"
+  working_directory = "/terraform/deployments/vpc/"
+  trigger_patterns = [
+    "/terraform/deployments/vpc/**/*",
+    "/terraform/variables/integration/common.tfvars"
+  ]
   global_remote_state = true
 
   project_name = "govuk-infrastructure"
@@ -23,24 +26,30 @@ module "vpc-integration" {
     "GOV.UK Production"           = "write"
   }
 
+  tfvars_files = [
+    "integration/common.tfvars"
+  ]
+
   variable_set_ids = [
     local.aws_credentials["integration"],
-    local.gcp_credentials["integration"],
-    module.variable-set-integration.id
+    local.gcp_credentials["integration"]
   ]
 }
 
 module "vpc-staging" {
   source = "github.com/alphagov/terraform-govuk-tfe-workspacer"
 
-  organization        = var.organization
-  workspace_name      = "vpc-staging"
-  workspace_desc      = "This module manages foundational cloud resources that are required by most other modules (VPC)"
-  workspace_tags      = ["staging", "vpc", "eks", "aws"]
-  terraform_version   = var.terraform_version
-  execution_mode      = "remote"
-  working_directory   = "/terraform/deployments/vpc/"
-  trigger_patterns    = ["/terraform/deployments/vpc/**/*"]
+  organization      = var.organization
+  workspace_name    = "vpc-staging"
+  workspace_desc    = "This module manages foundational cloud resources that are required by most other modules (VPC)"
+  workspace_tags    = ["staging", "vpc", "eks", "aws"]
+  terraform_version = var.terraform_version
+  execution_mode    = "remote"
+  working_directory = "/terraform/deployments/vpc/"
+  trigger_patterns = [
+    "/terraform/deployments/vpc/**/*",
+    "/terraform/variables/staging/common.tfvars"
+  ]
   global_remote_state = true
 
   project_name = "govuk-infrastructure"
@@ -54,24 +63,30 @@ module "vpc-staging" {
     "GOV.UK Production" = "write"
   }
 
+  tfvars_files = [
+    "staging/common.tfvars"
+  ]
+
   variable_set_ids = [
     local.aws_credentials["staging"],
-    local.gcp_credentials["staging"],
-    module.variable-set-staging.id
+    local.gcp_credentials["staging"]
   ]
 }
 
 module "vpc-production" {
   source = "github.com/alphagov/terraform-govuk-tfe-workspacer"
 
-  organization        = var.organization
-  workspace_name      = "vpc-production"
-  workspace_desc      = "This module manages foundational cloud resources that are required by most other modules (VPC)"
-  workspace_tags      = ["production", "vpc", "eks", "aws"]
-  terraform_version   = var.terraform_version
-  execution_mode      = "remote"
-  working_directory   = "/terraform/deployments/vpc/"
-  trigger_patterns    = ["/terraform/deployments/vpc/**/*"]
+  organization      = var.organization
+  workspace_name    = "vpc-production"
+  workspace_desc    = "This module manages foundational cloud resources that are required by most other modules (VPC)"
+  workspace_tags    = ["production", "vpc", "eks", "aws"]
+  terraform_version = var.terraform_version
+  execution_mode    = "remote"
+  working_directory = "/terraform/deployments/vpc/"
+  trigger_patterns = [
+    "/terraform/deployments/vpc/**/*",
+    "/terraform/variables/production/common.tfvars"
+  ]
   global_remote_state = true
 
   project_name = "govuk-infrastructure"
@@ -85,10 +100,13 @@ module "vpc-production" {
     "GOV.UK Production" = "write"
   }
 
+  tfvars_files = [
+    "production/common.tfvars"
+  ]
+
   variable_set_ids = [
     local.aws_credentials["production"],
-    local.gcp_credentials["production"],
-    module.variable-set-production.id
+    local.gcp_credentials["production"]
   ]
 }
 
