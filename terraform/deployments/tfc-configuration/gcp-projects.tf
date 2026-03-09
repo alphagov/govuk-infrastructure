@@ -59,6 +59,16 @@ module "gcp-ga4-aggregate-analytics" {
   variable_set_ids = [
     local.gcp_credentials["production"],
   ]
+
+  notifications = [
+    {
+      name             = "configuration-drift-alert"
+      destination_type = "email"
+      email_user_ids   = ["aaron_fowles"]
+      triggers         = ["assessment:check_failure", "assessment:drifted", "assessment:failed"]
+      enabled          = true
+    },
+  ]
 }
 
 module "gcp-gds-bq-processing" {
