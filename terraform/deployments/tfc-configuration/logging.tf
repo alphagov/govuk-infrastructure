@@ -1,14 +1,17 @@
 module "logging-integration" {
   source = "github.com/alphagov/terraform-govuk-tfe-workspacer"
 
-  organization        = var.organization
-  workspace_name      = "logging-integration"
-  workspace_desc      = "This module manages foundational cloud resources that are required by most other modules (VPC, DNS zones)"
-  workspace_tags      = ["integration", "logging", "aws"]
-  terraform_version   = var.terraform_version
-  execution_mode      = "remote"
-  working_directory   = "/terraform/deployments/logging/"
-  trigger_patterns    = ["/terraform/deployments/logging/**/*"]
+  organization      = var.organization
+  workspace_name    = "logging-integration"
+  workspace_desc    = "This module manages foundational cloud resources that are required by most other modules (VPC, DNS zones)"
+  workspace_tags    = ["integration", "logging", "aws"]
+  terraform_version = var.terraform_version
+  execution_mode    = "remote"
+  working_directory = "/terraform/deployments/logging/"
+  trigger_patterns = [
+    "/terraform/deployments/logging/**/*",
+    "/terraform/variables/integration/common.tfvars"
+  ]
   global_remote_state = true
 
   project_name = "govuk-infrastructure"
@@ -23,24 +26,30 @@ module "logging-integration" {
     "GOV.UK Production"           = "write"
   }
 
+  tfvars_files = [
+    "integration/common.tfvars"
+  ]
+
   variable_set_ids = [
     local.aws_credentials["integration"],
-    local.gcp_credentials["integration"],
-    module.variable-set-integration.id
+    local.gcp_credentials["integration"]
   ]
 }
 
 module "logging-staging" {
   source = "github.com/alphagov/terraform-govuk-tfe-workspacer"
 
-  organization        = var.organization
-  workspace_name      = "logging-staging"
-  workspace_desc      = "VPC-level logging (flow logs, buckets, etc)"
-  workspace_tags      = ["staging", "logging", "aws"]
-  terraform_version   = var.terraform_version
-  execution_mode      = "remote"
-  working_directory   = "/terraform/deployments/logging/"
-  trigger_patterns    = ["/terraform/deployments/logging/**/*"]
+  organization      = var.organization
+  workspace_name    = "logging-staging"
+  workspace_desc    = "VPC-level logging (flow logs, buckets, etc)"
+  workspace_tags    = ["staging", "logging", "aws"]
+  terraform_version = var.terraform_version
+  execution_mode    = "remote"
+  working_directory = "/terraform/deployments/logging/"
+  trigger_patterns = [
+    "/terraform/deployments/logging/**/*",
+    "/terraform/variables/staging/common.tfvars"
+  ]
   global_remote_state = true
 
   project_name = "govuk-infrastructure"
@@ -54,24 +63,30 @@ module "logging-staging" {
     "GOV.UK Production" = "write"
   }
 
+  tfvars_files = [
+    "staging/common.tfvars"
+  ]
+
   variable_set_ids = [
     local.aws_credentials["staging"],
-    local.gcp_credentials["staging"],
-    module.variable-set-staging.id
+    local.gcp_credentials["staging"]
   ]
 }
 
 module "logging-production" {
   source = "github.com/alphagov/terraform-govuk-tfe-workspacer"
 
-  organization        = var.organization
-  workspace_name      = "logging-production"
-  workspace_desc      = "VPC-level logging (flow logs, buckets, etc)"
-  workspace_tags      = ["production", "logging", "aws"]
-  terraform_version   = var.terraform_version
-  execution_mode      = "remote"
-  working_directory   = "/terraform/deployments/logging/"
-  trigger_patterns    = ["/terraform/deployments/logging/**/*"]
+  organization      = var.organization
+  workspace_name    = "logging-production"
+  workspace_desc    = "VPC-level logging (flow logs, buckets, etc)"
+  workspace_tags    = ["production", "logging", "aws"]
+  terraform_version = var.terraform_version
+  execution_mode    = "remote"
+  working_directory = "/terraform/deployments/logging/"
+  trigger_patterns = [
+    "/terraform/deployments/logging/**/*",
+    "/terraform/variables/production/common.tfvars"
+  ]
   global_remote_state = true
 
   project_name = "govuk-infrastructure"
@@ -85,10 +100,13 @@ module "logging-production" {
     "GOV.UK Production" = "write"
   }
 
+  tfvars_files = [
+    "production/common.tfvars"
+  ]
+
   variable_set_ids = [
     local.aws_credentials["production"],
-    local.gcp_credentials["production"],
-    module.variable-set-production.id
+    local.gcp_credentials["production"]
   ]
 }
 
