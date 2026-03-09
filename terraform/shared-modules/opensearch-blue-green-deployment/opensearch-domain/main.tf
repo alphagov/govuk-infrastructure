@@ -84,8 +84,8 @@ data "aws_iam_policy_document" "opensearch_domain" {
     sid = "AllowOpenSearchAccessFromThisAccount"
 
     principals {
-      type        = "AWS"
-      identifiers = [data.aws_caller_identity.current.account_id]
+      type        = "*"
+      identifiers = ["*"]
     }
 
     actions = ["es:*"]
