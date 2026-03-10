@@ -1,14 +1,18 @@
 module "cloudfront-staging" {
   source = "github.com/alphagov/terraform-govuk-tfe-workspacer"
 
-  organization        = var.organization
-  workspace_name      = "cloudfront-staging"
-  workspace_desc      = "This module manages resources for the failover CDN in Cloudfront"
-  workspace_tags      = ["staging", "cloudfront", "eks", "aws"]
-  terraform_version   = var.terraform_version
-  execution_mode      = "remote"
-  working_directory   = "/terraform/deployments/cloudfront/"
-  trigger_patterns    = ["/terraform/deployments/cloudfront/**/*"]
+  organization      = var.organization
+  workspace_name    = "cloudfront-staging"
+  workspace_desc    = "This module manages resources for the failover CDN in Cloudfront"
+  workspace_tags    = ["staging", "cloudfront", "eks", "aws"]
+  terraform_version = var.terraform_version
+  execution_mode    = "remote"
+  working_directory = "/terraform/deployments/cloudfront/"
+  trigger_patterns = [
+    "/terraform/deployments/cloudfront/**/*",
+    "/terraform/variables/staging/common.tfvars",
+    "/terraform/variables/staging/cloudfront.tfvars"
+  ]
   global_remote_state = true
 
   project_name = "govuk-infrastructure"
@@ -22,24 +26,31 @@ module "cloudfront-staging" {
     "GOV.UK Production" = "write"
   }
 
+  tfvars_files = [
+    "staging/common.tfvars",
+    "staging/cloudfront.tfvars"
+  ]
+
   variable_set_ids = [
-    local.aws_credentials["staging"],
-    module.variable-set-staging.id,
-    module.variable-set-cloudfront-staging.id
+    local.aws_credentials["staging"]
   ]
 }
 
 module "cloudfront-production" {
   source = "github.com/alphagov/terraform-govuk-tfe-workspacer"
 
-  organization        = var.organization
-  workspace_name      = "cloudfront-production"
-  workspace_desc      = "This module manages resources for the failover CDN in Cloudfront"
-  workspace_tags      = ["production", "cloudfront", "eks", "aws"]
-  terraform_version   = var.terraform_version
-  execution_mode      = "remote"
-  working_directory   = "/terraform/deployments/cloudfront/"
-  trigger_patterns    = ["/terraform/deployments/cloudfront/**/*"]
+  organization      = var.organization
+  workspace_name    = "cloudfront-production"
+  workspace_desc    = "This module manages resources for the failover CDN in Cloudfront"
+  workspace_tags    = ["production", "cloudfront", "eks", "aws"]
+  terraform_version = var.terraform_version
+  execution_mode    = "remote"
+  working_directory = "/terraform/deployments/cloudfront/"
+  trigger_patterns = [
+    "/terraform/deployments/cloudfront/**/*",
+    "/terraform/variables/production/common.tfvars",
+    "/terraform/variables/production/cloudfront.tfvars"
+  ]
   global_remote_state = true
 
   project_name = "govuk-infrastructure"
@@ -53,9 +64,12 @@ module "cloudfront-production" {
     "GOV.UK Production" = "write"
   }
 
+  tfvars_files = [
+    "production/common.tfvars",
+    "production/cloudfront.tfvars"
+  ]
+
   variable_set_ids = [
-    local.aws_credentials["production"],
-    module.variable-set-production.id,
-    module.variable-set-cloudfront-production.id
+    local.aws_credentials["production"]
   ]
 }
