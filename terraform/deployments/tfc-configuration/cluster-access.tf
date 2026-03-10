@@ -10,7 +10,10 @@ module "cluster-access-integration" {
   auto_apply_run_trigger = true
   execution_mode         = "remote"
   working_directory      = "/terraform/deployments/cluster-access/"
-  trigger_patterns       = ["/terraform/deployments/cluster-access/**/*"]
+  trigger_patterns = [
+    "/terraform/deployments/cluster-access/**/*",
+    "/terraform/variables/integration/common.tfvars"
+  ]
 
   project_name = "govuk-infrastructure"
   vcs_repo = {
@@ -24,9 +27,12 @@ module "cluster-access-integration" {
     "GOV.UK Production"           = "write"
   }
 
+  tfvars_files = [
+    "integration/common.tfvars"
+  ]
+
   variable_set_ids = [
-    local.aws_credentials["integration"],
-    module.variable-set-integration.id
+    local.aws_credentials["integration"]
   ]
 
   run_trigger_source_workspaces = ["govuk-aws-users-integration"]
@@ -44,7 +50,10 @@ module "cluster-access-staging" {
   auto_apply_run_trigger = true
   execution_mode         = "remote"
   working_directory      = "/terraform/deployments/cluster-access/"
-  trigger_patterns       = ["/terraform/deployments/cluster-access/**/*"]
+  trigger_patterns = [
+    "/terraform/deployments/cluster-access/**/*",
+    "/terraform/variables/staging/common.tfvars"
+  ]
 
   project_name = "govuk-infrastructure"
   vcs_repo = {
@@ -57,9 +66,12 @@ module "cluster-access-staging" {
     "GOV.UK Production" = "write"
   }
 
+  tfvars_files = [
+    "staging/common.tfvars"
+  ]
+
   variable_set_ids = [
-    local.aws_credentials["staging"],
-    module.variable-set-staging.id
+    local.aws_credentials["staging"]
   ]
 
   run_trigger_source_workspaces = ["govuk-aws-users-staging"]
@@ -77,7 +89,10 @@ module "cluster-access-production" {
   auto_apply_run_trigger = true
   execution_mode         = "remote"
   working_directory      = "/terraform/deployments/cluster-access/"
-  trigger_patterns       = ["/terraform/deployments/cluster-access/**/*"]
+  trigger_patterns = [
+    "/terraform/deployments/cluster-access/**/*",
+    "/terraform/variables/production/common.tfvars"
+  ]
 
   project_name = "govuk-infrastructure"
   vcs_repo = {
@@ -90,9 +105,12 @@ module "cluster-access-production" {
     "GOV.UK Production" = "write"
   }
 
+  tfvars_files = [
+    "production/common.tfvars"
+  ]
+
   variable_set_ids = [
-    local.aws_credentials["production"],
-    module.variable-set-production.id
+    local.aws_credentials["production"]
   ]
 
   run_trigger_source_workspaces = ["govuk-aws-users-production"]
