@@ -8,7 +8,10 @@ module "csp-reporter-integration" {
   terraform_version = var.terraform_version
   execution_mode    = "remote"
   working_directory = "/terraform/deployments/csp-reporter/"
-  trigger_patterns  = ["/terraform/deployments/csp-reporter/**/*"]
+  trigger_patterns = [
+    "/terraform/deployments/csp-reporter/**/*",
+    "/terraform/variables/integration/common.tfvars"
+  ]
 
   project_name = "govuk-infrastructure"
   vcs_repo = {
@@ -22,9 +25,12 @@ module "csp-reporter-integration" {
     "GOV.UK Production"           = "write"
   }
 
+  tfvars_files = [
+    "integration/common.tfvars"
+  ]
+
   variable_set_ids = [
-    local.aws_credentials["integration"],
-    module.variable-set-integration.id
+    local.aws_credentials["integration"]
   ]
 }
 
@@ -38,7 +44,10 @@ module "csp-reporter-staging" {
   terraform_version = var.terraform_version
   execution_mode    = "remote"
   working_directory = "/terraform/deployments/csp-reporter/"
-  trigger_patterns  = ["/terraform/deployments/csp-reporter/**/*"]
+  trigger_patterns = [
+    "/terraform/deployments/csp-reporter/**/*",
+    "/terraform/variables/staging/common.tfvars"
+  ]
 
   project_name = "govuk-infrastructure"
   vcs_repo = {
@@ -51,9 +60,12 @@ module "csp-reporter-staging" {
     "GOV.UK Production" = "write"
   }
 
+  tfvars_files = [
+    "staging/common.tfvars"
+  ]
+
   variable_set_ids = [
-    local.aws_credentials["staging"],
-    module.variable-set-staging.id
+    local.aws_credentials["staging"]
   ]
 }
 
@@ -67,7 +79,10 @@ module "csp-reporter-production" {
   terraform_version = var.terraform_version
   execution_mode    = "remote"
   working_directory = "/terraform/deployments/csp-reporter/"
-  trigger_patterns  = ["/terraform/deployments/csp-reporter/**/*"]
+  trigger_patterns = [
+    "/terraform/deployments/csp-reporter/**/*",
+    "/terraform/variables/production/common.tfvars"
+  ]
 
   project_name = "govuk-infrastructure"
   vcs_repo = {
@@ -80,8 +95,11 @@ module "csp-reporter-production" {
     "GOV.UK Production" = "write"
   }
 
+  tfvars_files = [
+    "production/common.tfvars"
+  ]
+
   variable_set_ids = [
-    local.aws_credentials["production"],
-    module.variable-set-production.id
+    local.aws_credentials["production"]
   ]
 }
