@@ -29,23 +29,19 @@ jobs:
     - name: Determine Terraform version to use
       uses: dflook/terraform-version@8ee89d962417ed259f9d75e7529e262637c7e5a8
       id: terraform-version
-      if: steps.changed-deployments.outputs.any_changed == 'true'
       with:
         path: terraform
 
     - uses: hashicorp/setup-terraform@5e8dbf3c6d9deaf4193ca7a8fb23f2ac83bb6c85 # v4.0.0
-      if: steps.changed-deployments.outputs.any_changed == 'true'
       with:
         terraform_version: ${{ steps.terraform-version.outputs.terraform }}
         terraform_wrapper: false
 
     - name: Create Terraform plugin cache dir
       run: mkdir -p "$TF_PLUGIN_CACHE_DIR"
-      if: steps.changed-deployments.outputs.any_changed == 'true'
 
     - name: Cache Terraform plugins
       uses: actions/cache@cdf6c1fa76f9f475f3d7449005a359c84ca0f306 # v5.0.3
-      if: steps.changed-deployments.outputs.any_changed == 'true'
       with:
         path: ${{ env.TF_PLUGIN_CACHE_DIR }}
         key:
@@ -64,7 +60,7 @@ jobs:
       with:
         tflint_version: v0.55.0
 
-    - name: terraform fmt
+    - name: terraform fmt roots
       working-directory: terraform/deployments
       env:
         DEPLOYMENTS: ${{ steps.changed-deployments.outputs.all_changed_files }}
@@ -79,6 +75,15 @@ jobs:
           echo "Deployment '$d' ok"
           cd "$OLDPWD"
         done
+
+    - name: terraform fmt variables
+      working-directory: terraform/variables
+      run: |
+        if ! terraform fmt -recursive -check -diff -list=true .; then
+          >&2 echo "Some tfvars files weren't formatted correctly. Run 'terraform fmt' to fix them."
+          exit 1
+        fi
+        echo "Variables ok"
 
     - name: terraform init
       working-directory: terraform/deployments
