@@ -12,6 +12,8 @@ module "ai-accelerator-integration" {
     "/terraform/deployments/ai-accelerator/**/*",
     "/terraform/shared-modules/opensearch-blue-green-deployment/**/*",
     "/terraform/shared-modules/s3/**/*",
+    "/terraform/variables/integration/common.tfvars",
+    "/terraform/variables/integration/ai-accelerator.tfvars"
   ]
   global_remote_state = true
 
@@ -27,9 +29,12 @@ module "ai-accelerator-integration" {
     "GOV.UK Production"           = "write"
   }
 
+  tfvars_files = [
+    "integration/common.tfvars",
+    "integration/ai-accelerator.tfvars"
+  ]
+
   variable_set_ids = [
-    local.aws_credentials["integration"],
-    module.variable-set-integration.id,
-    module.variable-set-ai-accelerator-integration.id
+    local.aws_credentials["integration"]
   ]
 }
