@@ -1,14 +1,17 @@
 module "mobile-backend-production" {
   source = "github.com/alphagov/terraform-govuk-tfe-workspacer"
 
-  organization        = var.organization
-  workspace_name      = "mobile-backend-production"
-  workspace_desc      = "Infrastucture for GOV.UK App"
-  workspace_tags      = ["production", "mobile-backend", "aws"]
-  terraform_version   = var.terraform_version
-  execution_mode      = "remote"
-  working_directory   = "/terraform/deployments/mobile-backend/"
-  trigger_patterns    = ["/terraform/deployments/mobile-backend/**/*"]
+  organization      = var.organization
+  workspace_name    = "mobile-backend-production"
+  workspace_desc    = "Infrastucture for GOV.UK App"
+  workspace_tags    = ["production", "mobile-backend", "aws"]
+  terraform_version = var.terraform_version
+  execution_mode    = "remote"
+  working_directory = "/terraform/deployments/mobile-backend/"
+  trigger_patterns = [
+    "/terraform/deployments/mobile-backend/**/*",
+    "/terraform/variables/production/common.tfvars"
+  ]
   global_remote_state = true
 
   project_name = "govuk-infrastructure"
@@ -22,23 +25,29 @@ module "mobile-backend-production" {
     "GOV.UK Production" = "write"
   }
 
+  tfvars_files = [
+    "production/common.tfvars"
+  ]
+
   variable_set_ids = [
-    local.aws_credentials["production"],
-    module.variable-set-production.id
+    local.aws_credentials["production"]
   ]
 }
 
 module "mobile-backend-staging" {
   source = "github.com/alphagov/terraform-govuk-tfe-workspacer"
 
-  organization        = var.organization
-  workspace_name      = "mobile-backend-staging"
-  workspace_desc      = "Infrastucture for GOV.UK App"
-  workspace_tags      = ["staging", "mobile-backend", "aws"]
-  terraform_version   = var.terraform_version
-  execution_mode      = "remote"
-  working_directory   = "/terraform/deployments/mobile-backend/"
-  trigger_patterns    = ["/terraform/deployments/mobile-backend/**/*"]
+  organization      = var.organization
+  workspace_name    = "mobile-backend-staging"
+  workspace_desc    = "Infrastucture for GOV.UK App"
+  workspace_tags    = ["staging", "mobile-backend", "aws"]
+  terraform_version = var.terraform_version
+  execution_mode    = "remote"
+  working_directory = "/terraform/deployments/mobile-backend/"
+  trigger_patterns = [
+    "/terraform/deployments/mobile-backend/**/*",
+    "/terraform/variables/staging/common.tfvars"
+  ]
   global_remote_state = true
 
   project_name = "govuk-infrastructure"
@@ -52,23 +61,29 @@ module "mobile-backend-staging" {
     "GOV.UK Production" = "write"
   }
 
+  tfvars_files = [
+    "staging/common.tfvars"
+  ]
+
   variable_set_ids = [
-    local.aws_credentials["staging"],
-    module.variable-set-staging.id
+    local.aws_credentials["staging"]
   ]
 }
 
 module "mobile-backend-integration" {
   source = "github.com/alphagov/terraform-govuk-tfe-workspacer"
 
-  organization        = var.organization
-  workspace_name      = "mobile-backend-integration"
-  workspace_desc      = "Infrastucture for GOV.UK App"
-  workspace_tags      = ["integration", "mobile-backend", "aws"]
-  terraform_version   = var.terraform_version
-  execution_mode      = "remote"
-  working_directory   = "/terraform/deployments/mobile-backend/"
-  trigger_patterns    = ["/terraform/deployments/mobile-backend/**/*"]
+  organization      = var.organization
+  workspace_name    = "mobile-backend-integration"
+  workspace_desc    = "Infrastucture for GOV.UK App"
+  workspace_tags    = ["integration", "mobile-backend", "aws"]
+  terraform_version = var.terraform_version
+  execution_mode    = "remote"
+  working_directory = "/terraform/deployments/mobile-backend/"
+  trigger_patterns = [
+    "/terraform/deployments/mobile-backend/**/*",
+    "/terraform/variables/integration/common.tfvars"
+  ]
   global_remote_state = true
 
   project_name = "govuk-infrastructure"
@@ -83,9 +98,12 @@ module "mobile-backend-integration" {
     "GOV.UK Production"           = "write"
   }
 
+  tfvars_files = [
+    "integration/common.tfvars"
+  ]
+
   variable_set_ids = [
-    local.aws_credentials["integration"],
-    module.variable-set-integration.id
+    local.aws_credentials["integration"]
   ]
 }
 
