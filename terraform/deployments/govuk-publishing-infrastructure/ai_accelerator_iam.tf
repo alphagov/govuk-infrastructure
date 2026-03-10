@@ -42,7 +42,8 @@ data "aws_iam_policy_document" "govuk_ai_accelerator_s3_access" {
       "s3:GetObject",
       "s3:GetObjectAcl",
       "s3:PutObject",
-      "s3:PutObjectAcl"
+      "s3:PutObjectAcl",
+      "s3:DeleteObject"
     ]
     resources = ["${aws_s3_bucket.govuk_ai_accelerator_data[0].arn}/*"]
   }
