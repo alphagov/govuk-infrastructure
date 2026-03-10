@@ -1,14 +1,17 @@
 module "cdn-analytics-integration" {
   source = "github.com/alphagov/terraform-govuk-tfe-workspacer"
 
-  organization        = var.organization
-  workspace_name      = "cdn-analytics-integration"
-  workspace_desc      = "BigQuery infrastructure for Data Insight & Analytics"
-  workspace_tags      = ["integration", "cdn-analytics", "gcp"]
-  terraform_version   = var.terraform_version
-  execution_mode      = "remote"
-  working_directory   = "/terraform/deployments/cdn-analytics/"
-  trigger_patterns    = ["/terraform/deployments/cdn-analytics/**/*"]
+  organization      = var.organization
+  workspace_name    = "cdn-analytics-integration"
+  workspace_desc    = "BigQuery infrastructure for Data Insight & Analytics"
+  workspace_tags    = ["integration", "cdn-analytics", "gcp"]
+  terraform_version = var.terraform_version
+  execution_mode    = "remote"
+  working_directory = "/terraform/deployments/cdn-analytics/"
+  trigger_patterns = [
+    "/terraform/deployments/cdn-analytics/**/*",
+    "/terraform/variables/integration/common.tfvars"
+  ]
   global_remote_state = true
 
   project_name = "govuk-infrastructure"
@@ -23,23 +26,29 @@ module "cdn-analytics-integration" {
     "GOV.UK Production"           = "write"
   }
 
+  tfvars_files = [
+    "integration/common.tfvars"
+  ]
+
   variable_set_ids = [
-    local.gcp_credentials["integration"],
-    module.variable-set-integration.id
+    local.gcp_credentials["integration"]
   ]
 }
 
 module "cdn-analytics-staging" {
   source = "github.com/alphagov/terraform-govuk-tfe-workspacer"
 
-  organization        = var.organization
-  workspace_name      = "cdn-analytics-staging"
-  workspace_desc      = "BigQuery infrastructure for Data Insight & Analytics"
-  workspace_tags      = ["staging", "cdn-analytics", "gcp"]
-  terraform_version   = var.terraform_version
-  execution_mode      = "remote"
-  working_directory   = "/terraform/deployments/cdn-analytics/"
-  trigger_patterns    = ["/terraform/deployments/cdn-analytics/**/*"]
+  organization      = var.organization
+  workspace_name    = "cdn-analytics-staging"
+  workspace_desc    = "BigQuery infrastructure for Data Insight & Analytics"
+  workspace_tags    = ["staging", "cdn-analytics", "gcp"]
+  terraform_version = var.terraform_version
+  execution_mode    = "remote"
+  working_directory = "/terraform/deployments/cdn-analytics/"
+  trigger_patterns = [
+    "/terraform/deployments/cdn-analytics/**/*",
+    "/terraform/variables/staging/common.tfvars"
+  ]
   global_remote_state = true
 
   project_name = "govuk-infrastructure"
@@ -53,23 +62,29 @@ module "cdn-analytics-staging" {
     "GOV.UK Production" = "write"
   }
 
+  tfvars_files = [
+    "staging/common.tfvars"
+  ]
+
   variable_set_ids = [
-    local.gcp_credentials["staging"],
-    module.variable-set-staging.id
+    local.gcp_credentials["staging"]
   ]
 }
 
 module "cdn-analytics-production" {
   source = "github.com/alphagov/terraform-govuk-tfe-workspacer"
 
-  organization        = var.organization
-  workspace_name      = "cdn-analytics-production"
-  workspace_desc      = "BigQuery infrastructure for Data Insight & Analytics"
-  workspace_tags      = ["production", "cdn-analytics", "gcp"]
-  terraform_version   = var.terraform_version
-  execution_mode      = "remote"
-  working_directory   = "/terraform/deployments/cdn-analytics/"
-  trigger_patterns    = ["/terraform/deployments/cdn-analytics/**/*"]
+  organization      = var.organization
+  workspace_name    = "cdn-analytics-production"
+  workspace_desc    = "BigQuery infrastructure for Data Insight & Analytics"
+  workspace_tags    = ["production", "cdn-analytics", "gcp"]
+  terraform_version = var.terraform_version
+  execution_mode    = "remote"
+  working_directory = "/terraform/deployments/cdn-analytics/"
+  trigger_patterns = [
+    "/terraform/deployments/cdn-analytics/**/*",
+    "/terraform/variables/production/common.tfvars"
+  ]
   global_remote_state = true
 
   project_name = "govuk-infrastructure"
@@ -83,8 +98,11 @@ module "cdn-analytics-production" {
     "GOV.UK Production" = "write"
   }
 
+  tfvars_files = [
+    "production/common.tfvars"
+  ]
+
   variable_set_ids = [
-    local.gcp_credentials["production"],
-    module.variable-set-production.id
+    local.gcp_credentials["production"]
   ]
 }
