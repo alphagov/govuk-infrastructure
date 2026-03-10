@@ -4,7 +4,7 @@ resource "aws_kinesis_firehose_delivery_stream" "delivery_stream" {
 
   extended_s3_configuration {
     role_arn   = aws_iam_role.firehose_role.arn
-    bucket_arn = aws_s3_bucket.csp_reports.arn
+    bucket_arn = module.secure_s3_bucket_csp_reports.arn
 
     prefix              = "reports/year=!{timestamp:yyyy}/month=!{timestamp:MM}/day=!{timestamp:dd}/"
     error_output_prefix = "errors/!{firehose:error-output-type}/year=!{timestamp:yyyy}/month=!{timestamp:MM}/day=!{timestamp:dd}/"
@@ -83,8 +83,8 @@ data "aws_iam_policy_document" "firehose_bucket_policy" {
     effect  = "Allow"
     actions = ["s3:*"]
     resources = [
-      aws_s3_bucket.csp_reports.arn,
-      "${aws_s3_bucket.csp_reports.arn}/*"
+      module.secure_s3_bucket_csp_reports.arn,
+      "${module.secure_s3_bucket_csp_reports.arn}/*"
     ]
   }
   statement {

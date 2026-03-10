@@ -29,8 +29,8 @@ data "aws_iam_policy_document" "glue_policy" {
     effect  = "Allow"
     actions = ["s3:*"]
     resources = [
-      aws_s3_bucket.csp_reports.arn,
-      "${aws_s3_bucket.csp_reports.arn}/*"
+      module.secure_s3_bucket_csp_reports.arn,
+      "${module.secure_s3_bucket_csp_reports.arn}/*"
     ]
   }
 }
@@ -50,7 +50,7 @@ resource "aws_glue_crawler" "csp_reports" {
   schedule      = "cron(15 * * * ? *)" # Run every hour as we're not sure how frequently we'll get reports
 
   s3_target {
-    path = "s3://${aws_s3_bucket.csp_reports.bucket}/reports"
+    path = "s3://${module.secure_s3_bucket_csp_reports.name}/reports"
   }
 
   schema_change_policy {
@@ -88,7 +88,7 @@ resource "aws_glue_catalog_table" "reports" {
 
   storage_descriptor {
     compressed    = true
-    location      = "s3://${aws_s3_bucket.csp_reports.bucket}/reports/"
+    location      = "s3://${module.secure_s3_bucket_csp_reports.name}/reports/"
     input_format  = "org.apache.hadoop.hive.ql.io.orc.OrcInputFormat"
     output_format = "org.apache.hadoop.hive.ql.io.orc.OrcOutputFormat"
 
