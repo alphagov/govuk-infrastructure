@@ -79,11 +79,6 @@ resource "google_service_usage_consumer_quota_override" "discoveryengine_documen
   override_value = var.discovery_engine_quota_documents
 }
 
-data "tfe_oauth_client" "github" {
-  organization     = var.tfc_organization_name
-  service_provider = "github"
-}
-
 # Set up Workload Identity Federation between Terraform Cloud and GCP
 # see https://github.com/hashicorp/terraform-dynamic-credentials-setup-examples
 resource "google_iam_workload_identity_pool" "tfc_pool" {

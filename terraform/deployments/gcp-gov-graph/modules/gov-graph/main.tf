@@ -51,11 +51,6 @@ resource "google_project_service" "api_service" {
   disable_dependent_services = true
 }
 
-data "tfe_oauth_client" "github" {
-  organization     = var.tfc_organization_name
-  service_provider = "github"
-}
-
 # Set up Workload Identity Federation between Terraform Cloud and GCP
 # see https://github.com/hashicorp/terraform-dynamic-credentials-setup-examples
 resource "google_iam_workload_identity_pool" "tfc_pool" {
