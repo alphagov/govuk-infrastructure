@@ -10,6 +10,16 @@ variable "tfc_organization_name" {
   description = "The name of the Terraform Cloud organization"
 }
 
+variable "project_id" {
+  type        = string
+  description = "The ID of the overarching terraform cloud project for all workspaces"
+}
+
+variable "name" {
+  type        = string
+  description = "A short name for this environment (used in resource IDs)"
+}
+
 variable "google_cloud_folder" {
   type        = string
   description = "The ID of the Google Cloud folder to create projects under"
@@ -20,13 +30,44 @@ variable "google_cloud_billing_account" {
   description = "The ID of the Google Cloud billing account to associate projects with"
 }
 
-variable "project_id" {
-  type        = string
-  description = "The ID of the overarching terraform cloud project for all workspaces"
+variable "google_cloud_apis" {
+  type        = set(string)
+  description = "The Google Cloud APIs to enable for the project"
+  default = [
+    # Required to be able to manage resources using Terraform
+    "cloudresourcemanager.googleapis.com",
+    # Required to set up service accounts and manage dynamic credentials
+    "iam.googleapis.com",
+    "iamcredentials.googleapis.com",
+    "sts.googleapis.com",
+    # Required for Discovery Engine
+    "discoveryengine.googleapis.com",
+    # Required for event data pipeline
+    "bigquery.googleapis.com",
+    "bigquerystorage.googleapis.com",
+    "storage.googleapis.com",
+    "cloudbuild.googleapis.com",
+    "artifactregistry.googleapis.com",
+    "cloudfunctions.googleapis.com",
+    "run.googleapis.com",
+    "cloudscheduler.googleapis.com",
+    # Required for observability
+    "logging.googleapis.com",
+    "monitoring.googleapis.com",
+  ]
 }
 
-variable "tfe_project_name" {
+variable "tfc_project_name" {
   type        = string
-  default     = "govuk-data-engineering"
   description = "The  name of the overarching terraform cloud project for all workspaces"
+}
+
+variable "environment_workspace_name" {
+  type        = string
+  description = "Provisions resources for the environment"
+}
+
+variable "access_group_name" {
+  type        = string
+  description = "The google group that should be able to access the environment"
 }
