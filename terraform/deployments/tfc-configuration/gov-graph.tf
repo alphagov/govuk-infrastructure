@@ -14,7 +14,7 @@ module "gov-graph-dev" {
   working_directory = "/terraform/deployments/gcp-gov-graph/"
   trigger_patterns  = ["/terraform/deployments/gcp-gov-graph/**/*"]
 
-  project_name = "govuk-data-engineering"
+  project_name = tfe_project.data-engineering-project.name
   vcs_repo = {
     identifier     = "alphagov/govuk-infrastructure"
     branch         = "main"
@@ -30,8 +30,6 @@ module "gov-graph-dev" {
     local.gcp_credentials["integration"],
     module.variable-set-gov-graph-dev.id
   ]
-
-  depends_on = [tfe_project.data-engineering-project]
 }
 
 module "gov-graph-staging" {
@@ -46,7 +44,7 @@ module "gov-graph-staging" {
   working_directory = "/terraform/deployments/gcp-gov-graph/"
   trigger_patterns  = ["/terraform/deployments/gcp-gov-graph/**/*"]
 
-  project_name = "govuk-data-engineering"
+  project_name = tfe_project.data-engineering-project.name
   vcs_repo = {
     identifier     = "alphagov/govuk-infrastructure"
     branch         = "main"
@@ -78,7 +76,7 @@ module "gov-graph-production" {
   working_directory = "/terraform/deployments/gcp-gov-graph/"
   trigger_patterns  = ["/terraform/deployments/gcp-gov-graph/**/*"]
 
-  project_name = "govuk-data-engineering"
+  project_name = tfe_project.data-engineering-project.name
   vcs_repo = {
     identifier     = "alphagov/govuk-infrastructure"
     branch         = "main"
@@ -94,6 +92,4 @@ module "gov-graph-production" {
     local.gcp_credentials["production"],
     module.variable-set-gov-graph-production.id
   ]
-
-  depends_on = [tfe_project.data-engineering-project]
 }
