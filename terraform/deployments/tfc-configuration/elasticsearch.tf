@@ -8,7 +8,11 @@ module "elasticsearch-integration" {
   terraform_version = var.terraform_version
   execution_mode    = "remote"
   working_directory = "/terraform/deployments/elasticsearch/"
-  trigger_patterns  = ["/terraform/deployments/elasticsearch/**/*"]
+  trigger_patterns = [
+    "/terraform/deployments/elasticsearch/**/*",
+    "/terraform/variables/integration/common.tfvars",
+    "/terraform/variables/integration/elasticsearch.tfvars"
+  ]
 
   project_name = "govuk-infrastructure"
   vcs_repo = {
@@ -22,10 +26,13 @@ module "elasticsearch-integration" {
     "GOV.UK Production"           = "write"
   }
 
+  tfvars_files = [
+    "integration/common.tfvars",
+    "integration/elasticsearch.tfvars"
+  ]
+
   variable_set_ids = [
-    local.aws_credentials["integration"],
-    module.variable-set-integration.id,
-    module.variable-set-elasticsearch-integration.id
+    local.aws_credentials["integration"]
   ]
 }
 
@@ -39,7 +46,11 @@ module "elasticsearch-staging" {
   terraform_version = var.terraform_version
   execution_mode    = "remote"
   working_directory = "/terraform/deployments/elasticsearch/"
-  trigger_patterns  = ["/terraform/deployments/elasticsearch/**/*"]
+  trigger_patterns = [
+    "/terraform/deployments/elasticsearch/**/*",
+    "/terraform/variables/staging/common.tfvars",
+    "/terraform/variables/staging/elasticsearch.tfvars"
+  ]
 
   project_name = "govuk-infrastructure"
   vcs_repo = {
@@ -53,10 +64,13 @@ module "elasticsearch-staging" {
     "GOV.UK Production"           = "write"
   }
 
+  tfvars_files = [
+    "staging/common.tfvars",
+    "staging/elasticsearch.tfvars"
+  ]
+
   variable_set_ids = [
-    local.aws_credentials["staging"],
-    module.variable-set-staging.id,
-    module.variable-set-elasticsearch-staging.id
+    local.aws_credentials["staging"]
   ]
 }
 
@@ -70,7 +84,11 @@ module "elasticsearch-production" {
   terraform_version = var.terraform_version
   execution_mode    = "remote"
   working_directory = "/terraform/deployments/elasticsearch/"
-  trigger_patterns  = ["/terraform/deployments/elasticsearch/**/*"]
+  trigger_patterns = [
+    "/terraform/deployments/elasticsearch/**/*",
+    "/terraform/variables/production/common.tfvars",
+    "/terraform/variables/production/elasticsearch.tfvars"
+  ]
 
   project_name = "govuk-infrastructure"
   vcs_repo = {
@@ -84,9 +102,12 @@ module "elasticsearch-production" {
     "GOV.UK Production"           = "write"
   }
 
+  tfvars_files = [
+    "production/common.tfvars",
+    "production/elasticsearch.tfvars"
+  ]
+
   variable_set_ids = [
-    local.aws_credentials["production"],
-    module.variable-set-production.id,
-    module.variable-set-elasticsearch-production.id
+    local.aws_credentials["production"]
   ]
 }
