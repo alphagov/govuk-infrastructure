@@ -82,3 +82,7 @@ variable "location" {
   description = "Google Cloud Storage location"
   default     = "EUROPE-WEST2"
 }
+
+variable "project_id" {
+  type = string
+}
