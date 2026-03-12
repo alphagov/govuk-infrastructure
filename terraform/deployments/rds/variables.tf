@@ -96,6 +96,12 @@ variable "backup_retention_period" {
   default     = 7
 }
 
+variable "create_secure_db_dumps_bucket" {
+  type        = bool
+  description = "Set to true to create a secured bucket for storing database dumps"
+  default     = false
+}
+
 variable "skip_final_snapshot" {
   type        = bool
   description = "Set to true to NOT create a final snapshot when the cluster is deleted."
