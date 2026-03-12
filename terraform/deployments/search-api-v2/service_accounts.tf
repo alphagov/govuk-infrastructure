@@ -6,6 +6,17 @@ resource "google_service_account" "api" {
   description  = "Service account to provide access to the search-api-v2 Rails app and document sync worker"
 }
 
+resource "google_service_account_iam_binding" "sa_token_creator_iam" {
+  # Only create this resource if the environment is integration.
+  count = terraform.workspace == "search-api-v2-integration" ? 1 : 0
+
+  service_account_id = google_service_account.api.id
+  role               = "roles/iam.serviceAccountTokenCreator"
+  members = [
+    "group:govuk-gcp-access-integration@digital.cabinet-office.gov.uk"
+  ]
+}
+
 resource "google_service_account_key" "api" {
   service_account_id = google_service_account.api.id
 }
