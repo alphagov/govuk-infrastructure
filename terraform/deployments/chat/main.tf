@@ -30,6 +30,22 @@ provider "aws" {
 }
 
 provider "aws" {
+  alias  = "london"
+  region = "eu-west-2"
+  default_tags {
+    tags = {
+      product              = "govuk"
+      system               = "govuk-chat"
+      environment          = var.govuk_environment
+      owner                = "govuk-platform-engineering@digital.cabinet-office.gov.uk"
+      repository           = "govuk-infrastructure"
+      terraform-deployment = basename(abspath(path.root))
+      Service              = "govuk-chat"
+    }
+  }
+}
+
+provider "aws" {
   alias  = "global"
   region = "us-east-1"
 }

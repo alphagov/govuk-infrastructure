@@ -58,13 +58,12 @@ resource "aws_chatbot_slack_channel_configuration" "chat" {
 }
 
 resource "aws_sns_topic" "chat_alerts_dublin" {
-  region       = "eu-west-1"
   name         = "chat-alerts-${var.govuk_environment}-dublin"
   display_name = "Chat Alerts (${var.govuk_environment} Dublin)"
 }
 
 resource "aws_sns_topic" "chat_alerts_london" {
-  region       = "eu-west-2"
+  provider     = aws.london
   name         = "chat-alerts-${var.govuk_environment}-london"
   display_name = "Chat Alerts London (${var.govuk_environment} London)"
 }
