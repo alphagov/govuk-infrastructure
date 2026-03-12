@@ -10,11 +10,6 @@ variable "tfc_organization_name" {
   description = "The name of the Terraform Cloud organization"
 }
 
-variable "project_id" {
-  type        = string
-  description = "The ID of the overarching terraform cloud project for all workspaces"
-}
-
 variable "name" {
   type        = string
   description = "A short name for this environment (used in resource IDs)"
@@ -59,7 +54,7 @@ variable "google_cloud_apis" {
 
 variable "tfc_project_name" {
   type        = string
-  description = "The  name of the overarching terraform cloud project for all workspaces"
+  description = "The name of the overarching terraform cloud project for all workspaces"
 }
 
 variable "environment_workspace_name" {
