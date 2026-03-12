@@ -1,12 +1,13 @@
 resource "google_project_iam_custom_role" "code_viewer" {
   description = "Permissions to read code but restricted from viewing BigQuery data"
   permissions = [
-    // These permissions are equivalent to https://docs.cloud.google.com/iam/docs/roles-permissions/dataform#dataform.viewer
+    // These permissions are equivalent to https://docs.cloud.google.com/iam/docs/roles-permissions/dataform#dataform.codeViewer
     "dataform.commentThreads.get",
     "dataform.commentThreads.list",
     "dataform.comments.get",
     "dataform.comments.list",
     "dataform.compilationResults.get",
+    "dataform.compilationResults.create",
     "dataform.compilationResults.list",
     "dataform.compilationResults.query",
     "dataform.config.get",
@@ -43,7 +44,6 @@ resource "google_project_iam_custom_role" "code_viewer" {
     "dataform.workspaces.queryDirectoryContents",
     "dataform.workspaces.readFile",
     "dataform.workspaces.searchFiles",
-    //
   ]
   role_id = "code_viewer"
   title   = "Code Viewer"
