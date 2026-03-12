@@ -395,7 +395,7 @@ resource "aws_cloudwatch_metric_alarm" "bedrock_token_threshold_100_percent_tita
 }
 
 resource "aws_cloudwatch_metric_alarm" "bedrock_token_threshold_50_percent_titan_embed_london" {
-  region              = "eu-west-2"
+  provider            = aws.london
   alarm_name          = "govuk-chat-${var.govuk_environment}-bedrock-token-threshold-50-titan-embed-london"
   alarm_description   = <<-EOF
   WARNING - The current ${var.govuk_environment} Bedrock token usage > 50% for Titan Embed in eu-west-2 (Document indexing)
@@ -438,7 +438,7 @@ resource "aws_cloudwatch_metric_alarm" "bedrock_token_threshold_50_percent_titan
 }
 
 resource "aws_cloudwatch_metric_alarm" "bedrock_token_threshold_100_percent_titan_embed_london" {
-  region              = "eu-west-2"
+  provider            = aws.london
   alarm_name          = "govuk-chat-${var.govuk_environment}-bedrock-token-threshold-100-titan-embed-london"
   alarm_description   = <<-EOF
   CRITICAL - The current ${var.govuk_environment} Bedrock token usage > 100% for Titan Embed in eu-west-2 (Document indexing)
