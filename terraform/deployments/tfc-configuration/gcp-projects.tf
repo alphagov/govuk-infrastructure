@@ -12,7 +12,7 @@ module "gcp-ga4-analytics" {
   global_remote_state = true
   assessments_enabled = true
 
-  project_name = "govuk-infrastructure"
+  project_name = "govuk-data-engineering"
   vcs_repo = {
     identifier     = "alphagov/govuk-infrastructure"
     branch         = "main"
