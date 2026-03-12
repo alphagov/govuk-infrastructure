@@ -14,7 +14,7 @@ module "gov-graph-dev" {
   working_directory = "/terraform/deployments/gcp-gov-graph/"
   trigger_patterns = [
     "/terraform/deployments/gcp-gov-graph/**/*",
-    "/terraform/variables/integration/gov-graph.tfvars"
+    "/terraform/variables/integration/gcp-gov-graph.tfvars"
   ]
 
   project_name = tfe_project.data-engineering-project.name
@@ -30,7 +30,7 @@ module "gov-graph-dev" {
   }
 
   tfvars_files = [
-    "integration/gov-graph.tfvars"
+    "integration/gcp-gov-graph.tfvars"
   ]
 
   variable_set_ids = [
@@ -50,7 +50,7 @@ module "gov-graph-staging" {
   working_directory = "/terraform/deployments/gcp-gov-graph/"
   trigger_patterns = [
     "/terraform/deployments/gcp-gov-graph/**/*",
-    "/terraform/variables/staging/gov-graph.tfvars"
+    "/terraform/variables/staging/gcp-gov-graph.tfvars"
   ]
 
   project_name = tfe_project.data-engineering-project.name
@@ -66,12 +66,11 @@ module "gov-graph-staging" {
   }
 
   tfvars_files = [
-    "staging/gov-graph.tfvars"
+    "staging/gcp-gov-graph.tfvars"
   ]
 
   variable_set_ids = [
-    local.gcp_credentials["staging"],
-    module.variable-set-gov-graph-staging.id
+    local.gcp_credentials["staging"]
   ]
 
   depends_on = [tfe_project.data-engineering-project]
@@ -89,7 +88,7 @@ module "gov-graph-production" {
   working_directory = "/terraform/deployments/gcp-gov-graph/"
   trigger_patterns = [
     "/terraform/deployments/gcp-gov-graph/**/*",
-    "/terraform/variables/production/gov-graph.tfvars"
+    "/terraform/variables/production/gcp-gov-graph.tfvars"
   ]
 
   project_name = tfe_project.data-engineering-project.name
@@ -105,12 +104,10 @@ module "gov-graph-production" {
   }
 
   tfvars_files = [
-    "production/gov-graph.tfvars"
+    "production/gcp-gov-graph.tfvars"
   ]
 
   variable_set_ids = [
     local.gcp_credentials["production"]
   ]
-
-  depends_on = [tfe_project.data-engineering-project]
 }
