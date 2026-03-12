@@ -10,11 +10,6 @@ variable "tfc_organization_name" {
   description = "The name of the Terraform Cloud organization"
 }
 
-variable "project_id" {
-  type        = string
-  description = "The ID of the overarching terraform cloud project for all workspaces"
-}
-
 variable "name" {
   type        = string
   description = "A short name for this environment (used in resource IDs)"
@@ -59,7 +54,7 @@ variable "google_cloud_apis" {
 
 variable "tfc_project_name" {
   type        = string
-  description = "The  name of the overarching terraform cloud project for all workspaces"
+  description = "The name of the overarching terraform cloud project for all workspaces"
 }
 
 variable "environment_workspace_name" {
@@ -70,4 +65,24 @@ variable "environment_workspace_name" {
 variable "access_group_name" {
   type        = string
   description = "The google group that should be able to access the environment"
+}
+
+variable "region" {
+  type    = string
+  default = "europe-west2"
+}
+
+variable "zone" {
+  type    = string
+  default = "europe-west2-b"
+}
+
+variable "location" {
+  type        = string
+  description = "Google Cloud Storage location"
+  default     = "EUROPE-WEST2"
+}
+
+variable "project_id" {
+  type = string
 }
