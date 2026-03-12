@@ -6,7 +6,7 @@ resource "aws_cloudwatch_log_group" "bedrock_log_group_dublin" {
 
 moved {
   from = aws_cloudwatch_log_group.bedrock_log_group
-  to = aws_cloudwatch_log_group.bedrock_log_group_dublin
+  to   = aws_cloudwatch_log_group.bedrock_log_group_dublin
 }
 
 resource "aws_cloudwatch_log_group" "bedrock_log_group_london" {

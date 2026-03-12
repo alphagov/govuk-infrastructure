@@ -12,10 +12,19 @@ resource "aws_cloudwatch_event_rule" "aws_service_health_alert" {
   role_arn = aws_iam_role.aws_service_health_alert.arn
 }
 
-resource "aws_cloudwatch_event_target" "aws_service_health_alert" {
+resource "aws_cloudwatch_event_target" "aws_service_health_alert_dublin" {
+  region    = "eu-west-1"
   rule      = aws_cloudwatch_event_rule.aws_service_health_alert.name
-  arn       = aws_sns_topic.chat_alerts.arn
-  target_id = "chat-aws-service-health-alert-target"
+  arn       = aws_sns_topic.chat_alerts_dublin.arn
+  target_id = "chat-aws-service-health-alert-target-dublin"
+  role_arn  = aws_iam_role.aws_service_health_alert.arn
+}
+
+resource "aws_cloudwatch_event_target" "aws_service_health_alert_london" {
+  region    = "eu-west-2"
+  rule      = aws_cloudwatch_event_rule.aws_service_health_alert.name
+  arn       = aws_sns_topic.chat_alerts_london.arn
+  target_id = "chat-aws-service-health-alert-target-london"
   role_arn  = aws_iam_role.aws_service_health_alert.arn
 }
 
@@ -36,9 +45,12 @@ data "aws_iam_policy_document" "aws_service_health_alert_assume_role" {
 
 data "aws_iam_policy_document" "aws_service_health_alert" {
   statement {
-    actions   = ["sns:Publish"]
-    effect    = "Allow"
-    resources = [aws_sns_topic.chat_alerts.arn]
+    actions = ["sns:Publish"]
+    effect  = "Allow"
+    resources = [
+      aws_sns_topic.chat_alerts_dublin.arn,
+      aws_sns_topic.chat_alerts_london.arn
+    ]
   }
 }
 

@@ -80,8 +80,8 @@ resource "aws_cloudwatch_metric_alarm" "bedrock_token_threshold_50_percent_claud
     return_data = true
   }
 
-  alarm_actions             = [aws_sns_topic.chat_alerts.arn]
-  ok_actions                = [aws_sns_topic.chat_alerts.arn]
+  alarm_actions             = [aws_sns_topic.chat_alerts_dublin.arn]
+  ok_actions                = [aws_sns_topic.chat_alerts_dublin.arn]
   insufficient_data_actions = []
 }
 
@@ -154,8 +154,8 @@ resource "aws_cloudwatch_metric_alarm" "bedrock_token_threshold_100_percent_clau
     return_data = true
   }
 
-  alarm_actions             = [aws_sns_topic.chat_alerts.arn]
-  ok_actions                = [aws_sns_topic.chat_alerts.arn]
+  alarm_actions             = [aws_sns_topic.chat_alerts_dublin.arn]
+  ok_actions                = [aws_sns_topic.chat_alerts_dublin.arn]
   insufficient_data_actions = []
 }
 
@@ -228,8 +228,8 @@ resource "aws_cloudwatch_metric_alarm" "bedrock_token_threshold_50_percent_gpt_o
     return_data = true
   }
 
-  alarm_actions             = [aws_sns_topic.chat_alerts.arn]
-  ok_actions                = [aws_sns_topic.chat_alerts.arn]
+  alarm_actions             = [aws_sns_topic.chat_alerts_dublin.arn]
+  ok_actions                = [aws_sns_topic.chat_alerts_dublin.arn]
   insufficient_data_actions = []
 }
 
@@ -302,8 +302,8 @@ resource "aws_cloudwatch_metric_alarm" "bedrock_token_threshold_100_percent_gpt_
     return_data = true
   }
 
-  alarm_actions             = [aws_sns_topic.chat_alerts.arn]
-  ok_actions                = [aws_sns_topic.chat_alerts.arn]
+  alarm_actions             = [aws_sns_topic.chat_alerts_dublin.arn]
+  ok_actions                = [aws_sns_topic.chat_alerts_dublin.arn]
   insufficient_data_actions = []
 }
 
@@ -346,8 +346,8 @@ resource "aws_cloudwatch_metric_alarm" "bedrock_token_threshold_50_percent_titan
     return_data = true
   }
 
-  alarm_actions             = [aws_sns_topic.chat_alerts.arn]
-  ok_actions                = [aws_sns_topic.chat_alerts.arn]
+  alarm_actions             = [aws_sns_topic.chat_alerts_dublin.arn]
+  ok_actions                = [aws_sns_topic.chat_alerts_dublin.arn]
   insufficient_data_actions = []
 }
 
@@ -389,8 +389,8 @@ resource "aws_cloudwatch_metric_alarm" "bedrock_token_threshold_100_percent_tita
     return_data = true
   }
 
-  alarm_actions             = [aws_sns_topic.chat_alerts.arn]
-  ok_actions                = [aws_sns_topic.chat_alerts.arn]
+  alarm_actions             = [aws_sns_topic.chat_alerts_dublin.arn]
+  ok_actions                = [aws_sns_topic.chat_alerts_dublin.arn]
   insufficient_data_actions = []
 }
 
@@ -432,8 +432,8 @@ resource "aws_cloudwatch_metric_alarm" "bedrock_token_threshold_50_percent_titan
     return_data = true
   }
 
-  alarm_actions             = [aws_sns_topic.chat_alerts.arn]
-  ok_actions                = [aws_sns_topic.chat_alerts.arn]
+  alarm_actions             = [aws_sns_topic.chat_alerts_london.arn]
+  ok_actions                = [aws_sns_topic.chat_alerts_london.arn]
   insufficient_data_actions = []
 }
 
@@ -475,7 +475,7 @@ resource "aws_cloudwatch_metric_alarm" "bedrock_token_threshold_100_percent_tita
     return_data = true
   }
 
-  alarm_actions             = [aws_sns_topic.chat_alerts.arn]
-  ok_actions                = [aws_sns_topic.chat_alerts.arn]
+  alarm_actions             = [aws_sns_topic.chat_alerts_london.arn]
+  ok_actions                = [aws_sns_topic.chat_alerts_london.arn]
   insufficient_data_actions = []
 }
