@@ -66,3 +66,19 @@ variable "access_group_name" {
   type        = string
   description = "The google group that should be able to access the environment"
 }
+
+variable "region" {
+  type    = string
+  default = "europe-west2"
+}
+
+variable "zone" {
+  type    = string
+  default = "europe-west2-b"
+}
+
+variable "location" {
+  type        = string
+  description = "Google Cloud Storage location"
+  default     = "EUROPE-WEST2"
+}
