@@ -8,7 +8,11 @@ module "govuk-publishing-infrastructure-integration" {
   terraform_version = var.terraform_version
   execution_mode    = "remote"
   working_directory = "/terraform/deployments/govuk-publishing-infrastructure/"
-  trigger_patterns  = ["/terraform/deployments/govuk-publishing-infrastructure/**/*"]
+  trigger_patterns = [
+    "/terraform/deployments/govuk-publishing-infrastructure/**/*",
+    "/terraform/variables/integration/common.tfvars",
+    "/terraform/variables/integration/govuk-publishing-infrastructure.tfvars"
+  ]
 
   project_name = "govuk-infrastructure"
   vcs_repo = {
@@ -22,14 +26,16 @@ module "govuk-publishing-infrastructure-integration" {
     "GOV.UK Production"           = "write"
   }
 
+  tfvars_files = [
+    "integration/common.tfvars",
+    "integration/govuk-publishing-infrastructure.tfvars"
+  ]
+
   variable_set_ids = [
     local.aws_credentials["integration"],
     local.gcp_credentials["integration"],
-    module.variable-set-integration.id,
-    module.variable-set-amazonmq-integration.id,
     module.sensitive-variables.security_integration_id,
-    module.sensitive-variables.waf_integration_id,
-    module.govuk-publishing-infrastructure-variable-set-integration.id,
+    module.sensitive-variables.waf_integration_id
   ]
 }
 
@@ -106,7 +112,11 @@ module "govuk-publishing-infrastructure-staging" {
   terraform_version = var.terraform_version
   execution_mode    = "remote"
   working_directory = "/terraform/deployments/govuk-publishing-infrastructure/"
-  trigger_patterns  = ["/terraform/deployments/govuk-publishing-infrastructure/**/*"]
+  trigger_patterns = [
+    "/terraform/deployments/govuk-publishing-infrastructure/**/*",
+    "/terraform/variables/staging/common.tfvars",
+    "/terraform/variables/staging/govuk-publishing-infrastructure.tfvars"
+  ]
 
   project_name = "govuk-infrastructure"
   vcs_repo = {
@@ -119,14 +129,16 @@ module "govuk-publishing-infrastructure-staging" {
     "GOV.UK Production" = "write"
   }
 
+  tfvars_files = [
+    "staging/common.tfvars",
+    "staging/govuk-publishing-infrastructure.tfvars"
+  ]
+
   variable_set_ids = [
     local.aws_credentials["staging"],
     local.gcp_credentials["staging"],
-    module.variable-set-staging.id,
-    module.variable-set-amazonmq-staging.id,
     module.sensitive-variables.security_staging_id,
-    module.sensitive-variables.waf_staging_id,
-    module.govuk-publishing-infrastructure-variable-set-staging.id,
+    module.sensitive-variables.waf_staging_id
   ]
 }
 
@@ -201,7 +213,11 @@ module "govuk-publishing-infrastructure-production" {
   terraform_version = var.terraform_version
   execution_mode    = "remote"
   working_directory = "/terraform/deployments/govuk-publishing-infrastructure/"
-  trigger_patterns  = ["/terraform/deployments/govuk-publishing-infrastructure/**/*"]
+  trigger_patterns = [
+    "/terraform/deployments/govuk-publishing-infrastructure/**/*",
+    "/terraform/variables/production/common.tfvars",
+    "/terraform/variables/production/govuk-publishing-infrastructure.tfvars"
+  ]
 
   project_name = "govuk-infrastructure"
   vcs_repo = {
@@ -214,14 +230,16 @@ module "govuk-publishing-infrastructure-production" {
     "GOV.UK Production" = "write"
   }
 
+  tfvars_files = [
+    "production/common.tfvars",
+    "production/govuk-publishing-infrastructure.tfvars"
+  ]
+
   variable_set_ids = [
     local.aws_credentials["production"],
     local.gcp_credentials["production"],
-    module.variable-set-production.id,
-    module.variable-set-amazonmq-production.id,
     module.sensitive-variables.security_production_id,
-    module.sensitive-variables.waf_production_id,
-    module.govuk-publishing-infrastructure-variable-set-production.id,
+    module.sensitive-variables.waf_production_id
   ]
 }
 
