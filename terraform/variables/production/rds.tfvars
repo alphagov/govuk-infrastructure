@@ -1,6 +1,7 @@
-backup_retention_period = 7
-skip_final_snapshot     = false
-multi_az                = true
+backup_retention_period       = 7
+create_secure_db_dumps_bucket = true
+skip_final_snapshot           = false
+multi_az                      = true
 
 databases = {
   account_api = {
