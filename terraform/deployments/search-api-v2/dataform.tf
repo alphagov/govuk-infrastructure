@@ -1,3 +1,10 @@
+# Create a service account for Dataform
+resource "google_service_account" "dataform_service_account" {
+  account_id   = "dataform-sa"
+  display_name = "Dataform Service Account"
+  project      = var.gcp_project_id
+}
+
 variable "search_dataform_github_repository_url" {
   description = "URL of the GitHub repository to link with Dataform"
   type        = string
@@ -14,22 +21,16 @@ resource "google_secret_manager_secret_iam_member" "member" {
   project   = var.gcp_project_id
   secret_id = "github_search_v2_api_dataform_ssh_key"
   role      = "roles/secretmanager.secretAccessor"
-  member    = "serviceAccount:service-${var.gcp_project_number}@gcp-sa-dataform.iam.gserviceaccount.com"
-}
-
-# Create a service account for Dataform
-resource "google_service_account" "dataform_service_account" {
-  account_id   = "dataform-sa"
-  display_name = "Dataform Service Account"
-  project      = var.gcp_project_id
+  member    = google_service_account.dataform_service_account.member
 }
 
 # Create Dataform repository with GitHub integration
 resource "google_dataform_repository" "search_api_v2" {
-  provider = google-beta
-  name     = "search_api_v2"
-  project  = var.gcp_project_id
-  region   = var.gcp_region
+  provider        = google-beta
+  name            = "search_api_v2"
+  project         = var.gcp_project_id
+  region          = var.gcp_region
+  service_account = google_service_account.dataform_service_account.email
 
   git_remote_settings {
     url            = var.search_dataform_github_repository_url
@@ -106,22 +107,40 @@ resource "google_dataform_repository_workflow_config" "search-monthly" {
   }
 }
 
+# Permissions for Default Dataform Service Agent to impersonate our custom Dataform Service Account
+# This allows Dataform to set up and run new workflows
+resource "google_service_account_iam_binding" "dataform_sa_impersonation" {
+  service_account_id = google_service_account.dataform_service_account.name
+  role               = "roles/iam.serviceAccountUser"
+  members = [
+    "serviceAccount:service-${var.gcp_project_number}@gcp-sa-dataform.iam.gserviceaccount.com"
+  ]
+}
+
+resource "google_service_account_iam_binding" "dataform_sa_token_creator" {
+  service_account_id = google_service_account.dataform_service_account.name
+  role               = "roles/iam.serviceAccountTokenCreator"
+  members = [
+    "serviceAccount:service-${var.gcp_project_number}@gcp-sa-dataform.iam.gserviceaccount.com"
+  ]
+}
+
 # BigQuery cross-project permissions
 # Service account permissions to access BigQuery
 resource "google_project_iam_member" "bigquery_data_editor" {
   project = "search-api-v2-${var.gcp_env}"
   role    = "roles/bigquery.dataEditor"
-  member  = "serviceAccount:service-${var.gcp_project_number}@gcp-sa-dataform.iam.gserviceaccount.com"
+  member  = google_service_account.dataform_service_account.member
 }
 
 resource "google_project_iam_member" "bigquery_job_user" {
   project = "search-api-v2-${var.gcp_env}"
   role    = "roles/bigquery.jobUser"
-  member  = "serviceAccount:service-${var.gcp_project_number}@gcp-sa-dataform.iam.gserviceaccount.com"
+  member  = google_service_account.dataform_service_account.member
 }
 
 resource "google_project_iam_member" "bigquery_data_viewer" {
   project = "search-api-v2-${var.gcp_env}"
   role    = "roles/bigquery.dataViewer"
-  member  = "serviceAccount:service-${var.gcp_project_number}@gcp-sa-dataform.iam.gserviceaccount.com"
+  member  = google_service_account.dataform_service_account.member
 }
