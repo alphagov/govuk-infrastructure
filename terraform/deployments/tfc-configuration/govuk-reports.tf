@@ -10,7 +10,8 @@ module "govuk-reports-integration" {
   working_directory = "/terraform/deployments/govuk-reports/"
   trigger_patterns = [
     "/terraform/deployments/govuk-reports/**/*",
-    "/terraform/variables/integration/common.tfvars"
+    "/terraform/variables/integration/common.tfvars",
+    "/terraform/variables/integration/govuk-reports.tfvars"
   ]
   global_remote_state = true
 
@@ -27,7 +28,8 @@ module "govuk-reports-integration" {
   }
 
   tfvars_files = [
-    "integration/common.tfvars"
+    "integration/common.tfvars",
+    "integration/govuk-reports.tfvars"
   ]
 
   variable_set_ids = [

@@ -10,7 +10,8 @@ module "cluster-services-integration" {
   working_directory = "/terraform/deployments/cluster-services/"
   trigger_patterns = [
     "/terraform/deployments/cluster-services/**/*",
-    "/terraform/variables/integration/common.tfvars"
+    "/terraform/variables/integration/common.tfvars",
+    "/terraform/variables/integration/cluster-services.tfvars"
   ]
 
   project_name = "govuk-infrastructure"
@@ -26,7 +27,8 @@ module "cluster-services-integration" {
   }
 
   tfvars_files = [
-    "integration/common.tfvars"
+    "integration/common.tfvars",
+    "integration/cluster-services.tfvars"
   ]
 
   variable_set_ids = [
@@ -48,7 +50,8 @@ module "cluster-services-staging" {
   working_directory = "/terraform/deployments/cluster-services/"
   trigger_patterns = [
     "/terraform/deployments/cluster-services/**/*",
-    "/terraform/variables/staging/common.tfvars"
+    "/terraform/variables/staging/common.tfvars",
+    "/terraform/variables/staging/cluster-services.tfvars"
   ]
 
   project_name = "govuk-infrastructure"
@@ -63,7 +66,8 @@ module "cluster-services-staging" {
   }
 
   tfvars_files = [
-    "staging/common.tfvars"
+    "staging/common.tfvars",
+    "staging/cluster-services.tfvars"
   ]
 
   variable_set_ids = [
@@ -85,7 +89,8 @@ module "cluster-services-production" {
   working_directory = "/terraform/deployments/cluster-services/"
   trigger_patterns = [
     "/terraform/deployments/cluster-services/**/*",
-    "/terraform/variables/production/common.tfvars"
+    "/terraform/variables/production/common.tfvars",
+    "/terraform/variables/production/cluster-services.tfvars"
   ]
 
   project_name = "govuk-infrastructure"
@@ -100,7 +105,8 @@ module "cluster-services-production" {
   }
 
   tfvars_files = [
-    "production/common.tfvars"
+    "production/common.tfvars",
+    "production/cluster-services.tfvars"
   ]
 
   variable_set_ids = [

@@ -10,7 +10,8 @@ module "cdn-analytics-integration" {
   working_directory = "/terraform/deployments/cdn-analytics/"
   trigger_patterns = [
     "/terraform/deployments/cdn-analytics/**/*",
-    "/terraform/variables/integration/common.tfvars"
+    "/terraform/variables/integration/common.tfvars",
+    "/terraform/variables/integration/cdn-analytics.tfvars"
   ]
   global_remote_state = true
 
@@ -27,7 +28,8 @@ module "cdn-analytics-integration" {
   }
 
   tfvars_files = [
-    "integration/common.tfvars"
+    "integration/common.tfvars",
+    "integration/cdn-analytics.tfvars"
   ]
 
   variable_set_ids = [
@@ -47,7 +49,8 @@ module "cdn-analytics-staging" {
   working_directory = "/terraform/deployments/cdn-analytics/"
   trigger_patterns = [
     "/terraform/deployments/cdn-analytics/**/*",
-    "/terraform/variables/staging/common.tfvars"
+    "/terraform/variables/staging/common.tfvars",
+    "/terraform/variables/staging/cdn-analytics.tfvars"
   ]
   global_remote_state = true
 
@@ -63,7 +66,8 @@ module "cdn-analytics-staging" {
   }
 
   tfvars_files = [
-    "staging/common.tfvars"
+    "staging/common.tfvars",
+    "staging/cdn-analytics.tfvars"
   ]
 
   variable_set_ids = [
@@ -83,7 +87,8 @@ module "cdn-analytics-production" {
   working_directory = "/terraform/deployments/cdn-analytics/"
   trigger_patterns = [
     "/terraform/deployments/cdn-analytics/**/*",
-    "/terraform/variables/production/common.tfvars"
+    "/terraform/variables/production/common.tfvars",
+    "/terraform/variables/production/cdn-analytics.tfvars"
   ]
   global_remote_state = true
 
@@ -99,7 +104,8 @@ module "cdn-analytics-production" {
   }
 
   tfvars_files = [
-    "production/common.tfvars"
+    "production/common.tfvars",
+    "production/cdn-analytics.tfvars"
   ]
 
   variable_set_ids = [

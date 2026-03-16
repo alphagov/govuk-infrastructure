@@ -10,7 +10,8 @@ module "vpc-integration" {
   working_directory = "/terraform/deployments/vpc/"
   trigger_patterns = [
     "/terraform/deployments/vpc/**/*",
-    "/terraform/variables/integration/common.tfvars"
+    "/terraform/variables/integration/common.tfvars",
+    "/terraform/variables/integration/vpc.tfvars"
   ]
   global_remote_state = true
 
@@ -27,7 +28,8 @@ module "vpc-integration" {
   }
 
   tfvars_files = [
-    "integration/common.tfvars"
+    "integration/common.tfvars",
+    "integration/vpc.tfvars"
   ]
 
   variable_set_ids = [
@@ -48,7 +50,8 @@ module "vpc-staging" {
   working_directory = "/terraform/deployments/vpc/"
   trigger_patterns = [
     "/terraform/deployments/vpc/**/*",
-    "/terraform/variables/staging/common.tfvars"
+    "/terraform/variables/staging/common.tfvars",
+    "/terraform/variables/staging/vpc.tfvars"
   ]
   global_remote_state = true
 
@@ -64,7 +67,8 @@ module "vpc-staging" {
   }
 
   tfvars_files = [
-    "staging/common.tfvars"
+    "staging/common.tfvars",
+    "staging/vpc.tfvars"
   ]
 
   variable_set_ids = [
@@ -85,7 +89,8 @@ module "vpc-production" {
   working_directory = "/terraform/deployments/vpc/"
   trigger_patterns = [
     "/terraform/deployments/vpc/**/*",
-    "/terraform/variables/production/common.tfvars"
+    "/terraform/variables/production/common.tfvars",
+    "/terraform/variables/production/vpc.tfvars"
   ]
   global_remote_state = true
 
@@ -101,7 +106,8 @@ module "vpc-production" {
   }
 
   tfvars_files = [
-    "production/common.tfvars"
+    "production/common.tfvars",
+    "production/vpc.tfvars"
   ]
 
   variable_set_ids = [

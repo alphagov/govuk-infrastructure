@@ -1,3 +1,7 @@
+# Common variables for the integration environment.
+# Only add variables here if they are shared across multiple workspaces in the integration environment.
+# Variables that are only used by a single workspace should be added to that workspace's specific tfvars file.
+
 govuk_aws_state_bucket              = "govuk-terraform-steppingstone-integration"
 cluster_infrastructure_state_bucket = "govuk-terraform-integration"
 

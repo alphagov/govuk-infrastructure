@@ -10,7 +10,8 @@ module "datagovuk-infrastructure-integration" {
   working_directory = "/terraform/deployments/datagovuk-infrastructure/"
   trigger_patterns = [
     "/terraform/deployments/datagovuk-infrastructure/**/*",
-    "/terraform/variables/integration/common.tfvars"
+    "/terraform/variables/integration/common.tfvars",
+    "/terraform/variables/integration/datagovuk-infrastructure.tfvars"
   ]
 
   project_name = "govuk-infrastructure"
@@ -26,7 +27,8 @@ module "datagovuk-infrastructure-integration" {
   }
 
   tfvars_files = [
-    "integration/common.tfvars"
+    "integration/common.tfvars",
+    "integration/datagovuk-infrastructure.tfvars"
   ]
 
   variable_set_ids = [
@@ -46,7 +48,8 @@ module "datagovuk-infrastructure-staging" {
   working_directory = "/terraform/deployments/datagovuk-infrastructure/"
   trigger_patterns = [
     "/terraform/deployments/datagovuk-infrastructure/**/*",
-    "/terraform/variables/staging/common.tfvars"
+    "/terraform/variables/staging/common.tfvars",
+    "/terraform/variables/staging/datagovuk-infrastructure.tfvars"
   ]
 
   project_name = "govuk-infrastructure"
@@ -61,7 +64,8 @@ module "datagovuk-infrastructure-staging" {
   }
 
   tfvars_files = [
-    "staging/common.tfvars"
+    "staging/common.tfvars",
+    "staging/datagovuk-infrastructure.tfvars"
   ]
 
   variable_set_ids = [
@@ -81,7 +85,8 @@ module "datagovuk-infrastructure-production" {
   working_directory = "/terraform/deployments/datagovuk-infrastructure/"
   trigger_patterns = [
     "/terraform/deployments/datagovuk-infrastructure/**/*",
-    "/terraform/variables/production/common.tfvars"
+    "/terraform/variables/production/common.tfvars",
+    "/terraform/variables/production/datagovuk-infrastructure.tfvars"
   ]
 
   project_name = "govuk-infrastructure"
@@ -96,7 +101,8 @@ module "datagovuk-infrastructure-production" {
   }
 
   tfvars_files = [
-    "production/common.tfvars"
+    "production/common.tfvars",
+    "production/datagovuk-infrastructure.tfvars"
   ]
 
   variable_set_ids = [

@@ -10,7 +10,8 @@ module "csp-reporter-integration" {
   working_directory = "/terraform/deployments/csp-reporter/"
   trigger_patterns = [
     "/terraform/deployments/csp-reporter/**/*",
-    "/terraform/variables/integration/common.tfvars"
+    "/terraform/variables/integration/common.tfvars",
+    "/terraform/variables/integration/csp-reporter.tfvars"
   ]
 
   project_name = "govuk-infrastructure"
@@ -26,7 +27,8 @@ module "csp-reporter-integration" {
   }
 
   tfvars_files = [
-    "integration/common.tfvars"
+    "integration/common.tfvars",
+    "integration/csp-reporter.tfvars"
   ]
 
   variable_set_ids = [
@@ -46,7 +48,8 @@ module "csp-reporter-staging" {
   working_directory = "/terraform/deployments/csp-reporter/"
   trigger_patterns = [
     "/terraform/deployments/csp-reporter/**/*",
-    "/terraform/variables/staging/common.tfvars"
+    "/terraform/variables/staging/common.tfvars",
+    "/terraform/variables/staging/csp-reporter.tfvars"
   ]
 
   project_name = "govuk-infrastructure"
@@ -61,7 +64,8 @@ module "csp-reporter-staging" {
   }
 
   tfvars_files = [
-    "staging/common.tfvars"
+    "staging/common.tfvars",
+    "staging/csp-reporter.tfvars"
   ]
 
   variable_set_ids = [
@@ -81,7 +85,8 @@ module "csp-reporter-production" {
   working_directory = "/terraform/deployments/csp-reporter/"
   trigger_patterns = [
     "/terraform/deployments/csp-reporter/**/*",
-    "/terraform/variables/production/common.tfvars"
+    "/terraform/variables/production/common.tfvars",
+    "/terraform/variables/production/csp-reporter.tfvars"
   ]
 
   project_name = "govuk-infrastructure"
@@ -96,7 +101,8 @@ module "csp-reporter-production" {
   }
 
   tfvars_files = [
-    "production/common.tfvars"
+    "production/common.tfvars",
+    "production/csp-reporter.tfvars"
   ]
 
   variable_set_ids = [
