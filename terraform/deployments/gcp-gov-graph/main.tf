@@ -26,8 +26,8 @@ locals {
 }
 
 resource "google_project" "environment_project" {
-  name       = "Gov Graph ${local.display_name}"
-  project_id = "gov-graph-${var.name}"
+  name       = var.project_id
+  project_id = var.project_id
 
   folder_id       = var.google_cloud_folder
   billing_account = var.google_cloud_billing_account
