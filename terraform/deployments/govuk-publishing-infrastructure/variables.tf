@@ -64,6 +64,11 @@ variable "search_api_domain" {
   description = "The domain name of the API gateway"
 }
 
+variable "publishing_service_domain" {
+  type        = string
+  description = "FQDN of the user-facing domain for the publishing apps, e.g. staging.publishing.service.gov.uk. This domain is included as a wildcard SAN on the TLS cert for Ingresses etc."
+}
+
 variable "publishing_certificate_arn" {
   type        = string
   description = "The ARN of the publishing certificate"
@@ -137,6 +142,12 @@ variable "backend_public_base_rate_limit" {
   type        = number
   description = "An enforced rate limit threshold for the backend public web ACL"
   default     = 1000
+}
+
+variable "chat_domain_base_rate_limit" {
+  type        = number
+  description = "An enforced rate limit threshold for the chat domain"
+  default     = 75000
 }
 
 variable "backend_public_ja3_denylist" {
