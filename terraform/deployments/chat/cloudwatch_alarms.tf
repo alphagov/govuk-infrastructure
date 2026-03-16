@@ -1,14 +1,13 @@
 locals {
-  period                         = 300
-  stat                           = "Sum"
-  unit                           = "Count"
-  claude_sonnet_model_id         = "eu.anthropic.claude-sonnet-4-202505"
-  claude_sonnet_token_limit      = var.chat_token_limits_per_minute["claude_sonnet"]
-  openai_gpt_oss_model_id        = "openai.gpt-oss-120b-1:0"
-  openai_gpt_oss_token_limit     = var.chat_token_limits_per_minute["openai_gpt_oss"]
-  titan_embed_model_id           = "amazon.titan-embed-text-v2:0"
-  titan_embed_dublin_token_limit = var.chat_token_limits_per_minute["titan_embed_dublin"]
-  titan_embed_london_token_limit = var.chat_token_limits_per_minute["titan_embed_london"]
+  period                     = 300
+  stat                       = "Sum"
+  unit                       = "Count"
+  claude_sonnet_model_id     = "eu.anthropic.claude-sonnet-4-202505"
+  claude_sonnet_token_limit  = var.chat_token_limits_per_minute["claude_sonnet"]
+  openai_gpt_oss_model_id    = "openai.gpt-oss-120b-1:0"
+  openai_gpt_oss_token_limit = var.chat_token_limits_per_minute["openai_gpt_oss"]
+  titan_embed_model_id       = "amazon.titan-embed-text-v2:0"
+  titan_embed_token_limit    = var.chat_token_limits_per_minute["titan_embed"]
 }
 
 resource "aws_cloudwatch_metric_alarm" "bedrock_token_threshold_50_percent_claude_sonnet" {
@@ -341,7 +340,7 @@ resource "aws_cloudwatch_metric_alarm" "bedrock_token_threshold_50_percent_titan
   # e1: Percentage Calculation
   metric_query {
     id          = "e1"
-    expression  = "m1 / ${local.titan_embed_dublin_token_limit} * 100"
+    expression  = "m1 / ${local.titan_embed_token_limit} * 100"
     label       = "Expression1"
     return_data = true
   }
@@ -384,7 +383,7 @@ resource "aws_cloudwatch_metric_alarm" "bedrock_token_threshold_100_percent_tita
   # e1: Percentage Calculation
   metric_query {
     id          = "e1"
-    expression  = "m1 / ${local.titan_embed_dublin_token_limit} * 100"
+    expression  = "m1 / ${local.titan_embed_token_limit} * 100"
     label       = "Expression1"
     return_data = true
   }
@@ -427,7 +426,7 @@ resource "aws_cloudwatch_metric_alarm" "bedrock_token_threshold_50_percent_titan
   # e1: Percentage Calculation
   metric_query {
     id          = "e1"
-    expression  = "m1 / ${local.titan_embed_london_token_limit} * 100"
+    expression  = "m1 / ${local.titan_embed_token_limit} * 100"
     label       = "Expression1"
     return_data = true
   }
@@ -470,7 +469,7 @@ resource "aws_cloudwatch_metric_alarm" "bedrock_token_threshold_100_percent_tita
   # e1: Percentage Calculation
   metric_query {
     id          = "e1"
-    expression  = "m1 / ${local.titan_embed_london_token_limit} * 100"
+    expression  = "m1 / ${local.titan_embed_token_limit} * 100"
     label       = "Expression1"
     return_data = true
   }
