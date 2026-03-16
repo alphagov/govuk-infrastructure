@@ -33,6 +33,7 @@ resource "aws_cloudwatch_event_rule" "aws_service_health_alert_london" {
   role_arn = aws_iam_role.aws_service_health_alert.arn
 }
 
+/* temporarily remove so ghost resource can be removed
 resource "aws_cloudwatch_event_target" "aws_service_health_alert_dublin" {
   region    = "eu-west-1"
   rule      = aws_cloudwatch_event_rule.aws_service_health_alert_dublin.name
@@ -40,6 +41,7 @@ resource "aws_cloudwatch_event_target" "aws_service_health_alert_dublin" {
   target_id = "chat-aws-service-health-alert-target-dublin"
   role_arn  = aws_iam_role.aws_service_health_alert.arn
 }
+*/
 
 resource "aws_cloudwatch_event_target" "aws_service_health_alert_london" {
   region    = "eu-west-2"
