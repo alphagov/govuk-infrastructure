@@ -13,6 +13,11 @@ resource "aws_cloudwatch_event_rule" "aws_service_health_alert_dublin" {
   role_arn = aws_iam_role.aws_service_health_alert.arn
 }
 
+moved {
+  from = aws_cloudwatch_event_rule.aws_service_health_alert
+  to   = aws_cloudwatch_event_rule.aws_service_health_alert_dublin
+}
+
 resource "aws_cloudwatch_event_rule" "aws_service_health_alert_london" {
   region      = "eu-west-2"
   name        = "chat-aws-service-health-alert"
