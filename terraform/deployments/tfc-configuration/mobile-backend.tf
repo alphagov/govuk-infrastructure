@@ -10,7 +10,8 @@ module "mobile-backend-production" {
   working_directory = "/terraform/deployments/mobile-backend/"
   trigger_patterns = [
     "/terraform/deployments/mobile-backend/**/*",
-    "/terraform/variables/production/common.tfvars"
+    "/terraform/variables/production/common.tfvars",
+    "/terraform/variables/production/mobile-backend.tfvars"
   ]
   global_remote_state = true
 
@@ -26,7 +27,8 @@ module "mobile-backend-production" {
   }
 
   tfvars_files = [
-    "production/common.tfvars"
+    "production/common.tfvars",
+    "production/mobile-backend.tfvars"
   ]
 
   variable_set_ids = [
@@ -46,7 +48,8 @@ module "mobile-backend-staging" {
   working_directory = "/terraform/deployments/mobile-backend/"
   trigger_patterns = [
     "/terraform/deployments/mobile-backend/**/*",
-    "/terraform/variables/staging/common.tfvars"
+    "/terraform/variables/staging/common.tfvars",
+    "/terraform/variables/staging/mobile-backend.tfvars"
   ]
   global_remote_state = true
 
@@ -62,7 +65,8 @@ module "mobile-backend-staging" {
   }
 
   tfvars_files = [
-    "staging/common.tfvars"
+    "staging/common.tfvars",
+    "staging/mobile-backend.tfvars"
   ]
 
   variable_set_ids = [
@@ -82,7 +86,8 @@ module "mobile-backend-integration" {
   working_directory = "/terraform/deployments/mobile-backend/"
   trigger_patterns = [
     "/terraform/deployments/mobile-backend/**/*",
-    "/terraform/variables/integration/common.tfvars"
+    "/terraform/variables/integration/common.tfvars",
+    "/terraform/variables/integration/mobile-backend.tfvars"
   ]
   global_remote_state = true
 
@@ -99,7 +104,8 @@ module "mobile-backend-integration" {
   }
 
   tfvars_files = [
-    "integration/common.tfvars"
+    "integration/common.tfvars",
+    "integration/mobile-backend.tfvars"
   ]
 
   variable_set_ids = [

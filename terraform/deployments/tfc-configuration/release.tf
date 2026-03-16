@@ -10,7 +10,8 @@ module "release-integration" {
   working_directory = "/terraform/deployments/release/"
   trigger_patterns = [
     "/terraform/deployments/release/**/*",
-    "/terraform/variables/integration/common.tfvars"
+    "/terraform/variables/integration/common.tfvars",
+    "/terraform/variables/integration/release.tfvars"
   ]
   global_remote_state = true
 
@@ -27,7 +28,8 @@ module "release-integration" {
   }
 
   tfvars_files = [
-    "integration/common.tfvars"
+    "integration/common.tfvars",
+    "integration/release.tfvars"
   ]
 
   variable_set_ids = [
@@ -47,7 +49,8 @@ module "release-staging" {
   working_directory = "/terraform/deployments/release/"
   trigger_patterns = [
     "/terraform/deployments/release/**/*",
-    "/terraform/variables/staging/common.tfvars"
+    "/terraform/variables/staging/common.tfvars",
+    "/terraform/variables/staging/release.tfvars"
   ]
   global_remote_state = true
 
@@ -63,7 +66,8 @@ module "release-staging" {
   }
 
   tfvars_files = [
-    "staging/common.tfvars"
+    "staging/common.tfvars",
+    "staging/release.tfvars"
   ]
 
   variable_set_ids = [
@@ -83,7 +87,8 @@ module "release-production" {
   working_directory = "/terraform/deployments/release/"
   trigger_patterns = [
     "/terraform/deployments/release/**/*",
-    "/terraform/variables/production/common.tfvars"
+    "/terraform/variables/production/common.tfvars",
+    "/terraform/variables/production/release.tfvars"
   ]
   global_remote_state = true
 
@@ -99,7 +104,8 @@ module "release-production" {
   }
 
   tfvars_files = [
-    "production/common.tfvars"
+    "production/common.tfvars",
+    "production/release.tfvars"
   ]
 
   variable_set_ids = [

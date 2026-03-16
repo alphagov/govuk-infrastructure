@@ -10,7 +10,8 @@ module "synthetic-test-integration" {
   working_directory = "/terraform/deployments/synthetic-test/"
   trigger_patterns = [
     "/terraform/deployments/synthetic-test/**/*",
-    "/terraform/variables/integration/common.tfvars"
+    "/terraform/variables/integration/common.tfvars",
+    "/terraform/variables/integration/synthetic-test.tfvars"
   ]
   global_remote_state = true
 
@@ -27,7 +28,8 @@ module "synthetic-test-integration" {
   }
 
   tfvars_files = [
-    "integration/common.tfvars"
+    "integration/common.tfvars",
+    "integration/synthetic-test.tfvars"
   ]
 
   variable_set_ids = [
@@ -47,7 +49,8 @@ module "synthetic-test-staging" {
   working_directory = "/terraform/deployments/synthetic-test/"
   trigger_patterns = [
     "/terraform/deployments/synthetic-test/**/*",
-    "/terraform/variables/staging/common.tfvars"
+    "/terraform/variables/staging/common.tfvars",
+    "/terraform/variables/staging/synthetic-test.tfvars"
   ]
   global_remote_state = true
 
@@ -63,7 +66,8 @@ module "synthetic-test-staging" {
   }
 
   tfvars_files = [
-    "staging/common.tfvars"
+    "staging/common.tfvars",
+    "staging/synthetic-test.tfvars"
   ]
 
   variable_set_ids = [
@@ -83,7 +87,8 @@ module "synthetic-test-production" {
   working_directory = "/terraform/deployments/synthetic-test/"
   trigger_patterns = [
     "/terraform/deployments/synthetic-test/**/*",
-    "/terraform/variables/production/common.tfvars"
+    "/terraform/variables/production/common.tfvars",
+    "/terraform/variables/production/synthetic-test.tfvars"
   ]
   global_remote_state = true
 
@@ -99,7 +104,8 @@ module "synthetic-test-production" {
   }
 
   tfvars_files = [
-    "production/common.tfvars"
+    "production/common.tfvars",
+    "production/synthetic-test.tfvars"
   ]
 
   variable_set_ids = [

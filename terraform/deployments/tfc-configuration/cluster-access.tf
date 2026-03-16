@@ -12,7 +12,8 @@ module "cluster-access-integration" {
   working_directory      = "/terraform/deployments/cluster-access/"
   trigger_patterns = [
     "/terraform/deployments/cluster-access/**/*",
-    "/terraform/variables/integration/common.tfvars"
+    "/terraform/variables/integration/common.tfvars",
+    "/terraform/variables/integration/cluster-access.tfvars"
   ]
 
   project_name = "govuk-infrastructure"
@@ -28,7 +29,8 @@ module "cluster-access-integration" {
   }
 
   tfvars_files = [
-    "integration/common.tfvars"
+    "integration/common.tfvars",
+    "integration/cluster-access.tfvars"
   ]
 
   variable_set_ids = [
@@ -52,7 +54,8 @@ module "cluster-access-staging" {
   working_directory      = "/terraform/deployments/cluster-access/"
   trigger_patterns = [
     "/terraform/deployments/cluster-access/**/*",
-    "/terraform/variables/staging/common.tfvars"
+    "/terraform/variables/staging/common.tfvars",
+    "/terraform/variables/staging/cluster-access.tfvars"
   ]
 
   project_name = "govuk-infrastructure"
@@ -67,7 +70,8 @@ module "cluster-access-staging" {
   }
 
   tfvars_files = [
-    "staging/common.tfvars"
+    "staging/common.tfvars",
+    "staging/cluster-access.tfvars"
   ]
 
   variable_set_ids = [
@@ -91,7 +95,8 @@ module "cluster-access-production" {
   working_directory      = "/terraform/deployments/cluster-access/"
   trigger_patterns = [
     "/terraform/deployments/cluster-access/**/*",
-    "/terraform/variables/production/common.tfvars"
+    "/terraform/variables/production/common.tfvars",
+    "/terraform/variables/production/cluster-access.tfvars"
   ]
 
   project_name = "govuk-infrastructure"
@@ -106,7 +111,8 @@ module "cluster-access-production" {
   }
 
   tfvars_files = [
-    "production/common.tfvars"
+    "production/common.tfvars",
+    "production/cluster-access.tfvars"
   ]
 
   variable_set_ids = [

@@ -10,7 +10,8 @@ module "security-integration" {
   working_directory = "/terraform/deployments/security/"
   trigger_patterns = [
     "/terraform/deployments/security/**/*",
-    "/terraform/variables/integration/common.tfvars"
+    "/terraform/variables/integration/common.tfvars",
+    "/terraform/variables/integration/security.tfvars"
   ]
   global_remote_state = true
 
@@ -27,7 +28,8 @@ module "security-integration" {
   }
 
   tfvars_files = [
-    "integration/common.tfvars"
+    "integration/common.tfvars",
+    "integration/security.tfvars"
   ]
 
   variable_set_ids = [
@@ -49,7 +51,8 @@ module "security-staging" {
   working_directory = "/terraform/deployments/security/"
   trigger_patterns = [
     "/terraform/deployments/security/**/*",
-    "/terraform/variables/staging/common.tfvars"
+    "/terraform/variables/staging/common.tfvars",
+    "/terraform/variables/staging/security.tfvars"
   ]
   global_remote_state = true
 
@@ -65,7 +68,8 @@ module "security-staging" {
   }
 
   tfvars_files = [
-    "staging/common.tfvars"
+    "staging/common.tfvars",
+    "staging/security.tfvars"
   ]
 
   variable_set_ids = [
@@ -87,7 +91,8 @@ module "security-production" {
   working_directory = "/terraform/deployments/security/"
   trigger_patterns = [
     "/terraform/deployments/security/**/*",
-    "/terraform/variables/production/common.tfvars"
+    "/terraform/variables/production/common.tfvars",
+    "/terraform/variables/production/security.tfvars"
   ]
   global_remote_state = true
 
@@ -103,7 +108,8 @@ module "security-production" {
   }
 
   tfvars_files = [
-    "production/common.tfvars"
+    "production/common.tfvars",
+    "production/security.tfvars"
   ]
 
   variable_set_ids = [

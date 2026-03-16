@@ -10,7 +10,8 @@ module "logging-integration" {
   working_directory = "/terraform/deployments/logging/"
   trigger_patterns = [
     "/terraform/deployments/logging/**/*",
-    "/terraform/variables/integration/common.tfvars"
+    "/terraform/variables/integration/common.tfvars",
+    "/terraform/variables/integration/logging.tfvars"
   ]
   global_remote_state = true
 
@@ -27,7 +28,8 @@ module "logging-integration" {
   }
 
   tfvars_files = [
-    "integration/common.tfvars"
+    "integration/common.tfvars",
+    "integration/logging.tfvars"
   ]
 
   variable_set_ids = [
@@ -48,7 +50,8 @@ module "logging-staging" {
   working_directory = "/terraform/deployments/logging/"
   trigger_patterns = [
     "/terraform/deployments/logging/**/*",
-    "/terraform/variables/staging/common.tfvars"
+    "/terraform/variables/staging/common.tfvars",
+    "/terraform/variables/staging/logging.tfvars"
   ]
   global_remote_state = true
 
@@ -64,7 +67,8 @@ module "logging-staging" {
   }
 
   tfvars_files = [
-    "staging/common.tfvars"
+    "staging/common.tfvars",
+    "staging/logging.tfvars"
   ]
 
   variable_set_ids = [
@@ -85,7 +89,8 @@ module "logging-production" {
   working_directory = "/terraform/deployments/logging/"
   trigger_patterns = [
     "/terraform/deployments/logging/**/*",
-    "/terraform/variables/production/common.tfvars"
+    "/terraform/variables/production/common.tfvars",
+    "/terraform/variables/production/logging.tfvars"
   ]
   global_remote_state = true
 
@@ -101,7 +106,8 @@ module "logging-production" {
   }
 
   tfvars_files = [
-    "production/common.tfvars"
+    "production/common.tfvars",
+    "production/logging.tfvars"
   ]
 
   variable_set_ids = [
