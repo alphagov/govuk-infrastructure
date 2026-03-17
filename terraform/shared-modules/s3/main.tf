@@ -96,7 +96,7 @@ resource "aws_s3_bucket_lifecycle_configuration" "this" {
       }
 
       dynamic "transition" {
-        for_each = try(rule.value.transition, null)[*]
+        for_each = rule.value.transition != null ? rule.value.transition : []
         content {
           date          = lookup(transition.value, "date", null)
           days          = lookup(transition.value, "days", null)
