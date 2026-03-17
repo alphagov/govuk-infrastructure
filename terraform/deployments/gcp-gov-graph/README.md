@@ -17,7 +17,7 @@ meta-resources like service accounts or projects).
 Before you can use this module, you must:
 - use `terraform login` to authenticate to Terraform Cloud
 - use `gcloud auth application-default login` to authenticate to GCP
-- specify values for `google_cloud_folder` and `google_cloud_billing_account` as parameters to
+- specify values for `folder_id` and `billing_account` as parameters to
   `terraform` or through a (gitignored) `local.auto.tfvars` file
 
 ## Additional information

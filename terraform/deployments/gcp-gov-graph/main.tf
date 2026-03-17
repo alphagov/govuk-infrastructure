@@ -29,8 +29,8 @@ resource "google_project" "environment_project" {
   name       = var.project_id
   project_id = var.project_id
 
-  folder_id       = var.google_cloud_folder
-  billing_account = var.google_cloud_billing_account
+  folder_id       = var.folder_id
+  billing_account = var.billing_account
 
   labels = {
     "programme"         = "govuk"
@@ -40,9 +40,10 @@ resource "google_project" "environment_project" {
 }
 
 resource "google_project_service" "api_service" {
-  for_each = var.google_cloud_apis
+  for_each = var.services
 
   project                    = google_project.environment_project.project_id
   service                    = each.value
-  disable_dependent_services = true
+  disable_dependent_services = false
+  disable_on_destroy         = false
 }
