@@ -51,7 +51,15 @@ variable "services" {
     "secretmanager.googleapis.com",
     "redis.googleapis.com",
     "dlp.googleapis.com",
-    "cloudquotas.googleapis.com"
+    "cloudquotas.googleapis.com",
+    "cloudresourcemanager.googleapis.com",
+    "iamcredentials.googleapis.com",
+    "sts.googleapis.com",
+    "discoveryengine.googleapis.com",
+    "bigquerystorage.googleapis.com",
+    "cloudbuild.googleapis.com",
+    "logging.googleapis.com",
+    "monitoring.googleapis.com"
   ]
 }
 
