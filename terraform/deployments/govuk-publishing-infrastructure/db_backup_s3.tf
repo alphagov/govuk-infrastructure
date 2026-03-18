@@ -34,7 +34,7 @@ module "secure_s3_bucket_db_backup_main" {
     }
   ]
 
-  object_lock_config = var.govuk_environment != "production" ? [
+  object_lock_config = var.govuk_environment == "production" ? [
     {
       rule = {
         default_retention = {
@@ -84,7 +84,7 @@ module "secure_s3_bucket_db_backup_replica" {
     }
   ]
 
-  object_lock_config = var.govuk_environment != "production" ? [
+  object_lock_config = var.govuk_environment == "production" ? [
     {
       rule = {
         default_retention = {
