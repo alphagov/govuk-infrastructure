@@ -23,6 +23,11 @@ resource "google_bigquery_dataset" "fastly_logs" {
     role          = "WRITER"
     user_by_email = google_service_account.fastly_writer.email
   }
+
+  access {
+    role          = "READER"
+    user_by_email = "data-processing@gds-bq-processing.iam.gserviceaccount.com"
+  }
 }
 
 resource "google_bigquery_table" "fastly_logs" {
