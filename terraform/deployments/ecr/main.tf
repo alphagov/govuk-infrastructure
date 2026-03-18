@@ -69,6 +69,13 @@ locals {
   allow_lambda_pull = [
     "govuk-fastly-diff-generator"
   ]
+
+  // This is a hack to prevent the lifecycle policy being applied to repositories that lambda needs to pull from,
+  // since lambda doesn't count as a 'pull', so images will be expired even if they're still in use.
+  lifecycle_policy_repositories = setsubtract(
+    local.repositories,
+    local.allow_lambda_pull
+  )
 }
 
 data "aws_caller_identity" "current" {}
@@ -92,7 +99,7 @@ resource "aws_ecr_pull_through_cache_rule" "github" {
 }
 
 resource "aws_ecr_lifecycle_policy" "ecr_lifecycle_policy" {
-  for_each   = toset([for repo in local.repositories : aws_ecr_repository.github_repositories[repo].name])
+  for_each   = toset([for repo in local.lifecycle_policy_repositories : aws_ecr_repository.github_repositories[repo].name])
   repository = each.key
 
   policy = jsonencode({
