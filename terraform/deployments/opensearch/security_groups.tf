@@ -1,6 +1,6 @@
 resource "aws_security_group" "opensearch" {
   name        = "opensearch"
-  vpc_id      = data.terraform_remote_state.infra_vpc.outputs.vpc_id
+  vpc_id      = data.tfe_outputs.vpc.nonsensitive_values.id
   description = "Allow access to Opensearch from EKS nodes"
 }
 

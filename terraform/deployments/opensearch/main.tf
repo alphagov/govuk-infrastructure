@@ -2,7 +2,7 @@ terraform {
   cloud {
     organization = "govuk"
     workspaces {
-      tags = ["opensearch", "eks", "aws"]
+      tags = ["opensearch", "aws"]
     }
   }
   required_version = "~> 1.14"
@@ -32,7 +32,7 @@ provider "aws" {
 
 locals {
   domain      = "${var.service}-engine"
-  subnet_ids  = data.terraform_remote_state.infra_networking.outputs.private_subnet_rds_ids
+  subnet_ids  = [for k, v in data.tfe_outputs.vpc.nonsensitive_values.private_subnet_ids : v if startswith(k, "rds_")]
   master_user = "${var.service}-masteruser"
 }
 
@@ -192,7 +192,7 @@ resource "aws_secretsmanager_secret_version" "opensearch_passwords" {
 }
 
 resource "aws_route53_record" "service_record" {
-  zone_id = data.terraform_remote_state.infra_root_dns_zones.outputs.internal_root_zone_id
+  zone_id = data.tfe_outputs.root_dns.nonsensitive_values.internal_root_zone_id
   name    = "chat-opensearch.${var.govuk_environment}.govuk-internal.digital"
   type    = "CNAME"
   ttl     = 300
@@ -202,7 +202,7 @@ resource "aws_route53_record" "service_record" {
 # This CNAME record is for the Test Opensearch snapshot import K8s cronjob:
 resource "aws_route53_record" "test_service_record" {
   count   = var.govuk_environment == "integration" ? 1 : 0
-  zone_id = data.terraform_remote_state.infra_root_dns_zones.outputs.internal_root_zone_id
+  zone_id = data.tfe_outputs.root_dns.nonsensitive_values.internal_root_zone_id
   name    = "chat-opensearch-test.${var.govuk_environment}.govuk-internal.digital"
   type    = "CNAME"
   ttl     = 300
