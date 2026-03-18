@@ -15,11 +15,6 @@ resource "google_bigquery_dataset" "fastly_logs" {
   }
 
   access {
-    role           = "roles/bigquery.admin"
-    group_by_email = "analytics-team@digital.cabinet-office.gov.uk"
-  }
-
-  access {
     role          = "WRITER"
     user_by_email = google_service_account.fastly_writer.email
   }
