@@ -4,7 +4,7 @@ module "opensearch-integration" {
   organization      = var.organization
   workspace_name    = "opensearch-integration"
   workspace_desc    = "This module manages AWS resources for creating OpenSearch cluster."
-  workspace_tags    = ["integration", "cluster-services", "eks", "aws"]
+  workspace_tags    = ["integration", "opensearch", "aws"]
   terraform_version = var.terraform_version
   execution_mode    = "remote"
   working_directory = "/terraform/deployments/opensearch/"
@@ -42,7 +42,7 @@ module "opensearch-staging" {
   organization      = var.organization
   workspace_name    = "opensearch-staging"
   workspace_desc    = "This module manages AWS resources for creating OpenSearch cluster."
-  workspace_tags    = ["staging", "chat", "aws"]
+  workspace_tags    = ["staging", "opensearch", "aws"]
   terraform_version = var.terraform_version
   execution_mode    = "remote"
   working_directory = "/terraform/deployments/opensearch/"
@@ -79,7 +79,7 @@ module "opensearch-production" {
   organization      = var.organization
   workspace_name    = "opensearch-production"
   workspace_desc    = "This module manages AWS resources for creating OpenSearch cluster."
-  workspace_tags    = ["production", "chat", "aws"]
+  workspace_tags    = ["production", "opensearch", "aws"]
   terraform_version = var.terraform_version
   execution_mode    = "remote"
   working_directory = "/terraform/deployments/opensearch/"
