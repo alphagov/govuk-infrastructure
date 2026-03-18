@@ -125,7 +125,6 @@ resource "google_service_account_iam_binding" "dataform_sa_token_creator" {
   ]
 }
 
-# BigQuery cross-project permissions
 # Service account permissions to access BigQuery
 resource "google_project_iam_member" "bigquery_data_editor" {
   project = "search-api-v2-${var.gcp_env}"
