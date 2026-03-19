@@ -431,6 +431,15 @@ repos:
   govuk-ruby-images:
     can_be_deployed: true
 
+  govuk-social-data:
+    can_be_deployed: false
+    visibility: "internal"
+    standard_contexts: *standard_security_checks 
+    push_allowances: [ “alphagov/gov-uk-data”]
+          required_pull_request_reviews:
+            pull_request_bypassers:
+              - "alphagov/gov-uk-data"
+
   govuk_ab_testing:
     publishes_gem: true
     required_status_checks:
