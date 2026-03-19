@@ -102,7 +102,7 @@ moved {
 }
 
 moved {
-  from = aws_s3_bucket_object_lock_configuration.backup_main
+  from = aws_s3_bucket_object_lock_configuration.backup_main[0]
   to   = module.secure_s3_bucket_db_backup_main.aws_s3_bucket_object_lock_configuration.this[0]
 }
 
@@ -132,7 +132,7 @@ moved {
 }
 
 moved {
-  from = aws_s3_bucket_object_lock_configuration.backup_replica
+  from = aws_s3_bucket_object_lock_configuration.backup_replica[0]
   to   = module.secure_s3_bucket_db_backup_replica.aws_s3_bucket_object_lock_configuration.this[0]
 }
 
