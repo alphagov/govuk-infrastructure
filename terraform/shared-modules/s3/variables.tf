@@ -68,11 +68,11 @@ variable "lifecycle_rules" {
       noncurrent_days           = optional(number)
       newer_noncurrent_versions = optional(number)
     }))
-    transition = optional(object({
+    transition = optional(list(object({
       date          = optional(string)
       days          = optional(number)
-      storage_class = number
-    }))
+      storage_class = string
+    })), [])
   }))
   description = "Bucket lifecycle rules and configuration see https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_lifecycle_configuration"
   default     = []
