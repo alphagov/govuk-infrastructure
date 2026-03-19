@@ -3,11 +3,31 @@ locals {
   timelock_days    = 120
 }
 
+data "aws_iam_policy_document" "db_backup_bucket_policy" {
+  statement {
+    principals {
+      type = "AWS"
+      identifiers = [
+        "210287912431", # integration
+        "696911096973", # staging
+        "172025368201", # production
+      ]
+    }
+    actions = ["s3:Get*", "s3:List*"]
+    resources = [
+      "arn:aws:s3:::govuk-${var.govuk_environment}-database-backups",
+      "arn:aws:s3:::govuk-${var.govuk_environment}-database-backups/*"
+    ]
+  }
+}
+
 module "secure_s3_bucket_db_backup_main" {
   source = "../../shared-modules/s3"
 
   govuk_environment = var.govuk_environment
   name              = "govuk-${var.govuk_environment}-database-backups"
+
+  extra_bucket_policies = [data.aws_iam_policy_document.db_backup_bucket_policy.json]
 
   lifecycle_rules = [
     {
