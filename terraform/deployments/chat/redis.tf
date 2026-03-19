@@ -1,6 +1,6 @@
 locals {
   chat_redis_name     = "chat-redis"
-  elasticache_subnets = data.terraform_remote_state.infra_networking.outputs.private_subnet_elasticache_ids
+  elasticache_subnets = [for k, v in data.tfe_outputs.vpc.nonsensitive_values.private_subnet_ids : v if startswith(k, "elasticache_")]
 }
 
 resource "aws_elasticache_subnet_group" "chat_redis_cluster" {

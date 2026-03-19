@@ -14,20 +14,7 @@ data "tfe_outputs" "vpc" {
   workspace    = "vpc-${var.govuk_environment}"
 }
 
-data "terraform_remote_state" "infra_networking" {
-  backend = "s3"
-  config = {
-    bucket = var.govuk_aws_state_bucket
-    key    = "govuk/infra-networking.tfstate"
-    region = var.aws_region
-  }
-}
-
-data "terraform_remote_state" "infra_root_dns_zones" {
-  backend = "s3"
-  config = {
-    bucket = var.govuk_aws_state_bucket
-    key    = "govuk/infra-root-dns-zones.tfstate"
-    region = var.aws_region
-  }
+data "tfe_outputs" "root_dns" {
+  organization = "govuk"
+  workspace    = "root-dns-${var.govuk_environment}"
 }

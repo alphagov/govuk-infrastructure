@@ -35,5 +35,5 @@ provider "aws" {
 }
 
 locals {
-  internal_dns_zone_id = data.terraform_remote_state.infra_root_dns_zones.outputs.internal_root_zone_id
+  internal_dns_zone_id = data.tfe_outputs.root_dns.nonsensitive_values.internal_root_zone_id
 }
