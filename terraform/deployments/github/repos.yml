@@ -433,7 +433,7 @@ repos:
 
   govuk-social-data:
     can_be_deployed: false
-    visibility: "internal"
+    visibility: "private"
     standard_contexts: *standard_security_checks 
     push_allowances: []
     required_pull_request_reviews:
