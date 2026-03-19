@@ -1,9 +1,18 @@
-resource "aws_s3_bucket" "whitehall_csvs" {
-  bucket = "govuk-${var.govuk_environment}-whitehall-csvs"
+module "secure_s3_bucket_whitehall_csvs" {
+  source = "../../shared-modules/s3"
+
+  govuk_environment = var.govuk_environment
+  name              = "govuk-${var.govuk_environment}-whitehall-csvs"
+
+  versioning_enabled = false
 }
 
-resource "aws_s3_bucket_logging" "whitehall_csvs" {
-  bucket        = aws_s3_bucket.whitehall_csvs.id
-  target_bucket = "govuk-${var.govuk_environment}-aws-logging"
-  target_prefix = "s3/govuk-${var.govuk_environment}-whitehall-csvs/"
+moved {
+  from = aws_s3_bucket.whitehall_csvs
+  to   = module.secure_s3_bucket_whitehall_csvs.aws_s3_bucket.this
+}
+
+moved {
+  from = aws_s3_bucket_logging.whitehall_csvs
+  to   = module.secure_s3_bucket_whitehall_csvs.aws_s3_bucket_logging.this
 }
