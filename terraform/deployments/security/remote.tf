@@ -14,12 +14,3 @@ data "tfe_outputs" "fastly_logs" {
   organization = "govuk"
   workspace    = "govuk-fastly-logs-${var.govuk_environment}"
 }
-
-data "terraform_remote_state" "infra_security_groups" {
-  backend = "s3"
-  config = {
-    bucket = var.govuk_aws_state_bucket
-    key    = "govuk/infra-security-groups.tfstate"
-    region = data.aws_region.current.region
-  }
-}
