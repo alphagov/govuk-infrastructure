@@ -1,12 +1,6 @@
 data "aws_security_group" "eks_cluster_primary_sg" {
   id = data.tfe_outputs.cluster_infrastructure.nonsensitive_values.control_plane_security_group_id
 }
-
-import {
-  id = data.terraform_remote_state.infra_security_groups.outputs.sg_asset-master-efs_id
-  to = aws_security_group.govuk_asset-master-efs_access
-}
-
 resource "aws_security_group" "govuk_asset-master-efs_access" {
   name        = "govuk_asset-master-efs_access"
   description = "Security group for asset-master EFS share"
@@ -25,11 +19,6 @@ resource "aws_security_group" "govuk_asset-master-efs_access" {
   }
 }
 
-import {
-  id = data.terraform_remote_state.infra_security_groups.outputs.sg_content-data-api-postgresql-primary_id
-  to = aws_security_group.govuk_content-data-api-postgresql-primary_access
-}
-
 resource "aws_security_group" "govuk_content-data-api-postgresql-primary_access" {
   name        = "govuk_content-data-api-postgresql-primary_access"
   description = "Access to content-data-api-postgresql-primary from its clients"
@@ -46,11 +35,6 @@ resource "aws_security_group" "govuk_content-data-api-postgresql-primary_access"
   tags = {
     Name = "govuk_content-data-api-postgresql-primary_access"
   }
-}
-
-import {
-  id = data.terraform_remote_state.infra_security_groups.outputs.sg_elasticsearch6_id
-  to = aws_security_group.govuk_elasticsearch6_access
 }
 
 resource "aws_security_group" "govuk_elasticsearch6_access" {
@@ -85,11 +69,6 @@ resource "aws_security_group" "govuk_elasticsearch6_access" {
   }
 }
 
-import {
-  id = data.terraform_remote_state.infra_security_groups.outputs.sg_search-ltr-generation_id
-  to = aws_security_group.search-ltr-generation_access
-}
-
 resource "aws_security_group" "search-ltr-generation_access" {
   name        = "search-ltr-generation_access"
   description = "Legacy SG for Search LTR Generation Access (used by ES6)"
@@ -114,11 +93,6 @@ resource "aws_security_group" "search-ltr-generation_access" {
   }
 }
 
-import {
-  id = data.terraform_remote_state.infra_security_groups.outputs.sg_licensify_documentdb_id
-  to = aws_security_group.govuk_licensify-documentdb_access
-}
-
 resource "aws_security_group" "govuk_licensify-documentdb_access" {
   name        = "govuk_licensify-documentdb_access"
   description = "Access to licensify documentdb from its clients"
@@ -135,11 +109,6 @@ resource "aws_security_group" "govuk_licensify-documentdb_access" {
   tags = {
     Name = "govuk_licensify-documentdb_access"
   }
-}
-
-import {
-  id = data.terraform_remote_state.infra_security_groups.outputs.sg_shared_documentdb_id
-  to = aws_security_group.govuk_shared_documentdb_access
 }
 
 resource "aws_security_group" "govuk_shared_documentdb_access" {
