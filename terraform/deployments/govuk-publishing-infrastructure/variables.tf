@@ -1,8 +1,3 @@
-variable "govuk_aws_state_bucket" {
-  type        = string
-  description = "The name of the S3 bucket used for govuk-aws's Terraform state files."
-}
-
 variable "govuk_environment" {
   type        = string
   description = "GOV.UK environment where resources are being deployed"

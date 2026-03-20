@@ -16,7 +16,6 @@ module "var_set" {
 
     force_destroy = true
 
-    govuk_aws_state_bucket    = ""
     publishing_service_domain = "${var.ephemeral_cluster_id}.publishing.service.gov.uk"
 
     enable_arm_workers_blue    = true

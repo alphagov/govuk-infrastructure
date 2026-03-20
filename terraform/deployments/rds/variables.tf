@@ -9,11 +9,6 @@ variable "aws_region" {
   default     = "eu-west-1"
 }
 
-variable "govuk_aws_state_bucket" {
-  type        = string
-  description = "Bucket where govuk-aws state is stored"
-}
-
 variable "databases" {
   description = "Databases to create and their configuration."
 
