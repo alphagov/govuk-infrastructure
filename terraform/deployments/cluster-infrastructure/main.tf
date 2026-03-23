@@ -54,10 +54,12 @@ locals {
     }
   }
 
-  # Uncomment to configure optional or per-env addons.
-  # enabled_cluster_addons = merge(local.default_cluster_addons, var.enable_network_flow_addon ? local.network_flow_agent_addon : {})
+  network_flow_agent_addon = {
+    aws-network-flow-monitoring-agent = { addon_version = "v1.1.3-eksbuild.2", resolve_conflicts_on_create = "OVERWRITE" }
+  }
 
-  enabled_cluster_addons = local.default_cluster_addons
+  # Uncomment to configure optional or per-env addons.
+  enabled_cluster_addons = merge(local.default_cluster_addons, var.enable_network_flow_addon ? local.network_flow_agent_addon : {})
 
   managed_node_group_defaults = {
     capacity_type                  = var.x86_workers_default_capacity_type
