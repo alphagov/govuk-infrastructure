@@ -55,8 +55,6 @@ enable_arm_workers_green = true
 enable_tetragon          = true
 enable_x86_workers       = false
 
-enable_network_flow_addon = true
-
 publishing_service_domain = "integration.publishing.service.gov.uk"
 
 frontend_memcached_node_type = "cache.t4g.micro"
