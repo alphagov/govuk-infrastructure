@@ -39,10 +39,6 @@ variable "aws_region" {
   description = "AWS region"
   default     = "eu-west-1"
 }
-variable "govuk_aws_state_bucket" {
-  type        = string
-  description = "Bucket where govuk-aws state is stored"
-}
 variable "govuk_environment" {
   type        = string
   description = "Acceptable values are test, integration, staging, production"

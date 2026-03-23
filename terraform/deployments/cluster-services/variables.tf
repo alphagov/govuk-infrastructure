@@ -46,11 +46,6 @@ variable "helm_timeout_seconds" {
   default     = "1200"
 }
 
-variable "govuk_aws_state_bucket" {
-  type        = string
-  description = "Name of the S3 bucket used for govuk-aws's Terraform state."
-}
-
 variable "govuk_environment" {
   type        = string
   description = "Acceptable values are test, integration, staging, production"

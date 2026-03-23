@@ -2,9 +2,6 @@
 # Only add variables here if they are shared across multiple workspaces in the staging environment.
 # Variables that are only used by a single workspace should be added to that workspace's specific tfvars file.
 
-govuk_aws_state_bucket              = "govuk-terraform-steppingstone-staging"
-cluster_infrastructure_state_bucket = "govuk-terraform-staging"
-
 cluster_version               = "1.34"
 cluster_log_retention_in_days = 731
 
