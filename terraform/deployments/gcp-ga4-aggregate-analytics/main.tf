@@ -31,3 +31,8 @@ resource "google_project" "project" {
   folder_id       = "278098142879"
   billing_account = "015C7A-FAF970-B0D375"
 }
+
+module "data_access_monitoring" {
+  source     = "./modules/data-access-monitoring"
+  project_id = google_project.project.project_id
+}
