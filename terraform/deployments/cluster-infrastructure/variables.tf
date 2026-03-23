@@ -46,6 +46,18 @@ variable "force_destroy" {
   default     = false
 }
 
+variable "enable_container_network_observability" {
+  type        = bool
+  description = "Whether to enable Container Network Observability configuration"
+  default     = false
+}
+
+variable "enable_eks_pod_identity_addon" {
+  type        = bool
+  description = "Whether to enable the EKS Pod Identity Agent addon"
+  default     = false
+}
+
 variable "enable_network_flow_addon" {
   type        = bool
   description = "Whether to enable the Network Flow Agent addon"
