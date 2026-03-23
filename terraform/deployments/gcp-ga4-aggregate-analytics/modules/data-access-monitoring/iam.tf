@@ -12,11 +12,3 @@ resource "google_project_iam_audit_config" "bq_audit" {
     log_type = "DATA_READ"
   }
 }
-
-resource "google_project_iam_audit_config" "bq_storage_audit" {
-  project = var.project_id
-  service = "bigquerystorage.googleapis.com"
-  audit_log_config {
-    log_type = "DATA_READ"
-  }
-}
