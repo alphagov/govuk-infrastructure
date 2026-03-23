@@ -46,6 +46,12 @@ variable "force_destroy" {
   default     = false
 }
 
+variable "enable_network_flow_addon" {
+  type        = bool
+  description = "Whether to enable the Network Flow Agent addon"
+  default     = false
+}
+
 variable "enable_arm_workers_blue" {
   type        = bool
   description = "Whether to enable the 'blue' ARM/Graviton-based Managed Node Group"
