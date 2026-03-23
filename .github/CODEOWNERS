@@ -6,3 +6,8 @@
 /.github/ @alphagov/gov-uk-platform-engineering
 # Terraform code
 /terraform/deployments/ @alphagov/gov-uk-platform-engineering
+# Data Engineering infrastructure
+/terraform/deployments/ga4-analytics/ @alphagov/govuk-data-engineering
+/terraform/deployments/gcp-ga4-aggregate-analytics/ @alphagov/govuk-data-engineering
+/terraform/deployments/gcp-gds-bq-processing/ @alphagov/govuk-data-engineering
+/terraform/deployments/gcp-gov-graph/ @alphagov/govuk-data-engineering
