@@ -51,12 +51,6 @@ variable "force_destroy" {
   default     = false
 }
 
-variable "enable_kube_state_metrics" {
-  type        = bool
-  description = "Enable the Kube State Metrics EKS Add-on. For Pod State Metrics."
-  default     = false
-}
-
 variable "enable_arm_workers_blue" {
   type        = bool
   description = "Whether to enable the 'blue' ARM/Graviton-based Managed Node Group"
