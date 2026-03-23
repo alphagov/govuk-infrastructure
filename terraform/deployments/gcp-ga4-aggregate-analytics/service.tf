@@ -2,6 +2,8 @@ locals {
   services = [
     "bigquery.googleapis.com",
     "bigquerydatatransfer.googleapis.com",
+    "bigquerystorage.googleapis.com",
+    "logging.googleapis.com",
     "storage.googleapis.com",
   ]
 }
