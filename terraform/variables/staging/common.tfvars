@@ -45,20 +45,4 @@ legacy_private_subnets = {
 
 govuk_environment = "staging"
 
-enable_arm_workers_blue  = false
-enable_arm_workers_green = true
-enable_x86_workers       = false
-
 publishing_service_domain = "staging.publishing.service.gov.uk"
-
-frontend_memcached_node_type = "cache.t4g.medium"
-
-desired_ha_replicas         = 2
-rds_backup_retention_period = 1
-
-ckan_s3_organogram_bucket = "datagovuk-staging-ckan-organogram"
-
-licensify_documentdb_instance_count       = 1
-licensify_backup_retention_period         = 1
-shared_documentdb_instance_count          = 1
-shared_documentdb_backup_retention_period = 1

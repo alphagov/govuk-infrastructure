@@ -58,3 +58,10 @@ amazonmq_maintenance_window_start_time_utc    = "07:00"
 amazonmq_host_instance_type                   = "mq.m5.large"
 
 amazonmq_govuk_chat_retry_message_ttl = 300000
+
+frontend_memcached_node_type = "cache.t4g.medium"
+
+licensify_documentdb_instance_count       = 1
+licensify_backup_retention_period         = 1
+shared_documentdb_instance_count          = 1
+shared_documentdb_backup_retention_period = 1

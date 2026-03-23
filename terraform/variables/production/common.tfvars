@@ -45,15 +45,4 @@ legacy_private_subnets = {
 
 govuk_environment = "production"
 
-enable_arm_workers_blue  = false
-enable_arm_workers_green = true
-enable_x86_workers       = false
-
 publishing_service_domain = "publishing.service.gov.uk"
-
-
-frontend_memcached_node_type = "cache.r6g.large"
-
-ckan_s3_organogram_bucket = "datagovuk-production-ckan-organogram"
-
-shared_documentdb_identifier_suffix = "-1"

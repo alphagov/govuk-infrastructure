@@ -50,31 +50,6 @@ legacy_private_subnets = {
 govuk_environment = "integration"
 force_destroy     = true
 
-enable_arm_workers_blue  = false
-enable_arm_workers_green = true
-enable_tetragon          = true
-enable_x86_workers       = false
+enable_tetragon = true
 
 publishing_service_domain = "integration.publishing.service.gov.uk"
-
-frontend_memcached_node_type = "cache.t4g.micro"
-
-# Non-production-only access is sufficient to access tools in this cluster.
-github_read_write_team = "alphagov:gov-uk"
-
-grafana_db_auto_pause       = true
-maintenance_window          = "Sun:04:00-Sun:06:00"
-rds_apply_immediately       = true
-rds_backup_retention_period = 1
-rds_skip_final_snapshot     = true
-
-secrets_recovery_window_in_days = 0
-
-desired_ha_replicas = 1
-
-ckan_s3_organogram_bucket = "datagovuk-integration-ckan-organogram"
-
-licensify_documentdb_instance_count       = 1
-licensify_backup_retention_period         = 1
-shared_documentdb_instance_count          = 1
-shared_documentdb_backup_retention_period = 1

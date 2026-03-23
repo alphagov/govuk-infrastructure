@@ -1,6 +1,7 @@
 backup_retention_period = 1
 skip_final_snapshot     = true
 multi_az                = false
+maintenance_window      = "Sun:04:00-Sun:06:00"
 
 databases = {
   account_api = {
