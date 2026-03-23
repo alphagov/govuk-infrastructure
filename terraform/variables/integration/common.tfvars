@@ -50,8 +50,6 @@ legacy_private_subnets = {
 govuk_environment = "integration"
 force_destroy     = true
 
-enable_kube_state_metrics = true
-
 enable_arm_workers_blue  = false
 enable_arm_workers_green = true
 enable_tetragon          = true

@@ -40,8 +40,9 @@ locals {
   }
 
   default_cluster_addons = {
-    coredns        = { addon_version = "v1.13.2-eksbuild.1", resolve_conflicts_on_create = "OVERWRITE" }
-    kube-proxy     = { addon_version = "v1.34.5-eksbuild.2", resolve_conflicts_on_create = "OVERWRITE" }
+    coredns = { addon_version = "v1.13.2-eksbuild.1", resolve_conflicts_on_create = "OVERWRITE" }
+    kube-proxy = { addon_version = "v1.34.5-eksbuild.2", resolve_conflicts_on_create = "OVERWRITE"
+    kube-state-metrics = { addon_version = "v2.18.0-eksbuild.1", resolve_conflicts_on_create = "OVERWRITE" } }
     metrics-server = { addon_version = "v0.8.1-eksbuild.1", resolve_conflicts_on_create = "OVERWRITE" }
     vpc-cni = {
       addon_version               = "v1.21.1-eksbuild.5",
@@ -53,11 +54,10 @@ locals {
     }
   }
 
-  kube_state_metrics_addon = {
-    kube-state-metrics = { addon_version = "v2.18.0-eksbuild.1", resolve_conflicts_on_create = "OVERWRITE" }
-  }
+  # Uncomment to configure optional or per-env addons.
+  # enabled_cluster_addons = merge(local.default_cluster_addons, var.enable_network_flow_addon ? local.network_flow_agent_addon : {})
 
-  enabled_cluster_addons = merge(local.default_cluster_addons, var.enable_kube_state_metrics ? local.kube_state_metrics_addon : {})
+  enabled_cluster_addons = local.default_cluster_addons
 
   managed_node_group_defaults = {
     capacity_type                  = var.x86_workers_default_capacity_type
