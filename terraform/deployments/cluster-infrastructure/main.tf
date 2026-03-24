@@ -59,7 +59,14 @@ locals {
   }
 
   network_flow_agent_addon = {
-    aws-network-flow-monitoring-agent = { addon_version = "v1.1.3-eksbuild.2", resolve_conflicts_on_create = "OVERWRITE" }
+    aws-network-flow-monitoring-agent = {
+      addon_version               = "v1.1.3-eksbuild.2"
+      resolve_conflicts_on_create = "OVERWRITE"
+      pod_identity_association = [{
+        role_arn        = try(aws_iam_role.network_flow_agent_role[0].arn, "")
+        service_account = "network-flow-monitoring-agent"
+      }]
+    }
   }
 
   # Uncomment to configure optional or per-env addons.

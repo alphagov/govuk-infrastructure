@@ -24,14 +24,7 @@ resource "aws_iam_role_policy_attachment" "network_flow_agent_role_policy" {
   policy_arn = "arn:aws:iam::aws:policy/CloudWatchNetworkFlowMonitorAgentPublishPolicy"
 }
 
-resource "aws_eks_pod_identity_association" "network_flow_agent" {
-  count = var.enable_container_network_observability == true ? 1 : 0
 
-  cluster_name    = var.cluster_name
-  namespace       = "amazon-network-flow-monitoring"
-  service_account = "network-flow-monitoring-agent"
-  role_arn        = aws_iam_role.network_flow_agent_role[0].arn
-}
 
 resource "aws_networkflowmonitor_scope" "govuk" {
   count = var.enable_container_network_observability == true ? 1 : 0
