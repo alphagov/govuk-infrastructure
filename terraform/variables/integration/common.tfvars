@@ -2,7 +2,6 @@
 # Only add variables here if they are shared across multiple workspaces in the integration environment.
 # Variables that are only used by a single workspace should be added to that workspace's specific tfvars file.
 
-cluster_version               = "1.34"
 cluster_log_retention_in_days = 731
 
 vpc_cidr = "10.1.0.0/16"
