@@ -15,9 +15,16 @@ resource "google_project_iam_audit_config" "bq_audit" {
 }
 
 # Alert Query Permissions
-resource "google_project_iam_member" "query_executor" {
+resource "google_bigquery_dataset_iam_member" "query_executor_data_editor" {
+  project    = var.project_id
+  dataset_id = google_bigquery_dataset.audit_logs.dataset_id
+  role       = "roles/bigquery.dataEditor"
+  member     = "serviceAccount:${google_service_account.query_executor.email}"
+}
+
+resource "google_project_iam_member" "query_executor_job_user" {
   project = var.project_id
-  role    = "roles/bigquery.editor"
+  role    = "roles/bigquery.jobUser"
   member  = "serviceAccount:${google_service_account.query_executor.email}"
 }
 
@@ -29,5 +36,5 @@ data "google_project" "project" {
 resource "google_service_account_iam_member" "token_creator" {
   service_account_id = google_service_account.query_executor.name
   role               = "roles/iam.serviceAccountTokenCreator"
-  member             = "serviceAccount:service-${data.google_project.project.number}@gcp-sa-biqquerydatatransfer.iam.gserviceaccount.com"
+  member             = "serviceAccount:service-${data.google_project.project.number}@gcp-sa-bigquerydatatransfer.iam.gserviceaccount.com"
 }
