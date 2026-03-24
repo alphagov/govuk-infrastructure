@@ -64,7 +64,7 @@ locals {
       resolve_conflicts_on_create = "OVERWRITE"
       pod_identity_association = [{
         role_arn        = try(aws_iam_role.network_flow_agent_role[0].arn, "")
-        service_account = "network-flow-monitoring-agent"
+        service_account = "aws-network-flow-monitor-agent-service-account"
       }]
     }
   }
