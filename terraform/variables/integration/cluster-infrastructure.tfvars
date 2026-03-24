@@ -3,8 +3,6 @@ enable_container_network_observability = true
 enable_eks_pod_identity_addon          = true
 enable_network_flow_addon              = true
 
-enable_kube_state_metrics = true
-
 enable_arm_workers_blue  = false
 enable_arm_workers_green = true
 enable_x86_workers       = false
