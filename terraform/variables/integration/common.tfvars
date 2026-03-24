@@ -50,6 +50,4 @@ legacy_private_subnets = {
 govuk_environment = "integration"
 force_destroy     = true
 
-enable_tetragon = true
-
 publishing_service_domain = "integration.publishing.service.gov.uk"
