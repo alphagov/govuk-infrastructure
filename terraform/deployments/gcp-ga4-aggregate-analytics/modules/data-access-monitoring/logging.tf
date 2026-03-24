@@ -1,9 +1,3 @@
-resource "google_bigquery_dataset" "audit_logs" {
-  project    = var.project_id
-  dataset_id = "data_access_logs"
-  location   = "europe-west2"
-}
-
 resource "google_logging_project_sink" "bq_read_sink" {
   project     = var.project_id
   name        = "bq-read-audit-sink"

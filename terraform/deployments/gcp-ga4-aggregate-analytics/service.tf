@@ -3,7 +3,9 @@ locals {
     "bigquery.googleapis.com",
     "bigquerydatatransfer.googleapis.com",
     "bigquerystorage.googleapis.com",
+    "iam.googleapis.com",
     "logging.googleapis.com",
+    "secretmanager.googleapis.com",
     "storage.googleapis.com",
   ]
 }

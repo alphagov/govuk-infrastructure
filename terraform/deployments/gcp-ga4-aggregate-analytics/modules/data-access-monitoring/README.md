@@ -1,5 +1,7 @@
 # Data Access Monitoring
-This module sets up a dataset called `data_access_log` in the specified project containing a table which captures all data access on GCP BigQuery services within that project.
+This module sets up a dataset called `data_access_log` in the specified project containing a table `cloudaudit_google_cloud_bigquery_v2_AuditData` which captures all data access on GCP BigQuery tables within that project.
+
+A configurable allow-list table also exists in that dataset called `authorised_users`. Any users which have queried a table in the project who are not also in `authorised_users` will result in that read being captured in the table `unauthorised_access_alerts`.
 
 It could eventually move to `terraform/shared-modules` once more mature and tested.
 <!-- BEGIN_TF_DOCS -->
