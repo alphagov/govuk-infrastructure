@@ -97,9 +97,3 @@ variable "ext_dns_enable_service_monitor" {
   description = "Whether to enable service monitors for external dns"
   default     = true
 }
-
-variable "enable_tetragon" {
-  type        = bool
-  description = "Whether to enable Tetragon daemonset to the cluster"
-  default     = false
-}
