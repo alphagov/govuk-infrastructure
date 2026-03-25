@@ -260,16 +260,7 @@ repos:
       additional_contexts:
         - test
 
-  government-frontend:
-    can_be_deployed: true
-    homepage_url: "https://docs.publishing.service.gov.uk/apps/government-frontend.html"
-    required_status_checks:
-      standard_contexts: *standard_govuk_rails_checks
-      additional_contexts:
-        - Lint SCSS / Run Stylelint
-        - Lint JavaScript / Run Standardx
-        - Test JavaScript / Run Jasmine
-        - Test Ruby / Run Minitest
+  government-frontend: {}
 
   govspeak:
     homepage_url: "https://govspeak-preview.publishing.service.gov.uk/"

@@ -24,7 +24,6 @@ locals {
     "feedback",
     "finder-frontend",
     "frontend",
-    "government-frontend",
     "govspeak-preview",
     "govuk-graphql",
     "hmrc-manuals-api",
