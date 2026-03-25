@@ -174,3 +174,13 @@ Raise a Pull Request. Review the Terraform plan carefully.
 The Terraform Deployment will run a series of precondition checks to catch any outstanding PRs or unaddressed Github Pages configuration. If you have missed any, the Terraform Plan will fail and you should back go over previous steps in the [Retire a repo](https://docs.publishing.service.gov.uk/manual/retiring-a-repo.html) manual again to make sure nothing has been overlooked.
 
 Once the PR is approved, merge it. Then apply the Terraform changes after reviewing the plan output again in [Terraform Cloud GitHub workspace](https://app.terraform.io/app/govuk/workspaces/GitHub/runs).
+
+## Disabling/enabling Dependabot 
+
+In the event of supply chain security incidents, we often want to disable Dependabot for a time. To do so:
+
+1. In `repos.yml` set `global.disable_dependabot` to true or false as necessary
+2. Run `./scripts/set_dependabot_access.sh`. The script will explain what it's about to do, and prompt for confirmation.
+
+The script requires GitHub organisation admin privileges, so can only be run by a human. Don't forget to commit your 
+changes to `repos.yml`.
