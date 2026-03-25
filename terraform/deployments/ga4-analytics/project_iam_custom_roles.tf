@@ -4,7 +4,8 @@ resource "google_project_iam_custom_role" "gds_bigquery_read_access" {
     "bigquery.datasets.get",
     "bigquery.datasets.getIamPolicy",
     "bigquery.tables.get",
-    "bigquery.tables.getData"
+    "bigquery.tables.getData",
+    "bigquery.tables.list"
   ]
   role_id = "GDS_BQ_read_access"
   title   = "GDS BQ read access"
