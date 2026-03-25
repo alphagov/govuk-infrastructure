@@ -21,7 +21,7 @@ resource "google_secret_manager_secret_iam_member" "member" {
   project   = var.gcp_project_id
   secret_id = "github_search_v2_api_dataform_ssh_key"
   role      = "roles/secretmanager.secretAccessor"
-  member    = google_service_account.dataform_service_account.member
+  member    = "serviceAccount:service-${var.gcp_project_number}@gcp-sa-dataform.iam.gserviceaccount.com"
 }
 
 # Create Dataform repository with GitHub integration
