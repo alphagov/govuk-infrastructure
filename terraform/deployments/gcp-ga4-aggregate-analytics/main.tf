@@ -33,6 +33,7 @@ resource "google_project" "project" {
 }
 
 module "data_access_monitoring" {
-  source     = "./modules/data-access-monitoring"
-  project_id = google_project.project.project_id
+  source                     = "./modules/data-access-monitoring"
+  project_id                 = google_project.project.project_id
+  notification_email_address = data.google_secret_manager_secret_version.slack_alert_channel_email_address.secret_data
 }
