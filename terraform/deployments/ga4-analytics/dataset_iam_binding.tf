@@ -8,14 +8,14 @@ locals {
 
 resource "google_bigquery_dataset_iam_member" "flattened_dataset_reader" {
   for_each   = toset(local.members)
-  dataset_id = "${google_project.project.project_id}.flattened_dataset"
+  dataset_id = "flattened_dataset"
   role       = google_project_iam_custom_role.gds_bigquery_read_access.name
   member     = each.key
 }
 
 resource "google_bigquery_dataset_iam_member" "events_reader" {
   for_each   = toset(local.members)
-  dataset_id = "${google_project.project.project_id}.analytics_330577055"
+  dataset_id = "analytics_330577055"
   role       = google_project_iam_custom_role.gds_bigquery_read_access.name
   member     = each.key
 }
