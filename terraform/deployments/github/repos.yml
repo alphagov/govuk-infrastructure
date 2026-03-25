@@ -8,6 +8,9 @@ access_levels:
     - Lint Ruby / Run RuboCop
     - Security Analysis / Run Brakeman
 
+global:
+  disable_dependabot: true
+
 repos:
   account-api:
     can_be_deployed: true
@@ -426,7 +429,7 @@ repos:
   govuk-social-data:
     can_be_deployed: false
     visibility: "private"
-    standard_contexts: *standard_security_checks 
+    standard_contexts: *standard_security_checks
     push_allowances: []
     required_pull_request_reviews:
       pull_request_bypassers:
@@ -1012,7 +1015,7 @@ repos:
     can_be_deployed: false
     visibility: private
     push_allowances: ["alphagov/gov-uk-ai-accelerator-alpha-team", "alphagov/gov-uk-production-admin", "alphagov/gov-uk-production-deploy"]
-    
+
   govuk-ai-accelerator-generator-e2e-testing-framework:
     # standard security checks are disabled as not configured for a private repo
     can_be_deployed: false

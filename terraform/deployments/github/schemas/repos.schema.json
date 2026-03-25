@@ -12,6 +12,15 @@
         }
       }
     },
+    "global": {
+      "type": "object",
+      "properties": {
+        "disable_dependabot": {
+          "description": "When true, all repositories will have Dependabot access revoked. Use during a supply chain security event",
+          "type": "boolean"
+        }
+      }
+    },
     "repos": {
       "type": "object",
       "patternProperties": {
