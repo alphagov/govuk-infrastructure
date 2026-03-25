@@ -6,12 +6,12 @@ DISABLE_DEPENDABOT="$(yq '.global.disable_dependabot' ./repos.yml)"
 REPOSITORY_IDS=$(terraform output -json repository_ids)
 
 PAYLOAD=""
-if [ "${DISABLE_DEPENDABOT}" == "false" ]; then
-  PAYLOAD="{\"repository_ids_to_add\": ${REPOSITORY_IDS}}"
-  echo "Going to disable dependabot access"
+if [ "${DISABLE_DEPENDABOT}" == "true" ]; then
+    PAYLOAD="{\"repository_ids_to_remove\": ${REPOSITORY_IDS}}"
+    echo "Going to disable dependabot access"
 else
-  PAYLOAD="{\"repository_ids_to_remove\": ${REPOSITORY_IDS}}"
-  echo "Going to enable dependabot access"
+    PAYLOAD="{\"repository_ids_to_add\": ${REPOSITORY_IDS}}"
+    echo "Going to enable dependabot access"
 fi
 
 echo "Going to send the following payload:"
