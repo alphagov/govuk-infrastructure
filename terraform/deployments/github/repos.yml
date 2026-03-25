@@ -260,7 +260,8 @@ repos:
       additional_contexts:
         - test
 
-  government-frontend: {}
+  government-frontend:
+    archived: true
 
   govspeak:
     homepage_url: "https://govspeak-preview.publishing.service.gov.uk/"
