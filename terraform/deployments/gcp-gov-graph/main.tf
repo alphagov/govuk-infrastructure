@@ -3,7 +3,7 @@ terraform {
     organization = "govuk"
     workspaces {
       project = "govuk-data-engineering"
-      name    = "gov-graph"
+      tags    = ["gcp", "gov-graph"]
     }
   }
 
