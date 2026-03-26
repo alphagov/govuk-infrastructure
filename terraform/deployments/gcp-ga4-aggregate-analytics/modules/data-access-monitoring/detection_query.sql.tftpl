@@ -1,0 +1,21 @@
+MERGE `${unauthorised_access_table}` T
+USING (
+  SELECT 
+    insertId,
+    timestamp,
+    protopayload_auditlog.authenticationInfo.principalEmail as user_email,
+    protopayload_auditlog.resourceName as resource_name,
+    protopayload_auditlog.methodName as method_name
+  FROM `${audit_log_table}`
+  WHERE 
+    timestamp > TIMESTAMP_SUB(CURRENT_TIMESTAMP(), INTERVAL 24 HOUR)
+    
+    -- Filter out authorised users
+    AND protopayload_auditlog.authenticationInfo.principalEmail NOT IN (
+      SELECT user_email FROM `${authorised_users_table}`
+    )
+) S
+ON T.insertId = S.insertId
+WHEN NOT MATCHED THEN
+  INSERT (insertId, timestamp, user_email, resource_name, method_name)
+  VALUES (S.insertId, S.timestamp, S.user_email, S.resource_name, S.method_name)

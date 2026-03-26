@@ -9,7 +9,7 @@ resource "google_secret_manager_secret" "slack_alert_channel_email_address" {
   }
 }
 
-data "google_secret_manager_secret_version" "slack_alert_channel_email_address_secret_value" {
+data "google_secret_manager_secret_version" "slack_alert_channel_email_address" {
   secret = local.slack_alert_channel_email_address_secret_id
 
   depends_on = [google_secret_manager_secret.slack_alert_channel_email_address]
