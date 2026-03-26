@@ -23,7 +23,7 @@ resource "google_monitoring_alert_policy" "dts_failure_alert" {
   conditions {
     display_name = "Detection Query Failed"
     condition_threshold {
-      filter          = "resource.type=\"bigquery_dts_config\" AND resource.labels.config_id=\"${local.detection_query_uuid}\" AND metric.type=\"bigquerydatatransfer.googleapis.com/transfer/run_count\" AND metric.labels.state=\"FAILED\""
+      filter          = "resource.type=\"bigquery_dts_config\" AND resource.labels.config_id=\"${local.detection_query_uuid}\" AND metric.type=\"bigquerydatatransfer.googleapis.com/transfer/completed_runs\" AND metric.label.completion_status=\"FAILED\""
       duration        = "0s"
       comparison      = "COMPARISON_GT"
       threshold_value = 0
@@ -67,6 +67,12 @@ resource "google_monitoring_alert_policy" "unauthorised_bq_access_alert" {
         AND protoPayload.serviceData.jobCompletedEvent.job.jobConfiguration.query.destinationTable.tableId = "${google_bigquery_table.unauthorised_access.table_id}"
         AND protoPayload.serviceData.jobCompletedEvent.job.jobStatistics.query.numDmlAffectedRows > 0
       EOT
+    }
+  }
+
+  alert_strategy {
+    notification_rate_limit {
+      period = "3600s"
     }
   }
 
