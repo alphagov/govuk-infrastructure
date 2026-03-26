@@ -554,3 +554,8 @@ data "google_iam_policy" "project" {
     ]
   }
 }
+
+variable "name" {
+  type        = string
+  description = "A short name for this environment (used in resource IDs)"
+}
