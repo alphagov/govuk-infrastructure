@@ -1,0 +1,32 @@
+[
+    {
+      "description": "The facets corresponding to the search query. Always null.",
+      "mode": "NULLABLE",
+      "name": "facets",
+      "type": "JSON"
+    },
+    {
+      "description": "Has the following nested properties: 'prev' and 'next'. These replace the 'next_page' and 'prev_page' links. The 'prev' property is always null because backward pagination is not supported. The 'next' property may include an auto-generated link to the next page of results.",
+      "mode": "REQUIRED",
+      "name": "links",
+      "type": "JSON"
+    },
+    {
+      "description": "Has the following nested properties: 'has_more' and 'after_cursor'. The 'has_more' property indicates whether the next page has more results. The 'after_cursor' property is the cursor used to paginate to the next page. It expires after one hour.",
+      "mode": "REQUIRED",
+      "name": "meta",
+      "type": "JSON"
+    },
+    {
+      "description": "May consist of tickets, users, groups, or organizations, as specified by the 'filter_type' parameter, and the 'result_type' property in each result object.",
+      "mode": "REPEATED",
+      "name": "results",
+      "type": "JSON"
+    },
+    {
+      "description": "Additional data sideloaded from another endpoint by specifying 'tickets(metric_sets)' in the query. This column is redundant because the same data is included in the 'results' column.",
+      "mode": "REPEATED",
+      "name": "metric_sets",
+      "type": "JSON"
+    }
+  ]

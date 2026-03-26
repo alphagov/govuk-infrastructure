@@ -1,0 +1,42 @@
+[
+  {
+    "mode": "NULLABLE",
+    "name": "id",
+    "type": "INTEGER"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "content_id",
+    "type": "STRING"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "locale",
+    "type": "STRING"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "with_drafts",
+    "type": "BOOLEAN"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "payload_version",
+    "type": "INTEGER"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "created_at",
+    "type": "TIMESTAMP"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "updated_at",
+    "type": "TIMESTAMP"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "expanded_links",
+    "type": "JSON"
+  }
+]

@@ -1,0 +1,31 @@
+[
+  {
+    "name": "edition_id",
+    "type": "INTEGER",
+    "mode": "REQUIRED"
+  },
+  {
+    "name": "type",
+    "type": "STRING",
+    "mode": "REQUIRED"
+  },
+  {
+    "name": "explanation",
+    "type": "STRING",
+    "mode": "NULLABLE" },
+  {
+    "name": "alternative_path",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "unpublished_at",
+    "type": "TIMESTAMP",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "redirects",
+    "type": "JSON",
+    "mode": "NULLABLE"
+  }
+]

@@ -1,0 +1,22 @@
+[
+    {
+        "name": "dataset_id",
+        "type": "STRING"
+    },
+    {
+        "name": "table_id",
+        "type": "STRING"
+    },
+    {
+        "name": "last_modified",
+        "type": "TIMESTAMP"
+    },
+    {
+        "name": "row_count",
+        "type": "INTEGER"
+    },
+    {
+        "name": "result",
+        "type": "STRING"
+    }
+]

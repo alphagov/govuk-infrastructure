@@ -1,0 +1,50 @@
+[
+  {
+    "description": "The ID of the asset",
+    "mode": "NULLABLE",
+    "name": "id",
+    "type": "INTEGER"
+  },
+  {
+    "description": "The Asset Manager unique identifier for the asset",
+    "mode": "NULLABLE",
+    "name": "asset_manager_id",
+    "type": "STRING"
+  },
+  {
+    "description": "Some assets have different versions of the same file (such as image sizes). Default is 'original'.",
+    "mode": "NULLABLE",
+    "name": "variant",
+    "type": "STRING"
+  },
+  {
+    "description": "The created timestamp of the asset",
+    "mode": "NULLABLE",
+    "name": "created_at",
+    "type": "TIMESTAMP"
+  },
+  {
+    "description": "The updated timestamp of the asset",
+    "mode": "NULLABLE",
+    "name": "updated_at",
+    "type": "TIMESTAMP"
+  },
+  {
+    "description": "The type of the model the asset is associated with (for example 'AttachmentData')",
+    "mode": "NULLABLE",
+    "name": "assetable_type",
+    "type": "STRING"
+  },
+  {
+    "description": "The ID of the model the asset is associated with (for example the 'AttachmentData' ID)",
+    "mode": "NULLABLE",
+    "name": "assetable_id",
+    "type": "INTEGER"
+  },
+  {
+    "description": "The name of the attached file",
+    "mode": "NULLABLE",
+    "name": "filename",
+    "type": "STRING"
+  }
+]

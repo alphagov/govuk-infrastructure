@@ -1,0 +1,22 @@
+[
+  {
+    "name": "base_path_for_joining",
+    "type": "STRING",
+    "mode": "REQUIRED"
+  },
+  {
+    "name": "publishing_api_base_path",
+    "type": "STRING",
+    "mode": "REQUIRED"
+  },
+  {
+    "name": "edition_id",
+    "type": "INTEGER",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "content_id",
+    "type": "STRING",
+    "mode": "REQUIRED"
+  }
+]

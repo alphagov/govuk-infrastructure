@@ -1,0 +1,34 @@
+[
+  {
+    "name": "edition_id",
+    "type": "INTEGER",
+    "mode": "REQUIRED",
+    "description": "ID of the edition of the document where the phone number appears"
+  },
+  {
+    "name": "part_index",
+    "type": "INTEGER",
+    "mode": "NULLABLE",
+    "description": "Index of the part of the edition, if this row relates to a part"
+  },
+  {
+    "mode": "REPEATED",
+    "name": "phone_numbers",
+    "type": "RECORD",
+    "description": "Array of phone numbers",
+    "fields": [
+      {
+        "name": "original_number",
+        "type": "STRING",
+        "mode": "REQUIRED",
+        "description": "Phone number as it appears in the document body or metadata"
+      },
+      {
+        "name": "standardised_number",
+        "type": "STRING",
+        "mode": "REQUIRED",
+        "description": "E.164 form of the phone number"
+      }
+    ]
+  }
+]

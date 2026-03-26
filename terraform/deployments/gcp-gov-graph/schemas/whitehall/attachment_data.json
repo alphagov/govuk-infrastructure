@@ -1,0 +1,50 @@
+[
+  {
+    "description": "The ID of the attachment data",
+    "mode": "NULLABLE",
+    "name": "id",
+    "type": "INTEGER"
+  },
+  {
+    "description": "The name of the attached file",
+    "mode": "NULLABLE",
+    "name": "carrierwave_file",
+    "type": "STRING"
+  },
+  {
+    "description": "The MIME type of the attached file",
+    "mode": "NULLABLE",
+    "name": "content_type",
+    "type": "STRING"
+  },
+  {
+    "description": "The size of the attached file",
+    "mode": "NULLABLE",
+    "name": "file_size",
+    "type": "INTEGER"
+  },
+  {
+    "description": "The number of pages in the attached file",
+    "mode": "NULLABLE",
+    "name": "number_of_pages",
+    "type": "INTEGER"
+  },
+  {
+    "description": "The created timestamp of the attachment data",
+    "mode": "NULLABLE",
+    "name": "created_at",
+    "type": "TIMESTAMP"
+  },
+  {
+    "description": "The updated timestamp of the attachment data",
+    "mode": "NULLABLE",
+    "name": "updated_at",
+    "type": "TIMESTAMP"
+  },
+  {
+    "description": "The ID of the replacement AttachmentData",
+    "mode": "NULLABLE",
+    "name": "replaced_by_id",
+    "type": "INTEGER"
+  }
+]

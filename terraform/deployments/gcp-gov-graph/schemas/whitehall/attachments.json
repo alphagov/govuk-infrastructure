@@ -1,0 +1,74 @@
+[
+  {
+    "description": "The ID of the attachment",
+    "mode": "NULLABLE",
+    "name": "id",
+    "type": "INTEGER"
+  },
+  {
+    "description": "The created timestamp of the attachment",
+    "mode": "NULLABLE",
+    "name": "created_at",
+    "type": "TIMESTAMP"
+  },
+  {
+    "description": "The updated timestamp of the attachment",
+    "mode": "NULLABLE",
+    "name": "updated_at",
+    "type": "TIMESTAMP"
+  },
+  {
+    "description": "The title of the attachment",
+    "mode": "NULLABLE",
+    "name": "title",
+    "type": "STRING"
+  },
+  {
+    "description": "The ID of the attachment data the attachment is associated with",
+    "mode": "NULLABLE",
+    "name": "attachment_data_id",
+    "type": "INTEGER"
+  },
+  {
+    "description": "The ID of the attachable the attachment is associated with. The attachable can be an edition, or a non-editionable model.`",
+    "mode": "NULLABLE",
+    "name": "attachable_id",
+    "type": "INTEGER"
+  },
+  {
+    "description": "The type of the attachable the attachment is associated with. The attachable can be an edition, or a non-editionable model.`",
+    "mode": "NULLABLE",
+    "name": "attachable_type",
+    "type": "STRING"
+  },
+  {
+    "description": "The type of the attachment",
+    "mode": "NULLABLE",
+    "name": "type",
+    "type": "STRING"
+  },
+  {
+    "description": "The slug of the attachment (only for HTML Attachments)",
+    "mode": "NULLABLE",
+    "name": "slug",
+    "type": "STRING"
+  },
+  {
+    "description": "The locale of the attachment (only for HTML Attachments)",
+    "mode": "NULLABLE",
+    "name": "locale",
+    "type": "STRING"
+  },
+  {
+    "description": "The content ID of the attachment (only for HTML Attachments)",
+    "mode": "NULLABLE",
+    "name": "content_id",
+    "type": "STRING"
+  },
+  {
+    "description": "A flag to indicate whether the attachment is deleted",
+    "mode": "NULLABLE",
+    "name": "deleted",
+    "type": "BOOLEAN"
+  }
+]

@@ -1,0 +1,190 @@
+main:
+  params: [args]
+  steps:
+    - init:
+        assign:
+          # Default to fetching yesterday's survey responses. Otherwise use
+          # the arguments provided in the call to this workflow (UNIX epoch integers)
+          - yesterday: $${text.substring(time.format(sys.now() - 60 * 60 * 24), 0, 10)}
+          - since: $${int(default(map.get(args, "since"), time.parse(yesterday + "T00:00:00.000000Z")))}
+          - until: $${int(default(map.get(args, "until"), time.parse(yesterday + "T23:59:59.999999Z")))}
+
+          # Default page size
+          # The API itself defaults to 10, with a maximum of 100. The number of
+          # records is not guaranteed to be the number specified as visibility
+          # rules may filter out items.
+          - page_size: $${default(map.get(args, "page_size"), 100)}
+
+          # Other API parameters
+          - completed: 1 # 0=Partial, 1=Completed, 2=Both
+          - sort_by: date_started
+          - filter_id: 0
+          - include_labels: true
+
+          # Name the output bucket object by the Workflow Execution ID so that
+          # it can be debugged in the logs. The same name is used for the BigQuery
+          # table that the data is loaded into.
+          - bucket_name: ${bucket_name}
+          - workflow_execution_id: $${sys.get_env("GOOGLE_CLOUD_WORKFLOW_EXECUTION_ID")}
+          - project_id: $${sys.get_env("GOOGLE_CLOUD_PROJECT_ID")}
+          - dataset_id: smart_survey
+
+          # Get a template of a query
+          - merge_query_template: ${query}
+
+    - fetch_survey_id:
+        call: googleapis.secretmanager.v1.projects.secrets.versions.accessString
+        args:
+          secret_id: smart-survey-api-survey-id
+        result: str_survey_id
+
+    - fetch_token:
+        call: googleapis.secretmanager.v1.projects.secrets.versions.accessString
+        args:
+          secret_id: smart-survey-api-token
+        result: str_token
+
+    - fetch_key:
+        call: googleapis.secretmanager.v1.projects.secrets.versions.accessString
+        args:
+          secret_id: smart-survey-api-secret
+        result: str_secret
+
+    - build_endpoint_url:
+        assign:
+          - endpoint_url: $${"https://api.smartsurvey.io/v2/surveys/" + str_survey_id + "/responses"}
+
+    - build_headers:
+        assign:
+          - auth_str: $${str_token + ":" + str_secret}
+          - auth_str_base64: $${"Basic " + base64.encode(text.encode(auth_str, "UTF-8"))}
+
+
+    # Retrieve the value of the total field. This says how many results there will be in this time-window for pagination.
+    - first_api_call:
+        try:
+          call: http.get
+          args:
+            url: $${endpoint_url}
+            query:
+              since: $${since}
+              until: $${until}
+              filter_id: $${filter_id}
+              completed: $${completed}
+              page: 1
+              page_size: 1
+              sort_by: $${sort_by}
+              include_labels: $${include_labels}
+            headers:
+              Authorization: $${auth_str_base64}
+          result: first_api_response
+        # Retry on 429 (Too Many Requests), 502 (Bad Gateway), 503 (Service
+        # unavailable), and 504 (Gateway Timeout), as well as on any
+        # ConnectionError, ConnectionFailedError and TimeoutError. Maximum retries
+        # (excluding first try): 5 Initial backoff 1 second, maximum backoff 1
+        # minute, multiplier 1.25.
+        # TODO: wait for Retry-After in seconds on error 429 (too many requests)
+        retry: $${http.default_retry}
+
+    # Calculate how many pages of page_size would fetch all the results.
+    - calculate_page_range:
+        assign:
+        - pagination_total: $${int(first_api_response.body.total)}
+        - max_page: $${pagination_total // page_size + math.min(1, pagination_total % page_size)}
+
+    # Iteratively fetch each page of results
+    - iterative_api_calls:
+        for:
+            value: page_number
+            range: $${[1, max_page]}
+            steps:
+              - call_api:
+                  try:
+                    call: http.get
+                    args:
+                      url: ${http_to_bucket_uri}
+                      query:
+                        endpoint_url: $${endpoint_url}
+                        headers: "$${\"Authorization: \" + auth_str_base64}"
+                        project_id: $${project_id}
+                        bucket_name: $${bucket_name}
+                        object_name: $${workflow_execution_id + "/" + page_number}
+                        since: $${since}
+                        until: $${until}
+                        filter_id: $${filter_id}
+                        completed: $${completed}
+                        page: $${page_number}
+                        page_size: $${page_size}
+                        sort_by: $${sort_by}
+                        include_labels: $${include_labels}
+                      auth:
+                          type: OIDC
+                    result: iterative_api_response
+                  # Retry on 429 (Too Many Requests), 502 (Bad Gateway), 503 (Service
+                  # unavailable), and 504 (Gateway Timeout), as well as on any
+                  # ConnectionError, ConnectionFailedError and TimeoutError. Maximum retries
+                  # (excluding first try): 5 Initial backoff 1 second, maximum backoff 1
+                  # minute, multiplier 1.25.
+                  retry: $${http.default_retry}
+
+    # Load the data into a new table in BigQuery, named by the workflow_execution_id
+    - load_into_bigquery:
+        call: googleapis.bigquery.v2.jobs.insert
+        args:
+            projectId: $${project_id}
+            body:
+                configuration:
+                    load:
+                        autodetect: false
+                        createDisposition: CREATE_IF_NEEDED
+                        destinationTable:
+                            datasetId: $${dataset_id}
+                            projectId: $${project_id}
+                            tableId: $${workflow_execution_id}
+                        destinationTableProperties:
+                            description: "Survey responses from the Smart Survey API, fetched by the smart-survey workflow. The table name is the execution ID of the workflow."
+                        ignoreUnknownValues: false
+                        maxBadRecords: 0
+                        schema:
+                            fields:
+                                ${schema}
+                        sourceFormat: NEWLINE_DELIMITED_JSON
+                        sourceUris: $${"gs://" + bucket_name + "/" + workflow_execution_id + "/*"}
+                        writeDisposition: WRITE_TRUNCATE
+        result: load_into_bigquery_result
+
+    # Set the table to expire after a while
+    - set_bigquery_table_expiry:
+        call: googleapis.bigquery.v2.tables.patch
+        args:
+            datasetId: $${dataset_id}
+            projectId: $${project_id}
+            tableId: $${workflow_execution_id}
+            body:
+                expirationTime: $${int(sys.now() + 60 * 60 * 24 * 7) * 1000} # milliseconds
+        result: set_bigquery_table_expiry_result
+
+    # Merge the new table into the `smart_survey.responses` table. Idempotent.
+    - build_merge_query:
+        assign:
+          - merge_query: $${text.replace_all(merge_query_template, "SOURCE_TABLE_NAME", workflow_execution_id)}
+
+    - merge_into_results_table:
+        call: googleapis.bigquery.v2.jobs.query
+        args:
+          projectId: $${project_id}
+          body:
+            useLegacySql: false # Use Standard SQL
+            query: $${merge_query}
+        result: merge_result
+
+    # Finish
+    - return:
+        return:
+          since: $${since}
+          until: $${until}
+          pagination_total: $${pagination_total}
+          max_page: $${max_page}
+          load_into_bigquery_result: $${load_into_bigquery_result}
+          set_bigquery_table_expiry_result: $${set_bigquery_table_expiry_result}
+          merge_result: $${merge_result}

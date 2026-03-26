@@ -1,0 +1,422 @@
+[
+  {
+    "description": "Unique ID of a Zendesk ticket",
+    "name": "id",
+    "type": "INTEGER",
+    "mode": "NULLABLE"
+  },
+  {
+    "description": "Timestamp with one-second precision of when the ticket was created.",
+    "name": "created_at",
+    "type": "TIMESTAMP",
+    "mode": "NULLABLE"
+  },
+  {
+    "description": "Timestamp with one-second precision of when the ticket was created.",
+    "name": "updated_at",
+    "type": "TIMESTAMP",
+    "mode": "NULLABLE"
+  },
+  {
+    "description": "The url of the ticket in Zendesk.",
+    "name": "ticket_url",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "description": "The external ID of the ticket, if it exists.",
+    "name": "external_id",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "description": "Timestamp with one-second precision of when the ticket was created.",
+    "name": "generated_timestamp",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "description": "The type of the ticket, such as 'incident', 'problem', 'question', or 'task'.",
+    "name": "type",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "description": "The subjext of the ticket, which is a short summary of the issue.",
+    "name": "subject",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "description": "The raw version of the subject, which may include HTML or other formatting.",
+    "name": "raw_subject",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "description": "The priority of the ticket, which can be 'low', 'normal', 'high', or 'urgent'.",
+    "name": "priority",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "description": "The status of the ticket, which can be 'new', 'open', 'pending', 'hold', 'solved', or 'closed'.",
+    "name": "status",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "description": "The intended recipient of the ticket, which can be a user or an organization.",
+    "name": "recipient",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "description": "The ID for the requester of the ticket, which is the user who created the ticket.",
+    "name": "requester_id",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "description": "The ID of the submitter of the ticket, which may be different from the requester if the ticket was created on behalf of another user.",
+    "name": "submitter_id",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "description": "The ID of the assignee of the ticket, which is the user responsible for resolving the ticket.",
+    "name": "assignee_id",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "description": "The Organisation ID of the requester, if the requester is part of an organization.",
+    "name": "organization_id",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "description": "The ID of the group that the ticket is assigned to, if applicable.",
+    "name": "group_id",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "description": "The ID of the collaborator of the ticket, which is a user who can view and comment on the ticket but is not the assignee.",
+    "name": "collaborator_ids",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "description": "The ID's of the followers of the ticket, which are users who can view the ticket but are not assignees or collaborators.",
+    "name": "follower_ids",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "description": "The ID of cc email addresses associated with the ticket, which are used to send notifications to users who are not directly involved in the ticket.",
+    "name": "email_cc_ids",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "description": "The ID of the forum topic associated with the ticket, if applicable.",
+    "name": "forum_topic_id",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "description": "The ID of the problem associated with the ticket, if it is part of a problem ticket.",
+    "name": "problem_id",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "description": "Indicates if a ticket has incdents.",
+    "name": "has_incidents",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "description": "Indicates if a ticket is public or private.",
+    "name": "is_public",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "description": "The date the ticket is due, if applicable.",
+    "name": "due_at",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "description": "A list of the tags associated with the ticket, which can be used for categorization or filtering.",
+    "name": "tags",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "description": "The ids of a sharing agreement associated with the ticket, if applicable.",
+    "name": "sharing_agreement_ids",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "description": "The ID of the custom status associated with the ticket, if applicable.",
+    "name": "custom_status_id",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "description": "The encoded ID of the ticket, which is a unique identifier used in URLs.",
+    "name": "encoded_id",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "description": "The followup IDs associated with the ticket, which are used to track follow-up actions or related tickets.",
+    "name": "followup_ids",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "description": "The Ticket form ID associated with the ticket, which is used to determine the fields and layout of the ticket.",
+    "name": "ticket_form_id",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "description": "The brand ID associated with the ticket, which is used to identify the brand or company that the ticket belongs to.",
+    "name": "brand_id",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "description": "Indicates if channel back is allowed for the ticket.",
+    "name": "allow_channelback",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "description": "Indicates if attachments are allowed for the ticket.",
+    "name": "allow_attachments",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "description": "Indicates which form messaging channel the ticket is from, such as 'web', 'email', 'chat', etc.",
+    "name": "from_messaging_channel",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "description": "Indicates the type of ticket, such as 'incident', 'problem', 'question', or 'task'.",
+    "name": "ticket_type",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "description": "Indicates the channel through which the ticket was created, such as 'web', 'email', 'chat', etc.",
+    "name": "via_channel",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "description": "Indicates if a ticket is via a source relationship, such as 'email', 'web', 'api', etc.",
+    "name": "via_source_rel",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "description": "Indicates the satisfaction rating score for the ticket, if applicable.",
+    "name": "satisfaction_rating_score",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "description": "Indicates the metric set ID associated with the ticket, which is used for performance metrics.",
+    "name": "metric_set_url",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "description": "Indicates the metric set ID associated with the ticket, which is used for performance metrics.",
+    "name": "metric_set_id",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "description": "Indicates the metric set ticket ID associated with the ticket, which is used for performance metrics.",
+    "name": "metric_set_ticket_id",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "description": "Metric set create at timestamp, which indicates when the metric set was created.",
+    "name": "metric_set_created_at",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "description": "Metric set update at timestamp, which indicates when the metric set was last updated.",
+    "name": "metric_set_updated_at",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "description": "Metric set group stations, which indicates the stations associated with the metric set.",
+    "name": "metric_set_group_stations",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "description": "Metric set reopens count, which indicates the number of times the ticket has been reopened.",
+    "name": "metric_set_reopens",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "description": "Indicates the metric set replies count, which is the number of replies in the ticket.",
+    "name": "metric_set_replies",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "description": "Indicates teh metric set assignee updated at timestamp, which is when the assignee was last updated.",
+    "name": "metric_set_assignee_updated_at",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "description": "Indicates the metrics set requester updated at timestamp, which is when the requester was last updated.",
+    "name": "metric_set_requester_updated_at",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "description": "Indicates the metrics status updated at timestamp, which is when the ticket status was last updated.",
+    "name": "metric_set_status_updated_at",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "description": "Indicates the metrics set initially assigned at timestamp, which is when the ticket was initially assigned.",
+    "name": "metric_set_initially_assigned_at",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "description": "Iindicates the metrics set assigned at timestamp, which is when the ticket was assigned.",
+    "name": "metric_set_assigned_at",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "description": "Indicates the metrics set solved at timestamp, which is when the ticket was solved.",
+    "name": "metric_set_solved_at",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "description": "Indicates the metric set latest comment added at timestamp, which is when the latest comment was added to the ticket.",
+    "name": "metric_set_latest_comment_added_at",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "description": "Indicates the metrics set reply time in minutes for calendar time, which is the time taken to reply to the ticket in calendar minutes.",
+    "name": "metric_set_reply_time_in_minutes_calendar",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "description": "Indicates the metrics set reply time in minutes for calendar time, which is the time taken to reply to the ticket in calendar minutes.",
+    "name": "metric_set_reply_time_in_minutes_business",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "description": "Indicates the metrics set first resolution time in minutes for calendar time, which is the time taken to resolve the ticket in calendar minutes.",
+    "name": "metric_set_first_resolution_time_in_minutes_calendar",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "description": "Indicates the metrics set first resolution time in minutes for business time, which is the time taken to resolve the ticket in business minutes.",
+    "name": "metric_set_first_resolution_time_in_minutes_business",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "description": "Indicates the metrics set full resolution time in minutes for calendar time, which is the total time taken to resolve the ticket in calendar minutes.",
+    "name": "metric_set_full_resolution_time_in_minutes_calendar",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "description": "Indicates set full resolution time in minutes business time, which is the total time taken to resolve the ticket in business minutes.",
+    "name": "metric_set_full_resolution_time_in_minutes_business",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "description": "Indicates the metrics set agent wait time in minutes for calendar time, which is the time the agent waited before responding to the ticket in calendar minutes.",
+    "name": "metric_set_agent_wait_time_in_minutes_calendar",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "description": "Indicates the metrics set agent wait time in minutes business time, which is the time the agent waited before responding to the ticket in business minutes.",
+    "name": "metric_set_agent_wait_time_in_minutes_business",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "description": "Indicates the set requester wait time in minutes for calendar time, which is the time the requester waited before the agent responded in calendar minutes.",
+    "name": "metric_set_requester_wait_time_in_minutes_calendar",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "description": "The metrics set requester wait time in minutes for business time, which is the time the requester waited before the agent responded in business minutes.",
+    "name": "metric_set_requester_wait_time_in_minutes_business",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "description": "The metrics set on hold time in minutes for calendar time, which is the time the ticket was on hold in calendar minutes.",
+    "name": "metric_set_on_hold_time_in_minutes_calendar",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "description": "The metrics set on hold time in minutes business time, which is the time the ticket was on hold in business minutes.",
+    "name": "metric_set_on_hold_time_in_minutes_business",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "description": "Indicates the via source from address, which is the email address or source from which the ticket was created.",
+    "name": "via_source_from_address",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "description": "Indicates the via source from name, which is the name of the source from which the ticket was created.",
+    "name": "via_source_from_name",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "description": "Indicates the via source to name, which is the name of the source to which the ticket was sent.",
+    "name": "via_source_to_name",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "description": "The via source to address, which is the email address or source to which the ticket was sent.",
+    "name": "via_source_to_address",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  }
+]

@@ -1,0 +1,110 @@
+[
+  {
+    "description": "The ID of the edition",
+    "mode": "NULLABLE",
+    "name": "id",
+    "type": "INTEGER"
+  },
+  {
+    "description": "The created timestamp of the edition",
+    "mode": "NULLABLE",
+    "name": "created_at",
+    "type": "TIMESTAMP"
+  },
+  {
+    "description": "The updated timestamp of the edition",
+    "mode": "NULLABLE",
+    "name": "updated_at",
+    "type": "TIMESTAMP"
+  },
+  {
+    "description": "The ID of the document that the edition belongs to",
+    "mode": "NULLABLE",
+    "name": "document_id",
+    "type": "INTEGER"
+  },
+  {
+    "description": "The publication status of the edition",
+    "mode": "NULLABLE",
+    "name": "state",
+    "type": "STRING"
+  },
+  {
+    "description": "The document type of the edition",
+    "mode": "NULLABLE",
+    "name": "type",
+    "type": "STRING"
+  },
+  {
+    "description": "The time at which the last edition with a major change on the parent document was published",
+    "mode": "NULLABLE",
+    "name": "major_change_published_at",
+    "type": "TIMESTAMP"
+  },
+  {
+    "description": "The time at which the parent document was first published",
+    "mode": "NULLABLE",
+    "name": "first_published_at",
+    "type": "TIMESTAMP"
+  },
+  {
+    "description": "A flag to indicate whether the edition has been published without 21",
+    "mode": "NULLABLE",
+    "name": "force_published",
+    "type": "BOOLEAN"
+  },
+  {
+    "description": "The publicly visible time at which the edition appears to have been published (this may be different to the actual publication time)",
+    "mode": "NULLABLE",
+    "name": "public_timestamp",
+    "type": "TIMESTAMP"
+  },
+  {
+    "description": "The time at which the edition has been scheduled for publication",
+    "mode": "NULLABLE",
+    "name": "scheduled_publication",
+    "type": "TIMESTAMP"
+  },
+  {
+    "description": "A flag to indicate whether the edition is restricted from the view of other organisations than the lead organisations (draft editions only)",
+    "mode": "NULLABLE",
+    "name": "access_limited",
+    "type": "BOOLEAN"
+  },
+  {
+    "description": "The time at which some edition types are open for public feedback",
+    "mode": "NULLABLE",
+    "name": "opening_at",
+    "type": "TIMESTAMP"
+  },
+  {
+    "description": "The time at which some edition types are closed for public feedback",
+    "mode": "NULLABLE",
+    "name": "closing_at",
+    "type": "TIMESTAMP"
+  },
+  {
+    "description": "A flag to indicate whether the edition is associated with a government",
+    "mode": "NULLABLE",
+    "name": "political",
+    "type": "BOOLEAN"
+  },
+  {
+    "description": "The language code of the primary locale",
+    "mode": "NULLABLE",
+    "name": "primary_locale",
+    "type": "STRING"
+  },
+  {
+    "description": "A token used to compose a shareable preview url",
+    "mode": "NULLABLE",
+    "name": "auth_bypass_id",
+    "type": "STRING"
+  },
+  {
+    "description": "The ID of the government that the edition is associated with",
+    "mode": "NULLABLE",
+    "name": "government_id",
+    "type": "INTEGER"
+  }
+]

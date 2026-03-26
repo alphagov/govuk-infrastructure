@@ -1,0 +1,20 @@
+[
+  {
+    "name": "url",
+    "type": "STRING",
+    "mode": "REQUIRED",
+    "description": "URL of a piece of static content on the www.gov.uk domain"
+  },
+  {
+    "name": "line_number",
+    "type": "INTEGER",
+    "mode": "REQUIRED",
+    "description": "The order of the line of content in the document"
+  },
+  {
+    "name": "line",
+    "type": "STRING",
+    "mode": "REQUIRED",
+    "description": "A single line of plain-text content"
+  }
+]

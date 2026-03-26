@@ -1,0 +1,7 @@
+[
+    {
+        "name": "locale",
+        "type": "STRING",
+        "description": "The ISO 639-1 two-letter code of the language of an edition on GOV.UK"
+    }
+]

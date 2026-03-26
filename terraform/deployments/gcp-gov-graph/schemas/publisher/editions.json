@@ -1,0 +1,137 @@
+[
+  {
+    "name": "id",
+    "type": "STRING",
+    "mode": "REQUIRED"
+  },
+  {
+    "name": "panopticon_id",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "version_number",
+    "type": "INTEGER",
+    "mode": "REQUIRED"
+  },
+  {
+    "name": "sibling_in_progress",
+    "type": "INTEGER",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "title",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "in_beta",
+    "type": "BOOL",
+    "mode": "REQUIRED"
+  },
+  {
+    "name": "publish_at",
+    "type": "TIMESTAMP",
+    "mode": "NULLABLE"
+  }, 
+  {
+    "name": "overview",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "slug",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "rejected_count",
+    "type": "INTEGER",
+    "mode": "REQUIRED"
+  },
+  {
+    "name": "asignee",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "reviewer",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "creator",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "publisher",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "archiver",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "major_change",
+    "type": "BOOL",
+    "mode": "REQUIRED"
+  },
+  {
+    "name": "change_note",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "state",
+    "type": "STRING",
+    "mode": "REQUIRED"
+  },
+  {
+    "name": "review_requested_at",
+    "type": "TIMESTAMP",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "auth_bypass_id",
+    "type": "STRING",
+    "mode": "REQUIRED"
+  },
+  {
+    "name": "owning_org_content_ids",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "mongo_id",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "created_at",
+    "type": "TIMESTAMP",
+    "mode": "REQUIRED"
+  },
+  {
+    "name": "updated_at",
+    "type": "TIMESTAMP",
+    "mode": "REQUIRED"
+  },
+  {
+    "name": "editionable_type",
+    "type": "STRING",
+    "mode": "REQUIRED"
+  },
+  {
+    "name": "editionable_id",
+    "type": "INTEGER",
+    "mode": "REQUIRED"
+  },
+  {
+    "name": "assigned_to_id",
+    "type": "INTEGER",
+    "mode": "NULLABLE"
+  }
+]

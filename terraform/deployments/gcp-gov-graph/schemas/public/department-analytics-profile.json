@@ -1,0 +1,12 @@
+[
+  {
+    "name": "edition_id",
+    "type": "INTEGER",
+    "mode": "REQUIRED"
+  },
+  {
+    "name": "department_analytics_profile",
+    "type": "STRING",
+    "mode": "REQUIRED"
+  }
+]

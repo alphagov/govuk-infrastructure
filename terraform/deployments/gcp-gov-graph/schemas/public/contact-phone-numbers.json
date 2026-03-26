@@ -1,0 +1,55 @@
+[
+  {
+    "mode": "REQUIRED",
+    "name": "edition_id",
+    "type": "INTEGER",
+    "description": "Edition ID of the document with schema 'contact'"
+  },
+  {
+    "mode": "REQUIRED",
+    "name": "title",
+    "type": "STRING"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "description",
+    "type": "STRING"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "open_hours",
+    "type": "STRING"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "best_time_to_call",
+    "type": "STRING"
+  },
+  {
+    "mode": "REPEATED",
+    "name": "numbers",
+    "type": "RECORD",
+    "description": "Array of numbers detected among those given",
+    "fields": [
+      {
+        "name": "type",
+        "type": "STRING"
+      },
+      {
+        "name": "original_number",
+        "type": "STRING",
+        "description": "The number as given in the document"
+      },
+      {
+        "name": "detected_number",
+        "type": "STRING",
+        "description": "A number detected from the given number"
+      },
+      {
+        "name": "standardised_number",
+        "type": "STRING",
+        "description": "E.164 form of the detected phone number"
+      }
+    ]
+  }
+]

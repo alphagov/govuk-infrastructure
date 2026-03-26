@@ -1,0 +1,7 @@
+[
+    {
+        "name": "title",
+        "type": "STRING",
+        "description": "Title of an organisation"
+    }
+]
