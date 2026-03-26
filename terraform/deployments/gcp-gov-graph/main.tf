@@ -3,7 +3,7 @@ terraform {
     organization = "govuk"
     workspaces {
       project = "govuk-data-engineering"
-      name    = "gov-graph"
+      tags    = ["gcp", "gov-graph"]
     }
   }
 
@@ -25,26 +25,9 @@ locals {
   display_name = title(var.name)
 }
 
-resource "google_project" "environment_project" {
-  name       = var.project_id
-  project_id = var.project_id
-
-  folder_id       = var.folder_id
-  billing_account = var.billing_account
-  deletion_policy = "DELETE"
-
-  labels = {
-    "programme"         = "govuk"
-    "team"              = "govuk-data-engineering"
-    "govuk_environment" = var.name
+removed {
+  from = google_project.environment_project
+  lifecycle {
+    destroy = false
   }
-}
-
-resource "google_project_service" "api_service" {
-  for_each = var.services
-
-  project                    = google_project.environment_project.project_id
-  service                    = each.value
-  disable_dependent_services = false
-  disable_on_destroy         = false
 }
