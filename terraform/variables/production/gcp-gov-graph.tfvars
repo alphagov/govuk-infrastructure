@@ -35,7 +35,7 @@ gtm_auth                            = "aWEg5ABBTyIPcsSg1cJWxg"
 
 project_owner_members = [
   "group:govgraph-developers@digital.cabinet-office.gov.uk",
-  "terraform-cloud-production@govuk-production.iam.gserviceaccount.com",
+  "serviceAccount:terraform-cloud-production@govuk-production.iam.gserviceaccount.com",
 ]
 
 iap_govgraphsearch_members = [
