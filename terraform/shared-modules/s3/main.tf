@@ -1,9 +1,10 @@
 resource "aws_s3_bucket" "this" {
   bucket = var.name
 
-  tags = {
-    Name = var.name
-  }
+  tags = merge(
+    var.tags,
+    { Name = var.name }
+  )
 }
 
 resource "aws_s3_bucket_object_lock_configuration" "this" {
@@ -158,9 +159,12 @@ data "aws_iam_policy_document" "https_only" {
 }
 
 data "aws_iam_policy_document" "s3_combined_policy" {
-  source_policy_documents = flatten([
-    data.aws_iam_policy_document.https_only.json,
-  var.extra_bucket_policies])
+  source_policy_documents = flatten(
+    [
+      data.aws_iam_policy_document.https_only.json,
+      var.extra_bucket_policies
+    ]
+  )
 }
 
 resource "aws_s3_bucket_policy" "bucket_policy" {
