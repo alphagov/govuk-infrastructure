@@ -52,7 +52,8 @@ storage_data_processed_object_viewer_members = [
 
 # BigQuery dataset: private
 bigquery_private_data_viewer_members = [
-  "group:govgraph-private-data-readers@digital.cabinet-office.gov.uk"
+  "group:govgraph-private-data-readers@digital.cabinet-office.gov.uk",
+  "serviceAccount:publishing-looker-studio-creds@govuk-publishing.iam.gserviceaccount.com",
 ]
 
 # BigQuery dataset: public
@@ -60,6 +61,7 @@ bigquery_public_data_viewer_members = [
   "group:govgraph-private-data-readers@digital.cabinet-office.gov.uk",
   "serviceAccount:service-419945323196@gcp-sa-dataform.iam.gserviceaccount.com",
   "serviceAccount:service-942729121218@gcp-sa-dataform.iam.gserviceaccount.com",
+  "serviceAccount:publishing-looker-studio-creds@govuk-publishing.iam.gserviceaccount.com",
 ]
 
 bigquery_content_data_viewer_members = [
@@ -68,11 +70,13 @@ bigquery_content_data_viewer_members = [
   "serviceAccount:wif-govgraph-bigquery-access@govuk-llm-question-answering.iam.gserviceaccount.com",
   "serviceAccount:wif-ner-new-content-inference@cpto-content-metadata.iam.gserviceaccount.com",
   "serviceAccount:wif-vectorstore@govuk-llm-question-answering.iam.gserviceaccount.com",
+  "serviceAccount:publishing-looker-studio-creds@govuk-publishing.iam.gserviceaccount.com",
 ]
 
 # BigQuery dataset: publisher
 bigquery_publisher_data_viewer_members = [
-  "group:govgraph-private-data-readers@digital.cabinet-office.gov.uk"
+  "group:govgraph-private-data-readers@digital.cabinet-office.gov.uk",
+  "serviceAccount:publishing-looker-studio-creds@govuk-publishing.iam.gserviceaccount.com",
 ]
 
 # BigQuery dataset: functions
@@ -96,6 +100,7 @@ bigquery_publishing_api_data_viewer_members = [
   "serviceAccount:service-419945323196@gcp-sa-dataform.iam.gserviceaccount.com",
   "serviceAccount:service-942729121218@gcp-sa-dataform.iam.gserviceaccount.com",
   "serviceAccount:custom-publishing-dataform-ser@govuk-publishing.iam.gserviceaccount.com",
+  "serviceAccount:publishing-looker-studio-creds@govuk-publishing.iam.gserviceaccount.com",
 ]
 
 # BigQuery dataset: smart_survey
@@ -120,6 +125,7 @@ bigquery_search_data_viewer_members = [
   "serviceAccount:wif-govgraph-bigquery-access@govuk-llm-question-answering.iam.gserviceaccount.com",
   "serviceAccount:wif-vectorstore@govuk-llm-question-answering.iam.gserviceaccount.com",
   "serviceAccount:custom-publishing-dataform-ser@govuk-publishing.iam.gserviceaccount.com",
+  "serviceAccount:publishing-looker-studio-creds@govuk-publishing.iam.gserviceaccount.com",
 ]
 
 # BigQuery dataset: test
@@ -129,14 +135,17 @@ bigquery_test_data_viewer_members = [
 # BigQuery dataset: whitehall
 bigquery_whitehall_data_viewer_members = [
   "group:govgraph-private-data-readers@digital.cabinet-office.gov.uk",
+  "serviceAccount:publishing-looker-studio-creds@govuk-publishing.iam.gserviceaccount.com",
 ]
 
 # BigQuery dataset: asset-manager
 bigquery_asset_manager_data_viewer_members = [
   "group:govgraph-private-data-readers@digital.cabinet-office.gov.uk",
+  "serviceAccount:publishing-looker-studio-creds@govuk-publishing.iam.gserviceaccount.com",
 ]
 
 # BigQuery dataset: zendesk
 bigquery_zendesk_data_viewer_members = [
   "group:govgraph-private-data-readers@digital.cabinet-office.gov.uk",
+  "serviceAccount:publishing-looker-studio-creds@govuk-publishing.iam.gserviceaccount.com",
 ]
