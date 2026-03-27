@@ -1,0 +1,26 @@
+[
+  {
+    "name": "url",
+    "type": "STRING",
+    "mode": "REQUIRED",
+    "description": "URL of a piece of static content on the www.gov.uk domain"
+  },
+  {
+    "name": "html",
+    "type": "STRING",
+    "mode": "NULLABLE",
+    "description": "The content of the page as HTML"
+  },
+  {
+    "name": "text",
+    "type": "STRING",
+    "mode": "NULLABLE",
+    "description": "The content of the page as plain text extracted from the HTML"
+  },
+  {
+    "name": "text_without_blank_lines",
+    "type": "STRING",
+    "mode": "NULLABLE",
+    "description": "The content of the page as plain text, omitting blank lines"
+  }
+]

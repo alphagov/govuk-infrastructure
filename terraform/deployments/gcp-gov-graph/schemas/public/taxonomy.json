@@ -1,0 +1,76 @@
+[
+  {
+    "mode": "REQUIRED",
+    "name": "edition_id",
+    "type": "INTEGER"
+  },
+  {
+    "mode": "REQUIRED",
+    "name": "level",
+    "type": "INTEGER",
+    "description": "Level of the taxon in the tree. Level 1 is the root (top)."
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "parent_edition_id",
+    "type": "INTEGER",
+    "description": "ID of the taxon's parent in the tree, if any."
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "associated_edition_id",
+    "type": "INTEGER",
+    "description": "ID of the taxon's associated taxon, if any."
+  },
+  {
+    "mode": "REPEATED",
+    "name": "ancestors_via_parent",
+    "type": "RECORD",
+    "description": "Array of ancestors of the taxon via its parent, including itself",
+    "fields": [
+      {
+        "name": "edition_id",
+        "type": "INTEGER"
+      },
+      {
+        "name": "level",
+        "type": "INTEGER",
+        "description": "Level of the taxon in the tree. Level 1 is the root (top)."
+      }
+    ]
+  },
+  {
+    "mode": "REPEATED",
+    "name": "ancestors_via_association",
+    "type": "RECORD",
+    "description": "Array of ancestors of the taxon via its associated taxon, including itself",
+    "fields": [
+      {
+        "name": "edition_id",
+        "type": "INTEGER"
+      },
+      {
+        "name": "level",
+        "type": "INTEGER",
+        "description": "Level of the taxon in the tree. Level 1 is the root (top)."
+      }
+    ]
+  },
+  {
+    "mode": "REPEATED",
+    "name": "all_ancestors",
+    "type": "RECORD",
+    "description": "Array of ancestors of the taxon via both its parent and its associated taxon (if any), including itself",
+    "fields": [
+      {
+        "name": "edition_id",
+        "type": "INTEGER"
+      },
+      {
+        "name": "level",
+        "type": "INTEGER",
+        "description": "Level of the taxon in the tree. Level 1 is the root (top)."
+      }
+    ]
+  }
+]

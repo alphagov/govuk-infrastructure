@@ -1,0 +1,2 @@
+-- Call a sequence of routines that process updated documents from the
+-- Support API database.

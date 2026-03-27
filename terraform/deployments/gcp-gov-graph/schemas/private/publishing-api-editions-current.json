@@ -1,0 +1,12 @@
+[
+  {
+    "mode": "REQUIRED",
+    "name": "document_id",
+    "type": "INTEGER"
+  },
+  {
+    "mode": "REQUIRED",
+    "name": "updated_at",
+    "type": "TIMESTAMP"
+  }
+]

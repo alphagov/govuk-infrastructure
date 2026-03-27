@@ -1,0 +1,85 @@
+[
+  {
+    "name": "id",
+    "type": "INTEGER",
+    "mode": "REQUIRED",
+    "description": "ID of action"
+  },
+  {
+    "name": "approver_id",
+    "type": "INTEGER",
+    "mode": "NULLABLE",
+    "description": "ID of user who approved edit if this is an approval action"
+  },
+  {
+    "name": "approved_timestamp",
+    "type": "TIMESTAMP",
+    "mode": "NULLABLE",
+    "description": "Time of approval if this is an approval action"
+  },
+  {
+    "name": "comment_character",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "comment_sanitized",
+    "type": "BOOL",
+    "mode": "REQUIRED"
+  },
+  {
+    "name": "request_type",
+    "type": "STRING",
+    "mode": "REQUIRED"
+  },
+  {
+    "name": "request_details",
+    "type": "JSON",
+    "mode": "REQUIRED"
+  },
+  {
+    "name": "requester_name",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "email_address",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "customised_message",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "mongo_id",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "create_at",
+    "type": "TIMESTAMP",
+    "mode": "REQUIRED"
+  },
+  {
+    "name": "updated_at",
+    "type": "TIMESTAMP",
+    "mode": "REQUIRED"
+  },
+  {
+    "name": "edition_id",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "requester_id",
+    "type": "INTEGER",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "recipient_id",
+    "type": "INTEGER",
+    "mode": "NULLABLE"
+  }
+]

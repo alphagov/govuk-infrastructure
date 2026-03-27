@@ -1,0 +1,14 @@
+[
+  {
+    "mode": "REQUIRED",
+    "name": "url",
+    "type": "STRING",
+    "description": "URL of a page"
+  },
+  {
+    "mode": "REQUIRED",
+    "name": "number_of_views",
+    "type": "INTEGER",
+    "description": "Number of views of the URL"
+  }
+]

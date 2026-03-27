@@ -1,0 +1,155 @@
+main:
+  params: [args]
+  steps:
+    - init:
+        assign:
+          # Default to fetching yesterday's survey responses. Otherwise use
+          # the arguments provided in the call to this workflow (UNIX epoch integers)
+          - yesterday: $${text.substring(time.format(sys.now() - 60 * 60 * 24), 0, 10)}
+          - updated_at: $${default(map.get(args, "updated_at"), yesterday)}
+
+          # Default page size
+          - page_size: $${default(map.get(args, "page_size"), 1000)}
+
+          - objects_suffix: "first_page"
+          - after_cursor: ""
+
+
+          # Name the output bucket object by the Workflow Execution ID so that
+          # it can be debugged in the logs. The same name is used for the BigQuery
+          # table that the data is loaded into.
+          - bucket_name: ${bucket_name}
+          - workflow_execution_id: $${sys.get_env("GOOGLE_CLOUD_WORKFLOW_EXECUTION_ID")}
+          - project_id: $${sys.get_env("GOOGLE_CLOUD_PROJECT_ID")}
+          - dataset_id: zendesk
+
+          # Get a template of a query
+          - merge_query_template: ${query}
+
+    - fetch_zendesk_user_mail:
+        # Fetch the secret from Secret Manager
+        call: googleapis.secretmanager.v1.projects.secrets.versions.accessString
+        args:
+          secret_id: zendesk-user-email
+        result: zendesk_user_email
+
+    - fetch_zendesk_subdomain:
+        call: googleapis.secretmanager.v1.projects.secrets.versions.accessString
+        args:
+          secret_id: zendesk-subdomain
+        result: zendesk_subdomain
+
+    - fetch_zendesk_api_token:
+        call: googleapis.secretmanager.v1.projects.secrets.versions.accessString
+        args:
+          secret_id: zendesk-api-token
+        result: zendesk_api_token
+
+    - build_endpoint_url:
+        assign:
+          - endpoint_url: $${"https://" + zendesk_subdomain + "/api/v2/search/export.json"}
+
+    - build_headers:
+        assign:
+          - auth_str: $${zendesk_user_email + "/token:" + zendesk_api_token}
+          - auth_str_base64: $${"Basic " + base64.encode(text.encode(auth_str, "UTF-8"))}
+
+    # Iteratively fetch each page of results and send to BigQuery
+    - iterative_api_calls:
+        try:
+          call: http.get
+          args:
+            url: ${http_to_bucket_uri}
+            query:
+              endpoint_url: $${endpoint_url}
+              headers: "$${\"Authorization: \" + auth_str_base64}"
+              project_id: $${project_id}
+              bucket_name: $${bucket_name}
+              object_name: $${workflow_execution_id + "/" + objects_suffix}
+              jmespath: "{next: links.next, has_more: meta.has_more, after_cursor: meta.after_cursor}"
+              include: "tickets(metric_sets)"
+              page[size]: $${page_size}
+              filter[type]: "ticket"
+              query: $${"updated_at:" + updated_at}
+              page[after]: $${after_cursor}
+            auth:
+                type: OIDC
+          result: iterative_api_response
+        # Retry on 429 (Too Many Requests), 502 (Bad Gateway), 503 (Service
+        # unavailable), and 504 (Gateway Timeout), as well as on any
+        # ConnectionError, ConnectionFailedError and TimeoutError. Maximum retries
+        # (excluding first try): 5 Initial backoff 1 second, maximum backoff 1
+        # minute, multiplier 1.25.
+        retry: $${http.default_retry}
+
+    - has_more:
+        switch:
+          - condition: $${iterative_api_response.body.has_more}
+            steps:
+             - update_vars:
+            # If there are more pages, set the next page URL and call the API again
+                assign:
+                  - objects_suffix: $${iterative_api_response.body.after_cursor}
+                  - after_cursor: $${iterative_api_response.body.after_cursor}
+                  # endpoint_url: $${iterative_api_response.body.next}
+            next: iterative_api_calls
+
+    # Load the data into a new table in BigQuery, named by the workflow_execution_id
+    - load_into_bigquery:
+        call: googleapis.bigquery.v2.jobs.insert
+        args:
+            projectId: $${project_id}
+            body:
+                configuration:
+                    load:
+                        autodetect: false
+                        createDisposition: CREATE_IF_NEEDED
+                        destinationTable:
+                            datasetId: $${dataset_id}
+                            projectId: $${project_id}
+                            tableId: $${workflow_execution_id}
+                        destinationTableProperties:
+                            description: "Zendesk responses from the Zendesk API, fetched by the zendesk workflow. The table name is the execution ID of the workflow."
+                        ignoreUnknownValues: false
+                        maxBadRecords: 0
+                        schema:
+                            fields:
+                                ${schema}
+                        sourceFormat: NEWLINE_DELIMITED_JSON
+                        sourceUris: $${"gs://" + bucket_name + "/" + workflow_execution_id + "/*"}
+                        writeDisposition: WRITE_TRUNCATE
+        result: load_into_bigquery_result
+
+    # Set the table to expire after a while
+    - set_bigquery_table_expiry:
+        call: googleapis.bigquery.v2.tables.patch
+        args:
+            datasetId: $${dataset_id}
+            projectId: $${project_id}
+            tableId: $${workflow_execution_id}
+            body:
+                expirationTime: $${int(sys.now() + 60 * 60 * 24 * 7) * 1000} # milliseconds
+        result: set_bigquery_table_expiry_result
+
+    # Merge the new table into the `smart_survey.responses` table. Idempotent.
+    - build_merge_query:
+        assign:
+          - merge_query: $${text.replace_all(merge_query_template, "SOURCE_TABLE_NAME", workflow_execution_id)}
+
+    - merge_into_results_table:
+        call: googleapis.bigquery.v2.jobs.query
+        args:
+          projectId: $${project_id}
+          body:
+            useLegacySql: false # Use Standard SQL
+            query: $${merge_query}
+        result: merge_result
+
+
+    # Finish
+    - return:
+        return:
+          updated_at: $${updated_at}
+          load_into_bigquery_result: $${load_into_bigquery_result}
+          set_bigquery_table_expiry_result: $${set_bigquery_table_expiry_result}
+          merge_result: $${merge_result}

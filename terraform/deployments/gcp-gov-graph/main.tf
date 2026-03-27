@@ -2,21 +2,20 @@ terraform {
   cloud {
     organization = "govuk"
     workspaces {
-      project = "govuk-data-engineering"
-      tags    = ["gcp", "gov-graph"]
+      tags = ["gcp", "gov-graph"]
     }
   }
 
-  required_providers {
-    tfe = {
-      source  = "hashicorp/tfe"
-      version = "~> 0.74.0"
-    }
-    google = {
-      source  = "hashicorp/google"
-      version = "~> 7.0"
-    }
-  }
+  #  required_providers {
+  #    tfe = {
+  #      source  = "hashicorp/tfe"
+  #      version = "~> 0.74.0"
+  #    }
+  #    google = {
+  #      source  = "hashicorp/google"
+  #      version = "~> 7.0"
+  #    }
+  #  }
 
   required_version = "~> 1.14"
 }

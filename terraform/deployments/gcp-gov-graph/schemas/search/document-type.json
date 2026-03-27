@@ -1,0 +1,7 @@
+[
+    {
+        "name": "document_type",
+        "type": "STRING",
+        "description": "The kind of thing that a page is about"
+    }
+]

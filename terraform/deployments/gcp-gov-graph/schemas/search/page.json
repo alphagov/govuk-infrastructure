@@ -1,0 +1,152 @@
+[
+  {
+    "mode": "NULLABLE",
+    "name": "url",
+    "type": "STRING",
+    "description": "URL of a page"
+  },
+  {
+    "mode": "REQUIRED",
+    "name": "documentType",
+    "type": "STRING",
+    "description": "The kind of thing that a page is about"
+  },
+  {
+    "mode": "REQUIRED",
+    "name": "contentId",
+    "type": "STRING",
+    "description": "The ID of the content item of a page"
+  },
+  {
+    "mode": "REQUIRED",
+    "name": "locale",
+    "type": "STRING",
+    "description": "The ISO 639-1 two-letter code of the language of an edition on GOV.UK"
+  },
+  {
+    "mode": "REQUIRED",
+    "name": "publishing_app",
+    "type": "STRING",
+    "description": "The application that published a content item on GOV.UK"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "first_published_at",
+    "type": "TIMESTAMP",
+    "description": "The date that a page was first published.  Automatically determined by the publishing-api, unless overridden by the publishing application."
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "public_updated_at",
+    "type": "TIMESTAMP",
+    "description": "When a page was last significantly changed (a major update). Shown to users.  Automatically determined by the publishing-api, unless overridden by the publishing application."
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "publisher_updated_at",
+    "type": "TIMESTAMP",
+    "description": "When a page was last changed in the Publisher app.  More meaningful than 'updated_at' in the Publishing API and Content API, which is polluted by editions that are created for techy reasons rather than editing reasons, and editors of mainstream pages tend not to use 'public_updated_at'."
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "withdrawn_at",
+    "type": "TIMESTAMP",
+    "description": "The date the page was withdrawn."
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "withdrawn_explanation",
+    "type": "STRING",
+    "description": "The explanation for withdrawing a page"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "page_views",
+    "type": "INTEGER",
+    "description": "Number of page views from GA4 over 7 recent days"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "title",
+    "type": "STRING",
+    "description": "The title of a page"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "description",
+    "type": "STRING",
+    "description": "Description of a page"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "text",
+    "type": "STRING",
+    "description": "The content of the page as plain text extracted from the HTML"
+  },
+  {
+    "mode": "REPEATED",
+    "name": "taxons",
+    "type": "STRING",
+    "description": "Array of titles of taxons that the page is tagged to, and their ancestors"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "primary_organisation",
+    "type": "STRING",
+    "description": "Title of the primary organisation that published the page"
+  },
+  {
+    "mode": "REPEATED",
+    "name": "organisations",
+    "type": "STRING",
+    "description": "Array of titles of organisations that published the page"
+  },
+  {
+    "mode": "REPEATED",
+    "name": "people",
+    "type": "STRING",
+    "description": "Array of names of people who are associated with the page"
+  },
+  {
+    "mode": "REPEATED",
+    "name": "organisations_ancestry",
+    "type": "STRING",
+    "description": "Array of titles of organisations (and any parent organisations) that published the page"
+  },
+  {
+    "mode": "REPEATED",
+    "name": "hyperlinks",
+    "type": "RECORD",
+    "description": "Array of hyperlinks from the body of the page",
+    "fields": [
+      {
+        "name": "link_url",
+        "type": "STRING",
+        "description": "Link URL"
+      },
+      {
+        "name": "link_type",
+        "type": "STRING",
+        "description": "Type of link"
+      }
+    ]
+  },
+  {
+    "mode": "REPEATED",
+    "name": "phone_numbers",
+    "type": "STRING",
+    "description": "Array of phone numbers from the body and metadata of the page"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "is_political",
+    "type": "BOOLEAN",
+    "description": "Indicator of whether the page is political. Pages where this is true, and that were published by a previous government, are displayed in 'history mode' with a prominent message drawing attention to the fact."
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "government",
+    "type": "STRING",
+    "description": "Title of the government that published the page, if the page is political."
+  }
+]

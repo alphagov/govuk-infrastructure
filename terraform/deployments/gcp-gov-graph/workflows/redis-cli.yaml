@@ -1,0 +1,25 @@
+main:
+  params: [event]
+  steps:
+  - log_event:
+      call: sys.log
+      args:
+          text: $${event}
+          severity: INFO
+  - start_redis_cli_instance:
+      call: googleapis.compute.v1.instances.insert
+      args:
+          project: ${project_id}
+          zone: ${zone}
+          sourceInstanceTemplate: https://www.googleapis.com/compute/v1/projects/${project_id}/global/instanceTemplates/redis-cli
+          body:
+              name: redis-cli
+              networkInterfaces:
+                - network: ${network_name}
+                  subnetwork: ${subnetwork_id}
+              metadata:
+                items:
+                - key: google-logging-enabled
+                  value: true
+                - key: gce-container-declaration
+                  value: ${metadata_value}

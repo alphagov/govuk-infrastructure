@@ -1,0 +1,7 @@
+[
+    {
+        "name": "publishing_app",
+        "type": "STRING",
+        "description": "Name of publishing application"
+    }
+]

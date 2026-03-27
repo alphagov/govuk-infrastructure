@@ -1,0 +1,76 @@
+[
+  {
+    "name": "edition_id",
+    "type": "INTEGER",
+    "mode": "REQUIRED",
+    "description": "Joins to the `id` column of the `publishing_api.editions` table, and its derivatives"
+  },
+  {
+    "name": "attachment_index",
+    "type": "INTEGER",
+    "mode": "REQUIRED",
+    "description": "Ordinal position of the attachment in the `details` column of its parent edition"
+  },
+  {
+    "name": "accessible",
+    "type": "BOOLEAN",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "alternative_format_contact_email",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "attachment_type",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "content_type",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "file_size",
+    "type": "INTEGER",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "locale",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "title",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "url",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "attachment_filename",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "asset_index",
+    "type": "INTEGER",
+    "mode": "REQUIRED",
+    "description": "Ordinal position of the asset in its parent attachment. Often there are two assets: a document, and its thumbnail with a filename that is prefixed with 'thumbnail_'."
+  },
+  {
+    "name": "asset_filename",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "asset_manager_id",
+    "type": "STRING",
+    "mode": "NULLABLE",
+    "description": "Joins to the `_id` column of the asset_manager.assets table"
+  }
+]

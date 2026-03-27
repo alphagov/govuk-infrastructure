@@ -1,0 +1,42 @@
+[
+  {
+    "mode": "NULLABLE",
+    "name": "id",
+    "type": "INTEGER"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "source_content_id",
+    "type": "STRING"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "target_content_id",
+    "type": "STRING"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "link_type",
+    "type": "STRING"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "change",
+    "type": "INTEGER"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "action_id",
+    "type": "INTEGER"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "created_at",
+    "type": "TIMESTAMP"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "updated_at",
+    "type": "TIMESTAMP"
+  }
+]

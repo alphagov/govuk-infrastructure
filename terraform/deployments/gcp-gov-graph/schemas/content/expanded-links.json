@@ -1,0 +1,20 @@
+[
+  {
+    "name": "link_type",
+    "type": "STRING",
+    "mode": "REQUIRED",
+    "description": "The type of the relationship between the URLs"
+  },
+  {
+    "name": "from_url",
+    "type": "STRING",
+    "mode": "REQUIRED",
+    "description": "The origin URL"
+  },
+  {
+    "name": "to_url",
+    "type": "STRING",
+    "mode": "REQUIRED",
+    "description": "The destination URL"
+  }
+]

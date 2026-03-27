@@ -1,0 +1,7 @@
+[
+    {
+        "name": "name",
+        "type": "STRING",
+        "description": "Title of a taxon document"
+    }
+]

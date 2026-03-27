@@ -1,0 +1,22 @@
+[
+  {
+    "name": "edition_id",
+    "type": "INTEGER",
+    "description": "ID of the edition that has the start button"
+  },
+  {
+    "name": "url",
+    "type": "STRING",
+    "description": "Full URL that the start button links to"
+  },
+  {
+    "name": "url_bare",
+    "type": "STRING",
+    "description": "The URL stripped of parameters and anchors"
+  },
+  {
+    "name": "text",
+    "type": "STRING",
+    "description": "Text that is displayed on the button"
+  }
+]

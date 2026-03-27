@@ -1,0 +1,26 @@
+[
+  {
+    "description": "Unique ID of a Zendesk ticket",
+    "mode": "REQUIRED",
+    "name": "id",
+    "type": "INTEGER"
+  },
+  {
+    "description": "Timestamp with one-second precision of when the ticket was created.",
+    "mode": "REQUIRED",
+    "name": "created_at",
+    "type": "TIMESTAMP"
+  },
+  {
+    "description": "Timestamp with one-second precision of when the ticket was last updated.",
+    "mode": "REQUIRED",
+    "name": "updated_at",
+    "type": "TIMESTAMP"
+  },
+  {
+    "description": "All the data about a Zendesk ticket",
+    "mode": "REQUIRED",
+    "name": "ticket",
+    "type": "JSON"
+  }
+]

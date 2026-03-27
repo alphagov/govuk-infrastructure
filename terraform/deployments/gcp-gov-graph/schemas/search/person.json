@@ -1,0 +1,7 @@
+[
+    {
+        "name": "title",
+        "type": "STRING",
+        "description": "Title of a person's document, which is their name"
+    }
+]

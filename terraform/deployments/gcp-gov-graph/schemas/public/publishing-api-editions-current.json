@@ -1,0 +1,112 @@
+[
+  {
+    "mode": "NULLABLE",
+    "name": "content_id",
+    "type": "STRING"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "locale",
+    "type": "STRING"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "id",
+    "type": "INTEGER"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "title",
+    "type": "STRING"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "public_updated_at",
+    "type": "TIMESTAMP"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "publishing_app",
+    "type": "STRING"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "rendering_app",
+    "type": "STRING"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "update_type",
+    "type": "STRING"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "phase",
+    "type": "STRING"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "analytics_identifier",
+    "type": "STRING"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "updated_at",
+    "type": "TIMESTAMP"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "document_type",
+    "type": "STRING"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "schema_name",
+    "type": "STRING"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "first_published_at",
+    "type": "TIMESTAMP"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "base_path",
+    "type": "STRING"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "document_id",
+    "type": "INTEGER"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "description",
+    "type": "STRING"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "published_at",
+    "type": "TIMESTAMP"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "details",
+    "type": "JSON"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "routes",
+    "type": "JSON"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "redirects",
+    "type": "JSON"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "unpublishing_type",
+    "type": "STRING"
+  }
+]

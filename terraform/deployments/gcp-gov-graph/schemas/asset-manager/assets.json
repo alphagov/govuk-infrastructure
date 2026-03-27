@@ -1,0 +1,116 @@
+[
+  {
+    "description": "The Asset Manager MongoDB ID for the asset",
+    "mode": "NULLABLE",
+    "name": "_id",
+    "type": "STRING"
+  },
+  {
+    "description": "The time at which the asset was created",
+    "mode": "NULLABLE",
+    "name": "created_at",
+    "type": "TIMESTAMP"
+  },
+  {
+    "description": "The time at which the asset was last updated",
+    "mode": "NULLABLE",
+    "name": "updated_at",
+    "type": "TIMESTAMP"
+  },
+  {
+    "description": "The ID of the replacement asset (this asset will redirect to it)",
+    "mode": "NULLABLE",
+    "name": "replacement_id",
+    "type": "STRING"
+  },
+  {
+    "description": "The state of the asset, relating to upload and virus scanning status",
+    "mode": "NULLABLE",
+    "name": "state",
+    "type": "STRING"
+  },
+  {
+    "description": "An array comprising the asset's history of filenames",
+    "mode": "REPEATED",
+    "name": "filename_history",
+    "type": "STRING"
+  },
+  {
+    "description": "The asset UUID",
+    "mode": "NULLABLE",
+    "name": "uuid",
+    "type": "STRING"
+  },
+  {
+    "description": "A flag indicating whether the asset is available on the draft or live stack",
+    "mode": "NULLABLE",
+    "name": "draft",
+    "type": "BOOLEAN"
+  },
+  {
+    "description": "The URL the asset should redirect to",
+    "mode": "NULLABLE",
+    "name": "redirect_url",
+    "type": "STRING"
+  },
+  {
+    "description": "The last time the asset was modified",
+    "mode": "NULLABLE",
+    "name": "last_modified",
+    "type": "TIMESTAMP"
+  },
+  {
+    "description": "The size of the asset",
+    "mode": "NULLABLE",
+    "name": "size",
+    "type": "INTEGER"
+  },
+  {
+    "description": "The MIME type of the asset",
+    "mode": "NULLABLE",
+    "name": "content_type",
+    "type": "STRING"
+  },
+  {
+    "description": "An array comprising access limited user content IDs (deprecated)",
+    "mode": "REPEATED",
+    "name": "access_limited",
+    "type": "STRING"
+  },
+  {
+    "description": "An array comprising access limited organisation content IDs",
+    "mode": "REPEATED",
+    "name": "access_limited_organisation_ids",
+    "type": "STRING"
+  },
+  {
+    "description": "The URL of the parent document, either a draft or live url",
+    "mode": "NULLABLE",
+    "name": "parent_document_url",
+    "type": "STRING"
+  },
+  {
+    "description": "The time at which the asset was deleted from Asset Manager",
+    "mode": "NULLABLE",
+    "name": "deleted_at",
+    "type": "TIMESTAMP"
+  },
+  {
+    "description": "The name of the asset file",
+    "mode": "NULLABLE",
+    "name": "file",
+    "type": "STRING"
+  },
+  {
+    "description": "Legacy field, either 'WhitehallAsset' or 'Asset', used to capture whether an asset came from Whitehall; Whitehall assets had a legacy_url_path",
+    "mode": "NULLABLE",
+    "name": "_type",
+    "type": "STRING"
+  },
+  {
+    "description": "The legacy path at which a WhitehallAsset can be found",
+    "mode": "NULLABLE",
+    "name": "legacy_url_path",
+    "type": "STRING"
+  }
+]
