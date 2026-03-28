@@ -1,49 +1,12 @@
-variable "cluster_log_retention_in_days" {
-  type        = number
-  description = "Number of days to retain cluster log events in CloudWatch."
-}
-
-variable "cluster_name" {
-  type        = string
-  description = "Name for the EKS cluster."
-  default     = "govuk"
-}
-
 variable "cluster_version" {
   type        = string
   description = "Kubernetes release version for the cluster, e.g. 1.21"
-}
-
-variable "eks_control_plane_subnets" {
-  type        = map(object({ az = string, cidr = string }))
-  description = "Map of {subnet_name: {az=<az>, cidr=<cidr>}} for the public subnets for the EKS cluster's apiserver."
-}
-
-variable "eks_private_subnets" {
-  type        = map(object({ az = string, cidr = string }))
-  description = "Map of {subnet_name: {az=<az>, cidr=<cidr>}} for the private subnets for the EKS cluster's nodes and pods."
-}
-
-variable "eks_public_subnets" {
-  type        = map(object({ az = string, cidr = string }))
-  description = "Map of {subnet_name: {az=<az>, cidr=<cidr>}} for the public subnets where the EKS cluster will create Internet-facing load balancers."
 }
 
 variable "external_dns_subdomain" {
   type        = string
   description = "Subdomain name for a Route53 zone which will be created underneath external_root_zone (e.g. 'eks' to be created underneath staging.govuk.digital), for use by the external-dns addon. external-dns will create records for ALBs/NLBs created by Ingresses and Service[type=LoadBalancer] in this zone."
   default     = "eks"
-}
-
-variable "publishing_service_domain" {
-  type        = string
-  description = "FQDN of the user-facing domain for the publishing apps, e.g. staging.publishing.service.gov.uk. This domain is included as a wildcard SAN on the TLS cert for Ingresses etc."
-}
-
-variable "force_destroy" {
-  type        = bool
-  description = "Setting for force_destroy on resources such as Route53 zones. For use in non-production environments to allow for automated tear-down."
-  default     = false
 }
 
 variable "enable_container_network_observability" {
@@ -229,11 +192,6 @@ variable "secrets_recovery_window_in_days" {
   type        = number
   description = "Set to 0 in non-production environments to allow Terraform to delete and re-create secrets in AWS Secrets Manager."
   default     = 7
-}
-
-variable "govuk_environment" {
-  type        = string
-  description = "Acceptable values are test, integration, staging, production"
 }
 
 variable "authentication_mode" {

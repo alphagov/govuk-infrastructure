@@ -4,12 +4,6 @@ variable "aws_region" {
   nullable    = false
 }
 
-variable "govuk_environment" {
-  type        = string
-  description = "GOV.UK AWS environment name"
-  nullable    = false
-}
-
 variable "current_live_domain" {
   type        = string
   description = "Either blue, or green, specifying the current live OpenSearch domain"
