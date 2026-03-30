@@ -116,3 +116,10 @@ variable "access_logging_config" {
   default     = {}
   nullable    = false
 }
+
+variable "tags" {
+  type        = map(string)
+  description = "Collection of additional tags to apply to each taggable resource"
+  default     = {}
+  nullable    = false
+}
