@@ -23,7 +23,7 @@ resource "google_monitoring_alert_policy" "dts_failure_alert" {
   conditions {
     display_name = "Detection Query Failed"
     condition_threshold {
-      filter          = "resource.type=\"bigquery_dts_config\" AND metric.type=\"bigquerydatatransfer.googleapis.com/transfer_config/completed_runs\""
+      filter          = "resource.type=\"bigquery_dts_config\" AND resource.labels.config_id=\"${local.detection_query_uuid}\" AND metric.type=\"bigquerydatatransfer.googleapis.com/transfer_config/completed_runs\" AND metric.labels.completion_status=\"FAILED\""
       duration        = "0s"
       comparison      = "COMPARISON_GT"
       threshold_value = 0
@@ -33,14 +33,14 @@ resource "google_monitoring_alert_policy" "dts_failure_alert" {
       }
 
       aggregations {
-        alignment_period   = "60s"
+        alignment_period   = "3600s"
         per_series_aligner = "ALIGN_COUNT"
       }
     }
   }
 
   documentation {
-    content   = "The query used to detect unauthorised access is not running. Review the Scheduled Query '${google_bigquery_data_transfer_config.detection_query.display_name}' for details."
+    content   = "The query used to detect unauthorised access is not running. Review the Scheduled Query '${google_bigquery_data_transfer_config.detection_query.display_name}' for details. Further information may be found in 'GA4 Aggregate Analytics - Technical Documentation' - https://gov-uk.atlassian.net/wiki/x/AYADMAE."
     mime_type = "text/markdown"
     subject   = "GA4 Aggregate Analytics Unauthorised Access Detection Query Failed"
     links {
@@ -78,7 +78,7 @@ resource "google_monitoring_alert_policy" "unauthorised_bq_access_alert" {
   notification_channels = [google_monitoring_notification_channel.notification_email.name]
 
   documentation {
-    content   = "Unauthorised BigQuery access was detected. Review the 'unauthorised_access' table in dataset '${google_bigquery_dataset.audit_logs.dataset_id}' for details."
+    content   = "Unauthorised BigQuery access was detected. Review the 'unauthorised_access' table in dataset '${google_bigquery_dataset.audit_logs.dataset_id}' for details. Further information may be found in 'GA4 Aggregate Analytics - Technical Documentation' - https://gov-uk.atlassian.net/wiki/x/AYADMAE."
     mime_type = "text/markdown"
     subject   = "Unauthorised Access to GA4 Aggregate Data"
     links {
