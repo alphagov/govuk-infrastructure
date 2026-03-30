@@ -12,7 +12,7 @@ resource "restapi_object" "google_discovery_engine_data_store_completion_config"
     queryFrequencyThreshold = 250,
     numUniqueUsersThreshold = 100,
     queryModel              = "automatic",
-    enableMode              = "AUTOMATIC"
+    enableMode              = "MANUAL"
   })
 
   # VAIS adds some properties dynamically, which creates false positive drift
