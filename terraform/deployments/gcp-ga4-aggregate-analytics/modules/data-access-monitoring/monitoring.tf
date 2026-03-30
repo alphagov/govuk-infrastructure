@@ -23,7 +23,7 @@ resource "google_monitoring_alert_policy" "dts_failure_alert" {
   conditions {
     display_name = "Detection Query Failed"
     condition_threshold {
-      filter          = "resource.type=\"bigquery_dts_config\" AND resource.labels.config_id=\"${local.detection_query_uuid}\" AND metric.type=\"bigquerydatatransfer.googleapis.com/transfer_config/completed_runs\" AND metric.labels.completion_status=\"FAILED\""
+      filter          = "resource.type=\"bigquery_dts_config\" AND resource.labels.config_id=\"${local.detection_query_uuid}\" AND metric.type=\"bigquerydatatransfer.googleapis.com/transfer_config/completed_runs\" AND metric.labels.completion_state=\"FAILED\""
       duration        = "0s"
       comparison      = "COMPARISON_GT"
       threshold_value = 0
