@@ -10,11 +10,6 @@ module "publisher_csvs_s3_bucket" {
   }
 }
 
-moved {
-  from = aws_s3_bucket.publisher_csvs
-  to   = module.publisher_csvs_s3_bucket.aws_s3_bucket.this
-}
-
 module "support_api_csvs_s3_bucket" {
   source = "../../shared-modules/s3"
 
@@ -30,16 +25,6 @@ module "support_api_csvs_s3_bucket" {
     target_bucket = "govuk-${var.govuk_environment}-aws-logging"
     target_prefix = "s3/govuk-${var.govuk_environment}-support-api-csvs/"
   }
-}
-
-moved {
-  from = aws_s3_bucket.support_api_csvs
-  to   = module.support_api_csvs_s3_bucket.aws_s3_bucket.this
-}
-
-moved {
-  from = aws_s3_bucket_logging.support_api_csvs
-  to   = module.support_api_csvs_s3_bucket.aws_s3_bucket_logging.this
 }
 
 # TODO: the govuk-publishing-api-event-log-* buckets don't seem to be defined
