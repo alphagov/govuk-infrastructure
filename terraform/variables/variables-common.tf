@@ -36,26 +36,56 @@ variable "force_destroy" {
 variable "vpc_cidr" {
   type        = string
   description = "IPv4 CIDR for VPC"
+
+  validation {
+    condition = cidrhost(var.vpc_cidr, 0) != null
+
+    error_message = "vpc_cidr must be set to a valid CIDR."
+  }
 }
 
 variable "eks_control_plane_subnets" {
   type        = map(object({ az = string, cidr = string }))
   description = "Map of {subnet_name: {az=<az>, cidr=<cidr>}} for the public subnets for the EKS control plane."
+
+  validation {
+    condition = [for subnet in var.eks_control_plane_subnets : cidrhost(subnet.cidr, 0)] != null
+
+    error_message = "Invalid CIDR in eks_control_plane_subnets."
+  }
 }
 
 variable "eks_public_subnets" {
   type        = map(object({ az = string, cidr = string }))
   description = "Map of {subnet_name: {az=<az>, cidr=<cidr>}} for the public subnets for the EKS worker nodes."
+
+  validation {
+    condition = [for subnet in var.eks_public_subnets : cidrhost(subnet.cidr, 0)] != null
+
+    error_message = "Invalid CIDR in eks_public_subnets."
+  }
 }
 
 variable "eks_private_subnets" {
   type        = map(object({ az = string, cidr = string }))
   description = "Map of {subnet_name: {az=<az>, cidr=<cidr>}} for the private subnets for the EKS worker nodes."
+
+  validation {
+    condition = [for subnet in var.eks_private_subnets : cidrhost(subnet.cidr, 0)] != null
+
+    error_message = "Invalid CIDR in eks_private_subnets."
+  }
 }
 
 variable "legacy_private_subnets" {
   type        = map(object({ az = string, cidr = string, nat = bool }))
   description = "Map of {subnet_name: {az=<az>, cidr=<cidr>, nat=<nat>}} for the private subnets for legacy non-EKS resources. nat is a boolean indicating whether the subnet should have a NAT gateway or not."
+
+  validation {
+    condition = [for subnet in var.legacy_private_subnets : cidrhost(subnet.cidr, 0)] != null
+
+    error_message = "Invalid CIDR in legacy_private_subnets."
+  }
 }
 
 // Kubernetes
