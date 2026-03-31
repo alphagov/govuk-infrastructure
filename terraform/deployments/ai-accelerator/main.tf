@@ -2,7 +2,7 @@ terraform {
   cloud {
     organization = "govuk"
     workspaces {
-      tags = ["opensearch", "govuk", "aws"]
+      tags = ["ai-accelerator", "govuk", "aws"]
     }
   }
 
