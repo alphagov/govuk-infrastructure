@@ -28,6 +28,18 @@ variable "versioning_enabled" {
   nullable    = false
 }
 
+variable "versioning_suspended" {
+  type        = bool
+  description = "Once S3 versioning has been enabled, whether to suspend versioning"
+  default     = false
+  nullable    = false
+
+  validation {
+    condition     = var.versioning_suspended == false || var.versioning_enabled == true
+    error_message = "var.versioning_suspended can only be true if var.versioning_enabled is also true."
+  }
+}
+
 variable "lifecycle_rules" {
   type = list(object({
     status = string
