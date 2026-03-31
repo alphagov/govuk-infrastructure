@@ -6,13 +6,3 @@ module "secure_s3_bucket_whitehall_csvs" {
 
   versioning_enabled = false
 }
-
-moved {
-  from = aws_s3_bucket.whitehall_csvs
-  to   = module.secure_s3_bucket_whitehall_csvs.aws_s3_bucket.this
-}
-
-moved {
-  from = aws_s3_bucket_logging.whitehall_csvs
-  to   = module.secure_s3_bucket_whitehall_csvs.aws_s3_bucket_logging.this
-}

@@ -116,66 +116,6 @@ module "secure_s3_bucket_db_backup_replica" {
   ] : []
 }
 
-moved {
-  from = aws_s3_bucket.backup_main
-  to   = module.secure_s3_bucket_db_backup_main.aws_s3_bucket.this
-}
-
-moved {
-  from = aws_s3_bucket_object_lock_configuration.backup_main[0]
-  to   = module.secure_s3_bucket_db_backup_main.aws_s3_bucket_object_lock_configuration.this[0]
-}
-
-moved {
-  from = aws_s3_bucket_public_access_block.backup_main
-  to   = module.secure_s3_bucket_db_backup_main.aws_s3_bucket_public_access_block.this[0]
-}
-
-moved {
-  from = aws_s3_bucket_logging.backup_main
-  to   = module.secure_s3_bucket_db_backup_main.aws_s3_bucket_logging.this
-}
-
-moved {
-  from = aws_s3_bucket_versioning.backup_main
-  to   = module.secure_s3_bucket_db_backup_main.aws_s3_bucket_versioning.this
-}
-
-moved {
-  from = aws_s3_bucket_lifecycle_configuration.backup_main
-  to   = module.secure_s3_bucket_db_backup_main.aws_s3_bucket_lifecycle_configuration.this[0]
-}
-
-moved {
-  from = aws_s3_bucket.backup_replica
-  to   = module.secure_s3_bucket_db_backup_replica.aws_s3_bucket.this
-}
-
-moved {
-  from = aws_s3_bucket_object_lock_configuration.backup_replica[0]
-  to   = module.secure_s3_bucket_db_backup_replica.aws_s3_bucket_object_lock_configuration.this[0]
-}
-
-moved {
-  from = aws_s3_bucket_public_access_block.backup_replica
-  to   = module.secure_s3_bucket_db_backup_replica.aws_s3_bucket_public_access_block.this[0]
-}
-
-moved {
-  from = aws_s3_bucket_logging.backup_replica
-  to   = module.secure_s3_bucket_db_backup_replica.aws_s3_bucket_logging.this
-}
-
-moved {
-  from = aws_s3_bucket_versioning.backup_replica
-  to   = module.secure_s3_bucket_db_backup_replica.aws_s3_bucket_versioning.this
-}
-
-moved {
-  from = aws_s3_bucket_lifecycle_configuration.backup_replica
-  to   = module.secure_s3_bucket_db_backup_replica.aws_s3_bucket_lifecycle_configuration.this[0]
-}
-
 resource "aws_s3_bucket_replication_configuration" "backup_main" {
   depends_on = [module.secure_s3_bucket_db_backup_main] # TF doesn't infer this :(
 

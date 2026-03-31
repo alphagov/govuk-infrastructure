@@ -1,20 +1,49 @@
-resource "aws_s3_bucket" "app_assets" {
-  bucket        = "govuk-app-assets-${var.govuk_environment}"
-  force_destroy = var.force_destroy
+locals {
+  secure_s3_bucket_app_assets_name = "govuk-app-assets-${var.govuk_environment}"
+  secure_s3_bucket_app_assets_arn  = "arn:aws:s3:::${local.secure_s3_bucket_app_assets_name}"
+}
+
+module "secure_s3_bucket_app_assets" {
+  source = "../../shared-modules/s3"
+
+  govuk_environment = var.govuk_environment
+  name              = local.secure_s3_bucket_app_assets_name
+
+  versioning_enabled   = true
+  versioning_suspended = true
+
+  enable_public_access_block = false
+  extra_bucket_policies      = [data.aws_iam_policy_document.app_assets.json]
+
+  access_logging_config = {
+    target_bucket = "govuk-s3-integration-troubleshoot-logs"
+    target_prefix = ""
+  }
+
   tags = {
     System = "Static serving"
     Name   = "App static assets for ${var.govuk_environment}"
   }
 }
 
-resource "aws_s3_bucket_versioning" "app_assets" {
-  bucket = aws_s3_bucket.app_assets.id
-  versioning_configuration { status = "Suspended" }
+moved {
+  from = aws_s3_bucket.app_assets
+  to   = module.secure_s3_bucket_app_assets.aws_s3_bucket.this
 }
 
-resource "aws_s3_bucket_policy" "app_assets" {
-  bucket = aws_s3_bucket.app_assets.id
-  policy = data.aws_iam_policy_document.app_assets.json
+moved {
+  from = aws_s3_bucket_versioning.app_assets
+  to   = module.secure_s3_bucket_app_assets.aws_s3_bucket_versioning.this
+}
+
+moved {
+  from = aws_s3_bucket_policy.app_assets
+  to   = module.secure_s3_bucket_app_assets.aws_s3_bucket_policy.bucket_policy
+}
+
+import {
+  to = module.secure_s3_bucket_app_assets.aws_s3_bucket_server_side_encryption_configuration.this
+  id = local.secure_s3_bucket_app_assets_name
 }
 
 # TODO: instead of granting write access to nodes, use IRSA (IAM Roles for
@@ -27,7 +56,7 @@ data "aws_iam_policy_document" "app_assets" {
       identifiers = ["*"]
     }
     actions   = ["s3:GetObject"]
-    resources = ["${aws_s3_bucket.app_assets.arn}/*"]
+    resources = ["${local.secure_s3_bucket_app_assets_arn}/*"]
   }
   statement {
     sid = "EKSNodesCanList"
@@ -36,7 +65,7 @@ data "aws_iam_policy_document" "app_assets" {
       identifiers = [data.tfe_outputs.cluster_infrastructure.nonsensitive_values.worker_iam_role_arn]
     }
     actions   = ["s3:ListBucket"]
-    resources = [aws_s3_bucket.app_assets.arn]
+    resources = [local.secure_s3_bucket_app_assets_arn]
   }
   statement {
     sid = "EKSNodesCanWrite"
@@ -45,6 +74,6 @@ data "aws_iam_policy_document" "app_assets" {
       identifiers = [data.tfe_outputs.cluster_infrastructure.nonsensitive_values.worker_iam_role_arn]
     }
     actions   = ["s3:GetObject", "s3:PutObject"]
-    resources = ["${aws_s3_bucket.app_assets.arn}/*"]
+    resources = ["${local.secure_s3_bucket_app_assets_arn}/*"]
   }
 }
