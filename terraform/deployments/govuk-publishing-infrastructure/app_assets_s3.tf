@@ -12,7 +12,13 @@ module "secure_s3_bucket_app_assets" {
   versioning_enabled   = true
   versioning_suspended = true
 
-  extra_bucket_policies = [data.aws_iam_policy_document.app_assets.json]
+  enable_public_access_block = false
+  extra_bucket_policies      = [data.aws_iam_policy_document.app_assets.json]
+
+  access_logging_config = {
+    target_bucket = "govuk-s3-integration-troubleshoot-logs"
+    target_prefix = ""
+  }
 
   tags = {
     System = "Static serving"
@@ -32,7 +38,12 @@ moved {
 
 moved {
   from = aws_s3_bucket_policy.app_assets
-  to   = module.secure_s3_bucket_app_assets.aws_s3_bucket_policy.this
+  to   = module.secure_s3_bucket_app_assets.aws_s3_bucket_policy.bucket_policy
+}
+
+import {
+  to = module.secure_s3_bucket_app_assets.aws_s3_bucket_server_side_encryption_configuration.this
+  id = local.secure_s3_bucket_app_assets_name
 }
 
 # TODO: instead of granting write access to nodes, use IRSA (IAM Roles for
