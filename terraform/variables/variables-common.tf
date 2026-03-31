@@ -94,12 +94,18 @@ variable "cluster_name" {
   type        = string
   default     = "govuk"
   description = "Name of the EKS cluster for this environment. Set to the cluster ID for ephemeral clusters."
+
+  validation {
+    condition = length(var.cluster_name) >= 1 && length(var.cluster_name) <= 100
+
+    error_message = "Length of cluster_name must be between 1 and 100 characters."
+  }
 }
 
 variable "cluster_log_retention_in_days" {
   type        = number
   description = "Number of days to retain CloudWatch logs for"
-  default = 731
+  default     = 731
 
   validation {
     condition = var.cluster_log_retention_in_days >= 1 && var.cluster_log_retention_in_days <= 3650
