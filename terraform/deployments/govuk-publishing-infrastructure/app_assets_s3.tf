@@ -15,11 +15,6 @@ module "secure_s3_bucket_app_assets" {
   enable_public_access_block = false
   extra_bucket_policies      = [data.aws_iam_policy_document.app_assets.json]
 
-  access_logging_config = {
-    target_bucket = "govuk-s3-integration-troubleshoot-logs"
-    target_prefix = ""
-  }
-
   tags = {
     System = "Static serving"
     Name   = "App static assets for ${var.govuk_environment}"
