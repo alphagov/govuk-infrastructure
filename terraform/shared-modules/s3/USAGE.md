@@ -3,7 +3,7 @@
 
 | Name | Version |
 |------|---------|
-| <a name="provider_aws"></a> [aws](#provider\_aws) | n/a |
+| <a name="provider_aws"></a> [aws](#provider\_aws) | >= 6.28 |
 
 ## Inputs
 
@@ -18,6 +18,7 @@
 | <a name="input_object_lock_config"></a> [object\_lock\_config](#input\_object\_lock\_config) | Bucket object lock config can help prevent Amazon S3 objects from being deleted or overwritten for a fixed amount of time or indefinitely. Object Lock uses a write-once-read-many (WORM) model to store objects. | <pre>list(object({<br/>    rule = object({<br/>      default_retention = object({<br/>        mode  = string<br/>        days  = optional(number)<br/>        years = optional(number)<br/>      })<br/>    })<br/>  }))</pre> | `[]` | no |
 | <a name="input_tags"></a> [tags](#input\_tags) | Collection of additional tags to apply to each taggable resource | `map(string)` | `{}` | no |
 | <a name="input_versioning_enabled"></a> [versioning\_enabled](#input\_versioning\_enabled) | Whether S3 bucket object versioning should be enabled | `bool` | `true` | no |
+| <a name="input_versioning_suspended"></a> [versioning\_suspended](#input\_versioning\_suspended) | Once S3 versioning has been enabled, whether to suspend versioning | `bool` | `false` | no |
 
 ## Outputs
 
