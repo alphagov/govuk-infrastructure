@@ -99,4 +99,11 @@ variable "cluster_name" {
 variable "cluster_log_retention_in_days" {
   type        = number
   description = "Number of days to retain CloudWatch logs for"
+  default = 731
+
+  validation {
+    condition = var.cluster_log_retention_in_days >= 1 && var.cluster_log_retention_in_days <= 3650
+
+    error_message = "cluster_log_retention_in_days must be between 1 day and 10 years."
+  }
 }
