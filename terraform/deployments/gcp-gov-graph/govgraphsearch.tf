@@ -163,6 +163,10 @@ resource "google_artifact_registry_repository_iam_policy" "cloud_run_source_depl
   location    = google_artifact_registry_repository.cloud_run_source_deploy.location
   repository  = google_artifact_registry_repository.cloud_run_source_deploy.name
   policy_data = data.google_iam_policy.artifact_registry_cloud_run_source_deploy.policy_data
+
+  depends_on = [
+    google_artifact_registry_repository.cloud_run_source_deploy,
+  ]
 }
 
 # Then push a docker image to that place.
