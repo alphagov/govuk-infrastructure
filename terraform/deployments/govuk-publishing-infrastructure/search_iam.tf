@@ -17,8 +17,8 @@ data "aws_iam_policy_document" "search_relevancy_bucket_policy" {
       "s3:List*",
     ]
     resources = [
-      "arn:aws:s3:::${aws_s3_bucket.search_relevancy_bucket.id}",
-      "arn:aws:s3:::${aws_s3_bucket.search_relevancy_bucket.id}/*",
+      module.secure_s3_bucket_search_relevancy.arn,
+      "${module.secure_s3_bucket_search_relevancy.arn}/*",
     ]
   }
 }
