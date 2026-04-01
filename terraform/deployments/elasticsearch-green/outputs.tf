@@ -14,6 +14,6 @@ output "domain_configuration_policy_arn" {
 }
 
 output "manual_snapshots_bucket_arn" {
-  value       = aws_s3_bucket.manual_snapshots.arn
+  value       = module.secure_s3_bucket_manual_snapshots.arn
   description = "ARN of the bucket to store manual snapshots"
 }

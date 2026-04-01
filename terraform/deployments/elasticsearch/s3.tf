@@ -1,23 +1,30 @@
 locals {
-  bucket_name = "govuk-${var.govuk_environment}-elasticsearch6-manual-snapshots"
+  manual_snapshots_bucket_name = "govuk-${var.govuk_environment}-elasticsearch6-manual-snapshots"
+  manual_snapshots_bucket_arn  = "arn:aws:s3:::${local.manual_snapshots_bucket_name}"
 }
 
-resource "aws_s3_bucket" "manual_snapshots" {
-  bucket = local.bucket_name
-  tags = {
-    Name = local.bucket_name
-  }
+module "secure_s3_bucket_manual_snapshots" {
+  source = "../../shared-modules/s3"
+
+  govuk_environment = var.govuk_environment
+  name              = local.manual_snapshots_bucket_name
+
+  extra_bucket_policies = [data.aws_iam_policy_document.manual_snapshots_cross_account_access.json]
 }
 
-resource "aws_s3_bucket_logging" "manual_snapshots" {
-  bucket        = aws_s3_bucket.manual_snapshots.id
-  target_bucket = data.tfe_outputs.logging.nonsensitive_values.aws_logging_bucket_id
-  target_prefix = "s3/${local.bucket_name}/"
+moved {
+  from = aws_s3_bucket.manual_snapshots
+  to   = module.secure_s3_bucket_manual_snapshots.aws_s3_bucket.this
 }
 
-resource "aws_s3_bucket_policy" "manual_snapshots_cross_account_access" {
-  bucket = aws_s3_bucket.manual_snapshots.id
-  policy = data.aws_iam_policy_document.manual_snapshots_cross_account_access.json
+moved {
+  from = aws_s3_bucket_logging.manual_snapshots
+  to   = module.secure_s3_bucket_manual_snapshots.aws_s3_bucket_logging.this
+}
+
+moved {
+  from = aws_s3_bucket_policy.manual_snapshots_cross_account_access
+  to   = module.secure_s3_bucket_manual_snapshots.aws_s3_bucket_policy.bucket_policy
 }
 
 data "aws_iam_policy_document" "manual_snapshots_cross_account_access" {
@@ -42,24 +49,8 @@ data "aws_iam_policy_document" "manual_snapshots_cross_account_access" {
       "s3:PutObjectAcl",
     ]
     resources = [
-      aws_s3_bucket.manual_snapshots.arn,
-      "${aws_s3_bucket.manual_snapshots.arn}/*",
+      local.manual_snapshots_bucket_arn,
+      "${local.manual_snapshots_bucket_arn}/*",
     ]
-  }
-
-  statement {
-    sid    = "DenyNonTLS"
-    effect = "Deny"
-    principals {
-      identifiers = ["*"]
-      type        = "AWS"
-    }
-    actions   = ["s3:*"]
-    resources = ["${aws_s3_bucket.manual_snapshots.arn}/*"]
-    condition {
-      test     = "Bool"
-      values   = [false]
-      variable = "aws:SecureTransport"
-    }
   }
 }
