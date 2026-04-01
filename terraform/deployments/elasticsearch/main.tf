@@ -70,7 +70,7 @@ data "aws_iam_policy_document" "opensearch_log_publishing_policy" {
 }
 
 resource "aws_cloudwatch_log_resource_policy" "opensearch_log_publishing_policy" {
-  policy_name = "elasticsearch6_log_resource_policy"
+  policy_name = "${local.domain}_log_write"
 
   policy_document = data.aws_iam_policy_document.opensearch_log_publishing_policy.json
 }
