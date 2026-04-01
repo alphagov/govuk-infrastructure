@@ -1,40 +1,46 @@
+locals {
+  opensearch_snapshots_bucket_name = "govuk-${var.govuk_environment}-${var.service}-opensearch-snapshots"
+  opensearch_snapshots_bucket_arn  = "arn:aws:s3:::${local.opensearch_snapshots_bucket_name}"
+}
+
 # S3 bucket configuration for manual snapshot process
-resource "aws_s3_bucket" "opensearch_snapshot" {
-  bucket = "govuk-${var.govuk_environment}-${var.service}-opensearch-snapshots"
-  tags   = { Name = "govuk-${var.govuk_environment}-${var.service}-opensearch-snapshots" }
+module "secure_s3_bucket_opensearch_snapshots" {
+  source = "../../shared-modules/s3"
+
+  govuk_environment = var.govuk_environment
+  name              = local.opensearch_snapshots_bucket_name
+
+  extra_bucket_policies = [data.aws_iam_policy_document.opensearch_snapshot_bucket_policy.json]
 }
 
-resource "aws_s3_bucket_public_access_block" "opensearch_snapshot" {
-  bucket                  = aws_s3_bucket.opensearch_snapshot.id
-  block_public_acls       = true
-  block_public_policy     = true
-  ignore_public_acls      = true
-  restrict_public_buckets = true
+moved {
+  from = aws_s3_bucket.opensearch_snapshot
+  to   = module.secure_s3_bucket_opensearch_snapshots.aws_s3_bucket.this
 }
 
-resource "aws_s3_bucket_logging" "opensearch_snapshot" {
-  bucket        = aws_s3_bucket.opensearch_snapshot.id
-  target_bucket = "govuk-${var.govuk_environment}-aws-logging"
-  target_prefix = "s3/govuk-${var.govuk_environment}-${var.service}-opensearch-snapshots/"
+moved {
+  from = aws_s3_bucket_public_access_block.opensearch_snapshot
+  to   = module.secure_s3_bucket_opensearch_snapshots.aws_s3_bucket_public_access_block.this[0]
 }
 
-resource "aws_s3_bucket_versioning" "opensearch_snapshot" {
-  bucket = aws_s3_bucket.opensearch_snapshot.id
-  versioning_configuration { status = "Enabled" }
+moved {
+  from = aws_s3_bucket_logging.opensearch_snapshot
+  to   = module.secure_s3_bucket_opensearch_snapshots.aws_s3_bucket_logging.this
 }
 
-resource "aws_s3_bucket_server_side_encryption_configuration" "opensearch_snapshot" {
-  bucket = aws_s3_bucket.opensearch_snapshot.id
-  rule {
-    apply_server_side_encryption_by_default {
-      sse_algorithm = "AES256"
-    }
-  }
+moved {
+  from = aws_s3_bucket_versioning.opensearch_snapshot
+  to   = module.secure_s3_bucket_opensearch_snapshots.aws_s3_bucket_versioning.this
 }
 
-resource "aws_s3_bucket_policy" "opensearch_snapshot" {
-  bucket = aws_s3_bucket.opensearch_snapshot.id
-  policy = data.aws_iam_policy_document.opensearch_snapshot_bucket_policy.json
+moved {
+  from = aws_s3_bucket_server_side_encryption_configuration.opensearch_snapshot
+  to   = module.secure_s3_bucket_opensearch_snapshots.aws_s3_bucket_server_side_encryption_configuration.this
+}
+
+moved {
+  from = aws_s3_bucket_policy.opensearch_snapshot
+  to   = module.secure_s3_bucket_opensearch_snapshots.aws_s3_bucket_policy.bucket_policy
 }
 
 data "aws_iam_policy_document" "opensearch_snapshot_bucket_policy" {
@@ -60,8 +66,8 @@ data "aws_iam_policy_document" "opensearch_snapshot_bucket_policy" {
       "s3:PutObjectAcl",
     ]
     resources = [
-      aws_s3_bucket.opensearch_snapshot.arn,
-      "${aws_s3_bucket.opensearch_snapshot.arn}/*",
+      local.opensearch_snapshots_bucket_arn,
+      "${local.opensearch_snapshots_bucket_arn}/*",
     ]
     condition {
       test     = "Bool"
