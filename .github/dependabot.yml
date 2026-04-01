@@ -1,16 +1,14 @@
 version: 2
 updates:
-  - package-ecosystem: bundler
-    directory: /
-    schedule:
-      interval: weekly
+  # Docker base images
+  # Terraform and GitHub Actions are managed by Renovate (see renovate.json)
   - package-ecosystem: docker
-    ignore:
-      - dependency-name: ruby
     directory: /images/
     schedule:
-      interval: weekly
-  - package-ecosystem: github-actions
-    directory: /
-    schedule:
-      interval: weekly
+      interval: monthly
+      time: "10:30"
+      timezone: "Europe/London"
+    cooldown:
+      default-days: 7
+    ignore:
+      - dependency-name: ruby
