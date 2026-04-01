@@ -39,10 +39,6 @@ variable "aws_region" {
   description = "AWS region"
   default     = "eu-west-1"
 }
-variable "govuk_environment" {
-  type        = string
-  description = "Acceptable values are test, integration, staging, production"
-}
 variable "test_opensearch_url" {
   type        = string
   description = "The public endpoint for chat-engine-test Opensearch cluster"

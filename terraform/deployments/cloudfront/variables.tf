@@ -8,11 +8,6 @@ variable "aws_region_global" {
   default = "us-east-1"
 }
 
-variable "govuk_environment" {
-  type        = string
-  description = "Name of the environment (AWS account) being deployed to."
-}
-
 variable "cloudfront_enable" {
   description = "Enable Cloudfront distributions."
   type        = bool
