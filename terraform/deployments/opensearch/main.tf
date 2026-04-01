@@ -20,7 +20,6 @@ provider "aws" {
     tags = {
       product              = "govuk"
       system               = "govuk-chat"
-      service              = "opensearch"
       environment          = var.govuk_environment
       owner                = "govuk-platform-engineering@digital.cabinet-office.gov.uk"
       repository           = "govuk-infrastructure"
