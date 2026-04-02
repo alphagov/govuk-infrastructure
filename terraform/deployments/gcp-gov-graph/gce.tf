@@ -552,7 +552,7 @@ resource "google_compute_instance_template" "redis_cli" {
 
 import {
   id = "projects/${var.project_id}/global/instanceTemplates/redis-cli"
-  to = google_compute_instance_template.redis_cli
+  to = google_compute_instance_template.redis_cli[0]
 }
 
 resource "google_compute_instance_template" "whitehall" {
