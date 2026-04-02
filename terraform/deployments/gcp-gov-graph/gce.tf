@@ -550,6 +550,11 @@ resource "google_compute_instance_template" "redis_cli" {
   }
 }
 
+import {
+  id = "projects/${var.project_id}/global/instanceTemplates/redis-cli"
+  to = google_compute_instance_template.redis_cli
+}
+
 resource "google_compute_instance_template" "whitehall" {
   name         = "whitehall"
   machine_type = "c2d-highmem-2"
