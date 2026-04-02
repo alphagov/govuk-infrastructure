@@ -12,21 +12,6 @@ module "secure_s3_bucket_manual_snapshots" {
   extra_bucket_policies = [data.aws_iam_policy_document.manual_snapshots_cross_account_access.json]
 }
 
-moved {
-  from = aws_s3_bucket.manual_snapshots
-  to   = module.secure_s3_bucket_manual_snapshots.aws_s3_bucket.this
-}
-
-moved {
-  from = aws_s3_bucket_logging.manual_snapshots
-  to   = module.secure_s3_bucket_manual_snapshots.aws_s3_bucket_logging.this
-}
-
-moved {
-  from = aws_s3_bucket_policy.manual_snapshots_cross_account_access
-  to   = module.secure_s3_bucket_manual_snapshots.aws_s3_bucket_policy.bucket_policy
-}
-
 data "aws_iam_policy_document" "manual_snapshots_cross_account_access" {
   statement {
     sid = "CrossAccountAccess"

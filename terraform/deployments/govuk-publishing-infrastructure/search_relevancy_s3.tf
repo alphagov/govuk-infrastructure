@@ -24,28 +24,3 @@ module "secure_s3_bucket_search_relevancy" {
     }
   ]
 }
-
-moved {
-  from = aws_s3_bucket.search_relevancy_bucket
-  to   = module.secure_s3_bucket_search_relevancy.aws_s3_bucket.this
-}
-
-moved {
-  from = aws_s3_bucket_logging.search_relevancy_bucket
-  to   = module.secure_s3_bucket_search_relevancy.aws_s3_bucket_logging.this
-}
-
-moved {
-  from = aws_s3_bucket_lifecycle_configuration.search_relevancy_bucket
-  to   = module.secure_s3_bucket_search_relevancy.aws_s3_bucket_lifecycle_configuration.this[0]
-}
-
-import {
-  to = module.secure_s3_bucket_search_relevancy.aws_s3_bucket_versioning.this
-  id = local.secure_s3_bucket_search_relevancy_name
-}
-
-import {
-  to = module.secure_s3_bucket_search_relevancy.aws_s3_bucket_server_side_encryption_configuration.this
-  id = local.secure_s3_bucket_search_relevancy_name
-}

@@ -13,36 +13,6 @@ module "secure_s3_bucket_opensearch_snapshots" {
   extra_bucket_policies = [data.aws_iam_policy_document.opensearch_snapshot_bucket_policy.json]
 }
 
-moved {
-  from = aws_s3_bucket.opensearch_snapshot
-  to   = module.secure_s3_bucket_opensearch_snapshots.aws_s3_bucket.this
-}
-
-moved {
-  from = aws_s3_bucket_public_access_block.opensearch_snapshot
-  to   = module.secure_s3_bucket_opensearch_snapshots.aws_s3_bucket_public_access_block.this[0]
-}
-
-moved {
-  from = aws_s3_bucket_logging.opensearch_snapshot
-  to   = module.secure_s3_bucket_opensearch_snapshots.aws_s3_bucket_logging.this
-}
-
-moved {
-  from = aws_s3_bucket_versioning.opensearch_snapshot
-  to   = module.secure_s3_bucket_opensearch_snapshots.aws_s3_bucket_versioning.this
-}
-
-moved {
-  from = aws_s3_bucket_server_side_encryption_configuration.opensearch_snapshot
-  to   = module.secure_s3_bucket_opensearch_snapshots.aws_s3_bucket_server_side_encryption_configuration.this
-}
-
-moved {
-  from = aws_s3_bucket_policy.opensearch_snapshot
-  to   = module.secure_s3_bucket_opensearch_snapshots.aws_s3_bucket_policy.bucket_policy
-}
-
 data "aws_iam_policy_document" "opensearch_snapshot_bucket_policy" {
   statement {
     sid = "CrossAccountAccess"
