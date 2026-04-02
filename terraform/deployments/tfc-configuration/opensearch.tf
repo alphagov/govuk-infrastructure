@@ -11,7 +11,8 @@ module "opensearch-integration" {
   trigger_patterns = [
     "/terraform/deployments/opensearch/**/*",
     "/terraform/variables/integration/common.tfvars",
-    "/terraform/variables/integration/opensearch.tfvars"
+    "/terraform/variables/integration/opensearch.tfvars",
+    "/terraform/shared-modules/s3/**/*",
   ]
 
   project_name = "govuk-infrastructure"
@@ -49,7 +50,8 @@ module "opensearch-staging" {
   trigger_patterns = [
     "/terraform/deployments/opensearch/**/*",
     "/terraform/variables/staging/common.tfvars",
-    "/terraform/variables/staging/opensearch.tfvars"
+    "/terraform/variables/staging/opensearch.tfvars",
+    "/terraform/shared-modules/s3/**/*",
   ]
 
   project_name = "govuk-infrastructure"
@@ -86,7 +88,8 @@ module "opensearch-production" {
   trigger_patterns = [
     "/terraform/deployments/opensearch/**/*",
     "/terraform/variables/production/common.tfvars",
-    "/terraform/variables/production/opensearch.tfvars"
+    "/terraform/variables/production/opensearch.tfvars",
+    "/terraform/shared-modules/s3/**/*",
   ]
 
   project_name = "govuk-infrastructure"

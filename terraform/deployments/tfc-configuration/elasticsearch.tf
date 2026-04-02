@@ -11,7 +11,8 @@ module "elasticsearch-integration" {
   trigger_patterns = [
     "/terraform/deployments/elasticsearch/**/*",
     "/terraform/variables/integration/common.tfvars",
-    "/terraform/variables/integration/elasticsearch.tfvars"
+    "/terraform/variables/integration/elasticsearch.tfvars",
+    "/terraform/shared-modules/s3/**/*",
   ]
 
   project_name = "govuk-infrastructure"
@@ -49,7 +50,8 @@ module "elasticsearch-staging" {
   trigger_patterns = [
     "/terraform/deployments/elasticsearch/**/*",
     "/terraform/variables/staging/common.tfvars",
-    "/terraform/variables/staging/elasticsearch.tfvars"
+    "/terraform/variables/staging/elasticsearch.tfvars",
+    "/terraform/shared-modules/s3/**/*",
   ]
 
   project_name = "govuk-infrastructure"
@@ -87,7 +89,8 @@ module "elasticsearch-production" {
   trigger_patterns = [
     "/terraform/deployments/elasticsearch/**/*",
     "/terraform/variables/production/common.tfvars",
-    "/terraform/variables/production/elasticsearch.tfvars"
+    "/terraform/variables/production/elasticsearch.tfvars",
+    "/terraform/shared-modules/s3/**/*",
   ]
 
   project_name = "govuk-infrastructure"
