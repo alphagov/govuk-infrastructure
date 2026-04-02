@@ -20,6 +20,19 @@ Before you can use this module, you must:
 - specify values for `folder_id` and `billing_account` as parameters to
   `terraform` or through a (gitignored) `local.auto.tfvars` file
 
+### Terraform
+
+#### google_compute_instance_template
+Various GCE templates are defined for the VMs (`resource google_compute_instance_template`).
+Google periodically updates the base images upstream and so sometimes a `terraform plan/apply` may throw up a number of replacement changes to these resources. This is normal and the plan may be applied. However, it is worth monitoring this in dev just to be sure that no low-level binaries in the image cause breaking changes to the ingestion.
+
+#### google_cloud_run_service.govgraphsearch
+The current deployment process configures most of the Cloud Run services in terraform. However, the deployment of new GovSearch revisions uses the `gcloud` cli in the CI. This can cause drift in some of the `run.googleapis.com/client-*` annotations and an apparent update to the image. The image will not be updated, just the tag used to pull it. These updates can be safely applied. This will create a new revision but you can verify that the image hash has not changed between revisions by checking the `spec.containers.image` property in the revision via the Cloud Run UI.
+
+## Access and permissions
+
+People are granted access by membership of Google Groups.  Other Google Cloud Platform projects are granted access via service accounts.  Access is granted by editing each environment's tfvars file, such as `../variables/integration/gcp-gov-graph.tfvars`.
+
 ## Additional information
 ### Adding additional GCP quota overrides
 Quota overrides on GCP are somewhat complex to set up and use inconsistent terminology between the
