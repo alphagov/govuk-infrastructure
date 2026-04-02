@@ -21,6 +21,10 @@ provider "google" {
   project = "gds-bq-processing"
 }
 
+provider "google-beta" {
+  project = "gds-bq-processing"
+}
+
 resource "google_project" "project" {
   name            = "gds-bq-processing"
   project_id      = "gds-bq-processing"
