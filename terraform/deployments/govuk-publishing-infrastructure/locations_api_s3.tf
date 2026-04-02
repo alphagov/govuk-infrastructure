@@ -21,18 +21,18 @@ module "secure_s3_bucket_locations_api_import_csvs" {
 }
 
 moved {
-  from = aws_s3_bucket.locations_api_import_csvs
+  from = aws_s3_bucket.location_api_import_csvs
   to   = module.secure_s3_bucket_locations_api_import_csvs.aws_s3_bucket.this
 }
 
 moved {
-  from = aws_s3_bucket_versioning.locations_api_import_csvs
+  from = aws_s3_bucket_versioning.location_api_import_csvs
   to   = module.secure_s3_bucket_locations_api_import_csvs.aws_s3_bucket_versioning.this
 }
 
 moved {
   from = aws_s3_bucket_policy.location_api_import_csvs
-  to   = module.secure_s3_bucket_locations_api_import_csvs.aws_s3_bucket_policy.this
+  to   = module.secure_s3_bucket_locations_api_import_csvs.aws_s3_bucket_policy.bucket_policy
 }
 
 data "aws_iam_policy_document" "location_api_import_csvs" {

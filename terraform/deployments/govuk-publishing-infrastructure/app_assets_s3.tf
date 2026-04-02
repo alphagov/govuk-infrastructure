@@ -21,26 +21,6 @@ module "secure_s3_bucket_app_assets" {
   }
 }
 
-moved {
-  from = aws_s3_bucket.app_assets
-  to   = module.secure_s3_bucket_app_assets.aws_s3_bucket.this
-}
-
-moved {
-  from = aws_s3_bucket_versioning.app_assets
-  to   = module.secure_s3_bucket_app_assets.aws_s3_bucket_versioning.this
-}
-
-moved {
-  from = aws_s3_bucket_policy.app_assets
-  to   = module.secure_s3_bucket_app_assets.aws_s3_bucket_policy.bucket_policy
-}
-
-import {
-  to = module.secure_s3_bucket_app_assets.aws_s3_bucket_server_side_encryption_configuration.this
-  id = local.secure_s3_bucket_app_assets_name
-}
-
 # TODO: instead of granting write access to nodes, use IRSA (IAM Roles for
 # Service Accounts aka pod identity) so that only Argo CD can write.
 data "aws_iam_policy_document" "app_assets" {
