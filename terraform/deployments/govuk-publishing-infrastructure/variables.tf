@@ -1,14 +1,3 @@
-variable "govuk_environment" {
-  type        = string
-  description = "GOV.UK environment where resources are being deployed"
-}
-
-variable "force_destroy" {
-  type        = bool
-  description = "Setting for force_destroy on resources such as S3 buckets and Route53 zones. For use in non-production environments to allow for automated tear-down."
-  default     = false
-}
-
 variable "frontend_memcached_node_type" {
   type        = string
   description = "Instance type for the Frontend memcached."
@@ -57,11 +46,6 @@ variable "search_api_lb_dns_name" {
 variable "search_api_domain" {
   type        = string
   description = "The domain name of the API gateway"
-}
-
-variable "publishing_service_domain" {
-  type        = string
-  description = "FQDN of the user-facing domain for the publishing apps, e.g. staging.publishing.service.gov.uk. This domain is included as a wildcard SAN on the TLS cert for Ingresses etc."
 }
 
 variable "publishing_certificate_arn" {

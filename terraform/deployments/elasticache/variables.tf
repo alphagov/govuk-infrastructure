@@ -1,8 +1,3 @@
-variable "govuk_environment" {
-  type        = string
-  description = "GOV.UK environment name"
-}
-
 variable "caches" {
   type = map(object({
     name                       = string

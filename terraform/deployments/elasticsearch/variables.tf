@@ -4,11 +4,6 @@ variable "aws_region" {
   default     = "eu-west-1"
 }
 
-variable "govuk_environment" {
-  type        = string
-  description = "Acceptable values are test, integration, staging, production"
-}
-
 variable "stackname" {
   type        = string
   description = "Name of the stack, valid options are 'blue' and 'green'"

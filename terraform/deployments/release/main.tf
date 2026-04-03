@@ -2,7 +2,7 @@ terraform {
   cloud {
     organization = "govuk"
     workspaces {
-      tags = ["release-assumer", "aws"]
+      tags = ["release", "aws"]
     }
   }
 

@@ -1,8 +1,3 @@
-variable "govuk_environment" {
-  type        = string
-  description = "GOV.UK environment where resources are being deployed"
-}
-
 variable "aws_region" {
   type        = string
   description = "AWS region"
@@ -19,11 +14,6 @@ variable "traffic_type" {
   type        = string
   description = "The traffic type to capture. Allows ACCEPT, ALL or REJECT"
   default     = "REJECT"
-}
-
-variable "cluster_log_retention_in_days" {
-  type        = string
-  description = "Number of days to retain Cloudwatch logs for"
 }
 
 variable "cyber_slunk_s3_bucket_name" {

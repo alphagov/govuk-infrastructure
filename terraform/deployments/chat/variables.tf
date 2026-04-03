@@ -7,10 +7,6 @@ variable "aws_region_global" {
   type    = string
   default = "us-east-1"
 }
-variable "govuk_environment" {
-  type        = string
-  description = "Acceptable values are test, integration, staging, production"
-}
 
 variable "chat_redis_cluster_apply_immediately" {
   type        = bool
