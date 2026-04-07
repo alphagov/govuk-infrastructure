@@ -11,6 +11,7 @@ module "mobile-backend-production" {
   trigger_patterns = [
     "/terraform/deployments/mobile-backend/**/*",
     "/terraform/variables/production/common.tfvars",
+    "/terraform/variables/variables-common.tf",
     "/terraform/variables/production/mobile-backend.tfvars"
   ]
   global_remote_state = true
@@ -49,6 +50,7 @@ module "mobile-backend-staging" {
   trigger_patterns = [
     "/terraform/deployments/mobile-backend/**/*",
     "/terraform/variables/staging/common.tfvars",
+    "/terraform/variables/variables-common.tf",
     "/terraform/variables/staging/mobile-backend.tfvars"
   ]
   global_remote_state = true
@@ -87,6 +89,7 @@ module "mobile-backend-integration" {
   trigger_patterns = [
     "/terraform/deployments/mobile-backend/**/*",
     "/terraform/variables/integration/common.tfvars",
+    "/terraform/variables/variables-common.tf",
     "/terraform/variables/integration/mobile-backend.tfvars"
   ]
   global_remote_state = true

@@ -11,6 +11,7 @@ module "cluster-services-integration" {
   trigger_patterns = [
     "/terraform/deployments/cluster-services/**/*",
     "/terraform/variables/integration/common.tfvars",
+    "/terraform/variables/variables-common.tf",
     "/terraform/variables/integration/cluster-services.tfvars"
   ]
 
@@ -51,6 +52,7 @@ module "cluster-services-staging" {
   trigger_patterns = [
     "/terraform/deployments/cluster-services/**/*",
     "/terraform/variables/staging/common.tfvars",
+    "/terraform/variables/variables-common.tf",
     "/terraform/variables/staging/cluster-services.tfvars"
   ]
 
@@ -90,6 +92,7 @@ module "cluster-services-production" {
   trigger_patterns = [
     "/terraform/deployments/cluster-services/**/*",
     "/terraform/variables/production/common.tfvars",
+    "/terraform/variables/variables-common.tf",
     "/terraform/variables/production/cluster-services.tfvars"
   ]
 

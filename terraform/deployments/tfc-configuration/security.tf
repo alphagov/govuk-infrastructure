@@ -11,6 +11,7 @@ module "security-integration" {
   trigger_patterns = [
     "/terraform/deployments/security/**/*",
     "/terraform/variables/integration/common.tfvars",
+    "/terraform/variables/variables-common.tf",
     "/terraform/variables/integration/security.tfvars"
   ]
   global_remote_state = true
@@ -52,6 +53,7 @@ module "security-staging" {
   trigger_patterns = [
     "/terraform/deployments/security/**/*",
     "/terraform/variables/staging/common.tfvars",
+    "/terraform/variables/variables-common.tf",
     "/terraform/variables/staging/security.tfvars"
   ]
   global_remote_state = true
@@ -92,6 +94,7 @@ module "security-production" {
   trigger_patterns = [
     "/terraform/deployments/security/**/*",
     "/terraform/variables/production/common.tfvars",
+    "/terraform/variables/variables-common.tf",
     "/terraform/variables/production/security.tfvars"
   ]
   global_remote_state = true

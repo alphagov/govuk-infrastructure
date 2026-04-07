@@ -11,6 +11,7 @@ module "govuk-reports-integration" {
   trigger_patterns = [
     "/terraform/deployments/govuk-reports/**/*",
     "/terraform/variables/integration/common.tfvars",
+    "/terraform/variables/variables-common.tf",
     "/terraform/variables/integration/govuk-reports.tfvars"
   ]
   global_remote_state = true

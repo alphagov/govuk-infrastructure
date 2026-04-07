@@ -11,6 +11,7 @@ module "govuk-publishing-infrastructure-integration" {
   trigger_patterns = [
     "/terraform/deployments/govuk-publishing-infrastructure/**/*",
     "/terraform/variables/integration/common.tfvars",
+    "/terraform/variables/variables-common.tf",
     "/terraform/variables/integration/govuk-publishing-infrastructure.tfvars",
     "/terraform/shared-modules/s3/**/*",
   ]
@@ -53,6 +54,7 @@ module "govuk-publishing-infrastructure-staging" {
   trigger_patterns = [
     "/terraform/deployments/govuk-publishing-infrastructure/**/*",
     "/terraform/variables/staging/common.tfvars",
+    "/terraform/variables/variables-common.tf",
     "/terraform/variables/staging/govuk-publishing-infrastructure.tfvars",
     "/terraform/shared-modules/s3/**/*",
   ]
@@ -94,6 +96,7 @@ module "govuk-publishing-infrastructure-production" {
   trigger_patterns = [
     "/terraform/deployments/govuk-publishing-infrastructure/**/*",
     "/terraform/variables/production/common.tfvars",
+    "/terraform/variables/variables-common.tf",
     "/terraform/variables/production/govuk-publishing-infrastructure.tfvars",
     "/terraform/shared-modules/s3/**/*",
   ]

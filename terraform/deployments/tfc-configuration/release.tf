@@ -11,6 +11,7 @@ module "release-integration" {
   trigger_patterns = [
     "/terraform/deployments/release/**/*",
     "/terraform/variables/integration/common.tfvars",
+    "/terraform/variables/variables-common.tf",
     "/terraform/variables/integration/release.tfvars"
   ]
   global_remote_state = true
@@ -50,6 +51,7 @@ module "release-staging" {
   trigger_patterns = [
     "/terraform/deployments/release/**/*",
     "/terraform/variables/staging/common.tfvars",
+    "/terraform/variables/variables-common.tf",
     "/terraform/variables/staging/release.tfvars"
   ]
   global_remote_state = true
@@ -88,6 +90,7 @@ module "release-production" {
   trigger_patterns = [
     "/terraform/deployments/release/**/*",
     "/terraform/variables/production/common.tfvars",
+    "/terraform/variables/variables-common.tf",
     "/terraform/variables/production/release.tfvars"
   ]
   global_remote_state = true

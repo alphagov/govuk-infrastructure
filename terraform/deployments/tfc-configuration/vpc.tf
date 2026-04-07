@@ -11,6 +11,7 @@ module "vpc-integration" {
   trigger_patterns = [
     "/terraform/deployments/vpc/**/*",
     "/terraform/variables/integration/common.tfvars",
+    "/terraform/variables/variables-common.tf",
     "/terraform/variables/integration/vpc.tfvars"
   ]
   global_remote_state = true
@@ -51,6 +52,7 @@ module "vpc-staging" {
   trigger_patterns = [
     "/terraform/deployments/vpc/**/*",
     "/terraform/variables/staging/common.tfvars",
+    "/terraform/variables/variables-common.tf",
     "/terraform/variables/staging/vpc.tfvars"
   ]
   global_remote_state = true
@@ -90,6 +92,7 @@ module "vpc-production" {
   trigger_patterns = [
     "/terraform/deployments/vpc/**/*",
     "/terraform/variables/production/common.tfvars",
+    "/terraform/variables/variables-common.tf",
     "/terraform/variables/production/vpc.tfvars"
   ]
   global_remote_state = true

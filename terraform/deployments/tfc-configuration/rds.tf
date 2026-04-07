@@ -11,6 +11,7 @@ module "rds-integration" {
   trigger_patterns = [
     "/terraform/deployments/rds/**/*",
     "/terraform/variables/integration/common.tfvars",
+    "/terraform/variables/variables-common.tf",
     "/terraform/variables/integration/rds.tfvars",
     "/terraform/shared-modules/s3/**/*",
   ]
@@ -56,6 +57,7 @@ module "rds-staging" {
   trigger_patterns = [
     "/terraform/deployments/rds/**/*",
     "/terraform/variables/staging/common.tfvars",
+    "/terraform/variables/variables-common.tf",
     "/terraform/variables/staging/rds.tfvars",
     "/terraform/shared-modules/s3/**/*",
   ]
@@ -100,6 +102,7 @@ module "rds-production" {
   trigger_patterns = [
     "/terraform/deployments/rds/**/*",
     "/terraform/variables/production/common.tfvars",
+    "/terraform/variables/variables-common.tf",
     "/terraform/variables/production/rds.tfvars",
     "/terraform/shared-modules/s3/**/*",
   ]

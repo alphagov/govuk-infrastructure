@@ -11,6 +11,7 @@ module "cluster-infrastructure-integration" {
   trigger_patterns = [
     "/terraform/deployments/cluster-infrastructure/**/*",
     "/terraform/variables/integration/common.tfvars",
+    "/terraform/variables/variables-common.tf",
     "/terraform/variables/integration/cluster-infrastructure.tfvars"
   ]
   global_remote_state = true
@@ -50,6 +51,7 @@ module "cluster-infrastructure-staging" {
   trigger_patterns = [
     "/terraform/deployments/cluster-infrastructure/**/*",
     "/terraform/variables/staging/common.tfvars",
+    "/terraform/variables/variables-common.tf",
     "/terraform/variables/staging/cluster-infrastructure.tfvars"
   ]
   global_remote_state = true
@@ -89,6 +91,7 @@ module "cluster-infrastructure-production" {
   trigger_patterns = [
     "/terraform/deployments/cluster-infrastructure/**/*",
     "/terraform/variables/production/common.tfvars",
+    "/terraform/variables/variables-common.tf",
     "/terraform/variables/production/cluster-infrastructure.tfvars"
   ]
   global_remote_state = true

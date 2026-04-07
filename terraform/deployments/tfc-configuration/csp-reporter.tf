@@ -11,6 +11,7 @@ module "csp-reporter-integration" {
   trigger_patterns = [
     "/terraform/deployments/csp-reporter/**/*",
     "/terraform/variables/integration/common.tfvars",
+    "/terraform/variables/variables-common.tf",
     "/terraform/variables/integration/csp-reporter.tfvars",
     "/terraform/shared-modules/s3/**/*",
   ]
@@ -50,6 +51,7 @@ module "csp-reporter-staging" {
   trigger_patterns = [
     "/terraform/deployments/csp-reporter/**/*",
     "/terraform/variables/staging/common.tfvars",
+    "/terraform/variables/variables-common.tf",
     "/terraform/variables/staging/csp-reporter.tfvars",
     "/terraform/shared-modules/s3/**/*",
   ]
@@ -88,6 +90,7 @@ module "csp-reporter-production" {
   trigger_patterns = [
     "/terraform/deployments/csp-reporter/**/*",
     "/terraform/variables/production/common.tfvars",
+    "/terraform/variables/variables-common.tf",
     "/terraform/variables/production/csp-reporter.tfvars",
     "/terraform/shared-modules/s3/**/*",
   ]

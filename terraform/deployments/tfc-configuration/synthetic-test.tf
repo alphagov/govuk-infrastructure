@@ -11,6 +11,7 @@ module "synthetic-test-integration" {
   trigger_patterns = [
     "/terraform/deployments/synthetic-test/**/*",
     "/terraform/variables/integration/common.tfvars",
+    "/terraform/variables/variables-common.tf",
     "/terraform/variables/integration/synthetic-test.tfvars"
   ]
   global_remote_state = true
@@ -50,6 +51,7 @@ module "synthetic-test-staging" {
   trigger_patterns = [
     "/terraform/deployments/synthetic-test/**/*",
     "/terraform/variables/staging/common.tfvars",
+    "/terraform/variables/variables-common.tf",
     "/terraform/variables/staging/synthetic-test.tfvars"
   ]
   global_remote_state = true
@@ -88,6 +90,7 @@ module "synthetic-test-production" {
   trigger_patterns = [
     "/terraform/deployments/synthetic-test/**/*",
     "/terraform/variables/production/common.tfvars",
+    "/terraform/variables/variables-common.tf",
     "/terraform/variables/production/synthetic-test.tfvars"
   ]
   global_remote_state = true

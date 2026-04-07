@@ -13,6 +13,7 @@ module "cluster-access-integration" {
   trigger_patterns = [
     "/terraform/deployments/cluster-access/**/*",
     "/terraform/variables/integration/common.tfvars",
+    "/terraform/variables/variables-common.tf",
     "/terraform/variables/integration/cluster-access.tfvars"
   ]
 
@@ -55,6 +56,7 @@ module "cluster-access-staging" {
   trigger_patterns = [
     "/terraform/deployments/cluster-access/**/*",
     "/terraform/variables/staging/common.tfvars",
+    "/terraform/variables/variables-common.tf",
     "/terraform/variables/staging/cluster-access.tfvars"
   ]
 
@@ -96,6 +98,7 @@ module "cluster-access-production" {
   trigger_patterns = [
     "/terraform/deployments/cluster-access/**/*",
     "/terraform/variables/production/common.tfvars",
+    "/terraform/variables/variables-common.tf",
     "/terraform/variables/production/cluster-access.tfvars"
   ]
 

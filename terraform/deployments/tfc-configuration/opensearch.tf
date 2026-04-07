@@ -11,6 +11,7 @@ module "opensearch-integration" {
   trigger_patterns = [
     "/terraform/deployments/opensearch/**/*",
     "/terraform/variables/integration/common.tfvars",
+    "/terraform/variables/variables-common.tf",
     "/terraform/variables/integration/opensearch.tfvars",
     "/terraform/shared-modules/s3/**/*",
   ]
@@ -50,6 +51,7 @@ module "opensearch-staging" {
   trigger_patterns = [
     "/terraform/deployments/opensearch/**/*",
     "/terraform/variables/staging/common.tfvars",
+    "/terraform/variables/variables-common.tf",
     "/terraform/variables/staging/opensearch.tfvars",
     "/terraform/shared-modules/s3/**/*",
   ]
@@ -88,6 +90,7 @@ module "opensearch-production" {
   trigger_patterns = [
     "/terraform/deployments/opensearch/**/*",
     "/terraform/variables/production/common.tfvars",
+    "/terraform/variables/variables-common.tf",
     "/terraform/variables/production/opensearch.tfvars",
     "/terraform/shared-modules/s3/**/*",
   ]

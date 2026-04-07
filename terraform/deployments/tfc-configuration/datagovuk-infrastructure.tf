@@ -11,6 +11,7 @@ module "datagovuk-infrastructure-integration" {
   trigger_patterns = [
     "/terraform/deployments/datagovuk-infrastructure/**/*",
     "/terraform/variables/integration/common.tfvars",
+    "/terraform/variables/variables-common.tf",
     "/terraform/variables/integration/datagovuk-infrastructure.tfvars"
   ]
 
@@ -49,6 +50,7 @@ module "datagovuk-infrastructure-staging" {
   trigger_patterns = [
     "/terraform/deployments/datagovuk-infrastructure/**/*",
     "/terraform/variables/staging/common.tfvars",
+    "/terraform/variables/variables-common.tf",
     "/terraform/variables/staging/datagovuk-infrastructure.tfvars"
   ]
 
@@ -86,6 +88,7 @@ module "datagovuk-infrastructure-production" {
   trigger_patterns = [
     "/terraform/deployments/datagovuk-infrastructure/**/*",
     "/terraform/variables/production/common.tfvars",
+    "/terraform/variables/variables-common.tf",
     "/terraform/variables/production/datagovuk-infrastructure.tfvars"
   ]
 
