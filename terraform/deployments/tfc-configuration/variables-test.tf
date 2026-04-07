@@ -50,5 +50,7 @@ module "variable-set-ephemeral" {
     }
 
     govuk_environment = "ephemeral"
+
+    publishing_service_domain = "ephemeral.publishing.service.gov.uk"
   }
 }

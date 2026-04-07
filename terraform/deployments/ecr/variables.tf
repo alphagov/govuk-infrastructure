@@ -7,8 +7,3 @@ variable "emails" {
   type    = list(string)
   default = []
 }
-
-variable "govuk_environment" {
-  type        = string
-  description = "Acceptable values are test, integration, staging, production"
-}

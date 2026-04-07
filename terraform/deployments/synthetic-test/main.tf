@@ -2,7 +2,7 @@ terraform {
   cloud {
     organization = "govuk"
     workspaces {
-      tags = ["synthetic-test-assumer", "aws"]
+      tags = ["synthetic-test", "aws"]
     }
   }
 
