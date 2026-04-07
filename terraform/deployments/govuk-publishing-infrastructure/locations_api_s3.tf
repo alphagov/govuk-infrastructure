@@ -12,7 +12,7 @@ module "secure_s3_bucket_locations_api_import_csvs" {
   versioning_enabled   = true
   versioning_suspended = true
 
-  extra_bucket_policies = [data.aws_iam_policy_document.app_assets.json]
+  extra_bucket_policies = [data.aws_iam_policy_document.location_api_import_csvs.json]
 
   tags = {
     System      = "Locations API"
