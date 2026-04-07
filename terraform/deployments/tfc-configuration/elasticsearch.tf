@@ -11,6 +11,7 @@ module "elasticsearch-integration" {
   trigger_patterns = [
     "/terraform/deployments/elasticsearch/**/*",
     "/terraform/variables/integration/common.tfvars",
+    "/terraform/variables/variables-common.tf",
     "/terraform/variables/integration/elasticsearch.tfvars",
     "/terraform/shared-modules/s3/**/*",
   ]
@@ -50,6 +51,7 @@ module "elasticsearch-staging" {
   trigger_patterns = [
     "/terraform/deployments/elasticsearch/**/*",
     "/terraform/variables/staging/common.tfvars",
+    "/terraform/variables/variables-common.tf",
     "/terraform/variables/staging/elasticsearch.tfvars",
     "/terraform/shared-modules/s3/**/*",
   ]
@@ -89,6 +91,7 @@ module "elasticsearch-production" {
   trigger_patterns = [
     "/terraform/deployments/elasticsearch/**/*",
     "/terraform/variables/production/common.tfvars",
+    "/terraform/variables/variables-common.tf",
     "/terraform/variables/production/elasticsearch.tfvars",
     "/terraform/shared-modules/s3/**/*",
   ]

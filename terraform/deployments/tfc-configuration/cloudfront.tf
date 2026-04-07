@@ -11,6 +11,7 @@ module "cloudfront-staging" {
   trigger_patterns = [
     "/terraform/deployments/cloudfront/**/*",
     "/terraform/variables/staging/common.tfvars",
+    "/terraform/variables/variables-common.tf",
     "/terraform/variables/staging/cloudfront.tfvars"
   ]
   global_remote_state = true
@@ -49,6 +50,7 @@ module "cloudfront-production" {
   trigger_patterns = [
     "/terraform/deployments/cloudfront/**/*",
     "/terraform/variables/production/common.tfvars",
+    "/terraform/variables/variables-common.tf",
     "/terraform/variables/production/cloudfront.tfvars"
   ]
   global_remote_state = true

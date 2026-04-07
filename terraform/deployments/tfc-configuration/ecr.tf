@@ -11,6 +11,7 @@ module "ecr-production" {
   trigger_patterns = [
     "/terraform/deployments/ecr/**/*",
     "/terraform/variables/production/common.tfvars",
+    "/terraform/variables/variables-common.tf",
     "/terraform/variables/production/ecr.tfvars"
   ]
   global_remote_state = true

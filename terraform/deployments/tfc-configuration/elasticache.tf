@@ -11,6 +11,7 @@ module "elasticache-integration" {
   trigger_patterns = [
     "/terraform/deployments/elasticache/**/*",
     "/terraform/variables/integration/common.tfvars",
+    "/terraform/variables/variables-common.tf",
     "/terraform/variables/integration/elasticache.tfvars"
   ]
   global_remote_state = true
@@ -50,6 +51,7 @@ module "elasticache-staging" {
   trigger_patterns = [
     "/terraform/deployments/elasticache/**/*",
     "/terraform/variables/staging/common.tfvars",
+    "/terraform/variables/variables-common.tf",
     "/terraform/variables/staging/elasticache.tfvars"
   ]
   global_remote_state = true
@@ -89,6 +91,7 @@ module "elasticache-production" {
   trigger_patterns = [
     "/terraform/deployments/elasticache/**/*",
     "/terraform/variables/production/common.tfvars",
+    "/terraform/variables/variables-common.tf",
     "/terraform/variables/production/elasticache.tfvars"
   ]
   global_remote_state = true

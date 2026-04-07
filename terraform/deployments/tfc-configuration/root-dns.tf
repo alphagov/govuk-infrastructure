@@ -42,6 +42,7 @@ module "root-dns-integration" {
   trigger_patterns = [
     "/terraform/deployments/root-dns/**/*",
     "/terraform/variables/integration/common.tfvars",
+    "/terraform/variables/variables-common.tf",
     "/terraform/variables/integration/root-dns.tfvars"
   ]
   global_remote_state = true
@@ -82,6 +83,7 @@ module "root-dns-staging" {
   trigger_patterns = [
     "/terraform/deployments/root-dns/**/*",
     "/terraform/variables/staging/common.tfvars",
+    "/terraform/variables/variables-common.tf",
     "/terraform/variables/staging/root-dns.tfvars"
   ]
   global_remote_state = true
@@ -121,6 +123,7 @@ module "root-dns-production" {
   trigger_patterns = [
     "/terraform/deployments/root-dns/**/*",
     "/terraform/variables/production/common.tfvars",
+    "/terraform/variables/variables-common.tf",
     "/terraform/variables/production/root-dns.tfvars"
   ]
   global_remote_state = true

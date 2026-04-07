@@ -11,6 +11,7 @@ module "neptune-integration" {
   trigger_patterns = [
     "/terraform/deployments/neptune/**/*",
     "/terraform/variables/integration/common.tfvars",
+    "/terraform/variables/variables-common.tf",
     "/terraform/variables/integration/neptune.tfvars"
   ]
   global_remote_state = true

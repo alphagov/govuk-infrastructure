@@ -13,6 +13,7 @@ module "ai-accelerator-integration" {
     "/terraform/shared-modules/opensearch-blue-green-deployment/**/*",
     "/terraform/shared-modules/s3/**/*",
     "/terraform/variables/integration/common.tfvars",
+    "/terraform/variables/variables-common.tf",
     "/terraform/variables/integration/ai-accelerator.tfvars"
   ]
   global_remote_state = true

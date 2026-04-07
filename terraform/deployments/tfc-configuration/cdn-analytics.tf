@@ -11,6 +11,7 @@ module "cdn-analytics-integration" {
   trigger_patterns = [
     "/terraform/deployments/cdn-analytics/**/*",
     "/terraform/variables/integration/common.tfvars",
+    "/terraform/variables/variables-common.tf",
     "/terraform/variables/integration/cdn-analytics.tfvars"
   ]
   global_remote_state = true
@@ -50,6 +51,7 @@ module "cdn-analytics-staging" {
   trigger_patterns = [
     "/terraform/deployments/cdn-analytics/**/*",
     "/terraform/variables/staging/common.tfvars",
+    "/terraform/variables/variables-common.tf",
     "/terraform/variables/staging/cdn-analytics.tfvars"
   ]
   global_remote_state = true
@@ -88,6 +90,7 @@ module "cdn-analytics-production" {
   trigger_patterns = [
     "/terraform/deployments/cdn-analytics/**/*",
     "/terraform/variables/production/common.tfvars",
+    "/terraform/variables/variables-common.tf",
     "/terraform/variables/production/cdn-analytics.tfvars"
   ]
   global_remote_state = true

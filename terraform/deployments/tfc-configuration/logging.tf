@@ -11,6 +11,7 @@ module "logging-integration" {
   trigger_patterns = [
     "/terraform/deployments/logging/**/*",
     "/terraform/variables/integration/common.tfvars",
+    "/terraform/variables/variables-common.tf",
     "/terraform/variables/integration/logging.tfvars"
   ]
   global_remote_state = true
@@ -51,6 +52,7 @@ module "logging-staging" {
   trigger_patterns = [
     "/terraform/deployments/logging/**/*",
     "/terraform/variables/staging/common.tfvars",
+    "/terraform/variables/variables-common.tf",
     "/terraform/variables/staging/logging.tfvars"
   ]
   global_remote_state = true
@@ -90,6 +92,7 @@ module "logging-production" {
   trigger_patterns = [
     "/terraform/deployments/logging/**/*",
     "/terraform/variables/production/common.tfvars",
+    "/terraform/variables/variables-common.tf",
     "/terraform/variables/production/logging.tfvars"
   ]
   global_remote_state = true

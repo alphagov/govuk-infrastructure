@@ -11,6 +11,7 @@ module "chat-integration" {
   trigger_patterns = [
     "/terraform/deployments/chat/**/*",
     "/terraform/variables/integration/common.tfvars",
+    "/terraform/variables/variables-common.tf",
     "/terraform/variables/integration/chat.tfvars"
   ]
   global_remote_state = true
@@ -50,6 +51,7 @@ module "chat-staging" {
   trigger_patterns = [
     "/terraform/deployments/chat/**/*",
     "/terraform/variables/staging/common.tfvars",
+    "/terraform/variables/variables-common.tf",
     "/terraform/variables/staging/chat.tfvars"
   ]
   global_remote_state = true
@@ -89,6 +91,7 @@ module "chat-production" {
   trigger_patterns = [
     "/terraform/deployments/chat/**/*",
     "/terraform/variables/production/common.tfvars",
+    "/terraform/variables/variables-common.tf",
     "/terraform/variables/production/chat.tfvars"
   ]
   global_remote_state = true
