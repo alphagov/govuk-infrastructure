@@ -141,5 +141,22 @@ jobs:
             --disable-rule=aws_eks_node_group_invalid_ami_type
           cd "$OLDPWD"
         done
-        
-        
+
+    - name: Ensure variables-common.tf is a symlink
+      working-directory: terraform/deployments
+      env:
+        DEPLOYMENTS: ${{ steps.changed-deployments.outputs.all_changed_files }}
+      if: steps.changed-deployments.outputs.any_changed == 'true'
+      run: |
+        STEP_EXIT_STATUS=0
+        for d in ${DEPLOYMENTS}; do
+          echo "$d"
+          cd "$d"
+          if { [ -f "variables-common.tf" ] && [ ! -h "variables-common.tf" ]; } || { [ -h "variables-common.tf" ] && [ "$(readlink variables-common.tf)" != "../../variables/variables-common.tf" ]; }; then
+            >&2 echo "variables-common.tf in '$d' should be a symlink to ../../variables/variables-common.tf"
+            STEP_EXIT_STATUS=1
+          fi
+          echo -e '\n-------------------------\n'
+          cd "$OLDPWD"
+        done
+        exit $STEP_EXIT_STATUS
