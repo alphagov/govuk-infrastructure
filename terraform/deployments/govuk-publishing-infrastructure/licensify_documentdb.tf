@@ -2,6 +2,10 @@ resource "random_password" "licensify_documentdb_master" {
   length = 100
 }
 
+resource "random_password" "licensify_documentdb_readonly" {
+  length = 32
+}
+
 resource "aws_docdb_subnet_group" "licensify_cluster_subnet" {
   name       = "licensify-documentdb-${var.govuk_environment}"
   subnet_ids = local.private_subnet_ids
@@ -107,4 +111,28 @@ resource "aws_docdb_cluster_instance" "licensify_cluster_instances" {
   cluster_identifier = aws_docdb_cluster.licensify_cluster.id
   instance_class     = "db.r5.large"
   tags               = aws_docdb_cluster.licensify_cluster.tags
+}
+
+resource "aws_route53_record" "licensify_documentdb" {
+  zone_id = data.aws_route53_zone.internal.zone_id
+  name    = "licensify-documentdb.${var.govuk_environment}.govuk-internal.digital"
+  type    = "CNAME"
+  ttl     = 300
+  records = ["${aws_docdb_cluster.licensify_cluster.endpoint}"]
+}
+
+resource "aws_secretsmanager_secret" "licensify_documentdb_readonly_password" {
+  name = "govuk/licensify/documentdb-readonly"
+}
+
+resource "aws_secretsmanager_secret_version" "licensify_documentdb_readonly_password" {
+  secret_id = aws_secretsmanager_secret.licensify_documentdb_readonly_password.id
+  secret_string = sensitive(jsonencode({
+    username      = "govuk_readonly",
+    password      = random_password.licensify_documentdb_readonly.result,
+    engine        = "documentdb",
+    host          = aws_route53_record.licensify_documentdb.fqdn
+    port          = aws_docdb_cluster.licensify_cluster.port
+    connectionUrl = "postgres://govuk_readonly:${urlencode(random_password.licensify_documentdb_readonly.result)}@${aws_route53_record.licensify_documentdb.fqdn}:${aws_docdb_cluster.licensify_cluster.port}"
+  }))
 }

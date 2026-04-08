@@ -13,6 +13,12 @@ resource "random_string" "database_password" {
   lifecycle { ignore_changes = [length, special] }
 }
 
+resource "random_password" "database_readonly" {
+  for_each = var.databases
+
+  length = 32
+}
+
 # this resource is called `blue-govuk-rds-subnet` in
 # integration, staging and production
 resource "aws_db_subnet_group" "subnet_group" {
@@ -208,4 +214,24 @@ resource "aws_secretsmanager_secret_version" "database_passwords" {
   secret_string = jsonencode(
     { for k, v in random_string.database_password : k => v.result }
   )
+}
+
+resource "aws_secretsmanager_secret" "database_readonly_password" {
+  for_each = var.databases
+
+  name = "govuk/${each.key}/${each.value.engine}-readonly"
+}
+
+resource "aws_secretsmanager_secret_version" "database_readonly_password" {
+  for_each = var.databases
+
+  secret_id = aws_secretsmanager_secret.database_readonly_password[each.key].id
+  secret_string = sensitive(jsonencode({
+    username      = "govuk_readonly",
+    password      = random_password.database_readonly[each.key].result,
+    engine        = each.value.engine,
+    host          = aws_route53_record.instance_cname[each.key].fqdn
+    port          = aws_db_instance.instance[each.key].port
+    connectionUrl = "postgres://govuk_readonly:${urlencode(random_password.database_readonly[each.key].result)}@${aws_route53_record.instance_cname[each.key].fqdn}:${aws_db_instance.instance[each.key].port}"
+  }))
 }
