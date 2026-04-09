@@ -48,6 +48,10 @@ resource "random_password" "shared_documentdb_master" {
   length = 100
 }
 
+resource "random_password" "shared_documentdb_readonly" {
+  length = 32
+}
+
 # TODO: Remove me once KMS Key is Imported across all environments.
 resource "aws_kms_key" "shared_documentdb_kms_key" {
   description = "Encryption key for Shared DocumentDB"
@@ -129,4 +133,20 @@ resource "aws_route53_record" "shared_documentdb" {
   type    = "CNAME"
   ttl     = 300
   records = ["${aws_docdb_cluster.shared_cluster.endpoint}"]
+}
+
+resource "aws_secretsmanager_secret" "shared_documentdb_readonly_password" {
+  name = "govuk/shared-documentdb/documentdb-readonly"
+}
+
+resource "aws_secretsmanager_secret_version" "shared_documentdb_readonly_password" {
+  secret_id = aws_secretsmanager_secret.shared_documentdb_readonly_password.id
+  secret_string = sensitive(jsonencode({
+    username      = "govuk_readonly",
+    password      = random_password.shared_documentdb_readonly.result,
+    engine        = "documentdb",
+    host          = aws_route53_record.shared_documentdb.fqdn
+    port          = aws_docdb_cluster.shared_cluster.port
+    connectionUrl = "postgres://govuk_readonly:${urlencode(random_password.shared_documentdb_readonly.result)}@${aws_route53_record.shared_documentdb.fqdn}:${aws_docdb_cluster.shared_cluster.port}"
+  }))
 }
