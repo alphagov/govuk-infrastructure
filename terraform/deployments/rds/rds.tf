@@ -227,11 +227,11 @@ resource "aws_secretsmanager_secret_version" "database_readonly_password" {
 
   secret_id = aws_secretsmanager_secret.database_readonly_password[each.key].id
   secret_string = sensitive(jsonencode({
-    username      = "govuk_readonly",
-    password      = random_password.database_readonly[each.key].result,
-    engine        = each.value.engine,
-    host          = aws_route53_record.instance_cname[each.key].fqdn
-    port          = aws_db_instance.instance[each.key].port
-    connectionUrl = "${each.value.engine == "postgres" ? "postgres" : "mysql2"}://govuk_readonly:${urlencode(random_password.database_readonly[each.key].result)}@${aws_route53_record.instance_cname[each.key].fqdn}:${aws_db_instance.instance[each.key].port}"
+    "${upper(each.value.engine)}_READONLY_USERNAME" = "govuk_readonly",
+    "${upper(each.value.engine)}_READONLY_PASSWORD" = random_password.database_readonly[each.key].result,
+    "${upper(each.value.engine)}_READONLY_ENGINE"   = each.value.engine,
+    "${upper(each.value.engine)}_READONLY_HOST"     = aws_route53_record.instance_cname[each.key].fqdn
+    "${upper(each.value.engine)}_READONLY_PORT"     = aws_db_instance.instance[each.key].port
+    "${upper(each.value.engine)}_READONLY_URL"      = "${each.value.engine == "postgres" ? "postgres" : "mysql2"}://govuk_readonly:${urlencode(random_password.database_readonly[each.key].result)}@${aws_route53_record.instance_cname[each.key].fqdn}:${aws_db_instance.instance[each.key].port}"
   }))
 }
