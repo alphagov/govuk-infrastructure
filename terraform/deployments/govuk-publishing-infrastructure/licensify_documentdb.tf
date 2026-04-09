@@ -128,11 +128,11 @@ resource "aws_secretsmanager_secret" "licensify_documentdb_readonly_password" {
 resource "aws_secretsmanager_secret_version" "licensify_documentdb_readonly_password" {
   secret_id = aws_secretsmanager_secret.licensify_documentdb_readonly_password.id
   secret_string = sensitive(jsonencode({
-    username      = "govuk_readonly",
-    password      = random_password.licensify_documentdb_readonly.result,
-    engine        = "documentdb",
-    host          = aws_route53_record.licensify_documentdb.fqdn
-    port          = aws_docdb_cluster.licensify_cluster.port
-    connectionUrl = "postgres://govuk_readonly:${urlencode(random_password.licensify_documentdb_readonly.result)}@${aws_route53_record.licensify_documentdb.fqdn}:${aws_docdb_cluster.licensify_cluster.port}"
+    DOCUMENTDB_READONLY_USERNAME = "govuk_readonly",
+    DOCUMENTDB_READONLY_PASSWORD = random_password.licensify_documentdb_readonly.result,
+    DOCUMENTDB_READONLY_ENGINE   = "documentdb",
+    DOCUMENTDB_READONLY_HOST     = aws_route53_record.licensify_documentdb.fqdn
+    DOCUMENTDB_READONLY_PORT     = aws_docdb_cluster.licensify_cluster.port
+    DOCUMENTDB_READONLY_URI      = "mongodb://govuk_readonly:${urlencode(random_password.licensify_documentdb_readonly.result)}@${aws_route53_record.licensify_documentdb.fqdn}:${aws_docdb_cluster.licensify_cluster.port}"
   }))
 }
