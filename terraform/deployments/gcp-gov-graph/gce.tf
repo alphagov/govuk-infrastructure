@@ -647,33 +647,3 @@ resource "google_compute_firewall" "custom_vpc_for_cloud_run_allow_iap_ssh" {
     google_service_account.gce_redis_cli.email
   ]
 }
-
-import {
-  id = "projects/${var.project_id}/global/instanceTemplates/redis-cli"
-  to = google_compute_instance_template.redis_cli[0]
-}
-
-import {
-  id = "projects/${var.project_id}/global/instanceTemplates/whitehall"
-  to = google_compute_instance_template.whitehall
-}
-
-import {
-  id = "projects/${var.project_id}/global/instanceTemplates/publisher"
-  to = google_compute_instance_template.publisher
-}
-
-import {
-  id = "projects/${var.project_id}/global/instanceTemplates/support-api"
-  to = google_compute_instance_template.support_api
-}
-
-import {
-  id = "projects/${var.project_id}/global/instanceTemplates/asset-manager"
-  to = google_compute_instance_template.asset_manager
-}
-
-import {
-  id = "projects/${var.project_id}/global/instanceTemplates/publishing-api"
-  to = google_compute_instance_template.publishing_api
-}
