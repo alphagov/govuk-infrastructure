@@ -26,21 +26,6 @@ resource "google_service_account_iam_policy" "govgraphsearch" {
   policy_data        = data.google_iam_policy.govgraphsearch_service_account.policy_data
 }
 
-# Create this first, on its own: The IAP OAuth consent screen (Identity-Aware
-# Proxy)
-resource "google_iap_brand" "project_brand" {
-  # The support_email must be your own email address, or a Google Group that you
-  # manage.
-  support_email     = "govgraph-developers@digital.cabinet-office.gov.uk"
-  application_title = var.application_title
-}
-
-# Then manually create OAUTH credentials:
-# https://console.cloud.google.com/apis/credentials/oauthclient
-
-# Add a redirect URI of the form
-# https://iap.googleapis.com/v1/oauth/clientIds/CLIENT_ID:handleRedirect
-
 # Then create the secrets in Secret Manager
 # https://blog.gruntwork.io/a-comprehensive-guide-to-managing-secrets-in-your-terraform-code-1d586955ace1#bebe
 resource "google_secret_manager_secret" "iap_oauth_client_id" {
