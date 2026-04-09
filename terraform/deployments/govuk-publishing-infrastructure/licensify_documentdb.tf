@@ -133,6 +133,6 @@ resource "aws_secretsmanager_secret_version" "licensify_documentdb_readonly_pass
     engine        = "documentdb",
     host          = aws_route53_record.licensify_documentdb.fqdn
     port          = aws_docdb_cluster.licensify_cluster.port
-    connectionUrl = "postgres://govuk_readonly:${urlencode(random_password.licensify_documentdb_readonly.result)}@${aws_route53_record.licensify_documentdb.fqdn}:${aws_docdb_cluster.licensify_cluster.port}"
+    connectionUrl = "mongodb://govuk_readonly:${urlencode(random_password.licensify_documentdb_readonly.result)}@${aws_route53_record.licensify_documentdb.fqdn}:${aws_docdb_cluster.licensify_cluster.port}"
   }))
 }

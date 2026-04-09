@@ -147,6 +147,6 @@ resource "aws_secretsmanager_secret_version" "shared_documentdb_readonly_passwor
     engine        = "documentdb",
     host          = aws_route53_record.shared_documentdb.fqdn
     port          = aws_docdb_cluster.shared_cluster.port
-    connectionUrl = "postgres://govuk_readonly:${urlencode(random_password.shared_documentdb_readonly.result)}@${aws_route53_record.shared_documentdb.fqdn}:${aws_docdb_cluster.shared_cluster.port}"
+    connectionUrl = "mongodb://govuk_readonly:${urlencode(random_password.shared_documentdb_readonly.result)}@${aws_route53_record.shared_documentdb.fqdn}:${aws_docdb_cluster.shared_cluster.port}"
   }))
 }

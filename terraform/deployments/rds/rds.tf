@@ -232,6 +232,6 @@ resource "aws_secretsmanager_secret_version" "database_readonly_password" {
     engine        = each.value.engine,
     host          = aws_route53_record.instance_cname[each.key].fqdn
     port          = aws_db_instance.instance[each.key].port
-    connectionUrl = "postgres://govuk_readonly:${urlencode(random_password.database_readonly[each.key].result)}@${aws_route53_record.instance_cname[each.key].fqdn}:${aws_db_instance.instance[each.key].port}"
+    connectionUrl = "${each.value.engine == "postgres" ? "postgres" : "mysql2"}://govuk_readonly:${urlencode(random_password.database_readonly[each.key].result)}@${aws_route53_record.instance_cname[each.key].fqdn}:${aws_db_instance.instance[each.key].port}"
   }))
 }
