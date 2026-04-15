@@ -1,14 +1,14 @@
+---
 version: 2
 updates:
-  # Docker base images
-  # Terraform and GitHub Actions are managed by Renovate (see renovate.json)
-  - package-ecosystem: docker
-    directory: /images/
-    schedule:
-      interval: monthly
-      time: "10:30"
-      timezone: "Europe/London"
-    cooldown:
-      default-days: 7
-    ignore:
-      - dependency-name: ruby
+- package-ecosystem: docker
+  directory: /images/
+  schedule:
+    interval: monthly
+    time: "10:30"
+    timezone: Europe/London
+  cooldown:
+    default-days: 10
+  ignore:
+  - dependency-name: ruby
+...
