@@ -1,0 +1,44 @@
+[
+  {
+    "description": "The ID of the document",
+    "mode": "NULLABLE",
+    "name": "id",
+    "type": "INTEGER"
+  },
+  {
+    "description": "The content ID of the document",
+    "mode": "NULLABLE",
+    "name": "content_id",
+    "type": "STRING"
+  },
+  {
+    "description": "The created timestamp of the document",
+    "mode": "NULLABLE",
+    "name": "created_at",
+    "type": "TIMESTAMP"
+  },
+  {
+    "description": "The updated timestamp of the document",
+    "mode": "NULLABLE",
+    "name": "updated_at",
+    "type": "TIMESTAMP"
+  },
+  {
+    "description": "The type of the document",
+    "mode": "NULLABLE",
+    "name": "document_type",
+    "type": "STRING"
+  },
+  {
+    "description": "The ID of the latest edition of the document",
+    "mode": "NULLABLE",
+    "name": "latest_edition_id",
+    "type": "INTEGER"
+  },
+  {
+    "description": "The ID of the live edition of the document",
+    "mode": "NULLABLE",
+    "name": "live_edition_id",
+    "type": "INTEGER"
+  }
+]

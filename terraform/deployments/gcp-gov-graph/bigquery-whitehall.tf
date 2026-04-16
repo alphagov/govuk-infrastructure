@@ -90,3 +90,16 @@ resource "google_bigquery_table" "whitehall_editions" {
     field = "updated_at"
   }
 }
+
+resource "google_bigquery_table" "whitehall_documents" {
+  dataset_id    = google_bigquery_dataset.whitehall.dataset_id
+  table_id      = "documents"
+  friendly_name = "Documents"
+  description   = "Documents table from the GOV.UK Whitehall MySQL database"
+  schema        = file("schemas/whitehall/documents.json")
+  clustering    = ["document_type"]
+  time_partitioning {
+    type  = "MONTH"
+    field = "updated_at"
+  }
+}

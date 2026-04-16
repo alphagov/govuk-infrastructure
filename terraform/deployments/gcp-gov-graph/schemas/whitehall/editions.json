@@ -106,5 +106,11 @@
     "mode": "NULLABLE",
     "name": "government_id",
     "type": "INTEGER"
+  },
+  {
+    "description": "The slug of the edition",
+    "mode": "NULLABLE",
+    "name": "slug",
+    "type": "STRING"
   }
 ]
