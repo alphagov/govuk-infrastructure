@@ -11,7 +11,7 @@ in Integration, Staging and Production environments, which are run by EKS as cro
 
 Instructions for running this script:
 $ eval $(gds aws govuk-[test|integration|staging|production]-fulladmin -e -art 8h)
-$ OPENSEARCH_URL=$(aws opensearch describe-domain --domain-name blue-elasticsearch6-domain  | jq -r '.DomainStatus.Endpoints.vpc')
+$ OPENSEARCH_URL=$(aws opensearch describe-domain --domain-name green-elasticsearch6-domain  | jq -r '.DomainStatus.Endpoints.vpc')
 $ kubectl relay host/$OPENSEARCH_URL 4443:443
 Open https://localhost:4443/_dashboards in a browser and log in
 Map your AWS Role using instructions in Step 1 of https://docs.aws.amazon.com/opensearch-service/latest/developerguide/managedomains-snapshots.html#managedomains-snapshot-registerdirectory
@@ -62,15 +62,15 @@ def register_repository(name, role_arn, delete_first=False, read_only=False):
 delete_first = 'DELETE_FIRST' in os.environ
 
 if sys.argv[1] == 'integration':
-    role_arn = 'arn:aws:iam::210287912431:role/blue-elasticsearch6-manual-snapshot-role'
+    role_arn = 'arn:aws:iam::210287912431:role/green-elasticsearch6-manual-snapshot-role'
     register_repository('govuk-integration', role_arn, delete_first=delete_first)
     register_repository('govuk-staging', role_arn, delete_first=delete_first, read_only=True)
 elif sys.argv[1] == 'staging':
-    role_arn = 'arn:aws:iam::696911096973:role/blue-elasticsearch6-manual-snapshot-role'
+    role_arn = 'arn:aws:iam::696911096973:role/green-elasticsearch6-manual-snapshot-role'
     register_repository('govuk-staging', role_arn, delete_first=delete_first)
     register_repository('govuk-production', role_arn, delete_first=delete_first, read_only=True)
 elif sys.argv[1] == 'production':
-    role_arn = 'arn:aws:iam::172025368201:role/blue-elasticsearch6-manual-snapshot-role'
+    role_arn = 'arn:aws:iam::172025368201:role/green-elasticsearch6-manual-snapshot-role'
     register_repository('govuk-production', role_arn, delete_first=delete_first)
 else:
     print('expected one of [integration|staging|production]')
