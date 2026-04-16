@@ -339,7 +339,13 @@ repos:
       standard_contexts: *standard_security_checks
 
   govuk-data-science-workshop:
-      archived: true
+    archived: true
+
+  govuk-db-sync:
+    teams: {
+      govuk: "maintain",
+      govuk-platform-engineering: "admin"
+    }
 
   govuk-dependabot-merger:
     required_status_checks:
@@ -362,7 +368,7 @@ repos:
     standard_contexts: *standard_security_checks
     teams: {
       govuk: "maintain"
-      }
+    }
 
   govuk-dns-tf:
     visibility: private
@@ -985,16 +991,8 @@ repos:
   govuk-pact-broker: {}
   govuk-rfcs: {}
   govuk-s3-mirror: {}
-  govuk-content-publishing-guidance: {
-    teams: {
-      govuk: "maintain"
-    }
-  }
-  govuk-design-guide: {
-    teams: {
-      govuk: "maintain"
-    }
-  }
+  govuk-content-publishing-guidance: { teams: { govuk: "maintain" } }
+  govuk-design-guide: { teams: { govuk: "maintain" } }
 
   govuk-toolbox-image:
     can_be_deployed: true
@@ -1002,22 +1000,42 @@ repos:
   govuk-ai-accelerator:
     can_be_deployed: true
     standard_contexts: *standard_security_checks
-    push_allowances: ["alphagov/gov-uk-ai-accelerator-alpha-team", "alphagov/gov-uk-production-admin", "alphagov/gov-uk-production-deploy"]
+    push_allowances:
+      [
+        "alphagov/gov-uk-ai-accelerator-alpha-team",
+        "alphagov/gov-uk-production-admin",
+        "alphagov/gov-uk-production-deploy",
+      ]
 
   govuk-ai-accelerator-tooling:
     # standard security checks are disabled as not configured for a private repo
     can_be_deployed: false
     visibility: private
-    push_allowances: ["alphagov/gov-uk-ai-accelerator-alpha-team", "alphagov/gov-uk-production-admin", "alphagov/gov-uk-production-deploy"]
+    push_allowances:
+      [
+        "alphagov/gov-uk-ai-accelerator-alpha-team",
+        "alphagov/gov-uk-production-admin",
+        "alphagov/gov-uk-production-deploy",
+      ]
 
   govuk-ai-accelerator-tw-accelerator:
     # standard security checks are disabled as not configured for a private repo
     can_be_deployed: false
     visibility: private
-    push_allowances: ["alphagov/gov-uk-ai-accelerator-alpha-team", "alphagov/gov-uk-production-admin", "alphagov/gov-uk-production-deploy"]
+    push_allowances:
+      [
+        "alphagov/gov-uk-ai-accelerator-alpha-team",
+        "alphagov/gov-uk-production-admin",
+        "alphagov/gov-uk-production-deploy",
+      ]
 
   govuk-ai-accelerator-generator-e2e-testing-framework:
     # standard security checks are disabled as not configured for a private repo
     can_be_deployed: false
     visibility: private
-    push_allowances: ["alphagov/gov-uk-ai-accelerator-alpha-team", "alphagov/gov-uk-production-admin", "alphagov/gov-uk-production-deploy"]
+    push_allowances:
+      [
+        "alphagov/gov-uk-ai-accelerator-alpha-team",
+        "alphagov/gov-uk-production-admin",
+        "alphagov/gov-uk-production-deploy",
+      ]
