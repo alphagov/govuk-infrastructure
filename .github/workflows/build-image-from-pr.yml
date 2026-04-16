@@ -33,7 +33,7 @@ on:
 
 jobs:
   build-image-from-PR:
-    name: Build image for ${{ inputs.imageName }} from $${{ inputs.gitRef }}
+    name: Build ${{ inputs.imageName }}-${{ matrix.arch }} image from branch ${{ inputs.gitRef }}
     strategy:
       matrix:
         arch:
