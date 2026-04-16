@@ -1021,3 +1021,8 @@ repos:
     can_be_deployed: false
     visibility: private
     push_allowances: ["alphagov/gov-uk-ai-accelerator-alpha-team", "alphagov/gov-uk-production-admin", "alphagov/gov-uk-production-deploy"]
+
+  govuk-ai-graph-tools:
+    can_be_deployed: true
+    standard_contexts: *standard_security_checks
+    push_allowances: ["alphagov/gov-uk-ai-accelerator-alpha-team", "alphagov/gov-uk-production-admin", "alphagov/gov-uk-production-deploy"]
