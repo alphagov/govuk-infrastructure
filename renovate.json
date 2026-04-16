@@ -51,7 +51,7 @@
     {
       "customType": "regex",
       "managerFilePatterns": [
-        "/.*cluster-infrastructure\\/main\\.tf/"
+        "/.*cluster-infrastructure\/main\\.tf/"
       ],
       "matchStrings": [
         "(?<depName>kube-proxy|metrics-server|vpc-cni|coredns|kube-state-metrics)\\s+=\\s+\\{\\s+addon_version\\s+=\\s+\"(?<currentValue>[a-zA-Z0-9-_.]+)\""
@@ -64,8 +64,8 @@
     {
       "customType": "regex",
       "managerFilePatterns": [
-        "/.*tfc-configuration\\/variables\\.tf/",
-        "/.*ws\\/variables\\.tf/"
+        "/.*tfc-configuration\/variables\\.tf/",
+        "/.*ws\/variables\\.tf/"
       ],
       "matchStrings": [
         "default\\s+=\\s+\"~>\\s+(?<currentValue>[0-9.]+)\""
