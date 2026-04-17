@@ -39,6 +39,19 @@ We set the constraints with minor version precision. However when using this Ter
 We have some [recommended pre-commit hooks](.pre-commit-config.yaml). You need
 to [install `pre-commit`](https://pre-commit.com/#install) for these to run.
 
+## Starting and updating an ephemeral cluster
+
+This repository supports creating ephemeral Kubernetes clusters for the purposes of short-lived tests. To 
+create a new cluster, or update the workspaces for an existing one, use the Make target:
+
+```shell
+make ephemeral_cluster EPH_CLUSTER_ID=eph-new-cluster
+```
+
+## Stopping an ephemeral cluster
+
+To stop an existing ephemeral cluster, see the instructions in the readme in `terraform/deployments/ephemeral/`.
+
 ## Documentation
 
 See the [`docs/` directory](docs/).

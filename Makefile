@@ -31,3 +31,21 @@ lint_docs:
   	  	1>&2 echo -e "\tmake lint_docs LINT_DOCS=./docs/README.md WATCH_DOCS=true"; \
 	fi; \
 	exit $${EXIT_CODE};
+
+.PHONY: ephemeral_cluster
+ephemeral_cluster:
+	@ if [[ -z "$${EPH_CLUSTER_ID}" ]] || [[ ! -v "EPH_CLUSTER_ID" ]]; then \
+		echo "Set the ephemeral cluster id with the EPH_CLUSTER_ID variable"; \
+		printf "\t make create_ephemeral_cluster EPH_CLUSTER_ID=\"eph-new-cluster\"\n"; \
+		exit 1; \
+  	fi; \
+  	cd terraform/deployments/ephemeral; \
+	terraform init; \
+	echo "Ephemeral cluster $${EPH_CLUSTER_ID} will be built by Terraform in Terraform Cloud."; \
+	echo "When the 'cluster_access' workspace is complete you should be able to access to the cluster"; \
+	printf "\t aws eks update-kubeconfig --name $${EPH_CLUSTER_ID}\n"; \
+	echo "Once all workspaces are complete, log into the cluster and run './validate.sh' to test the cluster is functioning"; \
+	open "https://app.terraform.io/app/govuk/projects"; \
+	echo "Press enter to continue"; \
+	read; \
+	terraform apply -var ephemeral_cluster_id="$${EPH_CLUSTER_ID}"; \
