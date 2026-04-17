@@ -19,5 +19,5 @@ terraform {
 provider "tfe" {
   hostname     = var.tfc_hostname
   organization = var.organization
-  token        = var.token
+  # token        = var.token
 }

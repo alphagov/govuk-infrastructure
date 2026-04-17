@@ -14,11 +14,11 @@ variable "organization" {
   default     = "govuk"
 }
 
-variable "token" {
-  type        = string
-  description = "Account token"
-  sensitive   = true
-}
+# variable "token" {
+#   type        = string
+#   description = "Account token"
+#   sensitive   = true
+# }
 
 #
 # Projects
