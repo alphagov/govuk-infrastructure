@@ -341,6 +341,13 @@ repos:
   govuk-data-science-workshop:
       archived: true
 
+  govuk-db-sync:
+    can_be_deployed: true
+    teams: {
+      govuk: "maintain",
+      govuk-platform-engineering: "admin"
+    }
+
   govuk-dependabot-merger:
     required_status_checks:
       standard_contexts: *standard_security_checks
