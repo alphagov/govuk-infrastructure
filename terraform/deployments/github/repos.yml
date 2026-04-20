@@ -343,10 +343,9 @@ repos:
 
   govuk-db-sync:
     can_be_deployed: true
-    teams: {
-      govuk: "maintain",
+    teams:
+      govuk: "maintain"
       govuk-platform-engineering: "admin"
-    }
 
   govuk-dependabot-merger:
     required_status_checks:
@@ -367,9 +366,8 @@ repos:
   govuk-display-screen:
     need_production_access_to_merge: false
     standard_contexts: *standard_security_checks
-    teams: {
+    teams:
       govuk: "maintain"
-      }
 
   govuk-dns-tf:
     visibility: private
@@ -992,16 +990,13 @@ repos:
   govuk-pact-broker: {}
   govuk-rfcs: {}
   govuk-s3-mirror: {}
-  govuk-content-publishing-guidance: {
-    teams: {
+  govuk-content-publishing-guidance:
+    teams:
       govuk: "maintain"
-    }
-  }
-  govuk-design-guide: {
-    teams: {
+
+  govuk-design-guide:
+    teams:
       govuk: "maintain"
-    }
-  }
 
   govuk-toolbox-image:
     can_be_deployed: true
