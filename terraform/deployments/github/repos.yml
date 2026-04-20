@@ -342,6 +342,7 @@ repos:
     archived: true
 
   govuk-db-sync:
+    can_be_deployed: true
     teams: {
       govuk: "maintain",
       govuk-platform-engineering: "admin"
