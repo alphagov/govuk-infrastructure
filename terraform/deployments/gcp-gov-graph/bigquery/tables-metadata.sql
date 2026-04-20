@@ -18,6 +18,8 @@ WITH all_objects AS (
   SELECT * FROM asset_manager.__TABLES__
   UNION ALL
   SELECT * FROM publisher.__TABLES__
+  UNION ALL
+  SELECT * FROM whitehall.__TABLES__
 )
 ,
 -- tables which  do not need to checked should be listed here. For example, intermediate tables which may not always contain new daily data.
