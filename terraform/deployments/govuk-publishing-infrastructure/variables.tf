@@ -221,3 +221,9 @@ variable "enable_govuk_ai_graph_tools" {
   default     = false
   description = "Should the GOVUK AI graph tools infrastructure be deployed. Should only enable on integration for the Alpha."
 }
+
+variable "create_licensify_documentdb_clone" {
+  type        = bool
+  default     = false
+  description = "Whether to create a v5 clone of the Licensify DocumentDB cluster."
+}

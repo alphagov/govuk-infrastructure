@@ -68,3 +68,4 @@ licensify_documentdb_instance_count       = 1
 licensify_backup_retention_period         = 1
 shared_documentdb_instance_count          = 1
 shared_documentdb_backup_retention_period = 1
+create_licensify_documentdb_clone         = true
