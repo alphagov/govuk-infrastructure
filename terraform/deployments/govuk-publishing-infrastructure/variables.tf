@@ -216,3 +216,8 @@ variable "enable_govuk_ai_accelerator" {
   description = "Should the GOVUK AI accelerator infrastucture be deployed. Should only enable on integration for the Alpha."
 }
 
+variable "enable_govuk_ai_graph_tools" {
+  type        = bool
+  default     = false
+  description = "Should the GOVUK AI graph tools infrastructure be deployed. Should only enable on integration for the Alpha."
+}

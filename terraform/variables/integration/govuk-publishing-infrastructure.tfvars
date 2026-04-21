@@ -1,4 +1,5 @@
 enable_govuk_ai_accelerator       = true
+enable_govuk_ai_graph_tools       = true
 subdomain_delegation_name_servers = {}
 subdomain_dns_records = [
   { type = "A", name = "@", ttl = 10800, value = ["151.101.0.144", "151.101.64.144", "151.101.128.144", "151.101.192.144"] },
