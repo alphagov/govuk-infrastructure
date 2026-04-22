@@ -580,8 +580,9 @@ resource "google_compute_instance_template" "whitehall" {
 }
 
 resource "google_compute_instance_template" "asset_manager" {
-  name         = "asset-manager"
-  machine_type = "c2d-highmem-2"
+  name                    = "asset-manager"
+  machine_type            = "c2d-highmem-2"
+  metadata_startup_script = file("scripts/asset_manager_startup.sh")
 
   disk {
     boot         = true
