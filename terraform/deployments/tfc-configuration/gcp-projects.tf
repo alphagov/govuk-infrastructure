@@ -91,3 +91,34 @@ module "gcp-gds-bq-processing" {
     local.gcp_credentials["production"],
   ]
 }
+
+module "gcp-gds-bq-processing-dev" {
+  source = "github.com/alphagov/terraform-govuk-tfe-workspacer"
+
+  organization        = var.organization
+  workspace_name      = "gcp-gds-bq-processing-dev"
+  workspace_desc      = "GCP project management for the gds-bq-processing-dev project"
+  workspace_tags      = ["dev", "gds-bq-processing", "gcp"]
+  terraform_version   = var.terraform_version
+  execution_mode      = "remote"
+  working_directory   = "/terraform/deployments/gcp-gds-bq-processing-dev/"
+  trigger_patterns    = ["/terraform/deployments/gcp-gds-bq-processing-dev/**/*"]
+  global_remote_state = true
+  assessments_enabled = true
+
+  project_name = "govuk-data-engineering"
+  vcs_repo = {
+    identifier     = "alphagov/govuk-infrastructure"
+    branch         = "main"
+    oauth_token_id = data.tfe_oauth_client.github.oauth_token_id
+  }
+
+  team_access = {
+    "GOV.UK Production"            = "write"
+    "Google Cloud Data Production" = "write"
+  }
+
+  variable_set_ids = [
+    local.gcp_credentials["production"],
+  ]
+}
