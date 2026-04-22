@@ -314,6 +314,7 @@ repos:
 
   govuk-chat-v1-iterations-2026:
     visibility: private
+    need_production_access_to_merge: false
     required_status_checks:
       # standard security checks are disabled as not configured for a private repo
       additional_contexts:
