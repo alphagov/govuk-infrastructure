@@ -21,7 +21,7 @@ runs:
       shell: bash
     - if:  ${{ github.ref_name == 'main' }}
       name: Send slack message
-      uses: slackapi/slack-github-action@af78098f536edbc4de71162a307590698245be95 # v3.0.1
+      uses: slackapi/slack-github-action@03ea5433c137af7c0495bc0cad1af10403fc800c # v3.0.2
       with:
         errors: true
         webhook: ${{ inputs.slack_webhook_url }}
