@@ -20,3 +20,10 @@ terraform {
 provider "google" {
   project = "gds-bq-processing-dev"
 }
+
+module "project" {
+  source = "../../shared-modules/gcp-project-init"
+
+  project_id   = "gds-bq-processing-dev"
+  project_name = "gds-bq-processing-dev"
+}
