@@ -95,14 +95,17 @@ module "gcp-gds-bq-processing" {
 module "gcp-gds-bq-processing-dev" {
   source = "github.com/alphagov/terraform-govuk-tfe-workspacer"
 
-  organization        = var.organization
-  workspace_name      = "gcp-gds-bq-processing-dev"
-  workspace_desc      = "GCP project management for the gds-bq-processing-dev project"
-  workspace_tags      = ["dev", "gds-bq-processing", "gcp"]
-  terraform_version   = var.terraform_version
-  execution_mode      = "remote"
-  working_directory   = "/terraform/deployments/gcp-gds-bq-processing-dev/"
-  trigger_patterns    = ["/terraform/deployments/gcp-gds-bq-processing-dev/**/*"]
+  organization      = var.organization
+  workspace_name    = "gcp-gds-bq-processing-dev"
+  workspace_desc    = "GCP project management for the gds-bq-processing-dev project"
+  workspace_tags    = ["dev", "gds-bq-processing", "gcp"]
+  terraform_version = var.terraform_version
+  execution_mode    = "remote"
+  working_directory = "/terraform/deployments/gcp-gds-bq-processing-dev/"
+  trigger_patterns = [
+    "/terraform/deployments/gcp-gds-bq-processing-dev/**/*",
+    "/terraform/shared-modules/gcp-project-init/**/*",
+  ]
   global_remote_state = true
   assessments_enabled = true
 
