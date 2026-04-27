@@ -7,38 +7,38 @@ locals {
     claude_sonnet = {
       model_id    = "eu.anthropic.claude-sonnet-4-20250514-v1:0"
       token_limit = var.chat_token_limits_per_minute["claude_sonnet"]
-      expression  = "((m1 + m2 + (m3 * 5)) / TOKEN_LIMIT) * 100"
+      expression  = "((CacheWriteInputTokenCount + InputTokenCount + (OutputTokenCount * 5)) / TOKEN_LIMIT) * 100"
       sns_topic   = aws_sns_topic.chat_alerts_dublin.arn
     }
     claude_sonnet_4_5 = {
       model_id    = "eu.anthropic.claude-sonnet-4-5-20250929-v1:0"
       token_limit = var.chat_token_limits_per_minute["claude_sonnet_4_5"]
-      expression  = "((m1 + m2 + (m3 * 5)) / TOKEN_LIMIT) * 100"
+      expression  = "((CacheWriteInputTokenCount + InputTokenCount + (OutputTokenCount)) / TOKEN_LIMIT) * 100"
       sns_topic   = aws_sns_topic.chat_alerts_dublin.arn
     }
     haiku_4_5 = {
       model_id    = "eu.anthropic.claude-haiku-4-5-20251001-v1:0"
       token_limit = var.chat_token_limits_per_minute["haiku_4_5"]
-      expression  = "((m1 + m2 + (m3 * 5)) / TOKEN_LIMIT) * 100"
+      expression  = "((CacheWriteInputTokenCount + InputTokenCount + (OutputTokenCount * 5)) / TOKEN_LIMIT) * 100"
       sns_topic   = aws_sns_topic.chat_alerts_dublin.arn
     }
     openai_gpt_oss = {
       model_id    = "openai.gpt-oss-120b-1:0"
       token_limit = var.chat_token_limits_per_minute["openai_gpt_oss"]
-      expression  = "((m1 + m2 + (m3 * 5)) / TOKEN_LIMIT) * 100"
+      expression  = "((CacheWriteInputTokenCount + InputTokenCount + (OutputTokenCount * 5)) / TOKEN_LIMIT) * 100"
       sns_topic   = aws_sns_topic.chat_alerts_dublin.arn
     }
     titan_embed_dublin = {
       model_id    = "amazon.titan-embed-text-v2:0"
       token_limit = var.chat_token_limits_per_minute["titan_embed"]
-      expression  = "m2 / TOKEN_LIMIT * 100"
+      expression  = "InputTokenCount / TOKEN_LIMIT * 100"
       region      = "eu-west-1"
       sns_topic   = aws_sns_topic.chat_alerts_dublin.arn
     }
     titan_embed_london = {
       model_id    = "amazon.titan-embed-text-v2:0"
       token_limit = var.chat_token_limits_per_minute["titan_embed"]
-      expression  = "m2 / TOKEN_LIMIT * 100"
+      expression  = "InputTokenCount / TOKEN_LIMIT * 100"
       region      = "eu-west-2"
       sns_topic   = aws_sns_topic.chat_alerts_london.arn
     }
@@ -124,11 +124,10 @@ resource "aws_cloudwatch_metric_alarm" "bedrock_token_threshold" {
   evaluation_periods  = 1
   treat_missing_data  = "notBreaching"
 
-  # m1: CacheWriteInputTokenCount
   dynamic "metric_query" {
-    for_each = strcontains(local.models[each.value.model_key].expression, "m1") ? [1] : []
+    for_each = strcontains(local.models[each.value.model_key].expression, "CacheWriteInputTokenCount") ? [1] : []
     content {
-      id = "m1"
+      id = "CacheWriteInputTokenCount"
       metric {
         namespace   = "AWS/Bedrock"
         metric_name = "CacheWriteInputTokenCount"
@@ -141,11 +140,10 @@ resource "aws_cloudwatch_metric_alarm" "bedrock_token_threshold" {
     }
   }
 
-  # m2: InputTokenCount
   dynamic "metric_query" {
-    for_each = strcontains(local.models[each.value.model_key].expression, "m2") ? [1] : []
+    for_each = strcontains(local.models[each.value.model_key].expression, "InputTokenCount") ? [1] : []
     content {
-      id = "m2"
+      id = "InputTokenCount"
       metric {
         namespace   = "AWS/Bedrock"
         metric_name = "InputTokenCount"
@@ -158,11 +156,10 @@ resource "aws_cloudwatch_metric_alarm" "bedrock_token_threshold" {
     }
   }
 
-  # m3: OutputTokenCount
   dynamic "metric_query" {
-    for_each = strcontains(local.models[each.value.model_key].expression, "m3") ? [1] : []
+    for_each = strcontains(local.models[each.value.model_key].expression, "OutputTokenCount") ? [1] : []
     content {
-      id = "m3"
+      id = "OutputTokenCount"
       metric {
         namespace   = "AWS/Bedrock"
         metric_name = "OutputTokenCount"
