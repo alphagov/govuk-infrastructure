@@ -221,7 +221,7 @@ resource "aws_s3_bucket_cors_configuration" "this" {
 }
 
 resource "aws_s3_bucket_replication_configuration" "this" {
-  count = var.replication_config != null? 1 : 0
+  count = var.replication_config != null ? 1 : 0
   depends_on = [aws_s3_bucket_versioning.this]
 
   bucket = aws_s3_bucket.this.id
