@@ -5,7 +5,7 @@ locals {
 
   models = {
     claude_sonnet = {
-      model_id    = "eu.anthropic.claude-sonnet-4-202505"
+      model_id    = "eu.anthropic.claude-sonnet-4-20250514-v1:0"
       token_limit = var.chat_token_limits_per_minute["claude_sonnet"]
       expression  = "((m1 + m2 + (m3 * 5)) / TOKEN_LIMIT) * 100"
       sns_topic   = aws_sns_topic.chat_alerts_dublin.arn
