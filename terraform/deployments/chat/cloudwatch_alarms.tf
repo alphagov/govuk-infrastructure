@@ -10,6 +10,18 @@ locals {
       expression  = "((m1 + m2 + (m3 * 5)) / TOKEN_LIMIT) * 100"
       sns_topic   = aws_sns_topic.chat_alerts_dublin.arn
     }
+    claude_sonnet_4_5 = {
+      model_id    = "eu.anthropic.claude-sonnet-4-5-20250929-v1:0"
+      token_limit = var.chat_token_limits_per_minute["claude_sonnet_4_5"]
+      expression  = "((m1 + m2 + (m3 * 5)) / TOKEN_LIMIT) * 100"
+      sns_topic   = aws_sns_topic.chat_alerts_dublin.arn
+    }
+    haiku_4_5 = {
+      model_id    = "eu.anthropic.claude-haiku-4-5-20251001-v1:0"
+      token_limit = var.chat_token_limits_per_minute["haiku_4_5"]
+      expression  = "((m1 + m2 + (m3 * 5)) / TOKEN_LIMIT) * 100"
+      sns_topic   = aws_sns_topic.chat_alerts_dublin.arn
+    }
     openai_gpt_oss = {
       model_id    = "openai.gpt-oss-120b-1:0"
       token_limit = var.chat_token_limits_per_minute["openai_gpt_oss"]
@@ -42,6 +54,26 @@ locals {
       model_key          = "claude_sonnet",
       threshold          = 100,
       "description_name" = "Claude Sonnet 4"
+    }
+    "bedrock_token_threshold_50_percent_claude_sonnet_4_5" = {
+      model_key          = "claude_sonnet_4_5",
+      threshold          = 50,
+      "description_name" = "Claude Sonnet 4.5"
+    }
+    "bedrock_token_threshold_100_percent_claude_sonnet_4_5" = {
+      model_key          = "claude_sonnet_4_5",
+      threshold          = 100,
+      "description_name" = "Claude Sonnet 4.5"
+    }
+    "bedrock_token_threshold_50_percent_haiku_4_5" = {
+      model_key          = "haiku_4_5",
+      threshold          = 50,
+      "description_name" = "Haiku 4.5"
+    }
+    "bedrock_token_threshold_100_percent_haiku_4_5" = {
+      model_key          = "haiku_4_5",
+      threshold          = 100,
+      "description_name" = "Haiku 4.5"
     }
     "bedrock_token_threshold_50_percent_gpt_oss" = {
       model_key          = "openai_gpt_oss",
