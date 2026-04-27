@@ -1,480 +1,161 @@
 locals {
-  period                     = 300
-  stat                       = "Sum"
-  unit                       = "Count"
-  claude_sonnet_model_id     = "eu.anthropic.claude-sonnet-4-202505"
-  claude_sonnet_token_limit  = var.chat_token_limits_per_minute["claude_sonnet"]
-  openai_gpt_oss_model_id    = "openai.gpt-oss-120b-1:0"
-  openai_gpt_oss_token_limit = var.chat_token_limits_per_minute["openai_gpt_oss"]
-  titan_embed_model_id       = "amazon.titan-embed-text-v2:0"
-  titan_embed_token_limit    = var.chat_token_limits_per_minute["titan_embed"]
+  period = 300
+  stat   = "Sum"
+  unit   = "Count"
+
+  models = {
+    claude_sonnet = {
+      model_id    = "eu.anthropic.claude-sonnet-4-202505"
+      token_limit = var.chat_token_limits_per_minute["claude_sonnet"]
+      expression  = "((m1 + m2 + (m3 * 5)) / TOKEN_LIMIT) * 100"
+      sns_topic   = aws_sns_topic.chat_alerts_dublin.arn
+    }
+    openai_gpt_oss = {
+      model_id    = "openai.gpt-oss-120b-1:0"
+      token_limit = var.chat_token_limits_per_minute["openai_gpt_oss"]
+      expression  = "((m1 + m2 + (m3 * 5)) / TOKEN_LIMIT) * 100"
+      sns_topic   = aws_sns_topic.chat_alerts_dublin.arn
+    }
+    titan_embed_dublin = {
+      model_id    = "amazon.titan-embed-text-v2:0"
+      token_limit = var.chat_token_limits_per_minute["titan_embed"]
+      expression  = "m2 / TOKEN_LIMIT * 100"
+      region      = "eu-west-1"
+      sns_topic   = aws_sns_topic.chat_alerts_dublin.arn
+    }
+    titan_embed_london = {
+      model_id    = "amazon.titan-embed-text-v2:0"
+      token_limit = var.chat_token_limits_per_minute["titan_embed"]
+      expression  = "m2 / TOKEN_LIMIT * 100"
+      region      = "eu-west-2"
+      sns_topic   = aws_sns_topic.chat_alerts_london.arn
+    }
+  }
+
+  alarms = {
+    "bedrock_token_threshold_50_percent_claude_sonnet" = {
+      model_key          = "claude_sonnet",
+      threshold          = 50,
+      "description_name" = "Claude Sonnet 4"
+    }
+    "bedrock_token_threshold_100_percent_claude_sonnet" = {
+      model_key          = "claude_sonnet",
+      threshold          = 100,
+      "description_name" = "Claude Sonnet 4"
+    }
+    "bedrock_token_threshold_50_percent_gpt_oss" = {
+      model_key          = "openai_gpt_oss",
+      threshold          = 50,
+      "description_name" = "OpenAI GPT-OSS"
+    }
+    "bedrock_token_threshold_100_percent_gpt_oss" = {
+      model_key          = "openai_gpt_oss",
+      threshold          = 100,
+      "description_name" = "OpenAI GPT-OSS"
+    }
+    "bedrock_token_threshold_50_percent_titan_embed_dublin" = {
+      model_key          = "titan_embed_dublin",
+      threshold          = 50,
+      "description_name" = "Titan Embed in eu-west-1 (User questions)"
+    }
+    "bedrock_token_threshold_100_percent_titan_embed_dublin" = {
+      model_key          = "titan_embed_dublin",
+      threshold          = 100,
+      "description_name" = "Titan Embed in eu-west-1 (User questions)"
+    }
+    "bedrock_token_threshold_50_percent_titan_embed_london" = {
+      model_key          = "titan_embed_london",
+      threshold          = 50,
+      "description_name" = "Titan Embed in eu-west-2 (Document indexing)"
+    }
+    "bedrock_token_threshold_100_percent_titan_embed_london" = {
+      model_key          = "titan_embed_london",
+      threshold          = 100,
+      "description_name" = "Titan Embed in eu-west-2 (Document indexing)"
+    }
+  }
 }
 
-resource "aws_cloudwatch_metric_alarm" "bedrock_token_threshold_50_percent_claude_sonnet" {
-  alarm_name          = "govuk-chat-${var.govuk_environment}-bedrock-token-threshold-50-claude-sonnet"
+resource "aws_cloudwatch_metric_alarm" "bedrock_token_threshold" {
+  for_each = local.alarms
+
+  region              = lookup(local.models[each.value.model_key], "region", null)
+  alarm_name          = "govuk-chat-${var.govuk_environment}-${replace(each.key, "_", "-")}"
   alarm_description   = <<-EOF
-  WARNING - The current ${var.govuk_environment} Bedrock token usage > 50% for Claude Sonnet
+  ${each.value.threshold == 50 ? "WARNING" : "CRITICAL"} - The current ${var.govuk_environment} Bedrock token usage > ${each.value.threshold}% for ${each.value.description_name}
 
   Runbook:
   https://docs.publishing.service.gov.uk/manual/alerts/chat-ai-alerts.html#bedrock-token-threshold-alerts
   EOF
   comparison_operator = "GreaterThanOrEqualToThreshold"
-  threshold           = 50
+  threshold           = each.value.threshold
   evaluation_periods  = 1
   treat_missing_data  = "notBreaching"
 
   # m1: CacheWriteInputTokenCount
-  metric_query {
-    id = "m1"
-    metric {
-      namespace   = "AWS/Bedrock"
-      metric_name = "CacheWriteInputTokenCount"
-      period      = local.period
-      stat        = local.stat
-      unit        = local.unit
-      dimensions = {
-        ModelId = local.claude_sonnet_model_id
+  dynamic "metric_query" {
+    for_each = strcontains(local.models[each.value.model_key].expression, "m1") ? [1] : []
+    content {
+      id = "m1"
+      metric {
+        namespace   = "AWS/Bedrock"
+        metric_name = "CacheWriteInputTokenCount"
+        period      = local.period
+        stat        = local.stat
+        unit        = local.unit
+        dimensions  = { ModelId = local.models[each.value.model_key].model_id }
       }
+      return_data = false
     }
-    return_data = false
   }
 
   # m2: InputTokenCount
-  metric_query {
-    id = "m2"
-    metric {
-      namespace   = "AWS/Bedrock"
-      metric_name = "InputTokenCount"
-      period      = local.period
-      stat        = local.stat
-      unit        = local.unit
-      dimensions = {
-        ModelId = local.claude_sonnet_model_id
+  dynamic "metric_query" {
+    for_each = strcontains(local.models[each.value.model_key].expression, "m2") ? [1] : []
+    content {
+      id = "m2"
+      metric {
+        namespace   = "AWS/Bedrock"
+        metric_name = "InputTokenCount"
+        period      = local.period
+        stat        = local.stat
+        unit        = local.unit
+        dimensions  = { ModelId = local.models[each.value.model_key].model_id }
       }
+      return_data = false
     }
-    return_data = false
   }
 
   # m3: OutputTokenCount
-  metric_query {
-    id = "m3"
-    metric {
-      namespace   = "AWS/Bedrock"
-      metric_name = "OutputTokenCount"
-      period      = local.period
-      stat        = local.stat
-      unit        = local.unit
-      dimensions = {
-        ModelId = local.claude_sonnet_model_id
+  dynamic "metric_query" {
+    for_each = strcontains(local.models[each.value.model_key].expression, "m3") ? [1] : []
+    content {
+      id = "m3"
+      metric {
+        namespace   = "AWS/Bedrock"
+        metric_name = "OutputTokenCount"
+        period      = local.period
+        stat        = local.stat
+        unit        = local.unit
+        dimensions  = { ModelId = local.models[each.value.model_key].model_id }
       }
+      return_data = false
     }
-    return_data = false
   }
 
   # e1: Percentage Calculation
   metric_query {
-    id          = "e1"
-    expression  = "((m1 + m2 + (m3 * 5)) / ${local.claude_sonnet_token_limit}) * 100"
+    id = "e1"
+    expression = replace(
+      local.models[each.value.model_key].expression,
+      "TOKEN_LIMIT",
+      local.models[each.value.model_key].token_limit
+    )
     label       = "Expression1"
     return_data = true
   }
 
-  alarm_actions             = [aws_sns_topic.chat_alerts_dublin.arn]
-  ok_actions                = [aws_sns_topic.chat_alerts_dublin.arn]
-  insufficient_data_actions = []
-}
-
-resource "aws_cloudwatch_metric_alarm" "bedrock_token_threshold_100_percent_claude_sonnet" {
-  alarm_name          = "govuk-chat-${var.govuk_environment}-bedrock-token-threshold-100-claude-sonnet"
-  alarm_description   = <<-EOF
-  CRITICAL - The current ${var.govuk_environment} Bedrock token usage > 100% for Claude Sonnet
-
-  Runbook:
-  https://docs.publishing.service.gov.uk/manual/alerts/chat-ai-alerts.html#bedrock-token-threshold-alerts
-  EOF
-  comparison_operator = "GreaterThanOrEqualToThreshold"
-  threshold           = 100
-  evaluation_periods  = 1
-  treat_missing_data  = "notBreaching"
-
-  # m1: CacheWriteInputTokenCount
-  metric_query {
-    id = "m1"
-    metric {
-      namespace   = "AWS/Bedrock"
-      metric_name = "CacheWriteInputTokenCount"
-      period      = local.period
-      stat        = local.stat
-      unit        = local.unit
-      dimensions = {
-        ModelId = local.claude_sonnet_model_id
-      }
-    }
-    return_data = false
-  }
-
-  # m2: InputTokenCount
-  metric_query {
-    id = "m2"
-    metric {
-      namespace   = "AWS/Bedrock"
-      metric_name = "InputTokenCount"
-      period      = local.period
-      stat        = local.stat
-      unit        = local.unit
-      dimensions = {
-        ModelId = local.claude_sonnet_model_id
-      }
-    }
-    return_data = false
-  }
-
-  # m3: OutputTokenCount
-  metric_query {
-    id = "m3"
-    metric {
-      namespace   = "AWS/Bedrock"
-      metric_name = "OutputTokenCount"
-      period      = local.period
-      stat        = local.stat
-      unit        = local.unit
-      dimensions = {
-        ModelId = local.claude_sonnet_model_id
-      }
-    }
-    return_data = false
-  }
-
-  # e1: Percentage Calculation
-  metric_query {
-    id          = "e1"
-    expression  = "((m1 + m2 + (m3 * 5)) / ${local.claude_sonnet_token_limit}) * 100"
-    label       = "Expression1"
-    return_data = true
-  }
-
-  alarm_actions             = [aws_sns_topic.chat_alerts_dublin.arn]
-  ok_actions                = [aws_sns_topic.chat_alerts_dublin.arn]
-  insufficient_data_actions = []
-}
-
-resource "aws_cloudwatch_metric_alarm" "bedrock_token_threshold_50_percent_gpt_oss" {
-  alarm_name          = "govuk-chat-${var.govuk_environment}-bedrock-token-threshold-50-gpt-oss"
-  alarm_description   = <<-EOF
-  WARNING - The current ${var.govuk_environment} Bedrock token usage > 50% for OpenAI GPT-OSS
-
-  Runbook:
-  https://docs.publishing.service.gov.uk/manual/alerts/chat-ai-alerts.html#bedrock-token-threshold-alerts
-  EOF
-  comparison_operator = "GreaterThanOrEqualToThreshold"
-  threshold           = 50
-  evaluation_periods  = 1
-  treat_missing_data  = "notBreaching"
-
-  # m1: CacheWriteInputTokenCount
-  metric_query {
-    id = "m1"
-    metric {
-      namespace   = "AWS/Bedrock"
-      metric_name = "CacheWriteInputTokenCount"
-      period      = local.period
-      stat        = local.stat
-      unit        = local.unit
-      dimensions = {
-        ModelId = local.openai_gpt_oss_model_id
-      }
-    }
-    return_data = false
-  }
-
-  # m2: InputTokenCount
-  metric_query {
-    id = "m2"
-    metric {
-      namespace   = "AWS/Bedrock"
-      metric_name = "InputTokenCount"
-      period      = local.period
-      stat        = local.stat
-      unit        = local.unit
-      dimensions = {
-        ModelId = local.openai_gpt_oss_model_id
-      }
-    }
-    return_data = false
-  }
-
-  # m3: OutputTokenCount
-  metric_query {
-    id = "m3"
-    metric {
-      namespace   = "AWS/Bedrock"
-      metric_name = "OutputTokenCount"
-      period      = local.period
-      stat        = local.stat
-      unit        = local.unit
-      dimensions = {
-        ModelId = local.openai_gpt_oss_model_id
-      }
-    }
-    return_data = false
-  }
-
-  # e1: Percentage Calculation
-  metric_query {
-    id          = "e1"
-    expression  = "((m1 + m2 + (m3 * 5)) / ${local.openai_gpt_oss_token_limit}) * 100"
-    label       = "Expression1"
-    return_data = true
-  }
-
-  alarm_actions             = [aws_sns_topic.chat_alerts_dublin.arn]
-  ok_actions                = [aws_sns_topic.chat_alerts_dublin.arn]
-  insufficient_data_actions = []
-}
-
-resource "aws_cloudwatch_metric_alarm" "bedrock_token_threshold_100_percent_gpt_oss" {
-  alarm_name          = "govuk-chat-${var.govuk_environment}-bedrock-token-threshold-100-gpt-oss"
-  alarm_description   = <<-EOF
-  CRITICAL - The current ${var.govuk_environment} Bedrock token usage > 100% for OpenAI GPT-OSS
-
-  Runbook:
-  https://docs.publishing.service.gov.uk/manual/alerts/chat-ai-alerts.html#bedrock-token-threshold-alerts
-  EOF
-  comparison_operator = "GreaterThanOrEqualToThreshold"
-  threshold           = 100
-  evaluation_periods  = 1
-  treat_missing_data  = "notBreaching"
-
-  # m1: CacheWriteInputTokenCount
-  metric_query {
-    id = "m1"
-    metric {
-      namespace   = "AWS/Bedrock"
-      metric_name = "CacheWriteInputTokenCount"
-      period      = local.period
-      stat        = local.stat
-      unit        = local.unit
-      dimensions = {
-        ModelId = local.openai_gpt_oss_model_id
-      }
-    }
-    return_data = false
-  }
-
-  # m2: InputTokenCount
-  metric_query {
-    id = "m2"
-    metric {
-      namespace   = "AWS/Bedrock"
-      metric_name = "InputTokenCount"
-      period      = local.period
-      stat        = local.stat
-      unit        = local.unit
-      dimensions = {
-        ModelId = local.openai_gpt_oss_model_id
-      }
-    }
-    return_data = false
-  }
-
-  # m3: OutputTokenCount
-  metric_query {
-    id = "m3"
-    metric {
-      namespace   = "AWS/Bedrock"
-      metric_name = "OutputTokenCount"
-      period      = local.period
-      stat        = local.stat
-      unit        = local.unit
-      dimensions = {
-        ModelId = local.openai_gpt_oss_model_id
-      }
-    }
-    return_data = false
-  }
-
-  # e1: Percentage Calculation
-  metric_query {
-    id          = "e1"
-    expression  = "((m1 + m2 + (m3 * 5)) / ${local.openai_gpt_oss_token_limit}) * 100"
-    label       = "Expression1"
-    return_data = true
-  }
-
-  alarm_actions             = [aws_sns_topic.chat_alerts_dublin.arn]
-  ok_actions                = [aws_sns_topic.chat_alerts_dublin.arn]
-  insufficient_data_actions = []
-}
-
-
-resource "aws_cloudwatch_metric_alarm" "bedrock_token_threshold_50_percent_titan_embed_dublin" {
-  region              = "eu-west-1"
-  alarm_name          = "govuk-chat-${var.govuk_environment}-bedrock-token-threshold-50-titan-embed-dublin"
-  alarm_description   = <<-EOF
-  WARNING - The current ${var.govuk_environment} Bedrock token usage > 50% for Titan Embed in eu-west-1 (User questions)
-
-  Runbook:
-  https://docs.publishing.service.gov.uk/manual/alerts/chat-ai-alerts.html#bedrock-token-threshold-alerts
-  EOF
-  comparison_operator = "GreaterThanOrEqualToThreshold"
-  threshold           = 50
-  evaluation_periods  = 1
-  treat_missing_data  = "notBreaching"
-
-  # m1: InputTokenCount
-  metric_query {
-    id = "m1"
-    metric {
-      namespace   = "AWS/Bedrock"
-      metric_name = "InputTokenCount"
-      period      = local.period
-      stat        = local.stat
-      unit        = local.unit
-      dimensions = {
-        ModelId = local.titan_embed_model_id
-      }
-    }
-    return_data = false
-  }
-
-  # e1: Percentage Calculation
-  metric_query {
-    id          = "e1"
-    expression  = "m1 / ${local.titan_embed_token_limit} * 100"
-    label       = "Expression1"
-    return_data = true
-  }
-
-  alarm_actions             = [aws_sns_topic.chat_alerts_dublin.arn]
-  ok_actions                = [aws_sns_topic.chat_alerts_dublin.arn]
-  insufficient_data_actions = []
-}
-
-resource "aws_cloudwatch_metric_alarm" "bedrock_token_threshold_100_percent_titan_embed_dublin" {
-  region              = "eu-west-1"
-  alarm_name          = "govuk-chat-${var.govuk_environment}-bedrock-token-threshold-100-titan-embed-dublin"
-  alarm_description   = <<-EOF
-  CRITICAL - The current ${var.govuk_environment} Bedrock token usage > 100% for Titan Embed in eu-west-1 (User questions)
-
-  Runbook:
-  https://docs.publishing.service.gov.uk/manual/alerts/chat-ai-alerts.html#bedrock-token-threshold-alerts
-  EOF
-  comparison_operator = "GreaterThanOrEqualToThreshold"
-  threshold           = 100
-  evaluation_periods  = 1
-  treat_missing_data  = "notBreaching"
-
-  # m1: InputTokenCount
-  metric_query {
-    id = "m1"
-    metric {
-      namespace   = "AWS/Bedrock"
-      metric_name = "InputTokenCount"
-      period      = local.period
-      stat        = local.stat
-      unit        = local.unit
-      dimensions = {
-        ModelId = local.titan_embed_model_id
-      }
-    }
-    return_data = false
-  }
-
-  # e1: Percentage Calculation
-  metric_query {
-    id          = "e1"
-    expression  = "m1 / ${local.titan_embed_token_limit} * 100"
-    label       = "Expression1"
-    return_data = true
-  }
-
-  alarm_actions             = [aws_sns_topic.chat_alerts_dublin.arn]
-  ok_actions                = [aws_sns_topic.chat_alerts_dublin.arn]
-  insufficient_data_actions = []
-}
-
-resource "aws_cloudwatch_metric_alarm" "bedrock_token_threshold_50_percent_titan_embed_london" {
-  region              = "eu-west-2"
-  alarm_name          = "govuk-chat-${var.govuk_environment}-bedrock-token-threshold-50-titan-embed-london"
-  alarm_description   = <<-EOF
-  WARNING - The current ${var.govuk_environment} Bedrock token usage > 50% for Titan Embed in eu-west-2 (Document indexing)
-
-  Runbook:
-  https://docs.publishing.service.gov.uk/manual/alerts/chat-ai-alerts.html#bedrock-token-threshold-alerts
-  EOF
-  comparison_operator = "GreaterThanOrEqualToThreshold"
-  threshold           = 50
-  evaluation_periods  = 1
-  treat_missing_data  = "notBreaching"
-
-  # m1: InputTokenCount
-  metric_query {
-    id = "m1"
-    metric {
-      namespace   = "AWS/Bedrock"
-      metric_name = "InputTokenCount"
-      period      = local.period
-      stat        = local.stat
-      unit        = local.unit
-      dimensions = {
-        ModelId = local.titan_embed_model_id
-      }
-    }
-    return_data = false
-  }
-
-  # e1: Percentage Calculation
-  metric_query {
-    id          = "e1"
-    expression  = "m1 / ${local.titan_embed_token_limit} * 100"
-    label       = "Expression1"
-    return_data = true
-  }
-
-  alarm_actions             = [aws_sns_topic.chat_alerts_london.arn]
-  ok_actions                = [aws_sns_topic.chat_alerts_london.arn]
-  insufficient_data_actions = []
-}
-
-resource "aws_cloudwatch_metric_alarm" "bedrock_token_threshold_100_percent_titan_embed_london" {
-  region              = "eu-west-2"
-  alarm_name          = "govuk-chat-${var.govuk_environment}-bedrock-token-threshold-100-titan-embed-london"
-  alarm_description   = <<-EOF
-  CRITICAL - The current ${var.govuk_environment} Bedrock token usage > 100% for Titan Embed in eu-west-2 (Document indexing)
-
-  Runbook:
-  https://docs.publishing.service.gov.uk/manual/alerts/chat-ai-alerts.html#bedrock-token-threshold-alerts
-  EOF
-  comparison_operator = "GreaterThanOrEqualToThreshold"
-  threshold           = 100
-  evaluation_periods  = 1
-  treat_missing_data  = "notBreaching"
-
-  # m1: InputTokenCount
-  metric_query {
-    id = "m1"
-    metric {
-      namespace   = "AWS/Bedrock"
-      metric_name = "InputTokenCount"
-      period      = local.period
-      stat        = local.stat
-      unit        = local.unit
-      dimensions = {
-        ModelId = local.titan_embed_model_id
-      }
-    }
-    return_data = false
-  }
-
-  # e1: Percentage Calculation
-  metric_query {
-    id          = "e1"
-    expression  = "m1 / ${local.titan_embed_token_limit} * 100"
-    label       = "Expression1"
-    return_data = true
-  }
-
-  alarm_actions             = [aws_sns_topic.chat_alerts_london.arn]
-  ok_actions                = [aws_sns_topic.chat_alerts_london.arn]
+  alarm_actions             = [local.models[each.value.model_key].sns_topic]
+  ok_actions                = [local.models[each.value.model_key].sns_topic]
   insufficient_data_actions = []
 }
