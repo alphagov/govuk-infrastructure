@@ -7,38 +7,38 @@ locals {
     claude_sonnet = {
       model_id    = "eu.anthropic.claude-sonnet-4-20250514-v1:0"
       token_limit = var.chat_token_limits_per_minute["claude_sonnet"]
-      expression  = "((CacheWriteInputTokenCount + InputTokenCount + (OutputTokenCount * 5)) / TOKEN_LIMIT) * 100"
+      expression  = "((cacheWriteinputTokenCount + inputTokenCount + (outputTokenCount * 5)) / TOKEN_LIMIT) * 100"
       sns_topic   = aws_sns_topic.chat_alerts_dublin.arn
     }
     claude_sonnet_4_5 = {
       model_id    = "eu.anthropic.claude-sonnet-4-5-20250929-v1:0"
       token_limit = var.chat_token_limits_per_minute["claude_sonnet_4_5"]
-      expression  = "((CacheWriteInputTokenCount + InputTokenCount + (OutputTokenCount)) / TOKEN_LIMIT) * 100"
+      expression  = "((cacheWriteinputTokenCount + inputTokenCount + (outputTokenCount)) / TOKEN_LIMIT) * 100"
       sns_topic   = aws_sns_topic.chat_alerts_dublin.arn
     }
     haiku_4_5 = {
       model_id    = "eu.anthropic.claude-haiku-4-5-20251001-v1:0"
       token_limit = var.chat_token_limits_per_minute["haiku_4_5"]
-      expression  = "((CacheWriteInputTokenCount + InputTokenCount + (OutputTokenCount * 5)) / TOKEN_LIMIT) * 100"
+      expression  = "((cacheWriteinputTokenCount + inputTokenCount + (outputTokenCount * 5)) / TOKEN_LIMIT) * 100"
       sns_topic   = aws_sns_topic.chat_alerts_dublin.arn
     }
     openai_gpt_oss = {
       model_id    = "openai.gpt-oss-120b-1:0"
       token_limit = var.chat_token_limits_per_minute["openai_gpt_oss"]
-      expression  = "((CacheWriteInputTokenCount + InputTokenCount + (OutputTokenCount * 5)) / TOKEN_LIMIT) * 100"
+      expression  = "((cacheWriteinputTokenCount + inputTokenCount + (outputTokenCount * 5)) / TOKEN_LIMIT) * 100"
       sns_topic   = aws_sns_topic.chat_alerts_dublin.arn
     }
     titan_embed_dublin = {
       model_id    = "amazon.titan-embed-text-v2:0"
       token_limit = var.chat_token_limits_per_minute["titan_embed"]
-      expression  = "InputTokenCount / TOKEN_LIMIT * 100"
+      expression  = "inputTokenCount / TOKEN_LIMIT * 100"
       region      = "eu-west-1"
       sns_topic   = aws_sns_topic.chat_alerts_dublin.arn
     }
     titan_embed_london = {
       model_id    = "amazon.titan-embed-text-v2:0"
       token_limit = var.chat_token_limits_per_minute["titan_embed"]
-      expression  = "InputTokenCount / TOKEN_LIMIT * 100"
+      expression  = "inputTokenCount / TOKEN_LIMIT * 100"
       region      = "eu-west-2"
       sns_topic   = aws_sns_topic.chat_alerts_london.arn
     }
@@ -125,12 +125,12 @@ resource "aws_cloudwatch_metric_alarm" "bedrock_token_threshold" {
   treat_missing_data  = "notBreaching"
 
   dynamic "metric_query" {
-    for_each = strcontains(local.models[each.value.model_key].expression, "CacheWriteInputTokenCount") ? [1] : []
+    for_each = strcontains(local.models[each.value.model_key].expression, "cacheWriteinputTokenCount") ? [1] : []
     content {
-      id = "CacheWriteInputTokenCount"
+      id = "cacheWriteinputTokenCount"
       metric {
         namespace   = "AWS/Bedrock"
-        metric_name = "CacheWriteInputTokenCount"
+        metric_name = "cacheWriteinputTokenCount"
         period      = local.period
         stat        = local.stat
         unit        = local.unit
@@ -141,12 +141,12 @@ resource "aws_cloudwatch_metric_alarm" "bedrock_token_threshold" {
   }
 
   dynamic "metric_query" {
-    for_each = strcontains(local.models[each.value.model_key].expression, "InputTokenCount") ? [1] : []
+    for_each = strcontains(local.models[each.value.model_key].expression, "inputTokenCount") ? [1] : []
     content {
-      id = "InputTokenCount"
+      id = "inputTokenCount"
       metric {
         namespace   = "AWS/Bedrock"
-        metric_name = "InputTokenCount"
+        metric_name = "inputTokenCount"
         period      = local.period
         stat        = local.stat
         unit        = local.unit
@@ -157,12 +157,12 @@ resource "aws_cloudwatch_metric_alarm" "bedrock_token_threshold" {
   }
 
   dynamic "metric_query" {
-    for_each = strcontains(local.models[each.value.model_key].expression, "OutputTokenCount") ? [1] : []
+    for_each = strcontains(local.models[each.value.model_key].expression, "outputTokenCount") ? [1] : []
     content {
-      id = "OutputTokenCount"
+      id = "outputTokenCount"
       metric {
         namespace   = "AWS/Bedrock"
-        metric_name = "OutputTokenCount"
+        metric_name = "outputTokenCount"
         period      = local.period
         stat        = local.stat
         unit        = local.unit
