@@ -419,6 +419,11 @@ repos:
       source_owner: "alexbasista"
       source_repo: "terraform-tfe-workspacer"
 
+  govuk-publishing-documentation:
+    visibility: private
+    branch_protection: true
+    can_be_deployed: false
+
   govuk-reports-prototype:
     need_production_access_to_merge: false
     branch_protection: false
