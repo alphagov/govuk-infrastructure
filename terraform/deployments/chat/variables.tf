@@ -36,7 +36,12 @@ variable "chat_slack_channel_id" {
 }
 
 variable "chat_token_limits_per_minute" {
-  type        = map(number)
+  type = object({
+    claude_sonnet     = number
+    claude_sonnet_4_5 = number
+    haiku_4_5         = number
+    openai_gpt_oss    = number
+    titan_embed       = number
+  })
   description = "A map of model names to AWS Bedrock token limits per minute."
-  default     = {}
 }
