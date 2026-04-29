@@ -12,3 +12,4 @@
 /terraform/deployments/gcp-gds-bq-processing/ @alphagov/gov-uk-platform-engineering @alphagov/govuk-data-engineering
 /terraform/deployments/gcp-gov-graph/ @alphagov/gov-uk-platform-engineering @alphagov/govuk-data-engineering
 /terraform/variables/**/gcp-gov-graph.tfvars @alphagov/gov-uk-platform-engineering @alphagov/govuk-data-engineering
+/terraform/shared-modules/gcp-project-init/ @alphagov/gov-uk-platform-engineering @alphagov/govuk-data-engineering
