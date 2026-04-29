@@ -15,6 +15,7 @@ locals {
     "content-store",
     "content-store-proxy",
     "content-tagger",
+    "datagovuk",
     "datagovuk_find",
     "govuk-chat",
     "email-alert-api",
