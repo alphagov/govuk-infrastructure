@@ -22,5 +22,8 @@
 
 | Name | Description |
 |------|-------------|
+| <a name="output_iam_binding_project_editors"></a> [iam\_binding\_project\_editors](#output\_iam\_binding\_project\_editors) | The project's IAM binding for roles/editor |
+| <a name="output_iam_binding_project_owners"></a> [iam\_binding\_project\_owners](#output\_iam\_binding\_project\_owners) | The project's IAM binding for roles/owner |
+| <a name="output_iam_binding_project_viewers"></a> [iam\_binding\_project\_viewers](#output\_iam\_binding\_project\_viewers) | The project's IAM binding for roles/viewer |
 | <a name="output_project"></a> [project](#output\_project) | The entire google\_project resource object. |
 <!-- END_TF_DOCS -->
