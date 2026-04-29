@@ -7,7 +7,7 @@ resource "aws_cloudwatch_event_rule" "aws_service_health_alert_dublin" {
     "detail-type" : ["AWS Health Event"],
     "detail" : {
       "service" : ["BEDROCK", "EKS", "ELASTICACHE", "ES", "RDS"],
-      "eventTypeCategory" : ["issue"]
+      "eventTypeCategory" : ["issue", "scheduledChange"]
     }
   })
   role_arn = aws_iam_role.aws_service_health_alert.arn
@@ -27,7 +27,7 @@ resource "aws_cloudwatch_event_rule" "aws_service_health_alert_london" {
     "detail-type" : ["AWS Health Event"],
     "detail" : {
       "service" : ["BEDROCK", "EKS", "ELASTICACHE", "ES", "RDS"],
-      "eventTypeCategory" : ["issue"]
+      "eventTypeCategory" : ["issue", "scheduledChange"]
     }
   })
   role_arn = aws_iam_role.aws_service_health_alert.arn
