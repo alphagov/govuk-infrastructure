@@ -42,3 +42,9 @@ variable "google_service_account_email" {
   description = "The GCP service account email runs will use to authenticate"
   type        = string
 }
+
+variable "terraform_version" {
+  type        = string
+  description = "Version constraint for Terraform for this workspace."
+  default     = "~> 1.14.9"
+}
