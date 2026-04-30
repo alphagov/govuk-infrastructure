@@ -17,7 +17,7 @@ resource "tfe_workspace" "environment_workspace" {
   source_url  = "https://github.com/alphagov/search-v2-infrastructure/tree/main/terraform/meta"
 
   working_directory = "terraform/deployments/search-api-v2"
-  terraform_version = "~> 1.14.0"
+  terraform_version = var.terraform_version
 
   # Don't auto-apply in production (to allow catching issues in lower environments)
   auto_apply = var.name != "production"
