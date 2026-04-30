@@ -191,7 +191,7 @@ variable "bigquery_zendesk_data_viewer_members" {
 terraform {
   required_providers {
     google = {
-      version = "7.30.0"
+      version = "6.27.0" # Pinning the version required by terraform-google-modules/container-vm/google.
     }
   }
 }
