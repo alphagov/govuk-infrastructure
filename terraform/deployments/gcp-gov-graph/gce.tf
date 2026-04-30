@@ -177,7 +177,7 @@ resource "google_compute_subnetwork" "cloudrun" {
 # https://github.com/terraform-google-modules/terraform-google-container-vm
 module "publishing-api-container" {
   source  = "terraform-google-modules/container-vm/google"
-  version = "~> 2.0"
+  version = "~> 3.0"
 
   container = {
     image = "${var.region}-docker.pkg.dev/${var.project_id}/docker/publishing-api:latest"
@@ -208,7 +208,7 @@ module "publishing-api-container" {
 # https://github.com/terraform-google-modules/terraform-google-container-vm
 module "support-api-container" {
   source  = "terraform-google-modules/container-vm/google"
-  version = "~> 2.0"
+  version = "~> 3.0"
 
   container = {
     image = "${var.region}-docker.pkg.dev/${var.project_id}/docker/support-api:latest"
@@ -267,7 +267,7 @@ module "support-api-container" {
 # https://github.com/terraform-google-modules/terraform-google-container-vm
 module "publisher-container" {
   source  = "terraform-google-modules/container-vm/google"
-  version = "~> 2.0"
+  version = "~> 3.0"
 
   container = {
     image = "${var.region}-docker.pkg.dev/${var.project_id}/docker/publisher:latest"
@@ -321,7 +321,7 @@ module "publisher-container" {
 # https://github.com/terraform-google-modules/terraform-google-container-vm
 module "redis-cli-container" {
   source  = "terraform-google-modules/container-vm/google"
-  version = "~> 2.0"
+  version = "~> 3.0"
 
   # Enable / Disable
   count = var.enable_redis_session_store_instance ? 1 : 0
@@ -360,7 +360,7 @@ module "redis-cli-container" {
 
 module "whitehall-container" {
   source  = "terraform-google-modules/container-vm/google"
-  version = "~> 2.0"
+  version = "~> 3.0"
 
   container = {
     image = "${var.region}-docker.pkg.dev/${var.project_id}/docker/whitehall:latest"
@@ -386,7 +386,7 @@ module "whitehall-container" {
 
 module "asset-manager-container" {
   source  = "terraform-google-modules/container-vm/google"
-  version = "~> 2.0"
+  version = "~> 3.0"
 
   container = {
     image = "${var.region}-docker.pkg.dev/${var.project_id}/docker/asset-manager:latest"
