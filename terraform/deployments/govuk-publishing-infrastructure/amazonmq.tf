@@ -232,3 +232,14 @@ resource "aws_iam_role_policy_attachment" "lambda_role_policy" {
   role       = aws_iam_role.post_config_to_amazonmq.name
   policy_arn = data.aws_iam_policy.lambda_vpc_access.arn
 }
+
+data "aws_lambda_invocation" "post_config_to_amazonmq" {
+  depends_on    = [aws_security_group_rule.rabbitmq_egress_self_self]
+  function_name = aws_lambda_function.post_config_to_amazonmq.function_name
+  input = jsonencode({
+    url      = "${aws_mq_broker.publishing_amazonmq.instances[0].console_url}/api/definitions"
+    username = "root"
+    password = random_password.mq_user["root"].result
+    json_b64 = base64encode(local.amazonmq_schema)
+  })
+}
