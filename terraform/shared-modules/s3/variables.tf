@@ -135,3 +135,32 @@ variable "tags" {
   default     = {}
   nullable    = false
 }
+
+variable "cors_rules" {
+  type = object({
+    allowed_headers = list(string)
+    allowed_methods = list(string)
+    allowed_origins = list(string)
+    max_age_seconds = number
+  })
+  description = "Cross-Origin Resource Sharing rules to apply to the bucket. If null, no rules will be configured"
+  nullable    = true
+  default     = null
+}
+
+variable "replication_config" {
+  type = object({
+    role = string
+    rules = optional(set(object({
+      id     = string
+      status = string
+      destination = object({
+        bucket        = string
+        storage_class = string
+      })
+    })))
+  })
+  description = "Replicate this bucket's content to another bucket. If null, no replication will be configured."
+  nullable    = true
+  default     = null
+}

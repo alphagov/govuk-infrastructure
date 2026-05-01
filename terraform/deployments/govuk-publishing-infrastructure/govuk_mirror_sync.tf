@@ -1,98 +1,139 @@
 locals {
-  provider_arn = data.tfe_outputs.cluster_infrastructure.nonsensitive_values.cluster_oidc_provider_arn
+  provider_arn               = data.tfe_outputs.cluster_infrastructure.nonsensitive_values.cluster_oidc_provider_arn
+  mirror_bucket_name         = "govuk-${var.govuk_environment}-mirror"
+  mirror_replica_bucket_name = "govuk-${var.govuk_environment}-mirror-replica"
 }
 
-resource "aws_s3_bucket" "govuk_mirror" {
-  provider = aws.replica
-  bucket   = "govuk-${var.govuk_environment}-mirror"
-
-  tags = {
-    Name = "govuk-${var.govuk_environment}-mirror"
+module "mirror_bucket" {
+  # The main mirror bucket lives in the region selected for replicas
+  providers = {
+    aws = aws.replica
   }
-}
 
-resource "aws_s3_bucket_versioning" "govuk_mirror" {
-  provider = aws.replica
-  bucket   = aws_s3_bucket.govuk_mirror.id
-  versioning_configuration {
-    status = "Enabled"
+  source            = "../../shared-modules/s3"
+  name              = local.mirror_bucket_name
+  govuk_environment = var.govuk_environment
+
+  access_logging_config = {
+    target_bucket = "govuk-${var.govuk_environment}-aws-secondary-logging"
+    target_prefix = "s3/govuk-${var.govuk_environment}-mirror/"
   }
-}
 
-resource "aws_s3_bucket_logging" "govuk_mirror" {
-  provider = aws.replica
-  bucket   = aws_s3_bucket.govuk_mirror.id
-
-  target_bucket = "govuk-${var.govuk_environment}-aws-secondary-logging"
-  target_prefix = "s3/govuk-${var.govuk_environment}-mirror/"
-}
-
-resource "aws_s3_bucket_cors_configuration" "govuk_mirror" {
-  provider = aws.replica
-  bucket   = aws_s3_bucket.govuk_mirror.id
-
-  cors_rule {
+  cors_rules = {
     allowed_headers = ["*"]
     allowed_methods = ["GET", "HEAD"]
     allowed_origins = ["*"]
     max_age_seconds = 3000
   }
-}
 
-resource "aws_s3_bucket_lifecycle_configuration" "govuk_mirror" {
-  provider = aws.replica
-  bucket   = aws_s3_bucket.govuk_mirror.id
-
-  rule {
-    id = "main"
-
-    filter {}
-
+  lifecycle_rules = [{
+    id     = "main"
     status = "Enabled"
-
-    noncurrent_version_expiration {
+    noncurrent_version_expiration = {
       noncurrent_days = 5
     }
+  }]
+
+  extra_bucket_policies = [
+    data.aws_iam_policy_document.s3_mirror_read_policy.json
+  ]
+
+  replication_config = {
+    role = aws_iam_role.govuk_mirror_replication_role.arn
+    rules = [{
+      id = "govuk-mirror-replication-whole-bucket-rule"
+
+      status = "Enabled"
+      destination = {
+        bucket        = module.mirror_replica_bucket.arn
+        storage_class = "STANDARD"
+      }
+    }]
   }
 }
 
-resource "aws_s3_bucket" "govuk_mirror_replica" {
-  bucket = "govuk-${var.govuk_environment}-mirror-replica"
-
-  tags = {
-    Name = "govuk-${var.govuk_environment}-mirror-replica"
-  }
+moved {
+  from = aws_s3_bucket.govuk_mirror
+  to   = module.mirror_bucket.aws_s3_bucket.this
 }
 
-resource "aws_s3_bucket_versioning" "govuk_mirror_replica" {
-  bucket = aws_s3_bucket.govuk_mirror_replica.id
-  versioning_configuration {
+moved {
+  from = aws_s3_bucket_versioning.govuk_mirror
+  to   = module.mirror_bucket.aws_s3_bucket_versioning.this
+}
+
+moved {
+  from = aws_s3_bucket_logging.govuk_mirror
+  to   = module.mirror_bucket.aws_s3_bucket_logging.this
+}
+
+moved {
+  from = aws_s3_bucket_cors_configuration.govuk_mirror
+  to   = module.mirror_bucket.aws_s3_bucket_cors_configuration.this[0]
+}
+
+moved {
+  from = aws_s3_bucket_lifecycle_configuration.govuk_mirror
+  to   = module.mirror_bucket.aws_s3_bucket_lifecycle_configuration.this[0]
+}
+
+moved {
+  from = aws_s3_bucket_replication_configuration.govuk_mirror
+  to   = module.mirror_bucket.aws_s3_bucket_replication_configuration.this[0]
+}
+
+moved {
+  from = aws_s3_bucket_policy.govuk_mirror_read_policy
+  to   = module.mirror_bucket.aws_s3_bucket_policy.bucket_policy
+}
+
+module "mirror_replica_bucket" {
+  source = "../../shared-modules/s3"
+
+  name              = local.mirror_replica_bucket_name
+  govuk_environment = var.govuk_environment
+
+  access_logging_config = {
+    target_bucket = "govuk-${var.govuk_environment}-aws-logging"
+    target_prefix = "s3/govuk-${var.govuk_environment}-mirror-replica/"
+  }
+
+  lifecycle_rules = [{
+    id     = "main"
     status = "Enabled"
-  }
-}
-
-resource "aws_s3_bucket_logging" "govuk_mirror_replica" {
-  bucket = aws_s3_bucket.govuk_mirror_replica.id
-
-  target_bucket = "govuk-${var.govuk_environment}-aws-logging"
-  target_prefix = "s3/govuk-${var.govuk_environment}-mirror-replica/"
-}
-
-
-resource "aws_s3_bucket_lifecycle_configuration" "govuk_mirror_replica" {
-  bucket = aws_s3_bucket.govuk_mirror_replica.id
-
-  rule {
-    id = "main"
-
-    filter {}
-
-    status = "Enabled"
-
-    noncurrent_version_expiration {
+    noncurrent_version_expiration = {
       noncurrent_days = 5
     }
-  }
+  }]
+
+  extra_bucket_policies = [
+    data.aws_iam_policy_document.s3_mirror_replica_read_policy.json
+  ]
+}
+
+moved {
+  from = aws_s3_bucket.govuk_mirror_replica
+  to   = module.mirror_replica_bucket.aws_s3_bucket.this
+}
+
+moved {
+  from = aws_s3_bucket_versioning.govuk_mirror_replica
+  to   = module.mirror_replica_bucket.aws_s3_bucket_versioning.this
+}
+
+moved {
+  from = aws_s3_bucket_logging.govuk_mirror_replica
+  to   = module.mirror_replica_bucket.aws_s3_bucket_logging.this
+}
+
+moved {
+  from = aws_s3_bucket_lifecycle_configuration.govuk_mirror_replica
+  to   = module.mirror_replica_bucket.aws_s3_bucket_lifecycle_configuration.this
+}
+
+moved {
+  from = aws_s3_bucket_policy.govuk_mirror_replica_read_policy
+  to   = module.mirror_replica_bucket.aws_s3_bucket_policy.bucket_policy
 }
 
 data "aws_iam_policy_document" "s3_mirror_read_policy" {
@@ -101,8 +142,8 @@ data "aws_iam_policy_document" "s3_mirror_read_policy" {
     actions = ["s3:GetObject"]
 
     resources = [
-      "arn:aws:s3:::${aws_s3_bucket.govuk_mirror.id}",
-      "arn:aws:s3:::${aws_s3_bucket.govuk_mirror.id}/*",
+      "arn:aws:s3:::${local.mirror_bucket_name}",
+      "arn:aws:s3:::${local.mirror_bucket_name}/*",
     ]
 
     condition {
@@ -122,8 +163,8 @@ data "aws_iam_policy_document" "s3_mirror_read_policy" {
     actions = ["s3:GetObject"]
 
     resources = [
-      "arn:aws:s3:::${aws_s3_bucket.govuk_mirror.id}",
-      "arn:aws:s3:::${aws_s3_bucket.govuk_mirror.id}/*",
+      "arn:aws:s3:::${local.mirror_bucket_name}",
+      "arn:aws:s3:::${local.mirror_bucket_name}/*",
     ]
 
     condition {
@@ -143,8 +184,8 @@ data "aws_iam_policy_document" "s3_mirror_read_policy" {
     actions = ["s3:GetObject"]
 
     resources = [
-      "arn:aws:s3:::${aws_s3_bucket.govuk_mirror.id}",
-      "arn:aws:s3:::${aws_s3_bucket.govuk_mirror.id}/*",
+      "arn:aws:s3:::${local.mirror_bucket_name}",
+      "arn:aws:s3:::${local.mirror_bucket_name}/*",
     ]
 
     condition {
@@ -166,8 +207,8 @@ data "aws_iam_policy_document" "s3_mirror_replica_read_policy" {
     actions = ["s3:GetObject"]
 
     resources = [
-      "arn:aws:s3:::${aws_s3_bucket.govuk_mirror_replica.id}",
-      "arn:aws:s3:::${aws_s3_bucket.govuk_mirror_replica.id}/*",
+      "arn:aws:s3:::${local.mirror_replica_bucket_name}",
+      "arn:aws:s3:::${local.mirror_replica_bucket_name}/*",
     ]
 
     condition {
@@ -187,8 +228,8 @@ data "aws_iam_policy_document" "s3_mirror_replica_read_policy" {
     actions = ["s3:GetObject"]
 
     resources = [
-      "arn:aws:s3:::${aws_s3_bucket.govuk_mirror_replica.id}",
-      "arn:aws:s3:::${aws_s3_bucket.govuk_mirror_replica.id}/*",
+      "arn:aws:s3:::${local.mirror_replica_bucket_name}",
+      "arn:aws:s3:::${local.mirror_replica_bucket_name}/*",
     ]
 
     condition {
@@ -208,8 +249,8 @@ data "aws_iam_policy_document" "s3_mirror_replica_read_policy" {
     actions = ["s3:GetObject"]
 
     resources = [
-      "arn:aws:s3:::${aws_s3_bucket.govuk_mirror_replica.id}",
-      "arn:aws:s3:::${aws_s3_bucket.govuk_mirror_replica.id}/*",
+      "arn:aws:s3:::${local.mirror_replica_bucket_name}",
+      "arn:aws:s3:::${local.mirror_replica_bucket_name}/*",
     ]
 
     condition {
@@ -221,36 +262,6 @@ data "aws_iam_policy_document" "s3_mirror_replica_read_policy" {
     principals {
       type        = "AWS"
       identifiers = ["*"]
-    }
-  }
-}
-
-resource "aws_s3_bucket_policy" "govuk_mirror_read_policy" {
-  provider = aws.replica
-  bucket   = aws_s3_bucket.govuk_mirror.id
-  policy   = data.aws_iam_policy_document.s3_mirror_read_policy.json
-}
-
-resource "aws_s3_bucket_policy" "govuk_mirror_replica_read_policy" {
-  bucket = aws_s3_bucket.govuk_mirror_replica.id
-  policy = data.aws_iam_policy_document.s3_mirror_replica_read_policy.json
-}
-
-resource "aws_s3_bucket_replication_configuration" "govuk_mirror" {
-  provider   = aws.replica
-  depends_on = [aws_s3_bucket_versioning.govuk_mirror]
-
-  role   = aws_iam_role.govuk_mirror_replication_role.arn
-  bucket = aws_s3_bucket.govuk_mirror.id
-
-  rule {
-    id = "govuk-mirror-replication-whole-bucket-rule"
-
-    status = "Enabled"
-
-    destination {
-      bucket        = aws_s3_bucket.govuk_mirror_replica.arn
-      storage_class = "STANDARD"
     }
   }
 }
@@ -277,7 +288,7 @@ data "aws_iam_policy_document" "replication" {
       "s3:ListBucket",
     ]
 
-    resources = [aws_s3_bucket.govuk_mirror.arn]
+    resources = [module.mirror_bucket.arn]
   }
 
   statement {
@@ -289,7 +300,7 @@ data "aws_iam_policy_document" "replication" {
       "s3:GetObjectVersionTagging",
     ]
 
-    resources = ["${aws_s3_bucket.govuk_mirror.arn}/*"]
+    resources = ["${module.mirror_bucket.arn}/*"]
   }
 
   statement {
@@ -301,7 +312,7 @@ data "aws_iam_policy_document" "replication" {
       "s3:ReplicateTags",
     ]
 
-    resources = ["${aws_s3_bucket.govuk_mirror_replica.arn}/*"]
+    resources = ["${module.mirror_replica_bucket.arn}/*"]
   }
 }
 
@@ -332,7 +343,7 @@ data "aws_iam_policy_document" "google_replication" {
 
     ]
 
-    resources = [aws_s3_bucket.govuk_mirror.arn]
+    resources = [module.mirror_bucket.arn]
   }
 
   statement {
@@ -342,7 +353,7 @@ data "aws_iam_policy_document" "google_replication" {
       "s3:GetObject",
     ]
 
-    resources = ["${aws_s3_bucket.govuk_mirror.arn}/*"]
+    resources = ["${module.mirror_bucket.arn}/*"]
   }
 }
 
