@@ -22,7 +22,7 @@ terraform {
     }
     tfe = {
       source  = "hashicorp/tfe"
-      version = "0.74.1"
+      version = "0.76.2"
     }
   }
 }
