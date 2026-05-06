@@ -13,7 +13,7 @@ variable "name" {
 
 variable "terraform_version" {
   type    = string
-  default = "~> 1.14.9"
+  default = "~> 1.15.2"
 }
 
 variable "variable_set_id" {
