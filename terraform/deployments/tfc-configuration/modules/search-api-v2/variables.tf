@@ -46,5 +46,5 @@ variable "google_service_account_email" {
 variable "terraform_version" {
   type        = string
   description = "Version constraint for Terraform for this workspace."
-  default     = "~> 1.14.9"
+  default     = "~> 1.15.1"
 }
