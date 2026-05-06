@@ -421,7 +421,7 @@ repos:
 
   govuk-publishing-documentation:
     visibility: private
-    branch_protection: true
+    branch_protection: false
     can_be_deployed: false
 
   govuk-reports-prototype:
