@@ -400,6 +400,14 @@ repos:
   govuk-graphql:
     branch_protection: false
     can_be_deployed: true
+    
+  govuk-ia-utility:
+    can_be_deployed: false
+    standard_contexts: *standard_security_checks 
+    push_allowances: ["alphagov/gov-uk-data"]
+    required_pull_request_reviews:
+      pull_request_bypassers:
+        - "alphagov/gov-uk-data"
 
   govuk-infrastructure:
     up_to_date_branches: true
