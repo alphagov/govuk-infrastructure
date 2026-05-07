@@ -82,5 +82,8 @@
             "datasourceTemplate": "github-releases",
             "versioningTemplate": "github-releases"
         }
+    ],
+    "ignorePaths": [
+        "terraform/deployments/gcp-gov-graph/**"
     ]
 }
