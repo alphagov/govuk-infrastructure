@@ -406,6 +406,8 @@ repos:
     required_pull_request_reviews:
       require_code_owner_reviews: true
 
+  govuk-cli: {}
+
   terraform-govuk-infrastructure-sensitive:
     visibility: private
     up_to_date_branches: true
