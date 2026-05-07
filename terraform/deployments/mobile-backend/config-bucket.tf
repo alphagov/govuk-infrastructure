@@ -14,22 +14,6 @@ module "mobile_backend_remote_config" {
   ]
 }
 
-moved {
-  from = aws_s3_bucket.mobile_backend_remote_config
-  to   = module.mobile_backend_remote_config.aws_s3_bucket.this
-}
-
-moved {
-  from = aws_s3_bucket_versioning.mobile_backend_remote_config
-  to   = module.mobile_backend_remote_config.aws_s3_bucket_versioning.this
-}
-
-
-moved {
-  from = aws_s3_bucket_logging.mobile_backend_remote_config
-  to   = module.mobile_backend_remote_config.aws_s3_bucket_logging.this
-}
-
 data "aws_iam_policy_document" "mobile_backend_remote_config_fastly_read" {
   statement {
     sid     = "S3FastlyReadBucket"
@@ -59,9 +43,4 @@ data "aws_iam_policy_document" "mobile_backend_remote_config_fastly_read" {
       identifiers = ["*"]
     }
   }
-}
-
-moved {
-  from = aws_s3_bucket_policy.mobile_backend_remote_config_read
-  to   = module.mobile_backend_remote_config.aws_s3_bucket_policy.bucket_policy
 }
