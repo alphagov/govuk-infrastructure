@@ -57,8 +57,8 @@ data "aws_iam_policy_document" "bucket_write_role_permissions" {
       "s3:DeleteObject"
     ]
     resources = [
-      aws_s3_bucket.mobile_backend_remote_config.arn,
-      "${aws_s3_bucket.mobile_backend_remote_config.arn}/*"
+      module.mobile_backend_remote_config.arn,
+      "${module.mobile_backend_remote_config.arn}/*"
     ]
   }
 }

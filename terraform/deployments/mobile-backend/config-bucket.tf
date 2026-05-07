@@ -1,18 +1,33 @@
-resource "aws_s3_bucket" "mobile_backend_remote_config" {
-  bucket = "govuk-app-remote-config-${var.govuk_environment}"
+locals {
+  mobile_backend_remote_config_bucket_name = "govuk-app-remote-config-${var.govuk_environment}"
 }
 
-resource "aws_s3_bucket_versioning" "mobile_backend_remote_config" {
-  bucket = aws_s3_bucket.mobile_backend_remote_config.id
-  versioning_configuration {
-    status = "Enabled"
+module "mobile_backend_remote_config" {
+  source            = "../../shared-modules/s3"
+  govuk_environment = var.govuk_environment
+  name              = local.mobile_backend_remote_config_bucket_name
+  access_logging_config = {
+    target_prefix = "s3/mobile-backend-remote-config-${var.govuk_environment}/"
   }
+  extra_bucket_policies = [
+    data.aws_iam_policy_document.mobile_backend_remote_config_fastly_read.json
+  ]
 }
 
-resource "aws_s3_bucket_logging" "mobile_backend_remote_config" {
-  bucket        = aws_s3_bucket.mobile_backend_remote_config.id
-  target_bucket = "govuk-${var.govuk_environment}-aws-logging"
-  target_prefix = "s3/mobile-backend-remote-config-${var.govuk_environment}/"
+moved {
+  from = aws_s3_bucket.mobile_backend_remote_config
+  to   = module.mobile_backend_remote_config.aws_s3_bucket.this
+}
+
+moved {
+  from = aws_s3_bucket_versioning.mobile_backend_remote_config
+  to   = module.mobile_backend_remote_config.aws_s3_bucket_versioning.this
+}
+
+
+moved {
+  from = aws_s3_bucket_logging.mobile_backend_remote_config
+  to   = module.mobile_backend_remote_config.aws_s3_bucket_logging.this
 }
 
 data "aws_iam_policy_document" "mobile_backend_remote_config_fastly_read" {
@@ -21,8 +36,8 @@ data "aws_iam_policy_document" "mobile_backend_remote_config_fastly_read" {
     actions = ["s3:GetObject"]
 
     resources = [
-      "arn:aws:s3:::${aws_s3_bucket.mobile_backend_remote_config.id}",
-      "arn:aws:s3:::${aws_s3_bucket.mobile_backend_remote_config.id}/*"
+      "arn:aws:s3:::${local.mobile_backend_remote_config_bucket_name}",
+      "arn:aws:s3:::${local.mobile_backend_remote_config_bucket_name}/*"
     ]
 
     condition {
@@ -46,7 +61,7 @@ data "aws_iam_policy_document" "mobile_backend_remote_config_fastly_read" {
   }
 }
 
-resource "aws_s3_bucket_policy" "mobile_backend_remote_config_read" {
-  bucket = aws_s3_bucket.mobile_backend_remote_config.id
-  policy = data.aws_iam_policy_document.mobile_backend_remote_config_fastly_read.json
+moved {
+  from = aws_s3_bucket_policy.mobile_backend_remote_config_read
+  to   = module.mobile_backend_remote_config.aws_s3_bucket_policy.bucket_policy
 }
