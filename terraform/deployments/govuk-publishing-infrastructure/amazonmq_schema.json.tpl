@@ -67,9 +67,9 @@
     {
       "user": "search_api",
       "vhost": "publishing",
-      "configure": "^(amq\\.gen.*|search_api_to_be_indexed|search_api_govuk_index)$",
-      "write": "^(amq\\.gen.*|search_api_to_be_indexed|search_api_govuk_index)$",
-      "read": "^(amq\\.gen.*|search_api_to_be_indexed|search_api_govuk_index|search_api_bulk_reindex|published_documents)$"
+      "configure": "^(amq\\.gen.*|search_api_govuk_index)$",
+      "write": "^(amq\\.gen.*|search_api_govuk_index)$",
+      "read": "^(amq\\.gen.*|search_api_govuk_index|search_api_bulk_reindex|published_documents)$"
     },
     {
       "user": "search_api_v2",
@@ -140,31 +140,6 @@
       "definition": {
         "dead-letter-exchange": "govuk_chat_dlx",
         "message-ttl":${govuk_chat_retry_message_ttl},
-        "ha-mode": "all",
-        "ha-sync-mode": "automatic"
-      },
-      "priority": 1
-    },
-    {
-      "vhost": "publishing",
-      "name": "search_api_to_be_indexed_retry",
-      "pattern": "^search_api_to_be_indexed$",
-      "apply-to": "queues",
-      "definition": {
-        "dead-letter-exchange": "search_api_to_be_indexed_retry_dlx",
-        "ha-mode": "all",
-        "ha-sync-mode": "automatic"
-      },
-      "priority": 1
-    },
-    {
-      "vhost": "publishing",
-      "name": "search_api_to_be_indexed_wait_to_retry_discarded",
-      "pattern": "^search_api_to_be_indexed_wait_to_retry$",
-      "apply-to": "queues",
-      "definition": {
-        "dead-letter-exchange": "search_api_to_be_indexed_discarded_dlx",
-        "message-ttl": 60000,
         "ha-mode": "all",
         "ha-sync-mode": "automatic"
       },
@@ -249,20 +224,6 @@
     },
     {
       "name": "subscriber_list_details_update_major",
-      "vhost": "publishing",
-      "durable": true,
-      "auto_delete": false,
-      "arguments": {}
-    },
-    {
-      "name": "search_api_to_be_indexed",
-      "vhost": "publishing",
-      "durable": true,
-      "auto_delete": false,
-      "arguments": {}
-    },
-    {
-      "name": "search_api_to_be_indexed_wait_to_retry",
       "vhost": "publishing",
       "durable": true,
       "auto_delete": false,
@@ -376,24 +337,6 @@
     },
     {
       "name": "content_data_api_dlx",
-      "vhost": "publishing",
-      "type": "topic",
-      "durable": true,
-      "auto_delete": false,
-      "internal": false,
-      "arguments": {}
-    },
-    {
-      "name": "search_api_to_be_indexed_discarded_dlx",
-      "vhost": "publishing",
-      "type": "topic",
-      "durable": true,
-      "auto_delete": false,
-      "internal": false,
-      "arguments": {}
-    },
-    {
-      "name": "search_api_to_be_indexed_retry_dlx",
       "vhost": "publishing",
       "type": "topic",
       "durable": true,
@@ -541,30 +484,6 @@
       "destination": "govuk_chat_published_documents",
       "destination_type": "queue",
       "routing_key": "*.links",
-      "arguments": {}
-    },
-    {
-      "source": "published_documents",
-      "vhost": "publishing",
-      "destination": "search_api_to_be_indexed",
-      "destination_type": "queue",
-      "routing_key": "*.links",
-      "arguments": {}
-    },
-    {
-      "source": "search_api_to_be_indexed_discarded_dlx",
-      "vhost": "publishing",
-      "destination": "search_api_to_be_indexed",
-      "destination_type": "queue",
-      "routing_key": "#",
-      "arguments": {}
-    },
-    {
-      "source": "search_api_to_be_indexed_retry_dlx",
-      "vhost": "publishing",
-      "destination": "search_api_to_be_indexed_wait_to_retry",
-      "destination_type": "queue",
-      "routing_key": "#",
       "arguments": {}
     },
     {
