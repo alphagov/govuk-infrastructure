@@ -33,7 +33,7 @@ data "aws_iam_policy_document" "govuk_ai_accelerator_s3_access" {
   statement {
     sid       = "GovukAiAcceleratorS3RootAccessPolicy"
     actions   = ["s3:GetBucketLocation", "s3:ListBucket"]
-    resources = [aws_s3_bucket.govuk_ai_accelerator_data[0].arn]
+    resources = [module.secure_s3_bucket_ai_accelerator_data[0].arn]
   }
 
   statement {
@@ -45,7 +45,7 @@ data "aws_iam_policy_document" "govuk_ai_accelerator_s3_access" {
       "s3:PutObjectAcl",
       "s3:DeleteObject"
     ]
-    resources = ["${aws_s3_bucket.govuk_ai_accelerator_data[0].arn}/*"]
+    resources = ["${module.secure_s3_bucket_ai_accelerator_data[0].arn}/*"]
   }
 }
 
