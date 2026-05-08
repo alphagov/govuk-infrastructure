@@ -582,7 +582,7 @@ resource "google_compute_instance_template" "whitehall" {
 resource "google_compute_instance_template" "asset_manager" {
   name         = "asset-manager"
   machine_type = "c2d-highmem-2"
-  metadata_startup_script = templatefile("scripts/asset_manager_startup.sh.tftpl", {
+  metadata_startup_script = templatefile("scripts/app_startup.sh.tftpl", {
     project_id = var.project_id
     image      = module.asset-manager-container.source_image
     }
