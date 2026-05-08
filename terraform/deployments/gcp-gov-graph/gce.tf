@@ -417,6 +417,11 @@ resource "google_compute_instance_template" "publishing_api" {
   # rather than parallel.  Not much memory is required.  See postgresql.conf for
   # the memory allowances.
   machine_type = "c2d-highmem-2"
+  metadata_startup_script = templatefile("scripts/app_startup.sh.tftpl", {
+    project_id = var.project_id
+    image      = module.publishing-api-container.source_image
+    }
+  )
 
   disk {
     boot         = true
@@ -452,6 +457,11 @@ resource "google_compute_instance_template" "support_api" {
   # rather than parallel.  Not much memory is required.  See postgresql.conf for
   # the memory allowances.
   machine_type = "c2d-highmem-2"
+  metadata_startup_script = templatefile("scripts/app_startup.sh.tftpl", {
+    project_id = var.project_id
+    image      = module.support-api-container.source_image
+    }
+  )
 
   disk {
     boot         = true
@@ -491,6 +501,11 @@ resource "google_compute_instance_template" "support_api" {
 resource "google_compute_instance_template" "publisher" {
   name         = "publisher"
   machine_type = "e2-highcpu-32"
+  metadata_startup_script = templatefile("scripts/app_startup.sh.tftpl", {
+    project_id = var.project_id
+    image      = module.publisher-container.source_image
+    }
+  )
 
   disk {
     boot         = true
@@ -521,6 +536,11 @@ resource "google_compute_instance_template" "publisher" {
 resource "google_compute_instance_template" "redis_cli" {
   name         = "redis-cli"
   machine_type = "e2-medium"
+  metadata_startup_script = templatefile("scripts/app_startup.sh.tftpl", {
+    project_id = var.project_id
+    image      = module.redis-cli-container[0].source_image
+    }
+  )
 
   # Enable / Disable
   count = var.enable_redis_session_store_instance ? 1 : 0
@@ -553,6 +573,11 @@ resource "google_compute_instance_template" "redis_cli" {
 resource "google_compute_instance_template" "whitehall" {
   name         = "whitehall"
   machine_type = "c2d-highmem-2"
+  metadata_startup_script = templatefile("scripts/app_startup.sh.tftpl", {
+    project_id = var.project_id
+    image      = module.whitehall-container.source_image
+    }
+  )
 
   disk {
     boot         = true
@@ -582,7 +607,7 @@ resource "google_compute_instance_template" "whitehall" {
 resource "google_compute_instance_template" "asset_manager" {
   name         = "asset-manager"
   machine_type = "c2d-highmem-2"
-  metadata_startup_script = templatefile("scripts/asset_manager_startup.sh.tftpl", {
+  metadata_startup_script = templatefile("scripts/app_startup.sh.tftpl", {
     project_id = var.project_id
     image      = module.asset-manager-container.source_image
     }
