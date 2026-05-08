@@ -113,7 +113,7 @@ module "control_global_boost_demote_medium" {
   engine_id    = google_discovery_engine_search_engine.govuk_global.engine_id
   action = {
     boostAction = {
-      filter     = "link: ANY(${local.demote_pages_medium_expr}) OR document_type: ANY(\"employment_tribunal_decision\", \"foi_release\", \"service_standard_report\") OR organisation_state: ANY(\"devolved\", \"closed\")",
+      filter     = "link: ANY(${local.demote_pages_medium_expr}) OR document_type: ANY(\"algorithmic_transparency_record\", \"employment_tribunal_decision\", \"foi_release\", \"service_standard_report\") OR organisation_state: ANY(\"devolved\", \"closed\")",
       fixedBoost = -0.5
       dataStore  = google_discovery_engine_data_store.govuk_content.name
     }
