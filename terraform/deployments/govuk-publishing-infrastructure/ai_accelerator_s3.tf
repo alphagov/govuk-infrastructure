@@ -8,36 +8,36 @@ module "secure_s3_bucket_ai_accelerator_data" {
 }
 
 moved {
-  from = aws_s3_bucket.govuk_ai_accelerator_data[0].id
-  to   = module.secure_s3_bucket_ai_accelerator_data[0].aws_s3_bucket.this.id
+  from = aws_s3_bucket.govuk_ai_accelerator_data[0]
+  to   = module.secure_s3_bucket_ai_accelerator_data[0].aws_s3_bucket.this
 }
 
 moved {
-  from = aws_s3_bucket_public_access_block.govuk_ai_accelerator_data_access_block[0].id
-  to   = module.secure_s3_bucket_ai_accelerator_data[0].aws_s3_bucket_public_access_block.this.id
+  from = aws_s3_bucket_public_access_block.govuk_ai_accelerator_data_access_block[0]
+  to   = module.secure_s3_bucket_ai_accelerator_data[0].aws_s3_bucket_public_access_block.this[0]
 }
 
 moved {
-  from = aws_s3_bucket_versioning.govuk_ai_accelerator_data_versioning[0].id
-  to   = module.secure_s3_bucket_ai_accelerator_data[0].aws_s3_bucket_versioning.this.id
+  from = aws_s3_bucket_versioning.govuk_ai_accelerator_data_versioning[0]
+  to   = module.secure_s3_bucket_ai_accelerator_data[0].aws_s3_bucket_versioning.this
 }
 
 moved {
-  from = aws_s3_bucket_server_side_encryption_configuration.govuk_ai_accelerator_data_encryption[0].id
-  to   = module.secure_s3_bucket_ai_accelerator_data[0].aws_s3_bucket_server_side_encryption_configuration.this.id
+  from = aws_s3_bucket_server_side_encryption_configuration.govuk_ai_accelerator_data_encryption[0]
+  to   = module.secure_s3_bucket_ai_accelerator_data[0].aws_s3_bucket_server_side_encryption_configuration.this
 }
 
 moved {
-  from = aws_s3_bucket_policy.govuk_ai_accelerator_data_bucket_policy[0].id
-  to   = module.secure_s3_bucket_ai_accelerator_data[0].aws_s3_bucket_policy.this.id
+  from = aws_s3_bucket_policy.govuk_ai_accelerator_data_bucket_policy[0]
+  to   = module.secure_s3_bucket_ai_accelerator_data[0].aws_s3_bucket_policy.bucket_policy
 }
 
 moved {
-  from = aws_s3_bucket_ownership_controls.govuk_ai_accelerator_data_owner_controls[0].id
-  to   = module.secure_s3_bucket_ai_accelerator_data[0].aws_s3_bucket_ownership_controls.this.id
+  from = aws_s3_bucket_ownership_controls.govuk_ai_accelerator_data_owner_controls[0]
+  to   = module.secure_s3_bucket_ai_accelerator_data[0].aws_s3_bucket_ownership_controls.owner
 }
 
 moved {
-  from = aws_s3_bucket_logging.govuk_ai_accelerator_data_logging[0].id
-  to   = module.secure_s3_bucket_ai_accelerator_data[0].aws_s3_bucket_logging.this.id
+  from = aws_s3_bucket_logging.govuk_ai_accelerator_data_logging[0]
+  to   = module.secure_s3_bucket_ai_accelerator_data[0].aws_s3_bucket_logging.this
 }
