@@ -416,7 +416,7 @@ repos:
   govuk-ia-utility:
     can_be_deployed: false
     standard_contexts: *standard_security_checks 
-    push_allowances: ["alphagov/gov-uk-data"]
+    push_allowances: ["alphagov/gov-uk-data", "alphagov/gov-uk-production-admin", "alphagov/gov-uk-production-deploy"]
     required_pull_request_reviews:
       pull_request_bypassers:
         - "alphagov/gov-uk-data"
