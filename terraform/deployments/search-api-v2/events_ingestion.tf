@@ -47,7 +47,7 @@ resource "google_bigquery_table" "search_event" {
 
 }
 
-# ga4 'select_item' events get transformed and inserted into this time-partitioned search-event table defined with a Discovery Engine schema
+# ga4 'page_view' events get transformed and inserted into this time-partitioned search-event table defined with a Discovery Engine schema
 resource "google_bigquery_table" "view_item_event" {
   dataset_id          = google_bigquery_dataset.dataset.dataset_id
   table_id            = "view-item-event"
@@ -81,7 +81,7 @@ resource "google_bigquery_table" "search_intraday_event" {
 
 }
 
-# ga4 'select_item' intraday events get transformed and inserted into this time-partitioned view-item-intraday-event table defined with a Discovery Engine schema
+# ga4 'page_view' intraday events get transformed and inserted into this time-partitioned view-item-intraday-event table defined with a Discovery Engine schema
 resource "google_bigquery_table" "view_item_intraday_event" {
   dataset_id          = google_bigquery_dataset.dataset.dataset_id
   table_id            = "view-item-intraday-event"
