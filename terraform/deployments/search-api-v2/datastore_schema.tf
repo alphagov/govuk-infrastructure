@@ -38,8 +38,8 @@ resource "restapi_object" "google_discovery_engine_datastore_schema" {
         # of the main body of content
         #
         # Note: We've decided not to use this as structured fields don't contribute enough to
-        # relevance. Vertex does not support removing a field from the schema (as of Jan 2024) so it
-        # stays here.
+        # relevance. Discovery Engine does not support removing a field from the schema (as of Jan 2024)
+        # so it stays here.
         additional_searchable_text = {
           type       = "string"
           searchable = true
@@ -52,7 +52,7 @@ resource "restapi_object" "google_discovery_engine_datastore_schema" {
           indexable   = true
         }
         # Absolute URL including protocol and host even for content on GOV.UK proper (used for
-        # Vertex to incorporate popularity/event signals and for internal purposes)
+        # Discovery Engine to incorporate popularity/event signals and for internal purposes)
         url = {
           type               = "string"
           retrievable        = true
@@ -175,8 +175,8 @@ resource "restapi_object" "google_discovery_engine_datastore_schema" {
         #
         # Note: We've decided not to use this in the end as there isn't enough of a risk and we
         # cannot guarantee atomic writes anyway. It is now included in the `debug` object field.
-        # Vertex does not support removing a field from the schema (as of Jan 2024) so it stays
-        # here.
+        # Discovery Engine does not support removing a field from the schema (as of Jan 2024)
+        # so it stays here.
         payload_version = {
           type = "integer"
         }
@@ -189,7 +189,7 @@ resource "restapi_object" "google_discovery_engine_datastore_schema" {
             payload_version = {
               type = "integer"
             }
-            # Timestamp of when this document was last synced to Vertex
+            # Timestamp of when this document was last synced to Discovery Engine
             last_synced_at = {
               type = "string"
             }
@@ -199,9 +199,9 @@ resource "restapi_object" "google_discovery_engine_datastore_schema" {
     }
   })
 
-  # VAIS adds some "output-only" properties dynamically, which creates false positive drift.
-  # Terraform also alphabetises the properties, which again causes false positive drift (as VAIS
-  # returns them in undefined order)
+  # Discovery Engine adds some "output-only" properties dynamically, which creates false positive drift.
+  # Terraform also alphabetises the properties, which again causes false positive drift (as Discovery
+  # Engine returns them in undefined order)
   ignore_changes_to = [
     "fieldConfigs",
     "structSchema",
