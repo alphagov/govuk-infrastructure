@@ -13,7 +13,7 @@ terraform {
       tags = ["cluster-infrastructure", "eks", "aws"]
     }
   }
-  required_version = "~> 1.14"
+  required_version = "~> 1.15"
   required_providers {
     aws = {
       source  = "hashicorp/aws"
