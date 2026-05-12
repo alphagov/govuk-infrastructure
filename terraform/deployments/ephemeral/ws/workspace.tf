@@ -8,7 +8,7 @@ module "workspace" {
   terraform_version   = var.terraform_version
   execution_mode      = "remote"
   working_directory   = "/terraform/deployments/${var.name}/"
-  trigger_patterns    = ["/terraform/deployments/${var.name}/**/*"]
+  trigger_patterns    = []
   global_remote_state = true
   queue_all_runs      = false
 
