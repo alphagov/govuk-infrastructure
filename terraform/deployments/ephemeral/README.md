@@ -8,7 +8,7 @@ This module is used to provision ephemeral EKS clusters via Terraform Cloud.
 1. Do a `terraform init`
 1. Run an apply with your chosen ephemeral cluster ID (this isn't generated for you):
    ```
-   terraform apply -var ephemeral_cluster_id=${EPH_CLUSTER_ID}`
+   terraform apply -var ephemeral_cluster_id=${EPH_CLUSTER_ID}
    ``` 
    If your new ephemeral cluster should be based on a branch other than `main`, provide the `git_branch` variable:
 
@@ -22,36 +22,9 @@ This module is used to provision ephemeral EKS clusters via Terraform Cloud.
 
 State for the ephemeral module is stored locally for now.
 
-### Shutdown
-
-Ensure `EPH_CLUSTER_ID` is set to your ephemeral cluster ID
-
-1. Assume the `govuk-test-platformengineer` role
-2. Run shutdown script
-   `./shutdown.sh "${EPH_CLUSTER_ID}"`
-3. Run Terraform destroy on the ephemeral workspaces
-   `terraform apply -var ephemeral_cluster_id=${EPH_CLUSTER_ID} -destroy`
-
-If the shutdown script fails or is in a pending state you can still remove the ephemeral cluster by following these steps:
-
-1. During the run of the `shutdown.sh` script, click on the terrform cloud link during the running of the shutdown.sh script to monitor the status of the run, it might be in a `pending` state if there are other runs blocking the destroy run so you will need to force and unlock the workspace and discard earlier runs for the shutdown script to continue.
-2. For any remaining ephemeral resources managed by terraform cloud, locate them using the `eph-` search on workspaces and under the `Settings/Destruction and Deletion` section:
-   a. manually queue a deletion of your ephemeral cluster infrastructure and monitor it`s progress on the terraform cloud website.
-   b. when the infrastructure resources have been deleted then delete the workspace itself.
-3. If there are still some ephemeral resources remaining you will need to use the terraform cli to remove these last resources:
-   a. update your local terraform state
-       `terraform refresh -var "ephemeral_cluster_id=$EPH_CLUSTER_ID"`
-   b. list the resources
-       `terraform state list`
-   c. inspect the resources to make sure that you are destroying your ephemeral resources
-       `terrform show <resource name>`
-   d. if only ephemeral resources remain then run
-       `terraform destroy`
-   e. NOTE - terraform cloud workspaces may need to be removed manually on the terraform cloud website under the `Settings/Destruction and Deletion` section.
-
 ### Alertmanager, Prometheus and Grafana
 
-As an example if the cluster ID as `eph-da2f44` then these are the following URLs to access the monitoring apps:
+As an example if the cluster ID is `eph-da2f44` then these are the following URLs to access the monitoring apps:
 
 - Alertmanager: https://alertmanager.eph-da2f44.ephemeral.govuk.digital/
 - CKAN:  https://ckan.eph-da2f44.ephemeral.govuk.digital/
@@ -89,3 +62,94 @@ Sometimes you want to test out a change to `argo-bootstrap-ephemeral` in `govuk-
 1. Increment `version` in `Chart.yaml`
 2. Run `helm upgrade -n cluster-services argo-bootstrap-ephemeral ./charts/argo-bootstrap-ephemeral --reuse-values`
 3. After you have finished testing your changes create a Terraform run in `cluster-services-eph-da2f44` to downgrade the Helm chart
+
+### Shutdown
+
+#### Prerequisites
+
+- `EPH_CLUSTER_ID` set to your cluster ID (e.g. `eph-ctf-260429`)
+- AWS credentials assumed for the test account (`govuk-test-platformengineer` or `govuk-test-fulladmin`)
+- Terraform Cloud CLI authenticated (`terraform login`)
+- `kubectl`, `helm`, `jq`, and `curl` available on `$PATH`
+
+#### Steps
+
+1. Assume the `govuk-test-platformengineer` (or `govuk-test-fulladmin`) role.
+
+2. Run the shutdown script:
+   ```bash
+   ./shutdown.sh "${EPH_CLUSTER_ID}"
+   ```
+   The script will:
+   - Update your kubeconfig to point at the target cluster
+   - Delete all Helm-managed Argo CD Application resources
+   - Uninstall all Helm charts (load balancer controller and external-dns last, so cloud resources they manage are cleaned up first)
+   - Trigger Terraform Cloud destroy runs in dependency order:
+     `datagovuk-infrastructure` -> `rds` -> `cluster-access` -> `cluster-services` -> `cluster-infrastructure` -> `vpc`
+   - Poll each destroy run until completion before starting the next
+
+   The script authenticates to Terraform Cloud using the token in `~/.terraform.d/credentials.tfrc.json`.
+
+3. After the shutdown script completes, destroy the local Terraform state for the ephemeral workspaces:
+   ```bash
+   terraform apply -var ephemeral_cluster_id=${EPH_CLUSTER_ID} -destroy
+   ```
+
+#### Troubleshooting
+
+##### MFA session timeout
+
+The full shutdown takes 30-60 minutes. If your AWS MFA session has a short
+TTL, it may expire mid-run causing `kubectl`, `helm`, or `aws` calls to
+fail. Either request a longer session duration before starting, or re-auth
+and re-run the script — it is mostly idempotent (already-deleted resources
+are skipped).
+
+##### Cluster API server unreachable
+
+If the EKS cluster has already been partially destroyed (e.g. by a previous
+failed run or manual intervention), `kubectl` and `helm` commands will fail
+with:
+
+```
+error: kubernetes cluster unreachable: the server has asked for the client to provide credentials
+```
+
+The script uses `set -eu` and will exit immediately. In this case, the Argo CD
+Applications and Helm charts are already gone (the cluster is gone), but the
+TFC destroy runs for the remaining workspaces have not been triggered. You
+need to destroy the remaining workspaces manually — see below.
+
+##### Pending or errored Terraform Cloud runs
+
+1. **Check the Terraform Cloud run.** The script prints a direct link to each run. Open it and check for:
+   - **Pending state**: another run is queued ahead of the destroy. Discard the earlier run, then unlock the workspace.
+   - **Errored state**: read the error, fix the underlying issue (e.g. a resource that can't be deleted), then re-run the script.
+
+##### Manually destroying remaining workspaces
+
+Search for your cluster ID in the [Terraform Cloud workspace list](https://app.terraform.io/app/govuk/workspaces). Destroy workspaces in dependency order, waiting for each to complete before starting the next:
+
+1. `cluster-services-<cluster-id>`
+2. `cluster-infrastructure-<cluster-id>`
+3. `vpc-<cluster-id>`
+
+For each workspace:
+- Go to **Settings > Destruction and Deletion**
+- Queue a destroy plan and wait for it to complete
+- Delete the workspace
+
+Any workspaces with 0 resources (e.g. `cluster-access`) can be deleted directly without queueing a destroy plan.
+
+##### Cleaning up orphaned local state
+
+If Terraform Cloud workspaces are gone but local state still references resources:
+
+```bash
+terraform refresh -var "ephemeral_cluster_id=${EPH_CLUSTER_ID}"
+terraform state list
+terraform state show <resource-name>   # inspect before destroying
+terraform destroy -var "ephemeral_cluster_id=${EPH_CLUSTER_ID}"
+```
+
+> **Note**: Terraform Cloud workspaces are not removed by `terraform destroy`. They must be deleted manually via the Terraform Cloud UI under **Settings > Destruction and Deletion**.
