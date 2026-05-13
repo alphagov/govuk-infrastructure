@@ -83,6 +83,8 @@ resource "google_project_iam_custom_role" "search_admin" {
     "discoveryengine.controls.get",
     "discoveryengine.controls.list",
     "discoveryengine.controls.update",
+    "discoveryengine.documents.get",
+    "discoveryengine.documents.delete",
     "discoveryengine.operations.get",
     "discoveryengine.servingConfigs.get",
     "discoveryengine.servingConfigs.list",
