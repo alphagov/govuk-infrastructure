@@ -28,14 +28,15 @@ resource "google_project_iam_binding" "analytics_write" {
   ]
 }
 
-# top level dataset to store events for ingestion into vertex
+# top level dataset to store events for ingestion into Discovery Engine (previously marketed as "Vertex AI Search")
 resource "google_bigquery_dataset" "dataset" {
   dataset_id                 = "analytics_events_vertex"
   location                   = var.gcp_region
   delete_contents_on_destroy = true
 }
 
-# ga4 'view_item_list' events get transformed and inserted into this time-partitioned search-event table defined with a vertex schema
+# ga4 'view_item_list' events get transformed and inserted into this time-partitioned search-event table defined with a
+# Discovery Engine 'search' schema: https://docs.cloud.google.com/generative-ai-app-builder/docs/user-events#bigquery_4
 resource "google_bigquery_table" "search_event" {
   dataset_id          = google_bigquery_dataset.dataset.dataset_id
   table_id            = "search-event"
@@ -47,7 +48,8 @@ resource "google_bigquery_table" "search_event" {
 
 }
 
-# ga4 'select_item' events get transformed and inserted into this time-partitioned search-event table defined with a vertex schema
+# ga4 'page_view' events get transformed and inserted into this time-partitioned view-item-event table defined with a
+# Discovery Engine 'view item' schema: https://docs.cloud.google.com/generative-ai-app-builder/docs/user-events#bigquery
 resource "google_bigquery_table" "view_item_event" {
   dataset_id          = google_bigquery_dataset.dataset.dataset_id
   table_id            = "view-item-event"
@@ -58,7 +60,9 @@ resource "google_bigquery_table" "view_item_event" {
   }
 }
 
-# ga4 'select_item' events get transformed and inserted into this time-partitioned view-item-external-link-event table defined with a vertex schema
+# ga4 'select_item' events get transformed and inserted into this time-partitioned view-item-external-link-event table
+# defined with a Discovery Engine 'view item' schema:
+# https://docs.cloud.google.com/generative-ai-app-builder/docs/user-events#bigquery
 resource "google_bigquery_table" "view_item_external_link_event" {
   dataset_id          = google_bigquery_dataset.dataset.dataset_id
   table_id            = "view-item-external-link-event"
@@ -69,7 +73,9 @@ resource "google_bigquery_table" "view_item_external_link_event" {
   }
 }
 
-# ga4 'view_item_list' intraday events get transformed and inserted into this time-partitioned search-intraday-event table defined with a vertex schema
+# ga4 'view_item_list' intraday events get transformed and inserted into this time-partitioned search-intraday-event
+# table defined with a Discovery Engine 'search' schema:
+# https://docs.cloud.google.com/generative-ai-app-builder/docs/user-events#bigquery_4
 resource "google_bigquery_table" "search_intraday_event" {
   dataset_id          = google_bigquery_dataset.dataset.dataset_id
   table_id            = "search-intraday-event"
@@ -81,7 +87,9 @@ resource "google_bigquery_table" "search_intraday_event" {
 
 }
 
-# ga4 'select_item' intraday events get transformed and inserted into this time-partitioned view-item-intraday-event table defined with a vertex schema
+# ga4 'page_view' intraday events get transformed and inserted into this time-partitioned view-item-intraday-event table
+# defined with a Discovery Engine 'view item' schema:
+# https://docs.cloud.google.com/generative-ai-app-builder/docs/user-events#bigquery
 resource "google_bigquery_table" "view_item_intraday_event" {
   dataset_id          = google_bigquery_dataset.dataset.dataset_id
   table_id            = "view-item-intraday-event"
@@ -92,7 +100,9 @@ resource "google_bigquery_table" "view_item_intraday_event" {
   }
 }
 
-# ga4 'select_item' intraday events get transformed and inserted into this time-partitioned view-item-external-link-intraday-event table defined with a vertex schema
+# ga4 'select_item' intraday events get transformed and inserted into this time-partitioned
+# view-item-external-link-intraday-event table defined with a Discovery Engine 'view item' schema:
+# https://docs.cloud.google.com/generative-ai-app-builder/docs/user-events#bigquery
 resource "google_bigquery_table" "view_item_external_link_intraday_event" {
   dataset_id          = google_bigquery_dataset.dataset.dataset_id
   table_id            = "view-item-external-link-intraday-event"
