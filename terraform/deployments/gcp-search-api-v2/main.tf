@@ -18,7 +18,7 @@ terraform {
     }
   }
 
-  required_version = "~> 1.14"
+  required_version = "~> 1.15"
 }
 
 module "environment_integration" {

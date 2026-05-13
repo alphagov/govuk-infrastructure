@@ -5,7 +5,7 @@ terraform {
       tags = ["chat", "aws"]
     }
   }
-  required_version = "~> 1.14"
+  required_version = "~> 1.15"
   required_providers {
     aws = {
       source  = "hashicorp/aws"
