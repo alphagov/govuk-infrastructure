@@ -428,6 +428,9 @@ repos:
 
   govuk-cli:
     can_be_deployed: true
+    required_status_checks:
+      additional_contexts:
+        - Test Go / Test Go
 
   terraform-govuk-infrastructure-sensitive:
     visibility: private
