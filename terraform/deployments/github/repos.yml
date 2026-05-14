@@ -432,6 +432,15 @@ repos:
       additional_contexts:
         - Test Go / Test Go
 
+  govuk-job-request-operator:
+    up_to_date_branches: true
+    homepage_url: "https://docs.publishing.service.gov.uk/repos/govuk-job-request-operator.html"
+    required_status_checks:
+      additional_contexts:
+        - Test Go / Test Go
+    required_pull_request_reviews:
+      require_code_owner_reviews: true
+
   terraform-govuk-infrastructure-sensitive:
     visibility: private
     up_to_date_branches: true
