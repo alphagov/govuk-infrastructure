@@ -23,7 +23,7 @@ resource "aws_security_group_rule" "ckan_efs" {
 }
 
 resource "aws_efs_file_system" "ckan_efs" {
-  creation_token = "blue-assets"
+  creation_token = "ckan-outputs"
   tags = {
     "Name"        = "ckan"
     "Description" = "Outputs from CKAN jobs will be stored here."
