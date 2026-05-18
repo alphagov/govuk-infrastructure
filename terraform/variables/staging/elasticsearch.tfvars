@@ -18,7 +18,7 @@ dedicated_master = {
   instance_type  = "c5.large.elasticsearch"
 }
 
-tls_security_policy = "Policy-Min-TLS-1-0-2019-07"
+tls_security_policy = "Policy-Min-TLS-1-2-2019-07"
 
 stackname = "blue"
 
