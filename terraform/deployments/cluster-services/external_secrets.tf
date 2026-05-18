@@ -17,7 +17,7 @@ resource "helm_release" "external_secrets" {
   name             = "external-secrets"
   repository       = "https://charts.external-secrets.io"
   chart            = "external-secrets"
-  version          = "1.0.0"
+  version          = "1.3.2"
   namespace        = local.services_ns
   create_namespace = true
   values = [yamlencode({
