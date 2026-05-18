@@ -32,11 +32,11 @@ jobs:
           BUNDLE_GITHUB__COM: "x-access-token:${{ secrets.BUNDLER_GITHUB_TOKEN }}"
 
       - name: Setup Node
-        uses: alphagov/govuk-infrastructure/.github/actions/setup-node@788b98389ac2003202dc421f4ccd187ad85cda17 # main
+        uses: alphagov/govuk-infrastructure/.github/actions/setup-node@cd13d4f4352ffe4b30ac7a0edad22b1159152938 # main
 
       - name: Precompile Rails assets
         if: inputs.useWithRails
-        uses: alphagov/govuk-infrastructure/.github/actions/precompile-rails-assets@788b98389ac2003202dc421f4ccd187ad85cda17 # main
+        uses: alphagov/govuk-infrastructure/.github/actions/precompile-rails-assets@cd13d4f4352ffe4b30ac7a0edad22b1159152938 # main
 
       - name: Run Jasmine
         run: yarn run jasmine-browser-runner runSpecs

@@ -20,7 +20,7 @@ on:
 
 jobs:
   build-and-push-image:
-    uses: alphagov/govuk-infrastructure/.github/workflows/build-and-push-multiarch-image.yml@788b98389ac2003202dc421f4ccd187ad85cda17 # main
+    uses: alphagov/govuk-infrastructure/.github/workflows/build-and-push-multiarch-image.yml@cd13d4f4352ffe4b30ac7a0edad22b1159152938 # main
     with:
       gitRef: ${{ inputs.gitRef || github.ref }}
       imageName: mongodb
