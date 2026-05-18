@@ -19,7 +19,7 @@ jobs:
           show-progress: false
 
       - name: Setup Node
-        uses: alphagov/govuk-infrastructure/.github/actions/setup-node@788b98389ac2003202dc421f4ccd187ad85cda17 # main
+        uses: alphagov/govuk-infrastructure/.github/actions/setup-node@cd13d4f4352ffe4b30ac7a0edad22b1159152938 # main
 
       - name: Run Standardx
         run: yarn run standardx ${{ inputs.files }}
