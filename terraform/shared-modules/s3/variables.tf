@@ -21,6 +21,13 @@ variable "extra_bucket_policies" {
   nullable    = false
 }
 
+variable "force_destroy" {
+  type        = bool
+  description = "Whether S3 bucket and all contained objects should be destroyed when the bucket is deleted"
+  default     = false
+  nullable    = false
+}
+
 variable "versioning_enabled" {
   type        = bool
   description = "Whether S3 bucket object versioning should be enabled"

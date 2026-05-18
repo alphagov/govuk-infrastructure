@@ -4,36 +4,28 @@ locals {
   provider_arn          = data.tfe_outputs.cluster_infrastructure.nonsensitive_values.cluster_oidc_provider_arn
 }
 
-resource "aws_s3_bucket" "tempo" {
-  bucket = "govuk-${var.govuk_environment}-tempo"
+module "secure_s3_bucket_tempo" {
+  source            = "../../shared-modules/s3"
+  govuk_environment = var.govuk_environment
 
-  force_destroy = var.force_destroy
+  name               = "govuk-${var.govuk_environment}-tempo"
+  force_destroy      = var.force_destroy
+  versioning_enabled = false
 }
 
-resource "aws_s3_bucket_policy" "tempo_bucket_policy" {
-  bucket = aws_s3_bucket.tempo.id
-  policy = data.aws_iam_policy_document.tempo_bucket_policy.json
+moved {
+  from = aws_s3_bucket.tempo
+  to   = module.secure_s3_bucket_tempo.aws_s3_bucket.this
 }
 
-data "aws_iam_policy_document" "tempo_bucket_policy" {
-  statement {
-    sid    = "DenyNonTLS"
-    effect = "Deny"
-    principals {
-      identifiers = ["*"]
-      type        = "AWS"
-    }
-    actions   = ["s3:*"]
-    resources = ["${aws_s3_bucket.tempo.arn}/*"]
-    condition {
-      test     = "Bool"
-      values   = [false]
-      variable = "aws:SecureTransport"
-    }
-  }
+moved {
+  from = aws_s3_bucket_policy.tempo_bucket_policy
+  to   = module.secure_s3_bucket_tempo.aws_s3_bucket_policy.bucket_policy
 }
 
 module "tempo_iam_role" {
+  depends_on = [module.secure_s3_bucket_tempo]
+
   source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts"
   version = "~> 6.0"
 
@@ -52,12 +44,15 @@ module "tempo_iam_role" {
 
 data "aws_iam_policy_document" "tempo" {
   statement {
+    sid       = "TempoAccessDataSources"
     actions   = ["s3:ListBucket", "s3:?*Object", "s3:?*ObjectTagging"]
-    resources = [aws_s3_bucket.tempo.arn, "${aws_s3_bucket.tempo.arn}/*"]
+    resources = ["${module.secure_s3_bucket_tempo.arn}", "${module.secure_s3_bucket_tempo.arn}/*"]
   }
 }
 
 resource "aws_iam_policy" "tempo" {
+  depends_on = [module.secure_s3_bucket_tempo]
+
   name        = "tempo-${local.cluster_name}"
   description = "Allows Tempo to access AWS data sources."
   policy      = data.aws_iam_policy_document.tempo.json
