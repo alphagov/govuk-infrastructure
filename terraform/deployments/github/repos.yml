@@ -473,7 +473,7 @@ repos:
     can_be_deployed: false
     visibility: "private"
     standard_contexts: *standard_security_checks
-    push_allowances: []
+    push_allowances: ["alphagov/gov-uk-data", "alphagov/gov-uk-production-admin", "alphagov/gov-uk-production-deploy"]
     required_pull_request_reviews:
       pull_request_bypassers:
         - "alphagov/gov-uk-data"
