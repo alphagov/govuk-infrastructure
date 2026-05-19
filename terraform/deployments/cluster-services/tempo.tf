@@ -24,7 +24,6 @@ moved {
 }
 
 module "tempo_iam_role" {
-  depends_on = [module.secure_s3_bucket_tempo]
 
   source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts"
   version = "~> 6.0"
@@ -51,8 +50,6 @@ data "aws_iam_policy_document" "tempo" {
 }
 
 resource "aws_iam_policy" "tempo" {
-  depends_on = [module.secure_s3_bucket_tempo]
-
   name        = "tempo-${local.cluster_name}"
   description = "Allows Tempo to access AWS data sources."
   policy      = data.aws_iam_policy_document.tempo.json
