@@ -33,8 +33,8 @@ moved {
 }
 
 moved {
-  from = aws_s3_bucket_ownership_controls.govuk_ai_accelerator_data_owner_controls[0]
-  to   = module.secure_s3_bucket_ai_accelerator_data[0].aws_s3_bucket_ownership_controls.owner
+  from = module.secure_s3_bucket_ai_accelerator_data[0].aws_s3_bucket_ownership_controls.owner
+  to   = module.secure_s3_bucket_ai_accelerator_data[0].aws_s3_bucket_ownership_controls.owner[0]
 }
 
 moved {

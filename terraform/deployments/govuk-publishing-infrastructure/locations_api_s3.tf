@@ -46,7 +46,7 @@ import {
 }
 
 import {
-  to = module.secure_s3_bucket_locations_api_import_csvs.aws_s3_bucket_ownership_controls.owner
+  to = module.secure_s3_bucket_locations_api_import_csvs.aws_s3_bucket_ownership_controls.owner[0]
   id = local.secure_s3_bucket_locations_api_import_csvs_name
 }
 
