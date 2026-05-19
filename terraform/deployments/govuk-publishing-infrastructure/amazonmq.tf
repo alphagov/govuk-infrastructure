@@ -233,7 +233,7 @@ resource "aws_iam_role_policy_attachment" "lambda_role_policy" {
   policy_arn = data.aws_iam_policy.lambda_vpc_access.arn
 }
 
-data "aws_lambda_invocation" "post_config_to_amazonmq" {
+resource "aws_lambda_invocation" "post_config_to_amazonmq" {
   depends_on    = [aws_security_group_rule.rabbitmq_egress_self_self]
   function_name = aws_lambda_function.post_config_to_amazonmq.function_name
   input = jsonencode({
