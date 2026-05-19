@@ -45,7 +45,7 @@ data "aws_iam_policy_document" "tempo" {
   statement {
     sid       = "TempoAccessDataSources"
     actions   = ["s3:ListBucket", "s3:?*Object", "s3:?*ObjectTagging"]
-    resources = ["${module.secure_s3_bucket_tempo.arn}", "${module.secure_s3_bucket_tempo.arn}/*"]
+    resources = [module.secure_s3_bucket_tempo.arn, "${module.secure_s3_bucket_tempo.arn}/*"]
   }
 }
 
