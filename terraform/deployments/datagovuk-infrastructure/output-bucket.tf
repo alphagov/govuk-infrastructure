@@ -1,5 +1,5 @@
 locals {
-  s3_bucket_datagovuk_bucket_name = "datagovuk-ckan-output-${var.govuk_environment}"
+  s3_bucket_datagovuk_bucket_name = "govuk-ckan-output-${var.govuk_environment}"
   s3_bucket_datagovuk_bucket_arn  = "arn:aws:s3:::${local.s3_bucket_datagovuk_bucket_name}"
 }
 
