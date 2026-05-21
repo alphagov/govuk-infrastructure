@@ -16,15 +16,8 @@ module "secure_s3_bucket_attachments" {
 
   name = "govuk-attachments-${var.govuk_environment}"
 
-  enforce_bucket_object_ownership = false
-  enable_public_access_block      = false
-  lifecycle_rules                 = var.govuk_environment == "integration" ? local.lifecycle_rules_integration : null
-  versioning_enabled              = var.govuk_environment == "production" ? true : false
-}
-
-resource "aws_s3_bucket_acl" "attachments" {
-  bucket = module.secure_s3_bucket_attachments.name
-  acl    = "private"
+  lifecycle_rules    = var.govuk_environment == "integration" ? local.lifecycle_rules_integration : null
+  versioning_enabled = var.govuk_environment == "production" ? true : false
 }
 
 moved {
