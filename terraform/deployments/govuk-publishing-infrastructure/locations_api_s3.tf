@@ -20,36 +20,6 @@ module "secure_s3_bucket_locations_api_import_csvs" {
   }
 }
 
-moved {
-  from = aws_s3_bucket.location_api_import_csvs
-  to   = module.secure_s3_bucket_locations_api_import_csvs.aws_s3_bucket.this
-}
-
-moved {
-  from = aws_s3_bucket_versioning.location_api_import_csvs
-  to   = module.secure_s3_bucket_locations_api_import_csvs.aws_s3_bucket_versioning.this
-}
-
-moved {
-  from = aws_s3_bucket_policy.location_api_import_csvs
-  to   = module.secure_s3_bucket_locations_api_import_csvs.aws_s3_bucket_policy.bucket_policy
-}
-
-import {
-  to = module.secure_s3_bucket_locations_api_import_csvs.aws_s3_bucket_server_side_encryption_configuration.this
-  id = local.secure_s3_bucket_locations_api_import_csvs_name
-}
-
-import {
-  to = module.secure_s3_bucket_locations_api_import_csvs.aws_s3_bucket_public_access_block.this[0]
-  id = local.secure_s3_bucket_locations_api_import_csvs_name
-}
-
-import {
-  to = module.secure_s3_bucket_locations_api_import_csvs.aws_s3_bucket_ownership_controls.owner[0]
-  id = local.secure_s3_bucket_locations_api_import_csvs_name
-}
-
 data "aws_iam_policy_document" "location_api_import_csvs" {
   statement {
     sid = "EKSNodesCanList"
