@@ -32,22 +32,6 @@ variable "organogram_bucket_cors_origins" {
   ]
 }
 
-variable "output_bucket_cors_origins" {
-  type        = list(string)
-  description = "List of allowed origins for CORS for output bucket"
-  default = [
-    "https://data.gov.uk",
-    "https://www.data.gov.uk",
-    "https://staging.data.gov.uk",
-    "https://www.staging.data.gov.uk",
-    "https://integration.data.gov.uk",
-    "https://www.integration.data.gov.uk",
-    "https://find.eks.production.govuk.digital",
-    "https://find.eks.integration.govuk.digital",
-    "https://find.eks.staging.govuk.digital"
-  ]
-}
-
 # Variables for rate limiting configuration
 variable "find_rate_limit_per_5min" {
   description = "Rate limit for Find app per IP per 5 minutes"
