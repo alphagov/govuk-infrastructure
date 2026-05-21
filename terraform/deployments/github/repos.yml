@@ -409,10 +409,8 @@ repos:
     required_pull_request_reviews:
       require_code_owner_reviews: true
 
-  govuk-graphql:
-    branch_protection: false
-    can_be_deployed: true
-    
+  govuk-graphql: {}
+
   govuk-ia-utility:
     can_be_deployed: false
     standard_contexts: *standard_security_checks 
