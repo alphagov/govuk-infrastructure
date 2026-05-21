@@ -14,13 +14,6 @@ variable "name" {
   }
 }
 
-variable "enforce_bucket_object_ownership" {
-  type        = bool
-  description = "Whether S3 bucket object ownership should be enforced to the bucket owner"
-  default     = true
-  nullable    = false
-}
-
 variable "extra_bucket_policies" {
   type        = list(string)
   description = "Extra bucket policies to apply to this bucket. List of json policies"
