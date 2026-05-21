@@ -21,10 +21,3 @@ resource "aws_internet_gateway" "public" {
     Name = "govuk-ig-${var.govuk_environment}"
   }
 }
-
-removed {
-  from = aws_route_table.public
-  lifecycle {
-    destroy = false
-  }
-}

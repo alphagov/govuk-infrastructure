@@ -13,16 +13,6 @@ module "secure_s3_bucket_tempo" {
   versioning_enabled = false
 }
 
-moved {
-  from = aws_s3_bucket.tempo
-  to   = module.secure_s3_bucket_tempo.aws_s3_bucket.this
-}
-
-moved {
-  from = aws_s3_bucket_policy.tempo_bucket_policy
-  to   = module.secure_s3_bucket_tempo.aws_s3_bucket_policy.bucket_policy
-}
-
 module "tempo_iam_role" {
 
   source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts"
