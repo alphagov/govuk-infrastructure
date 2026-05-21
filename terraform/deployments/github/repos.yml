@@ -409,7 +409,8 @@ repos:
     required_pull_request_reviews:
       require_code_owner_reviews: true
 
-  govuk-graphql: {}
+  govuk-graphql:
+    archived: true
 
   govuk-ia-utility:
     can_be_deployed: false
