@@ -12,7 +12,7 @@ module "s3_bucket_datagovuk_bucket" {
   versioning_enabled   = true
   versioning_suspended = true
 
-  enable_public_access_block = false
+  enable_public_access_block = true
   extra_bucket_policies      = [data.aws_iam_policy_document.datagovuk_bucket.json]
 
   tags = {
@@ -24,15 +24,6 @@ module "s3_bucket_datagovuk_bucket" {
 # TODO: instead of granting write access to nodes, use IRSA (IAM Roles for
 # Service Accounts aka pod identity) so that only Argo CD can write.
 data "aws_iam_policy_document" "datagovuk_bucket" {
-  statement {
-    sid = "PublicCanReadButNotList"
-    principals {
-      type        = "*"
-      identifiers = ["*"]
-    }
-    actions   = ["s3:GetObject"]
-    resources = ["${local.s3_bucket_datagovuk_bucket_arn}/*"]
-  }
   statement {
     sid = "EKSNodesCanList"
     principals {
