@@ -28,8 +28,23 @@ variable "organogram_bucket_cors_origins" {
     "https://www.integration.data.gov.uk",
     "https://find.eks.production.govuk.digital",
     "https://find.eks.integration.govuk.digital",
-    "https://find.eks.staging.govuk.digital",
-    "https://find.eph-aaa113.ephemeral.govuk.digital"
+    "https://find.eks.staging.govuk.digital"
+  ]
+}
+
+variable "output_bucket_cors_origins" {
+  type        = list(string)
+  description = "List of allowed origins for CORS for output bucket"
+  default = [
+    "https://data.gov.uk",
+    "https://www.data.gov.uk",
+    "https://staging.data.gov.uk",
+    "https://www.staging.data.gov.uk",
+    "https://integration.data.gov.uk",
+    "https://www.integration.data.gov.uk",
+    "https://find.eks.production.govuk.digital",
+    "https://find.eks.integration.govuk.digital",
+    "https://find.eks.staging.govuk.digital"
   ]
 }
 
