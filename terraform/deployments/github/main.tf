@@ -199,8 +199,6 @@ resource "github_repository" "govuk_repos" {
   allow_squash_merge = true
   allow_merge_commit = true
 
-  vulnerability_alerts = !try(each.value.archived, false) # Archived repos cannot have vulnerability alerts
-
   delete_branch_on_merge = true
 
   homepage_url = try(each.value.homepage_url, null)
@@ -255,6 +253,46 @@ resource "github_repository" "govuk_repos" {
 
     prevent_destroy = true
   }
+}
+
+resource "github_repository_vulnerability_alerts" "govuk_repos" {
+  for_each = {
+    for name, repo in github_repository.govuk_repos : name => repo
+    if !try(local.repositories[name].archived, false)
+  }
+
+  repository = each.key
+  enabled    = !lookup(local.repositories[each.key], "archived", false)
+}
+
+import {
+  for_each = {
+    for name, repo in github_repository.govuk_repos : name => repo
+    if !try(local.repositories[name].archived, false)
+  }
+
+  to = github_repository_vulnerability_alerts.govuk_repos[each.key]
+  id = each.key
+}
+
+resource "github_repository_dependabot_security_updates" "govuk_repos" {
+  for_each = {
+    for name, repo in github_repository.govuk_repos : name => repo
+    if !try(local.repositories[name].archived, false)
+  }
+
+  repository = each.key
+  enabled    = !lookup(local.repositories[each.key], "archived", false)
+}
+
+import {
+  for_each = {
+    for name, repo in github_repository.govuk_repos : name => repo
+    if !try(local.repositories[name].archived, false)
+  }
+
+  to = github_repository_dependabot_security_updates.govuk_repos[each.key]
+  id = each.key
 }
 
 resource "github_branch_protection" "govuk_repos" {
