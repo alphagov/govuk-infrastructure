@@ -16,8 +16,7 @@ module "secure_s3_bucket_attachments" {
 
   name = "govuk-attachments-${var.govuk_environment}"
 
-  lifecycle_rules    = var.govuk_environment == "integration" ? local.lifecycle_rules_integration : null
-  versioning_enabled = var.govuk_environment == "production" ? true : false
+  lifecycle_rules = var.govuk_environment == "integration" ? local.lifecycle_rules_integration : null
 }
 
 moved {
