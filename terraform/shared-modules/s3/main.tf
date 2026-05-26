@@ -210,7 +210,7 @@ resource "aws_s3_bucket_logging" "this" {
 resource "aws_s3_bucket_cors_configuration" "this" {
   count = var.cors_rules != null ? 1 : 0
 
-  bucket   = aws_s3_bucket.this.id
+  bucket = aws_s3_bucket.this.id
 
   cors_rule {
     allowed_headers = var.cors_rules.allowed_headers
@@ -221,7 +221,7 @@ resource "aws_s3_bucket_cors_configuration" "this" {
 }
 
 resource "aws_s3_bucket_replication_configuration" "this" {
-  count = var.replication_config != null ? 1 : 0
+  count      = var.replication_config != null ? 1 : 0
   depends_on = [aws_s3_bucket_versioning.this]
 
   bucket = aws_s3_bucket.this.id
@@ -230,10 +230,10 @@ resource "aws_s3_bucket_replication_configuration" "this" {
   dynamic "rule" {
     for_each = var.replication_config.rules
     content {
-      id = rule.value.id
+      id     = rule.value.id
       status = rule.value.status
       destination {
-        bucket = rule.value.destination.bucket
+        bucket        = rule.value.destination.bucket
         storage_class = rule.value.destination.storage_class
       }
     }

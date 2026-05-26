@@ -52,41 +52,6 @@ module "mirror_bucket" {
   }
 }
 
-moved {
-  from = aws_s3_bucket.govuk_mirror
-  to   = module.mirror_bucket.aws_s3_bucket.this
-}
-
-moved {
-  from = aws_s3_bucket_versioning.govuk_mirror
-  to   = module.mirror_bucket.aws_s3_bucket_versioning.this
-}
-
-moved {
-  from = aws_s3_bucket_logging.govuk_mirror
-  to   = module.mirror_bucket.aws_s3_bucket_logging.this
-}
-
-moved {
-  from = aws_s3_bucket_cors_configuration.govuk_mirror
-  to   = module.mirror_bucket.aws_s3_bucket_cors_configuration.this[0]
-}
-
-moved {
-  from = aws_s3_bucket_lifecycle_configuration.govuk_mirror
-  to   = module.mirror_bucket.aws_s3_bucket_lifecycle_configuration.this[0]
-}
-
-moved {
-  from = aws_s3_bucket_replication_configuration.govuk_mirror
-  to   = module.mirror_bucket.aws_s3_bucket_replication_configuration.this[0]
-}
-
-moved {
-  from = aws_s3_bucket_policy.govuk_mirror_read_policy
-  to   = module.mirror_bucket.aws_s3_bucket_policy.bucket_policy
-}
-
 module "mirror_replica_bucket" {
   source = "../../shared-modules/s3"
 
@@ -109,31 +74,6 @@ module "mirror_replica_bucket" {
   extra_bucket_policies = [
     data.aws_iam_policy_document.s3_mirror_replica_read_policy.json
   ]
-}
-
-moved {
-  from = aws_s3_bucket.govuk_mirror_replica
-  to   = module.mirror_replica_bucket.aws_s3_bucket.this
-}
-
-moved {
-  from = aws_s3_bucket_versioning.govuk_mirror_replica
-  to   = module.mirror_replica_bucket.aws_s3_bucket_versioning.this
-}
-
-moved {
-  from = aws_s3_bucket_logging.govuk_mirror_replica
-  to   = module.mirror_replica_bucket.aws_s3_bucket_logging.this
-}
-
-moved {
-  from = aws_s3_bucket_lifecycle_configuration.govuk_mirror_replica
-  to   = module.mirror_replica_bucket.aws_s3_bucket_lifecycle_configuration.this[0]
-}
-
-moved {
-  from = aws_s3_bucket_policy.govuk_mirror_replica_read_policy
-  to   = module.mirror_replica_bucket.aws_s3_bucket_policy.bucket_policy
 }
 
 data "aws_iam_policy_document" "s3_mirror_read_policy" {
