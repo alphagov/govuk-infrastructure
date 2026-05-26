@@ -29,33 +29,3 @@ module "dns" {
 resource "tfe_project" "govuk-dns" {
   name = "govuk-dns"
 }
-
-import {
-  to = tfe_project.govuk-dns
-  id = "prj-Sg3AQSpU79EmgwN1"
-}
-
-import {
-  to = module.dns.tfe_workspace.ws
-  id = "ws-EywpWWa2sGdR3VNh"
-}
-
-import {
-  to = module.dns.tfe_workspace_settings.ws
-  id = "ws-EywpWWa2sGdR3VNh"
-}
-
-import {
-  to = module.dns.tfe_team_access.managed["GOV.UK Production"]
-  id = "govuk/govuk-dns-tf/tws-p9duBCTAQwHmGAQX"
-}
-
-import {
-  to = module.dns.tfe_workspace_variable_set.vs_ids[0]
-  id = "govuk/govuk-dns-tf/aws-credentials-production"
-}
-
-import {
-  to = module.dns.tfe_workspace_variable_set.vs_ids[1]
-  id = "govuk/govuk-dns-tf/gcp-credentials-production"
-}

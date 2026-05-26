@@ -23,10 +23,3 @@ terraform {
 locals {
   display_name = title(var.name)
 }
-
-removed {
-  from = google_project.environment_project
-  lifecycle {
-    destroy = false
-  }
-}
