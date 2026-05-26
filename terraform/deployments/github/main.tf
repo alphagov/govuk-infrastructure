@@ -265,16 +265,6 @@ resource "github_repository_vulnerability_alerts" "govuk_repos" {
   enabled    = !lookup(local.repositories[each.key], "archived", false)
 }
 
-import {
-  for_each = {
-    for name, repo in github_repository.govuk_repos : name => repo
-    if !try(local.repositories[name].archived, false)
-  }
-
-  to = github_repository_vulnerability_alerts.govuk_repos[each.key]
-  id = each.key
-}
-
 resource "github_repository_dependabot_security_updates" "govuk_repos" {
   for_each = {
     for name, repo in github_repository.govuk_repos : name => repo
@@ -283,16 +273,6 @@ resource "github_repository_dependabot_security_updates" "govuk_repos" {
 
   repository = each.key
   enabled    = !lookup(local.repositories[each.key], "archived", false)
-}
-
-import {
-  for_each = {
-    for name, repo in github_repository.govuk_repos : name => repo
-    if !try(local.repositories[name].archived, false)
-  }
-
-  to = github_repository_dependabot_security_updates.govuk_repos[each.key]
-  id = each.key
 }
 
 resource "github_branch_protection" "govuk_repos" {
