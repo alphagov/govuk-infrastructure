@@ -26,7 +26,7 @@ moved {
 }
 
 moved {
-  from = aws_s3_bucket_versioning.attachments
+  from = aws_s3_bucket_versioning.attachments[0]
   to   = module.secure_s3_bucket_attachments.aws_s3_bucket_versioning.this
 }
 
