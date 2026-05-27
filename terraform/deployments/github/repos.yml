@@ -430,6 +430,8 @@ repos:
     can_be_deployed: true
     required_status_checks:
       additional_contexts:
+        - CodeQL SAST scan / Analyze
+        - Dependency Review scan / dependency-review-pr
         - Test Go / Test Go
 
   govuk-job-request-operator:
