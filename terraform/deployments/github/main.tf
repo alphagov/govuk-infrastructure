@@ -121,6 +121,10 @@ data "github_team" "co_platform_engineering" {
   slug = "co-platform-engineering"
 }
 
+data "github_team" "govuk_data" {
+  slug = "gov-uk-data"
+}
+
 resource "github_team_repository" "govuk_ai_accelerator_repos" {
   for_each   = toset(var.govuk_ai_accelerator_repo_names)
   repository = each.value
@@ -162,6 +166,13 @@ resource "github_team_repository" "co_platform_engineering_repos" {
   repository = each.key
   team_id    = data.github_team.co_platform_engineering.id
   permission = "pull"
+}
+
+resource "github_team_repository" "govuk_data_repos" {
+  for_each   = toset(["govuk-chat-evaluation", "govuk-chat-v1-iterations-2026", "govuk_chat_private"])
+  repository = each.key
+  team_id    = data.github_team.govuk_data.id
+  permission = "write"
 }
 
 resource "github_team_repository" "ithc_repos" {
