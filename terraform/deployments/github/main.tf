@@ -172,7 +172,7 @@ resource "github_team_repository" "govuk_data_repos" {
   for_each   = toset(["govuk-chat-evaluation", "govuk-chat-v1-iterations-2026", "govuk_chat_private"])
   repository = each.key
   team_id    = data.github_team.govuk_data.id
-  permission = "write"
+  permission = "push"
 }
 
 resource "github_team_repository" "ithc_repos" {
