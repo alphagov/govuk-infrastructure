@@ -427,6 +427,7 @@ repos:
 
   govuk-cli:
     can_be_deployed: true
+    push_allowances: ["alphagov/gov-uk-platform-engineering"]
     required_status_checks:
       additional_contexts:
         - CodeQL SAST scan / Analyze
