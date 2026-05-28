@@ -307,6 +307,7 @@ repos:
         - Lint
         - Format
         - Type checks
+    push_allowances: ["alphagov/gov-uk-data", "alphagov/gov-uk-production-admin", "alphagov/gov-uk-production-deploy"]
 
   govuk-chat-gradio-prototype:
     visibility: private
@@ -314,12 +315,12 @@ repos:
 
   govuk-chat-v1-iterations-2026:
     visibility: private
-    need_production_access_to_merge: false
     required_status_checks:
       # standard security checks are disabled as not configured for a private repo
       additional_contexts:
         - Lint
         - Format
+    push_allowances: ["alphagov/gov-uk-data", "alphagov/gov-uk-production-admin", "alphagov/gov-uk-production-deploy"]
 
   govuk-chat-gradio-user-research:
     visibility: private
@@ -517,6 +518,7 @@ repos:
         - Lint Ruby / Run RuboCop
         - Run RSpec
         - Test GOV.UK Chat / Run RSpec
+    push_allowances: ["alphagov/gov-uk-data", "alphagov/gov-uk-production-admin", "alphagov/gov-uk-production-deploy"]
 
   govuk_content_item_loader:
     can_be_deployed: true
