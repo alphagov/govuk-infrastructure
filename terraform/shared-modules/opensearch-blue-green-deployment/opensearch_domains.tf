@@ -4,6 +4,13 @@ locals {
     for name, subnet_id in data.tfe_outputs.vpc.nonsensitive_values.private_subnet_ids
     : subnet_id if startswith(name, "elasticsearch_")
   ])
+
+  blue_domain_name = "${var.opensearch_domain_name}-blue"
+  green_domain_name = (
+    var.green_cluster_options.prefix_colour_instead_of_suffix ?
+    "green-${var.opensearch_domain_name}" :
+    "${var.opensearch_domain_name}-green"
+  )
 }
 
 module "blue_domain" {
@@ -11,7 +18,7 @@ module "blue_domain" {
 
   source = "./opensearch-domain"
 
-  opensearch_domain_name        = "${var.opensearch_domain_name}-blue"
+  opensearch_domain_name        = local.blue_domain_name
   engine                        = var.blue_cluster_options.engine
   engine_version                = var.blue_cluster_options.engine_version
   instance_count                = var.blue_cluster_options.instance_count
@@ -42,7 +49,7 @@ module "green_domain" {
 
   source = "./opensearch-domain"
 
-  opensearch_domain_name        = "${var.opensearch_domain_name}-green"
+  opensearch_domain_name        = local.green_domain_name
   engine                        = var.green_cluster_options.engine
   engine_version                = var.green_cluster_options.engine_version
   instance_count                = var.green_cluster_options.instance_count

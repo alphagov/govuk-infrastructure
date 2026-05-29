@@ -113,6 +113,7 @@ variable "green_cluster_options" {
       throughput  = number
       iops        = optional(number)
     }))
+    prefix_colour_instead_of_suffix = optional(bool, false)
   })
   default  = null
   nullable = true

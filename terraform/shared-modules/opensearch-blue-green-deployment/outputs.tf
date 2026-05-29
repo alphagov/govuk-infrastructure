@@ -1,8 +1,8 @@
 output "opensearch_domain_names" {
   description = "A map of the OpenSearch domain names for the blue and green clusters, clusters which haven't be launched will be null"
   value = merge({
-    blue  = var.launch_blue_domain ? "${var.opensearch_domain_name}-blue" : null
-    green = var.launch_green_domain ? "${var.opensearch_domain_name}-green" : null
+    blue  = var.launch_blue_domain ? local.blue_domain_name : null
+    green = var.launch_green_domain ? local.green_domain_name : null
   })
 }
 
