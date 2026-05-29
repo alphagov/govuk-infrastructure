@@ -62,7 +62,7 @@ variable "blue_cluster_options" {
     advanced_security_options = optional(object({
       anonymous_auth_enabled         = optional(bool, false)
       internal_user_database_enabled = optional(bool, true)
-    }), {})
+    }))
     endpoint_tls_security_policy = optional(string)
     ebs_options = optional(object({
       volume_size = number
@@ -105,7 +105,7 @@ variable "green_cluster_options" {
     advanced_security_options = optional(object({
       anonymous_auth_enabled         = optional(bool, false)
       internal_user_database_enabled = optional(bool, true)
-    }), {})
+    }))
     endpoint_tls_security_policy = optional(string)
     ebs_options = optional(object({
       volume_size = number
