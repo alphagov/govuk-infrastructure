@@ -68,6 +68,7 @@ variable "blue_cluster_options" {
       volume_size = number
       volume_type = string
       throughput  = number
+      iops        = optional(number)
     }))
   })
   default  = null
@@ -110,6 +111,7 @@ variable "green_cluster_options" {
       volume_size = number
       volume_type = string
       throughput  = number
+      iops        = optional(number)
     }))
   })
   default  = null
