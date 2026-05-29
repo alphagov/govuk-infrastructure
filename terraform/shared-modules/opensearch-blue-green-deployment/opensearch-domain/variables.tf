@@ -90,7 +90,6 @@ variable "advanced_security_options" {
     }))
   })
   description = "OpenSearch Advanced Security options"
-  sensitive   = true
   nullable    = true
 }
 
