@@ -8,9 +8,10 @@ module "secure_s3_bucket_tempo" {
   source            = "../../shared-modules/s3"
   govuk_environment = var.govuk_environment
 
-  name               = "govuk-${var.govuk_environment}-tempo"
-  force_destroy      = var.force_destroy
-  versioning_enabled = false
+  name                   = "govuk-${var.govuk_environment}-tempo"
+  force_destroy          = var.force_destroy
+  versioning_enabled     = false
+  disable_bucket_logging = var.disable_tempo_bucket_logging
 }
 
 module "tempo_iam_role" {
