@@ -185,6 +185,8 @@ resource "aws_s3_bucket_ownership_controls" "owner" {
 }
 
 resource "aws_s3_bucket_logging" "this" {
+  count = var.disable_bucket_logging ? 0 : 1
+
   bucket = aws_s3_bucket.this.id
 
   target_bucket = var.access_logging_config.target_bucket == null ? "govuk-${var.govuk_environment}-aws-logging" : var.access_logging_config.target_bucket
