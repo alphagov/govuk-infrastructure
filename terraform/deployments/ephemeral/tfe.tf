@@ -102,6 +102,20 @@ module "cluster_services" {
   depends_on = [module.cluster_infrastructure, module.cluster_access, tfe_project.project]
 }
 
+module "loki" {
+  source = "./ws"
+
+  name                 = "loki"
+  ephemeral_cluster_id = var.ephemeral_cluster_id
+  variable_set_id      = module.var_set.id
+  git_branch           = var.git_branch
+
+  tfvars = {}
+
+  depends_on = [module.cluster_infrastructure]
+}
+
+
 /*
  * Commented out because it doesn't work, but the workspace it makes
  * causes every RDS PR to show it is failing the build
@@ -115,6 +129,7 @@ module "rds" {
 }
 */
 
+/*
 module "datagovuk_infrastructure" {
   source = "./ws"
 
@@ -125,3 +140,4 @@ module "datagovuk_infrastructure" {
 
   depends_on = [module.cluster_services, tfe_project.project]
 }
+*/
