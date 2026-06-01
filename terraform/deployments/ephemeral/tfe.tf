@@ -96,6 +96,7 @@ module "cluster_services" {
 
   tfvars = {
     ship_kubernetes_events_to_logit = false
+    disable_tempo_bucket_logging    = true
   }
 
   depends_on = [module.cluster_infrastructure, module.cluster_access, tfe_project.project]
@@ -114,6 +115,7 @@ module "rds" {
 }
 */
 
+/*
 module "datagovuk_infrastructure" {
   source = "./ws"
 
@@ -124,4 +126,4 @@ module "datagovuk_infrastructure" {
 
   depends_on = [module.cluster_services, tfe_project.project]
 }
-
+*/
