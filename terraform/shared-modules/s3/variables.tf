@@ -179,7 +179,7 @@ variable "disable_bucket_logging" {
   nullable    = false
 
   validation {
-    condition     = var.disable_bucket_logging == false || var.govuk_environment == "test" || length(regexall("^govuk-[^-]+-bucket-logging", var.name)) > 0
-    error_message = "You can only disable bucket logging in the test account or for the logging bucket itself."
+    condition     = var.disable_bucket_logging == false || startswith(var.name, "govuk-eph-") || length(regexall("^govuk-[^-]+-bucket-logging", var.name)) > 0
+    error_message = "You can only disable bucket logging for buckets used by ephemeral clusters or for the logging bucket itself."
   }
 }

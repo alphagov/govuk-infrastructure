@@ -115,7 +115,6 @@ module "rds" {
 }
 */
 
-/*
 module "datagovuk_infrastructure" {
   source = "./ws"
 
@@ -126,4 +125,3 @@ module "datagovuk_infrastructure" {
 
   depends_on = [module.cluster_services, tfe_project.project]
 }
-*/
