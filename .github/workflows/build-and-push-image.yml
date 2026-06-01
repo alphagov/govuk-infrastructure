@@ -63,6 +63,7 @@ jobs:
             type=raw,priority=400,value=${{ steps.local-head.outputs.sha }},enable=${{ !startsWith(inputs.gitRef, 'v') }}
 
       - name: Build and push
+        id: build-image
         uses: docker/build-push-action@bcafcacb16a39f128d818304e6c9c0c18556b85f # v7.1.0
         with:
           file: ${{ inputs.dockerfilepath }}
@@ -72,3 +73,13 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
+
+      - name: Install Cosign
+        uses: sigstore/cosign-installer@v4.1.2
+
+      - name: Sign Image
+        env:
+          TAG: "ghcr.io/${{ github.repository_owner }}/govuk/${{ inputs.imageName }}:${{ steps.meta.outputs.version }}"
+          DIGEST: ${{ steps.build-image.outputs.digest }}
+        run: |
+          cosign sign --yes "${TAG}@${DIGEST}"
