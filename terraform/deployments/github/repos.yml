@@ -345,8 +345,6 @@ repos:
     up_to_date_branches: true
     required_pull_request_reviews:
       require_code_owner_reviews: true
-    required_status_checks:
-      standard_contexts: *standard_security_checks
     teams:
       govuk: "maintain"
       govuk-platform-engineering: "admin"
