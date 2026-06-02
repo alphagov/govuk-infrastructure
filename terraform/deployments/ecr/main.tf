@@ -53,6 +53,11 @@ locals {
     data.tfe_outputs.github.nonsensitive_values.deployable_repo_names
   )
 
+  deleted_repositories = [
+    "govuk-graphql",
+    "govuk-job-request-operator",
+  ]
+
   extra_repositories = [
     "clamav",
     "govuk-fastly-diff-generator",
@@ -90,6 +95,18 @@ resource "aws_ecr_repository" "github_repositories" {
   lifecycle {
     prevent_destroy = true
   }
+}
+
+# Repositories that have been archived or marked deployable = false are moved here
+# so they can be destroyed without the prevent_destroy constraint above.
+# To delete a repo: ensure it's listed in local.deleted_repositories, run apply
+# (state-only migration), then remove it from local.deleted_repositories and
+# apply again to destroy the ECR repo.
+resource "aws_ecr_repository" "deleted_repositories" {
+  for_each             = toset(local.deleted_repositories)
+  name                 = "github/alphagov/govuk/${each.key}"
+  image_tag_mutability = "MUTABLE"
+  image_scanning_configuration { scan_on_push = true }
 }
 
 resource "aws_ecr_pull_through_cache_rule" "github" {
