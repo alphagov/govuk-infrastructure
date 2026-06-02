@@ -7,14 +7,14 @@ module "gcp-ga4-analytics" {
   workspace_tags      = ["production", "ga4-analytics", "gcp"]
   terraform_version   = var.terraform_version
   execution_mode      = "remote"
-  working_directory   = "/terraform/deployments/ga4-analytics/"
-  trigger_patterns    = ["/terraform/deployments/ga4-analytics/**/*"]
+  working_directory   = "/ga4-analytics/"
+  trigger_patterns    = ["/ga4-analytics/**/*"]
   global_remote_state = true
   assessments_enabled = true
 
   project_name = "govuk-infrastructure"
   vcs_repo = {
-    identifier     = "alphagov/govuk-infrastructure"
+    identifier     = "alphagov/govuk-data-infrastructure"
     branch         = "main"
     oauth_token_id = data.tfe_oauth_client.github.oauth_token_id
   }
@@ -39,14 +39,14 @@ module "gcp-ga4-aggregate-analytics" {
   workspace_tags      = ["production", "ga4-aggregate-analytics", "gcp"]
   terraform_version   = var.terraform_version
   execution_mode      = "remote"
-  working_directory   = "/terraform/deployments/gcp-ga4-aggregate-analytics/"
-  trigger_patterns    = ["/terraform/deployments/gcp-ga4-aggregate-analytics/**/*"]
+  working_directory   = "/gcp-ga4-aggregate-analytics/"
+  trigger_patterns    = ["/gcp-ga4-aggregate-analytics/**/*"]
   global_remote_state = true
   assessments_enabled = true
 
   project_name = "govuk-data-engineering"
   vcs_repo = {
-    identifier     = "alphagov/govuk-infrastructure"
+    identifier     = "alphagov/govuk-data-infrastructure"
     branch         = "main"
     oauth_token_id = data.tfe_oauth_client.github.oauth_token_id
   }
@@ -70,14 +70,14 @@ module "gcp-gds-bq-processing" {
   workspace_tags      = ["production", "gds-bq-processing", "gcp"]
   terraform_version   = var.terraform_version
   execution_mode      = "remote"
-  working_directory   = "/terraform/deployments/gcp-gds-bq-processing/"
-  trigger_patterns    = ["/terraform/deployments/gcp-gds-bq-processing/**/*"]
+  working_directory   = "/gcp-gds-bq-processing/"
+  trigger_patterns    = ["/gcp-gds-bq-processing/**/*"]
   global_remote_state = true
   assessments_enabled = true
 
   project_name = "govuk-data-engineering"
   vcs_repo = {
-    identifier     = "alphagov/govuk-infrastructure"
+    identifier     = "alphagov/govuk-data-infrastructure"
     branch         = "main"
     oauth_token_id = data.tfe_oauth_client.github.oauth_token_id
   }
@@ -101,17 +101,17 @@ module "gcp-gds-bq-processing-dev" {
   workspace_tags    = ["dev", "gds-bq-processing", "gcp"]
   terraform_version = var.terraform_version
   execution_mode    = "remote"
-  working_directory = "/terraform/deployments/gcp-gds-bq-processing-dev/"
+  working_directory = "/gcp-gds-bq-processing-dev/"
   trigger_patterns = [
-    "/terraform/deployments/gcp-gds-bq-processing-dev/**/*",
-    "/terraform/shared-modules/gcp-project-init/**/*",
+    "/gcp-gds-bq-processing-dev/**/*",
+    "/modules/gcp-project-init/**/*",
   ]
   global_remote_state = true
   assessments_enabled = true
 
   project_name = "govuk-data-engineering"
   vcs_repo = {
-    identifier     = "alphagov/govuk-infrastructure"
+    identifier     = "alphagov/govuk-data-infrastructure"
     branch         = "main"
     oauth_token_id = data.tfe_oauth_client.github.oauth_token_id
   }
