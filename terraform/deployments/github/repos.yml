@@ -464,8 +464,9 @@ repos:
     branch_protection: false
 
   govuk-rota-generator:
+    visibility: private
     required_status_checks:
-      standard_contexts: *standard_security_checks
+      # standard security checks are disabled as not configured for a private repo
       additional_contexts:
         - test
 
