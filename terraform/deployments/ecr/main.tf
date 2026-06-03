@@ -53,10 +53,8 @@ locals {
     data.tfe_outputs.github.nonsensitive_values.deployable_repo_names
   )
 
-  deleted_repositories = [
-    "govuk-graphql",
-    "govuk-job-request-operator",
-  ]
+  // Populate this with Repos that need to be deleted
+  deleted_repositories = []
 
   extra_repositories = [
     "clamav",
