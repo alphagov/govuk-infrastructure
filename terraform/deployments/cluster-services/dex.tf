@@ -1,6 +1,7 @@
 # Dex client credentials
 
 locals {
+  grafana_email = "ephemeral-user@digital.cabinet-office.gov.uk"
   dex_clients = toset([
     "alertmanager",
     "prometheus",
@@ -99,6 +100,7 @@ resource "kubernetes_secret_v1" "eph_account" {
 
   data = {
     username = "admin"
+    email    = local.grafana_email
     password = random_password.eph_account.result
   }
 }
@@ -110,7 +112,8 @@ locals {
     {
       username = "admin"
       hash     = random_password.eph_account.bcrypt_hash
-      email    = "ephemeral-user@digital.cabinet-office.gov.uk"
+      email    = local.grafana_email
+      groups   = ["admin"]
       userID   = random_uuid.eph_account.result
     }
   ] : []
@@ -257,8 +260,11 @@ resource "helm_release" "dex" {
   namespace        = local.services_ns
   create_namespace = true
   repository       = "https://charts.dexidp.io"
-  version          = "0.24.0"
+  version          = "0.24.1"
   values = [yamlencode({
+    image = {
+      tag : "v2.45.1"
+    }
     replicaCount = var.desired_ha_replicas
     config = {
       issuer = "https://${local.dex_host}"
