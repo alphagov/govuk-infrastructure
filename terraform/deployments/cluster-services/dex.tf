@@ -114,6 +114,7 @@ locals {
       hash     = random_password.eph_account.bcrypt_hash
       email    = local.grafana_email
       groups   = ["admin"]
+      roles    = ["admin"]
       userID   = random_uuid.eph_account.result
     }
   ] : []
