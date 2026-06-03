@@ -113,8 +113,8 @@ locals {
       username = "admin"
       hash     = random_password.eph_account.bcrypt_hash
       email    = local.grafana_email
-      groups   = ["'Admin'", "'alphagov:gov-uk-production-deploy'"]
-      roles    = ["'Admin'"]
+      groups   = ["Admin", "alphagov:gov-uk-production-deploy"]
+      roles    = ["Admin"]
       userID   = random_uuid.eph_account.result
     }
   ] : []
