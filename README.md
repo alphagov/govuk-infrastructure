@@ -19,6 +19,9 @@ Base image definitions for GOV.UK Ruby apps are in [alphagov/govuk-ruby-images](
 
 Configuration of CDN services is stored in [alphagov/govuk-fastly](https://github.com/alphagov/govuk-fastly) and [alphagov/govuk-fastly-secrets](https://github.com/alphagov/govuk-fastly-secrets) (private) repos.
 
+Configuration of Google Cloud Platform (GCP) projects used for internal analytics is stored in [alphagov/govuk-data-infrastructure](https://github.com/alphagov/govuk-data-infrastructure).
+
+
 Toolbox utility is stored in [alphagov/govuk-toolbox-image](https://github.com/alphagov/govuk-toolbox-image)
 
 ## Usage
