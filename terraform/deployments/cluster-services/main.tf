@@ -34,6 +34,11 @@ terraform {
       source  = "hashicorp/aws"
       version = "< 6.47.1"
     }
+
+    kubectl = {
+      source  = "alekc/kubectl"
+      version = "2.1.3"
+    }
   }
 }
 
@@ -70,6 +75,12 @@ provider "helm" {
     cluster_ca_certificate = base64decode(data.tfe_outputs.cluster_infrastructure.nonsensitive_values.cluster_certificate_authority_data)
     token                  = data.aws_eks_cluster_auth.cluster_token.token
   }
+}
+
+provider "kubectl" {
+  host                   = data.tfe_outputs.cluster_infrastructure.nonsensitive_values.cluster_endpoint
+  cluster_ca_certificate = base64decode(data.tfe_outputs.cluster_infrastructure.nonsensitive_values.cluster_certificate_authority_data)
+  token                  = data.aws_eks_cluster_auth.cluster_token.token
 }
 
 locals {
