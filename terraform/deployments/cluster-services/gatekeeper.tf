@@ -1,5 +1,5 @@
 module "gatekeeper" {
-  source = "github.com/alphagov/govuk-terraform-gatekeeper?ref=0.0.1"
+  source = "github.com/alphagov/govuk-terraform-gatekeeper?ref=0.0.2"
 
   dryrun_map = {
     service_type                       = true,
