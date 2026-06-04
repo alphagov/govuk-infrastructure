@@ -81,6 +81,11 @@ provider "kubectl" {
   host                   = data.tfe_outputs.cluster_infrastructure.nonsensitive_values.cluster_endpoint
   cluster_ca_certificate = base64decode(data.tfe_outputs.cluster_infrastructure.nonsensitive_values.cluster_certificate_authority_data)
   token                  = data.aws_eks_cluster_auth.cluster_token.token
+  exec {
+    api_version = "client.authentication.k8s.io/v1beta1"
+    args        = ["eks", "get-token", "--cluster-name", data.aws_eks_cluster.cluster.name]
+    command     = "aws"
+  }
 }
 
 locals {
