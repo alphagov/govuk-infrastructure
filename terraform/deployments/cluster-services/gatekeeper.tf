@@ -29,7 +29,7 @@ module "gatekeeper" {
   is_production                        = false
   environment_name                     = "eph-jas-0300626"
   out_of_hours_alert                   = "false"
-  cluster_domain_name                  = data.terraform_remote_state.cluster.outputs.cluster_domain_name
+  cluster_domain_name                  = local.external_dns_zone_name
   cluster_color                        = terraform.workspace == "production" ? "green" : "black"
   constraint_violations_max_to_display = 25
 
