@@ -1,12 +1,15 @@
-pipeline:
-  # -- The pipeline inputs configure the plugins responsible for collecting or receiving data. If storage is not enabled the `db` key will be removed to stop errors.
-  inputs:
-    - name: tail
-      alias: coredns
-      path: /var/log/containers/coredns*.log
-      tag: coredns
-      skip_empty_lines: true
+config:
+  pipeline:
+    inputs:
+      - name: tail
+        alias: coredns
+        path: /var/log/containers/coredns*.log
+        tag: coredns
+        skip_empty_lines: true
 
-  outputs:
-    - name: stdout
-      match: *
+    outputs:
+      - name: loki
+        match: "*"
+        host: "loki-distributor.loki.svc.cluster.local"
+        tenant_id: test
+        auto_kubernetes_labels: true
