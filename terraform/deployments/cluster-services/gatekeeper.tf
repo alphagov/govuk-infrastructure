@@ -1,5 +1,5 @@
 module "gatekeeper" {
-  source = "github.com/alphagov/govuk-terraform-gatekeeper?ref=0.0.2"
+  source = "github.com/alphagov/govuk-terraform-gatekeeper?ref=0.0.9"
 
   dryrun_map = {
     service_type                       = true,
@@ -12,7 +12,7 @@ module "gatekeeper" {
     external_dns_weight                = true,
     valid_hostname                     = true
     warn_service_account_secret_delete = true,
-    user_ns_requires_psa_label         = true,
+    user_ns_requires_psa_label         = false,
     deprecated_apis_1_26               = true,
     deprecated_apis_1_27               = true,
     deprecated_apis_1_29               = true,
