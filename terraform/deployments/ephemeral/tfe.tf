@@ -92,7 +92,7 @@ module "cluster_services" {
   name                 = "cluster-services"
   ephemeral_cluster_id = var.ephemeral_cluster_id
   variable_set_id      = module.var_set.id
-  git_branch           = var.git_branch
+  git_branch           = "firebreak-gatekeeper"
 
   tfvars = {
     ship_kubernetes_events_to_logit = false
@@ -115,13 +115,13 @@ module "rds" {
 }
 */
 
-module "datagovuk_infrastructure" {
-  source = "./ws"
-
-  name                 = "datagovuk-infrastructure"
-  ephemeral_cluster_id = var.ephemeral_cluster_id
-  variable_set_id      = module.var_set.id
-  git_branch           = var.git_branch
-
-  depends_on = [module.cluster_services, tfe_project.project]
-}
+# module "datagovuk_infrastructure" {
+#   source = "./ws"
+#
+#   name                 = "datagovuk-infrastructure"
+#   ephemeral_cluster_id = var.ephemeral_cluster_id
+#   variable_set_id      = module.var_set.id
+#   git_branch           = var.git_branch
+#
+#   depends_on = [module.cluster_services, tfe_project.project]
+# }
