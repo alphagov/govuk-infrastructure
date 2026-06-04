@@ -2,7 +2,7 @@ terraform {
   cloud {
     organization = "govuk"
     workspaces {
-      tags = ["loki", "eks", "aws"]
+      tags = ["loki", "ephemeral", "aws"]
     }
   }
 

@@ -1,0 +1,12 @@
+pipeline:
+  # -- The pipeline inputs configure the plugins responsible for collecting or receiving data. If storage is not enabled the `db` key will be removed to stop errors.
+  inputs:
+    - name: tail
+      alias: coredns
+      path: /var/log/containers/coredns*.log
+      tag: coredns
+      skip_empty_lines: true
+
+  outputs:
+    - name: stdout
+      match: *
