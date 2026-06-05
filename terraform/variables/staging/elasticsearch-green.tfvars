@@ -1,7 +1,7 @@
 ebs = {
   volume_size      = 314
   volume_type      = "gp3"
-  throughput       = 250
+  throughput       = 300
   provisioned_iops = 3000
 }
 engine_version         = "6.8"
