@@ -430,7 +430,7 @@ databases = {
     }
     engine_params_family         = "postgres14"
     name                         = "transition"
-    allocated_storage            = 120
+    allocated_storage            = 240
     instance_class               = "db.m6g.large"
     performance_insights_enabled = true
     project                      = "GOV.UK - Publishing"
