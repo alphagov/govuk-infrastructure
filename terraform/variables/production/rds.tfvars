@@ -424,7 +424,7 @@ databases = {
     engine_version = "14"
     engine_params = {
       log_min_duration_statement = { value = 10000 }
-      log_statement              = { value = "all" }
+      log_statement              = { value = "mod" }
       deadlock_timeout           = { value = 2500 }
       log_lock_waits             = { value = 1 }
     }
