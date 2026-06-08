@@ -21,6 +21,9 @@ databases = {
     performance_insights_enabled = true
     project                      = "GOV.UK - Web"
     snapshot_identifier          = "account-api-postgres-post-encryption"
+    tags = {
+      "used_by" = "account-api"
+    }
   }
 
   authenticating_proxy = {
@@ -40,6 +43,9 @@ databases = {
     performance_insights_enabled = false
     project                      = "GOV.UK - Publishing"
     snapshot_identifier          = "authenticating-proxy-postgres-post-encryption"
+    tags = {
+      "used_by" = "authenticating-proxy"
+    }
   }
 
   chat = {
@@ -58,6 +64,9 @@ databases = {
     performance_insights_enabled = false
     project                      = "GOV.UK - AI"
     snapshot_identifier          = "chat-postgres-post-encryption"
+    tags = {
+      "used_by" = "govuk-chat"
+    }
   }
 
   ckan = {
@@ -90,7 +99,10 @@ databases = {
     instance_class               = "db.t4g.micro"
     performance_insights_enabled = false
     project                      = "GOV.UK - Publishing"
-    snapshot_identifier          = "collections-publisher-mysql-post-encryption"
+    snapshot_identifier          = "collections-publisher-mysql-post-encryption" #
+    tags = {
+      "used_by" = "collections-publisher"
+    }
   }
 
   content_block_manager = {
@@ -110,6 +122,9 @@ databases = {
     performance_insights_enabled = true
     project                      = "GOV.UK - Publishing"
     snapshot_identifier          = "content-block-manager-postgres-post-encryption"
+    tags = {
+      "used_by" = "content-block-manager"
+    }
   }
 
   content_data_admin = {
@@ -128,6 +143,10 @@ databases = {
     performance_insights_enabled = false
     project                      = "GOV.UK - Publishing"
     snapshot_identifier          = "content-data-admin-postgres-post-encryption"
+
+    tags = {
+      "used_by" = "content-data-admin"
+    }
   }
 
   content_data_api = {
@@ -151,6 +170,9 @@ databases = {
     performance_insights_enabled = false
     project                      = "GOV.UK - Publishing"
     snapshot_identifier          = "blue-content-data-api-postgresql-primary-postgres-post-encryption"
+    tags = {
+      "used_by" = "content-data-api"
+    }
   }
 
   content_store = {
@@ -169,6 +191,9 @@ databases = {
     performance_insights_enabled = true
     project                      = "GOV.UK - Publishing"
     snapshot_identifier          = "content-store-postgres-post-encryption"
+    tags = {
+      "used_by" = "content-store"
+    }
   }
 
   content_tagger = {
@@ -187,6 +212,9 @@ databases = {
     performance_insights_enabled = false
     project                      = "GOV.UK - Publishing"
     snapshot_identifier          = "content-tagger-postgres-post-encryption"
+    tags = {
+      "used_by" = "content-tagger"
+    }
   }
 
   draft_content_store = {
@@ -205,6 +233,9 @@ databases = {
     performance_insights_enabled = true
     project                      = "GOV.UK - Publishing"
     snapshot_identifier          = "draft-content-store-postgres-post-encryption"
+    tags = {
+      "used_by" = "content-store"
+    }
   }
 
   email_alert_api = {
@@ -223,6 +254,10 @@ databases = {
     performance_insights_enabled = true
     project                      = "GOV.UK - Web"
     snapshot_identifier          = "email-alert-api-postgres-post-encryption"
+
+    tags = {
+      "used_by" = "email-alert-api"
+    }
   }
 
   fact_check_manager = {
@@ -240,6 +275,9 @@ databases = {
     instance_class               = "db.t4g.small"
     performance_insights_enabled = true
     project                      = "GOV.UK - Publishing"
+    tags = {
+      "used_by" = "fact-check-manager"
+    }
   }
 
   govuk_ai_accelerator = {
@@ -257,6 +295,9 @@ databases = {
     instance_class               = "db.m6g.large"
     performance_insights_enabled = true
     project                      = "GOV.UK - AI Accelerator"
+    tags = {
+      "used_by" = "govuk-ai-accelerator"
+    }
   }
 
   link_checker_api = {
@@ -276,6 +317,9 @@ databases = {
     project                      = "GOV.UK - Publishing"
     maintenance_window           = "Mon:00:00-Mon:01:00"
     snapshot_identifier          = "link-checker-api-postgres-post-encryption"
+    tags = {
+      "used_by" = "link-checker-api"
+    }
   }
 
   local_links_manager = {
@@ -294,6 +338,9 @@ databases = {
     performance_insights_enabled = false
     project                      = "GOV.UK - Web"
     snapshot_identifier          = "local-links-manager-postgres-post-encryption"
+    tags = {
+      "used_by" = "local-links-manager"
+    }
   }
 
   locations_api = {
@@ -312,6 +359,9 @@ databases = {
     performance_insights_enabled = true
     project                      = "GOV.UK - Web"
     snapshot_identifier          = "locations-api-postgres-post-encryption"
+    tags = {
+      "used_by" = "locations-api"
+    }
   }
 
   places_manager = {
@@ -331,6 +381,9 @@ databases = {
     performance_insights_enabled = false
     project                      = "GOV.UK - Web"
     snapshot_identifier          = "imminence-postgres-post-encryption"
+    tags = {
+      "used_by" = "places-manager"
+    }
   }
 
   publisher = {
@@ -350,6 +403,9 @@ databases = {
     performance_insights_enabled = true
     project                      = "GOV.UK - Publishing"
     snapshot_identifier          = "publisher-postgres-post-encryption"
+    tags = {
+      "used_by" = "publisher"
+    }
   }
 
   publishing_api = {
@@ -374,6 +430,9 @@ databases = {
     performance_insights_enabled = true
     project                      = "GOV.UK - Publishing"
     has_read_replica             = true
+    tags = {
+      "used_by" = "publishing-api"
+    }
   }
 
   release = {
@@ -389,6 +448,9 @@ databases = {
     performance_insights_enabled = false
     project                      = "GOV.UK - Infrastructure"
     snapshot_identifier          = "release-mysql-post-encryption"
+    tags = {
+      "used_by" = "release"
+    }
   }
 
   search_admin = {
@@ -404,6 +466,9 @@ databases = {
     performance_insights_enabled = false
     project                      = "GOV.UK - Search"
     snapshot_identifier          = "search-admin-mysql-post-encryption"
+    tags = {
+      "used_by" = "search-admin"
+    }
   }
 
   service_manual_publisher = {
@@ -422,6 +487,9 @@ databases = {
     performance_insights_enabled = false
     project                      = "GOV.UK - Publishing"
     snapshot_identifier          = "service-manual-publisher-postgres-post-encryption"
+    tags = {
+      "used_by" = "service-manual-publisher"
+    }
   }
 
   signon = {
@@ -437,6 +505,9 @@ databases = {
     performance_insights_enabled = true
     project                      = "GOV.UK - Publishing"
     snapshot_identifier          = "signon-mysql-post-encryption"
+    tags = {
+      "used_by" = "signon"
+    }
   }
 
   support_api = {
@@ -455,6 +526,9 @@ databases = {
     performance_insights_enabled = true
     project                      = "GOV.UK - Publishing"
     snapshot_identifier          = "support-api-postgres-post-encryption"
+    tags = {
+      "used_by" = "support-api"
+    }
   }
 
   transition = {
@@ -473,6 +547,9 @@ databases = {
     performance_insights_enabled = true
     project                      = "GOV.UK - Publishing"
     snapshot_identifier          = "transition-postgres-post-encryption"
+    tags = {
+      "used_by" = "transition"
+    }
   }
 
   whitehall = {
@@ -488,5 +565,8 @@ databases = {
     performance_insights_enabled = true
     project                      = "GOV.UK - Publishing"
     snapshot_identifier          = "whitehall-mysql-post-encryption"
+    tags = {
+      "used_by" = "whitehall"
+    }
   }
 }

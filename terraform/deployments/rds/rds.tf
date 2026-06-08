@@ -99,10 +99,13 @@ resource "aws_db_instance" "instance" {
   storage_encrypted = true
   kms_key_id        = aws_kms_key.rds.arn
 
-  tags = {
-    Name    = "govuk-rds-${local.identifier_prefix}${each.value.name}-${var.govuk_environment}-${each.value.engine}",
-    project = each.value.project,
-  }
+  tags = merge(
+    each.value.tags,
+    {
+      Name    = "govuk-rds-${local.identifier_prefix}${each.value.name}-${var.govuk_environment}-${each.value.engine}",
+      project = each.value.project,
+    }
+  )
 }
 
 resource "aws_db_event_subscription" "subscription" {

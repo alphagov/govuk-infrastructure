@@ -38,6 +38,8 @@ variable "databases" {
     replica_engine_version    = optional(string)
     replica_apply_immediately = optional(bool)
     replica_multi_az          = optional(bool)
+
+    tags = optional(map(string), {})
   }))
 
   validation {
