@@ -931,3 +931,34 @@ module "gcp-single-consent-api-dev" {
     local.gcp_credentials["production"],
   ]
 }
+
+module "gcp-govuk-user-feedback-dev" {
+  source = "github.com/alphagov/terraform-govuk-tfe-workspacer"
+
+  organization        = var.organization
+  workspace_name      = "gcp-govuk-user-feedback-dev"
+  workspace_desc      = "GCP project management for the govuk-user-feedback development project"
+  workspace_tags      = ["dev", "govuk-user-feedback", "gcp"]
+  terraform_version   = var.terraform_version
+  execution_mode      = "remote"
+  working_directory   = "/gcp-govuk-user-feedback-dev/"
+  trigger_patterns    = ["/gcp-govuk-user-feedback-dev/**/*"]
+  global_remote_state = true
+  assessments_enabled = true
+
+  project_name = "govuk-data-engineering"
+  vcs_repo = {
+    identifier     = "alphagov/govuk-data-infrastructure"
+    branch         = "main"
+    oauth_token_id = data.tfe_oauth_client.github.oauth_token_id
+  }
+
+  team_access = {
+    "GOV.UK Production"            = "write"
+    "Google Cloud Data Production" = "write"
+  }
+
+  variable_set_ids = [
+    local.gcp_credentials["production"],
+  ]
+}
