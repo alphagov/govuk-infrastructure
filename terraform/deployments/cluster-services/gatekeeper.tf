@@ -1,5 +1,5 @@
 module "gatekeeper" {
-  source = "github.com/alphagov/govuk-terraform-gatekeeper?ref=0.0.9"
+  source = "github.com/alphagov/govuk-terraform-gatekeeper?ref=0.0.16"
 
   dryrun_map = {
     service_type                       = true,
@@ -24,6 +24,7 @@ module "gatekeeper" {
     block_ingresses               = true,
     ingress_valid_classname       = true,
     ingress_internal_class_domain = true,
+    immutable_configmap           = false
   }
 
   is_production                        = false
@@ -38,3 +39,4 @@ module "gatekeeper" {
   audit_mem_limit      = terraform.workspace == "production" ? "16Gi" : "1Gi"
   audit_mem_req        = terraform.workspace == "production" ? "4Gi" : "512Mi"
 }
+
