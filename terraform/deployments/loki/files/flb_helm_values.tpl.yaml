@@ -16,11 +16,17 @@ config:
 
       - name: dummy
         tag: dummy.data
-        dummy: '{"data":"100 0.5 true This is example"}'
+        dummy: '{"data":"100 0.5 true This is example", "container_name":"app", "app_name":"dummy-publising-api", "foo":"bar"}'
+        rate: 100
+        copies: 2
+        threaded: true
 
       - name: dummy
         tag: dummy.data2
-        dummy: '{"data":"100 0.5 true This is example. foobar"}'
+        dummy: '{"data":"100 0.5 true This is example", "container_name":"nginx", "app_name":"dummy-publising-api", "baz":"quux"}'
+        rate: 100
+        copies: 1000
+        threaded: true
 
     filters:
       - name: parser
