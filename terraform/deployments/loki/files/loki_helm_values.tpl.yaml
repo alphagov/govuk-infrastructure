@@ -21,6 +21,8 @@ loki:
     allow_structured_metadata: true
     volume_enabled: true
     retention_period: 672h # 28 days retention
+    ingestion_rate_mb: 200
+    per_stream_rate_limit: 150MB
   compactor:
     retention_enabled: true
     delete_request_store: s3
@@ -61,7 +63,7 @@ ingester:
     enabled: false
 
 querier:
-  replicas: 3
+  replicas: 20
   maxUnavailable: 2
 
 queryFrontend:
