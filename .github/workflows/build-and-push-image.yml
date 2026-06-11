@@ -82,4 +82,4 @@ jobs:
           TAG: "ghcr.io/${{ github.repository_owner }}/govuk/${{ inputs.imageName }}:${{ steps.meta.outputs.version }}"
           DIGEST: ${{ steps.build-image.outputs.digest }}
         run: |
-          cosign sign --yes "${TAG}@${DIGEST}"
+          cosign sign --recursive --yes "${TAG}@sha256:${DIGEST}"

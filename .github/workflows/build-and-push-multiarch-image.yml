@@ -192,7 +192,7 @@ jobs:
           DIGEST=$(docker buildx imagetools inspect --raw "${TAG}" | sha256sum | awk '{print $1}')
 
           # Sign the manifest list digest
-          cosign sign --yes "${TAG}@sha256:${DIGEST}"
+          cosign sign --recursive --yes "${TAG}@sha256:${DIGEST}"
 
       - name: Inspect Images
         env:
