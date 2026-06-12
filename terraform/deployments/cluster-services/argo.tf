@@ -33,7 +33,6 @@ locals {
     g, ${var.github_national_data_library_team}, role:readonly
     g, ${var.github_read_only_team}, role:readonly
     g, ${var.github_read_write_team}, role:admin
-    g, backstage, role:readonly
     p, role:nationaldatalibrary, applications, update, datagovuk/*, allow
     p, role:nationaldatalibrary, applications, update, default/dgu-app-of-apps, allow
     p, role:nationaldatalibrary, applications, create, datagovuk/*, allow
@@ -89,7 +88,6 @@ resource "helm_release" "argo_cd" {
           clientID     = "$dex-client-argocd:clientID"
           clientSecret = "$dex-client-argocd:clientSecret"
         })
-        "accounts.backstage" = "apiKey"
       }
 
       # We terminate TLS at the ALB (L7 LB inside the VPC network), so tell
