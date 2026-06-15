@@ -63,7 +63,7 @@ ingester:
     enabled: false
 
 querier:
-  replicas: 20
+  replicas: 3
   maxUnavailable: 2
 
 queryFrontend:

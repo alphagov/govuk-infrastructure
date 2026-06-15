@@ -52,6 +52,3 @@ config:
         tenant_id: test
         auto_kubernetes_labels: true
         labels: service_name=$kubernetes['container_name']
-
-      - name: stdout
-        match: "*"
