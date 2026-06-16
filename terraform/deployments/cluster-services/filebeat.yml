@@ -13,10 +13,6 @@ filebeat.inputs:
       - '"/readyz"'
       # https://github.com/alphagov/bouncer/issues/461
       - 'DEPRECATION WARNING.*clear_active_connections'
-    exclude_files:
-      # Temporailily excluding bouncer nginx logs which have a path as below
-      # bouncer-5bf5cfd669-l26nn_apps_nginx-130a4d16cbc345360f6df426a0b8c347ce8fa745648431c8847615af5914a806.log
-      - bouncer-.*_apps_nginx-[0-9a-f]+.log$
     processors:
       - add_kubernetes_metadata:
           host: ${NODE_NAME}
