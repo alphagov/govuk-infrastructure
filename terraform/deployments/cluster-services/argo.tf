@@ -244,7 +244,7 @@ resource "helm_release" "argo_workflows" {
   namespace        = local.services_ns
   create_namespace = true
   repository       = "https://argoproj.github.io/argo-helm"
-  version          = "1.0.14"
+  version          = "1.0.16"
   timeout          = var.helm_timeout_seconds
   values = [yamlencode({
     controller = {
