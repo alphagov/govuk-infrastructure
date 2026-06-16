@@ -4,6 +4,13 @@ locals {
     for name, subnet_id in data.tfe_outputs.vpc.nonsensitive_values.private_subnet_ids
     : subnet_id if startswith(name, "elasticsearch_")
   ])
+
+  blue_domain_name = "${var.opensearch_domain_name}-blue"
+  green_domain_name = (
+    var.green_cluster_options != null && var.green_cluster_options.prefix_colour_instead_of_suffix ?
+    "green-${var.opensearch_domain_name}" :
+    "${var.opensearch_domain_name}-green"
+  )
 }
 
 module "blue_domain" {
@@ -11,7 +18,7 @@ module "blue_domain" {
 
   source = "./opensearch-domain"
 
-  opensearch_domain_name        = "${var.opensearch_domain_name}-blue"
+  opensearch_domain_name        = local.blue_domain_name
   engine                        = var.blue_cluster_options.engine
   engine_version                = var.blue_cluster_options.engine_version
   instance_count                = var.blue_cluster_options.instance_count
@@ -22,7 +29,7 @@ module "blue_domain" {
   endpoint_tls_security_policy  = var.blue_cluster_options.endpoint_tls_security_policy
   ebs_options                   = var.blue_cluster_options.ebs_options
 
-  advanced_security_options = {
+  advanced_security_options = var.blue_cluster_options.advanced_security_options == null ? null : {
     anonymous_auth_enabled         = var.blue_cluster_options.advanced_security_options.anonymous_auth_enabled
     internal_user_database_enabled = var.blue_cluster_options.advanced_security_options.internal_user_database_enabled
     master_user_options = {
@@ -42,7 +49,7 @@ module "green_domain" {
 
   source = "./opensearch-domain"
 
-  opensearch_domain_name        = "${var.opensearch_domain_name}-green"
+  opensearch_domain_name        = local.green_domain_name
   engine                        = var.green_cluster_options.engine
   engine_version                = var.green_cluster_options.engine_version
   instance_count                = var.green_cluster_options.instance_count
@@ -53,7 +60,7 @@ module "green_domain" {
   endpoint_tls_security_policy  = var.green_cluster_options.endpoint_tls_security_policy
   ebs_options                   = var.green_cluster_options.ebs_options
 
-  advanced_security_options = {
+  advanced_security_options = var.green_cluster_options.advanced_security_options == null ? null : {
     anonymous_auth_enabled         = var.green_cluster_options.advanced_security_options.anonymous_auth_enabled
     internal_user_database_enabled = var.green_cluster_options.advanced_security_options.internal_user_database_enabled
     master_user_options = {

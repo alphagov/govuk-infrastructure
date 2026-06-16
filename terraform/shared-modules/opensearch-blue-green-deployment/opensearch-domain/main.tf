@@ -15,13 +15,22 @@ resource "aws_opensearch_domain" "opensearch" {
     multi_az_with_standby_enabled = var.multi_az_with_standby_enabled
   }
 
-  advanced_security_options {
-    enabled                        = true
-    anonymous_auth_enabled         = var.advanced_security_options.anonymous_auth_enabled
-    internal_user_database_enabled = var.advanced_security_options.internal_user_database_enabled
-    master_user_options {
-      master_user_name     = var.advanced_security_options.master_user_options.master_user_name
-      master_user_password = var.advanced_security_options.master_user_options.master_user_password
+  dynamic "advanced_security_options" {
+    for_each = var.advanced_security_options == null ? [] : [var.advanced_security_options]
+
+    content {
+      enabled                        = true
+      anonymous_auth_enabled         = advanced_security_options.value.anonymous_auth_enabled
+      internal_user_database_enabled = advanced_security_options.value.internal_user_database_enabled
+
+      dynamic "master_user_options" {
+        for_each = advanced_security_options.value.master_user_options == null ? [] : [advanced_security_options.value.master_user_options]
+
+        content {
+          master_user_name     = master_user_options.value.master_user_name
+          master_user_password = master_user_options.value.master_user_password
+        }
+      }
     }
   }
 

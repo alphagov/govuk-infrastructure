@@ -84,14 +84,13 @@ variable "advanced_security_options" {
   type = object({
     anonymous_auth_enabled         = optional(bool, false)
     internal_user_database_enabled = optional(bool, true)
-    master_user_options = object({
+    master_user_options = optional(object({
       master_user_name     = string
       master_user_password = string
-    })
+    }))
   })
   description = "OpenSearch Advanced Security options"
-  sensitive   = true
-  nullable    = false
+  nullable    = true
 }
 
 variable "custom_endpoint" {
@@ -116,6 +115,7 @@ variable "ebs_options" {
     volume_size = number
     volume_type = optional(string, "gp3")
     throughput  = number
+    iops        = optional(number)
   })
   description = "Node EBS volume options, if left null, no EBS volumes will be attached to data nodes in the nodes"
   nullable    = true
