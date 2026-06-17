@@ -61,3 +61,21 @@ variable "elasticsearch6_manual_snapshot_bucket_arns" {
   type        = list(string)
   description = "A list of S3 Bucket ARNS that the manual snapshot role should be able to access"
 }
+
+variable "other_account_ids_to_read_snapshots_from" {
+  type        = list(string)
+  description = "A list of account IDS (other than the current) which this ES cluster should be able to read snapshots from"
+  default     = []
+  nullable    = false
+}
+
+variable "account_ids_allowed_to_read_domain_snapshots" {
+  type        = list(string)
+  description = "Which accounts can read from the snapshots bucket"
+  nullable    = false
+  default = [
+    "172025368201", # Production
+    "696911096973", # Staging
+    "210287912431", # Integration
+  ]
+}
