@@ -34,5 +34,6 @@
 
 | Name | Description |
 |------|-------------|
+| <a name="output_opensearch_domain_arn"></a> [opensearch\_domain\_arn](#output\_opensearch\_domain\_arn) | n/a |
 | <a name="output_opensearch_endpoint"></a> [opensearch\_endpoint](#output\_opensearch\_endpoint) | n/a |
 <!-- END_TF_DOCS -->

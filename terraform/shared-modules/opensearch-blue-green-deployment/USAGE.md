@@ -29,6 +29,7 @@
 | Name | Description |
 |------|-------------|
 | <a name="output_opensearch_cname"></a> [opensearch\_cname](#output\_opensearch\_cname) | The fully qualified domain name of the route53 record which points to the live OpenSearch domain |
+| <a name="output_opensearch_domain_arns"></a> [opensearch\_domain\_arns](#output\_opensearch\_domain\_arns) | A map of the AWS OpenSearch domain ARNS for the blue and green clusters,  clusters which haven't be launched will be null |
 | <a name="output_opensearch_domain_names"></a> [opensearch\_domain\_names](#output\_opensearch\_domain\_names) | A map of the OpenSearch domain names for the blue and green clusters, clusters which haven't be launched will be null |
 | <a name="output_opensearch_iam_role_arn"></a> [opensearch\_iam\_role\_arn](#output\_opensearch\_iam\_role\_arn) | The ARN of the IAM role used for OpenSearch to read and write Snapshots |
 | <a name="output_opensearch_iam_role_name"></a> [opensearch\_iam\_role\_name](#output\_opensearch\_iam\_role\_name) | The name of the IAM role used for OpenSearch to read and write Snapshots |
