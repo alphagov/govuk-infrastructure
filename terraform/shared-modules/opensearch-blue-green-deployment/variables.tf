@@ -122,7 +122,8 @@ variable "green_cluster_options" {
       search_slow_logs = string
       error_logs       = string
     }))
-    cloudwatch_log_retention_in_days = optional(number)
+    log_retention_in_days     = optional(number)
+    log_group_prefix_override = optional(string)
   })
   default  = null
   nullable = true

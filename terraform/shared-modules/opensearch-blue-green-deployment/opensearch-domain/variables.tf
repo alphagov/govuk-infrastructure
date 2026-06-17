@@ -10,7 +10,7 @@ variable "opensearch_domain_name" {
   nullable    = false
 }
 
-variable "cloudwatch_log_retention_in_days" {
+variable "log_retention_in_days" {
   type        = number
   description = "How long to retain OpenSearch logs in CloudWatch Logs"
   default     = 365
@@ -159,4 +159,11 @@ variable "log_group_name_overrides" {
   })
   nullable = true
   default  = null
+}
+
+variable "log_group_prefix_override" {
+  type        = string
+  description = "Use a custom prefix for the cloudwatch log group name"
+  default     = null
+  nullable    = true
 }
