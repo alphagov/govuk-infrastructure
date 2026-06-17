@@ -6,6 +6,14 @@ output "opensearch_domain_names" {
   })
 }
 
+output "opensearch_domain_arns" {
+  description = "A map of the AWS OpenSearch domain ARNS for the blue and green clusters,  clusters which haven't be launched will be null"
+  value = merge({
+    blue  = var.launch_blue_domain ? module.blue_domain.opensearch_domain_arn : null
+    green = var.launch_green_domain ? module.green_domain.opensearch_domain_arn : null
+  })
+}
+
 output "opensearch_cname" {
   description = "The fully qualified domain name of the route53 record which points to the live OpenSearch domain"
   value       = aws_route53_record.service_record.fqdn
