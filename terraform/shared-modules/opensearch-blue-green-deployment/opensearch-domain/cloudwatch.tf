@@ -17,7 +17,7 @@ resource "aws_cloudwatch_log_group" "audit_logs" {
   count = var.disable_audit_logs ? 0 : 1
 
   name              = "${var.log_group_prefix_override != null ? var.log_group_prefix_override : "/aws/opensearch/"}${var.opensearch_domain_name}/audit-logs"
-  retention_in_days = var.cloudwatch_log_retention_in_days
+  retention_in_days = var.log_retention_in_days
 }
 
 resource "aws_cloudwatch_log_resource_policy" "opensearch_log_resource_policy" {
@@ -47,7 +47,7 @@ data "aws_iam_policy_document" "opensearch_logs" {
         "${aws_cloudwatch_log_group.search_slow_logs.arn}:*",
         "${aws_cloudwatch_log_group.error_logs.arn}:*",
       ],
-      var.disable_audit_logs ? [] : "${aws_cloudwatch_log_group.audit_logs[0].arn}:*"
+      var.disable_audit_logs ? [] : ["${aws_cloudwatch_log_group.audit_logs[0].arn}:*"]
     )
 
     condition {

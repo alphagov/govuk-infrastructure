@@ -85,9 +85,13 @@ resource "aws_opensearch_domain" "opensearch" {
     subnet_ids         = var.subnet_ids
     security_group_ids = var.security_group_ids
   }
+
+  access_policies = var.inline_access_policy_declaration ? data.aws_iam_policy_document.opensearch_domain.json : null
 }
 
 resource "aws_opensearch_domain_policy" "main" {
+  count = var.inline_access_policy_declaration ? 0 : 1
+
   domain_name     = aws_opensearch_domain.opensearch.domain_name
   access_policies = data.aws_iam_policy_document.opensearch_domain.json
 }
@@ -103,6 +107,8 @@ data "aws_iam_policy_document" "opensearch_domain" {
 
     actions = ["es:*"]
 
-    resources = ["${aws_opensearch_domain.opensearch.arn}/*"]
+    // This can be simplified to the second commented out line once the inline_access_policy_declaration option has been removed
+    resources = ["arn:aws:es:${data.aws_region.current.region}:${data.aws_caller_identity.current.account_id}:domain/${var.opensearch_domain_name}/*"]
+    // resources = ["${aws_opensearch_domain.opensearch.arn}/*"]
   }
 }

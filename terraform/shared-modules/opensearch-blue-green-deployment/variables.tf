@@ -122,8 +122,9 @@ variable "green_cluster_options" {
       search_slow_logs = string
       error_logs       = string
     }))
-    log_retention_in_days     = optional(number)
-    log_group_prefix_override = optional(string)
+    log_retention_in_days            = optional(number)
+    log_group_prefix_override        = optional(string)
+    inline_access_policy_declaration = optional(bool, false)
   })
   default  = null
   nullable = true

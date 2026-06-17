@@ -144,6 +144,7 @@ variable "subnet_ids" {
   nullable    = false
 }
 
+// All options from here down are temporary to enable importing the existing ElasticSearch opensearch cluster
 variable "disable_audit_logs" {
   type        = bool
   description = "Disable sending audit logs to CloudWatch"
@@ -167,3 +168,11 @@ variable "log_group_prefix_override" {
   default     = null
   nullable    = true
 }
+
+variable "inline_access_policy_declaration" {
+  type        = bool
+  description = "Attach the opensearch domain access policy inline in the opensearch resource"
+  default     = false
+  nullable    = false
+}
+
