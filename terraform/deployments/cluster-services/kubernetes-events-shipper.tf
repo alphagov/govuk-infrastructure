@@ -7,6 +7,6 @@ resource "helm_release" "kubernetes_events_shipper" {
   name       = "kubernetes-events-shipper"
   namespace  = local.services_ns
   repository = "https://alphagov.github.io/govuk-helm-charts/"
-  version    = "1.1.2"
+  version    = "1.2.0"
   timeout    = var.helm_timeout_seconds
 }
