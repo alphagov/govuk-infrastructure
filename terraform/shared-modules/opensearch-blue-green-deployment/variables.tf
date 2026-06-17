@@ -184,3 +184,10 @@ variable "s3_bucket_custom_suffix" {
   default     = null
   nullable    = true
 }
+
+variable "attach_snapshot_policy_with_role_policy_attachement" {
+  type        = bool
+  description = "Attach the snapshot policy to the role with a role policy attachment instead of a policy attachment"
+  default     = false
+  nullable    = false
+}
