@@ -75,6 +75,7 @@ module "green_domain" {
   custom_endpoint    = local.service_record_name
 
   // These options only exist to allow the Search ES6 cluster to be imported and should not be used in the future
-  disable_audit_logs       = var.green_cluster_options.disable_audit_logs
-  log_group_name_overrides = var.green_cluster_options.log_group_name_overrides
+  disable_audit_logs               = var.green_cluster_options.disable_audit_logs
+  log_group_name_overrides         = var.green_cluster_options.log_group_name_overrides
+  cloudwatch_log_retention_in_days = var.green_cluster_options.cloudwatch_log_retention_in_days
 }
