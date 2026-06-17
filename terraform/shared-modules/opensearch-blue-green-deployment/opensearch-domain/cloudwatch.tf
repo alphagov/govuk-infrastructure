@@ -45,7 +45,7 @@ data "aws_iam_policy_document" "opensearch_logs" {
       "${aws_cloudwatch_log_group.index_slow_logs.arn}:*",
       "${aws_cloudwatch_log_group.search_slow_logs.arn}:*",
       "${aws_cloudwatch_log_group.error_logs.arn}:*",
-      "${aws_cloudwatch_log_group.audit_logs.arn}:*",
+      "${aws_cloudwatch_log_group.audit_logs[0].arn}:*",
     ]
 
     condition {
