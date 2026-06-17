@@ -336,7 +336,6 @@ databases = {
     instance_class               = "db.m7g.2xlarge"
     performance_insights_enabled = true
     project                      = "GOV.UK - Publishing"
-    has_read_replica             = true
   }
 
   release = {
