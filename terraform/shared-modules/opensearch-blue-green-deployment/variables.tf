@@ -113,7 +113,15 @@ variable "green_cluster_options" {
       throughput  = number
       iops        = optional(number)
     }))
+
+    // The following options only exist to allow the Search ES6 cluster to be imported and should not be used in the future
     prefix_colour_instead_of_suffix = optional(bool, false)
+    disable_audit_logs              = optional(bool, false)
+    log_group_name_overrides = optional(object({
+      index_slow_logs  = string
+      search_slow_logs = string
+      error_logs       = string
+    }))
   })
   default  = null
   nullable = true

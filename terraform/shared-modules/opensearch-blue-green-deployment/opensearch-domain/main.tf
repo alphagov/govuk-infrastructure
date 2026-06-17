@@ -68,9 +68,13 @@ resource "aws_opensearch_domain" "opensearch" {
     log_type                 = "ES_APPLICATION_LOGS"
   }
 
-  log_publishing_options {
-    cloudwatch_log_group_arn = aws_cloudwatch_log_group.audit_logs.arn
-    log_type                 = "AUDIT_LOGS"
+  dynamic "log_publishing_options" {
+    for_each = var.disable_audit_logs ? [] : [true]
+
+    content {
+      cloudwatch_log_group_arn = aws_cloudwatch_log_group.audit_logs[0].arn
+      log_type                 = "AUDIT_LOGS"
+    }
   }
 
   node_to_node_encryption {

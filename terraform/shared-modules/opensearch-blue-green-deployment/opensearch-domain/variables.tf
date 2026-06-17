@@ -143,3 +143,20 @@ variable "subnet_ids" {
   description = "A list of AWS VPC Subnet IDs in which to deploy the OpenSearch nodes"
   nullable    = false
 }
+
+variable "disable_audit_logs" {
+  type        = bool
+  description = "Disable sending audit logs to CloudWatch"
+  default     = false
+  nullable    = false
+}
+
+variable "log_group_name_overrides" {
+  type = object({
+    index_slow_logs  = string
+    search_slow_logs = string
+    error_logs       = string
+  })
+  nullable = true
+  default  = null
+}

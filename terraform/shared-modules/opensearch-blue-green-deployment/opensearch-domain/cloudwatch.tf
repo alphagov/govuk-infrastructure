@@ -1,19 +1,21 @@
 resource "aws_cloudwatch_log_group" "index_slow_logs" {
-  name              = "/aws/opensearch/${var.opensearch_domain_name}/index-slow"
+  name              = "/aws/opensearch/${var.opensearch_domain_name}/${try(var.log_group_name_overrides.index_slow_logs, "index-slow")}"
   retention_in_days = var.cloudwatch_log_retention_in_days
 }
 
 resource "aws_cloudwatch_log_group" "search_slow_logs" {
-  name              = "/aws/opensearch/${var.opensearch_domain_name}/search-slow"
+  name              = "/aws/opensearch/${var.opensearch_domain_name}/${try(var.log_group_name_overrides.search_slow_logs, "search-slow")}"
   retention_in_days = var.cloudwatch_log_retention_in_days
 }
 
 resource "aws_cloudwatch_log_group" "error_logs" {
-  name              = "/aws/opensearch/${var.opensearch_domain_name}/error-logs"
+  name              = "/aws/opensearch/${var.opensearch_domain_name}/${try(var.log_group_name_overrides.error_logs, "error-logs")}"
   retention_in_days = var.cloudwatch_log_retention_in_days
 }
 
 resource "aws_cloudwatch_log_group" "audit_logs" {
+  count = var.disable_audit_logs ? 0 : 1
+
   name              = "/aws/opensearch/${var.opensearch_domain_name}/audit-logs"
   retention_in_days = var.cloudwatch_log_retention_in_days
 }

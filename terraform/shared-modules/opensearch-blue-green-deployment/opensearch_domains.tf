@@ -73,4 +73,8 @@ module "green_domain" {
   security_group_ids = local.security_group_ids
   subnet_ids         = local.subnet_ids
   custom_endpoint    = local.service_record_name
+
+  // These options only exist to allow the Search ES6 cluster to be imported and should not be used in the future
+  disable_audit_logs       = var.green_cluster_options.disable_audit_logs
+  log_group_name_overrides = var.green_cluster_options.log_group_name_overrides
 }
