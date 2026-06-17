@@ -9,8 +9,8 @@ output "opensearch_domain_names" {
 output "opensearch_domain_arns" {
   description = "A map of the AWS OpenSearch domain ARNS for the blue and green clusters,  clusters which haven't be launched will be null"
   value = merge({
-    blue  = var.launch_blue_domain ? module.blue_domain.opensearch_domain_arn : null
-    green = var.launch_green_domain ? module.green_domain.opensearch_domain_arn : null
+    blue  = var.launch_blue_domain ? module.blue_domain[0].opensearch_domain_arn : null
+    green = var.launch_green_domain ? module.green_domain[0].opensearch_domain_arn : null
   })
 }
 
