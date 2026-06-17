@@ -341,7 +341,7 @@ databases = {
 
   release = {
     engine         = "mysql"
-    engine_version = "8.4"
+    engine_version = "8.4.9"
     engine_params = {
       max_allowed_packet = { value = 1073741824 }
     }
