@@ -14,6 +14,7 @@ module "elasticsearch-green-integration" {
     "/terraform/variables/variables-common.tf",
     "/terraform/variables/integration/elasticsearch-green.tfvars",
     "/terraform/shared-modules/s3/**/*",
+    "/terraform/shared-modules/opensearch-blue-green-deployment/**/*",
   ]
 
   project_name = "govuk-infrastructure"
@@ -54,6 +55,7 @@ module "elasticsearch-green-staging" {
     "/terraform/variables/variables-common.tf",
     "/terraform/variables/staging/elasticsearch-green.tfvars",
     "/terraform/shared-modules/s3/**/*",
+    "/terraform/shared-modules/opensearch-blue-green-deployment/**/*",
   ]
 
   project_name = "govuk-infrastructure"
@@ -94,6 +96,7 @@ module "elasticsearch-green-production" {
     "/terraform/variables/variables-common.tf",
     "/terraform/variables/production/elasticsearch-green.tfvars",
     "/terraform/shared-modules/s3/**/*",
+    "/terraform/shared-modules/opensearch-blue-green-deployment/**/*",
   ]
 
   project_name = "govuk-infrastructure"

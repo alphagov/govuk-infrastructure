@@ -68,9 +68,13 @@ resource "aws_opensearch_domain" "opensearch" {
     log_type                 = "ES_APPLICATION_LOGS"
   }
 
-  log_publishing_options {
-    cloudwatch_log_group_arn = aws_cloudwatch_log_group.audit_logs.arn
-    log_type                 = "AUDIT_LOGS"
+  dynamic "log_publishing_options" {
+    for_each = var.disable_audit_logs ? [] : [true]
+
+    content {
+      cloudwatch_log_group_arn = aws_cloudwatch_log_group.audit_logs[0].arn
+      log_type                 = "AUDIT_LOGS"
+    }
   }
 
   node_to_node_encryption {
@@ -81,9 +85,13 @@ resource "aws_opensearch_domain" "opensearch" {
     subnet_ids         = var.subnet_ids
     security_group_ids = var.security_group_ids
   }
+
+  access_policies = var.inline_access_policy_declaration ? data.aws_iam_policy_document.opensearch_domain.json : null
 }
 
 resource "aws_opensearch_domain_policy" "main" {
+  count = var.inline_access_policy_declaration ? 0 : 1
+
   domain_name     = aws_opensearch_domain.opensearch.domain_name
   access_policies = data.aws_iam_policy_document.opensearch_domain.json
 }
@@ -99,6 +107,8 @@ data "aws_iam_policy_document" "opensearch_domain" {
 
     actions = ["es:*"]
 
-    resources = ["${aws_opensearch_domain.opensearch.arn}/*"]
+    // This can be simplified to the second commented out line once the inline_access_policy_declaration option has been removed
+    resources = ["arn:aws:es:${data.aws_region.current.region}:${data.aws_caller_identity.current.account_id}:domain/${var.opensearch_domain_name}/*"]
+    // resources = ["${aws_opensearch_domain.opensearch.arn}/*"]
   }
 }

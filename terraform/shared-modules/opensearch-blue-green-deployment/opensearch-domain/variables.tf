@@ -10,7 +10,7 @@ variable "opensearch_domain_name" {
   nullable    = false
 }
 
-variable "cloudwatch_log_retention_in_days" {
+variable "log_retention_in_days" {
   type        = number
   description = "How long to retain OpenSearch logs in CloudWatch Logs"
   default     = 365
@@ -143,3 +143,36 @@ variable "subnet_ids" {
   description = "A list of AWS VPC Subnet IDs in which to deploy the OpenSearch nodes"
   nullable    = false
 }
+
+// All options from here down are temporary to enable importing the existing ElasticSearch opensearch cluster
+variable "disable_audit_logs" {
+  type        = bool
+  description = "Disable sending audit logs to CloudWatch"
+  default     = false
+  nullable    = false
+}
+
+variable "log_group_name_overrides" {
+  type = object({
+    index_slow_logs  = string
+    search_slow_logs = string
+    error_logs       = string
+  })
+  nullable = true
+  default  = null
+}
+
+variable "log_group_prefix_override" {
+  type        = string
+  description = "Use a custom prefix for the cloudwatch log group name"
+  default     = null
+  nullable    = true
+}
+
+variable "inline_access_policy_declaration" {
+  type        = bool
+  description = "Attach the opensearch domain access policy inline in the opensearch resource"
+  default     = false
+  nullable    = false
+}
+
