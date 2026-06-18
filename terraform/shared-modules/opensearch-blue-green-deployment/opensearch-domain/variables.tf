@@ -176,3 +176,17 @@ variable "inline_access_policy_declaration" {
   nullable    = false
 }
 
+variable "use_aws_elasticsearch_domain_resource" {
+  type        = bool
+  description = "Use an aws_elasticsearch_domain resource instead of aws_opensearch_domain to allow search ES cluster to be imported"
+  deprecated  = "Do not set this option except when importing the existing Search ElasticSearch cluster"
+  default     = false
+  nullable    = false
+
+  validation {
+    condition = (
+      var.use_aws_elasticsearch_domain_resource == true && var.opensearch_domain_name == "elasticsearch6-domain" && var.engine_version == "6.8"
+    ) || var.use_aws_elasticsearch_domain_resource == false
+    error_message = "This option must ONLY be set when importing the original Search Elasticsearch 6 cluster."
+  }
+}

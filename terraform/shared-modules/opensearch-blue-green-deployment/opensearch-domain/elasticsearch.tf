@@ -1,8 +1,8 @@
-resource "aws_opensearch_domain" "opensearch" {
-  count = var.use_aws_elasticsearch_domain_resource ? 0 : 1
+resource "aws_elasticsearch_domain" "elasticsearch" {
+  count = var.use_aws_elasticsearch_domain_resource ? 1 : 0
 
-  domain_name    = var.opensearch_domain_name
-  engine_version = "${var.engine}_${var.engine_version}"
+  domain_name           = var.opensearch_domain_name
+  elasticsearch_version = var.engine_version
 
   cluster_config {
     dedicated_master_count   = var.dedicated_master != null ? var.dedicated_master.instance_count : null
@@ -14,7 +14,6 @@ resource "aws_opensearch_domain" "opensearch" {
     zone_awareness_config {
       availability_zone_count = var.zone_awareness_enabled ? length(var.subnet_ids) : null
     }
-    multi_az_with_standby_enabled = var.multi_az_with_standby_enabled
   }
 
   dynamic "advanced_security_options" {
@@ -22,7 +21,6 @@ resource "aws_opensearch_domain" "opensearch" {
 
     content {
       enabled                        = true
-      anonymous_auth_enabled         = advanced_security_options.value.anonymous_auth_enabled
       internal_user_database_enabled = advanced_security_options.value.internal_user_database_enabled
 
       dynamic "master_user_options" {
@@ -91,26 +89,9 @@ resource "aws_opensearch_domain" "opensearch" {
   access_policies = var.inline_access_policy_declaration ? data.aws_iam_policy_document.opensearch_domain.json : null
 }
 
-resource "aws_opensearch_domain_policy" "main" {
-  count = (!var.use_aws_elasticsearch_domain_resource) && var.inline_access_policy_declaration ? 0 : 1
+resource "aws_elasticsearch_domain_policy" "main" {
+  count = var.use_aws_elasticsearch_domain_resource && !var.inline_access_policy_declaration ? 1 : 0
 
-  domain_name     = aws_opensearch_domain.opensearch[0].domain_name
+  domain_name     = aws_elasticsearch_domain.elasticsearch[0].domain_name
   access_policies = data.aws_iam_policy_document.opensearch_domain.json
-}
-
-data "aws_iam_policy_document" "opensearch_domain" {
-  statement {
-    sid = "AllowOpenSearchAccessFromThisAccount"
-
-    principals {
-      type        = "*"
-      identifiers = ["*"]
-    }
-
-    actions = ["es:*"]
-
-    // This can be simplified to the second commented out line once the inline_access_policy_declaration option has been removed
-    resources = ["arn:aws:es:${data.aws_region.current.region}:${data.aws_caller_identity.current.account_id}:domain/${var.opensearch_domain_name}/*"]
-    // resources = ["${aws_opensearch_domain.opensearch.arn}/*"]
-  }
 }
