@@ -182,6 +182,7 @@ variable "account_ids_allowed_to_read_domain_snapshots" {
             "210287912431", # Integration
             "430354129336", # Test
           ],
+          env
         )
       ]
     )

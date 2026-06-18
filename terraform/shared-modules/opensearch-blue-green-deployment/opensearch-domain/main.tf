@@ -92,7 +92,7 @@ resource "aws_opensearch_domain" "opensearch" {
 }
 
 resource "aws_opensearch_domain_policy" "main" {
-  count = (!var.use_aws_elasticsearch_domain_resource) && var.inline_access_policy_declaration ? 0 : 1
+  count = var.use_aws_elasticsearch_domain_resource || var.inline_access_policy_declaration ? 0 : 1
 
   domain_name     = aws_opensearch_domain.opensearch[0].domain_name
   access_policies = data.aws_iam_policy_document.opensearch_domain.json

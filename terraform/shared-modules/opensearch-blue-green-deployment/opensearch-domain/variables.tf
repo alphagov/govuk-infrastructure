@@ -122,7 +122,7 @@ variable "ebs_options" {
   default     = null
 
   validation {
-    condition     = startswith(var.instance_type, "t") && var.ebs_options != null
+    condition     = !startswith(var.instance_type, "t") || (startswith(var.instance_type, "t") && var.ebs_options != null)
     error_message = "var.ebs_options must be set if you are using a t* instance type"
   }
 
