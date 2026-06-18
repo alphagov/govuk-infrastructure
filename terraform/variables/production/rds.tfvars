@@ -334,7 +334,6 @@ databases = {
     instance_class               = "db.m6g.4xlarge"
     performance_insights_enabled = true
     project                      = "GOV.UK - Publishing"
-    has_read_replica             = true
     snapshot_identifier          = "publishing-api-postgres-post-encryption"
   }
 
