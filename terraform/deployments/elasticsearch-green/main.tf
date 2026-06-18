@@ -77,10 +77,10 @@ provider "aws" {
 
 # resource "aws_elasticsearch_domain" "opensearch" {
 #   # depends_on = [aws_iam_service_linked_role.es_role]
-
+# 
 #   domain_name           = local.domain
 #   elasticsearch_version = var.engine_version
-
+# 
 #   cluster_config {
 #     dedicated_master_enabled = var.dedicated_master != null
 #     dedicated_master_count   = var.dedicated_master == null ? 0 : var.dedicated_master.instance_count
@@ -92,15 +92,15 @@ provider "aws" {
 #       availability_zone_count = var.zone_awareness_enabled ? length(local.subnet_ids) : null
 #     }
 #   }
-
+# 
 #   advanced_security_options {
 #     enabled = false
 #   }
-
+# 
 #   encrypt_at_rest {
 #     enabled = var.encryption_at_rest
 #   }
-
+# 
 #   domain_endpoint_options {
 #     enforce_https                   = false
 #     tls_security_policy             = var.tls_security_policy
@@ -108,10 +108,10 @@ provider "aws" {
 #     custom_endpoint                 = "${var.stackname}-elasticsearch6.${var.govuk_environment}.govuk-internal.digital"
 #     custom_endpoint_certificate_arn = data.aws_acm_certificate.govuk_internal.arn
 #   }
-
+# 
 #   dynamic "ebs_options" {
 #     for_each = var.ebs[*]
-
+# 
 #     content {
 #       ebs_enabled = true
 #       volume_size = ebs_options.value.volume_size
@@ -120,7 +120,7 @@ provider "aws" {
 #       iops        = ebs_options.value.provisioned_iops
 #     }
 #   }
-
+# 
 #   log_publishing_options {
 #     cloudwatch_log_group_arn = aws_cloudwatch_log_group.opensearch_index_slow_logs.arn
 #     log_type                 = "INDEX_SLOW_LOGS"
@@ -133,18 +133,18 @@ provider "aws" {
 #     cloudwatch_log_group_arn = aws_cloudwatch_log_group.opensearch_error_logs.arn
 #     log_type                 = "ES_APPLICATION_LOGS"
 #   }
-
+# 
 #   node_to_node_encryption {
 #     enabled = false
 #   }
-
+# 
 #   vpc_options {
 #     subnet_ids         = local.subnet_ids
 #     security_group_ids = [data.tfe_outputs.security.nonsensitive_values.govuk_elasticsearch6_access_sg_id]
 #   }
-
+# 
 #   access_policies = data.aws_iam_policy_document.domain_access_policy.json
-
+# 
 #   tags = {
 #     Name          = "${var.stackname}-elasticsearch6"
 #     Project       = "${var.stackname}"

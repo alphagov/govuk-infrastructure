@@ -65,7 +65,7 @@ moved {
 
 moved {
   from = aws_elasticsearch_domain.opensearch
-  to   = module.opensearch.module.green_domain[0].aws_opensearch_domain.opensearch
+  to   = module.opensearch.module.green_domain[0].aws_elasticsearch_domain.elasticsearch
 }
 
 moved {
