@@ -49,6 +49,26 @@ resource "aws_db_parameter_group" "engine_params" {
   lifecycle { create_before_destroy = true }
 }
 
+# this resource is for use during MySQL 8.4 database upgrades
+resource "aws_db_parameter_group" "engine_params_84" {
+  for_each = { for k, v in var.databases : k => v if v.engine == "mysql" }
+
+  name   = "${var.govuk_environment}-${each.value.name}-${each.value.engine}-temporary-8-4"
+  family = "mysql8.4"
+
+  dynamic "parameter" {
+    for_each = each.value.engine_params
+
+    content {
+      name         = parameter.key
+      value        = parameter.value.value
+      apply_method = parameter.value.apply_method
+    }
+  }
+
+  lifecycle { create_before_destroy = true }
+}
+
 resource "aws_db_instance" "instance" {
   for_each = var.databases
 
