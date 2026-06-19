@@ -6,7 +6,7 @@ variable "govuk_environment" {
 
 variable "opensearch_domain_name" {
   type        = string
-  description = "Name for this opensearch domain, for blue/green stacks this will be suffixed with -blue or -green"
+  description = "Name for this opensearch domain"
   nullable    = false
 }
 
@@ -185,7 +185,7 @@ variable "use_aws_elasticsearch_domain_resource" {
 
   validation {
     condition = (
-      var.use_aws_elasticsearch_domain_resource == true && var.opensearch_domain_name == "elasticsearch6-domain" && var.engine_version == "6.8"
+      var.use_aws_elasticsearch_domain_resource == true && var.opensearch_domain_name == "green-elasticsearch6" && var.engine_version == "6.8"
     ) || var.use_aws_elasticsearch_domain_resource == false
     error_message = "This option must ONLY be set when importing the original Search Elasticsearch 6 cluster."
   }
@@ -200,7 +200,7 @@ variable "override_aws_elasticsearch_domain_name" {
 
   validation {
     condition = (
-      var.override_aws_elasticsearch_domain_name == "green-elasticseach6-domain" && var.opensearch_domain_name == "green-elasticsearch6" && var.engine_version == "6.8"
+      var.override_aws_elasticsearch_domain_name == "green-elasticsearch6-domain" && var.opensearch_domain_name == "green-elasticsearch6" && var.engine_version == "6.8"
     ) || var.override_aws_elasticsearch_domain_name == null
     error_message = "This option must ONLY be set when importing the original Search Elasticsearch 6 cluster."
   }

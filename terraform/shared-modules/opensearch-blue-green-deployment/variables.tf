@@ -228,7 +228,7 @@ variable "override_aws_elasticsearch_domain_name_for_green_cluster" {
 
   validation {
     condition = var.override_aws_elasticsearch_domain_name_for_green_cluster == null || (
-      var.override_aws_elasticsearch_domain_name_for_green_cluster == "elasticsearch6-domain" && var.opensearch_domain_name == "elasticsearch6" && var.green_cluster_options != null && var.green_cluster_options.engine_version == "6.8"
+      var.override_aws_elasticsearch_domain_name_for_green_cluster == "green-elasticsearch6-domain" && var.opensearch_domain_name == "elasticsearch6" && var.green_cluster_options != null && var.green_cluster_options.engine_version == "6.8"
     )
     error_message = "This option must ONLY be set when importing the original Search Elasticsearch 6 cluster."
   }
