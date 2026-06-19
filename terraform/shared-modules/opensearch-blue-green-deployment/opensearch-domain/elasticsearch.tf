@@ -40,7 +40,7 @@ resource "aws_elasticsearch_domain" "elasticsearch" {
 
   domain_endpoint_options {
     enforce_https                   = true
-    tls_security_policy             = "Policy-Min-TLS-1-2-2019-07"
+    tls_security_policy             = var.endpoint_tls_security_policy
     custom_endpoint_enabled         = true
     custom_endpoint                 = var.custom_endpoint
     custom_endpoint_certificate_arn = data.aws_acm_certificate.govuk_internal.arn
