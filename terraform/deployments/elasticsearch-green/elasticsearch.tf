@@ -18,6 +18,8 @@ module "opensearch" {
 
   attach_snapshot_policy_with_role_policy_attachement = true
 
+  s3_bucket_custom_suffix = "manual-snapshots"
+
   // WARNING: The following option must be removed once the existing elasticsearch 6 green cluster has been destroyed
   use_aws_elasticsearch_domain_resource_for_green_cluster  = var.use_aws_elasticsearch_domain_resource_for_green_cluster
   override_aws_elasticsearch_domain_name_for_green_cluster = "green-elasticsearch6-domain"
