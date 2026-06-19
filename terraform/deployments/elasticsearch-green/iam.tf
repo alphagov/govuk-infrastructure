@@ -16,7 +16,10 @@ data "aws_iam_policy_document" "can_configure_es_snapshots" {
     resources = [module.opensearch.opensearch_iam_role_arn]
   }
   statement {
-    actions   = ["es:ESHttpPut"]
-    resources = formatlist("%/*", sort(distinct([for _, arn in module.opensearch.opensearch_domain_arns : arn])))
+    actions = ["es:ESHttpPut"]
+    resources = formatlist(
+      "%s/*",
+      sort(distinct(compact(values(module.opensearch.opensearch_domain_arns))))
+    )
   }
 }

@@ -1,17 +1,17 @@
 output "opensearch_domain_names" {
   description = "A map of the OpenSearch domain names for the blue and green clusters, clusters which haven't be launched will be null"
-  value = merge({
+  value = {
     blue  = var.launch_blue_domain ? local.blue_domain_name : null
     green = var.launch_green_domain ? local.green_domain_name : null
-  })
+  }
 }
 
 output "opensearch_domain_arns" {
   description = "A map of the AWS OpenSearch domain ARNS for the blue and green clusters,  clusters which haven't be launched will be null"
-  value = merge({
+  value = {
     blue  = var.launch_blue_domain ? module.blue_domain[0].opensearch_domain_arn : null
     green = var.launch_green_domain ? module.green_domain[0].opensearch_domain_arn : null
-  })
+  }
 }
 
 output "opensearch_cname" {
