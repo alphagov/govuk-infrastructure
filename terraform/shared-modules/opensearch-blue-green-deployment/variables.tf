@@ -213,8 +213,23 @@ variable "use_aws_elasticsearch_domain_resource_for_green_cluster" {
 
   validation {
     condition = (
-      var.use_aws_elasticsearch_domain_resource_for_green_cluster == true && var.opensearch_domain_name == "elasticsearch6-domain" && var.green_cluster_options != null && var.green_cluster_options.engine_version == "6.8"
+      var.use_aws_elasticsearch_domain_resource_for_green_cluster == true && var.opensearch_domain_name == "elasticsearch6" && var.green_cluster_options != null && var.green_cluster_options.engine_version == "6.8"
     ) || var.use_aws_elasticsearch_domain_resource_for_green_cluster == false
+    error_message = "This option must ONLY be set when importing the original Search Elasticsearch 6 cluster."
+  }
+}
+
+variable "override_aws_elasticsearch_domain_name_for_green_cluster" {
+  type        = string
+  description = "Use this as the name of the aws_elasticsearch_domain (not as the domain name to talk to this cluster on) to allow search ES cluister to be imported"
+  deprecated  = "Do not set this option except when importing the existing Search ElasticSearch cluster"
+  default     = null
+  nullable    = true
+
+  validation {
+    condition = var.override_aws_elasticsearch_domain_name_for_green_cluster == null || (
+      var.override_aws_elasticsearch_domain_name_for_green_cluster == "elasticsearch6-domain" && var.opensearch_domain_name == "elasticsearch6" && var.green_cluster_options != null && var.green_cluster_options.engine_version == "6.8"
+    )
     error_message = "This option must ONLY be set when importing the original Search Elasticsearch 6 cluster."
   }
 }

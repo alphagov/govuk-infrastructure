@@ -1,7 +1,7 @@
 resource "aws_elasticsearch_domain" "elasticsearch" {
   count = var.use_aws_elasticsearch_domain_resource ? 1 : 0
 
-  domain_name           = var.opensearch_domain_name
+  domain_name           = var.override_aws_elasticsearch_domain_name != null ? var.override_aws_elasticsearch_domain_name : var.opensearch_domain_name
   elasticsearch_version = var.engine_version
 
   cluster_config {

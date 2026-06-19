@@ -190,3 +190,18 @@ variable "use_aws_elasticsearch_domain_resource" {
     error_message = "This option must ONLY be set when importing the original Search Elasticsearch 6 cluster."
   }
 }
+
+variable "override_aws_elasticsearch_domain_name" {
+  type        = string
+  description = "Use this as the name of the aws_elasticsearch_domain (not as the domain name to talk to this cluster on) to allow search ES cluister to be imported"
+  deprecated  = "Do not set this option except when importing the existing Search ElasticSearch cluster"
+  default     = null
+  nullable    = true
+
+  validation {
+    condition = (
+      var.override_aws_elasticsearch_domain_name == "elasticseach6-domain" && var.opensearch_domain_name == "elasticsearch6" && var.engine_version == "6.8"
+    ) || var.override_aws_elasticsearch_domain_name == null
+    error_message = "This option must ONLY be set when importing the original Search Elasticsearch 6 cluster."
+  }
+}
