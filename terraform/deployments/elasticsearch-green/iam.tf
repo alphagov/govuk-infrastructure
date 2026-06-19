@@ -58,6 +58,6 @@ data "aws_iam_policy_document" "can_configure_es_snapshots" {
   }
   statement {
     actions   = ["es:ESHttpPut"]
-    resources = formatlist("%/*", sort(distinct(values(module.opensearch.opensearch_domain_arns))))
+    resources = formatlist("%/*", sort(distinct([for _, arn in module.opensearch.opensearch_domain_arns : arn])))
   }
 }
