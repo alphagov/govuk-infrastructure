@@ -12,8 +12,3 @@ output "domain_configuration_policy_arn" {
   value       = aws_iam_policy.can_configure_es_snapshots.arn
   description = "ARN of the policy used to configure the elasticsearch domain"
 }
-
-output "manual_snapshots_bucket_arn" {
-  value       = module.secure_s3_bucket_manual_snapshots.arn
-  description = "ARN of the bucket to store manual snapshots"
-}

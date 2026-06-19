@@ -20,8 +20,6 @@ tls_security_policy = "Policy-Min-TLS-1-2-2019-07"
 stackname = "green"
 
 elasticsearch6_manual_snapshot_bucket_arns = [
-  "arn:aws:s3:::govuk-production-green-elasticsearch6-manual-snapshots",
-  "arn:aws:s3:::govuk-staging-green-elasticsearch6-manual-snapshots",
   "arn:aws:s3:::govuk-production-elasticsearch6-manual-snapshots",
   "arn:aws:s3:::govuk-staging-elasticsearch6-manual-snapshots"
 ]
