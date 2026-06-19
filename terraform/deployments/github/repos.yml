@@ -1105,3 +1105,8 @@ repos:
       - "alphagov/gov-uk-ai-accelerator-alpha-team"
       - "alphagov/gov-uk-production-admin"
       - "alphagov/gov-uk-production-deploy"
+
+  govuk-information-model:
+    # standard security checks are disabled as not configured for a private repo
+    can_be_deployed: false
+    visibility: private
