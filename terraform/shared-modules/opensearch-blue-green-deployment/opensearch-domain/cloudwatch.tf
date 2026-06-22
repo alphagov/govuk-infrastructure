@@ -21,8 +21,7 @@ resource "aws_cloudwatch_log_group" "audit_logs" {
 }
 
 resource "aws_cloudwatch_log_resource_policy" "opensearch_log_resource_policy" {
-  policy_name = "${var.opensearch_domain_name}-domain-write"
-
+  policy_name     = "${var.opensearch_domain_name}${var.log_resource_policy_name_suffix_override == null ? "-domain-write" : var.log_resource_policy_name_suffix_override}"
   policy_document = data.aws_iam_policy_document.opensearch_logs.json
 }
 

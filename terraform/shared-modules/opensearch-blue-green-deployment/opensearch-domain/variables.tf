@@ -205,3 +205,18 @@ variable "override_aws_elasticsearch_domain_name" {
     error_message = "This option must ONLY be set when importing the original Search Elasticsearch 6 cluster."
   }
 }
+
+variable "log_resource_policy_name_suffix_override" {
+  type        = string
+  description = "Use this as the aws_cloudwatch_log_resource_policy name suffix instead of -domain-write to allow search ES cluster to be imported."
+  deprecated  = "Do not set this option except when importing the existing Search ElasticSearch cluster"
+  default     = null
+  nullable    = true
+
+  validation {
+    condition = var.log_resource_policy_name_suffix_override == null || (
+      var.log_resource_policy_name_suffix_override == "-domain_log_write" && var.opensearch_domain_name == "green-elasticsearch6" && var.engine_version == "6.8"
+    )
+    error_message = "This option must ONLY be set when importing the original Search Elasticsearch 6 cluster."
+  }
+}
