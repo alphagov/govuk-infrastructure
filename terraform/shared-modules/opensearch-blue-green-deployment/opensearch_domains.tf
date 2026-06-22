@@ -34,7 +34,7 @@ module "blue_domain" {
     internal_user_database_enabled = var.blue_cluster_options.advanced_security_options.internal_user_database_enabled
     master_user_options = {
       master_user_name     = local.master_user
-      master_user_password = random_password.password.result
+      master_user_password = random_password.password[0].result
     }
   }
 
@@ -65,7 +65,7 @@ module "green_domain" {
     internal_user_database_enabled = var.green_cluster_options.advanced_security_options.internal_user_database_enabled
     master_user_options = {
       master_user_name     = local.master_user
-      master_user_password = random_password.password.result
+      master_user_password = random_password.password[0].result
     }
   }
 
