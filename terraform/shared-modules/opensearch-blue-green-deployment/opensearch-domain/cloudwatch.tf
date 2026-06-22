@@ -1,22 +1,22 @@
 resource "aws_cloudwatch_log_group" "index_slow_logs" {
-  name              = "${var.log_group_prefix_override != null ? var.log_group_prefix_override : "/aws/opensearch/"}${var.opensearch_domain_name}/${try(var.log_group_name_overrides.index_slow_logs, "index-slow")}"
+  name              = "${var.log_group_prefix_override != null ? var.log_group_prefix_override : "/aws/opensearch/${var.opensearch_domain_name}"}/${try(var.log_group_name_overrides.index_slow_logs, "index-slow")}"
   retention_in_days = var.log_retention_in_days
 }
 
 resource "aws_cloudwatch_log_group" "search_slow_logs" {
-  name              = "${var.log_group_prefix_override != null ? var.log_group_prefix_override : "/aws/opensearch/"}${var.opensearch_domain_name}/${try(var.log_group_name_overrides.search_slow_logs, "search-slow")}"
+  name              = "${var.log_group_prefix_override != null ? var.log_group_prefix_override : "/aws/opensearch/${var.opensearch_domain_name}"}/${try(var.log_group_name_overrides.search_slow_logs, "search-slow")}"
   retention_in_days = var.log_retention_in_days
 }
 
 resource "aws_cloudwatch_log_group" "error_logs" {
-  name              = "${var.log_group_prefix_override != null ? var.log_group_prefix_override : "/aws/opensearch/"}${var.opensearch_domain_name}/${try(var.log_group_name_overrides.error_logs, "error-logs")}"
+  name              = "${var.log_group_prefix_override != null ? var.log_group_prefix_override : "/aws/opensearch/${var.opensearch_domain_name}"}/${try(var.log_group_name_overrides.error_logs, "error-logs")}"
   retention_in_days = var.log_retention_in_days
 }
 
 resource "aws_cloudwatch_log_group" "audit_logs" {
   count = var.disable_audit_logs ? 0 : 1
 
-  name              = "${var.log_group_prefix_override != null ? var.log_group_prefix_override : "/aws/opensearch/"}${var.opensearch_domain_name}/audit-logs"
+  name              = "${var.log_group_prefix_override != null ? var.log_group_prefix_override : "/aws/opensearch/${var.opensearch_domain_name}"}/audit-logs"
   retention_in_days = var.log_retention_in_days
 }
 

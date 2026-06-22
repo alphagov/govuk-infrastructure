@@ -40,7 +40,7 @@ green_cluster_otions = {
     search_slow_logs = "es6-search-logs"
   }
   log_retention_in_days            = 3
-  log_group_prefix_override        = "/aws/aes/domains/"
+  log_group_prefix_override        = "/aws/aes/domains/green-elasticsearch6-domain"
   inline_access_policy_declaration = true
 }
 
