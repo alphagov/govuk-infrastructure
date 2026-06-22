@@ -58,7 +58,7 @@ module "control_global_boost_freshness_general" {
           },
           {
             attributeValue = "90D",
-            boostAmount    = 0
+            boostAmount    = 0.0
           },
           {
             attributeValue = "365D",
