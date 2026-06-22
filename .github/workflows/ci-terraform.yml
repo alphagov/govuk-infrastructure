@@ -58,7 +58,7 @@ jobs:
       name: Set up TFLint
       if: steps.changed-deployments.outputs.any_changed == 'true'
       with:
-        tflint_version: v0.55.0
+        tflint_version: v0.63.1
 
     - name: terraform fmt roots
       working-directory: terraform/deployments
