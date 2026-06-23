@@ -75,11 +75,6 @@ moved {
 }
 
 moved {
-  from = aws_route53_record.service_record
-  to   = module.opensearch.aws_route53_record.service_record
-}
-
-moved {
   from = aws_elasticsearch_domain.opensearch
   to   = module.opensearch.module.green_domain[0].aws_elasticsearch_domain.elasticsearch[0]
 }
