@@ -41,7 +41,7 @@ import {
 
 moved {
   from = aws_iam_role.manual_snapshot_role
-  to   = module.opensearch.aws_iam_role.opensearch_snapshot
+  to   = module.opensearch.aws_iam_role.elasticsearch_snapshot[0]
 }
 
 moved {
@@ -51,7 +51,7 @@ moved {
 
 moved {
   from = aws_iam_role_policy_attachment.manual_snapshot_role_policy
-  to   = module.opensearch.aws_iam_role_policy_attachment.opensearch_snapshot[0]
+  to   = module.opensearch.aws_iam_role_policy_attachment.elasticsearch_snapshot[0]
 }
 
 moved {

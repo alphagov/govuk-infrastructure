@@ -23,13 +23,26 @@ resource "aws_iam_role" "elasticsearch_snapshot" {
   count = var.create_additional_manual_snapshot_role_name == null ? 0 : 1
 
   name               = var.create_additional_manual_snapshot_role_name
-  assume_role_policy = data.aws_iam_policy_document.opensearch_snapshot_assume_role.json
+  assume_role_policy = data.aws_iam_policy_document.elasticsearch_snapshot_assume_role[0].json
 }
 
 data "aws_iam_policy_document" "opensearch_snapshot_assume_role" {
   statement {
     sid = "AllowAWSOpenSearchService"
 
+    principals {
+      type        = "Service"
+      identifiers = ["es.amazonaws.com"]
+    }
+
+    actions = ["sts:AssumeRole"]
+  }
+}
+
+data "aws_iam_policy_document" "elasticsearch_snapshot_assume_role" {
+  count = var.create_additional_manual_snapshot_role_name == null ? 0 : 1
+
+  statement {
     principals {
       type        = "Service"
       identifiers = ["es.amazonaws.com"]
