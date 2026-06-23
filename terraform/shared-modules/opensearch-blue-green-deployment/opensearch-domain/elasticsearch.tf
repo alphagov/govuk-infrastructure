@@ -1,7 +1,11 @@
+locals {
+  elasticsearch_domain_name = var.override_aws_elasticsearch_domain_name != null ? var.override_aws_elasticsearch_domain_name : var.opensearch_domain_name
+}
+
 resource "aws_elasticsearch_domain" "elasticsearch" {
   count = var.use_aws_elasticsearch_domain_resource ? 1 : 0
 
-  domain_name           = var.override_aws_elasticsearch_domain_name != null ? var.override_aws_elasticsearch_domain_name : var.opensearch_domain_name
+  domain_name           = local.elasticsearch_domain_name
   elasticsearch_version = var.engine_version
 
   cluster_config {
@@ -88,12 +92,25 @@ resource "aws_elasticsearch_domain" "elasticsearch" {
 
   tags = var.elasticsearch_domain_additional_tags
 
-  access_policies = var.inline_access_policy_declaration ? data.aws_iam_policy_document.opensearch_domain.json : null
+  access_policies = var.inline_access_policy_declaration ? data.aws_iam_policy_document.elasticsearch_domain.json : null
 }
 
 resource "aws_elasticsearch_domain_policy" "main" {
   count = var.use_aws_elasticsearch_domain_resource && !var.inline_access_policy_declaration ? 1 : 0
 
   domain_name     = aws_elasticsearch_domain.elasticsearch[0].domain_name
-  access_policies = data.aws_iam_policy_document.opensearch_domain.json
+  access_policies = data.aws_iam_policy_document.elasticsearch_domain.json
+}
+
+data "aws_iam_policy_document" "elasticsearch_domain" {
+  statement {
+    principals {
+      type        = "AWS"
+      identifiers = ["*"]
+    }
+
+    actions = ["es:*"]
+
+    resources = ["arn:aws:es:${data.aws_region.current.region}:${data.aws_caller_identity.current.account_id}:domain/${local.elasticsearch_domain_name}/*"]
+  }
 }
