@@ -43,3 +43,9 @@ output "secrets_manager_secret_name" {                                          
   description = "The name of the Secrets Manager secret which contains the OpenSearch master user details" # pragma: allowlist secret
   value       = aws_secretsmanager_secret.opensearch_passwords.name                                        # pragma: allowlist secret
 }
+
+output "green_elasticsearch_endpoint" {
+  description = "The endpoint of the green elasticsearch domain"
+  deprecated  = "Do not set this option except when importing the existing Search ElasticSearch cluster"
+  value       = var.launch_green_domain && var.use_aws_elasticsearch_domain_resource_for_green_cluster ? module.green_domain.opensearch_endpoint : null
+}
