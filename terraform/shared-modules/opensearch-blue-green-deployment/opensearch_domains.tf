@@ -70,7 +70,7 @@ module "green_domain" {
   }
 
   govuk_environment  = var.govuk_environment
-  security_group_ids = local.security_group_ids
+  security_group_ids = var.override_security_group_ids_for_green_cluster != null ? var.override_security_group_ids_for_green_cluster : local.security_group_ids
   subnet_ids         = local.subnet_ids
   custom_endpoint    = local.service_record_name
 
