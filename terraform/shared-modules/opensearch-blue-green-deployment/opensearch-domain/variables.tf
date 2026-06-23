@@ -235,3 +235,18 @@ variable "disable_node_to_node_encryption" {
     error_message = "This option must ONLY be set when importing the original Search Elasticsearch 6 cluster."
   }
 }
+
+variable "disable_enforced_https" {
+  type        = bool
+  description = "Disable enforced https connections to allow search ES cluster to be imported."
+  deprecated  = "Do not set this option except when importing the existing Search ElasticSearch cluster"
+  default     = false
+  nullable    = false
+
+  validation {
+    condition = var.disable_enforced_https == false || (
+      var.disable_enforced_https == true && var.opensearch_domain_name == "green-elasticsearch6" && var.engine_version == "6.8"
+    )
+    error_message = "This option must ONLY be set when importing the original Search Elasticsearch 6 cluster."
+  }
+}

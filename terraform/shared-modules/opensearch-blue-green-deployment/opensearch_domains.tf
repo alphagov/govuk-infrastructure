@@ -84,4 +84,5 @@ module "green_domain" {
   override_aws_elasticsearch_domain_name   = var.override_aws_elasticsearch_domain_name_for_green_cluster
   log_resource_policy_name_suffix_override = var.log_resource_policy_name_suffix_override_for_green_cluster
   disable_node_to_node_encryption          = var.disable_node_to_node_encryption_for_green_cluster
+  disable_enforced_https                   = var.disable_enforced_https_for_green_cluster
 }
