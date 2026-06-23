@@ -86,6 +86,8 @@ resource "aws_elasticsearch_domain" "elasticsearch" {
     security_group_ids = var.security_group_ids
   }
 
+  tags = var.elasticsearch_domain_additional_tags
+
   access_policies = var.inline_access_policy_declaration ? data.aws_iam_policy_document.opensearch_domain.json : null
 }
 
