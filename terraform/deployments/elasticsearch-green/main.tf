@@ -22,6 +22,9 @@ provider "aws" {
       aws_environment      = var.govuk_environment
       project              = "GOV.UK - Search"
       terraform_deployment = "app-elasticsearch6-green"
+      Project              = "green"
+      aws_stackname        = "green"
+      Name                 = "green-elasticsearch6"
     }
   }
 }
