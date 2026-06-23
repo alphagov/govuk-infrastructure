@@ -72,7 +72,7 @@ module "green_domain" {
   govuk_environment  = var.govuk_environment
   security_group_ids = var.override_security_group_ids_for_green_cluster != null ? var.override_security_group_ids_for_green_cluster : local.security_group_ids
   subnet_ids         = local.subnet_ids
-  custom_endpoint    = local.service_record_name
+  custom_endpoint    = var.override_custom_domain_endpoint_for_green_cluster == null ? local.service_record_name : var.override_custom_domain_endpoint_for_green_cluster
 
   // These options only exist to allow the Search ES6 cluster to be imported and should not be used in the future
   disable_audit_logs                       = var.green_cluster_options.disable_audit_logs
