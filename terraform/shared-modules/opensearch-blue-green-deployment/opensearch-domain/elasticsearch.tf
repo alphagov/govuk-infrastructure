@@ -78,7 +78,7 @@ resource "aws_elasticsearch_domain" "elasticsearch" {
   }
 
   node_to_node_encryption {
-    enabled = true
+    enabled = !var.disable_node_to_node_encryption
   }
 
   vpc_options {
