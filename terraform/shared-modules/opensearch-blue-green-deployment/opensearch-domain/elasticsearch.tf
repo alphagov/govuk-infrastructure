@@ -43,7 +43,7 @@ resource "aws_elasticsearch_domain" "elasticsearch" {
   }
 
   domain_endpoint_options {
-    enforce_https                   = true
+    enforce_https                   = !var.disable_enforced_https
     tls_security_policy             = var.endpoint_tls_security_policy
     custom_endpoint_enabled         = true
     custom_endpoint                 = var.custom_endpoint
