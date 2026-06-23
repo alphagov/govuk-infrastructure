@@ -83,3 +83,10 @@ resource "aws_iam_role_policy_attachment" "opensearch_snapshot" {
   role       = aws_iam_role.opensearch_snapshot.name
   policy_arn = aws_iam_policy.opensearch_snapshot.arn
 }
+
+resource "aws_iam_role_policy_attachment" "elasticsearch_snapshot" {
+  count = var.attach_snapshot_policy_with_role_policy_attachement && var.create_additional_manual_snapshot_role_name == null ? 1 : 0
+
+  role       = aws_iam_role.elasticsearch_snapshot.name
+  policy_arn = aws_iam_policy.opensearch_snapshot.arn
+}

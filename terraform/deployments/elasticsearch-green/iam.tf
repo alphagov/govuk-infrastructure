@@ -12,8 +12,11 @@ resource "aws_iam_policy" "can_configure_es_snapshots" {
 
 data "aws_iam_policy_document" "can_configure_es_snapshots" {
   statement {
-    actions   = ["iam:PassRole"]
-    resources = [module.opensearch.opensearch_iam_role_arn]
+    actions = ["iam:PassRole"]
+    resources = compact([
+      module.opensearch.opensearch_iam_role_arn,
+      module.opensearch.elasticsearch_iam_role_arn,
+    ])
   }
   statement {
     actions = ["es:ESHttpPut"]

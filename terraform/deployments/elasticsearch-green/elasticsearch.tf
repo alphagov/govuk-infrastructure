@@ -32,7 +32,8 @@ module "opensearch" {
   disable_node_to_node_encryption_for_green_cluster          = true
   disable_enforced_https_for_green_cluster                   = true
   override_security_group_ids_for_green_cluster              = [data.tfe_outputs.security.nonsensitive_values.govuk_elasticsearch6_access_sg_id]
-  override_custom_domain_endpoint_for_green_cluster          = "elasticsearch6-opensearch.${var.govuk_environment}.govuk-internal.digital"
+  override_custom_domain_endpoint_for_green_cluster          = "green-elasticsearch6.${var.govuk_environment}.govuk-internal.digital"
+  create_additional_manual_snapshot_role_name                = "green-elasticsearch6-manual-snapshot-role"
   elasticsearch_domain_additional_tags_for_green_cluster = {
     Project       = "green"
     aws_stackname = "green"
