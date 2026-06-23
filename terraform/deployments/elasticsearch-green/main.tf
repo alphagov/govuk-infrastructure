@@ -36,5 +36,5 @@ resource "aws_route53_record" "service_record" {
   name    = "elasticsearch6.green.${data.tfe_outputs.root_dns.nonsensitive_values.internal_root_zone_name}"
   type    = "CNAME"
   ttl     = 300
-  records = [aws_elasticsearch_domain.opensearch.endpoint]
+  records = [module.opensearch.green_elasticsearch_endpoint]
 }
