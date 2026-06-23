@@ -49,3 +49,9 @@ output "green_elasticsearch_endpoint" {
   deprecated  = "Do not set this option except when importing the existing Search ElasticSearch cluster"
   value       = var.launch_green_domain && var.use_aws_elasticsearch_domain_resource_for_green_cluster ? module.green_domain.opensearch_endpoint : null
 }
+
+output "elasticsearch_iam_role_arn" {
+  description = "The endpoint of the green elasticsearch domain"
+  deprecated  = "Do not set this option except when importing the existing Search ElasticSearch cluster"
+  value       = var.create_additional_manual_snapshot_role_name == null ? null : aws_iam_role.elasticsearch_snapshot[0].arn
+}

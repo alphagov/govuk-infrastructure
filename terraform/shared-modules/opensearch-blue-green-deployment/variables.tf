@@ -323,3 +323,18 @@ variable "override_custom_domain_endpoint_for_green_cluster" {
     error_message = "This option must ONLY be set when importing the original Search Elasticsearch 6 cluster."
   }
 }
+
+variable "create_additional_manual_snapshot_role_name" {
+  type        = string
+  description = "Set this as the custom domain endpoint in the Elasticsearch cluster to allow search ES cluster to be imported."
+  deprecated  = "Do not set this option except when importing the existing Search ElasticSearch cluster"
+  default     = null
+  nullable    = true
+
+  validation {
+    condition = var.create_additional_manual_snapshot_role_name == null || (
+      var.create_additional_manual_snapshot_role_name != null && var.opensearch_domain_name == "elasticsearch6" && var.green_cluster_options != null && var.green_cluster_options.engine_version == "6.8"
+    )
+    error_message = "This option must ONLY be set when importing the original Search Elasticsearch 6 cluster."
+  }
+}
