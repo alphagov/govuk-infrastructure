@@ -32,4 +32,9 @@ module "opensearch" {
   disable_node_to_node_encryption_for_green_cluster          = true
   disable_enforced_https_for_green_cluster                   = true
   override_security_group_ids_for_green_cluster              = [data.tfe_outputs.security.nonsensitive_values.govuk_elasticsearch6_access_sg_id]
+  elasticsearch_domain_additional_tags_for_green_cluster = {
+    Project       = "green"
+    aws_stackname = "green"
+    Name          = "green-elasticsearch6"
+  }
 }
