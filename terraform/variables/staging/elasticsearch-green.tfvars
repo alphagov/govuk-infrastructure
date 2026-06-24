@@ -1,27 +1,59 @@
-ebs = {
-  volume_size      = 314
-  volume_type      = "gp3"
-  throughput       = 350
-  provisioned_iops = 3000
-}
-engine_version         = "6.8"
-zone_awareness_enabled = true
+current_live_domain = "green"
 
-instance_count = 3
-instance_type  = "r7i.2xlarge.elasticsearch"
+attach_snapshot_policy_with_role_policy_attachment = true
 
-dedicated_master = {
+launch_blue_domain   = false
+blue_cluster_options = null
+
+launch_green_domain = true
+green_cluster_options = {
+  engine         = "Elasticsearch"
+  engine_version = "6.8"
+
+  dedicated_master = {
+    instance_count = 3
+    instance_type  = "c7i.large.elasticsearch"
+  }
+
   instance_count = 3
-  instance_type  = "c7i.large.elasticsearch"
+  instance_type  = "r7i.2xlarge.elasticsearch"
+
+  zone_awareness_enabled = true
+
+  advanced_security_options = null
+
+  endpoint_tls_security_policy = "Policy-Min-TLS-1-2-2019-07"
+  ebs_options = {
+    volume_size = 314
+    volume_type = "gp3"
+    throughput  = 350
+    iops        = 3000
+  }
+
+  // WARNING: All the following options are purely to allow importing the existing ES6 cluster,
+  //          when creating the next blue deployment remove these options and use the defaults
+  prefix_colour_instead_of_suffix = true
+  disable_audit_logs              = true
+  log_group_name_overrides = {
+    error_logs       = "es6-application-logs"
+    index_slow_logs  = "es6-index-logs"
+    search_slow_logs = "es6-search-logs"
+  }
+  log_retention_in_days            = 3
+  log_group_prefix_override        = "/aws/aes/domains/green-elasticsearch6-domain"
+  inline_access_policy_declaration = true
 }
 
-tls_security_policy = "Policy-Min-TLS-1-2-2019-07"
-
-stackname = "green"
-
-elasticsearch6_manual_snapshot_bucket_arns = [
-  "arn:aws:s3:::govuk-production-elasticsearch6-manual-snapshots",
-  "arn:aws:s3:::govuk-staging-elasticsearch6-manual-snapshots"
+read_snapshots_from_environments = [
+  "production",
+  "staging",
 ]
 
-encryption_at_rest = true
+account_ids_allowed_to_read_domain_snapshots = [
+  "172025368201", # Production
+  "696911096973", # Staging
+  "210287912431", # Integration
+]
+
+// WARNING: This _must_ be removed once the existiSearch elasticsearch 6.8 green cluster has been destroyed
+use_aws_elasticsearch_domain_resource_for_green_cluster = true
