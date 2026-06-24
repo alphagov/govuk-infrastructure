@@ -197,6 +197,13 @@ variable "s3_bucket_custom_suffix" {
   nullable    = true
 }
 
+variable "s3_bucket_additional_tags" {
+  type        = map(string)
+  description = "Apply these additional tags to the S3 bucket"
+  default     = {}
+  nullable    = false
+}
+
 variable "attach_snapshot_policy_with_role_policy_attachement" {
   type        = bool
   description = "Attach the snapshot policy to the role with a role policy attachment instead of a policy attachment"
@@ -338,3 +345,5 @@ variable "create_additional_manual_snapshot_role_name" {
     error_message = "This option must ONLY be set when importing the original Search Elasticsearch 6 cluster."
   }
 }
+
+
