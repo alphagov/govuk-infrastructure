@@ -78,7 +78,7 @@ data "aws_iam_policy_document" "opensearch_snapshot" {
 }
 
 resource "aws_iam_policy" "opensearch_snapshot" {
-  name   = "govuk-${var.govuk_environment}-${var.opensearch_domain_name}-opensearch-snapshot"
+  name   = var.override_opensearch_snapshot_policy_name == null ? "govuk-${var.govuk_environment}-${var.opensearch_domain_name}-opensearch-snapshot" : var.override_opensearch_snapshot_policy_name
   policy = data.aws_iam_policy_document.opensearch_snapshot.json
 }
 
