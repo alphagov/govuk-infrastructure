@@ -6,7 +6,7 @@ variable "govuk_environment" {
 
 variable "opensearch_domain_name" {
   type        = string
-  description = "Name for this opensearch domain, for blue/green stacks this will be suffixed with -blue or -green"
+  description = "Name for this opensearch domain"
   nullable    = false
 }
 
