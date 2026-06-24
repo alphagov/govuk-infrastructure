@@ -6,7 +6,7 @@ launch_blue_domain   = false
 blue_cluster_options = null
 
 launch_green_domain = true
-green_cluster_otions = {
+green_cluster_options = {
   engine         = "Elasticsearch"
   engine_version = "6.8"
 
