@@ -33,7 +33,7 @@ import {
 
 import {
   id = "govuk-${var.govuk_environment}-elasticsearch6-manual-snapshots"
-  to = module.opensearch.module.snapshot_bucket.aws_s3_bucket_logging[0].this
+  to = module.opensearch.module.snapshot_bucket.aws_s3_bucket_logging.this[0]
 }
 /**************************************************************************************/
 /* END Import the s3 bucket which is currently in terraform/deployments/elasticsearch */
