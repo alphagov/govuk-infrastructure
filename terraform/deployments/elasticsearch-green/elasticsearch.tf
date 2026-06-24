@@ -25,6 +25,10 @@ module "opensearch" {
 
   s3_bucket_custom_suffix = "manual-snapshots"
 
+  s3_bucket_additional_tags = {
+    terraform_deployment = "app-elasticsearch6"
+  }
+
   // WARNING: The following option must be removed once the existing elasticsearch 6 green cluster has been destroyed
   use_aws_elasticsearch_domain_resource_for_green_cluster    = var.use_aws_elasticsearch_domain_resource_for_green_cluster
   override_aws_elasticsearch_domain_name_for_green_cluster   = "green-elasticsearch6-domain"
