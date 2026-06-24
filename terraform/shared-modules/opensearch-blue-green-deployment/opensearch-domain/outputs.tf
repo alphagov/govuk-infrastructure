@@ -1,7 +1,7 @@
 output "opensearch_endpoint" {
-  value = aws_opensearch_domain.opensearch.endpoint
+  value = var.use_aws_elasticsearch_domain_resource ? aws_elasticsearch_domain.elasticsearch[0].endpoint : aws_opensearch_domain.opensearch[0].endpoint
 }
 
 output "opensearch_domain_arn" {
-  value = aws_opensearch_domain.opensearch.arn
+  value = var.use_aws_elasticsearch_domain_resource ? aws_elasticsearch_domain.elasticsearch[0].arn : aws_opensearch_domain.opensearch[0].arn
 }

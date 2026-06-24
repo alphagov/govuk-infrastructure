@@ -34,7 +34,7 @@ module "blue_domain" {
     internal_user_database_enabled = var.blue_cluster_options.advanced_security_options.internal_user_database_enabled
     master_user_options = {
       master_user_name     = local.master_user
-      master_user_password = random_password.password.result
+      master_user_password = random_password.password[0].result
     }
   }
 
@@ -65,19 +65,25 @@ module "green_domain" {
     internal_user_database_enabled = var.green_cluster_options.advanced_security_options.internal_user_database_enabled
     master_user_options = {
       master_user_name     = local.master_user
-      master_user_password = random_password.password.result
+      master_user_password = random_password.password[0].result
     }
   }
 
   govuk_environment  = var.govuk_environment
-  security_group_ids = local.security_group_ids
+  security_group_ids = var.override_security_group_ids_for_green_cluster != null ? var.override_security_group_ids_for_green_cluster : local.security_group_ids
   subnet_ids         = local.subnet_ids
-  custom_endpoint    = local.service_record_name
+  custom_endpoint    = var.override_custom_domain_endpoint_for_green_cluster == null ? local.service_record_name : var.override_custom_domain_endpoint_for_green_cluster
 
   // These options only exist to allow the Search ES6 cluster to be imported and should not be used in the future
-  disable_audit_logs               = var.green_cluster_options.disable_audit_logs
-  log_group_name_overrides         = var.green_cluster_options.log_group_name_overrides
-  log_retention_in_days            = var.green_cluster_options.log_retention_in_days
-  log_group_prefix_override        = var.green_cluster_options.log_group_prefix_override
-  inline_access_policy_declaration = var.green_cluster_options.inline_access_policy_declaration
+  disable_audit_logs                       = var.green_cluster_options.disable_audit_logs
+  log_group_name_overrides                 = var.green_cluster_options.log_group_name_overrides
+  log_retention_in_days                    = var.green_cluster_options.log_retention_in_days
+  log_group_prefix_override                = var.green_cluster_options.log_group_prefix_override
+  inline_access_policy_declaration         = var.green_cluster_options.inline_access_policy_declaration
+  use_aws_elasticsearch_domain_resource    = var.use_aws_elasticsearch_domain_resource_for_green_cluster
+  override_aws_elasticsearch_domain_name   = var.override_aws_elasticsearch_domain_name_for_green_cluster
+  log_resource_policy_name_suffix_override = var.log_resource_policy_name_suffix_override_for_green_cluster
+  disable_node_to_node_encryption          = var.disable_node_to_node_encryption_for_green_cluster
+  disable_enforced_https                   = var.disable_enforced_https_for_green_cluster
+  elasticsearch_domain_additional_tags     = var.elasticsearch_domain_additional_tags_for_green_cluster
 }

@@ -6,7 +6,7 @@ variable "govuk_environment" {
 
 variable "opensearch_domain_name" {
   type        = string
-  description = "Name for this opensearch domain, for blue/green stacks this will be suffixed with -blue or -green"
+  description = "Name for this opensearch domain"
   nullable    = false
 }
 
@@ -122,7 +122,7 @@ variable "ebs_options" {
   default     = null
 
   validation {
-    condition     = startswith(var.instance_type, "t") && var.ebs_options != null
+    condition     = !startswith(var.instance_type, "t") || (startswith(var.instance_type, "t") && var.ebs_options != null)
     error_message = "var.ebs_options must be set if you are using a t* instance type"
   }
 
@@ -176,3 +176,92 @@ variable "inline_access_policy_declaration" {
   nullable    = false
 }
 
+variable "use_aws_elasticsearch_domain_resource" {
+  type        = bool
+  description = "Use an aws_elasticsearch_domain resource instead of aws_opensearch_domain to allow search ES cluster to be imported"
+  deprecated  = "Do not set this option except when importing the existing Search ElasticSearch cluster"
+  default     = false
+  nullable    = false
+
+  validation {
+    condition = (
+      var.use_aws_elasticsearch_domain_resource == true && var.opensearch_domain_name == "green-elasticsearch6" && var.engine_version == "6.8"
+    ) || var.use_aws_elasticsearch_domain_resource == false
+    error_message = "This option must ONLY be set when importing the original Search Elasticsearch 6 cluster."
+  }
+}
+
+variable "override_aws_elasticsearch_domain_name" {
+  type        = string
+  description = "Use this as the name of the aws_elasticsearch_domain (not as the domain name to talk to this cluster on) to allow search ES cluister to be imported"
+  deprecated  = "Do not set this option except when importing the existing Search ElasticSearch cluster"
+  default     = null
+  nullable    = true
+
+  validation {
+    condition = (
+      var.override_aws_elasticsearch_domain_name == "green-elasticsearch6-domain" && var.opensearch_domain_name == "green-elasticsearch6" && var.engine_version == "6.8"
+    ) || var.override_aws_elasticsearch_domain_name == null
+    error_message = "This option must ONLY be set when importing the original Search Elasticsearch 6 cluster."
+  }
+}
+
+variable "log_resource_policy_name_suffix_override" {
+  type        = string
+  description = "Use this as the aws_cloudwatch_log_resource_policy name suffix instead of -domain-write to allow search ES cluster to be imported."
+  deprecated  = "Do not set this option except when importing the existing Search ElasticSearch cluster"
+  default     = null
+  nullable    = true
+
+  validation {
+    condition = var.log_resource_policy_name_suffix_override == null || (
+      var.log_resource_policy_name_suffix_override == "-domain_log_write" && var.opensearch_domain_name == "green-elasticsearch6" && var.engine_version == "6.8"
+    )
+    error_message = "This option must ONLY be set when importing the original Search Elasticsearch 6 cluster."
+  }
+}
+
+variable "disable_node_to_node_encryption" {
+  type        = bool
+  description = "Disable node to node encryption to allow search ES cluster to be imported."
+  deprecated  = "Do not set this option except when importing the existing Search ElasticSearch cluster"
+  default     = false
+  nullable    = false
+
+  validation {
+    condition = var.disable_node_to_node_encryption == false || (
+      var.disable_node_to_node_encryption == true && var.opensearch_domain_name == "green-elasticsearch6" && var.engine_version == "6.8"
+    )
+    error_message = "This option must ONLY be set when importing the original Search Elasticsearch 6 cluster."
+  }
+}
+
+variable "disable_enforced_https" {
+  type        = bool
+  description = "Disable enforced https connections to allow search ES cluster to be imported."
+  deprecated  = "Do not set this option except when importing the existing Search ElasticSearch cluster"
+  default     = false
+  nullable    = false
+
+  validation {
+    condition = var.disable_enforced_https == false || (
+      var.disable_enforced_https == true && var.opensearch_domain_name == "green-elasticsearch6" && var.engine_version == "6.8"
+    )
+    error_message = "This option must ONLY be set when importing the original Search Elasticsearch 6 cluster."
+  }
+}
+
+variable "elasticsearch_domain_additional_tags" {
+  type        = map(string)
+  description = "Add these additional tags to the green Elasticsearch cluster to allow search ES cluster to be imported."
+  deprecated  = "Do not set this option except when importing the existing Search ElasticSearch cluster"
+  default     = null
+  nullable    = true
+
+  validation {
+    condition = var.elasticsearch_domain_additional_tags == null || (
+      var.elasticsearch_domain_additional_tags != null && var.opensearch_domain_name == "green-elasticsearch6" && var.engine_version == "6.8"
+    )
+    error_message = "This option must ONLY be set when importing the original Search Elasticsearch 6 cluster."
+  }
+}

@@ -1,17 +1,17 @@
 output "opensearch_domain_names" {
   description = "A map of the OpenSearch domain names for the blue and green clusters, clusters which haven't be launched will be null"
-  value = merge({
+  value = {
     blue  = var.launch_blue_domain ? local.blue_domain_name : null
     green = var.launch_green_domain ? local.green_domain_name : null
-  })
+  }
 }
 
 output "opensearch_domain_arns" {
   description = "A map of the AWS OpenSearch domain ARNS for the blue and green clusters,  clusters which haven't be launched will be null"
-  value = merge({
+  value = {
     blue  = var.launch_blue_domain ? module.blue_domain[0].opensearch_domain_arn : null
     green = var.launch_green_domain ? module.green_domain[0].opensearch_domain_arn : null
-  })
+  }
 }
 
 output "opensearch_cname" {
@@ -42,4 +42,16 @@ output "opensearch_iam_role_arn" {
 output "secrets_manager_secret_name" {                                                                     # pragma: allowlist secret
   description = "The name of the Secrets Manager secret which contains the OpenSearch master user details" # pragma: allowlist secret
   value       = aws_secretsmanager_secret.opensearch_passwords.name                                        # pragma: allowlist secret
+}
+
+output "green_elasticsearch_endpoint" {
+  description = "The endpoint of the green elasticsearch domain"
+  deprecated  = "Do not set this option except when importing the existing Search ElasticSearch cluster"
+  value       = var.launch_green_domain && var.use_aws_elasticsearch_domain_resource_for_green_cluster ? module.green_domain[0].opensearch_endpoint : null
+}
+
+output "elasticsearch_iam_role_arn" {
+  description = "The endpoint of the green elasticsearch domain"
+  deprecated  = "Do not set this option except when importing the existing Search ElasticSearch cluster"
+  value       = var.create_additional_manual_snapshot_role_name == null ? null : aws_iam_role.elasticsearch_snapshot[0].arn
 }
