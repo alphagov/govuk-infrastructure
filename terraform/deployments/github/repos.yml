@@ -999,8 +999,12 @@ repos:
     archived: true
 
   govuk-user-reviewer:
+    can_be_deployed: true
     visibility: private
     homepage_url: "https://github.com/alphagov/govuk-rfcs/pull/75"
+    required_pull_request_reviews:
+      pull_request_bypassers:
+        - "/govuk-ci"
     required_status_checks:
       additional_contexts:
         - test
