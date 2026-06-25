@@ -300,6 +300,8 @@ resource "github_branch_protection" "govuk_repos" {
     pull_request_bypassers = try(each.value.required_pull_request_reviews.pull_request_bypassers, null)
 
     require_code_owner_reviews = try(each.value.required_pull_request_reviews.require_code_owner_reviews, false)
+
+    dismiss_stale_reviews = try(each.value.required_pull_request_reviews.dismiss_stale_reviews, false)
   }
 
   restrict_pushes {
