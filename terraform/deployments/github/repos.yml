@@ -1001,6 +1001,8 @@ repos:
   govuk-user-reviewer:
     visibility: private
     homepage_url: "https://github.com/alphagov/govuk-rfcs/pull/75"
+    required_pull_request_reviews:
+      dismiss_stale_reviews: true
     required_status_checks:
       additional_contexts:
         - test
