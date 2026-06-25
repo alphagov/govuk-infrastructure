@@ -92,6 +92,10 @@
                   "description": "Require an approved review in pull requests including files with a designated code owner. If omitted, defaults to false",
                   "type": "boolean"
                 },
+                "dismiss_stale_reviews": {
+                  "description": "Dismiss approved reviews when new commits are pushed. If omitted, defaults to false",
+                  "type": "boolean"
+                },
                 "pull_request_bypassers": {
                   "description": "The list of actor Names/IDs that are allowed to bypass pull request requirements. If omitted, defaults to null",
                   "type": "array",
