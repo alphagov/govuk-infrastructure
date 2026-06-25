@@ -1,10 +1,5 @@
-output "service_endpoint" {
-  value       = aws_elasticsearch_domain.opensearch.endpoint
-  description = "Endpoint to submit index, search, and upload requests"
-}
-
 output "service_dns_name" {
-  value       = aws_route53_record.service_record.fqdn
+  value       = module.opensearch.opensearch_cname
   description = "DNS name to access the Elasticsearch internal service"
 }
 
