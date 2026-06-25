@@ -25,10 +25,6 @@ module "opensearch" {
 
   s3_bucket_custom_suffix = "manual-snapshots"
 
-  s3_bucket_additional_tags = {
-    terraform_deployment = "app-elasticsearch6"
-  }
-
   // WARNING: The following option must be removed once the existing elasticsearch 6 green cluster has been destroyed
   use_aws_elasticsearch_domain_resource_for_green_cluster    = var.use_aws_elasticsearch_domain_resource_for_green_cluster
   override_aws_elasticsearch_domain_name_for_green_cluster   = "green-elasticsearch6-domain"
@@ -39,9 +35,4 @@ module "opensearch" {
   override_security_group_ids_for_green_cluster              = [data.tfe_outputs.security.nonsensitive_values.govuk_elasticsearch6_access_sg_id]
   override_custom_domain_endpoint_for_green_cluster          = "green-elasticsearch6.${var.govuk_environment}.govuk-internal.digital"
   create_additional_manual_snapshot_role_name                = "green-elasticsearch6-manual-snapshot-role"
-  elasticsearch_domain_additional_tags_for_green_cluster = {
-    Project       = "green"
-    aws_stackname = "green"
-    Name          = "green-elasticsearch6"
-  }
 }

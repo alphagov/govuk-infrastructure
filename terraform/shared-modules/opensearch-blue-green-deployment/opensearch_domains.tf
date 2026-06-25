@@ -85,5 +85,4 @@ module "green_domain" {
   log_resource_policy_name_suffix_override = var.log_resource_policy_name_suffix_override_for_green_cluster
   disable_node_to_node_encryption          = var.disable_node_to_node_encryption_for_green_cluster
   disable_enforced_https                   = var.disable_enforced_https_for_green_cluster
-  elasticsearch_domain_additional_tags     = var.elasticsearch_domain_additional_tags_for_green_cluster
 }

@@ -9,8 +9,6 @@ module "snapshot_bucket" {
   name              = local.snapshot_bucket_name
   govuk_environment = var.govuk_environment
 
-  tags = var.s3_bucket_additional_tags
-
   extra_bucket_policies = [data.aws_iam_policy_document.snapshot_bucket_policy.json]
 }
 
