@@ -73,7 +73,7 @@ data "aws_iam_policy_document" "opensearch_snapshot" {
       "s3:DeleteObject",
     ]
 
-    resources = [local.write_snapshot_bucket_arn]
+    resources = ["${local.write_snapshot_bucket_arn}/*"]
   }
 }
 
