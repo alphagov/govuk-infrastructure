@@ -133,3 +133,8 @@ output "public_subnets" {
 output "control_plane_subnets" {
   value = [for sn in aws_subnet.eks_control_plane : sn.id]
 }
+
+output "dguengineer_iam_role_arn" {
+  description = "IAM role ARN for the dguengineer IAM role"
+  value       = data.aws_iam_roles.dguengineer.arns
+}

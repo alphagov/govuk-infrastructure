@@ -34,10 +34,13 @@ data "aws_iam_policy_document" "datagovuk_bucket" {
     resources = [local.s3_bucket_datagovuk_bucket_arn]
   }
   statement {
-    sid = "EKSNodesCanWrite"
+    sid = "EKSNodesAndDGUEngineerRoleCanWrite"
     principals {
-      type        = "AWS"
-      identifiers = [data.tfe_outputs.cluster_infrastructure.nonsensitive_values.worker_iam_role_arn]
+      type = "AWS"
+      identifiers = concat(
+        [data.tfe_outputs.cluster_infrastructure.nonsensitive_values.worker_iam_role_arn],
+        tolist(data.tfe_outputs.cluster_infrastructure.nonsensitive_values.dguengineer_iam_role_arn)
+      )
     }
     actions   = ["s3:GetObject", "s3:PutObject"]
     resources = ["${local.s3_bucket_datagovuk_bucket_arn}/*"]
