@@ -340,8 +340,8 @@ repos:
 
   govuk-content-api-docs:
     homepage_url: "https://content-api.publishing.service.gov.uk"
-    need_production_access_to_merge: false
-    push_allowances: []
+    required_status_checks:
+      standard_contexts: *standard_govuk_rails_checks
 
   govuk-cookie-consent:
     topics:
