@@ -197,13 +197,6 @@ variable "s3_bucket_custom_suffix" {
   nullable    = true
 }
 
-variable "attach_snapshot_policy_with_role_policy_attachement" {
-  type        = bool
-  description = "Attach the snapshot policy to the role with a role policy attachment instead of a policy attachment"
-  default     = false
-  nullable    = false
-}
-
 variable "use_aws_elasticsearch_domain_resource_for_green_cluster" {
   type        = bool
   description = "Use an aws_elasticsearch_domain resource instead of aws_opensearch_domain to allow search ES cluster to be imported"
