@@ -250,18 +250,3 @@ variable "disable_enforced_https" {
     error_message = "This option must ONLY be set when importing the original Search Elasticsearch 6 cluster."
   }
 }
-
-variable "elasticsearch_domain_additional_tags" {
-  type        = map(string)
-  description = "Add these additional tags to the green Elasticsearch cluster to allow search ES cluster to be imported."
-  deprecated  = "Do not set this option except when importing the existing Search ElasticSearch cluster"
-  default     = null
-  nullable    = true
-
-  validation {
-    condition = var.elasticsearch_domain_additional_tags == null || (
-      var.elasticsearch_domain_additional_tags != null && var.opensearch_domain_name == "green-elasticsearch6" && var.engine_version == "6.8"
-    )
-    error_message = "This option must ONLY be set when importing the original Search Elasticsearch 6 cluster."
-  }
-}

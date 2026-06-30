@@ -197,20 +197,6 @@ variable "s3_bucket_custom_suffix" {
   nullable    = true
 }
 
-variable "s3_bucket_additional_tags" {
-  type        = map(string)
-  description = "Apply these additional tags to the S3 bucket"
-  default     = {}
-  nullable    = false
-}
-
-variable "attach_snapshot_policy_with_role_policy_attachement" {
-  type        = bool
-  description = "Attach the snapshot policy to the role with a role policy attachment instead of a policy attachment"
-  default     = false
-  nullable    = false
-}
-
 variable "use_aws_elasticsearch_domain_resource_for_green_cluster" {
   type        = bool
   description = "Use an aws_elasticsearch_domain resource instead of aws_opensearch_domain to allow search ES cluster to be imported"
@@ -301,21 +287,6 @@ variable "override_security_group_ids_for_green_cluster" {
   }
 }
 
-variable "elasticsearch_domain_additional_tags_for_green_cluster" {
-  type        = map(string)
-  description = "Add these additional tags to the green Elasticsearch cluster to allow search ES cluster to be imported."
-  deprecated  = "Do not set this option except when importing the existing Search ElasticSearch cluster"
-  default     = null
-  nullable    = true
-
-  validation {
-    condition = var.elasticsearch_domain_additional_tags_for_green_cluster == null || (
-      var.elasticsearch_domain_additional_tags_for_green_cluster != null && var.opensearch_domain_name == "elasticsearch6" && var.green_cluster_options != null && var.green_cluster_options.engine_version == "6.8"
-    )
-    error_message = "This option must ONLY be set when importing the original Search Elasticsearch 6 cluster."
-  }
-}
-
 variable "override_custom_domain_endpoint_for_green_cluster" {
   type        = string
   description = "Set this as the custom domain endpoint in the Elasticsearch cluster to allow search ES cluster to be imported."
@@ -344,12 +315,4 @@ variable "create_additional_manual_snapshot_role_name" {
     )
     error_message = "This option must ONLY be set when importing the original Search Elasticsearch 6 cluster."
   }
-}
-
-variable "override_opensearch_snapshot_policy_name" {
-  type        = string
-  description = "Set this as the name of the aws_iam_policy for the opensearch_snapshot role to allow search ES cluster to be imported."
-  deprecated  = "Do not set this option except when importing the existing Search ElasticSearch cluster"
-  default     = null
-  nullable    = true
 }
