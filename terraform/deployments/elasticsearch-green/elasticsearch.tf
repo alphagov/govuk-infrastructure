@@ -27,7 +27,6 @@ module "opensearch" {
   use_aws_elasticsearch_domain_resource_for_green_cluster    = var.use_aws_elasticsearch_domain_resource_for_green_cluster
   override_aws_elasticsearch_domain_name_for_green_cluster   = "green-elasticsearch6-domain"
   log_resource_policy_name_suffix_override_for_green_cluster = "-domain_log_write"
-  override_opensearch_snapshot_policy_name                   = "govuk-${var.govuk_environment}-green-elasticsearch6-manual-snapshot-bucket-policy"
   disable_node_to_node_encryption_for_green_cluster          = true
   disable_enforced_https_for_green_cluster                   = true
   override_security_group_ids_for_green_cluster              = [data.tfe_outputs.security.nonsensitive_values.govuk_elasticsearch6_access_sg_id]

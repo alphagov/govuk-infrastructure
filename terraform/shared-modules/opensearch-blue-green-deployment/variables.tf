@@ -316,11 +316,3 @@ variable "create_additional_manual_snapshot_role_name" {
     error_message = "This option must ONLY be set when importing the original Search Elasticsearch 6 cluster."
   }
 }
-
-variable "override_opensearch_snapshot_policy_name" {
-  type        = string
-  description = "Set this as the name of the aws_iam_policy for the opensearch_snapshot role to allow search ES cluster to be imported."
-  deprecated  = "Do not set this option except when importing the existing Search ElasticSearch cluster"
-  default     = null
-  nullable    = true
-}
