@@ -9,7 +9,7 @@ databases = {
     engine_version = "14"
     engine_params = {
       log_min_duration_statement = { value = 10000 }
-      log_statement              = { value = "all" }
+      log_statement              = { value = "ddl" }
       deadlock_timeout           = { value = 2500 }
       log_lock_waits             = { value = 1 }
     }
@@ -27,7 +27,7 @@ databases = {
     engine_version = "14"
     engine_params = {
       log_min_duration_statement = { value = 10000 }
-      log_statement              = { value = "all" }
+      log_statement              = { value = "ddl" }
       deadlock_timeout           = { value = 2500 }
       log_lock_waits             = { value = 1 }
       password_encryption        = { value = "md5" }
@@ -46,7 +46,7 @@ databases = {
     engine_version = "16"
     engine_params = {
       log_min_duration_statement = { value = 10000 }
-      log_statement              = { value = "all" }
+      log_statement              = { value = "ddl" }
       deadlock_timeout           = { value = 2500 }
       log_lock_waits             = { value = 1 }
     }
@@ -64,7 +64,7 @@ databases = {
     engine_version = "14"
     engine_params = {
       log_min_duration_statement = { value = 10000 }
-      log_statement              = { value = "all" }
+      log_statement              = { value = "ddl" }
       deadlock_timeout           = { value = 2500 }
       log_lock_waits             = { value = 1 }
     }
@@ -98,7 +98,7 @@ databases = {
     allow_major_version_upgrade = true
     engine_params = {
       log_min_duration_statement = { value = 10000 }
-      log_statement              = { value = "all" }
+      log_statement              = { value = "ddl" }
       deadlock_timeout           = { value = 2500 }
       log_lock_waits             = { value = 1 }
     }
@@ -116,7 +116,7 @@ databases = {
     engine_version = "14"
     engine_params = {
       log_min_duration_statement = { value = 10000 }
-      log_statement              = { value = "all" }
+      log_statement              = { value = "ddl" }
       deadlock_timeout           = { value = 2500 }
       log_lock_waits             = { value = 1 }
     }
@@ -139,7 +139,7 @@ databases = {
       "rds.force_autovacuum_logging_level" = { value = "log" }
       log_autovacuum_min_duration          = { value = 10000, apply_method = "pending-reboot" }
       log_min_duration_statement           = { value = "10000" }
-      log_statement                        = { value = "all" }
+      log_statement                        = { value = "ddl" }
       deadlock_timeout                     = { value = 2500 }
       log_lock_waits                       = { value = 1 }
     }
@@ -157,7 +157,7 @@ databases = {
     engine_version = "14"
     engine_params = {
       log_min_duration_statement = { value = 10000 }
-      log_statement              = { value = "all" }
+      log_statement              = { value = "ddl" }
       deadlock_timeout           = { value = 2500 }
       log_lock_waits             = { value = 1 }
     }
@@ -175,7 +175,7 @@ databases = {
     engine_version = "14"
     engine_params = {
       log_min_duration_statement = { value = 10000 }
-      log_statement              = { value = "all" }
+      log_statement              = { value = "ddl" }
       deadlock_timeout           = { value = 2500 }
       log_lock_waits             = { value = 1 }
     }
@@ -193,7 +193,7 @@ databases = {
     engine_version = "14"
     engine_params = {
       log_min_duration_statement = { value = 10000 }
-      log_statement              = { value = "all" }
+      log_statement              = { value = "ddl" }
       deadlock_timeout           = { value = 2500 }
       log_lock_waits             = { value = 1 }
     }
@@ -211,7 +211,7 @@ databases = {
     engine_version = "14"
     engine_params = {
       log_min_duration_statement = { value = 10000 }
-      log_statement              = { value = "all" }
+      log_statement              = { value = "ddl" }
       deadlock_timeout           = { value = 2500 }
       log_lock_waits             = { value = 1 }
     }
@@ -229,7 +229,7 @@ databases = {
     engine_version = "14"
     engine_params = {
       log_min_duration_statement = { value = 10000 }
-      log_statement              = { value = "all" }
+      log_statement              = { value = "ddl" }
       deadlock_timeout           = { value = 2500 }
       log_lock_waits             = { value = 1 }
     }
@@ -248,7 +248,7 @@ databases = {
     engine_version = "14"
     engine_params = {
       log_min_duration_statement = { value = 10000 }
-      log_statement              = { value = "all" }
+      log_statement              = { value = "ddl" }
       deadlock_timeout           = { value = 2500 }
       log_lock_waits             = { value = 1 }
     }
@@ -266,7 +266,7 @@ databases = {
     engine_version = "14"
     engine_params = {
       log_min_duration_statement = { value = 10000 }
-      log_statement              = { value = "all" }
+      log_statement              = { value = "ddl" }
       deadlock_timeout           = { value = 2500 }
       log_lock_waits             = { value = 1 }
     }
@@ -284,7 +284,7 @@ databases = {
     engine_version = "14"
     engine_params = {
       log_min_duration_statement = { value = 10000 }
-      log_statement              = { value = "all" }
+      log_statement              = { value = "ddl" }
       deadlock_timeout           = { value = 2500 }
       log_lock_waits             = { value = 1 }
       password_encryption        = { value = "md5" }
@@ -303,7 +303,7 @@ databases = {
     engine_version = "17"
     engine_params = {
       log_min_duration_statement = { value = 10000 }
-      log_statement              = { value = "all" }
+      log_statement              = { value = "ddl" }
       deadlock_timeout           = { value = 2500 }
       log_lock_waits             = { value = 1 }
     }
@@ -322,7 +322,7 @@ databases = {
     replica_engine_version = "17"
     engine_params = {
       log_min_duration_statement = { value = 10000 }
-      log_statement              = { value = "all" }
+      log_statement              = { value = "ddl" }
       deadlock_timeout           = { value = 2500 }
       log_lock_waits             = { value = 1 }
     }
@@ -372,7 +372,7 @@ databases = {
     engine_version = "14"
     engine_params = {
       log_min_duration_statement = { value = 10000 }
-      log_statement              = { value = "all" }
+      log_statement              = { value = "ddl" }
       deadlock_timeout           = { value = 2500 }
       log_lock_waits             = { value = 1 }
     }
@@ -405,7 +405,7 @@ databases = {
     engine_version = "14"
     engine_params = {
       log_min_duration_statement = { value = 10000 }
-      log_statement              = { value = "all" }
+      log_statement              = { value = "ddl" }
       deadlock_timeout           = { value = 2500 }
       log_lock_waits             = { value = 1 }
     }
@@ -423,7 +423,7 @@ databases = {
     engine_version = "14"
     engine_params = {
       log_min_duration_statement = { value = 10000 }
-      log_statement              = { value = "mod" }
+      log_statement              = { value = "ddl" }
       deadlock_timeout           = { value = 2500 }
       log_lock_waits             = { value = 1 }
     }
