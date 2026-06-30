@@ -1086,6 +1086,7 @@ repos:
       pull_request_bypassers:
         - "/govuk-ci"
       require_code_owner_reviews: true
+      dismiss_stale_reviews: true
 
   govuk-knowledge-graph-search:
     homepage_url: "https://docs.data-community.publishing.service.gov.uk/tools/govsearch/"
