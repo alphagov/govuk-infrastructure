@@ -9,6 +9,21 @@ variable "licensify_documentdb_instance_count" {
   description = "Number of instances to create for the Licensify DocumentDB cluster"
 }
 
+variable "licensify_documentdb_clone_instance_count" {
+  type        = number
+  default     = 3
+  description = "Number of instances to create for the Licensify DocumentDB clone cluster"
+}
+
+variable "licensify_documentdb_clone_instance_types" {
+  type = map(string)
+  default = {
+    "0" = "db.r5.large"
+    "1" = "db.r8g.large"
+    "2" = "db.r8g.large"
+  }
+}
+
 variable "licensify_backup_retention_period" {
   type        = number
   default     = 5
