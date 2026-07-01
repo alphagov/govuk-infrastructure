@@ -61,7 +61,7 @@ resource "aws_docdb_cluster_instance" "licensify_cluster_clone_instances" {
   count              = var.create_licensify_documentdb_clone ? var.licensify_documentdb_clone_instance_count : 0
   identifier         = "licensify-documentdb-clone-${count.index}"
   cluster_identifier = aws_docdb_cluster.licensify_cluster_clone[0].id
-  instance_class     = lookup(var.licensify_documentdb_clone_instance_types, tostring(count.index), "db.r5.large")
+  instance_class     = lookup(var.licensify_documentdb_clone_instance_types, tostring(count.index), "db.r8g.large")
   tags               = aws_docdb_cluster.licensify_cluster_clone[0].tags
 }
 

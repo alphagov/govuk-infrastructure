@@ -18,7 +18,7 @@ variable "licensify_documentdb_clone_instance_count" {
 variable "licensify_documentdb_clone_instance_types" {
   type = map(string)
   default = {
-    "0" = "db.r5.large"
+    "0" = "db.r8g.large"
     "1" = "db.r8g.large"
     "2" = "db.r8g.large"
   }
