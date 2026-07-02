@@ -64,12 +64,13 @@ amazonmq_govuk_chat_retry_message_ttl = 300000
 
 frontend_memcached_node_type = "cache.t4g.micro"
 
-licensify_documentdb_instance_count       = 1
-licensify_documentdb_clone_instance_count = 3
-licensify_backup_retention_period         = 1
-shared_documentdb_instance_count          = 1
-shared_documentdb_backup_retention_period = 1
-create_licensify_documentdb_clone         = true
+licensify_documentdb_instance_count            = 1
+licensify_documentdb_clone_instance_count      = 3
+licensify_backup_retention_period              = 1
+shared_documentdb_instance_count               = 1
+shared_documentdb_backup_retention_period      = 1
+create_licensify_documentdb_clone              = true
+licensify_documentdb_clone_allow_major_upgrade = false
 licensify_documentdb_clone_instance_types = {
   "0" = "db.r5.large"
   "1" = "db.r8g.large"
