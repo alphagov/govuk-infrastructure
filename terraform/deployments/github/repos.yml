@@ -1073,11 +1073,7 @@ repos:
     required_pull_request_reviews:
       dismiss_stale_reviews: true
 
-  govuk-dns-ui:
-    visibility: private
-    homepage_url: "https://dns.publishing.service.gov.uk"
-    required_pull_request_reviews:
-      dismiss_stale_reviews: true
+  govuk-dns-ui: {}
 
   govuk-helm-charts:
     can_be_deployed: true
