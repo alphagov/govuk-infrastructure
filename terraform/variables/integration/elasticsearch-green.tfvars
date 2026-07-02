@@ -2,8 +2,31 @@ current_live_domain = "green"
 
 attach_snapshot_policy_with_role_policy_attachment = true
 
-launch_blue_domain   = false
-blue_cluster_options = null
+launch_blue_domain = true
+blue_cluster_options = {
+  engine         = "Elasticsearch"
+  engine_version = "7.10"
+
+  dedicated_master = {
+    instance_count = 3
+    instance_type  = "c7i.xlarge.elasticsearch"
+  }
+
+  instance_count = 3
+  instance_type  = "r7i.xlarge.elasticsearch"
+
+  zone_awareness_enabled = true
+
+  advanced_security_options = null
+
+  endpoint_tls_security_policy = "Policy-Min-TLS-1-2-2019-07"
+  ebs_options = {
+    volume_size = 314
+    volume_type = "gp3"
+    throughput  = 350
+    iops        = 3000
+  }
+}
 
 launch_green_domain = true
 green_cluster_options = {
