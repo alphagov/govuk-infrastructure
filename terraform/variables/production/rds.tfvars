@@ -20,6 +20,9 @@ databases = {
     performance_insights_enabled = true
     project                      = "GOV.UK - Web"
     snapshot_identifier          = "account-api-postgres-post-encryption"
+    tags = {
+      "contains_pii" = true
+    }
   }
 
   authenticating_proxy = {
@@ -39,6 +42,9 @@ databases = {
     performance_insights_enabled = false
     project                      = "GOV.UK - Publishing"
     snapshot_identifier          = "authenticating-proxy-postgres-post-encryption"
+    tags = {
+      "contains_pii" = true
+    }
   }
 
   chat = {
@@ -75,6 +81,9 @@ databases = {
     performance_insights_enabled = true
     project                      = "GOV.UK - DGU"
     snapshot_identifier          = "ckan-postgres-post-encryption"
+    tags = {
+      "contains_pii" = true
+    }
   }
 
   collections_publisher = {
@@ -109,6 +118,9 @@ databases = {
     performance_insights_enabled = true
     project                      = "GOV.UK - Publishing"
     snapshot_identifier          = "content-block-manager-postgres-post-encryption"
+    tags = {
+      "contains_pii" = true
+    }
   }
 
   content_data_admin = {
@@ -186,6 +198,9 @@ databases = {
     performance_insights_enabled = true
     project                      = "GOV.UK - Publishing"
     snapshot_identifier          = "content-tagger-postgres-post-encryption"
+    tags = {
+      "contains_pii" = true
+    }
   }
 
   draft_content_store = {
@@ -222,6 +237,9 @@ databases = {
     performance_insights_enabled = true
     project                      = "GOV.UK - Web"
     snapshot_identifier          = "email-alert-api-postgres-post-encryption"
+    tags = {
+      "contains_pii" = true
+    }
   }
 
   link_checker_api = {
@@ -259,6 +277,9 @@ databases = {
     performance_insights_enabled = true
     project                      = "GOV.UK - Web"
     snapshot_identifier          = "local-links-manager-postgres-post-encryption"
+    tags = {
+      "contains_pii" = true
+    }
   }
 
   locations_api = {
@@ -314,6 +335,9 @@ databases = {
     performance_insights_enabled = true
     project                      = "GOV.UK - Publishing"
     snapshot_identifier          = "publisher-postgres-post-encryption"
+    tags = {
+      "contains_pii" = true
+    }
   }
 
   publishing_api = {
@@ -398,6 +422,9 @@ databases = {
     performance_insights_enabled = true
     project                      = "GOV.UK - Publishing"
     snapshot_identifier          = "signon-mysql-post-encryption"
+    tags = {
+      "contains_pii" = true
+    }
   }
 
   support_api = {

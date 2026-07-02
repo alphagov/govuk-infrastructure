@@ -22,7 +22,8 @@ databases = {
     project                      = "GOV.UK - Web"
     snapshot_identifier          = "account-api-postgres-post-encryption"
     tags = {
-      "used_by" = "account-api"
+      "used_by"      = "account-api"
+      "contains_pii" = true
     }
   }
 
@@ -85,6 +86,9 @@ databases = {
     performance_insights_enabled = true
     project                      = "GOV.UK - DGU"
     snapshot_identifier          = "ckan-postgres-post-encryption"
+    tags = {
+      "contains_pii" = true
+    }
   }
 
   collections_publisher = {
@@ -256,7 +260,8 @@ databases = {
     snapshot_identifier          = "email-alert-api-postgres-post-encryption"
 
     tags = {
-      "used_by" = "email-alert-api"
+      "used_by"      = "email-alert-api"
+      "contains_pii" = true
     }
   }
 
@@ -506,7 +511,8 @@ databases = {
     project                      = "GOV.UK - Publishing"
     snapshot_identifier          = "signon-mysql-post-encryption"
     tags = {
-      "used_by" = "signon"
+      "used_by"      = "signon"
+      "contains_pii" = true
     }
   }
 
