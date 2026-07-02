@@ -21,8 +21,6 @@ module "opensearch" {
   read_snapshots_from_environments             = var.read_snapshots_from_environments
   account_ids_allowed_to_read_domain_snapshots = var.account_ids_allowed_to_read_domain_snapshots
 
-  s3_bucket_custom_suffix = "manual-snapshots"
-
   // WARNING: The following option must be removed once the existing elasticsearch 6 green cluster has been destroyed
   use_aws_elasticsearch_domain_resource_for_green_cluster    = var.use_aws_elasticsearch_domain_resource_for_green_cluster
   override_aws_elasticsearch_domain_name_for_green_cluster   = "green-elasticsearch6-domain"
@@ -32,4 +30,6 @@ module "opensearch" {
   override_security_group_ids_for_green_cluster              = [data.tfe_outputs.security.nonsensitive_values.govuk_elasticsearch6_access_sg_id]
   override_custom_domain_endpoint_for_green_cluster          = "green-elasticsearch6.${var.govuk_environment}.govuk-internal.digital"
   create_additional_manual_snapshot_role_name                = "green-elasticsearch6-manual-snapshot-role"
+  create_snapshot_bucket                                     = false
+  create_additional_snapshot_bucket_name                     = "govuk-${var.govuk_environment}-elasticsearch6-manual-snapshots"
 }
