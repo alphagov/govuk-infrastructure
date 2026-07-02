@@ -82,16 +82,14 @@ resource "aws_iam_policy" "opensearch_snapshot" {
   policy = data.aws_iam_policy_document.opensearch_snapshot.json
 }
 
-resource "aws_iam_policy_attachment" "opensearch_snapshot" {
-  name       = "govuk-${var.govuk_environment}-${var.opensearch_domain_name}-opensearch-snapshot"
-  roles      = [aws_iam_role.opensearch_snapshot.name]
+resource "aws_iam_role_policy_attachment" "opensearch_snapshot" {
+  role       = aws_iam_role.opensearch_snapshot.name
   policy_arn = aws_iam_policy.opensearch_snapshot.arn
 }
 
-resource "aws_iam_policy_attachment" "elasticsearch_snapshot" {
+resource "aws_iam_role_policy_attachment" "elasticsearch_snapshot" {
   count = var.create_additional_manual_snapshot_role_name == null ? 0 : 1
 
-  name       = "govuk-${var.govuk_environment}-${var.opensearch_domain_name}-elasticsearch-snapshot"
-  roles      = [aws_iam_role.elasticsearch_snapshot[0].name]
+  role       = aws_iam_role.elasticsearch_snapshot[0].name
   policy_arn = aws_iam_policy.opensearch_snapshot.arn
 }
