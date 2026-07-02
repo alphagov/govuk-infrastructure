@@ -1,9 +1,8 @@
 resource "aws_codecommit_repository" "govuk_repos" {
-  for_each = data.github_repository.govuk
+  for_each = toset(data.github_repositories.govuk.full_names)
 
-  repository_name = each.value.name
-  description     = each.value.description
-  default_branch  = each.value.default_branch
+  repository_name = trimprefix(each.key, "alphagov/")
+  default_branch  = "main"
 }
 
 data "aws_iam_policy_document" "github_action_can_assume_role" {
