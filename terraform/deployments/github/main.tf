@@ -35,6 +35,9 @@ provider "aws" {
 provider "github" {
   owner = "alphagov"
 
+  parallel_requests = true
+  read_delay_ms     = 1000
+
   app_auth {
     id              = var.github_app_id              # or `GITHUB_APP_ID`
     installation_id = var.github_app_installation_id # or `GITHUB_APP_INSTALLATION_ID`
@@ -43,7 +46,8 @@ provider "github" {
 }
 
 data "github_repositories" "govuk" {
-  query = "topic:govuk org:alphagov archived:false fork:true"
+  query           = "topic:govuk org:alphagov archived:false fork:true"
+  include_repo_id = true
 
   lifecycle {
     postcondition {
@@ -53,30 +57,35 @@ data "github_repositories" "govuk" {
   }
 }
 
-data "github_repository" "govuk" {
-  for_each  = toset(data.github_repositories.govuk.full_names)
-  full_name = each.key
+data "github_repository" "govuk_archiving" {
+  for_each = {
+    for name, repo in local.repositories :
+    name => repo
+    if try(repo.archived, false) &&
+    contains(data.github_repositories.govuk.full_names, "alphagov/${name}")
+  }
+  full_name = "alphagov/${each.key}"
 }
 
 locals {
   repositories = yamldecode(file("repos.yml"))["repos"]
 
-  deployable_repos = [
-    for name, repo in local.repositories : data.github_repository.govuk["alphagov/${name}"]
-    if try(repo.can_be_deployed, false) && contains(keys(data.github_repository.govuk), "alphagov/${name}")
+  deployable_repo_names = [
+    for name, repo in local.repositories : name
+    if try(repo.can_be_deployed, false) && contains(data.github_repositories.govuk.full_names, "alphagov/${name}")
   ]
 
-  gems = [
-    for name, repo in local.repositories : data.github_repository.govuk["alphagov/${name}"]
-    if try(repo.publishes_gem, false) && contains(keys(data.github_repository.govuk), "alphagov/${name}")
+  gem_repo_names = [
+    for name, repo in local.repositories : name
+    if try(repo.publishes_gem, false) && contains(data.github_repositories.govuk.full_names, "alphagov/${name}")
   ]
 
-  pact_publishers = [
-    for name, repo in local.repositories : data.github_repository.govuk["alphagov/${name}"]
-    if try(repo.pact_publisher, false) && contains(keys(data.github_repository.govuk), "alphagov/${name}")
+  pact_publisher_repo_names = [
+    for name, repo in local.repositories : name
+    if try(repo.pact_publisher, false) && contains(data.github_repositories.govuk.full_names, "alphagov/${name}")
   ]
 
-  ithc_repos = [
+  ithc_repo_names = [
     for name, repo in local.repositories : name
     if try(repo.teams.govuk_ithc, "") != ""
   ]
@@ -178,7 +187,7 @@ resource "github_team_repository" "govuk_data_repos" {
 resource "github_team_repository" "ithc_repos" {
   # Only grant ITHC access to repositories that have been explicitly configured
   # to be accessible by the ITHC team in repos.yml.
-  for_each = { for name, repo in github_repository.govuk_repos : name => repo if contains(local.ithc_repos, name) }
+  for_each = { for name, repo in github_repository.govuk_repos : name => repo if contains(local.ithc_repo_names, name) }
 
   repository = each.key
   team_id    = github_team.govuk_ithc.id
@@ -249,7 +258,7 @@ resource "github_repository" "govuk_repos" {
     precondition {
       condition = (
         !try(each.value.archived, false) ||
-        try(length(data.github_repository.govuk[format("alphagov/%s", each.key)].pages), 0) == 0
+        try(length(data.github_repository.govuk_archiving[each.key].pages), 0) == 0
       )
       error_message = "You cannot archive a Repo with an active GitHub Pages Configuration. Remove this first."
     }
@@ -337,35 +346,35 @@ resource "github_branch_protection" "govuk_repos" {
 
 resource "github_actions_organization_secret_repositories" "ci_user_github_api_token" {
   secret_name             = "GOVUK_CI_GITHUB_API_TOKEN" # pragma: allowlist secret
-  selected_repository_ids = [for repo in concat(local.deployable_repos, local.gems) : repo.repo_id]
+  selected_repository_ids = [for repo in concat(local.deployable_repo_names, local.gem_repo_names) : github_repository.govuk_repos[repo].repo_id]
 }
 
 resource "github_actions_organization_secret_repositories" "argo_events_webhook_token" {
   secret_name             = "GOVUK_ARGO_EVENTS_WEBHOOK_TOKEN" # pragma: allowlist secret
-  selected_repository_ids = [for repo in local.deployable_repos : repo.repo_id]
+  selected_repository_ids = [for repo in local.deployable_repo_names : github_repository.govuk_repos[repo].repo_id]
 }
 
 resource "github_actions_organization_secret_repositories" "argo_events_webhook_url" {
   secret_name             = "GOVUK_ARGO_EVENTS_WEBHOOK_URL" # pragma: allowlist secret
-  selected_repository_ids = [for repo in local.deployable_repos : repo.repo_id]
+  selected_repository_ids = [for repo in local.deployable_repo_names : github_repository.govuk_repos[repo].repo_id]
 }
 
 resource "github_actions_organization_secret_repositories" "pact_broker_password" {
   secret_name             = "GOVUK_PACT_BROKER_PASSWORD" # pragma: allowlist secret
-  selected_repository_ids = [for repo in local.pact_publishers : repo.repo_id]
+  selected_repository_ids = [for repo in local.pact_publisher_repo_names : github_repository.govuk_repos[repo].repo_id]
 }
 
 resource "github_actions_organization_secret_repositories" "pact_broker_username" {
   secret_name             = "GOVUK_PACT_BROKER_USERNAME" # pragma: allowlist secret
-  selected_repository_ids = [for repo in local.pact_publishers : repo.repo_id]
+  selected_repository_ids = [for repo in local.pact_publisher_repo_names : github_repository.govuk_repos[repo].repo_id]
 }
 
 resource "github_actions_organization_secret_repositories" "slack_webhook_url" {
   secret_name             = "GOVUK_SLACK_WEBHOOK_URL" # pragma: allowlist secret
-  selected_repository_ids = [for repo in data.github_repository.govuk : repo.repo_id]
+  selected_repository_ids = [for repo in data.github_repositories.govuk.names : github_repository.govuk_repos[repo].repo_id if contains(keys(github_repository.govuk_repos), repo)]
 }
 
 resource "github_actions_organization_secret_repositories" "rubygems_api_key" {
   secret_name             = "ALPHAGOV_RUBYGEMS_API_KEY" # pragma: allowlist secret
-  selected_repository_ids = [for repo in local.gems : repo.repo_id]
+  selected_repository_ids = [for repo in local.gem_repo_names : github_repository.govuk_repos[repo].repo_id]
 }
