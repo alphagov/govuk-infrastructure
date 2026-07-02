@@ -470,8 +470,7 @@ repos:
     can_be_deployed: false
 
   govuk-reports-prototype:
-    need_production_access_to_merge: false
-    branch_protection: false
+    archived: true
 
   govuk-rota-generator:
     visibility: private
