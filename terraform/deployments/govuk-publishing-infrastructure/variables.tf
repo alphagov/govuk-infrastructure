@@ -9,6 +9,33 @@ variable "licensify_documentdb_instance_count" {
   description = "Number of instances to create for the Licensify DocumentDB cluster"
 }
 
+variable "licensify_documentdb_clone_engine_version" {
+  type        = string
+  default     = "5.0.0"
+  description = "Engine version for the Licensify DocumentDB clone cluster"
+}
+
+variable "licensify_documentdb_clone_instance_count" {
+  type        = number
+  default     = 3
+  description = "Number of instances to create for the Licensify DocumentDB clone cluster"
+}
+
+variable "licensify_documentdb_clone_instance_types" {
+  type = map(string)
+  default = {
+    "0" = "db.r8g.large"
+    "1" = "db.r8g.large"
+    "2" = "db.r8g.large"
+  }
+}
+
+variable "licensify_documentdb_clone_allow_major_upgrade" {
+  type        = bool
+  default     = false
+  description = "Allow major version upgrade for the Licensify DocumentDB clone cluster"
+}
+
 variable "licensify_backup_retention_period" {
   type        = number
   default     = 5
