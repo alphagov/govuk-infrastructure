@@ -63,7 +63,7 @@ frontend_memcached_node_type = "cache.t4g.medium"
 
 licensify_documentdb_instance_count            = 1
 licensify_documentdb_clone_instance_count      = 3
-licensify_documentdb_clone_engine_version      = "3.6.0"
+licensify_documentdb_clone_engine_version      = "5.0.0"
 licensify_backup_retention_period              = 1
 shared_documentdb_instance_count               = 1
 shared_documentdb_backup_retention_period      = 1
