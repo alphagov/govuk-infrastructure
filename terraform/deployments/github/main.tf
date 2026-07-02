@@ -35,6 +35,9 @@ provider "aws" {
 provider "github" {
   owner = "alphagov"
 
+  parallel_requests = true
+  read_delay_ms     = 1000
+
   app_auth {
     id              = var.github_app_id              # or `GITHUB_APP_ID`
     installation_id = var.github_app_installation_id # or `GITHUB_APP_INSTALLATION_ID`
@@ -43,7 +46,7 @@ provider "github" {
 }
 
 data "github_repositories" "govuk" {
-  query = "topic:govuk org:alphagov archived:false fork:true"
+  query           = "topic:govuk org:alphagov archived:false fork:true"
   include_repo_id = true
 
   lifecycle {
