@@ -57,12 +57,8 @@ repos:
       standard_contexts: *standard_security_checks
       additional_contexts:
         - Test
-    required_pull_request_reviews:
-      dismiss_stale_reviews: true
 
-  bulk-merger:
-    required_pull_request_reviews:
-      dismiss_stale_reviews: true
+  bulk-merger: {}
 
   collections:
     can_be_deployed: true
@@ -372,8 +368,6 @@ repos:
   govuk-dependabot-merger:
     required_status_checks:
       standard_contexts: *standard_security_checks
-    required_pull_request_reviews:
-      dismiss_stale_reviews: true
 
   govuk-dependency-checker:
     can_be_deployed: true
@@ -381,8 +375,6 @@ repos:
       standard_contexts: *standard_security_checks
       additional_contexts:
         - Test
-    required_pull_request_reviews:
-      dismiss_stale_reviews: true
 
   govuk-developer-docs:
     can_be_deployed: true
@@ -400,15 +392,12 @@ repos:
     up_to_date_branches: true
     required_pull_request_reviews:
       require_code_owner_reviews: true
-      dismiss_stale_reviews: true
     required_status_checks:
       additional_contexts:
         - test
 
   govuk-e2e-tests:
     can_be_deployed: true
-    required_pull_request_reviews:
-      dismiss_stale_reviews: true
 
   govuk-exporter:
     archived: true
@@ -418,14 +407,12 @@ repos:
     up_to_date_branches: true
     required_pull_request_reviews:
       require_code_owner_reviews: true
-      dismiss_stale_reviews: true
 
   govuk-fastly-secrets:
     visibility: private
     up_to_date_branches: true
     required_pull_request_reviews:
       require_code_owner_reviews: true
-      dismiss_stale_reviews: true
 
   govuk-graphql:
     archived: true
@@ -444,7 +431,6 @@ repos:
     up_to_date_branches: true
     required_pull_request_reviews:
       require_code_owner_reviews: true
-      dismiss_stale_reviews: true
 
   govuk-cli:
     can_be_deployed: true
@@ -454,8 +440,6 @@ repos:
         - CodeQL SAST scan / Analyze
         - Dependency Review scan / dependency-review-pr
         - Test Go / Test Go
-    required_pull_request_reviews:
-      dismiss_stale_reviews: true
 
   govuk-job-request-operator:
     up_to_date_branches: true
@@ -466,14 +450,12 @@ repos:
       standard_contexts: *standard_security_checks
     required_pull_request_reviews:
       require_code_owner_reviews: true
-      dismiss_stale_reviews: true
 
   terraform-govuk-infrastructure-sensitive:
     visibility: private
     up_to_date_branches: true
     required_pull_request_reviews:
       require_code_owner_reviews: true
-      dismiss_stale_reviews: true
 
   terraform-govuk-tfe-workspacer:
     up_to_date_branches: true
@@ -481,8 +463,6 @@ repos:
       enabled: true
       source_owner: "alexbasista"
       source_repo: "terraform-tfe-workspacer"
-    required_pull_request_reviews:
-      dismiss_stale_reviews: true
 
   govuk-publishing-documentation:
     visibility: private
@@ -492,8 +472,6 @@ repos:
   govuk-reports-prototype:
     need_production_access_to_merge: false
     branch_protection: false
-    required_pull_request_reviews:
-      dismiss_stale_reviews: true
 
   govuk-rota-generator:
     visibility: private
@@ -501,13 +479,9 @@ repos:
       # standard security checks are disabled as not configured for a private repo
       additional_contexts:
         - test
-    required_pull_request_reviews:
-      dismiss_stale_reviews: true
 
   govuk-ruby-images:
     can_be_deployed: true
-    required_pull_request_reviews:
-      dismiss_stale_reviews: true
 
   govuk-social-data:
     can_be_deployed: false
@@ -545,8 +519,6 @@ repos:
       standard_contexts: *standard_security_checks
       additional_contexts:
         - test
-    required_pull_request_reviews:
-      dismiss_stale_reviews: true
 
   govuk_chat_private:
     homepage_url: "https://docs.publishing.service.gov.uk/repos/govuk_chat_private.html"
@@ -634,8 +606,6 @@ repos:
       standard_contexts: *standard_security_checks
       additional_contexts:
         - test
-    required_pull_request_reviews:
-      dismiss_stale_reviews: true
 
   govuk_web_banners:
     publishes_gem: true
@@ -751,8 +721,6 @@ repos:
       standard_contexts: *standard_security_checks
       additional_contexts:
         - test
-    required_pull_request_reviews:
-      dismiss_stale_reviews: true
 
   publisher:
     can_be_deployed: true
@@ -788,8 +756,6 @@ repos:
       standard_contexts: *standard_security_checks
       additional_contexts:
         - test
-    required_pull_request_reviews:
-      dismiss_stale_reviews: true
 
   rails_translation_manager:
     publishes_gem: true
@@ -807,8 +773,6 @@ repos:
         - Test Ruby
         - Lint JavaScript / Run Standardx
         - Lint SCSS / Run Stylelint
-    required_pull_request_reviews:
-      dismiss_stale_reviews: true
 
   router:
     can_be_deployed: true
@@ -816,8 +780,6 @@ repos:
     required_status_checks:
       additional_contexts:
         - Test Go / Test Go
-    required_pull_request_reviews:
-      dismiss_stale_reviews: true
 
   router-api:
     archived: true
@@ -828,8 +790,6 @@ repos:
       standard_contexts: *standard_security_checks
       additional_contexts:
         - test
-    required_pull_request_reviews:
-      dismiss_stale_reviews: true
 
   seal:
     can_be_deployed: true
@@ -837,8 +797,6 @@ repos:
       standard_contexts: *standard_security_checks
       additional_contexts:
         - test
-    required_pull_request_reviews:
-      dismiss_stale_reviews: true
 
   search-admin:
     can_be_deployed: true
@@ -1005,40 +963,30 @@ repos:
     required_status_checks:
       additional_contexts:
         - test
-    required_pull_request_reviews:
-      dismiss_stale_reviews: true
 
   govuk-mirror:
     can_be_deployed: true
     required_status_checks:
       additional_contexts:
         - Test Go
-    required_pull_request_reviews:
-      dismiss_stale_reviews: true
 
   govuk-replatform-test-app:
     can_be_deployed: true
     required_status_checks:
       additional_contexts:
         - Test
-    required_pull_request_reviews:
-      dismiss_stale_reviews: true
 
   govuk-rota-announcer:
     visibility: internal
     required_status_checks:
       additional_contexts:
         - test
-    required_pull_request_reviews:
-      dismiss_stale_reviews: true
 
   govuk-synthetic-test-app:
     can_be_deployed: true
     required_status_checks:
       additional_contexts:
         - Test
-    required_pull_request_reviews:
-      dismiss_stale_reviews: true
 
   govuk-synthetic-test-app-canary:
     can_be_deployed: true
@@ -1046,8 +994,6 @@ repos:
       additional_contexts:
         - Test
     standard_contexts: *standard_security_checks
-    required_pull_request_reviews:
-      dismiss_stale_reviews: true
 
   govuk-synthetic-test-runner:
     archived: true
@@ -1055,8 +1001,6 @@ repos:
   govuk-user-reviewer:
     visibility: private
     homepage_url: "https://github.com/alphagov/govuk-rfcs/pull/75"
-    required_pull_request_reviews:
-      dismiss_stale_reviews: true
     required_status_checks:
       additional_contexts:
         - test
@@ -1070,14 +1014,10 @@ repos:
 
   govuk-crd-library:
     homepage_url: "https://alphagov.github.io/govuk-crd-library/"
-    required_pull_request_reviews:
-      dismiss_stale_reviews: true
 
   govuk-dns-ui:
     visibility: private
     homepage_url: "https://dns.publishing.service.gov.uk"
-    required_pull_request_reviews:
-      dismiss_stale_reviews: true
 
   govuk-helm-charts:
     can_be_deployed: true
@@ -1086,7 +1026,6 @@ repos:
       pull_request_bypassers:
         - "/govuk-ci"
       require_code_owner_reviews: true
-      dismiss_stale_reviews: true
 
   govuk-knowledge-graph-search:
     homepage_url: "https://docs.data-community.publishing.service.gov.uk/tools/govsearch/"
@@ -1110,9 +1049,7 @@ repos:
       source_owner: "emmabeynon"
       source_repo: "github-trello-poster"
 
-  govuk-pact-broker:
-    required_pull_request_reviews:
-      dismiss_stale_reviews: true
+  govuk-pact-broker: {}
 
   govuk-rfcs: {}
 
@@ -1128,8 +1065,6 @@ repos:
 
   govuk-toolbox-image:
     can_be_deployed: true
-    required_pull_request_reviews:
-      dismiss_stale_reviews: true
 
   govuk-ai-accelerator:
     can_be_deployed: true
