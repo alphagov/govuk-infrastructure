@@ -21,12 +21,12 @@ output "opensearch_cname" {
 
 output "s3_snapshot_bucket_name" {
   description = "Name of the S3 bucket used for snapshots"
-  value       = module.snapshot_bucket.name
+  value       = module.snapshot_bucket[0].name
 }
 
 output "s3_snapshot_bucket_arn" {
   description = "ARN of the S3 bucket used for snapshots"
-  value       = module.snapshot_bucket.arn
+  value       = module.snapshot_bucket[0].arn
 }
 
 output "opensearch_iam_role_name" {

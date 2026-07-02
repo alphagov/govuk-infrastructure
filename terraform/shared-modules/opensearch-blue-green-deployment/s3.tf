@@ -4,9 +4,22 @@ locals {
 }
 
 module "snapshot_bucket" {
+  count = var.create_snapshot_bucket ? 1 : 0
+
   source = "../s3"
 
   name              = local.snapshot_bucket_name
+  govuk_environment = var.govuk_environment
+
+  extra_bucket_policies = [data.aws_iam_policy_document.snapshot_bucket_policy.json]
+}
+
+module "additional_snapshot_bucket" {
+  count = var.create_additional_snapshot_bucket_name == null ? 0 : 1
+
+  source = "../s3"
+
+  name              = var.create_additional_snapshot_bucket_name
   govuk_environment = var.govuk_environment
 
   extra_bucket_policies = [data.aws_iam_policy_document.snapshot_bucket_policy.json]
@@ -29,10 +42,16 @@ data "aws_iam_policy_document" "snapshot_bucket_policy" {
       "s3:ListBucket",
     ]
 
-    resources = [
-      "arn:aws:s3:::${local.snapshot_bucket_name}",
-      "arn:aws:s3:::${local.snapshot_bucket_name}/*",
-    ]
+    resources = concat(
+      var.create_additional_snapshot_bucket_name == null ? [] : [
+        "arn:aws:s3:::${var.create_additional_snapshot_bucket_name}",
+        "arn:aws:s3:::${var.create_additional_snapshot_bucket_name}/*",
+      ],
+      [
+        "arn:aws:s3:::${local.snapshot_bucket_name}",
+        "arn:aws:s3:::${local.snapshot_bucket_name}/*",
+      ]
+    )
   }
 
   statement {
@@ -49,6 +68,11 @@ data "aws_iam_policy_document" "snapshot_bucket_policy" {
       "s3:PutObjectAcl",
     ]
 
-    resources = ["arn:aws:s3:::${local.snapshot_bucket_name}/*"]
+    resources = concat(
+      var.create_additional_snapshot_bucket_name == null ? [] : ["arn:aws:s3:::${var.create_additional_snapshot_bucket_name}/*"],
+      [
+        "arn:aws:s3:::${local.snapshot_bucket_name}/*"
+      ]
+    )
   }
 }

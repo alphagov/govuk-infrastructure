@@ -316,3 +316,27 @@ variable "create_additional_manual_snapshot_role_name" {
     error_message = "This option must ONLY be set when importing the original Search Elasticsearch 6 cluster."
   }
 }
+
+variable "create_snapshot_bucket" {
+  type        = bool
+  description = "Temporary, do not use"
+  deprecated  = "Do not set this option except when importing the existing Search ElasticSearch cluster"
+  default     = true
+  nullable    = false
+}
+
+variable "create_additional_snapshot_bucket_name" {
+  type        = string
+  description = "Create a second snapshot bucket with this name, if null do not create one"
+  deprecated  = "Do not set this option except when importing the existing Search ElasticSearch cluster"
+  default     = null
+  nullable    = true
+
+  validation {
+    condition = var.create_additional_snapshot_bucket_name == null || (
+      var.create_additional_manual_snapshot_role_name != null && var.opensearch_domain_name == "elasticsearch6" && var.green_cluster_options != null && var.green_cluster_options.engine_version == "6.8"
+    )
+    error_message = "This option must ONLY be set when importing the original Search Elasticsearch 6 cluster."
+  }
+}
+
