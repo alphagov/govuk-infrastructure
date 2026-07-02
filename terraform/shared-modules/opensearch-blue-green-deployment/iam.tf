@@ -4,7 +4,7 @@ locals {
       concat(
         [module.snapshot_bucket[0].arn],
         formatlist(
-          "arn:aws:s3:::govuk-%s-%s-${local.bucket_suffix}",
+          "arn:aws:s3:::govuk-%s-%s-opensearch-snapshots",
           var.read_snapshots_from_environments,
           var.opensearch_domain_name
         ),

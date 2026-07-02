@@ -1,6 +1,5 @@
 locals {
-  bucket_suffix        = var.s3_bucket_custom_suffix == null ? "opensearch-snapshots" : var.s3_bucket_custom_suffix
-  snapshot_bucket_name = "govuk-${var.govuk_environment}-${var.opensearch_domain_name}-${local.bucket_suffix}"
+  snapshot_bucket_name = "govuk-${var.govuk_environment}-${var.opensearch_domain_name}-opensearch-snapshots"
 }
 
 module "snapshot_bucket" {
