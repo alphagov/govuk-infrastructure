@@ -36,7 +36,7 @@ resource "aws_docdb_cluster_parameter_group" "licensify_clone_parameter_group" {
 }
 
 locals {
-  db_clone_cluster_parameter_group_name = var.licensify_documentdb_clone_engine_version == "3.6.0" ? aws_docdb_cluster_parameter_group.licensify_parameter_group.name : aws_docdb_cluster_parameter_group.licensify_clone_parameter_group[0].name
+  db_clone_cluster_parameter_group_name = var.licensify_documentdb_clone_engine_version == "3.6.0" ? aws_docdb_cluster_parameter_group.licensify_parameter_group.name : try(aws_docdb_cluster_parameter_group.licensify_clone_parameter_group[0].name, null)
 }
 
 resource "aws_docdb_cluster" "licensify_cluster_clone" {
