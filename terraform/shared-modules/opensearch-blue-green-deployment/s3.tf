@@ -3,7 +3,12 @@ locals {
   snapshot_bucket_name = "govuk-${var.govuk_environment}-${var.opensearch_domain_name}-${local.bucket_suffix}"
 }
 
-module "snapshot_bucket" {
+moved {
+  from = module.snapshot_bucket
+  to   = module.old_snapshot_bucket
+}
+
+module "old_snapshot_bucket" {
   source = "../s3"
 
   name              = local.snapshot_bucket_name
