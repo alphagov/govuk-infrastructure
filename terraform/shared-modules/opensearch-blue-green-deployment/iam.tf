@@ -3,11 +3,7 @@ locals {
     distinct(
       concat(
         [module.old_snapshot_bucket.arn],
-        formatlist(
-          "arn:aws:s3:::govuk-%s-%s-${local.bucket_suffix}",
-          var.read_snapshots_from_environments,
-          var.opensearch_domain_name
-        ),
+        [for environment in var.read_snapshots_from_environments : replace(module.old_snapshot_bucket.arn, var.govuk_environment, environment)]
       )
     )
   )

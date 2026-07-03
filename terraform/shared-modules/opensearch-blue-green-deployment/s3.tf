@@ -36,8 +36,8 @@ data "aws_iam_policy_document" "snapshot_bucket_policy" {
     ]
 
     resources = [
-      "arn:aws:s3:::${local.snapshot_bucket_name}",
-      "arn:aws:s3:::${local.snapshot_bucket_name}/*",
+      "arn:aws:s3:::${local.old_snapshot_bucket_name}",
+      "arn:aws:s3:::${local.old_snapshot_bucket_name}/*",
     ]
   }
 
@@ -55,6 +55,6 @@ data "aws_iam_policy_document" "snapshot_bucket_policy" {
       "s3:PutObjectAcl",
     ]
 
-    resources = ["arn:aws:s3:::${local.snapshot_bucket_name}/*"]
+    resources = ["arn:aws:s3:::${local.old_snapshot_bucket_name}/*"]
   }
 }
