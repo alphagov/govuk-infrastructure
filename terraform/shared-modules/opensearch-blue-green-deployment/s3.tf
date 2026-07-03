@@ -1,6 +1,7 @@
 locals {
-  bucket_suffix        = var.s3_bucket_custom_suffix == null ? "opensearch-snapshots" : var.s3_bucket_custom_suffix
-  snapshot_bucket_name = "govuk-${var.govuk_environment}-${var.opensearch_domain_name}-${local.bucket_suffix}"
+  bucket_suffix            = var.s3_bucket_custom_suffix == null ? "opensearch-snapshots" : var.s3_bucket_custom_suffix
+  snapshot_bucket_name     = "govuk-${var.govuk_environment}-${var.opensearch_domain_name}-${local.bucket_suffix}"
+  old_snapshot_bucket_name = var.override_old_snapshot_bucket_name == null ? local.snapshot_bucket_name : var.override_old_snapshot_bucket_name
 }
 
 moved {
@@ -11,7 +12,7 @@ moved {
 module "old_snapshot_bucket" {
   source = "../s3"
 
-  name              = local.snapshot_bucket_name
+  name              = local.old_snapshot_bucket_name
   govuk_environment = var.govuk_environment
 
   extra_bucket_policies = [data.aws_iam_policy_document.snapshot_bucket_policy.json]

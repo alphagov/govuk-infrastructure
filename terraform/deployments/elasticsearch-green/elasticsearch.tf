@@ -32,4 +32,5 @@ module "opensearch" {
   override_security_group_ids_for_green_cluster              = [data.tfe_outputs.security.nonsensitive_values.govuk_elasticsearch6_access_sg_id]
   override_custom_domain_endpoint_for_green_cluster          = "green-elasticsearch6.${var.govuk_environment}.govuk-internal.digital"
   create_additional_manual_snapshot_role_name                = "green-elasticsearch6-manual-snapshot-role"
+  override_old_snapshot_bucket_name                          = "govuk-${var.govuk_environment}-elasticsearch6-manual-snapshots"
 }
