@@ -2,7 +2,7 @@ locals {
   read_snapshot_bucket_arns = sort(
     distinct(
       concat(
-        [module.snapshot_bucket.arn],
+        [module.old_snapshot_bucket.arn],
         formatlist(
           "arn:aws:s3:::govuk-%s-%s-${local.bucket_suffix}",
           var.read_snapshots_from_environments,
@@ -11,7 +11,7 @@ locals {
       )
     )
   )
-  write_snapshot_bucket_arn = module.snapshot_bucket.arn
+  write_snapshot_bucket_arn = module.old_snapshot_bucket.arn
 }
 
 resource "aws_iam_role" "opensearch_snapshot" {
