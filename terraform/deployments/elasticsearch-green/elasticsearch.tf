@@ -6,7 +6,7 @@ data "tfe_outputs" "security" {
 module "opensearch" {
   source = "../../shared-modules/opensearch-blue-green-deployment"
 
-  opensearch_domain_name = "elasticsearch6"
+  opensearch_domain_name = "search-domain"
 
   current_live_domain = var.current_live_domain
   launch_blue_domain  = var.launch_blue_domain

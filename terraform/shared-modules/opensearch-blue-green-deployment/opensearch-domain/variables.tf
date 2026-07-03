@@ -185,7 +185,7 @@ variable "use_aws_elasticsearch_domain_resource" {
 
   validation {
     condition = (
-      var.use_aws_elasticsearch_domain_resource == true && var.opensearch_domain_name == "green-elasticsearch6" && var.engine_version == "6.8"
+      var.use_aws_elasticsearch_domain_resource == true && var.opensearch_domain_name == "green-search-domain" && var.engine_version == "6.8"
     ) || var.use_aws_elasticsearch_domain_resource == false
     error_message = "This option must ONLY be set when importing the original Search Elasticsearch 6 cluster."
   }
@@ -200,7 +200,7 @@ variable "override_aws_elasticsearch_domain_name" {
 
   validation {
     condition = (
-      var.override_aws_elasticsearch_domain_name == "green-elasticsearch6-domain" && var.opensearch_domain_name == "green-elasticsearch6" && var.engine_version == "6.8"
+      var.override_aws_elasticsearch_domain_name == "green-elasticsearch6-domain" && var.opensearch_domain_name == "green-search-domain" && var.engine_version == "6.8"
     ) || var.override_aws_elasticsearch_domain_name == null
     error_message = "This option must ONLY be set when importing the original Search Elasticsearch 6 cluster."
   }
@@ -215,7 +215,7 @@ variable "log_resource_policy_name_suffix_override" {
 
   validation {
     condition = var.log_resource_policy_name_suffix_override == null || (
-      var.log_resource_policy_name_suffix_override == "-domain_log_write" && var.opensearch_domain_name == "green-elasticsearch6" && var.engine_version == "6.8"
+      var.log_resource_policy_name_suffix_override == "-domain_log_write" && var.opensearch_domain_name == "green-search-domain" && var.engine_version == "6.8"
     )
     error_message = "This option must ONLY be set when importing the original Search Elasticsearch 6 cluster."
   }
@@ -230,7 +230,7 @@ variable "disable_node_to_node_encryption" {
 
   validation {
     condition = var.disable_node_to_node_encryption == false || (
-      var.disable_node_to_node_encryption == true && var.opensearch_domain_name == "green-elasticsearch6" && var.engine_version == "6.8"
+      var.disable_node_to_node_encryption == true && var.opensearch_domain_name == "green-search-domain" && var.engine_version == "6.8"
     )
     error_message = "This option must ONLY be set when importing the original Search Elasticsearch 6 cluster."
   }
@@ -245,7 +245,7 @@ variable "disable_enforced_https" {
 
   validation {
     condition = var.disable_enforced_https == false || (
-      var.disable_enforced_https == true && var.opensearch_domain_name == "green-elasticsearch6" && var.engine_version == "6.8"
+      var.disable_enforced_https == true && var.opensearch_domain_name == "green-search-domain" && var.engine_version == "6.8"
     )
     error_message = "This option must ONLY be set when importing the original Search Elasticsearch 6 cluster."
   }
