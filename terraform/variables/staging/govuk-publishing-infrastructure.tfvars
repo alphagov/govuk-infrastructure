@@ -71,7 +71,7 @@ create_licensify_documentdb_clone              = true
 licensify_documentdb_clone_allow_major_upgrade = true
 
 licensify_documentdb_clone_instance_types = {
-  "0" = "db.r5.large"
-  "1" = "db.r5.large"
-  "2" = "db.r5.large"
+  "0" = "db.r8g.large"
+  "1" = "db.r8g.large"
+  "2" = "db.r8g.large"
 }
