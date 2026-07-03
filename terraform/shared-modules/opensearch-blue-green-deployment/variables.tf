@@ -206,7 +206,7 @@ variable "use_aws_elasticsearch_domain_resource_for_green_cluster" {
 
   validation {
     condition = (
-      var.use_aws_elasticsearch_domain_resource_for_green_cluster == true && var.opensearch_domain_name == "elasticsearch6" && var.green_cluster_options != null && var.green_cluster_options.engine_version == "6.8"
+      var.use_aws_elasticsearch_domain_resource_for_green_cluster == true && var.opensearch_domain_name == "search-domain" && var.green_cluster_options != null && var.green_cluster_options.engine_version == "6.8"
     ) || var.use_aws_elasticsearch_domain_resource_for_green_cluster == false
     error_message = "This option must ONLY be set when importing the original Search Elasticsearch 6 cluster."
   }
@@ -221,7 +221,7 @@ variable "override_aws_elasticsearch_domain_name_for_green_cluster" {
 
   validation {
     condition = var.override_aws_elasticsearch_domain_name_for_green_cluster == null || (
-      var.override_aws_elasticsearch_domain_name_for_green_cluster == "green-elasticsearch6-domain" && var.opensearch_domain_name == "elasticsearch6" && var.green_cluster_options != null && var.green_cluster_options.engine_version == "6.8"
+      var.override_aws_elasticsearch_domain_name_for_green_cluster == "green-elasticsearch6-domain" && var.opensearch_domain_name == "search-domain" && var.green_cluster_options != null && var.green_cluster_options.engine_version == "6.8"
     )
     error_message = "This option must ONLY be set when importing the original Search Elasticsearch 6 cluster."
   }
@@ -236,7 +236,7 @@ variable "log_resource_policy_name_suffix_override_for_green_cluster" {
 
   validation {
     condition = var.log_resource_policy_name_suffix_override_for_green_cluster == null || (
-      var.log_resource_policy_name_suffix_override_for_green_cluster == "-domain_log_write" && var.opensearch_domain_name == "elasticsearch6" && var.green_cluster_options != null && var.green_cluster_options.engine_version == "6.8"
+      var.log_resource_policy_name_suffix_override_for_green_cluster == "-domain_log_write" && var.opensearch_domain_name == "search-domain" && var.green_cluster_options != null && var.green_cluster_options.engine_version == "6.8"
     )
     error_message = "This option must ONLY be set when importing the original Search Elasticsearch 6 cluster."
   }
@@ -251,7 +251,7 @@ variable "disable_node_to_node_encryption_for_green_cluster" {
 
   validation {
     condition = var.disable_node_to_node_encryption_for_green_cluster == false || (
-      var.disable_node_to_node_encryption_for_green_cluster == true && var.opensearch_domain_name == "elasticsearch6" && var.green_cluster_options != null && var.green_cluster_options.engine_version == "6.8"
+      var.disable_node_to_node_encryption_for_green_cluster == true && var.opensearch_domain_name == "search-domain" && var.green_cluster_options != null && var.green_cluster_options.engine_version == "6.8"
     )
     error_message = "This option must ONLY be set when importing the original Search Elasticsearch 6 cluster."
   }
@@ -266,7 +266,7 @@ variable "disable_enforced_https_for_green_cluster" {
 
   validation {
     condition = var.disable_enforced_https_for_green_cluster == false || (
-      var.disable_enforced_https_for_green_cluster == true && var.opensearch_domain_name == "elasticsearch6" && var.green_cluster_options != null && var.green_cluster_options.engine_version == "6.8"
+      var.disable_enforced_https_for_green_cluster == true && var.opensearch_domain_name == "search-domain" && var.green_cluster_options != null && var.green_cluster_options.engine_version == "6.8"
     )
     error_message = "This option must ONLY be set when importing the original Search Elasticsearch 6 cluster."
   }
@@ -281,7 +281,7 @@ variable "override_security_group_ids_for_green_cluster" {
 
   validation {
     condition = var.override_security_group_ids_for_green_cluster == null || (
-      var.override_security_group_ids_for_green_cluster != null && var.opensearch_domain_name == "elasticsearch6" && var.green_cluster_options != null && var.green_cluster_options.engine_version == "6.8"
+      var.override_security_group_ids_for_green_cluster != null && var.opensearch_domain_name == "search-domain" && var.green_cluster_options != null && var.green_cluster_options.engine_version == "6.8"
     )
     error_message = "This option must ONLY be set when importing the original Search Elasticsearch 6 cluster."
   }
@@ -296,7 +296,7 @@ variable "override_custom_domain_endpoint_for_green_cluster" {
 
   validation {
     condition = var.override_custom_domain_endpoint_for_green_cluster == null || (
-      var.override_custom_domain_endpoint_for_green_cluster != null && var.opensearch_domain_name == "elasticsearch6" && var.green_cluster_options != null && var.green_cluster_options.engine_version == "6.8"
+      var.override_custom_domain_endpoint_for_green_cluster != null && var.opensearch_domain_name == "search-domain" && var.green_cluster_options != null && var.green_cluster_options.engine_version == "6.8"
     )
     error_message = "This option must ONLY be set when importing the original Search Elasticsearch 6 cluster."
   }
@@ -311,7 +311,7 @@ variable "create_additional_manual_snapshot_role_name" {
 
   validation {
     condition = var.create_additional_manual_snapshot_role_name == null || (
-      var.create_additional_manual_snapshot_role_name != null && var.opensearch_domain_name == "elasticsearch6" && var.green_cluster_options != null && var.green_cluster_options.engine_version == "6.8"
+      var.create_additional_manual_snapshot_role_name != null && var.opensearch_domain_name == "search-domain" && var.green_cluster_options != null && var.green_cluster_options.engine_version == "6.8"
     )
     error_message = "This option must ONLY be set when importing the original Search Elasticsearch 6 cluster."
   }
