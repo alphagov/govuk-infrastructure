@@ -21,8 +21,6 @@ module "opensearch" {
   read_snapshots_from_environments             = var.read_snapshots_from_environments
   account_ids_allowed_to_read_domain_snapshots = var.account_ids_allowed_to_read_domain_snapshots
 
-  s3_bucket_custom_suffix = "manual-snapshots"
-
   // WARNING: The following option must be removed once the existing elasticsearch 6 green cluster has been destroyed
   use_aws_elasticsearch_domain_resource_for_green_cluster    = var.use_aws_elasticsearch_domain_resource_for_green_cluster
   override_aws_elasticsearch_domain_name_for_green_cluster   = "green-elasticsearch6-domain"
