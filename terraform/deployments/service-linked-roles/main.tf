@@ -2,7 +2,7 @@ terraform {
   cloud {
     organization = "govuk"
     workspaces {
-      tags = ["elasticsearch", "aws"]
+      tags = ["service-linked-roles", "aws"]
     }
   }
   required_version = "~> 1.15"
@@ -20,8 +20,8 @@ provider "aws" {
   default_tags {
     tags = {
       aws_environment      = var.govuk_environment
-      project              = "GOV.UK - Search"
-      terraform_deployment = "app-elasticsearch6"
+      project              = "GOV.UK"
+      terraform_deployment = "service-linked-roles"
     }
   }
 }
