@@ -3,9 +3,15 @@ locals {
   old_snapshot_bucket_name = var.override_old_snapshot_bucket_name == null ? local.snapshot_bucket_name : var.override_old_snapshot_bucket_name
 }
 
-moved {
-  from = module.snapshot_bucket
-  to   = module.old_snapshot_bucket
+module "snapshot_bucket" {
+  count = var.create_original_snapshot_bucket ? 1 : 0
+
+  source = "../s3"
+
+  name              = local.snapshot_bucket_name
+  govuk_environment = var.govuk_environment
+
+  extra_bucket_policies = [data.aws_iam_policy_document.snapshot_bucket_policy.json]
 }
 
 module "old_snapshot_bucket" {
@@ -34,10 +40,16 @@ data "aws_iam_policy_document" "snapshot_bucket_policy" {
       "s3:ListBucket",
     ]
 
-    resources = [
-      "arn:aws:s3:::${local.old_snapshot_bucket_name}",
-      "arn:aws:s3:::${local.old_snapshot_bucket_name}/*",
-    ]
+    resources = concat(
+      var.create_original_snapshot_bucket ? [
+        "arn:aws:s3:::${local.snapshot_bucket_name}",
+        "arn:aws:s3:::${local.snapshot_bucket_name}/*",
+      ] : [],
+      [
+        "arn:aws:s3:::${local.old_snapshot_bucket_name}",
+        "arn:aws:s3:::${local.old_snapshot_bucket_name}/*",
+      ]
+    )
   }
 
   statement {
@@ -54,6 +66,9 @@ data "aws_iam_policy_document" "snapshot_bucket_policy" {
       "s3:PutObjectAcl",
     ]
 
-    resources = ["arn:aws:s3:::${local.old_snapshot_bucket_name}/*"]
+    resources = concat(
+      var.create_original_snapshot_bucket ? ["arn:aws:s3:::${local.snapshot_bucket_name}/*"] : [],
+      ["arn:aws:s3:::${local.old_snapshot_bucket_name}/*"]
+    )
   }
 }

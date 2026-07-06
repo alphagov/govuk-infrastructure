@@ -21,10 +21,20 @@ output "opensearch_cname" {
 
 output "s3_snapshot_bucket_name" {
   description = "Name of the S3 bucket used for snapshots"
-  value       = module.old_snapshot_bucket.name
+  value       = var.create_original_snapshot_bucket ? module.snapshot_bucket[0].name : null
 }
 
 output "s3_snapshot_bucket_arn" {
+  description = "ARN of the S3 bucket used for snapshots"
+  value       = var.create_original_snapshot_bucket ? module.snapshot_bucket[0].arn : null
+}
+
+output "old_s3_snapshot_bucket_name" {
+  description = "Name of the S3 bucket used for snapshots"
+  value       = module.old_snapshot_bucket.name
+}
+
+output "old_s3_snapshot_bucket_arn" {
   description = "ARN of the S3 bucket used for snapshots"
   value       = module.old_snapshot_bucket.arn
 }

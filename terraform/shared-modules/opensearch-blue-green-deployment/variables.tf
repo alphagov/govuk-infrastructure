@@ -324,3 +324,16 @@ variable "override_old_snapshot_bucket_name" {
     error_message = "This option must ONLY be set when importing the original Search Elasticsearch 6 cluster."
   }
 }
+
+variable "create_original_snapshot_bucket" {
+  type        = bool
+  description = "Temporary: Create the correctly named snapshot bucket"
+  deprecated  = "Do not set this option except when importing the existing Search ElasticSearch cluster"
+  default     = false
+  nullable    = false
+
+  validation {
+    condition     = var.create_original_snapshot_bucket == false || var.opensearch_domain_name == "search-domain"
+    error_message = "This option must ONLY be set when importing the original Search Elasticsearch 6 cluster"
+  }
+}
