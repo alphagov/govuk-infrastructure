@@ -26,38 +26,6 @@ provider "aws" {
   }
 }
 
-// This is now managed in ../elasticsearch-green as part of module.opensearch
-removed {
-  from = aws_cloudwatch_log_group.opensearch_search_slow_logs
-  lifecycle {
-    destroy = false
-  }
-}
-
-// This is now managed in ../elasticsearch-green as part of module.opensearch
-removed {
-  from = aws_cloudwatch_log_group.opensearch_index_slow_logs
-  lifecycle {
-    destroy = false
-  }
-}
-
-// This is now managed in ../elasticsearch-green as part of module.opensearch
-removed {
-  from = aws_cloudwatch_log_group.opensearch_error_logs
-  lifecycle {
-    destroy = false
-  }
-}
-
-// This is now managed in ../elasticsearch-green as part of module.opensearch
-removed {
-  from = aws_cloudwatch_log_resource_policy.opensearch_log_publishing_policy
-  lifecycle {
-    destroy = false
-  }
-}
-
 resource "aws_iam_service_linked_role" "es_role" {
   aws_service_name = "es.amazonaws.com"
 
