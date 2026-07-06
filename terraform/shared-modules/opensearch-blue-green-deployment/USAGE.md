@@ -29,7 +29,6 @@
 | <a name="input_override_old_snapshot_bucket_name"></a> [override\_old\_snapshot\_bucket\_name](#input\_override\_old\_snapshot\_bucket\_name) | Set the name of the old snapshot bucket to this allow search ES cluster to be imported. | `string` | `null` | no |
 | <a name="input_override_security_group_ids_for_green_cluster"></a> [override\_security\_group\_ids\_for\_green\_cluster](#input\_override\_security\_group\_ids\_for\_green\_cluster) | Use these security groups (specified by their SG ID) to the ES cluster to allow search ES cluster to be imported. | `list(string)` | `null` | no |
 | <a name="input_read_snapshots_from_environments"></a> [read\_snapshots\_from\_environments](#input\_read\_snapshots\_from\_environments) | The environment names which this deployment should be able to read snapshots from as well as from its own | `list(string)` | `[]` | no |
-| <a name="input_s3_bucket_custom_suffix"></a> [s3\_bucket\_custom\_suffix](#input\_s3\_bucket\_custom\_suffix) | Custom s3 snapshot bucket suffix, will override the default of 'opensearch-snapshots' | `string` | `null` | no |
 | <a name="input_use_aws_elasticsearch_domain_resource_for_green_cluster"></a> [use\_aws\_elasticsearch\_domain\_resource\_for\_green\_cluster](#input\_use\_aws\_elasticsearch\_domain\_resource\_for\_green\_cluster) | Use an aws\_elasticsearch\_domain resource instead of aws\_opensearch\_domain to allow search ES cluster to be imported | `bool` | `false` | no |
 
 ## Outputs

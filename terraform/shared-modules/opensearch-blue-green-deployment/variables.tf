@@ -17,9 +17,9 @@ variable "opensearch_domain_name" {
     // These conditions are because the name needs to be valid within an S3 bucket name 
     condition = (
       // Length of domain < Max length of s3 bucket name - environment name legnth - s3 bucket name template
-      length(var.opensearch_domain_name) < (63 - length(var.govuk_environment) - length("govuk---${local.bucket_suffix}"))
+      length(var.opensearch_domain_name) < (63 - length(var.govuk_environment) - length("govuk---opensearch-snapshots"))
     )
-    error_message = "var.opensearch_domain_name must not be too long, when interpolated in 'govuk-<env>-<opensearch_domain>-${local.bucket_suffix}' the entire string must be 63 or fewer characters."
+    error_message = "var.opensearch_domain_name must not be too long, when interpolated in 'govuk-<env>-<opensearch_domain>-opensearch-snapshots' the entire string must be 63 or fewer characters."
   }
 }
 
@@ -188,13 +188,6 @@ variable "account_ids_allowed_to_read_domain_snapshots" {
     )
     error_message = "var.account_ids_allowed_to_read_snapshots must only contain recognised GOV.UK AWS Account IDs."
   }
-}
-
-variable "s3_bucket_custom_suffix" {
-  type        = string
-  description = "Custom s3 snapshot bucket suffix, will override the default of 'opensearch-snapshots'"
-  default     = null
-  nullable    = true
 }
 
 variable "use_aws_elasticsearch_domain_resource_for_green_cluster" {
