@@ -59,7 +59,9 @@ data "aws_iam_policy_document" "opensearch_logs" {
       test     = "ArnLike"
       variable = "aws:SourceArn"
       // Cannot use the resource directly to set this since it must exist before the OpenSearch domain
-      values = ["arn:aws:es:${data.aws_region.current.region}:${data.aws_caller_identity.current.account_id}:domain/${var.opensearch_domain_name}"]
+      values = [
+        "arn:aws:es:${data.aws_region.current.region}:${data.aws_caller_identity.current.account_id}:domain/${var.override_aws_elasticsearch_domain_name == null ? var.opensearch_domain_name : var.override_aws_elasticsearch_domain_name}"
+      ]
     }
   }
 }

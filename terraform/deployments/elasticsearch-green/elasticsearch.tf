@@ -6,7 +6,7 @@ data "tfe_outputs" "security" {
 module "opensearch" {
   source = "../../shared-modules/opensearch-blue-green-deployment"
 
-  opensearch_domain_name = "elasticsearch6"
+  opensearch_domain_name = "search-domain"
 
   current_live_domain = var.current_live_domain
   launch_blue_domain  = var.launch_blue_domain
@@ -32,4 +32,5 @@ module "opensearch" {
   override_security_group_ids_for_green_cluster              = [data.tfe_outputs.security.nonsensitive_values.govuk_elasticsearch6_access_sg_id]
   override_custom_domain_endpoint_for_green_cluster          = "green-elasticsearch6.${var.govuk_environment}.govuk-internal.digital"
   create_additional_manual_snapshot_role_name                = "green-elasticsearch6-manual-snapshot-role"
+  override_old_snapshot_bucket_name                          = "govuk-${var.govuk_environment}-elasticsearch6-manual-snapshots"
 }
