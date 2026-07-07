@@ -337,7 +337,9 @@ repos:
   govuk-content-api-docs:
     homepage_url: "https://content-api.publishing.service.gov.uk"
     required_status_checks:
-      standard_contexts: *standard_govuk_rails_checks
+      standard_contexts: *standard_security_checks
+      additional_contexts:
+        - Lint Ruby / Run RuboCop
 
   govuk-cookie-consent:
     topics:
