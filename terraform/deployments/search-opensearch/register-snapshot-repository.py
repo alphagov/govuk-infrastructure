@@ -11,7 +11,7 @@ in Integration, Staging and Production environments, which are run by EKS as cro
 
 Instructions for running this script:
 $ eval $(gds aws govuk-[test|integration|staging|production]-fulladmin -e -art 8h)
-$ OPENSEARCH_URL=$(aws opensearch describe-domain --domain-name green-elasticsearch6-domain  | jq -r '.DomainStatus.Endpoints.vpc')
+$ OPENSEARCH_URL=$(aws opensearch describe-domain --domain-name search-domain-<blue|green>  | jq -r '.DomainStatus.Endpoints.vpc')
 $ kubectl relay host/$OPENSEARCH_URL 4443:443
 Open https://localhost:4443/_dashboards in a browser and log in
 Map your AWS Role using instructions in Step 1 of https://docs.aws.amazon.com/opensearch-service/latest/developerguide/managedomains-snapshots.html#managedomains-snapshot-registerdirectory
