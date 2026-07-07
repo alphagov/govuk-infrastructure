@@ -1,6 +1,6 @@
 # Variables for the cluster-infrastructure-integration workspace
 
-cluster_version = "1.34"
+cluster_version = "1.35"
 
 enable_container_network_observability = true
 enable_eks_pod_identity_addon          = true
