@@ -1,18 +1,23 @@
-module "elasticsearch-integration" {
+moved {
+  from = module.elasticsearch-integration
+  to   = module.service-linked-roles-integration
+}
+
+module "service-linked-roles-integration" {
   source = "github.com/alphagov/terraform-govuk-tfe-workspacer"
 
   organization      = var.organization
-  workspace_name    = "elasticsearch-integration"
-  workspace_desc    = "This module manages AWS resources for creating an Elasticsearch cluster."
-  workspace_tags    = ["integration", "elasticsearch", "aws"]
+  workspace_name    = "service-linked-roles-integration"
+  workspace_desc    = "This module manages AWS Service Linked Roles for an account."
+  workspace_tags    = ["integration", "service-linked-roles", "aws"]
   terraform_version = var.terraform_version
   execution_mode    = "remote"
-  working_directory = "/terraform/deployments/elasticsearch/"
+  working_directory = "/terraform/deployments/service-linked-roles/"
   trigger_patterns = [
-    "/terraform/deployments/elasticsearch/**/*",
+    "/terraform/deployments/service-linked-roles/**/*",
     "/terraform/variables/integration/common.tfvars",
     "/terraform/variables/variables-common.tf",
-    "/terraform/variables/integration/elasticsearch.tfvars",
+    "/terraform/variables/integration/service-linked-roles.tfvars",
     "/terraform/shared-modules/s3/**/*",
   ]
 
@@ -30,7 +35,7 @@ module "elasticsearch-integration" {
 
   tfvars_files = [
     "integration/common.tfvars",
-    "integration/elasticsearch.tfvars"
+    "integration/service-linked-roles.tfvars"
   ]
 
   variable_set_ids = [
@@ -38,21 +43,26 @@ module "elasticsearch-integration" {
   ]
 }
 
-module "elasticsearch-staging" {
+moved {
+  from = module.elasticsearch-staging
+  to   = module.service-linked-roles-staging
+}
+
+module "service-linked-roles-staging" {
   source = "github.com/alphagov/terraform-govuk-tfe-workspacer"
 
   organization      = var.organization
-  workspace_name    = "elasticsearch-staging"
-  workspace_desc    = "This module manages AWS resources for creating an Elasticsearch cluster."
-  workspace_tags    = ["staging", "elasticsearch", "aws"]
+  workspace_name    = "service-linked-roles-staging"
+  workspace_desc    = "This module manages AWS Service Linked Roles for an account."
+  workspace_tags    = ["staging", "service-linked-roles", "aws"]
   terraform_version = var.terraform_version
   execution_mode    = "remote"
-  working_directory = "/terraform/deployments/elasticsearch/"
+  working_directory = "/terraform/deployments/service-linked-roles/"
   trigger_patterns = [
-    "/terraform/deployments/elasticsearch/**/*",
+    "/terraform/deployments/service-linked-roles/**/*",
     "/terraform/variables/staging/common.tfvars",
     "/terraform/variables/variables-common.tf",
-    "/terraform/variables/staging/elasticsearch.tfvars",
+    "/terraform/variables/staging/service-linked-roles.tfvars",
     "/terraform/shared-modules/s3/**/*",
   ]
 
@@ -70,7 +80,7 @@ module "elasticsearch-staging" {
 
   tfvars_files = [
     "staging/common.tfvars",
-    "staging/elasticsearch.tfvars"
+    "staging/service-linked-roles.tfvars"
   ]
 
   variable_set_ids = [
@@ -78,21 +88,26 @@ module "elasticsearch-staging" {
   ]
 }
 
-module "elasticsearch-production" {
+moved {
+  from = module.elasticsearch-production
+  to   = module.service-linked-roles-production
+}
+
+module "service-linked-roles-production" {
   source = "github.com/alphagov/terraform-govuk-tfe-workspacer"
 
   organization      = var.organization
-  workspace_name    = "elasticsearch-production"
-  workspace_desc    = "This module manages AWS resources for creating an Elasticsearch cluster."
-  workspace_tags    = ["production", "elasticsearch", "aws"]
+  workspace_name    = "service-linked-roles-production"
+  workspace_desc    = "This module manages AWS Service Linked Roles for an account."
+  workspace_tags    = ["production", "service-linked-roles", "aws"]
   terraform_version = var.terraform_version
   execution_mode    = "remote"
-  working_directory = "/terraform/deployments/elasticsearch/"
+  working_directory = "/terraform/deployments/service-linked-roles/"
   trigger_patterns = [
-    "/terraform/deployments/elasticsearch/**/*",
+    "/terraform/deployments/service-linked-roles/**/*",
     "/terraform/variables/production/common.tfvars",
     "/terraform/variables/variables-common.tf",
-    "/terraform/variables/production/elasticsearch.tfvars",
+    "/terraform/variables/production/service-linked-roles.tfvars",
     "/terraform/shared-modules/s3/**/*",
   ]
 
@@ -110,7 +125,7 @@ module "elasticsearch-production" {
 
   tfvars_files = [
     "production/common.tfvars",
-    "production/elasticsearch.tfvars"
+    "production/service-linked-roles.tfvars"
   ]
 
   variable_set_ids = [
