@@ -1,18 +1,23 @@
-module "elasticsearch-green-integration" {
+moved {
+  from = module.elasticsearch-green-integration
+  to   = module.search-opensearch-integration
+}
+
+module "search-opensearch-integration" {
   source = "github.com/alphagov/terraform-govuk-tfe-workspacer"
 
   organization      = var.organization
-  workspace_name    = "elasticsearch-green-integration"
-  workspace_desc    = "This module manages AWS resources for creating an Elasticsearch cluster."
-  workspace_tags    = ["integration", "elasticsearch", "aws"]
+  workspace_name    = "search-opensearch-integration"
+  workspace_desc    = "This module manages AWS resources for creating the Search AWS OpenSearch blue and/or green clusters."
+  workspace_tags    = ["integration", "search-opensearch", "aws"]
   terraform_version = var.terraform_version
   execution_mode    = "remote"
-  working_directory = "/terraform/deployments/elasticsearch-green/"
+  working_directory = "/terraform/deployments/search-opensearch/"
   trigger_patterns = [
-    "/terraform/deployments/elasticsearch-green/**/*",
+    "/terraform/deployments/search-opensearch/**/*",
     "/terraform/variables/integration/common.tfvars",
     "/terraform/variables/variables-common.tf",
-    "/terraform/variables/integration/elasticsearch-green.tfvars",
+    "/terraform/variables/integration/search-opensearch.tfvars",
     "/terraform/shared-modules/s3/**/*",
     "/terraform/shared-modules/opensearch-blue-green-deployment/**/*",
   ]
@@ -31,7 +36,7 @@ module "elasticsearch-green-integration" {
 
   tfvars_files = [
     "integration/common.tfvars",
-    "integration/elasticsearch-green.tfvars"
+    "integration/search-opensearch.tfvars"
   ]
 
   variable_set_ids = [
@@ -39,21 +44,26 @@ module "elasticsearch-green-integration" {
   ]
 }
 
-module "elasticsearch-green-staging" {
+moved {
+  from = module.elasticsearch-green-staging
+  to   = module.search-opensearch-staging
+}
+
+module "search-opensearch-staging" {
   source = "github.com/alphagov/terraform-govuk-tfe-workspacer"
 
   organization      = var.organization
-  workspace_name    = "elasticsearch-green-staging"
-  workspace_desc    = "This module manages AWS resources for creating an Elasticsearch cluster."
-  workspace_tags    = ["staging", "elasticsearch", "aws"]
+  workspace_name    = "search-opensearch-staging"
+  workspace_desc    = "This module manages AWS resources for creating the Search AWS OpenSearch blue and/or green clusters."
+  workspace_tags    = ["staging", "search-opensearch", "aws"]
   terraform_version = var.terraform_version
   execution_mode    = "remote"
-  working_directory = "/terraform/deployments/elasticsearch-green/"
+  working_directory = "/terraform/deployments/search-opensearch/"
   trigger_patterns = [
-    "/terraform/deployments/elasticsearch-green/**/*",
+    "/terraform/deployments/search-opensearch/**/*",
     "/terraform/variables/staging/common.tfvars",
     "/terraform/variables/variables-common.tf",
-    "/terraform/variables/staging/elasticsearch-green.tfvars",
+    "/terraform/variables/staging/search-opensearch.tfvars",
     "/terraform/shared-modules/s3/**/*",
     "/terraform/shared-modules/opensearch-blue-green-deployment/**/*",
   ]
@@ -72,7 +82,7 @@ module "elasticsearch-green-staging" {
 
   tfvars_files = [
     "staging/common.tfvars",
-    "staging/elasticsearch-green.tfvars"
+    "staging/search-opensearch.tfvars"
   ]
 
   variable_set_ids = [
@@ -80,21 +90,26 @@ module "elasticsearch-green-staging" {
   ]
 }
 
-module "elasticsearch-green-production" {
+moved {
+  from = module.elasticsearch-green-production
+  to   = module.search-opensearch-production
+}
+
+module "search-opensearch-production" {
   source = "github.com/alphagov/terraform-govuk-tfe-workspacer"
 
   organization      = var.organization
-  workspace_name    = "elasticsearch-green-production"
-  workspace_desc    = "This module manages AWS resources for creating an Elasticsearch cluster."
-  workspace_tags    = ["production", "elasticsearch", "aws"]
+  workspace_name    = "search-opensearch-production"
+  workspace_desc    = "This module manages AWS resources for creating the Search AWS OpenSearch blue and/or green clusters."
+  workspace_tags    = ["production", "search-opensearch", "aws"]
   terraform_version = var.terraform_version
   execution_mode    = "remote"
-  working_directory = "/terraform/deployments/elasticsearch-green/"
+  working_directory = "/terraform/deployments/search-opensearch/"
   trigger_patterns = [
-    "/terraform/deployments/elasticsearch-green/**/*",
+    "/terraform/deployments/search-opensearch/**/*",
     "/terraform/variables/production/common.tfvars",
     "/terraform/variables/variables-common.tf",
-    "/terraform/variables/production/elasticsearch-green.tfvars",
+    "/terraform/variables/production/search-opensearch.tfvars",
     "/terraform/shared-modules/s3/**/*",
     "/terraform/shared-modules/opensearch-blue-green-deployment/**/*",
   ]
@@ -113,7 +128,7 @@ module "elasticsearch-green-production" {
 
   tfvars_files = [
     "production/common.tfvars",
-    "production/elasticsearch-green.tfvars"
+    "production/search-opensearch.tfvars"
   ]
 
   variable_set_ids = [
