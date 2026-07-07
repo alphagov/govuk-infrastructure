@@ -1016,7 +1016,6 @@ repos:
 
   govuk-dns-ui:
     visibility: private
-    homepage_url: "https://dns.publishing.service.gov.uk"
 
   govuk-helm-charts:
     can_be_deployed: true
