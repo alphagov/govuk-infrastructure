@@ -64,6 +64,10 @@ data "aws_iam_roles" "readonly" {
   name_regex = "\\..*readonly$"
 }
 
+data "aws_iam_roles" "tempadmin" {
+  name_regex = "\\..*-tempadmin$"
+}
+
 data "aws_iam_roles" "dguengineer" {
   name_regex = "\\..*dguengineer$"
 }

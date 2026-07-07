@@ -190,6 +190,28 @@ module "readonly" {
   depends_on = [kubernetes_namespace_v1.apps, kubernetes_namespace_v1.datagovuk, kubernetes_namespace_v1.licensify]
 }
 
+module "tempadmin" {
+  source = "./modules/access-entry"
+
+  name = "tempadmin"
+
+  cluster_name = local.cluster_name
+
+  aws_iam_role_arns   = data.aws_iam_roles.tempadmin.arns
+  access_policy_arn   = "arn:aws:eks::aws:cluster-access-policy/AmazonEKSClusterAdminPolicy"
+  access_policy_scope = "cluster"
+
+  cluster_role_rules = [
+    {
+      api_groups = ["*"]
+      resources  = ["*"]
+      verbs      = ["*"]
+    }
+  ]
+
+  depends_on = [kubernetes_namespace_v1.apps, kubernetes_namespace_v1.datagovuk, kubernetes_namespace_v1.licensify]
+}
+
 module "dguengineer" {
   source = "./modules/access-entry"
 
