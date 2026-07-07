@@ -52,6 +52,11 @@
             "rangeStrategy": "bump",
             "groupName": "Terraform required_version",
             "minimumReleaseAge": "10 days"
+        },
+        {
+          "matchPackageNames": ["alphagov/govuk-infrastructure"],
+          "matchDepTypes": ["action"],
+          "enabled": false
         }
     ],
     "customManagers": [
