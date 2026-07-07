@@ -11,4 +11,4 @@ jobs:
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
           show-progress: false
-      - uses: alphagov/govuk-infrastructure/.github/actions/actionlint@788b98389ac2003202dc421f4ccd187ad85cda17 # main
+      - uses: alphagov/govuk-infrastructure/.github/actions/actionlint@bbc8def482c8912b9cdeaee5d3e5d1669843a74f # main
