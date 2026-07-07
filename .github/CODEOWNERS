@@ -6,6 +6,7 @@
 /.github/ @alphagov/gov-uk-platform-engineering
 # Terraform code
 /terraform/deployments/ @alphagov/gov-uk-platform-engineering
+/terraform/shared-modules/ @alphagov/gov-uk-platform-engineering
 # Data Engineering
 /terraform/deployments/gcp-gov-graph/ @alphagov/gov-uk-platform-engineering @alphagov/govuk-data-engineering
 /terraform/variables/**/gcp-gov-graph.tfvars @alphagov/gov-uk-platform-engineering @alphagov/govuk-data-engineering
