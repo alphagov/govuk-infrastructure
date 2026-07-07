@@ -1016,6 +1016,7 @@ repos:
 
   govuk-dns-ui:
     visibility: private
+    archived: true
 
   govuk-helm-charts:
     can_be_deployed: true
