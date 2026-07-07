@@ -46,7 +46,7 @@ def register_repository(name, role_arn, delete_first=False, read_only=False):
     payload = {
         "type": "s3",
         "settings": {
-            "bucket": name + '-elasticsearch6-manual-snapshots',
+            "bucket": 'govuk-' + name + '-search-domain-opensearch-snapshots',
             "region": region,
             "role_arn": role_arn,
             "readonly": read_only
@@ -62,15 +62,15 @@ def register_repository(name, role_arn, delete_first=False, read_only=False):
 delete_first = 'DELETE_FIRST' in os.environ
 
 if sys.argv[1] == 'integration':
-    role_arn = 'arn:aws:iam::210287912431:role/green-elasticsearch6-manual-snapshot-role'
+    role_arn = 'arn:aws:iam::210287912431:role/govuk-integration-search-domain-opensearch-snapshot'
     register_repository('govuk-integration', role_arn, delete_first=delete_first)
     register_repository('govuk-staging', role_arn, delete_first=delete_first, read_only=True)
 elif sys.argv[1] == 'staging':
-    role_arn = 'arn:aws:iam::696911096973:role/green-elasticsearch6-manual-snapshot-role'
+    role_arn = 'arn:aws:iam::696911096973:role/govuk-staging-search-domain-opensearch-snapshot'
     register_repository('govuk-staging', role_arn, delete_first=delete_first)
     register_repository('govuk-production', role_arn, delete_first=delete_first, read_only=True)
 elif sys.argv[1] == 'production':
-    role_arn = 'arn:aws:iam::172025368201:role/green-elasticsearch6-manual-snapshot-role'
+    role_arn = 'arn:aws:iam::172025368201:role/govuk-production-search-domain-opensearch-snapshot'
     register_repository('govuk-production', role_arn, delete_first=delete_first)
 else:
     print('expected one of [integration|staging|production]')

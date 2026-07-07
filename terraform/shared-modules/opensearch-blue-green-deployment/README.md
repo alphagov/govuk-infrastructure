@@ -137,7 +137,6 @@ module "opensearch" {
     "production"
   ]
   account_ids_allowed_to_read_domain_snapshots = ["210287912431"]
-  s3_bucket_custom_suffix = "os-snaps"
 
   aws_region = "eu-west-1"
 }

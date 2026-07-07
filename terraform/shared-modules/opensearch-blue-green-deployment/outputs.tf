@@ -14,6 +14,14 @@ output "opensearch_domain_arns" {
   }
 }
 
+output "opensearch_domain_endpoints" {
+  description = "A map of the AWS OpenSearch domain ARNS for the blue and green clusters,  clusters which haven't be launched will be null"
+  value = {
+    blue  = var.launch_blue_domain ? module.blue_domain[0].opensearch_endpoint : null
+    green = var.launch_green_domain ? module.green_domain[0].opensearch_endpoint : null
+  }
+}
+
 output "opensearch_cname" {
   description = "The fully qualified domain name of the route53 record which points to the live OpenSearch domain"
   value       = aws_route53_record.service_record.fqdn
@@ -21,10 +29,20 @@ output "opensearch_cname" {
 
 output "s3_snapshot_bucket_name" {
   description = "Name of the S3 bucket used for snapshots"
-  value       = module.old_snapshot_bucket.name
+  value       = var.create_original_snapshot_bucket ? module.snapshot_bucket[0].name : null
 }
 
 output "s3_snapshot_bucket_arn" {
+  description = "ARN of the S3 bucket used for snapshots"
+  value       = var.create_original_snapshot_bucket ? module.snapshot_bucket[0].arn : null
+}
+
+output "old_s3_snapshot_bucket_name" {
+  description = "Name of the S3 bucket used for snapshots"
+  value       = module.old_snapshot_bucket.name
+}
+
+output "old_s3_snapshot_bucket_arn" {
   description = "ARN of the S3 bucket used for snapshots"
   value       = module.old_snapshot_bucket.arn
 }

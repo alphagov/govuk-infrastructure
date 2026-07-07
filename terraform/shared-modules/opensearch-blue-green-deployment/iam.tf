@@ -2,12 +2,17 @@ locals {
   read_snapshot_bucket_arns = sort(
     distinct(
       concat(
+        var.create_original_snapshot_bucket ? [module.snapshot_bucket[0].arn] : [],
+        var.create_original_snapshot_bucket ? [for environment in var.read_snapshots_from_environments : replace(module.snapshot_bucket[0].arn, var.govuk_environment, environment)] : [],
         [module.old_snapshot_bucket.arn],
         [for environment in var.read_snapshots_from_environments : replace(module.old_snapshot_bucket.arn, var.govuk_environment, environment)]
       )
     )
   )
-  write_snapshot_bucket_arn = module.old_snapshot_bucket.arn
+  write_snapshot_bucket_arns = concat(
+    var.create_original_snapshot_bucket ? [module.snapshot_bucket[0].arn] : [],
+    [module.old_snapshot_bucket.arn]
+  )
 }
 
 resource "aws_iam_role" "opensearch_snapshot" {
@@ -69,7 +74,7 @@ data "aws_iam_policy_document" "opensearch_snapshot" {
       "s3:DeleteObject",
     ]
 
-    resources = ["${local.write_snapshot_bucket_arn}/*"]
+    resources = formatlist("%s/*", local.write_snapshot_bucket_arns)
   }
 }
 

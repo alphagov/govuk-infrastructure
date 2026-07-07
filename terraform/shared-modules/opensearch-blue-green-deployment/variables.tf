@@ -17,9 +17,9 @@ variable "opensearch_domain_name" {
     // These conditions are because the name needs to be valid within an S3 bucket name 
     condition = (
       // Length of domain < Max length of s3 bucket name - environment name legnth - s3 bucket name template
-      length(var.opensearch_domain_name) < (63 - length(var.govuk_environment) - length("govuk---${local.bucket_suffix}"))
+      length(var.opensearch_domain_name) < (63 - length(var.govuk_environment) - length("govuk---opensearch-snapshots"))
     )
-    error_message = "var.opensearch_domain_name must not be too long, when interpolated in 'govuk-<env>-<opensearch_domain>-${local.bucket_suffix}' the entire string must be 63 or fewer characters."
+    error_message = "var.opensearch_domain_name must not be too long, when interpolated in 'govuk-<env>-<opensearch_domain>-opensearch-snapshots' the entire string must be 63 or fewer characters."
   }
 }
 
@@ -190,13 +190,6 @@ variable "account_ids_allowed_to_read_domain_snapshots" {
   }
 }
 
-variable "s3_bucket_custom_suffix" {
-  type        = string
-  description = "Custom s3 snapshot bucket suffix, will override the default of 'opensearch-snapshots'"
-  default     = null
-  nullable    = true
-}
-
 variable "use_aws_elasticsearch_domain_resource_for_green_cluster" {
   type        = bool
   description = "Use an aws_elasticsearch_domain resource instead of aws_opensearch_domain to allow search ES cluster to be imported"
@@ -329,5 +322,18 @@ variable "override_old_snapshot_bucket_name" {
       var.override_old_snapshot_bucket_name != null && var.opensearch_domain_name == "search-domain" && var.green_cluster_options != null && var.green_cluster_options.engine_version == "6.8"
     )
     error_message = "This option must ONLY be set when importing the original Search Elasticsearch 6 cluster."
+  }
+}
+
+variable "create_original_snapshot_bucket" {
+  type        = bool
+  description = "Temporary: Create the correctly named snapshot bucket"
+  deprecated  = "Do not set this option except when importing the existing Search ElasticSearch cluster"
+  default     = false
+  nullable    = false
+
+  validation {
+    condition     = var.create_original_snapshot_bucket == false || var.opensearch_domain_name == "search-domain"
+    error_message = "This option must ONLY be set when importing the original Search Elasticsearch 6 cluster"
   }
 }
