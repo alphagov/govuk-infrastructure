@@ -139,12 +139,16 @@ After the repository is created, you will need to manually trigger a new run and
 
 ## Archiving repositories
 
-To archive a repository, you will need to raise **two** Pull Requests to update the repository's configuration in the [repos.yml](/terraform/deployments/github/repos.yml) file.
+To archive a repository, you will need to raise **two** Pull Requests to update the repository's configuration in the 
+[repos.yml](/terraform/deployments/github/repos.yml) file. It is important to do this in two steps, because Terraform will destroy a number of resources 
+when some properties are removed from configuration. If you do this in one step, Terraform will archive the repository
+(making it readonly) before it can delete the other resources, which depends on the repository being writeable.
 
 1. Remove all properties
 
 Remove all properties such as `required_status_checks` or `homepage_url`.
-You may want to keep the `visibility` property if you want to create a private or internal archive.
+If the repository is internal or private, you must keep the `visibility` property, otherwise the visibility will default
+to `public`.
 
 ```diff
 - my-repo:
@@ -161,7 +165,7 @@ You may want to keep the `visibility` property if you want to create a private o
 
 Raise a Pull Request and review the Terraform plan carefully. Once approved, merge the PR. Remember to apply the Terraform changes after reviewing the plan output again in [Terraform Cloud GitHub workspace](https://app.terraform.io/app/govuk/workspaces/GitHub/runs).
 
-2. Add the `archived: true` property
+2. Add the `archived: true` property, and preserve the `visibility` property if the repository is internal or private.
 
 ```diff
 -  my-repo: {}
