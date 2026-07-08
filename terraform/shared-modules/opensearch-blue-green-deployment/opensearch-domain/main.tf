@@ -71,7 +71,7 @@ resource "aws_opensearch_domain" "opensearch" {
   }
 
   dynamic "log_publishing_options" {
-    for_each = var.disable_audit_logs ? [] : [true]
+    for_each = local.audit_logs_enabled ? [true] : []
 
     content {
       cloudwatch_log_group_arn = aws_cloudwatch_log_group.audit_logs[0].arn

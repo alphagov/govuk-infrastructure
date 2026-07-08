@@ -56,7 +56,6 @@ green_cluster_options = {
   // WARNING: All the following options are purely to allow importing the existing ES6 cluster,
   //          when creating the next blue deployment remove these options and use the defaults
   prefix_colour_instead_of_suffix = true
-  disable_audit_logs              = true
   log_group_name_overrides = {
     error_logs       = "es6-application-logs"
     index_slow_logs  = "es6-index-logs"
