@@ -9,11 +9,11 @@ blue_cluster_options = {
 
   dedicated_master = {
     instance_count = 3
-    instance_type  = "c7i.xlarge.elasticsearch"
+    instance_type  = "c7i.xlarge.search"
   }
 
   instance_count = 3
-  instance_type  = "r7i.xlarge.elasticsearch"
+  instance_type  = "r7i.xlarge.search"
 
   zone_awareness_enabled = true
 
