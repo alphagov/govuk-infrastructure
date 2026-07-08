@@ -37,9 +37,10 @@ variable "blue_cluster_options" {
       instance_count = number
       instance_type  = string
     }))
-    instance_count         = number
-    instance_type          = string
-    zone_awareness_enabled = optional(bool, true)
+    instance_count                = number
+    instance_type                 = string
+    zone_awareness_enabled        = optional(bool, true)
+    multi_az_with_standby_enabled = optional(bool, true)
     advanced_security_options = optional(object({
       anonymous_auth_enabled         = optional(bool, false)
       internal_user_database_enabled = optional(bool, true)
@@ -74,9 +75,10 @@ variable "green_cluster_options" {
       instance_count = number
       instance_type  = string
     }))
-    instance_count         = number
-    instance_type          = string
-    zone_awareness_enabled = optional(bool, true)
+    instance_count                = number
+    instance_type                 = string
+    zone_awareness_enabled        = optional(bool, true)
+    multi_az_with_standby_enabled = optional(bool, true)
     advanced_security_options = optional(object({
       anonymous_auth_enabled         = optional(bool, false)
       internal_user_database_enabled = optional(bool, true)

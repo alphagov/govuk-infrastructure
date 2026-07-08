@@ -15,7 +15,8 @@ blue_cluster_options = {
   instance_count = 3
   instance_type  = "r7i.xlarge.search"
 
-  zone_awareness_enabled = true
+  zone_awareness_enabled        = true
+  multi_az_with_standby_enabled = false
 
   advanced_security_options = null
 
@@ -41,7 +42,8 @@ green_cluster_options = {
   instance_count = 3
   instance_type  = "r7i.xlarge.elasticsearch"
 
-  zone_awareness_enabled = true
+  zone_awareness_enabled        = true
+  multi_az_with_standby_enabled = false
 
   advanced_security_options = null
 
