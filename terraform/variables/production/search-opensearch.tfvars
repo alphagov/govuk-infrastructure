@@ -18,7 +18,8 @@ green_cluster_options = {
   instance_type  = "r7i.4xlarge.elasticsearch"
   instance_count = 3
 
-  zone_awareness_enabled = true
+  zone_awareness_enabled        = true
+  multi_az_with_standby_enabled = false
 
   advanced_security_options = null
 
