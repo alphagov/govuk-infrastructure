@@ -1,3 +1,7 @@
+locals {
+  audit_logs_enabled = var.advanced_security_options != null
+}
+
 resource "aws_cloudwatch_log_group" "index_slow_logs" {
   name              = "${var.log_group_prefix_override != null ? var.log_group_prefix_override : "/aws/opensearch/${var.opensearch_domain_name}"}/${try(var.log_group_name_overrides.index_slow_logs, "index-slow")}"
   retention_in_days = var.log_retention_in_days
@@ -14,7 +18,7 @@ resource "aws_cloudwatch_log_group" "error_logs" {
 }
 
 resource "aws_cloudwatch_log_group" "audit_logs" {
-  count = var.disable_audit_logs ? 0 : 1
+  count = local.audit_logs_enabled ? 1 : 0
 
   name              = "${var.log_group_prefix_override != null ? var.log_group_prefix_override : "/aws/opensearch/${var.opensearch_domain_name}"}/audit-logs"
   retention_in_days = var.log_retention_in_days
@@ -46,7 +50,7 @@ data "aws_iam_policy_document" "opensearch_logs" {
         "${aws_cloudwatch_log_group.search_slow_logs.arn}:*",
         "${aws_cloudwatch_log_group.error_logs.arn}:*",
       ],
-      var.disable_audit_logs ? [] : ["${aws_cloudwatch_log_group.audit_logs[0].arn}:*"]
+      local.audit_logs_enabled ? ["${aws_cloudwatch_log_group.audit_logs[0].arn}:*"] : []
     )
 
     condition {

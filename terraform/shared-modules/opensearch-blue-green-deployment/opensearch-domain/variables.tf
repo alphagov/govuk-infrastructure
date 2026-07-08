@@ -145,13 +145,6 @@ variable "subnet_ids" {
 }
 
 // All options from here down are temporary to enable importing the existing ElasticSearch opensearch cluster
-variable "disable_audit_logs" {
-  type        = bool
-  description = "Disable sending audit logs to CloudWatch"
-  default     = false
-  nullable    = false
-}
-
 variable "log_group_name_overrides" {
   type = object({
     index_slow_logs  = string
