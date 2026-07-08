@@ -1,18 +1,23 @@
-module "opensearch-integration" {
+moved {
+  from = module.opensearch-integration
+  to   = module.chat-opensearch-integration
+}
+
+module "chat-opensearch-integration" {
   source = "github.com/alphagov/terraform-govuk-tfe-workspacer"
 
   organization      = var.organization
-  workspace_name    = "opensearch-integration"
-  workspace_desc    = "This module manages AWS resources for creating OpenSearch cluster."
-  workspace_tags    = ["integration", "opensearch", "aws"]
+  workspace_name    = "chat-opensearch-integration"
+  workspace_desc    = "This module manages AWS resources for creating the chat OpenSearch cluster."
+  workspace_tags    = ["integration", "chat-opensearch", "aws"]
   terraform_version = var.terraform_version
   execution_mode    = "remote"
-  working_directory = "/terraform/deployments/opensearch/"
+  working_directory = "/terraform/deployments/chat-opensearch/"
   trigger_patterns = [
-    "/terraform/deployments/opensearch/**/*",
+    "/terraform/deployments/chat-opensearch/**/*",
     "/terraform/variables/integration/common.tfvars",
     "/terraform/variables/variables-common.tf",
-    "/terraform/variables/integration/opensearch.tfvars",
+    "/terraform/variables/integration/chat-opensearch.tfvars",
     "/terraform/shared-modules/s3/**/*",
   ]
 
@@ -30,7 +35,7 @@ module "opensearch-integration" {
 
   tfvars_files = [
     "integration/common.tfvars",
-    "integration/opensearch.tfvars"
+    "integration/chat-opensearch.tfvars"
   ]
 
   variable_set_ids = [
@@ -38,21 +43,26 @@ module "opensearch-integration" {
   ]
 }
 
-module "opensearch-staging" {
+moved {
+  from = module.opensearch-staging
+  to   = module.chat-opensearch-staging
+}
+
+module "chat-opensearch-staging" {
   source = "github.com/alphagov/terraform-govuk-tfe-workspacer"
 
   organization      = var.organization
-  workspace_name    = "opensearch-staging"
-  workspace_desc    = "This module manages AWS resources for creating OpenSearch cluster."
-  workspace_tags    = ["staging", "opensearch", "aws"]
+  workspace_name    = "chat-opensearch-staging"
+  workspace_desc    = "This module manages AWS resources for creating the chat OpenSearch cluster."
+  workspace_tags    = ["staging", "chat-opensearch", "aws"]
   terraform_version = var.terraform_version
   execution_mode    = "remote"
-  working_directory = "/terraform/deployments/opensearch/"
+  working_directory = "/terraform/deployments/chat-opensearch/"
   trigger_patterns = [
-    "/terraform/deployments/opensearch/**/*",
+    "/terraform/deployments/chat-opensearch/**/*",
     "/terraform/variables/staging/common.tfvars",
     "/terraform/variables/variables-common.tf",
-    "/terraform/variables/staging/opensearch.tfvars",
+    "/terraform/variables/staging/chat-opensearch.tfvars",
     "/terraform/shared-modules/s3/**/*",
   ]
 
@@ -69,7 +79,7 @@ module "opensearch-staging" {
 
   tfvars_files = [
     "staging/common.tfvars",
-    "staging/opensearch.tfvars"
+    "staging/chat-opensearch.tfvars"
   ]
 
   variable_set_ids = [
@@ -77,21 +87,26 @@ module "opensearch-staging" {
   ]
 }
 
-module "opensearch-production" {
+moved {
+  from = module.opensearch-production
+  to   = module.chat-opensearch-production
+}
+
+module "chat-opensearch-production" {
   source = "github.com/alphagov/terraform-govuk-tfe-workspacer"
 
   organization      = var.organization
-  workspace_name    = "opensearch-production"
-  workspace_desc    = "This module manages AWS resources for creating OpenSearch cluster."
-  workspace_tags    = ["production", "opensearch", "aws"]
+  workspace_name    = "chat-opensearch-production"
+  workspace_desc    = "This module manages AWS resources for creating the chat OpenSearch cluster."
+  workspace_tags    = ["production", "chat-opensearch", "aws"]
   terraform_version = var.terraform_version
   execution_mode    = "remote"
-  working_directory = "/terraform/deployments/opensearch/"
+  working_directory = "/terraform/deployments/chat-opensearch/"
   trigger_patterns = [
-    "/terraform/deployments/opensearch/**/*",
+    "/terraform/deployments/chat-opensearch/**/*",
     "/terraform/variables/production/common.tfvars",
     "/terraform/variables/variables-common.tf",
-    "/terraform/variables/production/opensearch.tfvars",
+    "/terraform/variables/production/chat-opensearch.tfvars",
     "/terraform/shared-modules/s3/**/*",
   ]
 
@@ -108,7 +123,7 @@ module "opensearch-production" {
 
   tfvars_files = [
     "production/common.tfvars",
-    "production/opensearch.tfvars"
+    "production/chat-opensearch.tfvars"
   ]
 
   variable_set_ids = [
