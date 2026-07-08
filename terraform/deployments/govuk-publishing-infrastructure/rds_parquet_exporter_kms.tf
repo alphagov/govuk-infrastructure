@@ -118,4 +118,24 @@ data "aws_iam_policy_document" "rds_parquet_exporter_kms" {
 
     resources = ["*"]
   }
+
+  dynamic "statement" {
+    for_each = var.create_google_s3_mirror_role ? [1] : []
+
+    content {
+      sid = "AllowGCPTransferRoleToDecrypt"
+
+      principals {
+        type        = "AWS"
+        identifiers = [aws_iam_role.google-s3-mirror[0].arn]
+      }
+
+      actions = [
+        "kms:Decrypt",
+        "kms:DescribeKey"
+      ]
+
+      resources = ["*"]
+    }
+  }
 }
