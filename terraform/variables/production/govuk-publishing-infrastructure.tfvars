@@ -74,7 +74,6 @@ subdomain_dns_records = [
   { type = "CNAME", name = "_c24a8e44c6c094be91c86242bb551b8d", ttl = 3600, value = ["7fdbbdd49b55706b95c54bb18f11eeb2.efaa3bc1d00edbcd399b3e69676cfee3.21fc29fd6ec2b0dfe2d5.comodoca.com."] },
   { type = "CNAME", name = "docs.data-community", ttl = 3600, value = ["alphagov.github.io."] },
   { type = "CNAME", name = "_f0007b153fe893d93563eb3a1aa8f957.docs.data-community", ttl = 86400, value = ["_5128066b455eb200b84c908386353e7c.dxhlbxbsbv.acm-validations.aws."] },
-  { type = "CNAME", name = "dns", ttl = 300, value = ["floating-blueberry-0v2fnhwrxrukdrmxzh1bio7m.herokudns.com."] },
   { type = "TXT", name = "_github-pages-challenge-alphagov.design-guide", ttl = 300, value = ["5560788dce22fe8b93575626647f77"] }, // pragma: allowlist secret
   { type = "CNAME", name = "design-guide", ttl = 300, value = ["alphagov.github.io."] },
   { type = "TXT", name = "_github-pages-challenge-alphagov.guidance", ttl = 300, value = ["ccb9432a9fba52e3163b5fbb73d5e7"] }, // pragma: allowlist secret
