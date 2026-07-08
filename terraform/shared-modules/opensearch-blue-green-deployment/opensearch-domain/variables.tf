@@ -42,6 +42,13 @@ variable "dedicated_master" {
   })
   description = "Dedicated master configuration, leave null to disable dedicated master"
   default     = null
+
+  validation {
+    condition = var.dedicated_master == null || endswith(var.dedicated_master.instance_type, ".search") || (
+      endswith(var.dedicated_master.instance_type, ".elasticsearch") && var.opensearch_domain_name == "green-search-domain" && var.engine_version == "6.8"
+    )
+    error_message = "var.dedicated_master.instance_type must end in .search, .elasticsearch has been removed from the AWS API."
+  }
 }
 
 variable "instance_count" {
@@ -54,6 +61,13 @@ variable "instance_type" {
   type        = string
   description = "Instance type of the OpenSearch nodes"
   nullable    = false
+
+  validation {
+    condition = endswith(var.instance_type, ".search") || (
+      endswith(var.instance_type, ".elasticsearch") && var.opensearch_domain_name == "green-search-domain" && var.engine_version == "6.8"
+    )
+    error_message = "var.instance_type must end in .search, .elasticsearch has been removed from the AWS API."
+  }
 }
 
 variable "zone_awareness_enabled" {
