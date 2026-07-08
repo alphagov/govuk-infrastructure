@@ -12,15 +12,17 @@ module "rds_parquet_exporter_job_starter_iam_role" {
   description          = "Role for rds-parquet-exporter job to initiate Export. Corresponds to ${local.rds_parquet_exporter_service_account_name} k8s ServiceAccount."
   max_session_duration = 28800
 
-  policies = {
-    "${aws_iam_policy.rds_parquet_exporter_job_starter.name}" = aws_iam_policy.rds_parquet_exporter_job_starter.arn
-  }
   oidc_providers = {
     main = {
       provider_arn               = data.tfe_outputs.cluster_infrastructure.nonsensitive_values.cluster_oidc_provider_arn
       namespace_service_accounts = ["apps:${local.rds_parquet_exporter_service_account_name}"]
     }
   }
+}
+
+resource "aws_iam_role_policy_attachment" "rds_parquet_exporter_job_starter" {
+  role       = module.rds_parquet_exporter_job_starter_iam_role.name
+  policy_arn = aws_iam_policy.rds_parquet_exporter_job_starter.arn
 }
 
 data "aws_iam_policy_document" "rds_parquet_exporter_job_starter" {
@@ -57,6 +59,11 @@ resource "aws_iam_role" "rds_parquet_exporter_export_task" {
   description          = "Role for RDS to use when exporting parquet files to S3"
   assume_role_policy   = data.aws_iam_policy_document.allow_rds_exporter_access.json
   max_session_duration = 28800
+}
+
+resource "aws_iam_role_policy_attachment" "rds_parquet_exporter_export_task" {
+  role       = aws_iam_role.rds_parquet_exporter_export_task.name
+  policy_arn = aws_iam_policy.rds_parquet_exporter_export_task.arn
 }
 
 data "aws_iam_policy_document" "rds_parquet_exporter_export_task" {
