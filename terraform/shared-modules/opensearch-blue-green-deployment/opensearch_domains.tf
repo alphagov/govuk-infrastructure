@@ -24,7 +24,7 @@ module "blue_domain" {
   instance_count                = var.blue_cluster_options.instance_count
   instance_type                 = var.blue_cluster_options.instance_type
   zone_awareness_enabled        = var.blue_cluster_options.zone_awareness_enabled
-  multi_az_with_standby_enabled = !startswith(var.blue_cluster_options.instance_type, "t")
+  multi_az_with_standby_enabled = var.blue_cluster_options.multi_az_with_standby_enabled
   dedicated_master              = var.blue_cluster_options.dedicated_master
   endpoint_tls_security_policy  = var.blue_cluster_options.endpoint_tls_security_policy
   ebs_options                   = var.blue_cluster_options.ebs_options
@@ -55,7 +55,7 @@ module "green_domain" {
   instance_count                = var.green_cluster_options.instance_count
   instance_type                 = var.green_cluster_options.instance_type
   zone_awareness_enabled        = var.green_cluster_options.zone_awareness_enabled
-  multi_az_with_standby_enabled = !startswith(var.green_cluster_options.instance_type, "t")
+  multi_az_with_standby_enabled = var.green_cluster_options.multi_az_with_standby_enabled
   dedicated_master              = var.green_cluster_options.dedicated_master
   endpoint_tls_security_policy  = var.green_cluster_options.endpoint_tls_security_policy
   ebs_options                   = var.green_cluster_options.ebs_options

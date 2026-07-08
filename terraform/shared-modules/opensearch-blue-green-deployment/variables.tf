@@ -56,9 +56,10 @@ variable "blue_cluster_options" {
       instance_count = number
       instance_type  = string
     }))
-    instance_count         = number
-    instance_type          = string
-    zone_awareness_enabled = optional(bool, true)
+    instance_count                = number
+    instance_type                 = string
+    zone_awareness_enabled        = optional(bool, true)
+    multi_az_with_standby_enabled = optional(bool, true)
     advanced_security_options = optional(object({
       anonymous_auth_enabled         = optional(bool, false)
       internal_user_database_enabled = optional(bool, true)
@@ -83,6 +84,21 @@ variable "blue_cluster_options" {
     condition     = var.blue_cluster_options == null || var.blue_cluster_options.zone_awareness_enabled == false || var.blue_cluster_options.instance_count >= 3
     error_message = "If var.blue_cluster_options.zone_awareness_enabled is true then var.blue_cluster_options.instance_count must be 3 or more."
   }
+
+  validation {
+    condition = var.blue_cluster_options == null || var.blue_cluster_options.multi_az_with_standby_enabled == false || (
+      !startswith(var.blue_cluster_options.instance_type, "t")
+      && var.blue_cluster_options.engine == "OpenSearch"
+      && (
+        tonumber(split(".", var.blue_cluster_options.engine_version)[0]) > 1
+        || (
+          tonumber(split(".", var.blue_cluster_options.engine_version)[0]) == 1
+          && tonumber(split(".", var.blue_cluster_options.engine_version)[1]) >= 3
+        )
+      )
+    )
+    error_message = "var.blue_cluster_options.multi_az_with_standby_enabled can only be enabled with non-burstable instance types (i.e. not instance types that start with t (e.g. t4g)), and only on OpenSearch >= 1.3"
+  }
 }
 
 variable "launch_green_domain" {
@@ -99,9 +115,10 @@ variable "green_cluster_options" {
       instance_count = number
       instance_type  = string
     }))
-    instance_count         = number
-    instance_type          = string
-    zone_awareness_enabled = optional(bool, true)
+    instance_count                = number
+    instance_type                 = string
+    zone_awareness_enabled        = optional(bool, true)
+    multi_az_with_standby_enabled = optional(bool, true)
     advanced_security_options = optional(object({
       anonymous_auth_enabled         = optional(bool, false)
       internal_user_database_enabled = optional(bool, true)
@@ -136,6 +153,21 @@ variable "green_cluster_options" {
   validation {
     condition     = var.green_cluster_options == null || var.green_cluster_options.zone_awareness_enabled == false || var.green_cluster_options.instance_count >= 3
     error_message = "If var.green_cluster_options.zone_awareness_enabled is true then var.green_cluster_options.instance_count must be 3 or more."
+  }
+
+  validation {
+    condition = var.green_cluster_options == null || var.green_cluster_options.multi_az_with_standby_enabled == false || (
+      !startswith(var.green_cluster_options.instance_type, "t")
+      && var.green_cluster_options.engine == "OpenSearch"
+      && (
+        tonumber(split(".", var.green_cluster_options.engine_version)[0]) > 1
+        || (
+          tonumber(split(".", var.green_cluster_options.engine_version)[0]) == 1
+          && tonumber(split(".", var.green_cluster_options.engine_version)[1]) >= 3
+        )
+      )
+    )
+    error_message = "var.green_cluster_options.multi_az_with_standby_enabled can only be enabled with non-burstable instance types (i.e. not instance types that start with t (e.g. t4g)), and only on OpenSearch >= 1.3"
   }
 }
 
