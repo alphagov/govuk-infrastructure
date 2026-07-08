@@ -12,6 +12,7 @@ blue_cluster_options = {
     volume_type = "gp3"
     throughput  = 250
   }
+  multi_az_with_standby_enabled = false
 }
 
 aws_region = "eu-west-1"
