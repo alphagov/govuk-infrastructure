@@ -43,7 +43,7 @@ data "aws_iam_policy_document" "rds_parquet_exporter_job_starter" {
     condition {
       test     = "StringEquals"
       variable = "iam:PassedToService"
-      values   = ["export.rds.amazonaws.com"]
+      values   = ["export.rds.amazonaws.com", "rds.amazonaws.com"]
     }
   }
 }
