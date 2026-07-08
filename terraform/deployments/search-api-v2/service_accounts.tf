@@ -68,6 +68,17 @@ resource "google_service_account" "search_admin" {
   description  = "Service account to provide access to the search-admin Rails app"
 }
 
+resource "google_service_account_iam_binding" "search_admin_sa_token_creator_iam" {
+  # Only create this resource if the environment is integration.
+  count = terraform.workspace == "search-api-v2-integration" ? 1 : 0
+
+  service_account_id = google_service_account.search_admin.id
+  role               = "roles/iam.serviceAccountTokenCreator"
+  members = [
+    "group:govuk-gcp-access-integration@digital.cabinet-office.gov.uk"
+  ]
+}
+
 resource "google_service_account_key" "search_admin" {
   service_account_id = google_service_account.search_admin.id
 }
