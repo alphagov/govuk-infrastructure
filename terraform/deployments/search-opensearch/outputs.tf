@@ -47,3 +47,8 @@ output "secrets_manager_secret_name" {
   value       = module.opensearch.secrets_manager_secret_name
   description = "The name of the AWS Secrets Manager Secret which holds the URL, and if advanced security is enabled the master username & password"
 }
+
+output "vpc_endpoints" {
+  value       = module.opensearch.vpc_endpoints
+  description = "The VPC endpoints of blue and green clusters, or null if they have not been created"
+}

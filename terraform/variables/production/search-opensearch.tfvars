@@ -31,6 +31,9 @@ green_cluster_options = {
     iops        = 3000
   }
 
+  // Note: This is only required if you are going to use remote reindex with this cluster as the source (aka the 'remote')
+  create_vpc_endpoint = false
+
   // WARNING: All the following options are purely to allow importing the existing ES6 cluster,
   //          when creating the next blue deployment remove these options and use the defaults
   prefix_colour_instead_of_suffix = true
