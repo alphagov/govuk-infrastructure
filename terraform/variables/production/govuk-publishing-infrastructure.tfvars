@@ -93,3 +93,5 @@ amazonmq_govuk_chat_retry_message_ttl = 300000
 frontend_memcached_node_type = "cache.r6g.large"
 
 shared_documentdb_identifier_suffix = "-1"
+
+create_google_s3_mirror_role = false

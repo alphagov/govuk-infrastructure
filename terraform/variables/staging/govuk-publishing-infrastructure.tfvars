@@ -75,3 +75,5 @@ licensify_documentdb_clone_instance_types = {
   "1" = "db.r8g.large"
   "2" = "db.r8g.large"
 }
+
+create_google_s3_mirror_role = true
