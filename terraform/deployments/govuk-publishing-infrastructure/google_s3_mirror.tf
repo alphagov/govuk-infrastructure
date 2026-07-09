@@ -1,6 +1,6 @@
 resource "aws_iam_role" "google-s3-mirror" {
   count = var.create_google_s3_mirror_role ? 1 : 0
-  name  = "google-s3-mirror"
+  name  = "google-s3-mirror" # This is an historic role name and doesn't contain an environment name because it's in use elsewhere
 
   assume_role_policy = jsonencode({
     "Version" : "2012-10-17",
@@ -51,4 +51,25 @@ data "aws_iam_policy_document" "google_s3_mirror" {
       "arn:aws:s3:::govuk-${var.govuk_environment}-database-backups/*",
     ]
   }
+}
+
+import {
+  for_each = var.create_google_s3_mirror_role ? [1] : []
+
+  to = aws_iam_role.google-s3-mirror[0]
+  id = "google-s3-mirror"
+}
+
+import {
+  for_each = var.create_google_s3_mirror_role ? [1] : []
+
+  to = aws_iam_policy.google-s3-mirror[0]
+  id = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:policy/google-s3-mirror"
+}
+
+import {
+  for_each = var.create_google_s3_mirror_role ? [1] : []
+
+  to = aws_iam_role_policy_attachment.google-s3-mirror-access[0]
+  id = "google-s3-mirror/arn:aws:iam::${data.aws_caller_identity.current.account_id}:policy/google-s3-mirror"
 }
