@@ -254,3 +254,10 @@ variable "create_licensify_documentdb_clone" {
   default     = false
   description = "Whether to create a v5 clone of the Licensify DocumentDB cluster."
 }
+
+
+variable "create_google_s3_mirror_role" {
+  type        = bool
+  default     = false
+  description = "Whether to create an IAM role for GCP to mirror a number of S3 buckets to Google Cloud Storage"
+}
