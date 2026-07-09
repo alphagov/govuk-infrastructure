@@ -114,3 +114,12 @@ data "aws_iam_policy_document" "opensearch_domain" {
     // resources = ["${aws_opensearch_domain.opensearch.arn}/*"]
   }
 }
+
+resource "aws_opensearch_vpc_endpoint" "opensearch" {
+  count      = var.create_vpc_endpoint && !var.use_aws_elasticsearch_domain_resource ? 1 : 0
+  domain_arn = aws_opensearch_domain.opensearch[0].arn
+  vpc_options {
+    subnet_ids         = var.subnet_ids
+    security_group_ids = var.security_group_ids
+  }
+}
