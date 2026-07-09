@@ -18,6 +18,7 @@
 | <a name="input_opensearch_domain_name"></a> [opensearch\_domain\_name](#input\_opensearch\_domain\_name) | Name for this opensearch domain | `string` | n/a | yes |
 | <a name="input_security_group_ids"></a> [security\_group\_ids](#input\_security\_group\_ids) | A list of AWS Security Group IDs to attach to the domain | `list(string)` | n/a | yes |
 | <a name="input_subnet_ids"></a> [subnet\_ids](#input\_subnet\_ids) | A list of AWS VPC Subnet IDs in which to deploy the OpenSearch nodes | `list(string)` | n/a | yes |
+| <a name="input_create_vpc_endpoint"></a> [create\_vpc\_endpoint](#input\_create\_vpc\_endpoint) | Create a VPC endpoint for connection to this domain (needed for remote reindex) | `bool` | `false` | no |
 | <a name="input_dedicated_master"></a> [dedicated\_master](#input\_dedicated\_master) | Dedicated master configuration, leave null to disable dedicated master | <pre>object({<br/>    instance_count = number<br/>    instance_type  = string<br/>  })</pre> | `null` | no |
 | <a name="input_disable_enforced_https"></a> [disable\_enforced\_https](#input\_disable\_enforced\_https) | Disable enforced https connections to allow search ES cluster to be imported. | `bool` | `false` | no |
 | <a name="input_disable_node_to_node_encryption"></a> [disable\_node\_to\_node\_encryption](#input\_disable\_node\_to\_node\_encryption) | Disable node to node encryption to allow search ES cluster to be imported. | `bool` | `false` | no |
@@ -40,4 +41,5 @@
 |------|-------------|
 | <a name="output_opensearch_domain_arn"></a> [opensearch\_domain\_arn](#output\_opensearch\_domain\_arn) | n/a |
 | <a name="output_opensearch_endpoint"></a> [opensearch\_endpoint](#output\_opensearch\_endpoint) | n/a |
+| <a name="output_vpc_endpoint"></a> [vpc\_endpoint](#output\_vpc\_endpoint) | n/a |
 <!-- END_TF_DOCS -->
