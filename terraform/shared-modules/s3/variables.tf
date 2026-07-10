@@ -165,7 +165,7 @@ variable "replication_config" {
         bucket        = string
         storage_class = string
         account       = optional(string)
-        access_conntrol_translation = optional(object({
+        access_control_translation = optional(object({
           owner = string
         }))
       })

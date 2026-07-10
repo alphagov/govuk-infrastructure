@@ -237,10 +237,10 @@ resource "aws_s3_bucket_replication_configuration" "this" {
       destination {
         bucket        = rule.value.destination.bucket
         storage_class = rule.value.destination.storage_class
-        account       = rule.value.account
+        account       = rule.value.destination.account
 
         dynamic "access_control_translation" {
-          for_each = rule.value.access_control_translation == null ? [] : [rule.value.access_control_translation]
+          for_each = rule.value.destination.access_control_translation == null ? [] : [rule.value.destination.access_control_translation]
 
           content {
             owner = access_control_translation.value.owner
@@ -249,7 +249,7 @@ resource "aws_s3_bucket_replication_configuration" "this" {
       }
 
       dynamic "filter" {
-        for_each = rule.value.filter == null ? [] : rule.value.filter
+        for_each = rule.value.filter == null ? [] : [rule.value.filter]
 
         content {
           prefix = filter.value.prefix
