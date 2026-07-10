@@ -237,6 +237,48 @@ resource "aws_s3_bucket_replication_configuration" "this" {
       destination {
         bucket        = rule.value.destination.bucket
         storage_class = rule.value.destination.storage_class
+        account       = rule.value.account
+
+        dynamic "access_control_translation" {
+          for_each = rule.value.access_control_translation == null ? [] : [rule.value.access_control_translation]
+
+          content {
+            owner = access_control_translation.value.owner
+          }
+        }
+      }
+
+      dynamic "filter" {
+        for_each = rule.value.filter == null ? [] : rule.value.filter
+
+        content {
+          prefix = filter.value.prefix
+
+          dynamic "and" {
+            for_each = filter.value.and == null ? [] : [filter.value.and]
+            content {
+              prefix = and.value.prefix
+              tags   = and.value.tags
+            }
+          }
+
+          dynamic "tag" {
+            for_each = filter.value.tag == null ? [] : [filter.value.tag]
+
+            content {
+              key   = tag.value.key
+              value = tag.value.value
+            }
+          }
+        }
+      }
+
+      dynamic "delete_marker_replication" {
+        for_each = rule.value.delete_marker_replication == null ? [] : [rule.value.delete_marker_replication]
+
+        content {
+          status = delete_marker_replication.value.status
+        }
       }
     }
   }

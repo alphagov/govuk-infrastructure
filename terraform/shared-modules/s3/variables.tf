@@ -164,7 +164,25 @@ variable "replication_config" {
       destination = object({
         bucket        = string
         storage_class = string
+        account       = optional(string)
+        access_conntrol_translation = optional(object({
+          owner = string
+        }))
       })
+      filter = optional(object({
+        and = optional(object({
+          prefix = optional(string)
+          tags   = optional(map(string))
+        }))
+        prefix = optional(string)
+        tag = optional(object({
+          key   = string,
+          value = string
+        }))
+      }), {})
+      delete_marker_replication = optional(object({
+        status = string
+      }))
     })))
   })
   description = "Replicate this bucket's content to another bucket. If null, no replication will be configured."
