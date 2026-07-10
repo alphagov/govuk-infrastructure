@@ -101,11 +101,16 @@ moved {
 
 moved {
   from = aws_s3_bucket_policy.aws_logging
-  to   = module.aws_logging_gucket.aws_s3_bucket_policy.bucket_policy
+  to   = module.aws_logging_bucket.aws_s3_bucket_policy.bucket_policy
 }
 
 import {
   to = module.aws_logging_bucket.aws_s3_bucket_server_side_encryption_configuration.this
+  id = local.log_bucket_name
+}
+
+import {
+  to = module.aws_logging_bucket.aws_s3_bucket_public_accces_block.this[0]
   id = local.log_bucket_name
 }
 
