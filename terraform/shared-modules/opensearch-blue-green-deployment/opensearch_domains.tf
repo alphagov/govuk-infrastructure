@@ -38,10 +38,11 @@ module "blue_domain" {
     }
   }
 
-  govuk_environment  = var.govuk_environment
-  security_group_ids = local.security_group_ids
-  subnet_ids         = local.subnet_ids
-  custom_endpoint    = local.service_record_name
+  govuk_environment   = var.govuk_environment
+  security_group_ids  = local.security_group_ids
+  subnet_ids          = local.subnet_ids
+  custom_endpoint     = local.service_record_name
+  create_vpc_endpoint = var.blue_cluster_options.create_vpc_endpoint
 }
 
 module "green_domain" {
@@ -69,10 +70,11 @@ module "green_domain" {
     }
   }
 
-  govuk_environment  = var.govuk_environment
-  security_group_ids = var.override_security_group_ids_for_green_cluster != null ? var.override_security_group_ids_for_green_cluster : local.security_group_ids
-  subnet_ids         = local.subnet_ids
-  custom_endpoint    = var.override_custom_domain_endpoint_for_green_cluster == null ? local.service_record_name : var.override_custom_domain_endpoint_for_green_cluster
+  govuk_environment   = var.govuk_environment
+  security_group_ids  = var.override_security_group_ids_for_green_cluster != null ? var.override_security_group_ids_for_green_cluster : local.security_group_ids
+  subnet_ids          = local.subnet_ids
+  custom_endpoint     = var.override_custom_domain_endpoint_for_green_cluster == null ? local.service_record_name : var.override_custom_domain_endpoint_for_green_cluster
+  create_vpc_endpoint = var.green_cluster_options.create_vpc_endpoint
 
   // These options only exist to allow the Search ES6 cluster to be imported and should not be used in the future
   log_group_name_overrides                 = var.green_cluster_options.log_group_name_overrides

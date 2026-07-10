@@ -183,6 +183,13 @@ variable "inline_access_policy_declaration" {
   nullable    = false
 }
 
+variable "create_vpc_endpoint" {
+  type        = bool
+  description = "Create a VPC endpoint for connection to this domain (needed for remote reindex)"
+  default     = false
+  nullable    = false
+}
+
 variable "use_aws_elasticsearch_domain_resource" {
   type        = bool
   description = "Use an aws_elasticsearch_domain resource instead of aws_opensearch_domain to allow search ES cluster to be imported"

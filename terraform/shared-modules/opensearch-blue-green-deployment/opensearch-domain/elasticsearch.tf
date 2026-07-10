@@ -112,3 +112,11 @@ data "aws_iam_policy_document" "elasticsearch_domain" {
     resources = ["arn:aws:es:${data.aws_region.current.region}:${data.aws_caller_identity.current.account_id}:domain/${local.elasticsearch_domain_name}/*"]
   }
 }
+resource "aws_elasticsearch_vpc_endpoint" "elasticsearch" {
+  count      = var.create_vpc_endpoint && var.use_aws_elasticsearch_domain_resource ? 1 : 0
+  domain_arn = aws_elasticsearch_domain.elasticsearch[0].arn
+  vpc_options {
+    subnet_ids         = var.subnet_ids
+    security_group_ids = var.security_group_ids
+  }
+}

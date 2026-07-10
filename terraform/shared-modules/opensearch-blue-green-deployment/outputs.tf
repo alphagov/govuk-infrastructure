@@ -73,3 +73,10 @@ output "elasticsearch_iam_role_arn" {
   deprecated  = "Do not set this option except when importing the existing Search ElasticSearch cluster"
   value       = var.create_additional_manual_snapshot_role_name == null ? null : aws_iam_role.elasticsearch_snapshot[0].arn
 }
+
+output "vpc_endpoints" {
+  value = {
+    blue  = var.launch_blue_domain ? module.blue_domain[0].vpc_endpoint : null
+    green = var.launch_green_domain ? module.green_domain[0].vpc_endpoint : null
+  }
+}
