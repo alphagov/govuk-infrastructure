@@ -110,7 +110,7 @@ import {
 }
 
 import {
-  to = module.aws_logging_bucket.aws_s3_bucket_public_accces_block.this[0]
+  to = module.aws_logging_bucket.aws_s3_bucket_public_access_block.this[0]
   id = local.log_bucket_name
 }
 
@@ -118,10 +118,9 @@ import {
 module "aws_logging_bucket" {
   source = "../../shared-modules/s3"
 
-  govuk_environment          = var.govuk_environment
-  name                       = local.log_bucket_name
-  disable_bucket_logging     = true
-  enable_public_access_block = true
+  govuk_environment      = var.govuk_environment
+  name                   = local.log_bucket_name
+  disable_bucket_logging = true
   extra_bucket_policies = [
     data.aws_iam_policy_document.s3_aws_logging.json
   ]
@@ -161,9 +160,6 @@ module "aws_logging_bucket" {
       }
     }]
   }
-
-  versioning_enabled   = true
-  versioning_suspended = false
 }
 
 moved {
