@@ -164,7 +164,25 @@ variable "replication_config" {
       destination = object({
         bucket        = string
         storage_class = string
+        account       = optional(string)
+        access_control_translation = optional(object({
+          owner = string
+        }))
       })
+      filter = optional(object({
+        and = optional(object({
+          prefix = optional(string)
+          tags   = optional(map(string))
+        }))
+        prefix = optional(string)
+        tag = optional(object({
+          key   = string,
+          value = string
+        }))
+      }), {})
+      delete_marker_replication = optional(object({
+        status = string
+      }))
     })))
   })
   description = "Replicate this bucket's content to another bucket. If null, no replication will be configured."
@@ -179,7 +197,7 @@ variable "disable_bucket_logging" {
   nullable    = false
 
   validation {
-    condition     = var.disable_bucket_logging == false || startswith(var.name, "govuk-eph-") || length(regexall("^govuk-[^-]+-bucket-logging", var.name)) > 0
+    condition     = var.disable_bucket_logging == false || startswith(var.name, "govuk-eph-") || length(regexall("^govuk-[^-]+-aws-logging", var.name)) > 0
     error_message = "You can only disable bucket logging for buckets used by ephemeral clusters or for the logging bucket itself."
   }
 }

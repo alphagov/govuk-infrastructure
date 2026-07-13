@@ -12,7 +12,8 @@ module "logging-integration" {
     "/terraform/deployments/logging/**/*",
     "/terraform/variables/integration/common.tfvars",
     "/terraform/variables/variables-common.tf",
-    "/terraform/variables/integration/logging.tfvars"
+    "/terraform/variables/integration/logging.tfvars",
+    "/terraform/shared-modules/s3/**/*",
   ]
   global_remote_state = true
 
@@ -53,7 +54,8 @@ module "logging-staging" {
     "/terraform/deployments/logging/**/*",
     "/terraform/variables/staging/common.tfvars",
     "/terraform/variables/variables-common.tf",
-    "/terraform/variables/staging/logging.tfvars"
+    "/terraform/variables/staging/logging.tfvars",
+    "/terraform/shared-modules/s3/**/*",
   ]
   global_remote_state = true
 
@@ -93,7 +95,8 @@ module "logging-production" {
     "/terraform/deployments/logging/**/*",
     "/terraform/variables/production/common.tfvars",
     "/terraform/variables/variables-common.tf",
-    "/terraform/variables/production/logging.tfvars"
+    "/terraform/variables/production/logging.tfvars",
+    "/terraform/shared-modules/s3/**/*",
   ]
   global_remote_state = true
 

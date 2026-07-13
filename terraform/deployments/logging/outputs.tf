@@ -1,10 +1,10 @@
 output "aws_logging_bucket_id" {
-  value       = aws_s3_bucket.aws_logging.id
+  value       = module.aws_logging_bucket.name
   description = "Name of the AWS logging bucket"
 }
 
 output "aws_logging_bucket_arn" {
-  value       = aws_s3_bucket.aws_logging.arn
+  value       = module.aws_logging_bucket.arn
   description = "ARN of the AWS logging bucket"
 }
 

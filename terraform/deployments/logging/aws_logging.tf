@@ -1,3 +1,8 @@
+locals {
+  log_bucket_name = "govuk-${var.govuk_environment}-aws-logging"
+  log_bucket_arn  = "arn:aws:s3:::${local.log_bucket_name}"
+}
+
 data "aws_elb_service_account" "main" {}
 
 data "aws_caller_identity" "current" {}
@@ -6,7 +11,7 @@ data "aws_iam_policy_document" "s3_aws_logging" {
   statement {
     actions   = ["s3:PutObject"]
     effect    = "Allow"
-    resources = ["arn:aws:s3:::govuk-${var.govuk_environment}-aws-logging/*"]
+    resources = ["arn:aws:s3:::${local.log_bucket_name}/*"]
     principals {
       type        = "AWS"
       identifiers = [data.aws_elb_service_account.main.arn]
@@ -14,18 +19,19 @@ data "aws_iam_policy_document" "s3_aws_logging" {
   }
 
   statement {
-    sid    = "DenyNonTLS"
-    effect = "Deny"
+    sid = "AccountLogDeliveryWrite"
+
     principals {
-      identifiers = ["*"]
-      type        = "AWS"
+      type        = "Service"
+      identifiers = ["logging.s3.amazonaws.com"]
     }
-    actions   = ["s3:*"]
-    resources = ["arn:aws:s3:::govuk-${var.govuk_environment}-aws-logging/*"]
+
+    resources = ["arn:aws:s3:::${local.log_bucket_name}/*"]
+
     condition {
-      test     = "Bool"
-      values   = [false]
-      variable = "aws:SecureTransport"
+      test     = "StringEquals"
+      variable = "aws:SourceAccount"
+      values   = [data.aws_caller_identity.current.account_id]
     }
   }
 }
@@ -37,7 +43,7 @@ data "aws_iam_policy_document" "s3_govuk_aws_logging_replication_policy" {
       "s3:ListBucket"
     ]
     effect    = "Allow"
-    resources = [aws_s3_bucket.aws_logging.arn]
+    resources = [local.log_bucket_arn]
   }
   statement {
     actions = [
@@ -46,7 +52,7 @@ data "aws_iam_policy_document" "s3_govuk_aws_logging_replication_policy" {
       "s3:GetObjectVersionTagging"
     ]
     effect    = "Allow"
-    resources = ["${aws_s3_bucket.aws_logging.arn}/*"]
+    resources = ["${local.log_bucket_arn}/*"]
   }
   statement {
     actions = [
@@ -88,70 +94,88 @@ resource "aws_iam_role_policy_attachment" "govuk_aws_logging_replication_policy_
   policy_arn = aws_iam_policy.govuk_aws_logging_replication_policy.arn
 }
 
+moved {
+  from = aws_s3_bucket.aws_logging
+  to   = module.aws_logging_bucket.aws_s3_bucket.this
+}
+
+moved {
+  from = aws_s3_bucket_policy.aws_logging
+  to   = module.aws_logging_bucket.aws_s3_bucket_policy.bucket_policy
+}
+
+import {
+  to = module.aws_logging_bucket.aws_s3_bucket_server_side_encryption_configuration.this
+  id = local.log_bucket_name
+}
+
+import {
+  to = module.aws_logging_bucket.aws_s3_bucket_public_access_block.this[0]
+  id = local.log_bucket_name
+}
+
 # Create a bucket that allows AWS services to write to it
-resource "aws_s3_bucket" "aws_logging" {
-  bucket = "govuk-${var.govuk_environment}-aws-logging"
-}
+module "aws_logging_bucket" {
+  source = "../../shared-modules/s3"
 
-resource "aws_s3_bucket_policy" "aws_logging" {
-  bucket = aws_s3_bucket.aws_logging.id
-  policy = data.aws_iam_policy_document.s3_aws_logging.json
-}
-
-resource "aws_s3_bucket_acl" "aws_logging" {
-  bucket = aws_s3_bucket.aws_logging.id
-  acl    = "log-delivery-write"
-}
-
-resource "aws_s3_bucket_lifecycle_configuration" "aws_logging" {
-  bucket = aws_s3_bucket.aws_logging.id
-
-  rule {
+  govuk_environment      = var.govuk_environment
+  name                   = local.log_bucket_name
+  disable_bucket_logging = true
+  extra_bucket_policies = [
+    data.aws_iam_policy_document.s3_aws_logging.json
+  ]
+  force_destroy = false
+  lifecycle_rules = [{
     id     = "ExpireRule"
     status = "Enabled"
 
-    expiration {
+    expiration = {
       days = 30
     }
-    noncurrent_version_expiration {
+
+    noncurrent_version_expiration = {
       noncurrent_days = 1
     }
-  }
-}
+  }]
 
-resource "aws_s3_bucket_versioning" "aws_logging" {
-  bucket = aws_s3_bucket.aws_logging.id
+  replication_config = {
+    role = aws_iam_role.govuk_aws_logging_replication_role.arn
+    rules = [{
+      id     = "govuk-aws-logging-elb-govuk-public-ckan-rule"
+      status = var.govuk_environment == "production" ? "Enabled" : "Disabled"
+      destination = {
+        bucket        = "arn:aws:s3:::${var.cyber_slunk_s3_bucket_name}"
+        storage_class = "STANDARD"
+        account       = var.cyber_slunk_aws_account_id
 
-  versioning_configuration {
-    status = "Enabled"
-  }
-}
-
-resource "aws_s3_bucket_replication_configuration" "aws_logging" {
-  bucket = aws_s3_bucket.aws_logging.id
-  role   = aws_iam_role.govuk_aws_logging_replication_role.arn
-
-  rule {
-    id     = "govuk-aws-logging-elb-govuk-public-ckan-rule"
-    status = var.govuk_environment == "production" ? "Enabled" : "Disabled"
-    destination {
-      bucket        = "arn:aws:s3:::${var.cyber_slunk_s3_bucket_name}"
-      storage_class = "STANDARD"
-      account       = var.cyber_slunk_aws_account_id
-
-      access_control_translation {
-        owner = "Destination"
+        access_control_translation = {
+          owner = "Destination"
+        }
       }
-    }
-    filter {
-      prefix = "elb/govuk-ckan-public-elb"
-    }
-    delete_marker_replication {
-      status = "Enabled"
-    }
+      filter = {
+        prefix = "elb/govuk-ckan-public-elb"
+      }
+      delete_marker_replication = {
+        status = "Enabled"
+      }
+    }]
   }
 }
 
+moved {
+  from = aws_s3_bucket_lifecycle_configuration.aws_logging
+  to   = module.aws_logging_bucket.aws_s3_bucket_lifecycle_configuration.this[0]
+}
+
+moved {
+  from = aws_s3_bucket_versioning.aws_logging
+  to   = module.aws_logging_bucket.aws_s3_bucket_versioning.this
+}
+
+moved {
+  from = aws_s3_bucket_replication_configuration.aws_logging
+  to   = module.aws_logging_bucket.aws_s3_bucket_replication_configuration.this[0]
+}
 # IAM role and policy for RDS Enhanced Monitoring
 
 data "aws_iam_policy_document" "rds_enhanced_monitoring" {
@@ -215,3 +239,4 @@ resource "aws_iam_role_policy_attachment" "cloudfront_cloudwatch" {
   role       = aws_iam_role.cloudfront_cloudwatch.name
   policy_arn = aws_iam_policy.cloudfront_cloudwatch.arn
 }
+
