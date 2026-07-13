@@ -173,6 +173,40 @@ variable "green_cluster_options" {
   }
 }
 
+variable "create_remote_connection_to_import_to_blue_from_green" {
+  type        = bool
+  description = "Create an outgoing connection from the blue cluster to the green cluster to allow remote reimport with green as source (remote) and blue as destination (local)"
+  default     = false
+  nullable    = false
+
+  validation {
+    condition     = var.create_remote_connection_to_import_to_blue_from_green == false || (var.launch_green_domain && var.launch_blue_domain && var.green_cluster_options != null && var.green_cluster_options.create_vpc_endpoint)
+    error_message = "For var.create_remote_connection_to_import_to_blue_from_green both blue and green clusters must be launched, and the green cluster must have create_vpc_endpoint set to true."
+  }
+
+  validation {
+    condition     = var.create_remote_connection_to_import_to_blue_from_green == false || (var.blue_cluster_options != null && var.blue_cluster_options.engine == "OpenSearch")
+    error_message = "Creating a remote connection requires the 'local' cluster (in this case blue, the one that is the destination for the data import) to be OpenSearch, and not Elasticsearch."
+  }
+}
+
+variable "create_remote_connection_to_import_to_green_from_blue" {
+  type        = bool
+  description = "Create an outgoing connection from the green cluster to the blue cluster to allow remote reimport with blue as source (remote) and green as destination (local)"
+  default     = false
+  nullable    = false
+
+  validation {
+    condition     = var.create_remote_connection_to_import_to_green_from_blue == false || (var.launch_green_domain && var.launch_blue_domain && var.blue_cluster_options != null && var.blue_cluster_options.create_vpc_endpoint)
+    error_message = "For var.create_remote_connection_to_import_to_green_from_blue both blue and green clusters must be launched, and the blue cluster must have create_vpc_endpoint set to true."
+  }
+
+  validation {
+    condition     = var.create_remote_connection_to_import_to_green_from_blue == false || (var.green_cluster_options != null && var.green_cluster_options.engine == "OpenSearch")
+    error_message = "Creating a remote connection requires the 'local' cluster (in this case green, the one that is the destination for the data import) to be OpenSearch, and not Elasticsearch."
+  }
+}
+
 variable "govuk_environment" {
   type        = string
   description = "Name of the GOV.UK Environment into which this is being deployed"
