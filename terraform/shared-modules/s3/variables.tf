@@ -179,7 +179,7 @@ variable "replication_config" {
           key   = string,
           value = string
         }))
-      }), {})
+      }))
       delete_marker_replication = optional(object({
         status = string
       }))
