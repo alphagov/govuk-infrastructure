@@ -29,7 +29,7 @@ blue_cluster_options = {
   }
 
   // Note: This is only required if you are going to use remote reindex with this cluster as the source (aka the 'remote')
-  create_vpc_endpoint = false
+  create_vpc_endpoint = true
 }
 
 launch_green_domain = true
