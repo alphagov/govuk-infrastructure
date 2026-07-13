@@ -26,6 +26,8 @@ data "aws_iam_policy_document" "s3_aws_logging" {
       identifiers = ["logging.s3.amazonaws.com"]
     }
 
+    actions = ["s3:PutObject"]
+
     resources = ["arn:aws:s3:::${local.log_bucket_name}/*"]
 
     condition {
