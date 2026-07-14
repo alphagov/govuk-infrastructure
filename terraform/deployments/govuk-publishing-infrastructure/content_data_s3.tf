@@ -13,14 +13,24 @@ module "content_data_csvs_s3_bucket" {
 
   extra_bucket_policies = [data.aws_iam_policy_document.content_data_csvs_s3_bucket_public_read.json]
 
-  lifecycle_rules = [{
-    id     = "all"
-    status = "Enabled"
+  lifecycle_rules = [
+    {
+      id     = "all"
+      status = "Enabled"
 
-    expiration = {
-      days = 7
-    }
-  }]
+      expiration = {
+        days = 7
+      }
+    },
+    {
+      id     = "all-expired"
+      status = "Enabled"
+
+      noncurrent_version_expiration = {
+        noncurrent_days = 7
+      }
+    },
+  ]
 }
 
 data "aws_iam_policy_document" "content_data_csvs_s3_bucket_public_read" {
