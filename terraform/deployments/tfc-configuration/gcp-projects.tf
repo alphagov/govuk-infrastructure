@@ -105,6 +105,7 @@ module "gcp-gds-bq-processing-dev" {
   trigger_patterns = [
     "/gcp-gds-bq-processing-dev/**/*",
     "/modules/gcp-project-init/**/*",
+    "/modules/scheduled-query-monitoring/**/*",
   ]
   global_remote_state = true
   assessments_enabled = true
@@ -547,6 +548,7 @@ module "gcp-gds-bq-reporting" {
   trigger_patterns = [
     "/gcp-gds-bq-reporting/**/*",
     "/modules/gcp-project-init/**/*",
+    "/modules/scheduled-query-monitoring/**/*",
   ]
   global_remote_state = true
   assessments_enabled = true
@@ -683,6 +685,7 @@ module "gcp-govuk-content-data" {
   trigger_patterns = [
     "/gcp-govuk-content-data/**/*",
     "/modules/gcp-project-init/**/*",
+    "/modules/scheduled-query-monitoring/**/*",
   ]
   global_remote_state = true
   assessments_enabled = true
