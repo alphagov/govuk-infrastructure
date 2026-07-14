@@ -35,11 +35,24 @@ module "content_data_csvs_s3_bucket" {
 
 data "aws_iam_policy_document" "content_data_csvs_s3_bucket_public_read" {
   statement {
-    sid = "AllowPublicRead"
+    sid = "AllowPublicObjectRead"
 
     actions = ["s3:GetObject"]
 
     resources = ["${local.content_data_csvs_s3_bucket_arn}/*"]
+
+    principals {
+      type        = "*"
+      identifiers = ["*"]
+    }
+  }
+
+  statement {
+    sid = "AllowPublicListBucket"
+
+    actions = ["s3:ListBucket"]
+
+    resources = [local.content_data_csvs_s3_bucket_arn]
 
     principals {
       type        = "*"
