@@ -34,3 +34,10 @@ variable "create_google_logging" {
   default     = true
   nullable    = false
 }
+
+variable "create_vpc_flow_logs" {
+  type        = bool
+  description = "Create VPC flowlog logging"
+  default     = true
+  nullable    = false
+}
