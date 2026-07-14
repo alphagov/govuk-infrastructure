@@ -106,16 +106,6 @@ moved {
   to   = module.aws_logging_bucket.aws_s3_bucket_policy.bucket_policy
 }
 
-import {
-  to = module.aws_logging_bucket.aws_s3_bucket_server_side_encryption_configuration.this
-  id = local.log_bucket_name
-}
-
-import {
-  to = module.aws_logging_bucket.aws_s3_bucket_public_access_block.this[0]
-  id = local.log_bucket_name
-}
-
 # Create a bucket that allows AWS services to write to it
 module "aws_logging_bucket" {
   source = "../../shared-modules/s3"

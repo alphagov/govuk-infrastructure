@@ -1,4 +1,6 @@
 data "aws_iam_policy_document" "vpc_flow_logs_policy" {
+  count = var.create_vpc_flow_logs ? 1 : 0
+
   statement {
     actions = [
       "logs:CreateLogGroup",
@@ -13,6 +15,8 @@ data "aws_iam_policy_document" "vpc_flow_logs_policy" {
 }
 
 data "aws_iam_policy_document" "vpc_flow_logs_assume_policy" {
+  count = var.create_vpc_flow_logs ? 1 : 0
+
   statement {
     actions = ["sts:AssumeRole"]
     principals {
@@ -24,29 +28,39 @@ data "aws_iam_policy_document" "vpc_flow_logs_assume_policy" {
 }
 
 resource "aws_cloudwatch_log_group" "log" {
+  count = var.create_vpc_flow_logs ? 1 : 0
+
   name              = "govuk-vpc-flow-log"
   retention_in_days = var.cluster_log_retention_in_days
 }
 
 resource "aws_flow_log" "vpc_flow_log" {
-  log_destination = aws_cloudwatch_log_group.log.arn
-  iam_role_arn    = aws_iam_role.vpc_flow_logs_role.arn
-  vpc_id          = data.tfe_outputs.vpc.nonsensitive_values.id
+  count = var.create_vpc_flow_logs ? 1 : 0
+
+  log_destination = aws_cloudwatch_log_group.log[0].arn
+  iam_role_arn    = aws_iam_role.vpc_flow_logs_role[0].arn
+  vpc_id          = data.tfe_outputs.vpc[0].nonsensitive_values.id
   traffic_type    = var.traffic_type
 }
 
 resource "aws_iam_role" "vpc_flow_logs_role" {
+  count = var.create_vpc_flow_logs ? 1 : 0
+
   name               = "govuk-vpc-flow-logs"
-  assume_role_policy = data.aws_iam_policy_document.vpc_flow_logs_assume_policy.json
+  assume_role_policy = data.aws_iam_policy_document.vpc_flow_logs_assume_policy[0].json
 }
 
 resource "aws_iam_policy" "vpc_flow_logs_policy" {
+  count = var.create_vpc_flow_logs ? 1 : 0
+
   name   = "govuk-vpc-flow-logs-policy"
   path   = "/"
-  policy = data.aws_iam_policy_document.vpc_flow_logs_policy.json
+  policy = data.aws_iam_policy_document.vpc_flow_logs_policy[0].json
 }
 
 resource "aws_iam_role_policy_attachment" "vpc_flow_logs_policy_attachment" {
-  role       = aws_iam_role.vpc_flow_logs_role.name
-  policy_arn = aws_iam_policy.vpc_flow_logs_policy.arn
+  count = var.create_vpc_flow_logs ? 1 : 0
+
+  role       = aws_iam_role.vpc_flow_logs_role[0].name
+  policy_arn = aws_iam_policy.vpc_flow_logs_policy[0].arn
 }
