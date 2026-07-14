@@ -127,7 +127,7 @@ module "logging-test" {
 
   organization      = var.organization
   workspace_name    = "logging-test"
-  workspace_desc    = "This module manages the logging deploymentsthat are required by most other modules (VPC, DNS zones)"
+  workspace_desc    = "This module manages the logging deployments that are required by most other modules (VPC, DNS zones)"
   workspace_tags    = ["test", "logging", "aws"]
   terraform_version = var.terraform_version
   execution_mode    = "remote"
