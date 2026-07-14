@@ -4,8 +4,8 @@ attach_snapshot_policy_with_role_policy_attachment = true
 
 launch_blue_domain = true
 blue_cluster_options = {
-  engine         = "Elasticsearch"
-  engine_version = "7.10"
+  engine         = "OpenSearch"
+  engine_version = "3.5"
 
   dedicated_master = {
     instance_count = 3
