@@ -1,0 +1,52 @@
+# Common variables for the test environment.
+# Only add variables here if they are shared across multiple workspaces in the test environment.
+# Variables that are only used by a single workspace should be added to that workspace's specific tfvars file.
+
+cluster_log_retention_in_days = 7
+
+vpc_cidr = "10.2.0.0/16"
+
+eks_control_plane_subnets = {
+  a = { az = "eu-west-1a", cidr = "10.2.19.0/28" }
+  b = { az = "eu-west-1b", cidr = "10.2.19.16/28" }
+  c = { az = "eu-west-1c", cidr = "10.2.19.32/28" }
+}
+
+eks_public_subnets = {
+  a = { az = "eu-west-1a", cidr = "10.2.20.0/24" }
+  b = { az = "eu-west-1b", cidr = "10.2.21.0/24" }
+  c = { az = "eu-west-1c", cidr = "10.2.22.0/24" }
+}
+
+eks_private_subnets = {
+  a = { az = "eu-west-1a", cidr = "10.2.24.0/22" }
+  b = { az = "eu-west-1b", cidr = "10.2.28.0/22" }
+  c = { az = "eu-west-1c", cidr = "10.2.32.0/22" }
+}
+
+legacy_private_subnets = {
+  a = { az = "eu-west-1a", cidr = "10.2.4.0/24", nat = true }
+  b = { az = "eu-west-1b", cidr = "10.2.5.0/24", nat = true }
+  c = { az = "eu-west-1c", cidr = "10.2.6.0/24", nat = true }
+
+  rds_a = { az = "eu-west-1a", cidr = "10.2.10.0/24", nat = false }
+  rds_b = { az = "eu-west-1b", cidr = "10.2.11.0/24", nat = false }
+  rds_c = { az = "eu-west-1c", cidr = "10.2.12.0/24", nat = false }
+
+  elasticache_a = { az = "eu-west-1a", cidr = "10.2.7.0/24", nat = false }
+  elasticache_b = { az = "eu-west-1b", cidr = "10.2.8.0/24", nat = false }
+  elasticache_c = { az = "eu-west-1c", cidr = "10.2.9.0/24", nat = false }
+
+  elasticsearch_a = { az = "eu-west-1a", cidr = "10.2.16.0/24", nat = false }
+  elasticsearch_b = { az = "eu-west-1b", cidr = "10.2.17.0/24", nat = false }
+  elasticsearch_c = { az = "eu-west-1c", cidr = "10.2.18.0/24", nat = false }
+
+  neptune_a = { az = "eu-west-1a", cidr = "10.2.36.0/24", nat = false }
+  neptune_b = { az = "eu-west-1b", cidr = "10.2.37.0/24", nat = false }
+  neptune_c = { az = "eu-west-1c", cidr = "10.2.38.0/24", nat = false }
+}
+
+govuk_environment = "test"
+force_destroy     = true
+
+publishing_service_domain = "test.publishing.service.gov.uk"

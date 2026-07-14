@@ -134,6 +134,9 @@ module "logging-test" {
   working_directory = "/terraform/deployments/logging/"
   trigger_patterns = [
     "/terraform/deployments/logging/**/*",
+    "/terraform/variables/test/common.tfvars",
+    "/terraform/variables/variables-common.tf",
+    "/terraform/variables/test/logging.tfvars",
     "/terraform/shared-modules/s3/**/*",
   ]
   global_remote_state = true
@@ -151,13 +154,13 @@ module "logging-test" {
   }
 
   tfvars_files = [
-    "integration/logging.tfvars"
+    "test/common.tfvars",
+    "test/logging.tfvars",
   ]
 
   variable_set_ids = [
     local.aws_credentials["test"],
     local.gcp_credentials["test"],
-    module.variable-set-test.id,
   ]
 }
 

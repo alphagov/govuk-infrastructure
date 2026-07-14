@@ -1,14 +1,3 @@
-module "variable-set-test" {
-  source = "./variable-set"
-
-  name     = "common-test"
-  priority = false
-  tfvars = {
-    cluster_log_retention_in_days = 7
-    create_google_logging         = false
-  }
-}
-
 module "variable-set-ephemeral" {
   source = "./variable-set"
 
