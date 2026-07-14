@@ -31,7 +31,9 @@ swap:
   "LB(s?)": "load balancers"
   "[lL]og ?[sS]tash": Logstash
   "OAUTH": "OAuth"
+  "[oO][pP][aA] [gG]ate[kK]eeper": OPA Gatekeeper
   "[pP]ager ?[dD]uty": "PagerDuty"
+  "[rR]ego": Rego
   "Secrets Manager": SecretsManager
   "[sS]ide[kK]i([qQ]|ck)": "Sidekiq"
   "[tT]erraform": Terraform
