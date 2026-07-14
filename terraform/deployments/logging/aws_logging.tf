@@ -96,16 +96,6 @@ resource "aws_iam_role_policy_attachment" "govuk_aws_logging_replication_policy_
   policy_arn = aws_iam_policy.govuk_aws_logging_replication_policy.arn
 }
 
-moved {
-  from = aws_s3_bucket.aws_logging
-  to   = module.aws_logging_bucket.aws_s3_bucket.this
-}
-
-moved {
-  from = aws_s3_bucket_policy.aws_logging
-  to   = module.aws_logging_bucket.aws_s3_bucket_policy.bucket_policy
-}
-
 # Create a bucket that allows AWS services to write to it
 module "aws_logging_bucket" {
   source = "../../shared-modules/s3"
@@ -154,22 +144,7 @@ module "aws_logging_bucket" {
   }
 }
 
-moved {
-  from = aws_s3_bucket_lifecycle_configuration.aws_logging
-  to   = module.aws_logging_bucket.aws_s3_bucket_lifecycle_configuration.this[0]
-}
-
-moved {
-  from = aws_s3_bucket_versioning.aws_logging
-  to   = module.aws_logging_bucket.aws_s3_bucket_versioning.this
-}
-
-moved {
-  from = aws_s3_bucket_replication_configuration.aws_logging
-  to   = module.aws_logging_bucket.aws_s3_bucket_replication_configuration.this[0]
-}
 # IAM role and policy for RDS Enhanced Monitoring
-
 data "aws_iam_policy_document" "rds_enhanced_monitoring" {
   statement {
     actions = [
