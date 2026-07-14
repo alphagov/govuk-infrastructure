@@ -80,10 +80,3 @@ variable "ext_dns_enable_service_monitor" {
   description = "Whether to enable service monitors for external dns"
   default     = true
 }
-
-variable "disable_tempo_bucket_logging" {
-  type        = bool
-  description = "Whether to disable S3 bucket logging for the Tempo bucket"
-  default     = false
-  nullable    = false
-}

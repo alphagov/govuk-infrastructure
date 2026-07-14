@@ -192,12 +192,12 @@ variable "replication_config" {
 
 variable "disable_bucket_logging" {
   type        = bool
-  description = "Do not configure bucket logging. This is ONLY allowed in test, or for the logging bucket itself."
+  description = "Do not configure bucket logging. This is ONLY allowed for the logging bucket itself."
   default     = false
   nullable    = false
 
   validation {
-    condition     = var.disable_bucket_logging == false || startswith(var.name, "govuk-eph-") || length(regexall("^govuk-[^-]+-aws-logging", var.name)) > 0
-    error_message = "You can only disable bucket logging for buckets used by ephemeral clusters or for the logging bucket itself."
+    condition     = var.disable_bucket_logging == false || length(regexall("^govuk-[^-]+-aws-logging", var.name)) > 0
+    error_message = "You can only disable bucket logging for the logging bucket itself."
   }
 }
