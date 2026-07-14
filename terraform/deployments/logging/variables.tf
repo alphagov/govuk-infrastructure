@@ -27,3 +27,10 @@ variable "cyber_slunk_aws_account_id" {
   description = "Account ID which holds the Splunk log bucket"
   default     = "885513274347"
 }
+
+variable "create_google_logging" {
+  type        = bool
+  description = "Create GCP logging storage bucket."
+  default     = true
+  nullable    = false
+}

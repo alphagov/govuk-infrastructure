@@ -122,3 +122,45 @@ module "logging-production" {
   ]
 }
 
+module "logging-test" {
+  source = "github.com/alphagov/terraform-govuk-tfe-workspacer"
+
+  organization      = var.organization
+  workspace_name    = "logging-test"
+  workspace_desc    = "This module manages the logging deployments that are required by most other modules (VPC, DNS zones)"
+  workspace_tags    = ["test", "logging", "aws"]
+  terraform_version = var.terraform_version
+  execution_mode    = "remote"
+  working_directory = "/terraform/deployments/logging/"
+  trigger_patterns = [
+    "/terraform/deployments/logging/**/*",
+    "/terraform/variables/test/common.tfvars",
+    "/terraform/variables/variables-common.tf",
+    "/terraform/variables/test/logging.tfvars",
+    "/terraform/shared-modules/s3/**/*",
+  ]
+  global_remote_state = true
+
+  project_name = "govuk-infrastructure"
+  vcs_repo = {
+    identifier     = "alphagov/govuk-infrastructure"
+    branch         = "main"
+    oauth_token_id = data.tfe_oauth_client.github.oauth_token_id
+  }
+
+  team_access = {
+    "GOV.UK Non-Production (r/o)" = "write"
+    "GOV.UK Production"           = "write"
+  }
+
+  tfvars_files = [
+    "test/common.tfvars",
+    "test/logging.tfvars",
+  ]
+
+  variable_set_ids = [
+    local.aws_credentials["test"],
+    local.gcp_credentials["test"],
+  ]
+}
+
