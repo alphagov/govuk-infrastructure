@@ -26,6 +26,8 @@ resource "google_storage_bucket" "google_logging" {
 }
 
 resource "google_storage_bucket_access_control" "google_logging" {
+  count = var.create_google_logging ? 1 : 0
+
   bucket = google_storage_bucket.google_logging[0].name
 
   role   = "WRITER"
