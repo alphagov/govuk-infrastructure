@@ -372,7 +372,7 @@ resource "aws_wafv2_web_acl" "ckan" {
     }
     statement {
       rate_based_statement {
-        limit              = 100
+        limit              = 100 # AWS WAF rate windows are always 5 minutes, so this is 100 requests per 5-minute window per User-Agent string
         aggregate_key_type = "CUSTOM_KEYS"
         custom_key {
           header {
