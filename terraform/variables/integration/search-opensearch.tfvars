@@ -2,6 +2,8 @@ current_live_domain = "green"
 
 attach_snapshot_policy_with_role_policy_attachment = true
 
+create_remote_connection_to_import_to_blue_from_green = true
+
 launch_blue_domain = true
 blue_cluster_options = {
   engine         = "OpenSearch"
@@ -27,9 +29,6 @@ blue_cluster_options = {
     throughput  = 350
     iops        = 3000
   }
-
-  // Note: This is only required if you are going to use remote reindex with this cluster as the source (aka the 'remote')
-  create_vpc_endpoint = true
 }
 
 launch_green_domain = true
@@ -57,9 +56,6 @@ green_cluster_options = {
     throughput  = 350
     iops        = 3000
   }
-
-  // Note: This is only required if you are going to use remote reindex with this cluster as the source (aka the 'remote')
-  create_vpc_endpoint = true
 
   // WARNING: All the following options are purely to allow importing the existing ES6 cluster,
   //          when creating the next blue deployment remove these options and use the defaults
