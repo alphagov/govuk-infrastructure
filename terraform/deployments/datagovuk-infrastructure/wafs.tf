@@ -269,11 +269,11 @@ resource "aws_wafv2_web_acl_logging_configuration" "find_waf" {
 }
 
 # ===========================================================
-# Bad bot User-Agent patterns for CKAN
+# Bot User-Agent patterns for CKAN
 # ===========================================================
 
-resource "aws_wafv2_regex_pattern_set" "ckan_bad_bots" {
-  name  = "ckan-bad-bots-${var.govuk_environment}"
+resource "aws_wafv2_regex_pattern_set" "ckan_hard_block_bots" {
+  name  = "ckan-hard-block-bots-${var.govuk_environment}"
   scope = "REGIONAL"
 
   regular_expression { regex_string = "(?i)Bytespider" }
@@ -288,18 +288,30 @@ resource "aws_wafv2_regex_pattern_set" "ckan_bad_bots" {
   regular_expression { regex_string = "(?i)Clickagy" }
   regular_expression { regex_string = "(?i)serpstatbot" }
   regular_expression { regex_string = "(?i)DataForSeoBot" }
-  regular_expression { regex_string = "(?i)meta-externalagent" }
+
+  tags = {
+    Name        = "ckan-hard-block-bots-${var.govuk_environment}"
+    Application = "CKAN"
+    Purpose     = "BotBlocking"
+  }
+}
+
+resource "aws_wafv2_regex_pattern_set" "ckan_ai_bots" {
+  name  = "ckan-ai-bots-${var.govuk_environment}"
+  scope = "REGIONAL"
+
   regular_expression { regex_string = "(?i)GPTBot" }
   regular_expression { regex_string = "(?i)ClaudeBot" }
   regular_expression { regex_string = "(?i)Claude-Web" }
   regular_expression { regex_string = "(?i)anthropic-ai" }
   regular_expression { regex_string = "(?i)CCBot" }
   regular_expression { regex_string = "(?i)ChatGPT-User" }
+  regular_expression { regex_string = "(?i)meta-externalagent" }
 
   tags = {
-    Name        = "ckan-bad-bots-${var.govuk_environment}"
+    Name        = "ckan-ai-bots-${var.govuk_environment}"
     Application = "CKAN"
-    Purpose     = "BotBlocking"
+    Purpose     = "BotRateLimiting"
   }
 }
 
@@ -315,7 +327,7 @@ resource "aws_wafv2_web_acl" "ckan" {
     allow {}
   }
   rule {
-    name     = "ckan-bad-bot-block"
+    name     = "ckan-hard-bot-block"
     priority = 0
     action {
       block {
@@ -326,7 +338,7 @@ resource "aws_wafv2_web_acl" "ckan" {
     }
     statement {
       regex_pattern_set_reference_statement {
-        arn = aws_wafv2_regex_pattern_set.ckan_bad_bots.arn
+        arn = aws_wafv2_regex_pattern_set.ckan_hard_block_bots.arn
         field_to_match {
           single_header {
             name = "user-agent"
@@ -340,16 +352,62 @@ resource "aws_wafv2_web_acl" "ckan" {
     }
     visibility_config {
       cloudwatch_metrics_enabled = true
-      metric_name                = "ckan-bad-bot-block"
+      metric_name                = "ckan-hard-bot-block"
       sampled_requests_enabled   = true
     }
   }
-  # Rule 1: Rate limit warning (monitoring only)
-  # This rule counts requests approaching the limit but doesn't block
-  # Useful for monitoring and adjusting limits before blocking occurs
+  rule {
+    name     = "ckan-ai-bot-rate-limit"
+    priority = 1
+    action {
+      block {
+        custom_response {
+          response_code = 429
+          response_header {
+            name  = "Retry-After"
+            value = "300"
+          }
+        }
+      }
+    }
+    statement {
+      rate_based_statement {
+        limit              = 100
+        aggregate_key_type = "CUSTOM_KEYS"
+        custom_keys {
+          header {
+            name = "user-agent"
+            text_transformations {
+              priority = 0
+              type     = "LOWERCASE"
+            }
+          }
+        }
+        scope_down_statement {
+          regex_pattern_set_reference_statement {
+            arn = aws_wafv2_regex_pattern_set.ckan_ai_bots.arn
+            field_to_match {
+              single_header {
+                name = "user-agent"
+              }
+            }
+            text_transformation {
+              priority = 0
+              type     = "NONE"
+            }
+          }
+        }
+      }
+    }
+    visibility_config {
+      cloudwatch_metrics_enabled = true
+      metric_name                = "ckan-ai-bot-rate-limit"
+      sampled_requests_enabled   = true
+    }
+  }
   rule {
     name     = "ckan-rate-limit-warning"
-    priority = 1
+    priority = 2
     action {
       count {}
     }
@@ -385,11 +443,9 @@ resource "aws_wafv2_web_acl" "ckan" {
       sampled_requests_enabled   = true
     }
   }
-  # Rule 2: Rate limit blocking
-  # This rule actually blocks requests that exceed the limit
   rule {
     name     = "ckan-rate-limit-block"
-    priority = 2
+    priority = 3
     action {
       block {
         custom_response {
