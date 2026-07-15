@@ -377,7 +377,7 @@ resource "aws_wafv2_web_acl" "ckan" {
         custom_keys {
           header {
             name = "user-agent"
-            text_transformations {
+            text_transformation {
               priority = 0
               type     = "LOWERCASE"
             }
