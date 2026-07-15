@@ -22,6 +22,7 @@ module "search-api-v2-integration" {
   working_directory = "/terraform/deployments/search-api-v2/"
   trigger_patterns = [
     "/terraform/deployments/search-api-v2/**/*",
+    "/terraform/deployments/search-api-v2/**/files/**/*",
     "/terraform/variables/integration/search-api-v2.tfvars"
   ]
 
@@ -77,6 +78,7 @@ module "search-api-v2-staging" {
   working_directory = "/terraform/deployments/search-api-v2/"
   trigger_patterns = [
     "/terraform/deployments/search-api-v2/**/*",
+    "/terraform/deployments/search-api-v2/**/files/**/*",
     "/terraform/variables/staging/search-api-v2.tfvars"
   ]
 
@@ -132,6 +134,7 @@ module "search-api-v2-production" {
   working_directory = "/terraform/deployments/search-api-v2/"
   trigger_patterns = [
     "/terraform/deployments/search-api-v2/**/*",
+    "/terraform/deployments/search-api-v2/**/files/**/*",
     "/terraform/variables/production/search-api-v2.tfvars"
   ]
 
