@@ -22,6 +22,7 @@ module "search-api-v2-integration" {
   working_directory = "/terraform/deployments/search-api-v2/"
   trigger_patterns = [
     "/terraform/deployments/search-api-v2/**/*",
+    "/terraform/deployments/search-api-v2/**/files/**/*",
     "/terraform/variables/integration/search-api-v2.tfvars"
   ]
 
@@ -48,7 +49,8 @@ module "search-api-v2-integration" {
   ]
 
   variable_set_ids = [
-    local.gcp_credentials["integration"]
+    local.gcp_credentials["integration"],
+    local.aws_credentials["integration"]
   ]
 }
 
@@ -76,6 +78,7 @@ module "search-api-v2-staging" {
   working_directory = "/terraform/deployments/search-api-v2/"
   trigger_patterns = [
     "/terraform/deployments/search-api-v2/**/*",
+    "/terraform/deployments/search-api-v2/**/files/**/*",
     "/terraform/variables/staging/search-api-v2.tfvars"
   ]
 
@@ -102,7 +105,8 @@ module "search-api-v2-staging" {
   ]
 
   variable_set_ids = [
-    local.gcp_credentials["staging"]
+    local.gcp_credentials["staging"],
+    local.aws_credentials["staging"]
   ]
 }
 
@@ -130,6 +134,7 @@ module "search-api-v2-production" {
   working_directory = "/terraform/deployments/search-api-v2/"
   trigger_patterns = [
     "/terraform/deployments/search-api-v2/**/*",
+    "/terraform/deployments/search-api-v2/**/files/**/*",
     "/terraform/variables/production/search-api-v2.tfvars"
   ]
 
@@ -156,7 +161,8 @@ module "search-api-v2-production" {
   ]
 
   variable_set_ids = [
-    local.gcp_credentials["production"]
+    local.gcp_credentials["production"],
+    local.aws_credentials["production"],
   ]
 }
 
