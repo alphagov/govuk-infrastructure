@@ -48,6 +48,7 @@
 | <a name="output_opensearch_domain_names"></a> [opensearch\_domain\_names](#output\_opensearch\_domain\_names) | A map of the OpenSearch domain names for the blue and green clusters, clusters which haven't be launched will be null |
 | <a name="output_opensearch_iam_role_arn"></a> [opensearch\_iam\_role\_arn](#output\_opensearch\_iam\_role\_arn) | The ARN of the IAM role used for OpenSearch to read and write Snapshots |
 | <a name="output_opensearch_iam_role_name"></a> [opensearch\_iam\_role\_name](#output\_opensearch\_iam\_role\_name) | The name of the IAM role used for OpenSearch to read and write Snapshots |
+| <a name="output_remote_connection_vpc_endpoints"></a> [remote\_connection\_vpc\_endpoints](#output\_remote\_connection\_vpc\_endpoints) | n/a |
 | <a name="output_s3_snapshot_bucket_arn"></a> [s3\_snapshot\_bucket\_arn](#output\_s3\_snapshot\_bucket\_arn) | ARN of the S3 bucket used for snapshots |
 | <a name="output_s3_snapshot_bucket_name"></a> [s3\_snapshot\_bucket\_name](#output\_s3\_snapshot\_bucket\_name) | Name of the S3 bucket used for snapshots |
 | <a name="output_secrets_manager_secret_name"></a> [secrets\_manager\_secret\_name](#output\_secrets\_manager\_secret\_name) | The name of the Secrets Manager secret which contains the OpenSearch master user details |
