@@ -110,3 +110,35 @@ data "aws_iam_policy_document" "allow_rds_exporter_access" {
     }
   }
 }
+
+resource "aws_iam_policy" "google_s3_mirror_kms_key_access" {
+  count = var.create_google_s3_mirror_role ? 1 : 0
+
+  name        = "google_s3_mirror_kms_key_access"
+  description = "Permissions for decrypting parquet files in s3."
+  policy      = data.aws_iam_policy_document.google_s3_mirror_kms_key_access[0].json
+}
+
+data "aws_iam_policy_document" "google_s3_mirror_kms_key_access" {
+  count = var.create_google_s3_mirror_role ? 1 : 0
+
+  statement {
+    sid = "AllowDecryptionAccessToKMSKey"
+
+    actions = [
+      "kms:Decrypt",
+      "kms:DescribeKey"
+    ]
+
+    resources = [
+      "arn:aws:kms:${data.aws_region.current.region}:${data.aws_caller_identity.current.account_id}:key/*"
+    ]
+  }
+}
+
+resource "aws_iam_role_policy_attachment" "google_s3_mirror_kms_key_access" {
+  count = var.create_google_s3_mirror_role ? 1 : 0
+
+  role       = aws_iam_role.google-s3-mirror[0].name
+  policy_arn = aws_iam_policy.google_s3_mirror_kms_key_access[0].arn
+}
