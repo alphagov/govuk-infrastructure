@@ -48,7 +48,8 @@ module "search-api-v2-integration" {
   ]
 
   variable_set_ids = [
-    local.gcp_credentials["integration"]
+    local.gcp_credentials["integration"],
+    local.aws_credentials["integration"]
   ]
 }
 
@@ -102,7 +103,8 @@ module "search-api-v2-staging" {
   ]
 
   variable_set_ids = [
-    local.gcp_credentials["staging"]
+    local.gcp_credentials["staging"],
+    local.aws_credentials["staging"]
   ]
 }
 
@@ -156,7 +158,8 @@ module "search-api-v2-production" {
   ]
 
   variable_set_ids = [
-    local.gcp_credentials["production"]
+    local.gcp_credentials["production"],
+    local.aws_credentials["production"],
   ]
 }
 
