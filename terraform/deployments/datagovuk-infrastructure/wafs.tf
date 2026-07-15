@@ -269,6 +269,41 @@ resource "aws_wafv2_web_acl_logging_configuration" "find_waf" {
 }
 
 # ===========================================================
+# Bad bot User-Agent patterns for CKAN
+# ===========================================================
+
+resource "aws_wafv2_regex_pattern_set" "ckan_bad_bots" {
+  name  = "ckan-bad-bots-${var.govuk_environment}"
+  scope = "REGIONAL"
+
+  regular_expression { regex_string = "(?i)Bytespider" }
+  regular_expression { regex_string = "(?i)Sogou" }
+  regular_expression { regex_string = "(?i)Amazonbot" }
+  regular_expression { regex_string = "(?i)PetalBot" }
+  regular_expression { regex_string = "(?i)SemrushBot" }
+  regular_expression { regex_string = "(?i)AhrefsBot" }
+  regular_expression { regex_string = "(?i)MJ12bot" }
+  regular_expression { regex_string = "(?i)DotBot" }
+  regular_expression { regex_string = "(?i)BLEXBot" }
+  regular_expression { regex_string = "(?i)Clickagy" }
+  regular_expression { regex_string = "(?i)serpstatbot" }
+  regular_expression { regex_string = "(?i)DataForSeoBot" }
+  regular_expression { regex_string = "(?i)meta-externalagent" }
+  regular_expression { regex_string = "(?i)GPTBot" }
+  regular_expression { regex_string = "(?i)ClaudeBot" }
+  regular_expression { regex_string = "(?i)Claude-Web" }
+  regular_expression { regex_string = "(?i)anthropic-ai" }
+  regular_expression { regex_string = "(?i)CCBot" }
+  regular_expression { regex_string = "(?i)ChatGPT-User" }
+
+  tags = {
+    Name        = "ckan-bad-bots-${var.govuk_environment}"
+    Application = "CKAN"
+    Purpose     = "BotBlocking"
+  }
+}
+
+# ===========================================================
 # WAF Web ACL and Rules for CKAN application
 # ===========================================================
 
@@ -278,6 +313,36 @@ resource "aws_wafv2_web_acl" "ckan" {
   scope = "REGIONAL"
   default_action {
     allow {}
+  }
+  rule {
+    name     = "ckan-bad-bot-block"
+    priority = 0
+    action {
+      block {
+        custom_response {
+          response_code = 403
+        }
+      }
+    }
+    statement {
+      regex_pattern_set_reference_statement {
+        arn = aws_wafv2_regex_pattern_set.ckan_bad_bots.arn
+        field_to_match {
+          single_header {
+            name = "user-agent"
+          }
+        }
+        text_transformation {
+          priority = 0
+          type     = "NONE"
+        }
+      }
+    }
+    visibility_config {
+      cloudwatch_metrics_enabled = true
+      metric_name                = "ckan-bad-bot-block"
+      sampled_requests_enabled   = true
+    }
   }
   # Rule 1: Rate limit warning (monitoring only)
   # This rule counts requests approaching the limit but doesn't block
