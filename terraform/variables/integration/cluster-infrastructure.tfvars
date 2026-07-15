@@ -15,4 +15,6 @@ rds_apply_immediately       = true
 rds_backup_retention_period = 1
 rds_skip_final_snapshot     = true
 
+use_bedrock_endpoints = true
+
 secrets_recovery_window_in_days = 0

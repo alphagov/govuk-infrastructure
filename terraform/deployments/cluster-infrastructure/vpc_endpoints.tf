@@ -20,6 +20,20 @@ resource "aws_security_group" "vpc_endpoints" {
   }
 }
 
+resource "aws_vpc_endpoint" "bedrock_runtime" {
+  count               = var.use_bedrock_endpoints ? 1 : 0
+  vpc_id              = data.tfe_outputs.vpc.nonsensitive_values.id
+  service_name        = "com.amazonaws.${data.aws_region.current.region}.bedrock-runtime"
+  vpc_endpoint_type   = "Interface"
+  private_dns_enabled = true
+  security_group_ids  = [aws_security_group.vpc_endpoints.id]
+  subnet_ids          = [for subnet in aws_subnet.eks_private : subnet.id]
+
+  tags = {
+    Name = "bedrock-runtime-endpoint-${var.govuk_environment}"
+  }
+}
+
 resource "aws_vpc_endpoint" "ecr_api" {
   count               = var.use_ecr_vpc_endpoints ? 1 : 0
   vpc_id              = data.tfe_outputs.vpc.nonsensitive_values.id
