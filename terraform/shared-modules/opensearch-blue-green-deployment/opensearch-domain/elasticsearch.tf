@@ -98,6 +98,12 @@ resource "aws_elasticsearch_domain_policy" "main" {
 
   domain_name     = aws_elasticsearch_domain.elasticsearch[0].domain_name
   access_policies = data.aws_iam_policy_document.elasticsearch_domain.json
+
+  lifecycle {
+    replace_triggered_by = [
+      aws_elasticsearch_domain.elasticsearch[0]
+    ]
+  }
 }
 
 data "aws_iam_policy_document" "elasticsearch_domain" {
@@ -118,5 +124,11 @@ resource "aws_elasticsearch_vpc_endpoint" "elasticsearch" {
   vpc_options {
     subnet_ids         = var.subnet_ids
     security_group_ids = var.security_group_ids
+  }
+
+  lifecycle {
+    replace_triggered_by = [
+      aws_elasticsearch_domain.elasticsearch[0]
+    ]
   }
 }
