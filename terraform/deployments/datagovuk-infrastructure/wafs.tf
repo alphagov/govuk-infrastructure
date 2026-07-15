@@ -374,7 +374,7 @@ resource "aws_wafv2_web_acl" "ckan" {
       rate_based_statement {
         limit              = 100
         aggregate_key_type = "CUSTOM_KEYS"
-        custom_keys {
+        custom_key {
           header {
             name = "user-agent"
             text_transformation {
