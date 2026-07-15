@@ -1,29 +1,79 @@
-resource "aws_s3_bucket" "content_data_csvs" {
-  bucket = "govuk-${var.govuk_environment}-content-data-csvs"
+locals {
+  content_data_csvs_s3_bucket_name = "govuk-${var.govuk_environment}-content-data-csvs"
+  content_data_csvs_s3_bucket_arn  = "arn:aws:s3:::${local.content_data_csvs_s3_bucket_name}"
 }
 
-resource "aws_s3_bucket_acl" "content_data_csvs" {
-  bucket = aws_s3_bucket.content_data_csvs.id
-  acl    = "public-read"
+module "content_data_csvs_s3_bucket" {
+  source = "../../shared-modules/s3"
+
+  name              = local.content_data_csvs_s3_bucket_name
+  govuk_environment = var.govuk_environment
+
+  enable_public_access_block = false
+
+  extra_bucket_policies = [data.aws_iam_policy_document.content_data_csvs_s3_bucket_public_read.json]
+
+  lifecycle_rules = [
+    {
+      id     = "all"
+      status = "Enabled"
+
+      expiration = {
+        days = 7
+      }
+    },
+    {
+      id     = "all-expired"
+      status = "Enabled"
+
+      noncurrent_version_expiration = {
+        noncurrent_days = 7
+      }
+    },
+  ]
 }
 
-resource "aws_s3_bucket_logging" "content_data_csvs" {
-  bucket        = aws_s3_bucket.content_data_csvs.id
-  target_bucket = "govuk-${var.govuk_environment}-aws-logging"
-  target_prefix = "s3/govuk-${var.govuk_environment}-content-data-csvs/"
-}
+data "aws_iam_policy_document" "content_data_csvs_s3_bucket_public_read" {
+  statement {
+    sid = "AllowPublicObjectRead"
 
-resource "aws_s3_bucket_lifecycle_configuration" "content_data_csvs" {
-  bucket = aws_s3_bucket.content_data_csvs.id
+    actions = ["s3:GetObject"]
 
-  rule {
-    id     = "all"
-    status = "Enabled"
+    resources = ["${local.content_data_csvs_s3_bucket_arn}/*"]
 
-    expiration {
-      days = 7
+    principals {
+      type        = "*"
+      identifiers = ["*"]
     }
   }
+
+  statement {
+    sid = "AllowPublicListBucket"
+
+    actions = ["s3:ListBucket"]
+
+    resources = [local.content_data_csvs_s3_bucket_arn]
+
+    principals {
+      type        = "*"
+      identifiers = ["*"]
+    }
+  }
+}
+
+moved {
+  from = aws_s3_bucket.content_data_csvs
+  to   = module.content_data_csvs_s3_bucket.aws_s3_bucket.this
+}
+
+moved {
+  from = aws_s3_bucket_logging.content_data_csvs
+  to   = module.content_data_csvs_s3_bucket.aws_s3_bucket_logging.this[0]
+}
+
+moved {
+  from = aws_s3_bucket_lifecycle_configuration.content_data_csvs
+  to   = module.content_data_csvs_s3_bucket.aws_s3_bucket_lifecycle_configuration.this[0]
 }
 
 # IAM role for content-data-admin
@@ -59,7 +109,7 @@ data "aws_iam_policy_document" "content_data_admin" {
       "s3:ListBucket",
       "s3:GetBucketLocation"
     ]
-    resources = [aws_s3_bucket.content_data_csvs.arn]
+    resources = [local.content_data_csvs_s3_bucket_arn]
   }
   statement {
     effect = "Allow"
@@ -69,7 +119,7 @@ data "aws_iam_policy_document" "content_data_admin" {
       "s3:PutObject",
       "s3:PutObjectAcl"
     ]
-    resources = ["${aws_s3_bucket.content_data_csvs.arn}/*"]
+    resources = ["${local.content_data_csvs_s3_bucket_arn}/*"]
   }
 }
 
