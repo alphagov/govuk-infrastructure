@@ -80,3 +80,10 @@ output "vpc_endpoints" {
     green = var.launch_green_domain ? module.green_domain[0].vpc_endpoint : null
   }
 }
+
+output "remote_connection_vpc_endpoints" {
+  value = {
+    green_endpoint_for_reindex_from_green_to_blue = var.create_remote_connection_to_import_to_blue_from_green ? aws_opensearch_outbound_connection.to_green_from_blue : null
+    blue_endpoaint_for_reindex_from_blue_to_green = var.create_remote_connection_to_import_to_green_from_blue ? aws_opensearch_outbound_connection.to_blue_from_green : null
+  }
+}

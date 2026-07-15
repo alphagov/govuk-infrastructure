@@ -52,3 +52,8 @@ output "vpc_endpoints" {
   value       = module.opensearch.vpc_endpoints
   description = "The VPC endpoints of blue and green clusters, or null if they have not been created"
 }
+
+output "remote_connection_vpc_endpoints" {
+  value       = module.opensearch.remote_connection_vpc_endpoints
+  description = "The VPC endpoints created automatically when creating remote connections for remote reindexing"
+}
