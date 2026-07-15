@@ -21,6 +21,9 @@ module "opensearch" {
   read_snapshots_from_environments             = var.read_snapshots_from_environments
   account_ids_allowed_to_read_domain_snapshots = var.account_ids_allowed_to_read_domain_snapshots
 
+  create_remote_connection_to_import_to_blue_from_green = var.create_remote_connection_to_import_to_blue_from_green
+  create_remote_connection_to_import_to_green_from_blue = var.create_remote_connection_to_import_to_green_from_blue
+
 
   // WARNING: The following option must be removed once the existing elasticsearch 6 green cluster has been destroyed
   use_aws_elasticsearch_domain_resource_for_green_cluster    = var.use_aws_elasticsearch_domain_resource_for_green_cluster
