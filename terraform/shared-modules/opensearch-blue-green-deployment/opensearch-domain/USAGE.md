@@ -42,5 +42,6 @@
 | <a name="output_opensearch_domain_arn"></a> [opensearch\_domain\_arn](#output\_opensearch\_domain\_arn) | n/a |
 | <a name="output_opensearch_domain_name"></a> [opensearch\_domain\_name](#output\_opensearch\_domain\_name) | n/a |
 | <a name="output_opensearch_endpoint"></a> [opensearch\_endpoint](#output\_opensearch\_endpoint) | n/a |
+| <a name="output_opensearch_engine_version"></a> [opensearch\_engine\_version](#output\_opensearch\_engine\_version) | n/a |
 | <a name="output_vpc_endpoint"></a> [vpc\_endpoint](#output\_vpc\_endpoint) | n/a |
 <!-- END_TF_DOCS -->
