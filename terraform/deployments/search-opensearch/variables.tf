@@ -136,6 +136,20 @@ variable "green_cluster_options" {
   }
 }
 
+variable "create_remote_connection_to_import_to_blue_from_green" {
+  type        = bool
+  description = "Create an outgoing connection from the blue cluster to the green cluster to allow remote reimport with green as source (remote) and blue as destination (local)"
+  default     = false
+  nullable    = false
+}
+
+variable "create_remote_connection_to_import_to_green_from_blue" {
+  type        = bool
+  description = "Create an outgoing connection from the green cluster to the blue cluster to allow remote reimport with blue as source (remote) and green as destination (local)"
+  default     = false
+  nullable    = false
+}
+
 variable "use_aws_elasticsearch_domain_resource_for_green_cluster" {
   type        = bool
   description = "Use an aws_elasticsearch_domain resource instead of aws_opensearch_domain to allow search ES cluster to be imported"
