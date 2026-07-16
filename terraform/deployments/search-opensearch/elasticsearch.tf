@@ -3,21 +3,6 @@ data "tfe_outputs" "security" {
   workspace    = "security-${var.govuk_environment}"
 }
 
-import {
-  to = module.opensearch.terraform_data.blue_domain_replacement
-  id = "vpc-search-domain-blue-7ejykdejkxvqpyoer2gii7gryi.eu-west-1.es.amazonaws.com"
-}
-
-import {
-  to = module.opensearch.terraform_data.green_domain_replacement
-  id = "vpc-green-elasticsearch6-domain-gqsdw3llwygomagfcrzwtjrawy.eu-west-1.es.amazonaws.com"
-}
-
-import {
-  to = module.opensearch.terraform_data.opensearch_domain_replacement
-  id = "vpc-green-elasticsearch6-domain-gqsdw3llwygomagfcrzwtjrawy.eu-west-1.es.amazonaws.com"
-}
-
 module "opensearch" {
   source = "../../shared-modules/opensearch-blue-green-deployment"
 
