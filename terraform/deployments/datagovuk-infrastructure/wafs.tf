@@ -276,18 +276,12 @@ resource "aws_wafv2_regex_pattern_set" "ckan_hard_block_bots" {
   name  = "ckan-hard-block-bots-${var.govuk_environment}"
   scope = "REGIONAL"
 
-  regular_expression { regex_string = "(?i)Bytespider" }
-  regular_expression { regex_string = "(?i)Sogou" }
-  regular_expression { regex_string = "(?i)Amazonbot" }
-  regular_expression { regex_string = "(?i)PetalBot" }
-  regular_expression { regex_string = "(?i)SemrushBot" }
-  regular_expression { regex_string = "(?i)AhrefsBot" }
-  regular_expression { regex_string = "(?i)MJ12bot" }
-  regular_expression { regex_string = "(?i)DotBot" }
-  regular_expression { regex_string = "(?i)BLEXBot" }
-  regular_expression { regex_string = "(?i)Clickagy" }
-  regular_expression { regex_string = "(?i)serpstatbot" }
-  regular_expression { regex_string = "(?i)DataForSeoBot" }
+  regular_expression { regex_string = "(?i)(Bytespider|Sogou)" }
+  regular_expression { regex_string = "(?i)(Amazonbot|PetalBot)" }
+  regular_expression { regex_string = "(?i)(SemrushBot|AhrefsBot)" }
+  regular_expression { regex_string = "(?i)(MJ12bot|DotBot)" }
+  regular_expression { regex_string = "(?i)(BLEXBot|Clickagy)" }
+  regular_expression { regex_string = "(?i)(serpstatbot|DataForSeoBot)" }
 
   tags = {
     Name        = "ckan-hard-block-bots-${var.govuk_environment}"
