@@ -43,7 +43,7 @@ locals {
     coredns            = { addon_version = "v1.13.2-eksbuild.3", resolve_conflicts_on_create = "OVERWRITE" }
     kube-proxy         = { addon_version = "v1.35.3-eksbuild.13", resolve_conflicts_on_create = "OVERWRITE" }
     kube-state-metrics = { addon_version = "v2.19.1-eksbuild.1", resolve_conflicts_on_create = "OVERWRITE" }
-    metrics-server     = { addon_version = "v0.8.1-eksbuild.2", resolve_conflicts_on_create = "OVERWRITE" }
+    metrics-server     = { addon_version = "v0.8.1-eksbuild.11", resolve_conflicts_on_create = "OVERWRITE" }
     vpc-cni = {
       addon_version               = "v1.22.2-eksbuild.1",
       resolve_conflicts_on_create = "OVERWRITE",
