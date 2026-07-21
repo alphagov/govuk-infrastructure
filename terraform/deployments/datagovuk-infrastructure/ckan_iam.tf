@@ -1,4 +1,3 @@
-
 module "ckan_iam_role" {
   source             = "terraform-aws-modules/iam/aws//modules/iam-role"
   version            = "~> 6.0"
@@ -26,8 +25,8 @@ data "aws_iam_policy_document" "ckan" {
     actions = ["s3:*"]
 
     resources = [
-      aws_s3_bucket.datagovuk-organogram.arn,
-      "${aws_s3_bucket.datagovuk-organogram.arn}/*"
+      module.secure_s3_bucket_datagovuk-organogram.arn,
+      "${module.secure_s3_bucket_datagovuk-organogram.arn}/*"
     ]
   }
 }
