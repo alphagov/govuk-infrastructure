@@ -8,7 +8,7 @@ jobs:
       contents: read
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           show-progress: false
       - uses: alphagov/govuk-infrastructure/.github/actions/actionlint@788b98389ac2003202dc421f4ccd187ad85cda17 # main
