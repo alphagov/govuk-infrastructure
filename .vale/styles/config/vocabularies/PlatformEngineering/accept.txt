@@ -11,12 +11,14 @@ Argo
 ArgoCD
 Autoscaler?s?
 AWS
+CEL
 CI/CD
 CircleCI
 CLI
 CloudFront
 CloudTrail
 CNAME
+CNCF
 CodeCommit
 Cognito
 CPU
@@ -48,16 +50,19 @@ Kargo
 KCL
 Kibana
 Kustomize
+Kyverno
 Logit
 Logstash
 MacBooks?
 Nygard
 NLBs
 OAuth
+OPA Gatekeeper
 PagerDuty
 Pkl
 Pryce
 Pulumi
+Rego
 SecretsManager
 SHA
 Sidekiq
