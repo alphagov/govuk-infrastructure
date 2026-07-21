@@ -462,7 +462,7 @@ repos:
     push_allowances: ["alphagov/gov-uk-platform-engineering"]
     required_status_checks:
       additional_contexts:
-        - CI / Test Go
+        - Test Go
         - CodeQL SAST scan / Analyze
         - Dependency Review scan / dependency-review-pr
 
