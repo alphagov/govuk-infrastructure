@@ -41,7 +41,7 @@ module "secure_s3_bucket_datagovuk-organogram" {
   ownership_controls = {
     rules = [
       {
-        object_ownership = "BucketOwnerEnforced"
+        object_ownership = "ObjectWriter"
       },
     ]
   }
@@ -77,6 +77,6 @@ moved {
 }
 
 moved {
-  from = aws_s3_bucket_logging.datagovuk_organogram
+  from = aws_s3_bucket_logging.datagovuk_organogram[0]
   to   = module.secure_s3_bucket_datagovuk-organogram.aws_s3_bucket_logging.this[0]
 }
