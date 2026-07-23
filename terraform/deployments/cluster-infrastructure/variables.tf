@@ -200,6 +200,13 @@ variable "authentication_mode" {
   description = "Authentication mode to use for the cluster"
 }
 
+variable "use_bedrock_endpoints" {
+  type        = bool
+  description = "If true, create VPC endpoints for Bedrock Runtime, to avoid using the NAT gateway for this traffic."
+  default     = false
+}
+
+
 variable "use_ecr_vpc_endpoints" {
   type        = bool
   description = "If true, create VPC endpoints for ECR and ECR Docker, to avoid using the NAT gateway for this traffic."
