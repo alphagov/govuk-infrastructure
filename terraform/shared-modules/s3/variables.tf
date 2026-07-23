@@ -9,8 +9,8 @@ variable "name" {
   description = "The bucket and IAM policy name. NOTE: This must be a globally unique name for AWS S3"
 
   validation {
-    condition     = startswith(var.name, "govuk-")
-    error_message = "The name of the bucket should follow the format 'govuk-{environment}-{purpose}'"
+    condition     = startswith(var.name, "govuk-") || startswith(var.name, "datagovuk-")
+    error_message = "The name of the bucket should follow the format 'govuk-{environment}-{purpose}' or 'datagovuk-{environment}-{purpose}'"
   }
 }
 
@@ -113,6 +113,23 @@ variable "object_lock_config" {
   nullable    = false
 }
 
+variable "ownership_controls" {
+  type = object({
+    rules = optional(set(object({
+      object_ownership = string
+    })))
+  })
+  description = "Override bucket object ownership controls"
+  default = {
+    rules = [
+      {
+        object_ownership = "BucketOwnerEnforced"
+      }
+    ]
+  }
+  nullable = false
+}
+
 variable "enable_public_access_block" {
   type        = bool
   description = "Whether S3 bucket should block public access"
@@ -145,10 +162,10 @@ variable "tags" {
 
 variable "cors_rules" {
   type = object({
-    allowed_headers = list(string)
-    allowed_methods = list(string)
-    allowed_origins = list(string)
-    max_age_seconds = number
+    allowed_headers = optional(list(string))
+    allowed_methods = optional(list(string))
+    allowed_origins = optional(list(string))
+    max_age_seconds = optional(number)
   })
   description = "Cross-Origin Resource Sharing rules to apply to the bucket. If null, no rules will be configured"
   nullable    = true

@@ -1,10 +1,15 @@
+locals {
+  datagovuk-organogram_bucket_name = "datagovuk-${var.govuk_environment}-ckan-organogram"
+  datagovuk-organogram_bucket_arn  = "arn:aws:s3:::${local.datagovuk-organogram_bucket_name}"
+}
+
 data "aws_iam_policy_document" "s3_fastly_read_policy_doc" {
   statement {
     sid     = "S3FastlyReadBucket"
     actions = ["s3:GetObject"]
     resources = [
-      "arn:aws:s3:::${aws_s3_bucket.datagovuk-organogram.id}",
-      "arn:aws:s3:::${aws_s3_bucket.datagovuk-organogram.id}/*",
+      local.datagovuk-organogram_bucket_arn,
+      "${local.datagovuk-organogram_bucket_arn}/*",
     ]
     condition {
       test     = "IpAddress"
@@ -18,51 +23,60 @@ data "aws_iam_policy_document" "s3_fastly_read_policy_doc" {
   }
 }
 
-resource "aws_s3_bucket" "datagovuk-organogram" {
-  bucket = "datagovuk-${var.govuk_environment}-ckan-organogram"
-  tags   = { Name = "datagovuk-${var.govuk_environment}-ckan-organogram" }
-}
+module "secure_s3_bucket_datagovuk-organogram" {
+  source = "../../shared-modules/s3"
 
-resource "aws_s3_bucket_versioning" "datagovuk_organogram" {
+  govuk_environment = var.govuk_environment
+  name              = local.datagovuk-organogram_bucket_name
 
-  bucket = aws_s3_bucket.datagovuk-organogram.id
-  versioning_configuration { status = "Enabled" }
-}
+  versioning_enabled         = true
+  enable_public_access_block = false
+  disable_bucket_logging     = startswith(var.govuk_environment, "eph-") ? true : false
 
-resource "aws_s3_bucket_logging" "datagovuk_organogram" {
-  count = startswith(var.govuk_environment, "eph-") ? 0 : 1
-
-  bucket        = aws_s3_bucket.datagovuk-organogram.id
-  target_bucket = "govuk-${var.govuk_environment}-aws-logging"
-  target_prefix = "s3/datagovuk-${var.govuk_environment}-ckan-organogram/"
-}
-
-resource "aws_s3_bucket_cors_configuration" "datagovuk_organogram" {
-  bucket = aws_s3_bucket.datagovuk-organogram.id
-  cors_rule {
+  cors_rules = {
     allowed_methods = ["GET"]
     allowed_origins = var.organogram_bucket_cors_origins
   }
-}
 
-resource "aws_s3_bucket_policy" "govuk_datagovuk_organogram_read_policy" {
-  bucket = aws_s3_bucket.datagovuk-organogram.id
-  policy = data.aws_iam_policy_document.s3_fastly_read_policy_doc.json
-}
-
-resource "aws_s3_bucket_public_access_block" "datagovuk_organogram" {
-  bucket = aws_s3_bucket.datagovuk-organogram.id
-
-  block_public_acls       = false
-  block_public_policy     = false
-  ignore_public_acls      = false
-  restrict_public_buckets = false
-}
-
-resource "aws_s3_bucket_ownership_controls" "datagovuk_organogram" {
-  bucket = aws_s3_bucket.datagovuk-organogram.id
-
-  rule {
-    object_ownership = "ObjectWriter"
+  ownership_controls = {
+    rules = [
+      {
+        object_ownership = "ObjectWriter"
+      },
+    ]
   }
+
+  extra_bucket_policies = [
+    data.aws_iam_policy_document.s3_fastly_read_policy_doc.json
+  ]
+}
+
+moved {
+  from = aws_s3_bucket.datagovuk-organogram
+  to   = module.secure_s3_bucket_datagovuk-organogram.aws_s3_bucket.this
+}
+
+moved {
+  from = aws_s3_bucket_versioning.datagovuk_organogram
+  to   = module.secure_s3_bucket_datagovuk-organogram.aws_s3_bucket_versioning.this
+}
+
+moved {
+  from = aws_s3_bucket_policy.govuk_datagovuk_organogram_read_policy
+  to   = module.secure_s3_bucket_datagovuk-organogram.aws_s3_bucket_policy.bucket_policy
+}
+
+moved {
+  from = aws_s3_bucket_ownership_controls.datagovuk_organogram
+  to   = module.secure_s3_bucket_datagovuk-organogram.aws_s3_bucket_ownership_controls.owner
+}
+
+moved {
+  from = aws_s3_bucket_cors_configuration.datagovuk_organogram
+  to   = module.secure_s3_bucket_datagovuk-organogram.aws_s3_bucket_cors_configuration.this[0]
+}
+
+moved {
+  from = aws_s3_bucket_logging.datagovuk_organogram[0]
+  to   = module.secure_s3_bucket_datagovuk-organogram.aws_s3_bucket_logging.this[0]
 }

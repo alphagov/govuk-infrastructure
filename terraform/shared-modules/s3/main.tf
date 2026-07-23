@@ -179,8 +179,12 @@ resource "aws_s3_bucket_policy" "bucket_policy" {
 
 resource "aws_s3_bucket_ownership_controls" "owner" {
   bucket = aws_s3_bucket.this.id
-  rule {
-    object_ownership = "BucketOwnerEnforced"
+
+  dynamic "rule" {
+    for_each = coalesce(var.ownership_controls.rules, toset([{ object_ownership = "BucketOwnerEnforced" }]))
+    content {
+      object_ownership = rule.value.object_ownership
+    }
   }
 }
 
