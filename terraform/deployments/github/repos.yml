@@ -1082,6 +1082,7 @@ repos:
   govuk-s3-mirror: {}
 
   govuk-content-publishing-guidance:
+    homepage_url: "https://guidance.publishing.service.gov.uk/"
     teams:
       govuk: "maintain"
 
