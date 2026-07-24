@@ -49,8 +49,8 @@ data "aws_iam_policy_document" "sitemaps_bucket_policy" {
       "s3:List*",
     ]
     resources = [
-      "arn:aws:s3:::${aws_s3_bucket.search_sitemaps_bucket.id}",
-      "arn:aws:s3:::${aws_s3_bucket.search_sitemaps_bucket.id}/*",
+      module.search_sitemaps_bucket.arn,
+      "${module.search_sitemaps_bucket.arn}/*",
     ]
   }
 }
