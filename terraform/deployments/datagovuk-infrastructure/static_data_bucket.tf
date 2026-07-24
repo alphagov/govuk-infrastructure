@@ -53,24 +53,3 @@ data "aws_iam_policy_document" "datagovuk_static" {
     }
   }
 }
-
-moved {
-  from = aws_s3_bucket_policy.govuk_datagovuk_static_read_policy
-  to   = module.datagovuk_static.aws_s3_bucket_policy.bucket_policy
-}
-
-moved {
-  from = aws_s3_bucket.datagovuk_static
-  to   = module.datagovuk_static.aws_s3_bucket.this
-}
-
-moved {
-  from = aws_s3_bucket_versioning.datagovuk_static
-  to   = module.datagovuk_static.aws_s3_bucket_versioning.this
-}
-
-moved {
-  from = aws_s3_bucket_logging.datagovuk_static
-  to   = module.datagovuk_static.aws_s3_bucket_logging.this
-}
-
