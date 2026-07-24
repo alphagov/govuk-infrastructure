@@ -408,8 +408,8 @@ data "aws_iam_policy_document" "govuk_mirror_sync" {
       "s3:*Object"
     ]
     resources = [
-      aws_s3_bucket.athena_query_results.arn,
-      "${aws_s3_bucket.athena_query_results.arn}/*",
+      module.athena_query_results.arn,
+      "${module.athena_query_results.arn}/*",
     ]
     condition {
       test     = "ForAnyValue:StringEquals"
@@ -463,7 +463,7 @@ data "aws_iam_policy_document" "govuk_mirror_sync" {
       "s3:GetObject"
     ]
     resources = [
-      "${aws_s3_bucket.athena_query_results.arn}/*",
+      "${module.athena_query_results.arn}/*",
     ]
   }
 }
