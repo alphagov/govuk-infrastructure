@@ -5,6 +5,6 @@ resource "google_cloud_quotas_quota_preference" "bigquery_query_usage_per_day" {
   quota_id      = "QueryUsagePerDay"
   contact_email = "govgraph-developers@digital.cabinet-office.gov.uk"
   quota_config {
-    preferred_value = 1048576 # 1048576 Mib = 1 TiB
+    preferred_value = 3145728 # 3145728 Mib = 1 TiB
   }
 }
