@@ -63,3 +63,24 @@ variable "ckan_rate_limit_warning_per_5min" {
   type        = number
   default     = 800
 }
+
+variable "enable_cross_account_database_backup_sync" {
+  description = "Whether this environment should support syncing its database backups to the new NDL AWS account"
+  type        = bool
+  default     = false
+}
+
+variable "cross_account_database_backup_sync_target_s3_bucket_arn" {
+  description = "The ARN of the AWS S3 bucket the backups will be synchronised to. This must be null if enable_cross_account_database_backup_sync is false"
+  type        = string
+  nullable    = true
+  default     = null
+
+  validation {
+    condition = (
+      (!var.enable_cross_account_database_backup_sync && var.cross_account_database_backup_sync_target_s3_bucket_arn == null)
+      || (var.enable_cross_account_database_backup_sync && var.cross_account_database_backup_sync_target_s3_bucket_arn != null)
+    )
+    error_message = "if enable_cross_account_database_backup_sync is true, cross_account_database_backup_sync_target_s3_bucket_arn must be set. Otherwise it must be null."
+  }
+}
