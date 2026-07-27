@@ -62,6 +62,8 @@ data "google_iam_policy" "artifact_registry_docker" {
       google_service_account.gce_redis_cli.member,
       google_service_account.gce_whitehall.member,
       google_service_account.gce_asset_manager.member,
+      google_service_account.rds_parquet_bq_loader.member,
+      google_service_account.docdb_bq_loader.member,
       "serviceAccount:service-${var.project_number}@serverless-robot-prod.iam.gserviceaccount.com",
     ]
   }
