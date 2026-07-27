@@ -22,3 +22,8 @@ output "sg_rds" {
   description = "RDS instance security groups"
   value       = { for k, v in aws_security_group.instance : k => v.id }
 }
+
+output "database_dump_bucket_arn" {
+  description = "The ARN of the AWS S3 bucket that is created to hold database backups. If the bucket is not created, this value is the empty string"
+  value       = var.create_secure_db_dumps_bucket ? module.secure_s3_bucket_rds_dumps[0].arn : ""
+}
