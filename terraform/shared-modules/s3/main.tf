@@ -1,3 +1,9 @@
+data "aws_caller_identity" "current" {}
+
+locals {
+  logging_target_bucket_default_val = data.aws_caller_identity.current.account_id == "430354129336" ? "govuk-test-aws-logging" : "govuk-${var.govuk_environment}-aws-logging"
+}
+
 resource "aws_s3_bucket" "this" {
   bucket = var.name
 
@@ -193,7 +199,7 @@ resource "aws_s3_bucket_logging" "this" {
 
   bucket = aws_s3_bucket.this.id
 
-  target_bucket = var.access_logging_config.target_bucket == null ? "govuk-${var.govuk_environment}-aws-logging" : var.access_logging_config.target_bucket
+  target_bucket = var.access_logging_config.target_bucket == null ? local.logging_target_bucket_default_val : var.access_logging_config.target_bucket
   target_prefix = var.access_logging_config.target_prefix == null ? "s3/${aws_s3_bucket.this.bucket}/" : var.access_logging_config.target_prefix
 
   dynamic "target_object_key_format" {
