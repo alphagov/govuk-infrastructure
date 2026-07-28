@@ -8,6 +8,14 @@ resource "google_bigquery_dataset" "asset_manager" {
   max_time_travel_hours = "48"
 }
 
+resource "google_bigquery_dataset" "govuk_docdb_asset_manager_raw_s" {
+  dataset_id            = "govuk_docdb_asset_manager_raw_s"
+  friendly_name         = "Asset Manager"
+  description           = "Data from the GOV.UK Asset Manager database"
+  location              = var.region
+  max_time_travel_hours = "48"
+}
+
 data "google_iam_policy" "bigquery_dataset_asset_manager" {
   binding {
     role = "roles/bigquery.dataEditor"
@@ -15,6 +23,7 @@ data "google_iam_policy" "bigquery_dataset_asset_manager" {
       "projectWriters",
       google_service_account.bigquery_scheduled_queries.member,
       google_service_account.gce_asset_manager.member,
+      google_service_account.docdb_bq_loader.member,
     ]
   }
   binding {
@@ -37,6 +46,11 @@ data "google_iam_policy" "bigquery_dataset_asset_manager" {
 
 resource "google_bigquery_dataset_iam_policy" "asset_manager" {
   dataset_id  = google_bigquery_dataset.asset_manager.dataset_id
+  policy_data = data.google_iam_policy.bigquery_dataset_asset_manager.policy_data
+}
+
+resource "google_bigquery_dataset_iam_policy" "govuk_docdb_asset_manager_raw_s" {
+  dataset_id  = google_bigquery_dataset.govuk_docdb_asset_manager_raw_s.dataset_id
   policy_data = data.google_iam_policy.bigquery_dataset_asset_manager.policy_data
 }
 

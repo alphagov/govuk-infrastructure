@@ -8,6 +8,14 @@ resource "google_bigquery_dataset" "support_api" {
   max_time_travel_hours = "48"
 }
 
+resource "google_bigquery_dataset" "govuk_postgres_support_api_raw_s" {
+  dataset_id            = "govuk_postgres_support_api_raw_s"
+  friendly_name         = "Support API"
+  description           = "Data from the GOV.UK Support API database"
+  location              = var.region
+  max_time_travel_hours = "48"
+}
+
 data "google_iam_policy" "bigquery_dataset_support_api" {
   binding {
     role = "roles/bigquery.dataEditor"
@@ -15,6 +23,7 @@ data "google_iam_policy" "bigquery_dataset_support_api" {
       "projectWriters",
       google_service_account.bigquery_scheduled_queries.member,
       google_service_account.gce_support_api.member,
+      google_service_account.rds_parquet_bq_loader.member,
     ]
   }
   binding {
@@ -36,6 +45,11 @@ data "google_iam_policy" "bigquery_dataset_support_api" {
 
 resource "google_bigquery_dataset_iam_policy" "support_api" {
   dataset_id  = google_bigquery_dataset.support_api.dataset_id
+  policy_data = data.google_iam_policy.bigquery_dataset_support_api.policy_data
+}
+
+resource "google_bigquery_dataset_iam_policy" "govuk_postgres_support_api_raw_s" {
+  dataset_id  = google_bigquery_dataset.govuk_postgres_support_api_raw_s.dataset_id
   policy_data = data.google_iam_policy.bigquery_dataset_support_api.policy_data
 }
 

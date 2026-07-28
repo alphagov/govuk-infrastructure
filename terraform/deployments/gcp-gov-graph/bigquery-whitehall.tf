@@ -8,6 +8,14 @@ resource "google_bigquery_dataset" "whitehall" {
   max_time_travel_hours = "48"
 }
 
+resource "google_bigquery_dataset" "govuk_mysql_whitehall_raw_s" {
+  dataset_id            = "govuk_mysql_whitehall_raw_s"
+  friendly_name         = "Whitehall"
+  description           = "Data from the GOV.UK Whitehall database"
+  location              = var.region
+  max_time_travel_hours = "48"
+}
+
 data "google_iam_policy" "bigquery_dataset_whitehall" {
   binding {
     role = "roles/bigquery.dataEditor"
@@ -15,6 +23,7 @@ data "google_iam_policy" "bigquery_dataset_whitehall" {
       "projectWriters",
       google_service_account.bigquery_scheduled_queries.member,
       google_service_account.gce_whitehall.member,
+      google_service_account.rds_parquet_bq_loader.member,
     ]
   }
   binding {
@@ -37,6 +46,11 @@ data "google_iam_policy" "bigquery_dataset_whitehall" {
 
 resource "google_bigquery_dataset_iam_policy" "whitehall" {
   dataset_id  = google_bigquery_dataset.whitehall.dataset_id
+  policy_data = data.google_iam_policy.bigquery_dataset_whitehall.policy_data
+}
+
+resource "google_bigquery_dataset_iam_policy" "govuk_mysql_whitehall_raw_s" {
+  dataset_id  = google_bigquery_dataset.govuk_mysql_whitehall_raw_s.dataset_id
   policy_data = data.google_iam_policy.bigquery_dataset_whitehall.policy_data
 }
 
