@@ -282,7 +282,7 @@ resource "aws_wafv2_regex_pattern_set" "ckan_hard_block_bots" {
   regular_expression { regex_string = "(?i)(MJ12bot|DotBot)" }
   regular_expression { regex_string = "(?i)(BLEXBot|Clickagy)" }
   regular_expression { regex_string = "(?i)(serpstatbot|DataForSeoBot)" }
-  regular_expression { regex_string = "(?i)amazon-Quick" }                     # Amazon scraper bot
+  regular_expression { regex_string = "(?i)amazon-Quick" }                       # Amazon scraper bot
   regular_expression { regex_string = "(?i)TalonGDPvalAttachmentGroupExplorer" } # unknown crawler
 
   tags = {
