@@ -1,0 +1,54 @@
+kind: AdmissionReview
+apiVersion: admission.k8s.io/v1beta1
+request:
+  kind:
+    group: networking.k8s.io
+    version: v1
+    kind: Ingress
+  operation: "UPDATE"
+  name: ing-update
+  namespace: default-2
+  object:
+    apiVersion: networking.k8s.io/v1
+    kind: Ingress
+    metadata:
+      name: ing-update
+      namespace: default-2
+      annotations:
+        allow-duplicate-host: "true"
+        allowed-duplicate-ns: "default-1,default-2"
+        external-dns.alpha.kubernetes.io/aws-weight: "50"
+        external-dns.alpha.kubernetes.io/set-identifier: ing-update-default
+    spec:
+      rules:
+      - host: ing-1.example.com   # Updated to conflicting host.
+        http:
+          paths:
+          - pathType: Prefix
+            path: "/"
+            backend:
+              service:
+                name: nginx
+                port:
+                  number: 80
+  oldObject:
+    apiVersion: networking.k8s.io/v1
+    kind: Ingress
+    metadata:
+      name: ing-update
+      namespace: default-2
+      annotations:
+        external-dns.alpha.kubernetes.io/aws-weight: "100"
+        external-dns.alpha.kubernetes.io/set-identifier: ing-update-default
+    spec:
+      rules:
+      - host: ing-update.example.com
+        http:
+          paths:
+          - pathType: Prefix
+            path: "/"
+            backend:
+              service:
+                name: nginx
+                port:
+                  number: 80

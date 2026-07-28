@@ -1,0 +1,8 @@
+apiVersion: constraints.gatekeeper.sh/v1beta1
+kind: k8ssnippetallowlist
+metadata:
+  name: k8ssnippetallowlist
+spec:
+  match:
+    kinds:
+      - kinds: ["Ingress"]

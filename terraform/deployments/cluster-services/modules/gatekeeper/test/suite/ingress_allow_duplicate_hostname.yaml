@@ -1,0 +1,85 @@
+kind: Suite
+apiVersion: test.gatekeeper.sh/v1alpha1
+tests:
+- name: allow-duplicate-hostname
+  template: ../../resources/constraint_templates/ingress_allow_duplicate_hostname.yaml
+  constraint: ../../resources/constraints/ingress_allow_duplicate_hostname.yaml
+  cases:
+  - name: allow-different-ingress-hosts
+    inventory:
+      - samples/ingress_allow_duplicate_hostname/allow_different_hosts/inventory.yaml
+    object: samples/ingress_allow_duplicate_hostname/allow_different_hosts/case.yaml
+    assertions:
+    - violations: no
+  - name: allow-same-host-different-ns-with-annotations
+    inventory:
+      - samples/ingress_allow_duplicate_hostname/allow_same_host/inventory.yaml
+    object: samples/ingress_allow_duplicate_hostname/allow_same_host/case.yaml
+    assertions:
+    - violations: no
+  - name: deny-ingress-host-clash
+    inventory:
+      - samples/ingress_allow_duplicate_hostname/deny_clash/inventory.yaml
+    object: samples/ingress_allow_duplicate_hostname/deny_clash/case.yaml
+    assertions:
+    - violations: yes
+  - name: deny-missing-external-dns-weight
+    inventory:
+      - samples/ingress_allow_duplicate_hostname/deny_missing_weight/inventory.yaml
+    object: samples/ingress_allow_duplicate_hostname/deny_missing_weight/case.yaml
+    assertions:
+    - violations: yes
+  - name: deny-update-host-to-conflict-without-annotations
+    inventory:
+      - samples/ingress_allow_duplicate_hostname/deny_update_host_no_annotations/inventory.yaml
+    object: samples/ingress_allow_duplicate_hostname/deny_update_host_no_annotations/case.yaml
+    assertions:
+    - violations: yes
+  - name: allow-update-host-to-conflict-with-annotations
+    inventory:
+      - samples/ingress_allow_duplicate_hostname/allow_update_host_with_annotations/inventory.yaml
+    object: samples/ingress_allow_duplicate_hostname/allow_update_host_with_annotations/case.yaml
+    assertions:
+    - violations: no
+  - name: deny-update-remove-external-dns-weight
+    inventory:
+      - samples/ingress_allow_duplicate_hostname/deny_update_remove_aws_weight/inventory.yaml
+    object: samples/ingress_allow_duplicate_hostname/deny_update_remove_aws_weight/case.yaml
+    assertions:
+    - violations: yes
+  - name: allow-same-host-in-same-ns-from-ingress-clash-case
+    inventory:
+      - samples/ingress_allow_duplicate_hostname/allow_ingress_same_ns/inventory.yaml
+    object: samples/ingress_allow_duplicate_hostname/allow_ingress_same_ns/case.yaml
+    assertions:
+    - violations: no
+  - name: allow-update-new-ingress-hosts-from-ingress-clash-case
+    inventory: 
+      - samples/ingress_allow_duplicate_hostname/allow_update_new/inventory.yaml
+    object: samples/ingress_allow_duplicate_hostname/allow_update_new/case.yaml
+    assertions:
+    - violations: no
+  - name: allow-update-existing-ingress-hosts-from-ingress-clash-case
+    inventory: 
+      - samples/ingress_allow_duplicate_hostname/allow_update_existing/inventory.yaml
+    object: samples/ingress_allow_duplicate_hostname/allow_update_existing/case.yaml
+    assertions:
+    - violations: no
+  - name: deny-update-ingress-host-clash-change-existing-from-ingress-clash-case
+    inventory: 
+      - samples/ingress_allow_duplicate_hostname/deny_update_existing_clash/inventory.yaml
+    object: samples/ingress_allow_duplicate_hostname/deny_update_existing_clash/case.yaml
+    assertions:
+    - violations: yes
+  - name: deny-update-new-ns-ingress-host-clash-from-ingress-clash-case
+    inventory: 
+      - samples/ingress_allow_duplicate_hostname/deny_update_new_clash/inventory.yaml
+    object: samples/ingress_allow_duplicate_hostname/deny_update_new_clash/case.yaml
+    assertions:
+    - violations: yes
+  - name: deny-create-ingress-host-with-wrong-annotations
+    inventory: 
+      - samples/ingress_allow_duplicate_hostname/deny_same_host_with_wrong_annotations/inventory.yaml
+    object: samples/ingress_allow_duplicate_hostname/deny_same_host_with_wrong_annotations/case.yaml
+    assertions:
+    - violations: yes

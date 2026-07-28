@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  annotations:
+    cloud-platform.justice.gov.uk/application: Cloud Platform starter pack test app
+    cloud-platform.justice.gov.uk/business-unit: cloud-platform
+    cloud-platform.justice.gov.uk/owner: 'Cloud Platform: platforms@digital.justice.gov.uk'
+    cloud-platform.justice.gov.uk/source-code: https://github.com/ministryofjustice/cloud-platform-infrastructure
+  labels:
+    name: starter-pack-0
+  name: starter-pack-0
+

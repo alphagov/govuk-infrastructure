@@ -1,0 +1,5 @@
+kind: Ingress
+metadata: 
+  annotations: 
+    kubernetes.io/ingress.class: "some-other-ingress-class"
+    nginx.ingress.kubernetes.io/modsecurity-snippet: "other"

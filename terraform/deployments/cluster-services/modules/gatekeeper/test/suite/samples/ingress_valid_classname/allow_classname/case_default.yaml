@@ -1,0 +1,29 @@
+kind: AdmissionReview
+apiVersion: admission.k8s.io/v1beta1
+request:
+  kind:
+    group: networking.k8s.io
+    version: v1
+    kind: Ingress
+  operation: "CREATE"
+  name: ing-default
+  namespace: default-0
+  object:
+    apiVersion: networking.k8s.io/v1
+    kind: Ingress
+    metadata:
+      name: ing-default
+      namespace: default-0
+    spec:
+      ingressClassName: default
+      rules:
+      - host: ing-1.example.com
+        http:
+          paths:
+          - pathType: Prefix
+            path: "/"
+            backend:
+              service:
+                name: nginx
+                port:
+                  number: 80

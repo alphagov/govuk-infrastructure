@@ -1,0 +1,10 @@
+apiVersion: constraints.gatekeeper.sh/v1beta1
+kind: k8sblockingresses
+metadata:
+  name: k8sblockingresses
+spec:
+  match:
+    kinds:
+      - kinds: ["Ingress"]
+        apiGroups: ["extensions", "networking.k8s.io"]
+

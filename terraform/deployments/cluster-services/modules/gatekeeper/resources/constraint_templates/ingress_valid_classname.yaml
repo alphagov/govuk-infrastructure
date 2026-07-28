@@ -1,0 +1,36 @@
+apiVersion: templates.gatekeeper.sh/v1beta1
+kind: ConstraintTemplate
+metadata:
+  name: k8singressclassname
+  annotations:
+    metadata.gatekeeper.sh/title: Ensure ingressClassName is valid
+    description: |
+        This policy denies any Ingress resources that do not specify an ingressClassName or specify an invalid one.
+
+        The allowed ingress class names can be configured via the 'allowedIngressClasses' parameter in the Constraint.
+spec:
+  crd:
+    spec:
+      names:
+        kind: k8singressclassname
+      validation:
+        openAPIV3Schema:
+          properties:
+            allowedIngressClasses:
+              type: array
+              items:
+                type: string
+  targets:
+    - target: admission.k8s.gatekeeper.sh
+      rego: |
+        package k8singressclassname
+
+        violation[{"msg": msg}] {
+          input.review.kind.kind == "Ingress"
+          not ingress_class_allowed
+          msg := sprintf("IngressClassName '%s' is not allowed. Allowed values: %v", [input.review.object.spec.ingressClassName, input.parameters.allowedIngressClasses])
+        }
+
+        ingress_class_allowed {
+          input.review.object.spec.ingressClassName == input.parameters.allowedIngressClasses[_]
+        }

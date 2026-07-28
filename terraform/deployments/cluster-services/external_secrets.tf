@@ -12,7 +12,7 @@ resource "kubernetes_namespace_v1" "monitoring" {
 }
 
 resource "helm_release" "external_secrets" {
-  depends_on = [helm_release.aws_lb_controller]
+  depends_on = [module.gatekeeper]
 
   name             = "external-secrets"
   repository       = "https://charts.external-secrets.io"

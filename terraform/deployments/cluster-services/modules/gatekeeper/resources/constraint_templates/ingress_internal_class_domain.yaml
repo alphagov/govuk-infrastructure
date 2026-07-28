@@ -1,0 +1,57 @@
+apiVersion: templates.gatekeeper.sh/v1
+kind: ConstraintTemplate
+metadata:
+  name: k8singressinternalclassdomain
+spec:
+  crd:
+    spec:
+      names:
+        kind: k8singressinternalclassdomain
+      validation:
+        openAPIV3Schema:
+          type: object
+          properties:
+            validDomainNames:
+              type: array
+              items:
+                type: string
+            validInternalDomains:
+              type: array
+              items:
+                type: string
+            validInternalNonProdDomains:
+              type: array
+              items:
+                type: string
+  targets:
+      - target: admission.k8s.gatekeeper.sh
+        rego: |
+          package k8singressinternalclassdomain
+
+          valid_internal_domain {
+            pattern := input.parameters.validInternalDomains[_]
+            host := input.review.object.spec.rules[0].host
+            glob.match(pattern, [], host)
+          }
+
+          valid_internal_non_prod_domain {
+            pattern := input.parameters.validInternalNonProdDomains[_]
+            host := input.review.object.spec.rules[0].host
+            glob.match(pattern, [], host)
+          }
+
+          violation[{"msg": msg}] {
+            input.review.kind.kind == "Ingress"
+            input.review.object.spec.ingressClassName == "internal"
+            not valid_internal_domain
+            host := input.review.object.spec.rules[0].host
+            msg := sprintf("Ingress with ingressClassName '%v' must use domain matching one of %v. Found domain: %v", [input.review.object.spec.ingressClassName, input.parameters.validInternalDomains, host])
+          }
+
+          violation[{"msg": msg}] {
+            input.review.kind.kind == "Ingress"
+            input.review.object.spec.ingressClassName == "internal-non-prod"
+            not valid_internal_non_prod_domain
+            host := input.review.object.spec.rules[0].host
+            msg := sprintf("Ingress with ingressClassName '%v' must use domain matching one of %v. Found domain: %v", [input.review.object.spec.ingressClassName, input.parameters.validInternalNonProdDomains, host])
+          }

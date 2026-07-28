@@ -1,0 +1,31 @@
+kind: Suite
+apiVersion: test.gatekeeper.sh/v1alpha1
+tests:
+- name: service_type
+  template: ../../resources/constraint_templates/service_type.yaml
+  constraint: ../../resources/constraints/service_type.yaml
+  cases:
+  - name: allow-cluster-ip
+    inventory: 
+      - samples/service_type/allow_cluster_ip/inventory.yaml
+    object: samples/service_type/allow_cluster_ip/case.yaml
+    assertions:
+    - violations: no
+  - name: allow-annotation-key-no-value
+    inventory:
+      - samples/service_type/allow_annotation_key_no_value/inventory.yaml
+    object: samples/service_type/allow_annotation_key_no_value/case.yaml
+    assertions:
+    - violations: no
+  - name: allow-annotation-key
+    inventory:
+      - samples/service_type/allow_annotation_key/inventory.yaml
+    object: samples/service_type/allow_annotation_key/case.yaml
+    assertions:
+    - violations: no
+  - name: deny-no-annotation
+    inventory:
+      - samples/service_type/deny_no_annotation_key/inventory.yaml
+    object: samples/service_type/deny_no_annotation_key/case.yaml
+    assertions:
+    - violations: yes

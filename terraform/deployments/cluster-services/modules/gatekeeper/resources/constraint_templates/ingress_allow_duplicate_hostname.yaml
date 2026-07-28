@@ -1,0 +1,54 @@
+apiVersion: templates.gatekeeper.sh/v1
+kind: ConstraintTemplate
+metadata:
+  name: k8sallowduplicatehostname
+  annotations:
+    metadata.gatekeeper.sh/title: Allow Ingress with duplicate hostname across namespaces
+    description: >
+      Allow Ingress with duplicate hostname across namespaces while ensuring that both the new Ingress and the existing Ingress must include the required annotations:
+      - allow-duplicate-host: "true"
+      - allowed-duplicate-ns (non-empty and identical)
+      - external-dns.alpha.kubernetes.io/aws-weight (non-empty)
+spec:
+  crd:
+    spec:
+      names:
+        kind: k8sallowduplicatehostname
+  targets:
+    - target: admission.k8s.gatekeeper.sh
+      rego: |
+        package k8sallowduplicatehostname
+
+        violation[{"msg": msg}] {
+          input.review.kind.kind == "Ingress"
+          id := concat("/", [input.review.object.metadata.namespace, input.review.object.metadata.name])
+          annotations := input.review.object.metadata.annotations
+          host := input.review.object.spec.rules[_].host
+          namespace := input.review.object.metadata.namespace
+
+          some other_namespace, other_api_version, other_name
+          other_ingress := data.inventory.namespace[other_namespace][other_api_version]["Ingress"][other_name]
+          other_ingress != {}
+          other_namespace != namespace
+          id != concat("/", [other_namespace, other_name])
+          host == other_ingress.spec.rules[_].host
+
+          not all_duplicate_ok(annotations, namespace, other_ingress.metadata.annotations, other_namespace)
+          
+          msg := sprintf("Ingress hostname %v is already in use in another namespace and cannot be duplicated unless both ingresses include the required annotations: allow-duplicate-host: \"true\", allowed-duplicate-ns (non-empty and identical), and external-dns.alpha.kubernetes.io/aws-weight (non-empty). You can find more info here - https://user-guide.cloud-platform.service.justice.gov.uk/documentation/deploying-an-app/ingress-with-duplicate-hostnames.html", [host])
+        }
+
+        all_duplicate_ok(newAnnotations, newNS, existAnnotations, existNS) {
+          allow_duplicate_host(newAnnotations, newNS)
+          allow_duplicate_host(existAnnotations, existNS)
+          newAnnotations["allowed-duplicate-ns"] == existAnnotations["allowed-duplicate-ns"]
+        }
+
+        allow_duplicate_host(annotations, namespace) {
+          annotations["allow-duplicate-host"] == "true"
+          allowed_namespaces := split(annotations["allowed-duplicate-ns"], ",")
+          some i
+          namespace == allowed_namespaces[i]
+          annotations["external-dns.alpha.kubernetes.io/aws-weight"]
+          annotations["external-dns.alpha.kubernetes.io/aws-weight"] != ""
+        }

@@ -1,0 +1,50 @@
+apiVersion: templates.gatekeeper.sh/v1
+kind: ConstraintTemplate
+metadata:
+  name: warnkubectlserviceaccount
+  annotations:
+    metadata.gatekeeper.sh/title: Warn manual Service Account creation (from kubectl)
+    description: This policy WARNS any attempt to create a service account via kubectl for users not in webops or being applied via CICD
+spec:
+  crd:
+    spec:
+      names:
+        kind: WarnKubectlServiceAccount
+      validation:
+        openAPIV3Schema:
+          type: object
+          properties:
+            allowedGroups:
+              description: Groups that should be allowed to bypass the policy.
+              type: array
+              items:
+                type: string
+  targets:
+    - target: admission.k8s.gatekeeper.sh
+      rego: |
+        package warnkubectlserviceaccount
+
+        operations = {"CREATE"}
+
+        privileged(userInfo, allowedGroups) {
+          # Allow if the user's groups intersect allowedGroups.
+          # Use object.get so omitted parameters can't cause policy bypass by
+          # evaluating to undefined.
+          userGroups := object.get(userInfo, "groups", [])
+          groups := {g | g := userGroups[_]}
+          allowed := {g | g := allowedGroups[_]}
+          intersection := groups & allowed
+          count(intersection) > 0
+        }
+
+        violation[{"msg": msg}] {
+          params := object.get(input, "parameters", {})
+          allowedGroups := object.get(params, "allowedGroups", [])
+
+          not privileged(input.review.userInfo, allowedGroups)
+
+          input.review.kind.kind == "ServiceAccount"
+          operations[input.review.operation]
+          msg := "The Cloud Platform recommends using the `cloud-platform-terraform-serviceaccount` module to create and manage Service Accounts and assoiated tokens. You can then pass the newly create Service Account to resources which need it eg. helm charts, this method is preferred over allowing helm create the Service Account. You can find more info here - https://user-guide.cloud-platform.service.justice.gov.uk/documentation/other-topics/moving-service-accounts-to-terraform.html"
+        }
+

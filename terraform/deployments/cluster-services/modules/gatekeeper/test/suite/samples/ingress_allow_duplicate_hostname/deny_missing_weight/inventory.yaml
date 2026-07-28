@@ -1,0 +1,22 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ing-1
+  namespace: default-1
+  annotations:
+    allow-duplicate-host: "true"
+    allowed-duplicate-ns: "default-1,default-2"
+    external-dns.alpha.kubernetes.io/aws-weight: "100"
+    external-dns.alpha.kubernetes.io/set-identifier: ing-1-default-blue
+spec:
+  rules:
+  - host: ing-1.example.com
+    http:
+      paths:
+      - pathType: Prefix
+        path: "/"
+        backend:
+          service:
+            name: nginx
+            port:
+              number: 80

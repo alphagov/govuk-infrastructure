@@ -1,0 +1,28 @@
+kind: Suite
+apiVersion: test.gatekeeper.sh/v1alpha1
+tests:
+- name: hostname_length
+  template: ../../resources/constraint_templates/ingress_hostname_length.yaml
+  constraint: ../../resources/constraints/ingress_hostname_length.yaml
+  cases:
+  - name: allow-hostname
+    object: samples/ingress_hostname_length/allow_hostname/case.yaml
+    assertions:
+    - violations: no
+  - name: allow-max-length-hostname
+    object: samples/ingress_hostname_length/allow_max_length/case.yaml
+    assertions:
+    - violations: no
+  - name: allow-update
+    object: samples/ingress_hostname_length/allow_update_hostname/case.yaml
+    assertions:
+    - violations: no
+  - name: deny-long-hostname
+    object: samples/ingress_hostname_length/deny_long_hostname/case.yaml
+    assertions:
+    - violations: yes
+  - name: deny-update-long-hostname
+    object: samples/ingress_hostname_length/deny_update_long_hostname/case.yaml
+    assertions:
+    - violations: yes
+

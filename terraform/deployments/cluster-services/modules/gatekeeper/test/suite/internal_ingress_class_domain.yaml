@@ -1,0 +1,23 @@
+kind: Suite
+apiVersion: test.gatekeeper.sh/v1alpha1
+tests:
+- name: internal_ingress_class_domain
+  template: ../../resources/constraint_templates/ingress_internal_class_domain.yaml
+  constraint: ../../resources/constraints/ingress_internal_class_domain.yaml
+  cases:
+  - name: allow-internal-domain
+    object: samples/internal_ingress_class_domain/allow_internal_domain/case.yaml
+    assertions:
+    - violations: no
+  - name: allow-internal-non-prod-domain
+    object: samples/internal_ingress_class_domain/allow_internal_non_prod_domain/case.yaml
+    assertions:
+    - violations: no
+  - name: deny-invalid-internal-domain
+    object: samples/internal_ingress_class_domain/deny_invalid_internal_domain/case.yaml
+    assertions:
+    - violations: yes
+  - name: deny-invalid-update-to-internal-domain
+    object: samples/internal_ingress_class_domain/deny_invalid_update_to_internal_domain/case.yaml
+    assertions:
+    - violations: yes

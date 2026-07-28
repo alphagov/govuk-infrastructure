@@ -1,0 +1,28 @@
+kind: Suite
+apiVersion: test.gatekeeper.sh/v1alpha1
+tests:
+- name: hostname_length
+  template: ../../resources/constraint_templates/ingress_valid_hostname.yaml
+  constraint: ../../resources/constraints/ingress_valid_hostname.yaml
+  cases:
+  - name: allow-delete-operation
+    object: samples/ingress_valid_hostname/allow_delete_operation/case.yaml
+    assertions:
+    - violations: no
+  - name: allow-hostname
+    object: samples/ingress_valid_hostname/allow_hostname/case.yaml
+    assertions:
+    - violations: no
+  - name: allow-update-hostname
+    object: samples/ingress_valid_hostname/allow_update_hostname/case.yaml
+    assertions:
+    - violations: no
+  - name: deny-hostname
+    object: samples/ingress_valid_hostname/deny_hostname/case.yaml
+    assertions:
+    - violations: yes
+  - name: deny-update-hostname
+    object: samples/ingress_valid_hostname/deny_update_hostname/case.yaml
+    assertions:
+    - violations: yes
+

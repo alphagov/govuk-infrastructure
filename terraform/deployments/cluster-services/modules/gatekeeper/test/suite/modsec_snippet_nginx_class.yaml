@@ -1,0 +1,24 @@
+kind: Suite
+apiVersion: test.gatekeeper.sh/v1alpha1
+tests:
+- name: snippet_allowlist
+  template: ../../resources/constraint_templates/modsec_snippet_nginx_class.yaml
+  constraint: ../../resources/constraints/modsec_snippet_nginx_class.yaml
+  cases:
+  - name: allow-annotation-class-nginx
+    object: samples/modsec_snippet_nginx_class/allow_annotation_class_nginx/case.yaml
+    assertions:
+    - violations: no  
+  - name: allow-spec-ingress-class
+    object: samples/modsec_snippet_nginx_class/allow_spec_ingress_class/case.yaml
+    assertions:
+    - violations: no
+  - name: deny-annotation
+    object: samples/modsec_snippet_nginx_class/deny_annotation/case.yaml
+    assertions:
+    - violations: yes
+  - name: deny-spec
+    object: samples/modsec_snippet_nginx_class/deny_spec/case.yaml
+    assertions:
+    - violations: yes
+

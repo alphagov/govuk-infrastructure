@@ -1,0 +1,26 @@
+kind: Suite
+apiVersion: test.gatekeeper.sh/v1alpha1
+tests:
+- name: ns_requires_psa_label
+  template: ../../resources/constraint_templates/required_labels.yaml
+  constraint: ../../resources/constraints/user_ns_requires_psa_label.yaml
+  cases:
+    - name: allow-valid-label
+      object: samples/ns_requires_psa_label/allow_valid_label/case.yaml
+      assertions:
+      - violations: no 
+    - name: allow-excluded-ns
+      object: samples/ns_requires_psa_label/allow_excluded_ns/case.yaml
+      assertions:
+      - violations: no 
+    - name: deny-invalid-ns
+      object: samples/ns_requires_psa_label/deny_invalid_ns/case.yaml
+      assertions:
+      - violations: yes 
+        message: "All user namespaces must have a `pod-security.kubernetes.io/enforce: restricted` label." 
+    - name: deny-missing-label
+      object: samples/ns_requires_psa_label/deny_missing_label/case.yaml
+      assertions:
+      - violations: yes 
+        message: "All user namespaces must have a `pod-security.kubernetes.io/enforce: restricted` label."
+

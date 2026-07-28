@@ -1,0 +1,22 @@
+kind: Suite
+apiVersion: test.gatekeeper.sh/v1alpha1
+tests:
+- name: warn_kubectl_create_sa
+  template: ../../resources/constraint_templates/warn_sa.yaml
+  constraint: ../../resources/constraints/warn_sa.yaml
+  cases:
+  - name: allow-sa-creation-if-webops
+    object: samples/warn_sa/allow/case.yaml
+    assertions:
+    - violations: no
+  - name: allow-sa-creation-if-concourse
+    object: samples/warn_sa/allow/case.yaml
+    assertions:
+    - violations: no
+  - name: warn-sa-creation-if-not-whitelisted-group
+    object: samples/warn_sa/warn/case.yaml
+    assertions:
+    - violations: yes
+      message: "The Cloud Platform recommends using the `cloud-platform-terraform-serviceaccount` module to create and manage Service Accounts and assoiated tokens. You can then pass the newly create Service Account to resources which need it eg. helm charts, this method is preferred over allowing helm create the Service Account. You can find more info here - https://user-guide.cloud-platform.service.justice.gov.uk/documentation/other-topics/moving-service-accounts-to-terraform.html"
+
+

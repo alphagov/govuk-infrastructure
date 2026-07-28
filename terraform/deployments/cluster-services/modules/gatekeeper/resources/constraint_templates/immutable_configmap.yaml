@@ -1,0 +1,76 @@
+apiVersion: templates.gatekeeper.sh/v1
+kind: ConstraintTemplate
+metadata:
+  name: k8simmutableconfigmap
+  annotations:
+    metadata.gatekeeper.sh/title: Prevent configmap from being mutated
+    description: This constraint prevents users from editing configmaps after they have been created
+spec:
+  crd:
+    spec:
+      names:
+        kind: K8sImmutableConfigMap
+      validation:
+        openAPIV3Schema:
+          type: object
+          properties:
+            allowedGroups:
+              description: Groups that should be allowed to bypass the policy.
+              type: array
+              items:
+                type: string
+
+  targets:
+    - target: admission.k8s.gatekeeper.sh
+      rego: |
+        package k8simmutableconfigmap
+
+        operations = {"UPDATE"}
+
+        # we need to define the excluded namespaces here and in the constraint yaml because we need to use them in logic
+        excludedNamespaces = {
+            "gatekeeper-system",
+            "kube-system",
+            "kube-node-lease",
+            "kube-public",
+            "default",
+            "logging",
+            "monitoring",
+          }
+
+        privileged(userInfo, allowedGroups) {
+          # Allow if the user's groups intersect allowedGroups.
+          # Use object.get so omitted parameters can't cause policy bypass by
+          # evaluating to undefined.
+          userGroups := object.get(userInfo, "groups", [])
+          groups := {g | g := userGroups[_]}
+          allowed := {g | g := allowedGroups[_]}
+          intersection := groups & allowed
+          count(intersection) > 0
+        }
+
+
+        violation[{"msg": msg}] {
+          input.review.kind.kind == "ConfigMap"
+
+          params := object.get(input, "parameters", {})
+          allowedGroups := object.get(params, "allowedGroups", [])
+
+          not privileged(input.review.userInfo, allowedGroups)
+
+          operations[input.review.operation]
+          msg := sprintf("\nUsers cannot edit configmap resources %v %v", [input.review.userInfo.username, input.review.userInfo.groups])
+        }
+
+        violation[{"msg": msg}] {
+          input.review.kind.kind == "ConfigMap"
+
+          params := object.get(input, "parameters", {})
+          allowedGroups := object.get(params, "allowedGroups", [])
+          not privileged(input.review.userInfo, allowedGroups)
+
+          excludedNamespaces[input.review.namespace]
+
+          operations[input.review.operation]
+          msg := sprintf("\nUsers cannot edit configmap resources in non-user namespaces %v %v", [input.review.userInfo.username, input.review.userInfo.groups])
+        }

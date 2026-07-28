@@ -1,0 +1,25 @@
+kind: AdmissionReview
+apiVersion: admission.k8s.io/v1beta1
+request:
+  kind:
+    kind: Secret
+
+  operation: "DELETE"
+
+  name: secret-basic-auth
+
+  namespace: ns-0
+  
+  oldObject:
+    apiVersion: v1
+    kind: Secret
+    metadata:
+      name: secret-basic-auth
+      namespace: ns-0
+      annotations:
+        kubernetes.io/service-account.name: cd-serviceaccount
+        kubernetes.io/service-account.uid: s0m3-str1ng
+    type: kubernetes.io/basic-auth
+    stringData:
+      username: admin # required field for kubernetes.io/basic-auth
+      password: t0p-Secret # required field for kubernetes.io/basic-auth

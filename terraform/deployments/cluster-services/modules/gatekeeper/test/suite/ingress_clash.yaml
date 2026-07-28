@@ -1,0 +1,50 @@
+kind: Suite
+apiVersion: test.gatekeeper.sh/v1alpha1
+tests:
+- name: ingress_clash
+  template: ../../resources/constraint_templates/ingress_clash.yaml
+  constraint: ../../resources/constraints/ingress_clash.yaml
+  cases:
+  - name: allow-different-ingress-hosts
+    inventory: 
+      - samples/ingress_clash/allow_ingress/inventory.yaml
+    object: samples/ingress_clash/allow_ingress/case.yaml
+    assertions:
+    - violations: no
+  - name: allow-update-new-ingress-hosts
+    inventory: 
+      - samples/ingress_clash/allow_update_new/inventory.yaml
+    object: samples/ingress_clash/allow_update_new/case.yaml
+    assertions:
+    - violations: no
+  - name: allow-update-existing-ingress-hosts
+    inventory: 
+      - samples/ingress_clash/allow_update_existing/inventory.yaml
+    object: samples/ingress_clash/allow_update_existing/case.yaml
+    assertions:
+    - violations: no
+  - name: allow-same-host-in-same-ns
+    inventory:
+      - samples/ingress_clash/allow_ingress_same_ns/inventory.yaml
+    object: samples/ingress_clash/allow_ingress_same_ns/case.yaml
+    assertions:
+    - violations: no
+  - name: deny-ingress-host-clash
+    inventory: 
+      - samples/ingress_clash/deny_clash/inventory.yaml
+    object: samples/ingress_clash/deny_clash/case.yaml
+    assertions:
+    - violations: yes
+  - name: deny-update-ingress-host-clash-change-existing
+    inventory: 
+      - samples/ingress_clash/deny_update_existing_clash/inventory.yaml
+    object: samples/ingress_clash/deny_update_existing_clash/case.yaml
+    assertions:
+    - violations: yes
+  - name: deny-update-new-ns-ingress-host-clash
+    inventory: 
+      - samples/ingress_clash/deny_update_new_clash/inventory.yaml
+    object: samples/ingress_clash/deny_update_new_clash/case.yaml
+    assertions:
+    - violations: yes
+

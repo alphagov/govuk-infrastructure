@@ -1,0 +1,16 @@
+kind: Suite
+apiVersion: test.gatekeeper.sh/v1alpha1
+tests:
+- name: block_ingresses
+  template: ../../resources/constraint_templates/block_ingresses.yaml
+  constraint: ../../resources/constraints/block_ingresses.yaml
+  cases:
+  - name: allow-whitelisted-ns
+    object: samples/block_ingresses/allow_whitelisted_ns/case.yaml
+    assertions:
+    - violations: no
+  - name: deny-non-whitelisted-ing
+    object: samples/block_ingresses/deny_ingress/case.yaml
+    assertions:
+    - violations: yes
+

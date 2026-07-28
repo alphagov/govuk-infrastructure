@@ -1,0 +1,53 @@
+kind: AdmissionReview
+apiVersion: admission.k8s.io/v1beta1
+request:  # Fully-qualified group/version/kind of the incoming object
+  kind:
+    group: networking.k8s.io
+    version: v1
+    kind: Ingress
+
+  operation: "UPDATE"
+  # Name of the resource being modified
+  name: ing-0
+
+  # Namespace of the resource being modified, if the resource is namespaced (or is a Namespace object)
+  namespace: default-0
+
+  object:
+    apiVersion: networking.k8s.io/v1
+    kind: Ingress
+    metadata:
+      name: ing-0
+      namespace: default-0
+    spec:
+      rules:
+      - host: ing-1.live.com
+        http:
+          paths:
+          - pathType: Prefix
+            path: "/"
+            backend:
+              service:
+                name: nginx
+                port:
+                  number: 80
+
+  oldObject:
+    apiVersion: networking.k8s.io/v1
+    kind: Ingress
+    metadata:
+      name: ing-0
+      namespace: default-0
+    spec:
+      rules:
+      - host: ing-0.example.com
+        http:
+          paths:
+          - pathType: Prefix
+            path: "/"
+            backend:
+              service:
+                name: nginx
+                port:
+                  number: 80
+

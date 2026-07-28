@@ -1,0 +1,58 @@
+apiVersion: templates.gatekeeper.sh/v1
+kind: ConstraintTemplate
+metadata:
+  name: k8svalidhostname
+  annotations:
+    metadata.gatekeeper.sh/title: For test clusters we need to ensure the hostname is valid
+    description: Checks the current hostname against a fqdn pattern, if it matches the pattern a violation is raised
+spec:
+  crd:
+    spec:
+      names:
+        kind: k8svalidhostname
+      validation:
+        openAPIV3Schema:
+          type: object
+          properties:
+            validDomainNames:
+              type: string
+  targets:
+    - target: admission.k8s.gatekeeper.sh
+      rego: |
+        package k8svalidhostname
+
+        operations = {"CREATE", "UPDATE"}
+
+        violation[{"msg": msg}] {
+          input.review.kind.kind == "Ingress"
+          operations[input.review.operation]
+          host := input.review.object.spec.rules[_].host
+          not fqdn_matches_any(host, valid_ingress_hosts)
+          msg := sprintf("invalid ingress host %q %v", [host, valid_ingress_hosts])
+        }
+
+        valid_ingress_hosts = {host |
+          whitelist := input.parameters.validDomainNames
+          hosts := split(whitelist, ",")
+          host := hosts[_]
+        }
+
+        fqdn_matches_any(str, patterns) {
+          fqdn_matches(str, patterns[_])
+        }
+
+        fqdn_matches(str, pattern) {
+          pattern_parts := split(pattern, ".")
+          pattern_parts[0] == "*"
+          str_parts := split(str, ".")
+          n_pattern_parts := count(pattern_parts)
+          n_str_parts := count(str_parts)
+          suffix := trim(pattern, "*.")
+          endswith(str, suffix)
+        }
+
+        fqdn_matches(str, pattern) {
+            not contains(pattern, "*")
+            str == pattern
+        }
+

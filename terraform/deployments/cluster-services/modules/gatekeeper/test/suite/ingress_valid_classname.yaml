@@ -1,0 +1,39 @@
+kind: Suite
+apiVersion: test.gatekeeper.sh/v1alpha1
+tests:
+- name: classname_valid
+  template: ../../resources/constraint_templates/ingress_valid_classname.yaml
+  constraint: ../../resources/constraints/ingress_valid_classname.yaml
+  cases:
+  - name: allow-classname-default
+    object: samples/ingress_valid_classname/allow_classname/case_default.yaml
+    assertions:
+    - violations: no
+  - name: allow-classname-default-non-prod
+    object: samples/ingress_valid_classname/allow_classname/case_default-non-prod.yaml
+    assertions:
+    - violations: no
+  - name: allow-classname-internal
+    object: samples/ingress_valid_classname/allow_classname/case_internal.yaml
+    assertions:
+    - violations: no
+  - name: allow-classname-internal-laa
+    object: samples/ingress_valid_classname/allow_classname/case_internal-laa.yaml
+    assertions:
+    - violations: no
+  - name: allow-classname-modsec
+    object: samples/ingress_valid_classname/allow_classname/case_modsec.yaml
+    assertions:
+    - violations: no
+  - name: allow-classname-modsec-non-prod
+    object: samples/ingress_valid_classname/allow_classname/case_modsec-non-prod.yaml
+    assertions:
+    - violations: no
+  - name: deny-classname-invalid
+    object: samples/ingress_valid_classname/deny_classname/case.yaml
+    assertions:
+    - violations: yes
+  - name: deny-update-classname-invalid
+    object: samples/ingress_valid_classname/deny_update_classname/case.yaml
+    assertions:
+    - violations: yes

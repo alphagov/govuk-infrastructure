@@ -1,0 +1,36 @@
+kind: AdmissionReview
+apiVersion: admission.k8s.io/v1beta1
+request:  # Fully-qualified group/version/kind of the incoming object
+  kind:
+    group: networking.k8s.io
+    version: v1
+    kind: Ingress
+
+  operation: "UPDATE"
+  # Name of the resource being modified
+  name: ing-0
+
+  # Namespace of the resource being modified, if the resource is namespaced (or is a Namespace object)
+  namespace: default-0
+
+  object:
+    apiVersion: networking.k8s.io/v1
+    kind: Ingress
+    metadata:
+      name: ing-0
+      namespace: default
+      annotations:
+        external-dns.alpha.kubernetes.io/aws-weight: "100"
+        external-dns.alpha.kubernetes.io/set-identifier: ing-0-default-blue
+    spec:
+      rules:
+      - host: this-label-is-too-long-to-be-a-label-it-is-over-permitted-route53-length.apps.live.cloud-platform.service.justice.gov.uk
+        http:
+          paths:
+          - pathType: Prefix
+            path: "/"
+            backend:
+              service:
+                name: nginx
+                port:
+                  number: 80

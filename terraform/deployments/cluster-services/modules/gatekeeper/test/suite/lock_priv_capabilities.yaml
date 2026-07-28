@@ -1,0 +1,25 @@
+kind: Suite
+apiVersion: test.gatekeeper.sh/v1alpha1
+metadata:
+  name: lockprivcapabilities
+tests:
+  - name: lockprivcapabilities
+    template: ../../resources/constraint_templates/lock_priv_capabilities.yaml
+    constraint: ../../resources/constraints/lock_priv_capabilities.yaml
+    cases:
+      - name: example-disallowed
+        object: samples/lock_priv_capabilities/disallowed.yaml
+        assertions:
+          - violations: yes
+      - name: example-allowed
+        object: samples/lock_priv_capabilities/allowed.yaml
+        assertions:
+          - violations: no
+      - name: disallowed-ephemeral
+        object: samples/lock_priv_capabilities/disallowed_ephemeral.yaml
+        assertions:
+          - violations: yes
+      - name: update
+        object: samples/lock_priv_capabilities/update.yaml
+        assertions:
+          - violations: no

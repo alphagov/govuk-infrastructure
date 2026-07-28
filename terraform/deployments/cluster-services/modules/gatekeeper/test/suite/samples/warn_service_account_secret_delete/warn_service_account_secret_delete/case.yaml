@@ -1,0 +1,26 @@
+kind: AdmissionReview
+apiVersion: admission.k8s.io/v1beta1
+request:
+  kind:
+    kind: Secret
+
+  operation: "DELETE"
+
+  name: cd-serviceaccount-token
+
+  namespace: ns-0
+  
+  oldObject:
+    apiVersion: v1
+    kind: Secret
+    metadata:
+      name: cd-serviceaccount-token
+      namespace: ns-0
+      annotations:
+        kubernetes.io/service-account.name: cd-serviceaccount
+        kubernetes.io/service-account.uid: s0m3-str1ng
+    type: kubernetes.io/service-account-token
+    data:
+      ca.crt: SOMESTRING
+      namespace: s0m3str1ng
+      token: SOMESTRING

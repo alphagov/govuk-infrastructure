@@ -1,0 +1,41 @@
+kind: Suite
+apiVersion: test.gatekeeper.sh/v1alpha1
+metadata:
+  name: verifydeprecatedapi
+tests:
+- name: verifydeprecatedapi-1.26
+  template: ../../resources/constraint_templates/verify_deprecated_api.yaml
+  constraint: ../../resources/constraints/deprecated_apis_1.26.yaml
+  cases:
+  - name: 1.26-allowed
+    object: samples/verify_deprecated_apis/1.26/allow/case.yaml
+    assertions:
+    - violations: no
+  - name: 1.26-disallowed
+    object: samples/verify_deprecated_apis/1.26/deny/case.yaml
+    assertions:
+    - violations: yes
+- name: verifydeprecatedapi-1.27
+  template: ../../resources/constraint_templates/verify_deprecated_api.yaml
+  constraint: ../../resources/constraints/deprecated_apis_1.27.yaml
+  cases:
+  - name: 1.27-allowed
+    object: samples/verify_deprecated_apis/1.27/allow/case.yaml
+    assertions:
+    - violations: no
+  - name: 1.27-disallowed
+    object: samples/verify_deprecated_apis/1.27/deny/case.yaml
+    assertions:
+    - violations: yes
+- name: verifydeprecatedapi-1.29
+  template: ../../resources/constraint_templates/verify_deprecated_api.yaml
+  constraint: ../../resources/constraints/deprecated_apis_1.29.yaml
+  cases:
+  - name: 1.29-allowed
+    object: samples/verify_deprecated_apis/1.29/allow/case.yaml
+    assertions:
+    - violations: no
+  - name: 1.29-disallowed
+    object: samples/verify_deprecated_apis/1.29/deny/case.yaml
+    assertions:
+    - violations: yes

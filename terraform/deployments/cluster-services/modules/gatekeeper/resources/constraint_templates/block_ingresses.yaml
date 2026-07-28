@@ -1,0 +1,24 @@
+apiVersion: templates.gatekeeper.sh/v1
+kind: ConstraintTemplate
+metadata:
+  name: k8sblockingresses
+  annotations:
+    metadata.gatekeeper.sh/title: Block all ingress actions
+    description: This constraint blocks all ingress actions
+spec:
+  crd:
+    spec:
+      names:
+        kind: k8sblockingresses
+
+  targets:
+    - target: admission.k8s.gatekeeper.sh
+      rego: |
+        package k8sblockingresses
+
+        violation[{"msg": msg}] {
+          input.review.kind.kind == "Ingress"
+          not input.review.object.metadata.namespace == "jaskaran-dev"
+          msg := sprintf("\nIngress actions are temporarily blocked whilst the Cloud Platform goes under essential maintenance. The maintenance window is on Tuesday 4th March between 1900 to 2300. For more info see https://mojdt.slack.com/archives/CH6D099DF/p1740668486144479. Please raise any other queries in #ask-cloud-platform.", [])
+        }
+

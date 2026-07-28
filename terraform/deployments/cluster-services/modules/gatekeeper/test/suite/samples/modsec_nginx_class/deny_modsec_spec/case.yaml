@@ -1,0 +1,6 @@
+kind: Ingress
+metadata: 
+  annotations: 
+    nginx.ingress.kubernetes.io/enable-modsecurity: "true"
+spec:
+  ingressClassName: "default"

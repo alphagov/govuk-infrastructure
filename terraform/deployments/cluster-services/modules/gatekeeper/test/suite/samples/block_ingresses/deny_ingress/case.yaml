@@ -1,0 +1,20 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ing-0
+  namespace: default
+  annotations:
+    external-dns.alpha.kubernetes.io/set-identifier: ing-0-default-green
+spec:
+  rules:
+  - host: ing-0.example.com
+    http:
+      paths:
+      - pathType: Prefix
+        path: "/"
+        backend:
+          service:
+            name: nginx
+            port:
+              number: 80
+

@@ -1,0 +1,23 @@
+kind: Suite
+apiVersion: test.gatekeeper.sh/v1alpha1
+tests:
+- name: modsec_nginx_class
+  template: ../../resources/constraint_templates/modsec_nginx_class.yaml
+  constraint: ../../resources/constraints/modsec_nginx_class.yaml
+  cases:
+  - name: allow-modsec-nginx-annotation
+    object: samples/modsec_nginx_class/allow_modsec_nginx_annotation/case.yaml
+    assertions:
+    - violations: no
+  - name: allow-modsec-nginx-spec
+    object: samples/modsec_nginx_class/allow_modsec_nginx_spec/case.yaml
+    assertions:
+    - violations: no
+  - name: deny-modsec-annotation
+    object: samples/modsec_nginx_class/deny_modsec_annotation/case.yaml
+    assertions:
+    - violations: yes
+  - name: deny-modsec-spec
+    object: samples/modsec_nginx_class/deny_modsec_spec/case.yaml
+    assertions:
+    - violations: yes

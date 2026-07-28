@@ -235,8 +235,9 @@ resource "helm_release" "argo_bootstrap_ephemeral" {
 
 resource "helm_release" "argo_workflows" {
   depends_on = [
+    helm_release.dex,
     kubernetes_secret_v1.dex_client,
-    helm_release.aws_lb_controller
+    module.gatekeeper
   ]
 
   chart            = "argo-workflows"

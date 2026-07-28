@@ -1,0 +1,20 @@
+kind: AdmissionReview
+apiVersion: admission.k8s.io/v1beta1
+request:  # Fully-qualified group/version/kind of the incoming object
+  kind:
+    version: v1
+    kind: ServiceAccount 
+
+  operation: "CREATE"
+  # Name of the resource being modified
+  name: sa-0
+
+  object:
+    apiVersion: v1
+    kind: ServiceAccount
+    metadata: 
+      name: sa-0
+      namespace: foobar
+
+  userInfo: 
+    groups: ["system:users", "system:authenticated"]

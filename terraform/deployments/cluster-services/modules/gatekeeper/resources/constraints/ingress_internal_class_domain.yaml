@@ -1,0 +1,11 @@
+apiVersion: constraints.gatekeeper.sh/v1beta1
+kind: k8singressinternalclassdomain
+metadata:
+  name: internal-ingress-domain
+spec:
+  enforcementAction: deny
+  parameters:
+    validInternalDomains:
+      - "*.internal.cloud-platform.service.justice.gov.uk"
+    validInternalNonProdDomains:
+      - "*.internal-non-prod.cloud-platform.service.justice.gov.uk"

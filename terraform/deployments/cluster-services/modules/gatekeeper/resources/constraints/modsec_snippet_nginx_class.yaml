@@ -1,0 +1,8 @@
+apiVersion: constraints.gatekeeper.sh/v1beta1
+kind: k8smodsecsnippetnginxclass
+metadata:
+  name: k8smodsecsnippetnginxclass
+spec:
+  match:
+    kinds:
+      - kinds: ["Ingress"]
