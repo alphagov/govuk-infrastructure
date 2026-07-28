@@ -317,6 +317,8 @@ data "google_iam_policy" "project" {
         google_service_account.govgraphsearch.member,
         google_service_account.workflow_smart_survey.member,
         google_service_account.workflow_zendesk.member,
+        google_service_account.rds_parquet_bq_loader.member,
+        google_service_account.docdb_bq_loader.member,
       ],
       var.bigquery_job_user_members
     )
