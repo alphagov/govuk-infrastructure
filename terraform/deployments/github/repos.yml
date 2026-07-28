@@ -834,7 +834,8 @@ repos:
         - Lint SCSS / Run Stylelint
         - Test Ruby / Run RSpec
 
-  search-analytics-ga4: {}
+  search-analytics-ga4:
+    archived: true
 
   search-api:
     can_be_deployed: true
