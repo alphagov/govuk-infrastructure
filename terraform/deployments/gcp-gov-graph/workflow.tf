@@ -30,23 +30,25 @@ resource "google_workflows_workflow" "govuk_database_backups" {
   )
 }
 
-resource "google_eventarc_trigger" "govuk_database_backups" {
-  name            = "govuk-database-backups"
-  location        = var.region
-  service_account = google_service_account.eventarc.email
-  matching_criteria {
-    attribute = "type"
-    value     = "google.cloud.pubsub.topic.v1.messagePublished"
-  }
-  destination {
-    workflow = google_workflows_workflow.govuk_database_backups.id
-  }
-  transport {
-    pubsub {
-      topic = google_pubsub_topic.govuk_database_backups.id
-    }
-  }
-}
+// I wouldn't normally comment out code but this is part of a migration and just want a quick rollback option.
+// This whole file will be deleted post-migration.
+# resource "google_eventarc_trigger" "govuk_database_backups" {
+#   name            = "govuk-database-backups"
+#   location        = var.region
+#   service_account = google_service_account.eventarc.email
+#   matching_criteria {
+#     attribute = "type"
+#     value     = "google.cloud.pubsub.topic.v1.messagePublished"
+#   }
+#   destination {
+#     workflow = google_workflows_workflow.govuk_database_backups.id
+#   }
+#   transport {
+#     pubsub {
+#       topic = google_pubsub_topic.govuk_database_backups.id
+#     }
+#   }
+# }
 
 # A service account for the redis-cli workflow
 resource "google_service_account" "workflow_redis_cli" {
