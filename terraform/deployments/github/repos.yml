@@ -834,6 +834,8 @@ repos:
         - Lint SCSS / Run Stylelint
         - Test Ruby / Run RSpec
 
+  search-analytics-ga4: {}
+
   search-api:
     can_be_deployed: true
     homepage_url: "https://docs.publishing.service.gov.uk/apps/search-api.html"
