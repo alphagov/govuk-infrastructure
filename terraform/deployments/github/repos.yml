@@ -350,6 +350,9 @@ repos:
 
   govuk-chat-opensearch: {}
 
+  govuk-chat-monitoring:
+    visibility: private
+
   govuk-content-api-docs:
     homepage_url: "https://content-api.publishing.service.gov.uk"
     required_status_checks:
