@@ -109,6 +109,8 @@ data "google_iam_policy" "bucket_data_processed" {
     members = [
       google_service_account.gce_publisher.member,
       google_service_account.gce_asset_manager.member,
+      google_service_account.rds_parquet_bq_loader.member,
+      google_service_account.docdb_bq_loader.member,
     ]
   }
 
