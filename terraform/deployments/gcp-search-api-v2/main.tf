@@ -54,13 +54,4 @@ module "environment_production" {
   tfc_project_name             = var.tfe_project_name
   environment_workspace_name   = "search-api-v2-production"
   access_group_name            = "govuk-gcp-access"
-
-
-  # NOTE: There are limits on the Google side on how high we are permitted to set these quotas. If
-  # you attempt to increase these beyond the ceiling, a `COMMON_QUOTA_CONSUMER_OVERRIDE_TOO_HIGH`
-  # error will be raised (including some metadata that should tell you what the current ceiling is)
-  # and you will need to manually request a quota increase from Google through the console first
-  # (see the environment module for the exact quota names you need to request increases for).
-  discovery_engine_quota_search_requests_per_minute = 5000
-  discovery_engine_quota_documents                  = 2000000
 }

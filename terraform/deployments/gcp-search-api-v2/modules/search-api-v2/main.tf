@@ -51,34 +51,6 @@ resource "google_project_service" "api_service" {
   disable_dependent_services = true
 }
 
-resource "google_service_usage_consumer_quota_override" "discoveryengine_search_requests" {
-  provider = google-beta
-  project  = google_project.environment_project.project_id
-
-  service = "discoveryengine.googleapis.com"
-  metric  = urlencode("discoveryengine.googleapis.com/search_requests")
-  force   = true
-
-  # limit is equivalent to `unit` field when making a GET request against the metric, but without
-  # leading `1/` and without curly braces
-  limit          = urlencode("/min/project")
-  override_value = var.discovery_engine_quota_search_requests_per_minute
-}
-
-resource "google_service_usage_consumer_quota_override" "discoveryengine_documents" {
-  provider = google-beta
-  project  = google_project.environment_project.project_id
-
-  service = "discoveryengine.googleapis.com"
-  metric  = urlencode("discoveryengine.googleapis.com/documents")
-  force   = true
-
-  # limit is equivalent to `unit` field when making a GET request against the metric, but without
-  # leading `1/` and without curly braces
-  limit          = urlencode("/project")
-  override_value = var.discovery_engine_quota_documents
-}
-
 # Set up Workload Identity Federation between Terraform Cloud and GCP
 # see https://github.com/hashicorp/terraform-dynamic-credentials-setup-examples
 resource "google_iam_workload_identity_pool" "tfc_pool" {

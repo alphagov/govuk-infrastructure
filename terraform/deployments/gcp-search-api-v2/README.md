@@ -21,8 +21,9 @@ Before you can use this module, you must:
   `terraform` or through a (gitignored) `local.auto.tfvars` file
 
 ## Additional information
-### Adding additional GCP quota overrides
-Quota overrides on GCP are somewhat complex to set up and use inconsistent terminology between the
+### Adding GCP quota overrides
+Quota overrides are used to cap limits under values that have been set by default or by admin/producer overrides.
+On GCP, these are somewhat complex to set up and use inconsistent terminology between the
 console UI, the REST API, and the (beta) Terraform provider. In particular, it can be somewhat
 confusing to figure out the `limit` value for the `google_service_usage_consumer_quota_override`
 resource (which actually corresponds to the `unit` field in the API but with different syntax), and
@@ -42,3 +43,8 @@ curl -H "Authorization: Bearer $(gcloud auth print-access-token)" \
 
 This returns a list of available quotas by display name, complete with the necessary `metric` and
 `unit` values.
+
+There are limits on the Google side on how high we are permitted to set quotas. If
+you attempt to increase them beyond the ceiling, a `COMMON_QUOTA_CONSUMER_OVERRIDE_TOO_HIGH`
+error will be raised (including some metadata that should tell you what the current ceiling is). 
+You will need to manually request a quota increase from Google through the console first.
