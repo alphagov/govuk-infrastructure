@@ -9,8 +9,3 @@ data "tfe_outputs" "vpc" {
   organization = "govuk"
   workspace    = "vpc-${var.govuk_environment}"
 }
-
-data "tfe_outputs" "rds" {
-  organization = "govuk"
-  workspace    = "rds-${var.govuk_environment}"
-}

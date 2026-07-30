@@ -1,6 +1,7 @@
 locals {
   ckan_database_cross_account_backup_role_name            = "ckan-db-backup-xaccount-sync-${local.cluster_id}"
   ckan_database_cross_account_backup_service_account_name = "ckan-db-backup-xaccount-sync"
+  source_db_backups_s3_bucket_arn                         = "arn:aws:s3:::govuk-${var.govuk_environment}-database-backups"
 }
 
 module "ckan_database_cross_account_backup_role" {
@@ -35,14 +36,14 @@ data "aws_iam_policy_document" "ckan_db_backup_xaccount_sync" {
     effect  = "Allow"
     actions = ["s3:CopyObject", "s3:GetObject", "s3:HeadObject", "s3:ListObjects"]
 
-    resources = ["${data.tfe_outputs.rds.nonsensitive_values.database_dump_bucket_arn}:ckan-postgres/*"]
+    resources = ["${local.source_db_backups_s3_bucket_arn}/ckan-postgres/*"]
   }
 
   statement {
     sid       = "AllowActingOnSourceBucket"
     effect    = "Allow"
     actions   = ["s3:GetBucketLocation", "s3:ListBucket"]
-    resources = [data.tfe_outputs.rds.nonsensitive_values.database_dump_bucket_arn]
+    resources = [local.source_db_backups_s3_bucket_arn]
   }
 
   statement {
