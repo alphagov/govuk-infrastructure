@@ -90,8 +90,7 @@ module "search-api-v2-staging" {
   }
 
   team_access = {
-    "GOV.UK Non-Production (r/o)" = "write"
-    "GOV.UK Production"           = "write"
+    "GOV.UK Production" = "write"
   }
 
   envvars = {
@@ -146,8 +145,7 @@ module "search-api-v2-production" {
   }
 
   team_access = {
-    "GOV.UK Non-Production (r/o)" = "write"
-    "GOV.UK Production"           = "write"
+    "GOV.UK Production" = "write"
   }
 
   envvars = {
