@@ -80,3 +80,21 @@ variable "ext_dns_enable_service_monitor" {
   description = "Whether to enable service monitors for external dns"
   default     = true
 }
+
+variable "gatekeeper_controller_resources" {
+  type = object({
+    mem_limit       = string
+    mem_req         = string
+    audit_mem_limit = string
+    audit_mem_req   = string
+  })
+
+  description = "Object containing values for gatekeeper controller resource requests and limits"
+
+  default = {
+    mem_req         = "512Mi"
+    mem_limit       = "1Gi"
+    audit_mem_req   = "512Mi"
+    audit_mem_limit = "1Gi"
+  }
+}

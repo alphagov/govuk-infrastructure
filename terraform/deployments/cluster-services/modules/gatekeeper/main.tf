@@ -74,9 +74,9 @@ metadata:
 spec:
   sync:
     syncOnly:
-      - group: "networking.k8s.io"
+      - group: ""
         version: "v1"
-        kind: "Ingress"
+        kind: "ConfigMap"
       - group: ""
         version: "v1"
         kind: "Namespace"

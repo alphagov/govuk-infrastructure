@@ -4,16 +4,6 @@ variable "constraint_violations_max_to_display" {
   type        = number
 }
 
-variable "is_production" {
-  description = "is this a production environment"
-  type        = string
-}
-
-variable "environment_name" {
-  description = "production || development"
-  type        = string
-}
-
 variable "controller_mem_limit" {
   description = "memory limit for the gatekeeper controller manager"
   type        = string
