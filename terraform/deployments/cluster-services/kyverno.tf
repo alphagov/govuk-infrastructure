@@ -8,7 +8,7 @@ resource "helm_release" "kyverno" {
   namespace        = "kyverno"
   create_namespace = true
 
-  version = "3.8.1"
+  version = "3.8.2"
 }
 
 resource "kubernetes_namespace_v1" "sigstore_test" {
