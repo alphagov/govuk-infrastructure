@@ -1,0 +1,4 @@
+api_version: 2
+defaults:
+  auto_merge: true
+  update_external_dependencies: true
