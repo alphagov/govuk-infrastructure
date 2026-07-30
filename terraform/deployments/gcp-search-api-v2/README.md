@@ -2,8 +2,7 @@
 This Terraform module is for bootstrapping the search GCP projects. This lays the initial (minimal) groundwork
 in GCP for the `search-api-v2` projects to run successfully. 
 
-For other parts of the `search-api-v2` setup, see the [search-api-v2 deployment][search-api-v2-deployment], and the
-[tfc-configurations][search-v2-tfc-config] and [variables][variables].
+For other parts of the `search-api-v2` setup, see the [search-api-v2 deployment][search-api-v2-deployment].
 
 ## Resources
 This module manages the following resources:
@@ -75,6 +74,4 @@ you attempt to increase them beyond the ceiling, a `COMMON_QUOTA_CONSUMER_OVERRI
 error will be raised (including some metadata that should tell you what the current ceiling is). 
 You will need to manually request a quota increase from Google through the console first.
 
-[search-api-v2-deployment]: ../search-api-v2/
-[search-v2-tfc-config]: ../tfc-configuration/search-api-v2.tf
-[variables]: ../../variables
+[search-api-v2-deployment]: ../search-api-v2/README.md
