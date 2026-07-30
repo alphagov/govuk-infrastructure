@@ -1,6 +1,0 @@
-kind: Ingress
-metadata: 
-  annotations: 
-    nginx.ingress.kubernetes.io/modsecurity-snippet: "other"
-spec:
-  ingressClassName: "other"

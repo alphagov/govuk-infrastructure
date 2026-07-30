@@ -1,6 +1,0 @@
-kind: Ingress
-metadata: 
-  annotations: 
-    nginx.ingress.kubernetes.io/enable-modsecurity: "other"
-spec:
-  ingressClassName: "other"

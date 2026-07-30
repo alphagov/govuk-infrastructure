@@ -56,9 +56,7 @@ resource "time_sleep" "wait_30_seconds_for_templates" {
 module "constraints" {
   source = "./constraints"
 
-  dryrun_map            = var.dryrun_map
-  cluster_domain_name   = var.cluster_domain_name
-  integration_test_zone = var.integration_test_zone
+  dryrun_map = var.dryrun_map
 
   depends_on = [time_sleep.wait_30_seconds_for_templates]
 }

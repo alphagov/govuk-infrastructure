@@ -1,4 +1,4 @@
-# remember any kind used by a constraint template must also be added to the sync config at the end of this file
+# remember any kind used by a constraint template must also be added to the sync config in main.tf
 resource "kubectl_manifest" "constraint_templates" {
   for_each = fileset("${path.module}/../resources/constraint_templates/", "*")
 

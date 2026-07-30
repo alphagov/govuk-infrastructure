@@ -2,32 +2,11 @@ module "gatekeeper" {
   source = "./modules/gatekeeper"
 
   dryrun_map = {
-    service_type                       = true,
-    snippet_allowlist                  = true,
-    modsec_snippet_nginx_class         = true,
-    modsec_nginx_class                 = true,
-    ingress_clash                      = true,
-    hostname_length                    = true,
-    external_dns_identifier            = true,
-    external_dns_weight                = true,
-    valid_hostname                     = true
-    warn_service_account_secret_delete = true,
-    user_ns_requires_psa_label         = true,
-    deprecated_apis_1_26               = true,
-    deprecated_apis_1_27               = true,
-    deprecated_apis_1_29               = true,
-    warn_kubectl_create_sa             = true,
-    lock_priv_capabilities             = true,
-    allow_duplicate_hostname_yaml      = true,
-    block_ingresses                    = true,
-    ingress_valid_classname            = true,
-    ingress_internal_class_domain      = true,
-    immutable_configmap                = true
+    immutable_configmap = true
   }
 
   is_production                        = terraform.workspace == "production"
   environment_name                     = var.govuk_environment
-  cluster_domain_name                  = local.external_dns_zone_name
   constraint_violations_max_to_display = 25
 
   controller_mem_limit = terraform.workspace == "production" ? "8Gi" : "1Gi"
