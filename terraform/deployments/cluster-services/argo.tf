@@ -233,9 +233,22 @@ resource "helm_release" "argo_bootstrap_ephemeral" {
   })]
 }
 
+resource "terraform_data" "dex_ready" {
+  depends_on = [helm_release.dex]
+
+  provisioner "local-exec" {
+    command = <<EOT
+         until curl -IL "https://${local.dex_host}/.well-known/openid-configuration" | grep "HTTP" | grep -q "200"; do
+           echo "Waiting for dex to be fully ready..."
+           sleep 5
+         done
+       EOT
+  }
+}
+
 resource "helm_release" "argo_workflows" {
   depends_on = [
-    helm_release.dex,
+    terraform_data.dex_ready,
     kubernetes_secret_v1.dex_client,
     module.gatekeeper
   ]
