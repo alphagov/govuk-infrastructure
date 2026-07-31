@@ -80,6 +80,7 @@ subdomain_dns_records = [
   { type = "CNAME", name = "guidance", ttl = 300, value = ["alphagov.github.io."] },
   { type = "CNAME", name = "whitehall-admin", ttl = 300, value = ["whitehall-admin.eks.production.govuk.digital."] },
   { type = "CNAME", name = "www-origin", ttl = 300, value = ["www-origin.eks.production.govuk.digital."] },
+  { type = "TXT", name = "_github-pages-challenge-alphagov.architecture", ttl = 300, value = ["8048c0a9324627acf3cad6e91cb0d8"] }, // pragma: allowlist secret
 ]
 
 amazonmq_engine_version                       = "3.13"
