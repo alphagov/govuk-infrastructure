@@ -121,6 +121,12 @@ resource "github_team" "govuk_ai_accelerator" {
   description = "Grants access to a limited set of repos to allow managed service collegues to work on the GOV.UK publishing AI Alpha"
 }
 
+resource "github_team" "govuk_information_architects" {
+  name        = "GOV.UK Information Architects"
+  privacy     = "closed"
+  description = "Manages github permissions for the information architects"
+}
+
 resource "github_team" "govuk" {
   name    = "GOV.UK"
   privacy = "closed"
