@@ -1,0 +1,31 @@
+kind: AdmissionReview
+apiVersion: admission.k8s.io/v1beta1
+request: # Fully-qualified group/version/kind of the incoming object
+  kind:
+    version: v1
+    kind: ConfigMap
+
+  operation: "UPDATE"
+  # Name of the resource being modified
+  name: cm-0
+  # Namespace of the resource being modified, if the resource is namespaced (or is a Namespace object)
+  namespace: user-ns
+  userInfo:
+    groups: ["system:users", "system:authenticated"]
+    username: "test"
+  object:
+    apiVersion: v1
+    kind: ConfigMap
+    metadata:
+      name: cm-0
+      namespace: user-ns
+    data:
+      foo: "barbuzz"
+  oldObject:
+    apiVersion: v1
+    kind: ConfigMap
+    metadata:
+      name: cm-0
+      namespace: user-ns
+    data:
+      foo: "bar"

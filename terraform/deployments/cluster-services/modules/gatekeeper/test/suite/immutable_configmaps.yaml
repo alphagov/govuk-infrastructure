@@ -1,0 +1,23 @@
+kind: Suite
+apiVersion: test.gatekeeper.sh/v1alpha1
+tests:
+  - name: immutable_configmaps
+    template: ../../resources/constraint_templates/immutable_configmap.yaml
+    constraint: ../../resources/constraints/immutable_configmap.yaml
+    cases:
+      - name: allow updating in an allowed namespace by an allowed group
+        object: samples/immutable_configmap/allow_updating_namespace/case.yaml
+        assertions:
+          - violations: no
+      - name: allow updating from an allowed group in a user's namespace
+        object: samples/immutable_configmap/allow_updating_group/case.yaml
+        assertions:
+          - violations: no
+      - name: deny updating from a user's group in an excluded namespace
+        object: samples/immutable_configmap/deny_updating_excluded_namespace/case.yaml
+        assertions:
+          - violations: yes
+      - name: deny updating from a user's group in a user's namepsace
+        object: samples/immutable_configmap/deny_updating_user_group/case.yaml
+        assertions:
+          - violations: yes
