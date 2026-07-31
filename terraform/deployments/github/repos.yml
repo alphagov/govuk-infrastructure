@@ -1145,7 +1145,6 @@ repos:
   govuk-information-model:
     # standard security checks are disabled as not configured for a private repo
     can_be_deployed: false
-    visibility: private
     push_allowances:
       - "alphagov/gov-uk-ai-accelerator-alpha-team"
       - "alphagov/gov-uk-production-admin"
