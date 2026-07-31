@@ -465,11 +465,11 @@ databases = {
 
   whitehall = {
     engine         = "mysql"
-    engine_version = "8.0"
+    engine_version = "8.4"
     engine_params = {
       max_allowed_packet = { value = 1073741824 }
     }
-    engine_params_family         = "mysql8.0"
+    engine_params_family         = "mysql8.4"
     name                         = "whitehall"
     allocated_storage            = 400
     iops                         = 12000
