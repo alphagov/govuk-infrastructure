@@ -34,7 +34,7 @@ data "aws_iam_policy_document" "ckan_db_backup_xaccount_sync" {
   statement {
     sid     = "AllowReadingFromSource"
     effect  = "Allow"
-    actions = ["s3:CopyObject", "s3:GetObject", "s3:GetOjectTagging", "s3:HeadObject", "s3:ListObjects"]
+    actions = ["s3:CopyObject", "s3:GetObject", "s3:GetObjectTagging", "s3:HeadObject", "s3:ListObjects"]
 
     resources = ["${local.source_db_backups_s3_bucket_arn}/ckan-postgres/*"]
   }
