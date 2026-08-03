@@ -20,11 +20,6 @@ variable "google_cloud_billing_account" {
   description = "The ID of the Google Cloud billing account to associate projects with"
 }
 
-variable "project_id" {
-  type        = string
-  description = "The ID of the overarching terraform cloud project for all workspaces"
-}
-
 variable "tfe_project_name" {
   type        = string
   default     = "govuk-search-api-v2"
