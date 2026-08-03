@@ -898,12 +898,7 @@ repos:
         - Lint SCSS / Run Stylelint
         - Test JavaScript / Run Jasmine
 
-  siteimprove_api_client:
-    publishes_gem: true
-    required_status_checks:
-      standard_contexts: *standard_security_checks
-      additional_contexts:
-        - test
+  siteimprove_api_client: {}
 
   slimmer:
     archived: true
