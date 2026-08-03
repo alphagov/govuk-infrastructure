@@ -40,18 +40,6 @@ variable "google_cloud_apis" {
   ]
 }
 
-variable "discovery_engine_quota_search_requests_per_minute" {
-  type        = number
-  description = "The maximum number of search requests per minute for the Discovery Engine"
-  default     = 250
-}
-
-variable "discovery_engine_quota_documents" {
-  type        = number
-  description = "The maximum number of documents across Discovery Engine datastores"
-  default     = 1000000
-}
-
 variable "upstream_environment_name" {
   type        = string
   description = "The name of the upstream environment, if any (used to wait for a successful apply on a 'lower' environment before applying this one)"
