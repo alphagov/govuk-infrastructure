@@ -34,7 +34,7 @@ data "aws_iam_policy_document" "ckan_db_backup_xaccount_sync" {
   statement {
     sid     = "AllowReadingFromSource"
     effect  = "Allow"
-    actions = ["s3:CopyObject", "s3:GetObject", "s3:HeadObject", "s3:ListObjects"]
+    actions = ["s3:CopyObject", "s3:GetObject", "s3:GetOjectTagging", "s3:HeadObject", "s3:ListObjects"]
 
     resources = ["${local.source_db_backups_s3_bucket_arn}/ckan-postgres/*"]
   }
@@ -49,9 +49,9 @@ data "aws_iam_policy_document" "ckan_db_backup_xaccount_sync" {
   statement {
     sid     = "AllowWritingToDestination"
     effect  = "Allow"
-    actions = ["s3:HeadObject", "s3:PutObject", "s3:ListObjects"]
+    actions = ["s3:HeadObject", "s3:PutObject", "s3:PutObjectTagging", "s3:ListObjects"]
     resources = [
-      "${var.cross_account_database_backup_sync_target_s3_bucket_arn}:ckan-postgres/*"
+      "${var.cross_account_database_backup_sync_target_s3_bucket_arn}/ckan-postgres/*"
     ]
   }
 
