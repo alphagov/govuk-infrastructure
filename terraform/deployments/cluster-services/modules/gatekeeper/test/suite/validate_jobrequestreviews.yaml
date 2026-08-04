@@ -31,3 +31,13 @@ tests:
         assertions:
           - violations: yes
             message: "The JobRequestReview references JobRequest \\(test-jobrequest-another-namespace\\) but that JobRequest cannot be found in the namespace of the JobRequestReview \\(apps\\)"
+      - name: allow deleting a JobRequestReview when the JobRequest it references no longer exists
+        object: samples/validate_jobrequestreviews/allow_deleting_jobrequestreviews_when_jobrequest_notfound/case.yaml
+        assertions:
+          - violations: no
+      - name: allow deleting a JobRequestReview when the JobRequest still exists
+        object: samples/validate_jobrequestreviews/allow_deleting_jobrequestreviews_when_jobrequest_exists/case.yaml
+        inventory:
+          - samples/validate_jobrequestreviews/allow_deleting_jobrequestreviews_when_jobrequest_exists/inventory.yaml
+        assertions:
+          - violations: no

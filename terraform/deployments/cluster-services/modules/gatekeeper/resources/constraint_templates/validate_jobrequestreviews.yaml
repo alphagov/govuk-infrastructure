@@ -19,6 +19,7 @@ spec:
 
         violation[{"msg": msg}] {
           input.review.kind.kind == "JobRequestReview"
+          input.review.operation != "DELETE"
 
           # jobRequestName is a required field, so defensive lookup not needed
           job_request_name := input.review.object.spec.jobRequestName
@@ -39,6 +40,7 @@ spec:
 
         violation[{"msg": msg}] {
           input.review.kind.kind == "JobRequestReview"
+          input.review.operation != "DELETE"
 
           # jobRequestName is a required field, so defensive lookup not needed
           job_request_name := input.review.object.spec.jobRequestName

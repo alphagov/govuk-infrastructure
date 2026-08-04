@@ -1,0 +1,26 @@
+---
+kind: AdmissionReview
+apiVersion: admission.k8s.io/v1beta1
+request:
+  kind:
+    kind: JobRequestReview
+    group: platform.publishing.service.gov.uk
+    version: v1
+
+  operation: DELETE
+
+  name: test-jobrequestreview-delete-jobrequest-found
+  namespace: apps
+
+  oldObject:
+    apiVersion: platform.publishing.service.gov.uk/v1
+    kind: JobRequestReview
+    metadata:
+      name: test-jobrequestreview-delete-jobrequest-found
+      namespace: apps
+      annotations:
+        platform.publishing.service.gov.uk/reviewed-by: arn:aws:sts::123456789:assumed-role/otheruser.name-platformengineer/test-platformengineer
+    spec:
+      jobRequestName: test-jobrequest
+      decision: Approved
+      description: "LGTM"
