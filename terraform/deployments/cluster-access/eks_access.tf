@@ -146,6 +146,21 @@ module "ithctester" {
       api_groups = ["argoproj.io", "external-secrets.io"]
       resources  = ["*"]
       verbs      = ["get", "list", "watch"]
+    },
+    {
+      api_groups = [""]
+      resources  = ["namespaces", "pods", "pods/logs", "services", "configmaps", "endpoints", "events"]
+      verbs      = ["get", "list", "watch"]
+    },
+    {
+      api_groups = ["apps", "batch"]
+      resources  = ["deployments", "replicasets", "statefulsets", "jobs", "cronjobs"]
+      verbs      = ["get", "list", "watch"]
+    },
+    {
+      api_groups = ["networking.k8s.io"]
+      resources  = ["ingresses"]
+      verbs      = ["get", "list", "watch"]
     }
   ]
 
