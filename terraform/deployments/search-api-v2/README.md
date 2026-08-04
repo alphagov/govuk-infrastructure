@@ -8,7 +8,9 @@ consumed by the Kubernetes platform for an individual environment (integration, 
 
 For initial (bootstrapping) setup of the GCP projects, including broad access roles, see [gcp-search-api-v2][gcp-search-api-v2-deployment].
 
-The setup of the Terraform workspaces for this module is done in the [tfc-configurations][search-v2-tfc-config]. 
+The setup of the Terraform workspaces for this module is done in the [tfc-configurations][search-v2-tfc-config].
+
+For managing AWS resources related to search, including for the [search API gateway][api-gateway] and `search-api-v1`, see [govuk-publishing-infrastructure][publishing-deployment].
 
 ## Applying this module
 This module will automatically be **planned** across all environments in [Terraform Cloud][terraform-cloud] on
@@ -44,7 +46,9 @@ This module provisions the following resources into the Google Cloud Platform pr
 [restapi_provider_docs]: https://registry.terraform.io/providers/Mastercard/restapi/latest
 [search-api-v2-repo]: https://github.com/alphagov/search-api-v2
 [terraform-cloud]: https://app.terraform.io/
+[api-gateway]: ../govuk-publishing-infrastructure/search_api_gateway.tf
 [gcp-search-api-v2-deployment]: ../gcp-search-api-v2/
 [search-v2-tfc-config]: ../tfc-configuration/search-api-v2.tf
+[publishing-deployment]: ../govuk-publishing-infrastructure/README.md
 [variables]: ./variables.tf
 [variables-folder]: ../../variables
