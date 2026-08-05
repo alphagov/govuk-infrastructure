@@ -161,6 +161,11 @@ module "ithctester" {
       api_groups = ["networking.k8s.io"]
       resources  = ["ingresses"]
       verbs      = ["get", "list", "watch"]
+    },
+    {
+      api_groups = ["rbac.authorization.k8s.io"]
+      resources  = ["clusterroles"]
+      verbs      = ["get", "list"]
     }
   ]
 
