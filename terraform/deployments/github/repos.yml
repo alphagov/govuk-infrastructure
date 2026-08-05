@@ -1141,7 +1141,7 @@ repos:
     # standard security checks are disabled as not configured for a private repo
     can_be_deployed: false
     push_allowances:
-      - "alphagov/govuk-ai-information-architects"
+      - "alphagov/gov-uk-information-architects"
       - "alphagov/gov-uk-production-admin"
       - "alphagov/gov-uk-production-deploy"
     
