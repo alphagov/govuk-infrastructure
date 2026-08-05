@@ -898,7 +898,8 @@ repos:
         - Lint SCSS / Run Stylelint
         - Test JavaScript / Run Jasmine
 
-  siteimprove_api_client: {}
+  siteimprove_api_client:
+    archived: true
 
   slimmer:
     archived: true
