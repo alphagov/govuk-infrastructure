@@ -86,6 +86,12 @@ spec:
       - group: ""
         version: "v1"
         kind: "Service"
+      - group: "platform.publishing.service.gov.uk"
+        version: "v1"
+        kind: "JobRequest"
+      - group: "platform.publishing.service.gov.uk"
+        version: "v1"
+        kind: "JobRequestReview"
 YAML
 }
 

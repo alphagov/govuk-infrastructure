@@ -1,0 +1,43 @@
+---
+kind: Suite
+apiVersion: test.gatekeeper.sh/v1alpha1
+tests:
+  - name: ValidateJobRequestReviews
+    template: ../../resources/constraint_templates/validate_jobrequestreviews.yaml
+    constraint: ../../resources/constraints/validate_jobrequestreviews.yaml
+    cases:
+      - name: allow a JobRequestReview to review an unreviewed JobRequest
+        inventory:
+          - samples/validate_jobrequestreviews/allow_reviewing_unreviewed_jobrequest/inventory.yaml
+        object: samples/validate_jobrequestreviews/allow_reviewing_unreviewed_jobrequest/case.yaml
+        assertions:
+          - violations: no
+      - name: deny a JobRequestReview which attempts to review an already reviewed JobRequest
+        inventory:
+          - samples/validate_jobrequestreviews/deny_reviewing_already_reviewed_jobrequest/inventory.yaml
+        object: samples/validate_jobrequestreviews/deny_reviewing_already_reviewed_jobrequest/case.yaml
+        assertions:
+          - violations: yes
+            message: "JobRequest \\(test-jobrequest-reviewed\\) has already been reviewed by JobRequestReview \\(previous-jobrequestreview\\) and is now in state \\(Started\\)"
+      - name: deny a JobRequestReview which references a non-existant JobRequest
+        object: samples/validate_jobrequestreviews/deny_referencing_nonexisting_jobrequest/case.yaml
+        assertions:
+          - violations: yes
+            message: "The JobRequestReview references JobRequest \\(test-jobrequest-notfound\\) but that JobRequest cannot be found in the namespace of the JobRequestReview \\(apps\\)"
+      - name: deny a JobRequestReview which references a JobRequest in a different namespace
+        object: samples/validate_jobrequestreviews/deny_referencing_jobrequest_in_another_namespace/case.yaml
+        inventory:
+          - samples/validate_jobrequestreviews/deny_referencing_jobrequest_in_another_namespace/inventory.yaml
+        assertions:
+          - violations: yes
+            message: "The JobRequestReview references JobRequest \\(test-jobrequest-another-namespace\\) but that JobRequest cannot be found in the namespace of the JobRequestReview \\(apps\\)"
+      - name: allow deleting a JobRequestReview when the JobRequest it references no longer exists
+        object: samples/validate_jobrequestreviews/allow_deleting_jobrequestreviews_when_jobrequest_notfound/case.yaml
+        assertions:
+          - violations: no
+      - name: allow deleting a JobRequestReview when the JobRequest still exists
+        object: samples/validate_jobrequestreviews/allow_deleting_jobrequestreviews_when_jobrequest_exists/case.yaml
+        inventory:
+          - samples/validate_jobrequestreviews/allow_deleting_jobrequestreviews_when_jobrequest_exists/inventory.yaml
+        assertions:
+          - violations: no

@@ -1,0 +1,10 @@
+---
+apiVersion: constraints.gatekeeper.sh/v1beta1
+kind: validatejobrequestreview
+metadata:
+  name: validatejobrequestreview
+spec:
+  match:
+    kinds:
+      - apiGroups: ["platform.publishing.service.gov.uk"]
+        kinds: ["JobRequestReview"]
