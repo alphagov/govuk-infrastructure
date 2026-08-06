@@ -17,13 +17,17 @@ spec:
       rego: |
         package validatejobrequestreview
 
-        violation[{"msg": msg}] {
+        valid_resource_and_operation {
           input.review.kind.kind == "JobRequestReview"
           input.review.operation != "DELETE"
+        }
 
-          # jobRequestName is a required field, so defensive lookup not needed
-          job_request_name := input.review.object.spec.jobRequestName
-          job_request_review_namespace := input.review.namespace
+        # jobRequestName is a required field, so defensive lookup not needed
+        job_request_name := input.review.object.spec.jobRequestName
+        job_request_review_namespace := input.review.namespace
+
+        violation[{"msg": msg}] {
+          valid_resource_and_operation
 
           job_request := object.get(
             data.inventory,
@@ -39,12 +43,7 @@ spec:
         }
 
         violation[{"msg": msg}] {
-          input.review.kind.kind == "JobRequestReview"
-          input.review.operation != "DELETE"
-
-          # jobRequestName is a required field, so defensive lookup not needed
-          job_request_name := input.review.object.spec.jobRequestName
-          namespace := input.review.namespace
+          valid_resource_and_operation
 
           job_request := data.inventory.namespace[namespace]["platform.publishing.service.gov.uk/v1"]["JobRequest"][job_request_name]
           review_name := object.get(job_request, ["status", "reviewName"], "")

@@ -12,7 +12,7 @@ tests:
         object: samples/validate_jobrequestreviews/allow_reviewing_unreviewed_jobrequest/case.yaml
         assertions:
           - violations: no
-      - name: deny a JobRequestReview which attempts to review and already reviewed JobRequest
+      - name: deny a JobRequestReview which attempts to review an already reviewed JobRequest
         inventory:
           - samples/validate_jobrequestreviews/deny_reviewing_already_reviewed_jobrequest/inventory.yaml
         object: samples/validate_jobrequestreviews/deny_reviewing_already_reviewed_jobrequest/case.yaml
