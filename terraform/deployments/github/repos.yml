@@ -375,7 +375,6 @@ repos:
     teams:
       govuk: "maintain"
       govuk-platform-engineering: "admin"
-      govuk-data-engineering: "admin"
 
   govuk-data-science-workshop:
     archived: true
