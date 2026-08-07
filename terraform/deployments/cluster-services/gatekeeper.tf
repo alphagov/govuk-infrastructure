@@ -2,8 +2,9 @@ module "gatekeeper" {
   source = "./modules/gatekeeper"
 
   dryrun_map = {
-    immutable_configmap        = true
-    validate_jobrequestreviews = false
+    immutable_configmap                    = true
+    validate_jobrequestreviews             = false
+    jobrequestoperator_requiredannotations = false
   }
 
   constraint_violations_max_to_display = 25
