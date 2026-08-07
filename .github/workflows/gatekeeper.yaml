@@ -1,0 +1,30 @@
+name: Unit test Gatekeeper policies
+on:
+  pull_request:
+      paths:
+        - 'terraform/deployments/cluster-services/modules/gatekeeper/**'
+
+jobs:
+  gator-tests:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+
+      - name: Run Gatekeeper Tests
+        working-directory: terraform/deployments/cluster-services/modules/gatekeeper/test/suite
+        run: |
+          # install gator via brew
+          curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh
+          test -d ~/.linuxbrew && eval "$(~/.linuxbrew/bin/brew shellenv)"
+          test -d /home/linuxbrew/.linuxbrew && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+          test -r ~/.bash_profile && echo "eval \"\$($(brew --prefix)/bin/brew shellenv)\"" >> ~/.bash_profile
+          echo "eval \"\$($(brew --prefix)/bin/brew shellenv)\"" >> ~/.profile
+
+          brew version-install gator@3.23.0
+
+          gator verify --verbose ./...
+
