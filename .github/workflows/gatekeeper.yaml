@@ -1,0 +1,27 @@
+name: Unit test Gatekeeper policies
+on:
+  pull_request:
+      paths:
+        - 'terraform/deployments/cluster-services/modules/gatekeeper/**'
+
+jobs:
+  gator-tests:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+
+      - name: Set up Homebrew
+        id: set-up-homebrew
+        uses: Homebrew/actions/setup-homebrew@1f8e202ffddf94def7f42f6fa3a482e821489f9c # 2026.07.10.1
+
+      - name: Run Gatekeeper Tests
+        working-directory: terraform/deployments/cluster-services/modules/gatekeeper/test/suite
+        run: |
+          brew version-install gator@3.23.0
+
+          gator verify --verbose ./...
+
