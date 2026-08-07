@@ -1,0 +1,16 @@
+---
+apiVersion: platform.publishing.service.gov.uk/v1
+kind: JobRequest
+metadata:
+  name: test-jr-empty-annotation
+  annotations:
+    platform.publishing.service.gov.uk/requested-by: ""
+spec:
+  containerFrom:
+    podSpecFrom:
+      group: apps/v1
+      kind: Deployment
+      name: govuk-replatform-test-app
+    containerName: app
+  command: rake
+  args: ["hello"]
