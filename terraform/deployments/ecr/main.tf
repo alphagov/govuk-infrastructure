@@ -48,10 +48,10 @@ provider "github" {
 }
 
 locals {
-  repositories = concat(
+  repositories = distinct(concat(
     local.extra_repositories,
     data.tfe_outputs.github.nonsensitive_values.deployable_repo_names
-  )
+  ))
 
   // Populate this with Repos that need to be deleted
   deleted_repositories = []
@@ -59,6 +59,7 @@ locals {
   extra_repositories = [
     "clamav",
     "govuk-fastly-diff-generator",
+    "govuk-job-request-operator",
     "govuk-replatform-test-app",
     "imminence",
     "licensify-backend",
