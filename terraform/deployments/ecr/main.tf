@@ -59,6 +59,7 @@ locals {
   extra_repositories = [
     "clamav",
     "govuk-fastly-diff-generator",
+    "govuk-job-request-operator",
     "govuk-replatform-test-app",
     "imminence",
     "licensify-backend",
