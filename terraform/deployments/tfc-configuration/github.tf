@@ -25,6 +25,8 @@ module "github" {
   variable_set_ids = [
     local.aws_credentials["tools"],
   ]
+
+  remote_state_consumer_ids = [module.ecr-production.workspace_id]
 }
 
 resource "tfe_project" "github" {
