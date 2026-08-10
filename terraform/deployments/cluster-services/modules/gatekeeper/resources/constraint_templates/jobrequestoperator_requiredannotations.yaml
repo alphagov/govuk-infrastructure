@@ -1,0 +1,41 @@
+---
+apiVersion: templates.gatekeeper.sh/v1
+kind: ConstraintTemplate
+metadata:
+  name: jobrequestoperatorrequiredannotations
+  annotations:
+    metadata.gatekeeper.sh/title: Validate a JobRequest has a requested-by annotation
+    description: This constraint ensures a JobRequest has the requested-by annotation
+spec:
+  crd:
+    spec:
+      names:
+        kind: JobRequestOperatorRequiredAnnotations
+
+  targets:
+    - target: admission.k8s.gatekeeper.sh
+      rego: |
+        package jobrequestoperatorrequiredannotations
+
+        annotation_keys := {
+          "JobRequest": "platform.publishing.service.gov.uk/requested-by",
+          "JobRequestReview": "platform.publishing.service.gov.uk/reviewed-by"
+        }
+
+        violation[{"msg": msg}] {
+          input.review.operation != "DELETE"
+
+          annotation_key := annotation_keys[input.review.kind.kind]
+
+          annotation_value := object.get(
+            input.review.object,
+            ["metadata", "annotations", annotation_key],
+            ""
+          )
+          annotation_value == ""
+
+          msg := sprintf(
+            "The %s (%s) does not include the required annotation (%s)",
+            [input.review.kind.kind, input.review.name, annotation_key]
+          )
+        }

@@ -1,0 +1,12 @@
+---
+apiVersion: constraints.gatekeeper.sh/v1beta1
+kind: JobRequestOperatorRequiredAnnotations
+metadata:
+  name: jobrequest-operator-required-annotations
+spec:
+  match:
+    kinds:
+      - apiGroups: ["platform.publishing.service.gov.uk"]
+        kinds:
+          - "JobRequest"
+          - "JobRequestReview"

@@ -1,0 +1,36 @@
+---
+kind: Suite
+apiVersion: test.gatekeeper.sh/v1alpha1
+tests:
+  - name: ValidateJobRequestReviews
+    template: ../../resources/constraint_templates/jobrequestoperator_requiredannotations.yaml
+    constraint: ../../resources/constraints/jobrequestoperator_requiredannotations.yaml
+    cases:
+      - name: allow a JobRequest with the correct annotation
+        object: samples/jobrequestoperator_requiredannotations/allow_jobrequest_with_correct_annotation/case.yaml
+        assertions:
+          - violations: no
+      - name: allow a JobRequestReview with the correct annotation
+        object: samples/jobrequestoperator_requiredannotations/allow_jobrequestreview_with_correct_annotation/case.yaml
+        assertions:
+          - violations: no
+      - name: deny a JobRequest without the correct annotation
+        object: samples/jobrequestoperator_requiredannotations/deny_jobrequest_without_correct_annotation/case.yaml
+        assertions:
+          - violations: yes
+            message: "The JobRequest \\(test-jr-no-annotation\\) does not include the required annotation \\(platform.publishing.service.gov.uk/requested-by\\)"
+      - name: deny a JobRequestReview without the correct annotation
+        object: samples/jobrequestoperator_requiredannotations/deny_jobrequestreview_without_correct_annotation/case.yaml
+        assertions:
+          - violations: yes
+            message: "The JobRequestReview \\(test-jrr-no-annotation\\) does not include the required annotation \\(platform.publishing.service.gov.uk/reviewed-by\\)"
+      - name: deny a JobRequest with the correct annotation set to an empty string
+        object: samples/jobrequestoperator_requiredannotations/deny_jobrequest_with_correct_annotation_set_to_empty_string/case.yaml
+        assertions:
+          - violations: yes
+            message: "The JobRequest \\(test-jr-empty-annotation\\) does not include the required annotation \\(platform.publishing.service.gov.uk/requested-by\\)"
+      - name: deny a JobRequestReview with the correct annotation set to an empty string
+        object: samples/jobrequestoperator_requiredannotations/deny_jobrequestreview_with_correct_annotation_set_to_empty_string/case.yaml
+        assertions:
+          - violations: yes
+            message: "The JobRequestReview \\(test-jrr-empty-annotation\\) does not include the required annotation \\(platform.publishing.service.gov.uk/reviewed-by\\)"
