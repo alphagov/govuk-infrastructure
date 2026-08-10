@@ -48,10 +48,10 @@ provider "github" {
 }
 
 locals {
-  repositories = concat(
+  repositories = distinct(concat(
     local.extra_repositories,
     data.tfe_outputs.github.nonsensitive_values.deployable_repo_names
-  )
+  ))
 
   // Populate this with Repos that need to be deleted
   deleted_repositories = []
