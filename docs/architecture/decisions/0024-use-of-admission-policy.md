@@ -20,18 +20,18 @@ The strengths of Admission Policies are:
 
 ## Decision
 
-We have already have settled on a more sophisticated policy engine and language in Open Policy Agent (OPA) and Rego. They are used to power [Gatekeeper's](./0023-use-opa-gatekeeper.md) admission controller webhooks, and we will commit to continue writing as much policy as possible using these tools.
+Keep using Open Policy Agent (OPA) and Rego.
+
+Pick Gatekeeper and Admission Webhooks over CEL and Admission Policy where possible.
 
 OPA proves particularly useful for the team, as we [expect to utilise the engine](https://concourse-ci.org/docs/operation/opa-integration/) with our upcoming [concourse work](./0018-use-concourse-ci.md).
 
-Where possible we will pick Gatekeeper and admission webhooks over CEL and admission policy.
+## Consequences
 
-We will stay flexible and use admission policies when Gatekeeper cannot meet our needs. Examples of such scenarios are:
+There are a couple of scenarios where Gatekeeper cannot meet our needs. They are:
 
 - When we need to write a mutation that requires looking up data from the `userInfo` field in the `AdmissionReview` object
 - When we need a performant admission
-
-## Consequences
 
 Our choice to prioritise the Gatekeeper, Rego language and the OPA engine means that engineers will have less languages and approaches that they need to hold in their head.
 
