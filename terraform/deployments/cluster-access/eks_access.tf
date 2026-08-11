@@ -91,6 +91,11 @@ module "developer" {
       api_groups = [""]
       resources  = ["pods/exec"]
       verbs      = ["create"]
+    },
+    {
+      api_groups = ["platform.publishing.service.gov.uk"]
+      resources  = ["jobrequests", "jobrequestreviews"]
+      verbs      = ["get", "list", "watch", "create"]
     }
   ]
 
@@ -203,6 +208,14 @@ module "readonly" {
     {
       api_groups = ["networking.k8s.io"]
       resources  = ["ingresses"]
+      verbs      = ["get", "list", "watch"]
+    }
+  ]
+
+  namespace_role_rules = [
+    {
+      api_groups = ["platform.publishing.service.gov.uk"]
+      resources  = ["jobrequests", "jobrequestreviews"]
       verbs      = ["get", "list", "watch"]
     }
   ]
