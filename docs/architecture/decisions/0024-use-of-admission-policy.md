@@ -28,11 +28,12 @@ OPA proves particularly useful for the team, as we [expect to utilise the engine
 
 ## Consequences
 
+Our choice to prioritise Gatekeeper, Rego and the OPA engine means that engineers will have less languages and approaches that they need to hold in their head.
+
+We will stay flexible and still have the option to use Admission Policies when we need, otherwise we'll continue leveraging the efficiency gains of already well known technologies.
+
 There are a couple of scenarios where Gatekeeper cannot meet our needs. They are:
 
 - When we need to write a mutation that requires looking up data from the `userInfo` field in the `AdmissionReview` object
 - When we need a performant admission
 
-Our choice to prioritise the Gatekeeper, Rego language and the OPA engine means that engineers will have less languages and approaches that they need to hold in their head.
-
-We will stay flexible and still have the option to use Admission Policies when we need, otherwise we'll continue leveraging the efficiency gains of already well known technologies.
