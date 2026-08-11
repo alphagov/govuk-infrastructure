@@ -93,6 +93,7 @@ devops
 equivalent
 favicon
 legacy
+leveraging
 logit.io
 [mM]aintain
 modify
@@ -102,6 +103,7 @@ namespaced
 namespaces
 onboarding
 overhead
+performant
 repoint
 [rR]ollouts?
 [sS]harding
