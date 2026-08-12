@@ -104,6 +104,7 @@ module "cluster_services" {
 /*
  * Commented out because it doesn't work, but the workspace it makes
  * causes every RDS PR to show it is failing the build
+*/
 module "rds" {
   source               = "./ws"
   name                 = "rds"
@@ -112,7 +113,6 @@ module "rds" {
 
   depends_on = [module.cluster_infrastructure, module.vpc, tfe_project.project]
 }
-*/
 
 /*
  * Commented out because DGU no longer belongs to us and we very rarely need
