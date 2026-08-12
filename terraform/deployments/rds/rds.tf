@@ -90,7 +90,7 @@ resource "aws_db_instance" "instance" {
   backup_retention_period     = each.value.backup_retention_period != null ? each.value.backup_retention_period : var.backup_retention_period
   backup_window               = each.value.backup_window != null ? each.value.backup_window : var.backup_window
   copy_tags_to_snapshot       = true
-  monitoring_interval         = 60
+  monitoring_interval         = 0
   monitoring_role_arn         = ""
   vpc_security_group_ids      = [aws_security_group.instance[each.key].id]
   ca_cert_identifier          = "rds-ca-rsa2048-g1"
