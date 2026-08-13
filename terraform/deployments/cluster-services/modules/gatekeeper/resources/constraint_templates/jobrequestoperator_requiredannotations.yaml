@@ -93,3 +93,26 @@ spec:
             [input.review.kind.kind, input.review.name, split(annotation_key, "/")[1], arn]
           )
         }
+
+        violation[{"msg": msg}] {
+          valid_operation
+          input.review.kind.kind == "JobRequestReview"
+
+          namespace := input.review.namespace
+          job_request_name := input.review.object.spec.jobRequestName
+
+          job_request := data.inventory.namespace[namespace]["platform.publishing.service.gov.uk/v1"]["JobRequest"][job_request_name]
+
+          requested_by_arn := input.review.object.metadata.annotations[annotation_keys["JobRequestReview"]]
+          reviewed_by_arn := job_request.metadata.annotations[annotation_keys["JobRequest"]]
+
+          requested_by_username := parse_username_from_arn(requested_by_arn)
+          reviewed_by_username := parse_username_from_arn(reviewed_by_arn)
+
+          requested_by_username == reviewed_by_username
+
+          msg := sprintf(
+            "JobRequestReview (%s) cannot review JobRequest (%s) since the reviewer and requester are the same user (%s)",
+            [input.review.name, job_request_name, reviewed_by_username]
+          )
+        }

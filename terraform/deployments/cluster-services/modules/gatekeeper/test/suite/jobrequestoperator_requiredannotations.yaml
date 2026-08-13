@@ -140,3 +140,31 @@ tests:
         assertions:
           - violations: yes
             message: "JobRequestReview \\(test-jrr-with-annotation\\) has a reviewed-by annotation \\(arn:aws:sts::123456789:assumed-role/user.name-unknownrole/test-environment\\) which cannot be parsed to a username"
+      - name: deny a JobRequestReview where the reviewer is the same as the requester and they are both the same gds-users role
+        object: samples/jobrequestoperator_requiredannotations/deny_jobrequestreview_with_same_reviewer_as_jobrequest_requester/same-gds-users-role.yaml
+        inventory:
+          - samples/jobrequestoperator_requiredannotations/shared-inventory/jobrequest_with_gds_users_user.yaml
+        assertions:
+          - violations: yes
+            message: "JobRequestReview \\(test-jrr-with-annotation\\) cannot review JobRequest \\(test-jr-with-annotation\\) since the reviewer and requester are the same user \\(requesting.user\\)"
+      - name: deny a JobRequestReview where the reviewer is the same as the requester and they have different gds-users roles
+        object: samples/jobrequestoperator_requiredannotations/deny_jobrequestreview_with_same_reviewer_as_jobrequest_requester/different-gds-users-role.yaml
+        inventory:
+          - samples/jobrequestoperator_requiredannotations/shared-inventory/jobrequest_with_gds_users_user.yaml
+        assertions:
+          - violations: yes
+            message: "JobRequestReview \\(test-jrr-with-annotation\\) cannot review JobRequest \\(test-jr-with-annotation\\) since the reviewer and requester are the same user \\(requesting.user\\)"
+      - name: deny a JobRequestReview where the reviewer is the same as the requester and they are both the same EntraID role
+        object: samples/jobrequestoperator_requiredannotations/deny_jobrequestreview_with_same_reviewer_as_jobrequest_requester/same-entra-id-users-role.yaml
+        inventory:
+          - samples/jobrequestoperator_requiredannotations/shared-inventory/jobrequest_with_entra_id_user.yaml
+        assertions:
+          - violations: yes
+            message: "JobRequestReview \\(test-jrr-with-annotation\\) cannot review JobRequest \\(test-jr-with-annotation\\) since the reviewer and requester are the same user \\(requesting.user@example.com\\)"
+      - name: deny a JobRequestReview where the reviewer is the same as the requester and they have different EntraID roles
+        object: samples/jobrequestoperator_requiredannotations/deny_jobrequestreview_with_same_reviewer_as_jobrequest_requester/different-entra-id-users-role.yaml
+        inventory:
+          - samples/jobrequestoperator_requiredannotations/shared-inventory/jobrequest_with_entra_id_user.yaml
+        assertions:
+          - violations: yes
+            message: "JobRequestReview \\(test-jrr-with-annotation\\) cannot review JobRequest \\(test-jr-with-annotation\\) since the reviewer and requester are the same user \\(requesting.user@example.com\\)"
