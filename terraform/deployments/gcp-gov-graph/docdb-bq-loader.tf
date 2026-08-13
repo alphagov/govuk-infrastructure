@@ -47,7 +47,7 @@ resource "google_cloud_run_v2_job" "docdb_bq_loader" {
       service_account = google_service_account.docdb_bq_loader.email
 
       containers {
-        image = "europe-west2-docker.pkg.dev/govuk-knowledge-graph/docker/docdb-bq-loader:latest"
+        image = "europe-west2-docker.pkg.dev/${var.project_id}/docker/docdb-bq-loader:latest"
 
         resources {
           limits = {
