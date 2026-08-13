@@ -23,6 +23,7 @@ subdomain_dns_records = [
   { type = "CNAME", name = "draft-assets", ttl = 3600, value = ["draft-assets.eks.staging.govuk.digital."] },
   { type = "CNAME", name = "draft-origin", ttl = 3600, value = ["draft-origin.eks.staging.govuk.digital."] },
   { type = "CNAME", name = "email-alert-api-public", ttl = 3600, value = ["email-alert-api.eks.staging.govuk.digital."] },
+  { type = "CNAME", name = "fact-check-manager", ttl = 3600, value = ["fact-check-manager.eks.staging.govuk.digital."] },
   { type = "CNAME", name = "hmrc-manuals-api", ttl = 3600, value = ["hmrc-manuals-api.eks.staging.govuk.digital."] },
   { type = "CNAME", name = "licensify-admin.eks", ttl = 3600, value = ["licensify-admin.eks.staging.govuk.digital."] },
   { type = "CNAME", name = "licensify-admin", ttl = 3600, value = ["licensify-admin.eks.staging.govuk.digital."] },
