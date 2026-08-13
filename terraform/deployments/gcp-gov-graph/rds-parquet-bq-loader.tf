@@ -48,7 +48,7 @@ resource "google_cloud_run_v2_job" "rds_parquet_bq_loader" {
       service_account = google_service_account.rds_parquet_bq_loader.email
 
       containers {
-        image = "europe-west2-docker.pkg.dev/govuk-knowledge-graph/docker/rds-parquet-bq-loader:latest"
+        image = "europe-west2-docker.pkg.dev/${var.project_id}/docker/rds-parquet-bq-loader:latest"
 
         resources {
           limits = {
