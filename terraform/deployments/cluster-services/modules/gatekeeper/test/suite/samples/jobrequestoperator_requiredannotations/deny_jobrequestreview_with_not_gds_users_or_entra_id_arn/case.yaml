@@ -1,0 +1,12 @@
+---
+apiVersion: platform.publishing.service.gov.uk/v1
+kind: JobRequestReview
+metadata:
+  name: test-jrr-with-annotation
+  namespace: apps
+  annotations:
+    platform.publishing.service.gov.uk/reviewed-by: arn:aws:sts::123456789:assumed-role/user.name-unknownrole/test-environment
+spec:
+  jobRequestName: test-jr-with-annotation
+  decision: Approved
+  description: "LGTM"
