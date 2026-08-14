@@ -34,3 +34,137 @@ tests:
         assertions:
           - violations: yes
             message: "The JobRequestReview \\(test-jrr-empty-annotation\\) does not include the required annotation \\(platform.publishing.service.gov.uk/reviewed-by\\)"
+      - name: allow a JobRequest where the annotation is a gds-users fulladmin arn
+        object: samples/jobrequestoperator_requiredannotations/allow_jobrequest_with_gds_users_arn/fulladmin.yaml
+        assertions:
+          - violations: no
+      - name: allow a JobRequest where the annotation is a gds-users tempadmin arn
+        object: samples/jobrequestoperator_requiredannotations/allow_jobrequest_with_gds_users_arn/tempadmin.yaml
+        assertions:
+          - violations: no
+      - name: allow a JobRequest where the annotation is a gds-users platformengineer arn
+        object: samples/jobrequestoperator_requiredannotations/allow_jobrequest_with_gds_users_arn/platformengineer.yaml
+        assertions:
+          - violations: no
+      - name: allow a JobRequest where the annotation is a gds-users developer arn
+        object: samples/jobrequestoperator_requiredannotations/allow_jobrequest_with_gds_users_arn/developer.yaml
+        assertions:
+          - violations: no
+      - name: allow a JobRequest where the annotation is a gds-users readonly arn
+        object: samples/jobrequestoperator_requiredannotations/allow_jobrequest_with_gds_users_arn/readonly.yaml
+        assertions:
+          - violations: no
+      - name: allow a JobRequest where the annotation is a gds-users ithctester arn
+        object: samples/jobrequestoperator_requiredannotations/allow_jobrequest_with_gds_users_arn/ithctester.yaml
+        assertions:
+          - violations: no
+      - name: allow a JobRequest where the annotation is an EntraID arn
+        object: samples/jobrequestoperator_requiredannotations/allow_jobrequest_with_entra_id_arn/case.yaml
+        assertions:
+          - violations: no
+      - name: deny a JobRequest where the annotation is an arn that is not an assumed-role arn
+        object: samples/jobrequestoperator_requiredannotations/deny_jobrequest_with_not_assumed_role_arn/case.yaml
+        assertions:
+          - violations: yes
+            message: "JobRequest \\(test-jr-with-annotation\\) has a requested-by annotation \\(arn:aws:sts::123456789:role/SomeRole\\) which cannot be parsed to a username"
+      - name: deny a JobRequest where the annotation is not an arn
+        object: samples/jobrequestoperator_requiredannotations/deny_jobrequest_with_not_an_arn/case.yaml
+        assertions:
+          - violations: yes
+            message: "JobRequest \\(test-jr-with-annotation\\) has a requested-by annotation \\(wibble\\) which cannot be parsed to a username"
+      - name: deny a JobRequest where the annotation is an assumed-role arn that cannot be parsed as either gds-users or EntraID
+        object: samples/jobrequestoperator_requiredannotations/deny_jobrequest_with_not_gds_users_or_entra_id_arn/case.yaml
+        assertions:
+          - violations: yes
+            message: "JobRequest \\(test-jr-with-annotation\\) has a requested-by annotation \\(arn:aws:sts::123456789:assumed-role/user.name-unknownrole/test-environment\\) which cannot be parsed to a username"
+      - name: allow a JobRequestReview where the annotation is a gds-users fulladmin arn
+        object: samples/jobrequestoperator_requiredannotations/allow_jobrequestreview_with_gds_users_arn/fulladmin.yaml
+        inventory:
+          - samples/jobrequestoperator_requiredannotations/shared-inventory/jobrequest_with_gds_users_user.yaml
+        assertions:
+          - violations: no
+      - name: allow a JobRequestReview where the annotation is a gds-users tempadmin arn
+        object: samples/jobrequestoperator_requiredannotations/allow_jobrequestreview_with_gds_users_arn/tempadmin.yaml
+        inventory:
+          - samples/jobrequestoperator_requiredannotations/shared-inventory/jobrequest_with_gds_users_user.yaml
+        assertions:
+          - violations: no
+      - name: allow a JobRequestReview where the annotation is a gds-users platformengineer arn
+        object: samples/jobrequestoperator_requiredannotations/allow_jobrequestreview_with_gds_users_arn/platformengineer.yaml
+        inventory:
+          - samples/jobrequestoperator_requiredannotations/shared-inventory/jobrequest_with_gds_users_user.yaml
+        assertions:
+          - violations: no
+      - name: allow a JobRequestReview where the annotation is a gds-users developer arn
+        object: samples/jobrequestoperator_requiredannotations/allow_jobrequestreview_with_gds_users_arn/developer.yaml
+        inventory:
+          - samples/jobrequestoperator_requiredannotations/shared-inventory/jobrequest_with_gds_users_user.yaml
+        assertions:
+          - violations: no
+      - name: allow a JobRequestReview where the annotation is a gds-users readonly arn
+        object: samples/jobrequestoperator_requiredannotations/allow_jobrequestreview_with_gds_users_arn/readonly.yaml
+        inventory:
+          - samples/jobrequestoperator_requiredannotations/shared-inventory/jobrequest_with_gds_users_user.yaml
+        assertions:
+          - violations: no
+      - name: allow a JobRequestReview where the annotation is a gds-users ithctester arn
+        object: samples/jobrequestoperator_requiredannotations/allow_jobrequestreview_with_gds_users_arn/ithctester.yaml
+        inventory:
+          - samples/jobrequestoperator_requiredannotations/shared-inventory/jobrequest_with_gds_users_user.yaml
+        assertions:
+          - violations: no
+      - name: allow a JobRequestReview where the annotation is an EntraID arn
+        object: samples/jobrequestoperator_requiredannotations/allow_jobrequestreview_with_entra_id_arn/case.yaml
+        inventory:
+          - samples/jobrequestoperator_requiredannotations/shared-inventory/jobrequest_with_gds_users_user.yaml
+        assertions:
+          - violations: no
+      - name: deny a JobRequestReview where the annotation is an arn that is not an assumed-role arn
+        object: samples/jobrequestoperator_requiredannotations/deny_jobrequestreview_with_not_assumed_role_arn/case.yaml
+        inventory:
+          - samples/jobrequestoperator_requiredannotations/shared-inventory/jobrequest_with_gds_users_user.yaml
+        assertions:
+          - violations: yes
+            message: "JobRequestReview \\(test-jrr-with-annotation\\) has a reviewed-by annotation \\(arn:aws:sts::123456789:role/SomeRole\\) which cannot be parsed to a username"
+      - name: deny a JobRequestReview where the annotation is not an arn
+        object: samples/jobrequestoperator_requiredannotations/deny_jobrequestreview_with_not_an_arn/case.yaml
+        inventory:
+          - samples/jobrequestoperator_requiredannotations/shared-inventory/jobrequest_with_gds_users_user.yaml
+        assertions:
+          - violations: yes
+            message: "JobRequestReview \\(test-jrr-with-annotation\\) has a reviewed-by annotation \\(wibble\\) which cannot be parsed to a username"
+      - name: deny a JobRequestReview where the annotation is an assumed-role arn that cannot be parsed as either gds-users or EntraID
+        object: samples/jobrequestoperator_requiredannotations/deny_jobrequestreview_with_not_gds_users_or_entra_id_arn/case.yaml
+        inventory:
+          - samples/jobrequestoperator_requiredannotations/shared-inventory/jobrequest_with_gds_users_user.yaml
+        assertions:
+          - violations: yes
+            message: "JobRequestReview \\(test-jrr-with-annotation\\) has a reviewed-by annotation \\(arn:aws:sts::123456789:assumed-role/user.name-unknownrole/test-environment\\) which cannot be parsed to a username"
+      - name: deny a JobRequestReview where the reviewer is the same as the requester and they are both the same gds-users role
+        object: samples/jobrequestoperator_requiredannotations/deny_jobrequestreview_with_same_reviewer_as_jobrequest_requester/same-gds-users-role.yaml
+        inventory:
+          - samples/jobrequestoperator_requiredannotations/shared-inventory/jobrequest_with_gds_users_user.yaml
+        assertions:
+          - violations: yes
+            message: "JobRequestReview \\(test-jrr-with-annotation\\) cannot review JobRequest \\(test-jr-with-annotation\\) since the reviewer and requester are the same user \\(requesting.user\\)"
+      - name: deny a JobRequestReview where the reviewer is the same as the requester and they have different gds-users roles
+        object: samples/jobrequestoperator_requiredannotations/deny_jobrequestreview_with_same_reviewer_as_jobrequest_requester/different-gds-users-role.yaml
+        inventory:
+          - samples/jobrequestoperator_requiredannotations/shared-inventory/jobrequest_with_gds_users_user.yaml
+        assertions:
+          - violations: yes
+            message: "JobRequestReview \\(test-jrr-with-annotation\\) cannot review JobRequest \\(test-jr-with-annotation\\) since the reviewer and requester are the same user \\(requesting.user\\)"
+      - name: deny a JobRequestReview where the reviewer is the same as the requester and they are both the same EntraID role
+        object: samples/jobrequestoperator_requiredannotations/deny_jobrequestreview_with_same_reviewer_as_jobrequest_requester/same-entra-id-users-role.yaml
+        inventory:
+          - samples/jobrequestoperator_requiredannotations/shared-inventory/jobrequest_with_entra_id_user.yaml
+        assertions:
+          - violations: yes
+            message: "JobRequestReview \\(test-jrr-with-annotation\\) cannot review JobRequest \\(test-jr-with-annotation\\) since the reviewer and requester are the same user \\(requesting.user@example.com\\)"
+      - name: deny a JobRequestReview where the reviewer is the same as the requester and they have different EntraID roles
+        object: samples/jobrequestoperator_requiredannotations/deny_jobrequestreview_with_same_reviewer_as_jobrequest_requester/different-entra-id-users-role.yaml
+        inventory:
+          - samples/jobrequestoperator_requiredannotations/shared-inventory/jobrequest_with_entra_id_user.yaml
+        assertions:
+          - violations: yes
+            message: "JobRequestReview \\(test-jrr-with-annotation\\) cannot review JobRequest \\(test-jr-with-annotation\\) since the reviewer and requester are the same user \\(requesting.user@example.com\\)"
