@@ -478,6 +478,8 @@ data "google_iam_policy" "project" {
     role = "roles/workflows.invoker"
     members = [
       google_service_account.eventarc.member,
+      google_service_account.rds_parquet_bq_loader.member,
+      google_service_account.docdb_bq_loader.member,
     ]
   }
 
