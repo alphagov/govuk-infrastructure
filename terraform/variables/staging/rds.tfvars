@@ -231,7 +231,7 @@ databases = {
       "contains_pii" = true
     }
   }
-  
+
   fact_check_manager = {
     engine         = "postgres"
     engine_version = "17"
