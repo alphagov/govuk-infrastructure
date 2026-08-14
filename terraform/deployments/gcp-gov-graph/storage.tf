@@ -96,6 +96,18 @@ resource "google_storage_bucket" "data_processed" {
   versioning {
     enabled = false
   }
+  # A nightly batch is uploaded to an object with a random name. BigQuery will
+  # try to load the data out of that particular object. The next night, a new
+  # object will be created. Each object will be kept for 7 days, for debugging
+  # in case of trouble.
+  lifecycle_rule {
+    condition {
+      age = 7
+    }
+    action {
+      type = "Delete"
+    }
+  }
 }
 
 resource "google_storage_bucket_iam_policy" "data_processed" {
