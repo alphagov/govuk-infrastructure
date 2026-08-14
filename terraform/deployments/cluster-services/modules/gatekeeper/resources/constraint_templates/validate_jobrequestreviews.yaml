@@ -14,43 +14,47 @@ spec:
 
   targets:
     - target: admission.k8s.gatekeeper.sh
-      rego: |
-        package validatejobrequestreview
+      code:
+        - engine: Rego
+          source:
+            version: "v1"
+            rego: |
+              package validatejobrequestreview
 
-        valid_resource_and_operation {
-          input.review.kind.kind == "JobRequestReview"
-          input.review.operation != "DELETE"
-        }
+              valid_resource_and_operation if {
+                input.review.kind.kind == "JobRequestReview"
+                input.review.operation != "DELETE"
+              }
 
-        # jobRequestName is a required field, so defensive lookup not needed
-        job_request_name := input.review.object.spec.jobRequestName
-        job_request_review_namespace := input.review.namespace
+              # jobRequestName is a required field, so defensive lookup not needed
+              job_request_name := input.review.object.spec.jobRequestName
+              job_request_review_namespace := input.review.namespace
 
-        violation[{"msg": msg}] {
-          valid_resource_and_operation
+              violation contains {"msg": msg} if {
+                valid_resource_and_operation
 
-          job_request := object.get(
-            data.inventory,
-            ["namespace", job_request_review_namespace, "platform.publishing.service.gov.uk/v1", "JobRequest", job_request_name],
-            {}
-          )
-          job_request == {}
+                job_request := object.get(
+                  data.inventory,
+                  ["namespace", job_request_review_namespace, "platform.publishing.service.gov.uk/v1", "JobRequest", job_request_name],
+                  {}
+                )
+                job_request == {}
 
-          msg := sprintf(
-            "The JobRequestReview references JobRequest (%s) but that JobRequest cannot be found in the namespace of the JobRequestReview (%s)",
-            [job_request_name, job_request_review_namespace]
-          )
-        }
+                msg := sprintf(
+                  "The JobRequestReview references JobRequest (%s) but that JobRequest cannot be found in the namespace of the JobRequestReview (%s)",
+                  [job_request_name, job_request_review_namespace]
+                )
+              }
 
-        violation[{"msg": msg}] {
-          valid_resource_and_operation
+              violation contains {"msg": msg} if {
+                valid_resource_and_operation
 
-          job_request := data.inventory.namespace[namespace]["platform.publishing.service.gov.uk/v1"]["JobRequest"][job_request_name]
-          review_name := object.get(job_request, ["status", "reviewName"], "")
-          review_name != ""
+                job_request := data.inventory.namespace[namespace]["platform.publishing.service.gov.uk/v1"]["JobRequest"][job_request_name]
+                review_name := object.get(job_request, ["status", "reviewName"], "")
+                review_name != ""
 
-          msg := sprintf(
-            "JobRequest (%s) has already been reviewed by JobRequestReview (%s) and is now in state (%s)",
-            [job_request_name, job_request.status.reviewName, job_request.status.state]
-          )
-        }
+                msg := sprintf(
+                  "JobRequest (%s) has already been reviewed by JobRequestReview (%s) and is now in state (%s)",
+                  [job_request_name, job_request.status.reviewName, job_request.status.state]
+                )
+              }
