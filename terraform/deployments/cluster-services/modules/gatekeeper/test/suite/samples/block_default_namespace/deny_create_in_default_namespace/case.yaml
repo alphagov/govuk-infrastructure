@@ -1,0 +1,17 @@
+kind: AdmissionReview
+apiVersion: admission.k8s.io/v1beta1
+request:
+  kind:
+    version: v1
+    kind: ConfigMap
+  operation: "CREATE"
+  name: accidental-config
+  namespace: default
+  object:
+    apiVersion: v1
+    kind: ConfigMap
+    metadata:
+      name: accidental-config
+      namespace: default
+    data:
+      example: "value"

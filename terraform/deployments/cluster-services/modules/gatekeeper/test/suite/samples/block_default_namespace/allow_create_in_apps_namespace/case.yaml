@@ -1,0 +1,17 @@
+kind: AdmissionReview
+apiVersion: admission.k8s.io/v1beta1
+request:
+  kind:
+    version: v1
+    kind: ConfigMap
+  operation: "CREATE"
+  name: app-config
+  namespace: apps
+  object:
+    apiVersion: v1
+    kind: ConfigMap
+    metadata:
+      name: app-config
+      namespace: apps
+    data:
+      example: "value"
