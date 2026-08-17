@@ -39,6 +39,7 @@ subdomain_dns_records = [
   { type = "CNAME", name = "draft-assets", ttl = 3600, value = ["draft-assets.eks.production.govuk.digital."] },
   { type = "CNAME", name = "draft-origin", ttl = 300, value = ["draft-origin.eks.production.govuk.digital."] },
   { type = "CNAME", name = "email-alert-api-public", ttl = 3600, value = ["email-alert-api.eks.production.govuk.digital."] },
+  { type = "CNAME", name = "fact-check-manager", ttl = 3600, value = ["fact-check-manager.eks.production.govuk.digital."] },
   { type = "CNAME", name = "govspeak-preview", ttl = 3600, value = ["govspeak-preview.eks.production.govuk.digital."] },
   { type = "CNAME", name = "govuk-kubernetes-cluster-user-docs", ttl = 3600, value = ["bouncer-cdn.production.govuk.service.gov.uk."] },
   { type = "TXT", name = "_fastly.govuk-kubernetes-cluster-user-docs", ttl = 3600, value = ["fastly-domain-delegation-qWiNqNqmqXcaseJh-2023-09-28"] },
