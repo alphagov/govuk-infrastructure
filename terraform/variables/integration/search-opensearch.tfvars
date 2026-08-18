@@ -7,7 +7,7 @@ create_remote_connection_to_import_to_blue_from_green = true
 launch_blue_domain = true
 blue_cluster_options = {
   engine         = "OpenSearch"
-  engine_version = "2.19"
+  engine_version = "3.7"
 
   dedicated_master = {
     instance_count = 3
