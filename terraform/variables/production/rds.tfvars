@@ -258,7 +258,6 @@ databases = {
     performance_insights_enabled = true
     project                      = "GOV.UK - Publishing"
     maintenance_window           = "Mon:00:00-Mon:01:00"
-    snapshot_identifier          = "fact-check-manager-postgres-post-encryption"
     tags = {
       "contains_pii" = true
     }
