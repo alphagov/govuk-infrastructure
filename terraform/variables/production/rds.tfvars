@@ -242,6 +242,28 @@ databases = {
     }
   }
 
+  fact_check_manager = {
+    engine         = "postgres"
+    engine_version = "17"
+    engine_params = {
+      log_min_duration_statement = { value = 10000 }
+      log_statement              = { value = "ddl" }
+      deadlock_timeout           = { value = 2500 }
+      log_lock_waits             = { value = 1 }
+    }
+    engine_params_family         = "postgres17"
+    name                         = "fact-check-manager"
+    allocated_storage            = 100
+    instance_class               = "db.t4g.medium"
+    performance_insights_enabled = true
+    project                      = "GOV.UK - Publishing"
+    maintenance_window           = "Mon:00:00-Mon:01:00"
+    snapshot_identifier          = "fact-check-manager-postgres-post-encryption"
+    tags = {
+      "contains_pii" = true
+    }
+  }
+
   link_checker_api = {
     engine         = "postgres"
     engine_version = "14"
