@@ -280,7 +280,6 @@ databases = {
     instance_class               = "db.t4g.small"
     performance_insights_enabled = true
     project                      = "GOV.UK - Publishing"
-    snapshot_identifier          = "fact-check-manager-postgres-post-encryption"
     tags = {
       "used_by" = "fact-check-manager"
     }
