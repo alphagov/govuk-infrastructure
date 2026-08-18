@@ -1,0 +1,27 @@
+apiVersion: templates.gatekeeper.sh/v1
+kind: ConstraintTemplate
+metadata:
+  name: k8sblockdefaultnamespace
+  annotations:
+    metadata.gatekeeper.sh/title: Prevent resources from being created in the default namespace
+    description: This constraint prevents resources from being created in the default namespace
+spec:
+  crd:
+    spec:
+      names:
+        kind: K8sBlockDefaultNamespace
+  targets:
+    - target: admission.k8s.gatekeeper.sh
+      operations: ["CREATE"]
+      code:
+        - engine: Rego
+          source:
+            version: "v1"
+            rego: |
+              package k8sblockdefaultnamespace
+
+              violation contains {"msg": msg} if {
+                input.review.operation == "CREATE"
+                input.review.namespace == "default"
+                msg := "Resources cannot be created in the default namespace. Set the current namespace with kubectl config set-context --current --namespace apps and try again."
+              }

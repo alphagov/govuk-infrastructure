@@ -2,6 +2,7 @@ module "gatekeeper" {
   source = "./modules/gatekeeper"
 
   dryrun_map = {
+    block_default_namespace                = false
     immutable_configmap                    = true
     validate_jobrequestreviews             = false
     jobrequestoperator_requiredannotations = false
