@@ -17,7 +17,7 @@ runs:
 
     - name: Start container
       env:
-        ELASTICSEARCH_IMAGE_TAG: 6.7.2
+        ELASTICSEARCH_IMAGE_TAG: 6.8.23
         ELASTICSEARCH_PORT: 9200
       shell: bash
       run: |
