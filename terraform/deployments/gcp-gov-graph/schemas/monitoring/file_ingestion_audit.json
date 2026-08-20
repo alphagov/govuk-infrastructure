@@ -1,0 +1,64 @@
+[
+  {
+    "name": "audit_id",
+    "type": "STRING",
+    "mode": "REQUIRED"
+  },
+  {
+    "name": "audit_stage",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "bq_dataset",
+    "type": "STRING",
+    "mode": "REQUIRED"
+  },
+  {
+    "name": "bq_table",
+    "type": "STRING",
+    "mode": "REQUIRED"
+  },
+  {
+    "name": "file_type",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "file_path",
+    "type": "STRING",
+    "mode": "REQUIRED"
+  },
+  {
+    "name": "status",
+    "type": "STRING",
+    "mode": "REQUIRED"
+  },
+  {
+    "name": "file_count",
+    "type": "INTEGER",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "inserted_rows",
+    "type": "INTEGER",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "error_message",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "start_time",
+    "type": "TIMESTAMP",
+    "mode": "NULLABLE",
+    "defaultValueExpression": "CURRENT_TIMESTAMP()"
+  },
+  {
+    "name": "end_time",
+    "type": "TIMESTAMP",
+    "mode": "NULLABLE",
+    "defaultValueExpression": "CURRENT_TIMESTAMP()"
+  }
+]
