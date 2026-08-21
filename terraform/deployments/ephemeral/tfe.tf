@@ -41,7 +41,7 @@ module "var_set" {
         instance_class               = "db.t4g.micro"
         performance_insights_enabled = false
         project                      = "GOV.UK - Infrastructure"
-        snapshot_identifier          = "release-mysql-post-encryption"
+        # snapshot_identifier          = "release-mysql-post-encryption"
       }
       # ckan = {
       #   engine         = "postgres"
