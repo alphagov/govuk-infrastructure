@@ -232,10 +232,10 @@ read
 aws eks update-kubeconfig --name "${CLUSTER_ID}"
 
 # delete ArgoCD Application resources
-application_shutdown
+# application_shutdown
 
 # uninstall Helm charts
-helm_shutdown
+# helm_shutdown
 
 # do destroy runs on workspaces in the correct order
 retry 2 tfc_do_destroy "datagovuk-infrastructure"

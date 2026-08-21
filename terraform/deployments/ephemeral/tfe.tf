@@ -29,22 +29,36 @@ module "var_set" {
     ext_dns_enable_service_monitor = false
 
     databases = {
-      ckan = {
-        engine         = "postgres"
-        engine_version = "13"
+      release = {
+        engine         = "mysql"
+        engine_version = "8.4.9"
         engine_params = {
-          log_min_duration_statement = { value = 10000 }
-          log_statement              = { value = "all" }
-          deadlock_timeout           = { value = 2500 }
-          log_lock_waits             = { value = 1 }
+          max_allowed_packet = { value = 1073741824 }
         }
-        engine_params_family         = "postgres13"
-        name                         = "ckan"
-        allocated_storage            = 1000
-        instance_class               = "db.m6g.large"
-        performance_insights_enabled = true
-        project                      = "GOV.UK - DGU"
+        engine_params_family         = "mysql8.4"
+        name                         = "release"
+        allocated_storage            = 100
+        instance_class               = "db.t4g.micro"
+        performance_insights_enabled = false
+        project                      = "GOV.UK - Infrastructure"
+        # snapshot_identifier          = "release-mysql-post-encryption"
       }
+      # ckan = {
+      #   engine         = "postgres"
+      #   engine_version = "13"
+      #   engine_params = {
+      #     log_min_duration_statement = { value = 10000 }
+      #     log_statement              = { value = "all" }
+      #     deadlock_timeout           = { value = 2500 }
+      #     log_lock_waits             = { value = 1 }
+      #   }
+      #   engine_params_family         = "postgres13"
+      #   name                         = "ckan"
+      #   allocated_storage            = 1000
+      #   instance_class               = "db.m6g.large"
+      #   performance_insights_enabled = true
+      #   project                      = "GOV.UK - DGU"
+      # }
     }
   }
 }
@@ -104,15 +118,16 @@ module "cluster_services" {
 /*
  * Commented out because it doesn't work, but the workspace it makes
  * causes every RDS PR to show it is failing the build
+*/
 module "rds" {
   source               = "./ws"
   name                 = "rds"
   ephemeral_cluster_id = var.ephemeral_cluster_id
   variable_set_id      = module.var_set.id
+  git_branch           = var.git_branch
 
   depends_on = [module.cluster_infrastructure, module.vpc, tfe_project.project]
 }
-*/
 
 /*
  * Commented out because DGU no longer belongs to us and we very rarely need
