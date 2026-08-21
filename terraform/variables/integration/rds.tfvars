@@ -434,7 +434,6 @@ databases = {
     instance_class               = "db.m6g.large"
     performance_insights_enabled = true
     project                      = "GOV.UK - Publishing"
-    has_read_replica             = true
     tags = {
       "used_by" = "publishing-api"
     }
