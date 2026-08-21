@@ -34,7 +34,9 @@ This module provisions the following resources into the Google Cloud Platform pr
 
 > **Note**
 > The Discovery Engine resources are managed through the [RestAPI provider][restapi_provider_docs]
-> due to the Google provider not offering first party Terraform resources yet (as of October 2023).
+> due to the Google provider not offering sufficient first party Terraform resources yet (as of August 2026).
+> The Google provider does offer a [first party resource for serving controls][control_resource],
+> but this doesn't support multiple control points for boost actions at this point, so doesn't meet our needs.
 
 > **Warning**
 > As of October 2023, the Google Discovery Engine API has a _manual_ enabling step that can only be
@@ -44,6 +46,7 @@ This module provisions the following resources into the Google Cloud Platform pr
 
 [enable-de]: https://console.cloud.google.com/gen-app-builder/start
 [restapi_provider_docs]: https://registry.terraform.io/providers/Mastercard/restapi/latest
+[control_resource]: https://registry.terraform.io/providers/hashicorp/google-beta/latest/docs/resources/discovery_engine_control
 [search-api-v2-repo]: https://github.com/alphagov/search-api-v2
 [terraform-cloud]: https://app.terraform.io/
 [api-gateway]: ../govuk-publishing-infrastructure/search_api_gateway.tf
