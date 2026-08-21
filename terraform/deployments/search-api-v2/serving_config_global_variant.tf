@@ -44,8 +44,8 @@ module "control_global_boost_freshness_general" {
         interpolationType = "LINEAR",
         # Control points explained
         # 0.2 (decaying to 0.05), for the first 7 days
-        # 0.05 (decaying to 0), for 8 days to 90 days
-        # 0 (decaying to -0.5) for 91 days to 365 days
+        # 0.05 (decaying to ~0), for 8 days to 90 days
+        # ~0 (decaying to -0.5) for 91 days to 365 days
         # -0.5 (decaying to -0.75) for 366 days to 1460 days
         controlPoints = [
           {
@@ -58,7 +58,10 @@ module "control_global_boost_freshness_general" {
           },
           {
             attributeValue = "90D",
-            boostAmount    = 0.0
+            boostAmount    = 0.00000001
+            # Ideally we'd like to set this boostAmount to 0, but when we do this the boostAmount is stripped out of
+            # the API response, causing a permanent drift in our Terraform configuration. We are therefore setting this
+            # to a very small value instead.
           },
           {
             attributeValue = "365D",
