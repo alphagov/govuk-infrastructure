@@ -55,3 +55,8 @@ variable "complete_query_requests" {
   type        = number
   description = "The maximum number of complete query requests per minute for Discovery Engine"
 }
+
+variable "search_requests_regional" {
+  type        = number
+  description = "The maximum number of search requests per minute per region for Discovery Engine"
+}
