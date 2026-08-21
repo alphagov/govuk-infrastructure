@@ -29,6 +29,20 @@ module "var_set" {
     ext_dns_enable_service_monitor = false
 
     databases = {
+      release = {
+        engine         = "mysql"
+        engine_version = "8.4.9"
+        engine_params = {
+          max_allowed_packet = { value = 1073741824 }
+        }
+        engine_params_family         = "mysql8.4"
+        name                         = "release"
+        allocated_storage            = 100
+        instance_class               = "db.t4g.micro"
+        performance_insights_enabled = false
+        project                      = "GOV.UK - Infrastructure"
+        snapshot_identifier          = "release-mysql-post-encryption"
+      }
       ckan = {
         engine         = "postgres"
         engine_version = "13"
