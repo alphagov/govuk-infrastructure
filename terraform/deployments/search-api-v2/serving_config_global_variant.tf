@@ -57,8 +57,9 @@ module "control_global_boost_freshness_general" {
             boostAmount    = 0.05
           },
           {
-            attributeValue = "90D",
-            boostAmount    = 0.0
+            attributeValue = "90D"
+            # Since 0 is the default value, if it is specified here the boostAmount will be stripped out of
+            # the API response, causing a permanent drift in our Terraform configuration.
           },
           {
             attributeValue = "365D",
