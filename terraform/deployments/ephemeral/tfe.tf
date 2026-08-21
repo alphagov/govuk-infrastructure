@@ -124,6 +124,7 @@ module "rds" {
   name                 = "rds"
   ephemeral_cluster_id = var.ephemeral_cluster_id
   variable_set_id      = module.var_set.id
+  git_branch           = var.git_branch
 
   depends_on = [module.cluster_infrastructure, module.vpc, tfe_project.project]
 }
