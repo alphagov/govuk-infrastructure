@@ -37,7 +37,7 @@ module "var_set" {
         }
         engine_params_family         = "mysql8.4"
         name                         = "release"
-        allocated_storage            = 10
+        allocated_storage            = 100
         instance_class               = "db.t4g.micro"
         performance_insights_enabled = false
         project                      = "GOV.UK - Infrastructure"
