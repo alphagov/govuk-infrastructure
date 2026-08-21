@@ -50,3 +50,8 @@ variable "evaluation_create_requests" {
   description = "The maximum number of evaluation create requests per day for Discovery Engine"
   default     = 100
 }
+
+variable "complete_query_requests" {
+  type        = number
+  description = "The maximum number of complete query requests per minute for Discovery Engine"
+}
