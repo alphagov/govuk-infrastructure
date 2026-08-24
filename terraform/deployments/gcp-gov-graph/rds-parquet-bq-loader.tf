@@ -76,6 +76,9 @@ resource "google_cloud_run_v2_job" "rds_parquet_bq_loader" {
 # ==============================================================================
 
 resource "google_cloud_scheduler_job" "rds_parquet_bq_loader_scheduler" {
+  # If environment is "production", count is 1 (creates the scheduler)
+  # Otherwise, count is 0 (skips/destroys the scheduler)
+  count            = var.environment == "production" ? 1 : 0
   name             = "rds-parquet-bq-loader-scheduler"
   description      = "Triggers the Document DB BQ Loader job Mon-Fri at 06:30 AM"
   schedule         = "30 6 * * 1-5"

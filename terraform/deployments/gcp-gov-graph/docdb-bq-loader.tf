@@ -70,6 +70,9 @@ resource "google_cloud_run_v2_job" "docdb_bq_loader" {
 # ==============================================================================
 
 resource "google_cloud_scheduler_job" "docdb_bq_loader_scheduler" {
+  # If environment is "production", count is 1 (creates the scheduler)
+  # Otherwise, count is 0 (skips the scheduler)
+  count            = var.environment == "production" ? 1 : 0
   name             = "docdb-bq-loader-scheduler"
   description      = "Triggers the Document DB BQ Loader job Mon-Fri at 06:30 AM"
   schedule         = "30 6 * * 1-5"
