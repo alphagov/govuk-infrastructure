@@ -23,6 +23,7 @@ locals {
     "finder-frontend",
     "frontend",
     "govspeak-preview",
+    "govuk-user-reviewer",
     "hmrc-manuals-api",
     "licensify",
     "link-checker-api",
