@@ -1,0 +1,10 @@
+---
+apiVersion: constraints.gatekeeper.sh/v1beta1
+kind: K8sDenyDefaultNamespace
+metadata:
+  name: deny-default-namespace
+spec:
+  match:
+    scope: Namespaced
+    namespaces:
+      - default
