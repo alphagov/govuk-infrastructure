@@ -40,7 +40,7 @@ resource "google_cloud_run_v2_job" "docdb_bq_loader" {
 
     template {
       max_retries           = 0
-      timeout               = "7200s"
+      timeout               = "1800s"
       execution_environment = "EXECUTION_ENVIRONMENT_GEN2"
 
       # Dynamically references the Service Account declared above
