@@ -1,0 +1,16 @@
+kind: Suite
+apiVersion: test.gatekeeper.sh/v1alpha1
+tests:
+  - name: deny_default_namespace
+    template: ../../resources/constraint_templates/deny_default_namespace.yaml
+    constraint: ../../resources/constraints/deny_default_namespace.yaml
+    cases:
+      - name: deny creating a resource in the default namespace
+        object: samples/deny_default_namespace/default_namespace.yaml
+        assertions:
+          - violations: 1
+            message: "Resources must not be created in the default namespace. Set the current namespace with: kubectl config set-context --current --namespace apps"
+      - name: allow creating a resource outside the default namespace
+        object: samples/deny_default_namespace/apps_namespace.yaml
+        assertions:
+          - violations: no
