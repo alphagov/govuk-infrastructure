@@ -127,6 +127,7 @@ data "aws_iam_policy_document" "tfc_policy" {
       "arn:aws:iam::*:role/govuk-chat-bedrock-access-role",
       "arn:aws:iam::*:role/govuk-chat-bedrock-cloudwatch-role",
       "arn:aws:iam::*:role/govuk-chat-eventbridge-health-alert",
+      "arn:aws:iam::*:role/govuk-fastly-diff-generator",
       "arn:aws:iam::*:role/network-flow-agent-role"
     ]
   }
