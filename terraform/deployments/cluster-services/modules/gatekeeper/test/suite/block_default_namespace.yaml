@@ -1,0 +1,21 @@
+---
+kind: Suite
+apiVersion: test.gatekeeper.sh/v1alpha1
+tests:
+  - name: BlockDefaultNamespace
+    template: ../../resources/constraint_templates/block_default_namespace.yaml
+    constraint: ../../resources/constraints/block_default_namespace.yaml
+    cases:
+      - name: deny creating a resource in the default namespace
+        object: samples/block_default_namespace/deny_create_in_default_namespace/case.yaml
+        assertions:
+          - violations: yes
+            message: "Resources cannot be created in the default namespace. Set the current namespace with kubectl config set-context --current --namespace apps and try again."
+      - name: allow creating a resource in the apps namespace
+        object: samples/block_default_namespace/allow_create_in_apps_namespace/case.yaml
+        assertions:
+          - violations: no
+      - name: allow updating a resource in the default namespace
+        object: samples/block_default_namespace/allow_update_in_default_namespace/case.yaml
+        assertions:
+          - violations: no
