@@ -7,8 +7,8 @@ module "gcp-ga4-analytics" {
   workspace_tags      = ["production", "ga4-analytics", "gcp"]
   terraform_version   = var.terraform_version
   execution_mode      = "remote"
-  working_directory   = "/ga4-analytics/"
-  trigger_patterns    = ["/ga4-analytics/**/*"]
+  working_directory   = "/gcp-ga4-analytics/"
+  trigger_patterns    = ["/gcp-ga4-analytics/**/*"]
   global_remote_state = true
   assessments_enabled = true
 
