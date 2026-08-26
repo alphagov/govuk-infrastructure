@@ -20,7 +20,6 @@ assignees: ''
 - [ ] Introduce them to the team during a stand up
 - [ ] Arrange a call to introduce the Platform Engineering leads and Platform Engineering area (platform architecture, workflows etc.)
 - [ ] Add them to Private and Public Slack channels (inc #govuk-fastly)
-- [ ] Add them to [Trello](https://trello.com/w/gds_govuk/members) (for access to our historical cards and other teams' backlogs)
 - [ ] Add them to the [GOV.UK Platform Engineering GitHub team](https://github.com/orgs/alphagov/teams/gov-uk-platform-engineering)
 - [ ] Add them to the @platform-engineering-team Slack user group
 - [ ] Schedule fortnightly 121 meetings with DM
@@ -38,8 +37,8 @@ assignees: ''
 
 ### New joiner tasks
 
-- [ ] Familiarise yourself with [Guide to Platform Engineering Team & Ways of Working](https://docs.google.com/document/d/1IJ5jFOojl_1hNcTZUxse2JwIkA6gtJJyZ1QwToyy_VE/edit?tab=t.0#heading=h.614wri5x7vxr)
-- [ ] _(optional)_ Write a 'Manual for me' in our [team's folder](https://drive.google.com/drive/folders/11FFOwenbMyW5N0jlQZXQBlAe3tdq1djo) and share it with the team
+- [ ] Familiarise yourself with [Guide to Platform Engineering Team & Ways of Working](https://beisgov.sharepoint.com/:w:/r/sites/GOVUKPE/Shared%20Documents/General/Platform%20Engineering/Ways%20of%20working/Guide%20to%20Platform%20Engineering%20Team%20%26%20Ways%20of%20Working.docx?d=w3757ef749a4b4dde8374c874df3e4eb7&csf=1&web=1&e=gE5VS6)
+- [ ] _(optional)_ Write a 'Manual for me' in our [team's folder](https://beisgov.sharepoint.com/:f:/r/sites/GOVUKPE/Shared%20Documents/General/Platform%20Engineering/Manuals%20for%20Me?d=w71e799a8035f40619b97daf0325958bd&csf=1&web=1&e=GlIH45) and share it with the team
 
 #### Additional tasks for engineers
 
