@@ -446,7 +446,6 @@ databases = {
     instance_class               = "db.t4g.micro"
     performance_insights_enabled = true
     project                      = "GOV.UK - Publishing"
-    snapshot_identifier          = "specialist-publisher-mysql-post-encryption"
     tags = {
       "used_by" = "specialist-publisher"
     }
