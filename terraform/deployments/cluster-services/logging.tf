@@ -31,12 +31,6 @@ resource "helm_release" "filebeat" {
         }
       }
       secretMounts = []
-      tolerations = [{ # TODO: remove once we no longer run amd64 (Intel) nodes.
-        key      = "arch"
-        operator = "Equal"
-        value    = "arm64"
-        effect   = "NoSchedule"
-      }]
     }
     filebeatConfig = {
       "filebeat.yml" = yamlencode(yamldecode(file("${path.module}/filebeat.yml")))
