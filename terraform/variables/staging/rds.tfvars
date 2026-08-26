@@ -433,6 +433,25 @@ databases = {
     }
   }
 
+  specialist_publisher = {
+    engine                      = "mysql"
+    engine_version              = "8.4"
+    allow_major_version_upgrade = true
+    engine_params = {
+      max_allowed_packet = { value = 1073741824 }
+    }
+    engine_params_family         = "mysql8.4"
+    name                         = "specialist-publisher"
+    allocated_storage            = 20
+    instance_class               = "db.t4g.micro"
+    performance_insights_enabled = true
+    project                      = "GOV.UK - Publishing"
+    snapshot_identifier          = "specialist-publisher-mysql-post-encryption"
+    tags = {
+      "used_by" = "specialist-publisher"
+    }
+  }
+
   support_api = {
     engine         = "postgres"
     engine_version = "14"
