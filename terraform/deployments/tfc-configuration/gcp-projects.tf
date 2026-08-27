@@ -44,7 +44,7 @@ module "gcp-ga4-aggregate-analytics" {
   global_remote_state = true
   assessments_enabled = true
 
-  project_name = "govuk-data-engineering"
+  project_name = "govuk-data-infrastructure"
   vcs_repo = {
     identifier     = "alphagov/govuk-data-infrastructure"
     branch         = "main"
@@ -75,7 +75,7 @@ module "gcp-gds-bq-processing" {
   global_remote_state = true
   assessments_enabled = true
 
-  project_name = "govuk-data-engineering"
+  project_name = "govuk-data-infrastructure"
   vcs_repo = {
     identifier     = "alphagov/govuk-data-infrastructure"
     branch         = "main"
@@ -110,7 +110,7 @@ module "gcp-gds-bq-processing-dev" {
   global_remote_state = true
   assessments_enabled = true
 
-  project_name = "govuk-data-engineering"
+  project_name = "govuk-data-infrastructure"
   vcs_repo = {
     identifier     = "alphagov/govuk-data-infrastructure"
     branch         = "main"
@@ -144,7 +144,7 @@ module "gcp-blogs-ga4-analytics" {
   global_remote_state = true
   assessments_enabled = true
 
-  project_name = "govuk-data-engineering"
+  project_name = "govuk-data-infrastructure"
   vcs_repo = {
     identifier     = "alphagov/govuk-data-infrastructure"
     branch         = "main"
@@ -178,7 +178,7 @@ module "gcp-ga4-user-admin-tool-dev" {
   global_remote_state = true
   assessments_enabled = true
 
-  project_name = "govuk-data-engineering"
+  project_name = "govuk-data-infrastructure"
   vcs_repo = {
     identifier     = "alphagov/govuk-data-infrastructure"
     branch         = "main"
@@ -212,7 +212,7 @@ module "gcp-gds-gcp-admin-di" {
   global_remote_state = true
   assessments_enabled = true
 
-  project_name = "govuk-data-engineering"
+  project_name = "govuk-data-infrastructure"
   vcs_repo = {
     identifier     = "alphagov/govuk-data-infrastructure"
     branch         = "main"
@@ -246,7 +246,7 @@ module "gcp-gds-gcp-admin-search" {
   global_remote_state = true
   assessments_enabled = true
 
-  project_name = "govuk-data-engineering"
+  project_name = "govuk-data-infrastructure"
   vcs_repo = {
     identifier     = "alphagov/govuk-data-infrastructure"
     branch         = "main"
@@ -280,7 +280,7 @@ module "gcp-govuk-bigquery-analytics" {
   global_remote_state = true
   assessments_enabled = true
 
-  project_name = "govuk-data-engineering"
+  project_name = "govuk-data-infrastructure"
   vcs_repo = {
     identifier     = "alphagov/govuk-data-infrastructure"
     branch         = "main"
@@ -314,7 +314,7 @@ module "gcp-govuk-polling" {
   global_remote_state = true
   assessments_enabled = true
 
-  project_name = "govuk-data-engineering"
+  project_name = "govuk-data-infrastructure"
   vcs_repo = {
     identifier     = "alphagov/govuk-data-infrastructure"
     branch         = "main"
@@ -348,7 +348,7 @@ module "gcp-sde-consent-api" {
   global_remote_state = true
   assessments_enabled = true
 
-  project_name = "govuk-data-engineering"
+  project_name = "govuk-data-infrastructure"
   vcs_repo = {
     identifier     = "alphagov/govuk-data-infrastructure"
     branch         = "main"
@@ -382,7 +382,7 @@ module "gcp-cpto-content-metadata" {
   global_remote_state = true
   assessments_enabled = true
 
-  project_name = "govuk-data-engineering"
+  project_name = "govuk-data-infrastructure"
   vcs_repo = {
     identifier     = "alphagov/govuk-data-infrastructure"
     branch         = "main"
@@ -416,7 +416,7 @@ module "gcp-cpto-spam-classifier" {
   global_remote_state = true
   assessments_enabled = true
 
-  project_name = "govuk-data-engineering"
+  project_name = "govuk-data-infrastructure"
   vcs_repo = {
     identifier     = "alphagov/govuk-data-infrastructure"
     branch         = "main"
@@ -450,7 +450,7 @@ module "gcp-data-insights-experimentation" {
   global_remote_state = true
   assessments_enabled = true
 
-  project_name = "govuk-data-engineering"
+  project_name = "govuk-data-infrastructure"
   vcs_repo = {
     identifier     = "alphagov/govuk-data-infrastructure"
     branch         = "main"
@@ -484,7 +484,7 @@ module "gcp-disco-journeys" {
   global_remote_state = true
   assessments_enabled = true
 
-  project_name = "govuk-data-engineering"
+  project_name = "govuk-data-infrastructure"
   vcs_repo = {
     identifier     = "alphagov/govuk-data-infrastructure"
     branch         = "main"
@@ -518,7 +518,7 @@ module "gcp-gds-bq-data" {
   global_remote_state = true
   assessments_enabled = true
 
-  project_name = "govuk-data-engineering"
+  project_name = "govuk-data-infrastructure"
   vcs_repo = {
     identifier     = "alphagov/govuk-data-infrastructure"
     branch         = "main"
@@ -553,7 +553,7 @@ module "gcp-gds-bq-reporting" {
   global_remote_state = true
   assessments_enabled = true
 
-  project_name = "govuk-data-engineering"
+  project_name = "govuk-data-infrastructure"
   vcs_repo = {
     identifier     = "alphagov/govuk-data-infrastructure"
     branch         = "main"
@@ -587,7 +587,7 @@ module "gcp-gds-ga-archive" {
   global_remote_state = true
   assessments_enabled = true
 
-  project_name = "govuk-data-engineering"
+  project_name = "govuk-data-infrastructure"
   vcs_repo = {
     identifier     = "alphagov/govuk-data-infrastructure"
     branch         = "main"
@@ -621,7 +621,7 @@ module "gcp-gds-looker" {
   global_remote_state = true
   assessments_enabled = true
 
-  project_name = "govuk-data-engineering"
+  project_name = "govuk-data-infrastructure"
   vcs_repo = {
     identifier     = "alphagov/govuk-data-infrastructure"
     branch         = "main"
@@ -655,7 +655,7 @@ module "gcp-gds-social-data" {
   global_remote_state = true
   assessments_enabled = true
 
-  project_name = "govuk-data-engineering"
+  project_name = "govuk-data-infrastructure"
   vcs_repo = {
     identifier     = "alphagov/govuk-data-infrastructure"
     branch         = "main"
@@ -690,7 +690,7 @@ module "gcp-govuk-content-data" {
   global_remote_state = true
   assessments_enabled = true
 
-  project_name = "govuk-data-engineering"
+  project_name = "govuk-data-infrastructure"
   vcs_repo = {
     identifier     = "alphagov/govuk-data-infrastructure"
     branch         = "main"
@@ -724,7 +724,7 @@ module "gcp-govuk-govsearch" {
   global_remote_state = true
   assessments_enabled = true
 
-  project_name = "govuk-data-engineering"
+  project_name = "govuk-data-infrastructure"
   vcs_repo = {
     identifier     = "alphagov/govuk-data-infrastructure"
     branch         = "main"
@@ -758,7 +758,7 @@ module "gcp-govuk-publishing" {
   global_remote_state = true
   assessments_enabled = true
 
-  project_name = "govuk-data-engineering"
+  project_name = "govuk-data-infrastructure"
   vcs_repo = {
     identifier     = "alphagov/govuk-data-infrastructure"
     branch         = "main"
@@ -792,7 +792,7 @@ module "gcp-govuk-s3-mirror" {
   global_remote_state = true
   assessments_enabled = true
 
-  project_name = "govuk-data-engineering"
+  project_name = "govuk-data-infrastructure"
   vcs_repo = {
     identifier     = "alphagov/govuk-data-infrastructure"
     branch         = "main"
@@ -826,7 +826,7 @@ module "gcp-govuk-user-feedback" {
   global_remote_state = true
   assessments_enabled = true
 
-  project_name = "govuk-data-engineering"
+  project_name = "govuk-data-infrastructure"
   vcs_repo = {
     identifier     = "alphagov/govuk-data-infrastructure"
     branch         = "main"
@@ -860,7 +860,7 @@ module "gcp-sde-analysis" {
   global_remote_state = true
   assessments_enabled = true
 
-  project_name = "govuk-data-engineering"
+  project_name = "govuk-data-infrastructure"
   vcs_repo = {
     identifier     = "alphagov/govuk-data-infrastructure"
     branch         = "main"
@@ -894,7 +894,7 @@ module "gcp-sde-consent-api-dev" {
   global_remote_state = true
   assessments_enabled = true
 
-  project_name = "govuk-data-engineering"
+  project_name = "govuk-data-infrastructure"
   vcs_repo = {
     identifier     = "alphagov/govuk-data-infrastructure"
     branch         = "main"
@@ -928,7 +928,7 @@ module "gcp-sde-prototype-service" {
   global_remote_state = true
   assessments_enabled = true
 
-  project_name = "govuk-data-engineering"
+  project_name = "govuk-data-infrastructure"
   vcs_repo = {
     identifier     = "alphagov/govuk-data-infrastructure"
     branch         = "main"
@@ -962,7 +962,7 @@ module "gcp-sde-sandbox-haas" {
   global_remote_state = true
   assessments_enabled = true
 
-  project_name = "govuk-data-engineering"
+  project_name = "govuk-data-infrastructure"
   vcs_repo = {
     identifier     = "alphagov/govuk-data-infrastructure"
     branch         = "main"
@@ -996,7 +996,7 @@ module "gcp-single-consent-api-dev" {
   global_remote_state = true
   assessments_enabled = true
 
-  project_name = "govuk-data-engineering"
+  project_name = "govuk-data-infrastructure"
   vcs_repo = {
     identifier     = "alphagov/govuk-data-infrastructure"
     branch         = "main"
@@ -1030,7 +1030,7 @@ module "gcp-govuk-user-feedback-dev" {
   global_remote_state = true
   assessments_enabled = true
 
-  project_name = "govuk-data-engineering"
+  project_name = "govuk-data-infrastructure"
   vcs_repo = {
     identifier     = "alphagov/govuk-data-infrastructure"
     branch         = "main"
