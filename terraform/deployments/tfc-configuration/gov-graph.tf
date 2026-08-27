@@ -1,7 +1,3 @@
-resource "tfe_project" "data-engineering-project" {
-  name = "govuk-data-engineering"
-}
-
 resource "tfe_project" "data-infrastructure-project" {
   name = "govuk-data-infrastructure"
 }
