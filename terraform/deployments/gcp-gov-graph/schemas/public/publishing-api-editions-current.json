@@ -2,111 +2,133 @@
   {
     "mode": "NULLABLE",
     "name": "content_id",
-    "type": "STRING"
+    "type": "STRING",
+    "description": "The unique identifier of the content item. A content item may have one document for each locale, with each document having one or more editions."
   },
   {
     "mode": "NULLABLE",
     "name": "locale",
-    "type": "STRING"
+    "type": "STRING",
+    "description": "The locale of the document, such as ‘en’ for English or ‘cy’ for Welsh. Together, content_id and locale identify a document."
   },
   {
     "mode": "NULLABLE",
     "name": "id",
-    "type": "INTEGER"
+    "type": "INTEGER",
+    "description": "The internal identifier assigned to this edition by the Publishing API."
   },
   {
     "mode": "NULLABLE",
     "name": "title",
-    "type": "STRING"
+    "type": "STRING",
+    "description": "The title of the content item. Set to NULL for ‘redirect’ and ‘gone’ items in this table."
   },
   {
     "mode": "NULLABLE",
     "name": "public_updated_at",
-    "type": "TIMESTAMP"
+    "type": "TIMESTAMP",
+    "description": "Date and time when the content item was last significantly changed by a major update. It is automatically determined by the Publishing API unless overridden by the publishing application."
   },
   {
     "mode": "NULLABLE",
     "name": "publishing_app",
-    "type": "STRING"
+    "type": "STRING",
+    "description": "The publishing application that supplied the content item to the Publishing API, recorded as the application’s hostname."
   },
   {
     "mode": "NULLABLE",
     "name": "rendering_app",
-    "type": "STRING"
+    "type": "STRING",
+    "description": "The hostname of the frontend application that renders the content item. Set to NULL for ‘redirect’ and ‘gone’ items in this table."
   },
   {
     "mode": "NULLABLE",
     "name": "update_type",
-    "type": "STRING"
+    "type": "STRING",
+    "description": "Classification of the update to the edition. Accepted Publishing API values are ‘major’, ‘minor’ and ‘republish’. A major update changes public_updated_at when the edition is published and may include a change note. A republish may result from technical or bulk processing rather than an editorial change to the content."
   },
   {
     "mode": "NULLABLE",
     "name": "phase",
-    "type": "STRING"
+    "type": "STRING",
+    "description": "The phase assigned to the edition. Accepted Publishing API values are alpha, beta and live."
   },
   {
     "mode": "NULLABLE",
     "name": "analytics_identifier",
-    "type": "STRING"
+    "type": "STRING",
+    "description": "Identifier used to track the content item in analytics software. Set to NULL for ‘redirect’ and ‘gone’ items in this table."
   },
   {
     "mode": "NULLABLE",
     "name": "updated_at",
-    "type": "TIMESTAMP"
+    "type": "TIMESTAMP",
+    "description": "Date and time when this edition was last updated in the Publishing API data. This field is used to select the most recent edition for each document. An update may reflect technical processing or republishing rather than an editorial change."
   },
   {
     "mode": "NULLABLE",
     "name": "document_type",
-    "type": "STRING"
+    "type": "STRING",
+    "description": "The type of content represented by this edition, used to distinguish content that may share the same schema. If the ‘unpublishing_type’ field is ‘redirect’ or ‘gone’, the value will be replaced by the unpublishing type."
   },
   {
     "mode": "NULLABLE",
     "name": "schema_name",
-    "type": "STRING"
+    "type": "STRING",
+    "description": "Name of the content schema e.g. ‘publication’, ‘news_article’, ‘speech’. If the ‘unpublishing_type’ field is ‘redirect’ or ‘gone’, the value will be replaced by the unpublishing type."
   },
   {
     "mode": "NULLABLE",
     "name": "first_published_at",
-    "type": "TIMESTAMP"
+    "type": "TIMESTAMP",
+    "description": "Date and time recorded as the first publication of the content item. It is automatically determined by the Publishing API unless a value is supplied by the publishing application. Set to NULL for ‘redirect’ and ‘gone’ items in this table."
   },
   {
     "mode": "NULLABLE",
     "name": "base_path",
-    "type": "STRING"
+    "type": "STRING",
+    "description": "The path used by the content item on GOV.UK, excluding the hostname, protocol and query string."
   },
   {
     "mode": "NULLABLE",
     "name": "document_id",
-    "type": "INTEGER"
+    "type": "INTEGER",
+    "description": "The internal identifier assigned by the Publishing API to the document to which this edition belongs. Multiple editions of the same document share the same document_id."
   },
   {
     "mode": "NULLABLE",
     "name": "description",
-    "type": "STRING"
+    "type": "STRING",
+    "description": "A description of the content item. Set to NULL for ‘redirect’ and ‘gone’ items in this table."
   },
   {
     "mode": "NULLABLE",
     "name": "published_at",
-    "type": "TIMESTAMP"
+    "type": "TIMESTAMP",
+    "description": "Date and time associated with the publication of this edition. This is an edition-level timestamp and may differ from first_published_at, public_updated_at and updated_at."
   },
   {
     "mode": "NULLABLE",
     "name": "details",
-    "type": "JSON"
+    "type": "JSON",
+    "description": "JSON object containing data specific to the content item’s document_type. Its structure varies according to the applicable content schema. Set to NULL for ‘redirect’ and ‘gone’ items in this table."
   },
   {
     "mode": "NULLABLE",
     "name": "routes",
-    "type": "JSON"
+    "type": "JSON",
+    "description": "Paths and route types used to make the content item available through GOV.UK."
   },
   {
     "mode": "NULLABLE",
     "name": "redirects",
-    "type": "JSON"
+    "type": "JSON",
+    "description": "Redirect destination information associated with an unpublished content item."
   },
   {
     "mode": "NULLABLE",
     "name": "unpublishing_type",
-    "type": "STRING"
+    "type": "STRING",
+    "description": "Type of unpublishing action associated with the edition, such as ‘withdrawal’, ‘redirect’ or ‘gone’. A NULL value indicates that no matching unpublishing record was found."
   }
 ]
