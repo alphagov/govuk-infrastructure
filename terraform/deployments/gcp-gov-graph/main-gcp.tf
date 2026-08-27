@@ -217,7 +217,7 @@ resource "google_project" "project" {
     # underscores and dashes. The value can be at most 63 characters long.
     # International characters are allowed.
     programme = "govuk",
-    team      = "govuk-data-engineering",
+    team      = "govuk-data-infrastructure",
   }
   lifecycle {
     prevent_destroy = true
