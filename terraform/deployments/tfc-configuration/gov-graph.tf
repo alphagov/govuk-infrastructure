@@ -1,7 +1,3 @@
-resource "tfe_project" "data-engineering-project" {
-  name = "govuk-data-engineering"
-}
-
 resource "tfe_project" "data-infrastructure-project" {
   name = "govuk-data-infrastructure"
 }
@@ -21,7 +17,7 @@ module "gov-graph-dev" {
     "/terraform/variables/integration/gcp-gov-graph.tfvars"
   ]
 
-  project_name = tfe_project.data-engineering-project.name
+  project_name = tfe_project.data-infrastructure-project.name
   vcs_repo = {
     identifier     = "alphagov/govuk-infrastructure"
     branch         = "main"
@@ -57,7 +53,7 @@ module "gov-graph-staging" {
     "/terraform/variables/staging/gcp-gov-graph.tfvars"
   ]
 
-  project_name = tfe_project.data-engineering-project.name
+  project_name = tfe_project.data-infrastructure-project.name
   vcs_repo = {
     identifier     = "alphagov/govuk-infrastructure"
     branch         = "main"
@@ -77,7 +73,7 @@ module "gov-graph-staging" {
     local.gcp_credentials["staging"]
   ]
 
-  depends_on = [tfe_project.data-engineering-project]
+  depends_on = [tfe_project.data-infrastructure-project]
 }
 
 module "gov-graph-production" {
@@ -95,7 +91,7 @@ module "gov-graph-production" {
     "/terraform/variables/production/gcp-gov-graph.tfvars"
   ]
 
-  project_name = tfe_project.data-engineering-project.name
+  project_name = tfe_project.data-infrastructure-project.name
   vcs_repo = {
     identifier     = "alphagov/govuk-infrastructure"
     branch         = "main"
