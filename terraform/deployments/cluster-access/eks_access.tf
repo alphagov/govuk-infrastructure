@@ -61,7 +61,7 @@ module "developer" {
   cluster_role_rules = [
     {
       api_groups = [""]
-      resources  = ["namespaces", "pods", "pods/logs", "services", "configmaps", "secrets", "endpoints", "events"]
+      resources  = ["namespaces", "pods", "pods/log", "services", "configmaps", "secrets", "endpoints", "events"]
       verbs      = ["get", "list", "watch"]
     },
     {
@@ -79,7 +79,7 @@ module "developer" {
   namespace_role_rules = [
     {
       api_groups = ["", "apps"]
-      resources  = ["pods", "pods/logs", "deployments", "replicasets", "statefulsets"]
+      resources  = ["pods", "pods/log", "deployments", "replicasets", "statefulsets"]
       verbs      = ["get", "list", "watch", "create", "update", "patch", "delete"]
     },
     {
