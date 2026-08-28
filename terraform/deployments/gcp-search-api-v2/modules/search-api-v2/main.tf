@@ -43,6 +43,7 @@ resource "google_project_service" "api_service" {
 
   project                    = google_project.environment_project.project_id
   service                    = each.value
+  disable_on_destroy         = true
   disable_dependent_services = true
 }
 
