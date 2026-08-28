@@ -58,10 +58,12 @@ module "control_global_boost_freshness_general" {
           },
           {
             attributeValue = "90D",
-            boostAmount    = 0.00000001
+            boostAmount    = 0.0001
             # Ideally we'd like to set this boostAmount to 0, but when we do this the boostAmount is stripped out of
             # the API response, causing a permanent drift in our Terraform configuration. We are therefore setting this
-            # to a very small value instead.
+            # to a small value instead. 0.0001 is the smallest value we can use before Terraform and the Google API
+            # start converting this into scientific notation, which also causes permanent drift (potentially
+            # because Terraform and Google have a slightly different way of writing scientific notation).
           },
           {
             attributeValue = "365D",
