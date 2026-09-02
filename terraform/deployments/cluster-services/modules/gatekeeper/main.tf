@@ -15,7 +15,7 @@ resource "helm_release" "gatekeeper" {
   namespace  = kubernetes_namespace_v1.gatekeeper.id
   repository = "https://open-policy-agent.github.io/gatekeeper/charts"
   chart      = "gatekeeper"
-  version    = "3.23.0"
+  version    = "3.23.1"
 
   # https://github.com/open-policy-agent/gatekeeper/blob/master/charts/gatekeeper/values.yaml
   values = [templatefile("${path.module}/templates/values.yaml.tpl", {

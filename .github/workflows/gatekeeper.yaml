@@ -1,8 +1,8 @@
 name: Unit test Gatekeeper policies
 on:
   pull_request:
-      paths:
-        - 'terraform/deployments/cluster-services/modules/gatekeeper/**'
+    paths:
+      - "terraform/deployments/cluster-services/modules/gatekeeper/**"
 
 jobs:
   gator-tests:
@@ -21,7 +21,6 @@ jobs:
       - name: Run Gatekeeper Tests
         working-directory: terraform/deployments/cluster-services/modules/gatekeeper/test/suite
         run: |
-          brew version-install gator@3.23.0
+          brew version-install gator@3.23.1
 
           gator verify --verbose ./...
-
