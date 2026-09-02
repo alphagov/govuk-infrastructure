@@ -27,6 +27,23 @@ runs:
          --performance-schema=off --innodb_buffer_pool_size=32M \
          --innodb-log-buffer-size=8M --key_buffer_size=4M
 
+    - name: Wait for MySQL
+      shell: bash
+      run: |
+        for i in {1..30}; do
+          if docker exec mysql mysqladmin ping -h 127.0.0.1 -uroot -proot --silent; then
+            echo "MySQL is ready"
+            exit 0
+          fi
+
+          echo "Waiting for MySQL..."
+          sleep 2
+        done
+
+        echo "MySQL did not become ready"
+        docker logs mysql
+        exit 1
+
     - name: Generate database URL
       id: generate-url
       env:
