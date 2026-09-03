@@ -62,12 +62,6 @@ output "secrets_manager_secret_name" {                                          
   value       = aws_secretsmanager_secret.opensearch_passwords.name                                        # pragma: allowlist secret
 }
 
-output "green_elasticsearch_endpoint" {
-  description = "The endpoint of the green elasticsearch domain"
-  deprecated  = "Do not set this option except when importing the existing Search ElasticSearch cluster"
-  value       = var.launch_green_domain && var.use_aws_elasticsearch_domain_resource_for_green_cluster ? module.green_domain[0].opensearch_endpoint : null
-}
-
 output "elasticsearch_iam_role_arn" {
   description = "The endpoint of the green elasticsearch domain"
   deprecated  = "Do not set this option except when importing the existing Search ElasticSearch cluster"

@@ -40,7 +40,6 @@
 | Name | Description |
 |------|-------------|
 | <a name="output_elasticsearch_iam_role_arn"></a> [elasticsearch\_iam\_role\_arn](#output\_elasticsearch\_iam\_role\_arn) | The endpoint of the green elasticsearch domain |
-| <a name="output_green_elasticsearch_endpoint"></a> [green\_elasticsearch\_endpoint](#output\_green\_elasticsearch\_endpoint) | The endpoint of the green elasticsearch domain |
 | <a name="output_old_s3_snapshot_bucket_arn"></a> [old\_s3\_snapshot\_bucket\_arn](#output\_old\_s3\_snapshot\_bucket\_arn) | ARN of the S3 bucket used for snapshots |
 | <a name="output_old_s3_snapshot_bucket_name"></a> [old\_s3\_snapshot\_bucket\_name](#output\_old\_s3\_snapshot\_bucket\_name) | Name of the S3 bucket used for snapshots |
 | <a name="output_opensearch_cname"></a> [opensearch\_cname](#output\_opensearch\_cname) | The fully qualified domain name of the route53 record which points to the live OpenSearch domain |
