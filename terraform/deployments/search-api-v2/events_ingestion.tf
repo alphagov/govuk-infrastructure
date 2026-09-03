@@ -2,31 +2,6 @@
 # BQ dataset and table creation hasn't been migrated to Dataform so remains here
 # Event ingest is orchestrated in Ruby stack not in GCP
 
-
-# custom role for writing ga analytics data to our bq store
-resource "google_project_iam_custom_role" "analytics_write" {
-  role_id     = "analytics_write"
-  title       = "ga4-write-bq-permissions"
-  description = "Write data to vertex schemas in bq"
-  permissions = [
-    "bigquery.tables.update",
-    "bigquery.tables.updateData",
-    "bigquery.jobs.create",
-    "bigquery.datasets.get",
-    "bigquery.tables.get",
-    "bigquery.tables.getData"
-  ]
-}
-
-# binding ga write role to ga write service account
-resource "google_project_iam_binding" "analytics_write" {
-  role    = google_project_iam_custom_role.analytics_write.id
-  project = var.gcp_project_id
-  members = [
-    google_service_account.analytics_events_pipeline.member,
-  ]
-}
-
 # top level dataset to store events for ingestion into Discovery Engine (previously marketed as "Vertex AI Search")
 resource "google_bigquery_dataset" "dataset" {
   dataset_id                 = "analytics_events_vertex"

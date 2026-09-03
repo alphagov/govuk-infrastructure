@@ -114,12 +114,6 @@ resource "google_project_iam_binding" "search_admin" {
   ]
 }
 
-resource "google_service_account" "analytics_events_pipeline" {
-  account_id   = "analytics-events-pipeline"
-  display_name = "analytics-events-pipeline"
-  description  = "Service account for reading GA4 search events data and importing events into our project"
-}
-
 ## Read only service account for local development
 
 resource "google_service_account" "postman" {
