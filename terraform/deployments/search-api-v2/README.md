@@ -32,6 +32,10 @@ This module provisions the following resources into the Google Cloud Platform pr
 - AWS Secrets Manager secrets to be consumed by the API service application in the corresponding
   environment on the Kubernetes platform
 
+## Additional information
+### GCP quota preferences
+[Quota preferences][quota_preference] are used to request changes to quota values and to document changes already agreed with Google. Note that they cannot be used to alter system limits. See [Quotas and system limits][quotas-and-system-limits] for more information.
+
 > **Note**
 > The Discovery Engine resources are managed through the [RestAPI provider][restapi_provider_docs]
 > due to the Google provider not offering sufficient first party Terraform resources yet (as of August 2026).
@@ -55,3 +59,5 @@ This module provisions the following resources into the Google Cloud Platform pr
 [publishing-deployment]: ../govuk-publishing-infrastructure/README.md
 [variables]: ./variables.tf
 [variables-folder]: ../../variables
+[quota_preference]: https://registry.terraform.io/providers/hashicorp/google-beta/latest/docs/resources/cloud_quotas_quota_preference
+[quotas-and-system-limits]: https://docs.cloud.google.com/docs/quotas/quotas
