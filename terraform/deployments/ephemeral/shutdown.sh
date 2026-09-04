@@ -231,11 +231,15 @@ read
 # make sure the correct cluster is selected before destroying anything
 aws eks update-kubeconfig --name "${CLUSTER_ID}"
 
-# delete ArgoCD Application resources
-application_shutdown
+if kubectl cluster-info; then
+  # delete ArgoCD Application resources
+  application_shutdown
 
-# uninstall Helm charts
-helm_shutdown
+  # uninstall Helm charts
+  helm_shutdown
+else
+  echo "Skipping application tear down because there is no access to the cluster."
+fi
 
 # do destroy runs on workspaces in the correct order
 retry 2 tfc_do_destroy "datagovuk-infrastructure"
