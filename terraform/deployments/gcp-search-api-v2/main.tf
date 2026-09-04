@@ -55,10 +55,3 @@ module "environment_production" {
   environment_workspace_name   = "search-api-v2-production"
   access_group_name            = "govuk-gcp-access"
 }
-
-removed {
-  from = google_dataform_repository.search_v2_api
-  lifecycle {
-    destroy = false
-  }
-}
