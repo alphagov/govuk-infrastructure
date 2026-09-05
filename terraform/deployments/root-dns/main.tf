@@ -5,7 +5,7 @@ terraform {
       tags = ["root-dns", "aws"]
     }
   }
-  required_version = "~> 1.15"
+  required_version = "~> 1.16"
   required_providers {
     aws = {
       source  = "hashicorp/aws"
