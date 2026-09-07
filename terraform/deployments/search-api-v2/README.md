@@ -32,6 +32,43 @@ This module provisions the following resources into the Google Cloud Platform pr
 - AWS Secrets Manager secrets to be consumed by the API service application in the corresponding
   environment on the Kubernetes platform
 
+## Additional information
+### Quotas and system limits
+Our usage of the various Google APIs is controlled through [quotas and system limits][quotas-and-system-limits]. Quota changes can be agreed with Google through [quota preferences](#quota-preferences) or capped using [quota overrides](#quota-overrides), while system limits are fixed. 
+
+Despite its fixed nature we have agreed an increase to the system limit `SearchRequestsPerMinutePerProjectPerRegion` on `production`. Quotas and system limits can be found in the GCP console under "IAM and Admin > Quotas and system limits".
+
+### Quota preferences
+[Quota preferences][quota_preference] are used to request changes to quota values and to document changes already agreed with Google. Note that they cannot be used to alter system limits.
+
+### Quota overrides
+Quota overrides are used to cap limits below values that have been set by default or by admin/producer overrides.
+On GCP, these are somewhat complex to set up and use inconsistent terminology between the
+console UI, the REST API, and the (beta) Terraform provider. In particular, it can be somewhat
+confusing to figure out the `limit` value for the `google_service_usage_consumer_quota_override`
+resource (which actually corresponds to the `unit` field in the API but with different syntax), and
+to find the internal (not display) name of quotas.
+
+If you need to set up a new `google_service_usage_consumer_quota_override` resource for a Discovery
+Engine project, the best way of finding out these values is to make a GET request to the
+`consumerQuotaMetrics` endpoint like so:
+
+```bash
+curl -H "Authorization: Bearer $(gcloud auth print-access-token)" \
+-H "Content-Type: application/json" \
+"https://serviceusage.googleapis.com/v1beta1/projects/${GCP_PROJECT}/services/discoveryengine.googleapis.com/consumerQuotaMetrics" \
+| jq -r '.metrics[] | "\(.displayName): \(.consumerQuotaLimits[0].metric) (\(.consumerQuotaLimits[0].unit | gsub("[1\\{\\}]";"")))"' \
+| sort
+```
+
+This returns a list of available quotas by display name, complete with the necessary `metric` and
+`unit` values.
+
+There are limits on the Google side on how high we are permitted to set quotas. If
+you attempt to increase them beyond the ceiling, a `COMMON_QUOTA_CONSUMER_OVERRIDE_TOO_HIGH`
+error will be raised (including some metadata that should tell you what the current ceiling is).
+You will need to request a quota increase from Google via the Cloud Quotas API using [quota_preferences](#quota-preferences) first.
+
 > **Note**
 > The Discovery Engine resources are managed through the [RestAPI provider][restapi_provider_docs]
 > due to the Google provider not offering sufficient first party Terraform resources yet (as of August 2026).
@@ -55,3 +92,5 @@ This module provisions the following resources into the Google Cloud Platform pr
 [publishing-deployment]: ../govuk-publishing-infrastructure/README.md
 [variables]: ./variables.tf
 [variables-folder]: ../../variables
+[quota_preference]: https://registry.terraform.io/providers/hashicorp/google-beta/latest/docs/resources/cloud_quotas_quota_preference
+[quotas-and-system-limits]: https://docs.cloud.google.com/docs/quotas/quotas
