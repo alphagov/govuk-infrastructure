@@ -45,33 +45,4 @@ These values can be set interactively in the console when running the cli, or th
 terraform plan -var google_cloud_billing_account=<account-id> -var google_cloud_folder=<folder-id>
 ```
 
-## Additional information
-### Adding GCP quota overrides
-Quota overrides are used to cap limits under values that have been set by default or by admin/producer overrides.
-On GCP, these are somewhat complex to set up and use inconsistent terminology between the
-console UI, the REST API, and the (beta) Terraform provider. In particular, it can be somewhat
-confusing to figure out the `limit` value for the `google_service_usage_consumer_quota_override`
-resource (which actually corresponds to the `unit` field in the API but with different syntax), and
-to find the internal (not display) name of quotas.
-
-If you need to set up a new `google_service_usage_consumer_quota_override` resource for a Discovery
-Engine project, the best way of finding out these values is to make a GET request to the
-`consumerQuotaMetrics` endpoint like so:
-
-```bash
-curl -H "Authorization: Bearer $(gcloud auth print-access-token)" \
--H "Content-Type: application/json" \
-"https://serviceusage.googleapis.com/v1beta1/projects/${GCP_PROJECT}/services/discoveryengine.googleapis.com/consumerQuotaMetrics" \
-| jq -r '.metrics[] | "\(.displayName): \(.consumerQuotaLimits[0].metric) (\(.consumerQuotaLimits[0].unit | gsub("[1\\{\\}]";"")))"' \
-| sort
-```
-
-This returns a list of available quotas by display name, complete with the necessary `metric` and
-`unit` values.
-
-There are limits on the Google side on how high we are permitted to set quotas. If
-you attempt to increase them beyond the ceiling, a `COMMON_QUOTA_CONSUMER_OVERRIDE_TOO_HIGH`
-error will be raised (including some metadata that should tell you what the current ceiling is). 
-You will need to manually request a quota increase from Google through the console first.
-
 [search-api-v2-deployment]: ../search-api-v2/README.md
