@@ -252,7 +252,6 @@ repos:
     required_status_checks:
       standard_contexts: *standard_govuk_rails_checks
       additional_contexts:
-        - Lint JavaScript / Run Standardx
         - Lint SCSS / Run Stylelint
         - Test JavaScript / Run Jasmine
         - Test Ruby / Run RSpec
@@ -1144,4 +1143,4 @@ repos:
       - "alphagov/gov-uk-information-architects"
       - "alphagov/gov-uk-production-admin"
       - "alphagov/gov-uk-production-deploy"
-    
+
