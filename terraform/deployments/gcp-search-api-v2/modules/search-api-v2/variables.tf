@@ -37,6 +37,8 @@ variable "google_cloud_apis" {
     # Required for observability
     "logging.googleapis.com",
     "monitoring.googleapis.com",
+    # Required for setting quota preferences
+    "cloudquotas.googleapis.com"
   ]
 }
 
