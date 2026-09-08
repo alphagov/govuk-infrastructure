@@ -56,7 +56,3 @@ variable "complete_query_requests" {
   description = "The maximum number of complete query requests per minute for Discovery Engine"
   default     = 300
 }
-
-variable "import_quota_preference" {
-  type = bool
-}
