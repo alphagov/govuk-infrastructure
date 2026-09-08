@@ -44,6 +44,3 @@ account_ids_allowed_to_read_domain_snapshots = [
   "696911096973", # Staging
   "210287912431", # Integration
 ]
-
-// WARNING: This _must_ be removed once the existing Search elasticsearch 6.8 green cluster has been destroyed
-use_aws_elasticsearch_domain_resource_for_green_cluster = false
