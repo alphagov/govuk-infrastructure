@@ -191,7 +191,6 @@ repos:
       standard_contexts: *standard_govuk_rails_checks
       additional_contexts:
         - Lint SCSS / Run Stylelint
-        - Lint JavaScript / Run Standardx
         - Test JavaScript / Run Jasmine
         - Test Ruby / Run RSpec
 
