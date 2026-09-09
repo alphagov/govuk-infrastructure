@@ -49,6 +49,26 @@ resource "aws_db_parameter_group" "engine_params" {
   lifecycle { create_before_destroy = true }
 }
 
+# this resource is for use during PostgreSQL 18 database upgrades
+resource "aws_db_parameter_group" "engine_params_18" {
+  for_each = { for k, v in var.databases : k => v if v.engine == "postgres" }
+
+  name   = "${var.govuk_environment}-${each.value.name}-${each.value.engine}-temporary-18"
+  family = "postgres18"
+
+  dynamic "parameter" {
+    for_each = each.value.engine_params
+
+    content {
+      name         = parameter.key
+      value        = parameter.value.value
+      apply_method = parameter.value.apply_method
+    }
+  }
+
+  lifecycle { create_before_destroy = true }
+}
+
 resource "aws_db_instance" "instance" {
   for_each = var.databases
 
