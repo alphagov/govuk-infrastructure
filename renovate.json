@@ -86,6 +86,17 @@
             "depNameTemplate": "Terraform Version",
             "datasourceTemplate": "github-releases",
             "versioningTemplate": "github-releases"
+        },
+        {
+            "customType": "regex",
+            "managerFilePatterns": [
+                "/.*cluster-services\\/logging\\.tf/"
+            ],
+            "matchStrings": [
+                "imageTag\\s+=\\s+\"(?<currentValue>[0-9.]+)\""
+            ],
+            "datasourceTemplate": "docker",
+            "depNameTemplate": "elastic/filebeat"
         }
     ],
     "ignorePaths": [
