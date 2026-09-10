@@ -242,7 +242,6 @@ repos:
       additional_contexts:
         - Integration tests
         - Lint SCSS / Run Stylelint
-        - Lint JavaScript / Run Standardx
         - Test JavaScript / Run Jasmine
         - Test Ruby / Run RSpec
 
