@@ -67,6 +67,7 @@ repos:
       standard_contexts: *standard_govuk_rails_checks
       additional_contexts:
         - Integration tests
+        - Lint JavaScript / Run Standard
         - Lint SCSS / Run Stylelint
         - Test JavaScript / Run Jasmine
         - Test Ruby / Run RSpec
@@ -190,6 +191,7 @@ repos:
       standard_contexts: *standard_govuk_rails_checks
       additional_contexts:
         - Lint SCSS / Run Stylelint
+        - Lint JavaScript / Run Standard
         - Test JavaScript / Run Jasmine
         - Test Ruby / Run RSpec
 
@@ -251,6 +253,7 @@ repos:
       standard_contexts: *standard_govuk_rails_checks
       additional_contexts:
         - Lint SCSS / Run Stylelint
+        - Lint JavaScript / Run Standard
         - Test JavaScript / Run Jasmine
         - Test Ruby / Run RSpec
         - CodeQL SAST scan / Analyze
