@@ -14,10 +14,6 @@ terraform {
       source  = "integrations/github"
       version = "~> 6.10"
     }
-    http = {
-      source  = "hashicorp/http"
-      version = "~> 3.6"
-    }
   }
 }
 
@@ -93,10 +89,6 @@ locals {
     for name, repo in local.repositories : name
     if try(repo.teams.govuk_ithc, "") != ""
   ]
-
-  repos_yml_teams = {
-    for obj in jsondecode(data.http.repos_yml.response_body) : obj.app_name => trimprefix(obj.team, "#")
-  }
 }
 
 resource "github_team" "govuk_ci_bots" {
