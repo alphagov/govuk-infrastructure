@@ -86,10 +86,14 @@ databases = {
     engine         = "postgres"
     engine_version = "14"
     engine_params = {
-      log_min_duration_statement = { value = 10000 }
-      log_statement              = { value = "ddl" }
-      deadlock_timeout           = { value = 2500 }
-      log_lock_waits             = { value = 1 }
+      log_min_duration_statement      = { value = 10000 }
+      log_statement                   = { value = "ddl" }
+      deadlock_timeout                = { value = 2500 }
+      log_lock_waits                  = { value = 1 }
+      "rds.logical_replication"       = { value = 1 }
+      max_wal_senders                 = { value = 35 }
+      max_logical_replication_workers = { value = 20 }
+      max_worker_processes            = { value = 40 }
     }
     engine_params_family         = "postgres14"
     name                         = "ckan-sams-test"
