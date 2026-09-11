@@ -95,7 +95,7 @@ locals {
   ]
 
   repos_yml_teams = {
-    for obj in jsondecode(data.http.repos_yml.response_body) : obj.app_name => trimprefix(obj.team, "#")
+    for obj in jsondecode(data.http.repos_yml.response_body) : obj.repo_name => trimprefix(obj.team, "#")
   }
 }
 
