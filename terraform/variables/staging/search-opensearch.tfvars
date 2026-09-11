@@ -1,4 +1,4 @@
-current_live_domain = "green"
+current_live_domain = "blue"
 
 attach_snapshot_policy_with_role_policy_attachment = true
 
