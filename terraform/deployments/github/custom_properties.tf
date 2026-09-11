@@ -20,3 +20,14 @@ resource "github_repository_custom_property" "team_identifier" {
   property_value = [contains(data.github_organization_custom_properties.team_identifier.allowed_values, each.value) ? each.value : "other"]
 }
 
+resource "github_repository_custom_property" "team_other" {
+  for_each = {
+    for k, v in local.repos_yml_teams : k => v
+    if !contains(data.github_organization_custom_properties.team_identifier.allowed_values, v)
+  }
+
+  repository     = each.key
+  property_name  = "team_other"
+  property_type  = "string"
+  property_value = [each.value]
+}
