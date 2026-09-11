@@ -8,6 +8,7 @@ This module:
 - Visibility, topics, merge settings, branch deletion on merge etc.
 - Enables security features like vulnerability alerts
 - Prevents archiving if there are open PRs or GitHub Pages are active
+- Keeps custom properties, specifically the `team_identifier` [introduced by Engineering Enablement (EE)](https://engineering-enablement.gds-reliability.engineering/engineering/github/repository-owners.html), on each repo in sync with slack channel name defined in [govuk-developer-docs/data/repos.yml](https://docs.publishing.service.gov.uk/repos.json)
 
 🔐 Applies branch protection to the `main` branch for applicable repositories:
 - Requires PR reviews
@@ -25,6 +26,10 @@ This module:
 - Pact publishers → Pact Broker credentials
 - Gem publishers → govuk-ci GitHub API token
 - All repos → Slack webhook URL
+
+### Note on Repo Custom Properties
+
+The allowed values for the `team_identifier` custom property are set at the organisation level, this means that when a team changes their name, and then subsequently updates their information in the govuk-developer-docs repository, the Terraform here will request an update to the allowed values by setting another custom property `team_other`. Once EE review and add the new value to the selectable values list then Terraform will remove the `team_other` custom property and select the `team_identifier` from the updated custom property allowed values.
 
 ## Applying Terraform
 
