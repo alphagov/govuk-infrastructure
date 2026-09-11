@@ -27,7 +27,7 @@ resource "aws_cloudwatch_dashboard" "rds" {
               "width": 24,
               "height": 1,
               "properties": {
-                  "markdown": "# 🗄️ RDS Storage Burn Rate & Early Warning Monitor (eu-west-1)\nDynamic thresholds based on allocated storage size. ⚠️ Warning = 25% free | 🔴 Critical = 10% free | Burn Rate = 0.2% allocated/hr | Time-to-Full: ⚠️ 48hrs 🔴 12hrs"
+                  "markdown": "# 🗄️ RDS Storage Burn Rate & Early Warning Monitor (eu-west-1)\nDynamic thresholds based on allocated storage size."
               }
           },
           {
@@ -38,7 +38,7 @@ resource "aws_cloudwatch_dashboard" "rds" {
               "height": 2,
               "properties": {
                   "title": "🚨 Storage Alarm Status",
-                  "alarms": ${jsonencode(concat(values(aws_cloudwatch_metric_alarm.rds_freestoragespace)[*].arn, values(aws_cloudwatch_metric_alarm.rds_depletion_7days)[*].arn, values(aws_cloudwatch_metric_alarm.rds_depletion_48hrs)[*].arn))}
+                  "alarms": ${jsonencode(concat(values(aws_cloudwatch_metric_alarm.rds_freestoragespace)[*].arn, values(aws_cloudwatch_metric_alarm.rds_depletion_14days)[*].arn, values(aws_cloudwatch_metric_alarm.rds_depletion_72hrs)[*].arn))}
               }
           },
           {
@@ -140,14 +140,14 @@ resource "aws_cloudwatch_dashboard" "rds" {
                       "horizontal": [
                           {
                               "color": "#ff7f0e",
-                              "label": "⚠️ Warning: < 7 days remaining",
-                              "value": 168,
+                              "label": "⚠️ Warning: < 14 days remaining",
+                              "value": 336,
                               "fill": "below"
                           },
                           {
                               "color": "#d62728",
-                              "label": "🚨 Critical: < 48 hrs remaining",
-                              "value": 48,
+                              "label": "🚨 Critical: < 72 hrs remaining",
+                              "value": 72,
                               "fill": "below"
                           }
                       ]
@@ -155,7 +155,7 @@ resource "aws_cloudwatch_dashboard" "rds" {
                   "yAxis": {
                       "left": {
                           "min": 0,
-                          "max": 336,
+                          "max": 672,
                           "label": "Hours",
                           "showUnits": false
                       }
@@ -338,16 +338,16 @@ resource "aws_cloudwatch_dashboard" "rds" {
 EOF
 }
 
-resource "aws_cloudwatch_metric_alarm" "rds_depletion_7days" {
+resource "aws_cloudwatch_metric_alarm" "rds_depletion_14days" {
   for_each = var.databases
 
-  alarm_name        = "${aws_db_instance.instance[each.key].identifier}-rds-depletion_7_days"
-  alarm_description = "Triggers when ${aws_db_instance.instance[each.key].identifier} is predicted to run out of storage in the next 7 days."
+  alarm_name        = "${aws_db_instance.instance[each.key].identifier}-rds-depletion_14_days"
+  alarm_description = "Triggers when ${aws_db_instance.instance[each.key].identifier} is predicted to run out of storage in the next 14 days."
 
   comparison_operator = "LessThanThreshold"
   evaluation_periods  = 3
   datapoints_to_alarm = 3
-  threshold           = 168 # 7 days (in hours)
+  threshold           = 336 # 14 days (in hours)
   alarm_actions       = [aws_sns_topic.rds_alerts.arn]
   ok_actions          = [aws_sns_topic.rds_alerts.arn]
 
@@ -374,16 +374,16 @@ resource "aws_cloudwatch_metric_alarm" "rds_depletion_7days" {
   }
 }
 
-resource "aws_cloudwatch_metric_alarm" "rds_depletion_48hrs" {
+resource "aws_cloudwatch_metric_alarm" "rds_depletion_72hrs" {
   for_each = var.databases
 
-  alarm_name        = "${aws_db_instance.instance[each.key].identifier}-rds-depletion-48hrs"
-  alarm_description = "Triggers when ${aws_db_instance.instance[each.key].identifier} is predicted to run out of storage in the next 48 hours."
+  alarm_name        = "${aws_db_instance.instance[each.key].identifier}-rds-depletion-72hrs"
+  alarm_description = "Triggers when ${aws_db_instance.instance[each.key].identifier} is predicted to run out of storage in the next 72 hours."
 
   comparison_operator = "LessThanThreshold"
   evaluation_periods  = 3
   datapoints_to_alarm = 3
-  threshold           = 48
+  threshold           = 72
   alarm_actions       = [aws_sns_topic.rds_alerts.arn]
   ok_actions          = [aws_sns_topic.rds_alerts.arn]
 
