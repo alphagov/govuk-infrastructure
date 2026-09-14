@@ -18,7 +18,9 @@ module "opensearch" {
 
   create_remote_connection_to_import_to_blue_from_green = var.create_remote_connection_to_import_to_blue_from_green
   create_remote_connection_to_import_to_green_from_blue = var.create_remote_connection_to_import_to_green_from_blue
+}
 
-  override_old_snapshot_bucket_name = "govuk-${var.govuk_environment}-elasticsearch6-manual-snapshots"
-  create_original_snapshot_bucket   = true
+moved {
+  from = module.opensearch.module.snapshot_bucket[0]
+  to   = module.opensearch.module.snapshot_bucket
 }
