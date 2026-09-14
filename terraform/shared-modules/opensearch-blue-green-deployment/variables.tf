@@ -272,36 +272,6 @@ variable "use_aws_elasticsearch_domain_resource_for_green_cluster" {
   }
 }
 
-variable "override_aws_elasticsearch_domain_name_for_green_cluster" {
-  type        = string
-  description = "Use this as the name of the aws_elasticsearch_domain (not as the domain name to talk to this cluster on) to allow search ES cluister to be imported"
-  deprecated  = "Do not set this option except when importing the existing Search ElasticSearch cluster"
-  default     = null
-  nullable    = true
-
-  validation {
-    condition = var.override_aws_elasticsearch_domain_name_for_green_cluster == null || (
-      var.override_aws_elasticsearch_domain_name_for_green_cluster == "green-elasticsearch6-domain" && var.opensearch_domain_name == "search-domain" && var.green_cluster_options != null && var.green_cluster_options.engine_version == "6.8"
-    )
-    error_message = "This option must ONLY be set when importing the original Search Elasticsearch 6 cluster."
-  }
-}
-
-variable "log_resource_policy_name_suffix_override_for_green_cluster" {
-  type        = string
-  description = "Use this as the aws_cloudwatch_log_resource_policy name suffix instead of -domain-write to allow search ES cluster to be imported."
-  deprecated  = "Do not set this option except when importing the existing Search ElasticSearch cluster"
-  default     = null
-  nullable    = true
-
-  validation {
-    condition = var.log_resource_policy_name_suffix_override_for_green_cluster == null || (
-      var.log_resource_policy_name_suffix_override_for_green_cluster == "-domain_log_write" && var.opensearch_domain_name == "search-domain" && var.green_cluster_options != null && var.green_cluster_options.engine_version == "6.8"
-    )
-    error_message = "This option must ONLY be set when importing the original Search Elasticsearch 6 cluster."
-  }
-}
-
 variable "override_old_snapshot_bucket_name" {
   type        = string
   description = "Set the name of the old snapshot bucket to this allow search ES cluster to be imported."
