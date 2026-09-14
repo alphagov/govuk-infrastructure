@@ -257,21 +257,6 @@ variable "account_ids_allowed_to_read_domain_snapshots" {
   }
 }
 
-variable "use_aws_elasticsearch_domain_resource_for_green_cluster" {
-  type        = bool
-  description = "Use an aws_elasticsearch_domain resource instead of aws_opensearch_domain to allow search ES cluster to be imported"
-  deprecated  = "Do not set this option except when importing the existing Search ElasticSearch cluster"
-  default     = false
-  nullable    = false
-
-  validation {
-    condition = (
-      var.use_aws_elasticsearch_domain_resource_for_green_cluster == true && var.opensearch_domain_name == "search-domain" && var.green_cluster_options != null && var.green_cluster_options.engine_version == "6.8"
-    ) || var.use_aws_elasticsearch_domain_resource_for_green_cluster == false
-    error_message = "This option must ONLY be set when importing the original Search Elasticsearch 6 cluster."
-  }
-}
-
 variable "override_old_snapshot_bucket_name" {
   type        = string
   description = "Set the name of the old snapshot bucket to this allow search ES cluster to be imported."
