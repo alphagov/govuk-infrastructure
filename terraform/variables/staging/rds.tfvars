@@ -82,27 +82,6 @@ databases = {
     }
   }
 
-  ckan_sams_test = {
-    engine         = "postgres"
-    engine_version = "18"
-    engine_params = {
-      log_min_duration_statement = { value = 10000 }
-      log_statement              = { value = "ddl" }
-      deadlock_timeout           = { value = 2500 }
-      log_lock_waits             = { value = 1 }
-    }
-    engine_params_family         = "postgres18"
-    name                         = "ckan-sams-test"
-    allocated_storage            = 1000
-    instance_class               = "db.m6g.large"
-    performance_insights_enabled = true
-    project                      = "GOV.UK - Infrastructure"
-    snapshot_identifier          = "rds:ckan-staging-postgres-2026-09-11-01-04",
-    tags = {
-      "contains_pii" = true
-    }
-  }
-
   collections_publisher = {
     engine         = "mysql"
     engine_version = "8.4"
