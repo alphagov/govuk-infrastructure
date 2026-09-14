@@ -84,18 +84,14 @@ databases = {
 
   ckan_sams_test = {
     engine         = "postgres"
-    engine_version = "14"
+    engine_version = "18"
     engine_params = {
-      log_min_duration_statement      = { value = 10000 }
-      log_statement                   = { value = "ddl" }
-      deadlock_timeout                = { value = 2500 }
-      log_lock_waits                  = { value = 1 }
-      "rds.logical_replication"       = { value = 1, apply_method = "pending-reboot" }
-      max_wal_senders                 = { value = 35, apply_method = "pending-reboot" }
-      max_logical_replication_workers = { value = 20, apply_method = "pending-reboot" }
-      max_worker_processes            = { value = 40, apply_method = "pending-reboot" }
+      log_min_duration_statement = { value = 10000 }
+      log_statement              = { value = "ddl" }
+      deadlock_timeout           = { value = 2500 }
+      log_lock_waits             = { value = 1 }
     }
-    engine_params_family         = "postgres14"
+    engine_params_family         = "postgres18"
     name                         = "ckan-sams-test"
     allocated_storage            = 1000
     instance_class               = "db.m6g.large"
