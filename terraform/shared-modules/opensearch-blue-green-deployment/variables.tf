@@ -132,9 +132,6 @@ variable "green_cluster_options" {
       iops        = optional(number)
     }))
     create_vpc_endpoint = optional(bool, false)
-
-    // The following options only exist to allow the Search ES6 cluster to be imported and should not be used in the future
-    prefix_colour_instead_of_suffix = optional(bool, false)
   })
   default  = null
   nullable = true

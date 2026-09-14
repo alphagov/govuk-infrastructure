@@ -5,12 +5,8 @@ locals {
     : subnet_id if startswith(name, "elasticsearch_")
   ])
 
-  blue_domain_name = "${var.opensearch_domain_name}-blue"
-  green_domain_name = (
-    var.green_cluster_options != null && var.green_cluster_options.prefix_colour_instead_of_suffix ?
-    "green-${var.opensearch_domain_name}" :
-    "${var.opensearch_domain_name}-green"
-  )
+  blue_domain_name  = "${var.opensearch_domain_name}-blue"
+  green_domain_name = "${var.opensearch_domain_name}-green"
 }
 
 module "blue_domain" {
