@@ -75,9 +75,4 @@ module "green_domain" {
   subnet_ids          = local.subnet_ids
   custom_endpoint     = local.service_record_name
   create_vpc_endpoint = var.green_cluster_options.create_vpc_endpoint // || var.create_remote_connection_to_import_to_blue_from_green // I think the vpc endpoint is being made automatically
-
-  // These options only exist to allow the Search ES6 cluster to be imported and should not be used in the future
-  log_group_name_overrides  = var.green_cluster_options.log_group_name_overrides
-  log_retention_in_days     = var.green_cluster_options.log_retention_in_days
-  log_group_prefix_override = var.green_cluster_options.log_group_prefix_override
 }
