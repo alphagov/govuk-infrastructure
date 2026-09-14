@@ -302,21 +302,6 @@ variable "log_resource_policy_name_suffix_override_for_green_cluster" {
   }
 }
 
-variable "disable_node_to_node_encryption_for_green_cluster" {
-  type        = bool
-  description = "Disable node to node encryption to allow search ES cluster to be imported."
-  deprecated  = "Do not set this option except when importing the existing Search ElasticSearch cluster"
-  default     = false
-  nullable    = false
-
-  validation {
-    condition = var.disable_node_to_node_encryption_for_green_cluster == false || (
-      var.disable_node_to_node_encryption_for_green_cluster == true && var.opensearch_domain_name == "search-domain" && var.green_cluster_options != null && var.green_cluster_options.engine_version == "6.8"
-    )
-    error_message = "This option must ONLY be set when importing the original Search Elasticsearch 6 cluster."
-  }
-}
-
 variable "override_old_snapshot_bucket_name" {
   type        = string
   description = "Set the name of the old snapshot bucket to this allow search ES cluster to be imported."
