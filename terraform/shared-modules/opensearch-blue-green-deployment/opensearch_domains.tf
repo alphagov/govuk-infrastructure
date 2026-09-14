@@ -71,7 +71,7 @@ module "green_domain" {
   }
 
   govuk_environment   = var.govuk_environment
-  security_group_ids  = var.override_security_group_ids_for_green_cluster != null ? var.override_security_group_ids_for_green_cluster : local.security_group_ids
+  security_group_ids  = local.security_group_ids
   subnet_ids          = local.subnet_ids
   custom_endpoint     = local.service_record_name
   create_vpc_endpoint = var.green_cluster_options.create_vpc_endpoint // || var.create_remote_connection_to_import_to_blue_from_green // I think the vpc endpoint is being made automatically
