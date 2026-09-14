@@ -347,21 +347,6 @@ variable "override_security_group_ids_for_green_cluster" {
   }
 }
 
-variable "override_custom_domain_endpoint_for_green_cluster" {
-  type        = string
-  description = "Set this as the custom domain endpoint in the Elasticsearch cluster to allow search ES cluster to be imported."
-  deprecated  = "Do not set this option except when importing the existing Search ElasticSearch cluster"
-  default     = null
-  nullable    = true
-
-  validation {
-    condition = var.override_custom_domain_endpoint_for_green_cluster == null || (
-      var.override_custom_domain_endpoint_for_green_cluster != null && var.opensearch_domain_name == "search-domain" && var.green_cluster_options != null && var.green_cluster_options.engine_version == "6.8"
-    )
-    error_message = "This option must ONLY be set when importing the original Search Elasticsearch 6 cluster."
-  }
-}
-
 variable "override_old_snapshot_bucket_name" {
   type        = string
   description = "Set the name of the old snapshot bucket to this allow search ES cluster to be imported."
