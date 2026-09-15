@@ -16,13 +16,13 @@ resource "aws_opensearch_outbound_connection" "to_green_from_blue" {
 
   local_domain_info {
     owner_id    = data.aws_caller_identity.current.account_id
-    region      = data.aws_region.current.name
+    region      = data.aws_region.current.region
     domain_name = module.blue_domain[0].opensearch_domain_name
   }
 
   remote_domain_info {
     owner_id    = data.aws_caller_identity.current.account_id
-    region      = data.aws_region.current.name
+    region      = data.aws_region.current.region
     domain_name = module.green_domain[0].opensearch_domain_name
   }
 
@@ -43,7 +43,7 @@ resource "aws_opensearch_authorize_vpc_endpoint_access" "blue" {
 
   domain_name = module.blue_domain[0].opensearch_domain_name
   account     = data.aws_caller_identity.current.account_id
-  region      = data.aws_region.current.name
+  region      = data.aws_region.current.region
 
   lifecycle {
     replace_triggered_by = [
@@ -62,13 +62,13 @@ resource "aws_opensearch_outbound_connection" "to_blue_from_green" {
 
   local_domain_info {
     owner_id    = data.aws_caller_identity.current.account_id
-    region      = data.aws_region.current.name
+    region      = data.aws_region.current.region
     domain_name = module.green_domain[0].opensearch_domain_name
   }
 
   remote_domain_info {
     owner_id    = data.aws_caller_identity.current.account_id
-    region      = data.aws_region.current.name
+    region      = data.aws_region.current.region
     domain_name = module.blue_domain[0].opensearch_domain_name
   }
 
@@ -89,7 +89,7 @@ resource "aws_opensearch_authorize_vpc_endpoint_access" "green" {
 
   domain_name = module.green_domain[0].opensearch_domain_name
   account     = data.aws_caller_identity.current.account_id
-  region      = data.aws_region.current.name
+  region      = data.aws_region.current.region
 
   lifecycle {
     replace_triggered_by = [

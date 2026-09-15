@@ -110,17 +110,6 @@ variable "green_cluster_options" {
       iops        = optional(number)
     }))
     create_vpc_endpoint = optional(bool, false)
-
-    // The following options only exist to allow the Search ES6 cluster to be imported and should not be used in the future
-    prefix_colour_instead_of_suffix = optional(bool, false)
-    log_group_name_overrides = optional(object({
-      index_slow_logs  = string
-      search_slow_logs = string
-      error_logs       = string
-    }))
-    log_retention_in_days            = optional(number)
-    log_group_prefix_override        = optional(string)
-    inline_access_policy_declaration = optional(bool, false)
   })
   default  = null
   nullable = true
@@ -148,19 +137,4 @@ variable "create_remote_connection_to_import_to_green_from_blue" {
   description = "Create an outgoing connection from the green cluster to the blue cluster to allow remote reimport with blue as source (remote) and green as destination (local)"
   default     = false
   nullable    = false
-}
-
-variable "use_aws_elasticsearch_domain_resource_for_green_cluster" {
-  type        = bool
-  description = "Use an aws_elasticsearch_domain resource instead of aws_opensearch_domain to allow search ES cluster to be imported"
-  deprecated  = "Do not set this option except when importing the existing Search ElasticSearch cluster"
-  default     = false
-  nullable    = false
-
-  validation {
-    condition = (
-      var.use_aws_elasticsearch_domain_resource_for_green_cluster == true && var.green_cluster_options != null && var.green_cluster_options.engine_version == "6.8"
-    ) || var.use_aws_elasticsearch_domain_resource_for_green_cluster == false
-    error_message = "This option must ONLY be set when importing the original Search Elasticsearch 6 cluster."
-  }
 }

@@ -15,3 +15,8 @@ module "opensearch" {
   read_snapshots_from_environments             = var.read_snapshots_from_environments
   account_ids_allowed_to_read_domain_snapshots = var.account_ids_allowed_to_read_domain_snapshots
 }
+
+moved {
+  from = module.opensearch.module.old_snapshot_bucket
+  to   = module.opensearch.module.snapshot_bucket
+}

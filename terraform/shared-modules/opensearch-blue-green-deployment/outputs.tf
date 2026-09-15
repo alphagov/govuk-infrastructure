@@ -29,22 +29,12 @@ output "opensearch_cname" {
 
 output "s3_snapshot_bucket_name" {
   description = "Name of the S3 bucket used for snapshots"
-  value       = var.create_original_snapshot_bucket ? module.snapshot_bucket[0].name : null
+  value       = module.snapshot_bucket.name
 }
 
 output "s3_snapshot_bucket_arn" {
   description = "ARN of the S3 bucket used for snapshots"
-  value       = var.create_original_snapshot_bucket ? module.snapshot_bucket[0].arn : null
-}
-
-output "old_s3_snapshot_bucket_name" {
-  description = "Name of the S3 bucket used for snapshots"
-  value       = module.old_snapshot_bucket.name
-}
-
-output "old_s3_snapshot_bucket_arn" {
-  description = "ARN of the S3 bucket used for snapshots"
-  value       = module.old_snapshot_bucket.arn
+  value       = module.snapshot_bucket.arn
 }
 
 output "opensearch_iam_role_name" {
@@ -60,18 +50,6 @@ output "opensearch_iam_role_arn" {
 output "secrets_manager_secret_name" {                                                                     # pragma: allowlist secret
   description = "The name of the Secrets Manager secret which contains the OpenSearch master user details" # pragma: allowlist secret
   value       = aws_secretsmanager_secret.opensearch_passwords.name                                        # pragma: allowlist secret
-}
-
-output "green_elasticsearch_endpoint" {
-  description = "The endpoint of the green elasticsearch domain"
-  deprecated  = "Do not set this option except when importing the existing Search ElasticSearch cluster"
-  value       = var.launch_green_domain && var.use_aws_elasticsearch_domain_resource_for_green_cluster ? module.green_domain[0].opensearch_endpoint : null
-}
-
-output "elasticsearch_iam_role_arn" {
-  description = "The endpoint of the green elasticsearch domain"
-  deprecated  = "Do not set this option except when importing the existing Search ElasticSearch cluster"
-  value       = var.create_additional_manual_snapshot_role_name == null ? null : aws_iam_role.elasticsearch_snapshot[0].arn
 }
 
 output "vpc_endpoints" {
