@@ -176,8 +176,9 @@ variable "replication_config" {
   type = object({
     role = string
     rules = optional(set(object({
-      id     = string
-      status = string
+      id       = string
+      status   = string
+      priority = optional(number)
       destination = object({
         bucket        = string
         storage_class = string

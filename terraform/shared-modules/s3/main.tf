@@ -259,6 +259,12 @@ resource "aws_s3_bucket_replication_configuration" "this" {
       }
 
       dynamic "filter" {
+        // Even if there are no filters, if a priority is set we must create an empty filter block
+        for_each = rule.value.filter == null && rule.value.priority != null ? [1] : []
+        content {}
+      }
+
+      dynamic "filter" {
         for_each = rule.value.filter == null ? [] : [rule.value.filter]
 
         content {
