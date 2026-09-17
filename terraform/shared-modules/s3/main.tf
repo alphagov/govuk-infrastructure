@@ -242,8 +242,10 @@ resource "aws_s3_bucket_replication_configuration" "this" {
   dynamic "rule" {
     for_each = var.replication_config.rules
     content {
-      id     = rule.value.id
-      status = rule.value.status
+      id       = rule.value.id
+      status   = rule.value.status
+      priority = rule.value.priority
+
       destination {
         bucket        = rule.value.destination.bucket
         storage_class = rule.value.destination.storage_class
@@ -256,6 +258,12 @@ resource "aws_s3_bucket_replication_configuration" "this" {
             owner = access_control_translation.value.owner
           }
         }
+      }
+
+      dynamic "filter" {
+        // Even if there are no filters, if a priority is set we must create an empty filter block
+        for_each = rule.value.filter == null && rule.value.priority != null ? [1] : []
+        content {}
       }
 
       dynamic "filter" {

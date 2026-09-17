@@ -57,23 +57,3 @@ resource "aws_iam_role_policy_attachment" "asset_manager_s3" {
   role       = data.tfe_outputs.cluster_infrastructure.nonsensitive_values.worker_iam_role_name
   policy_arn = aws_iam_policy.asset_manager_s3.arn
 }
-
-moved {
-  from = aws_s3_bucket.assets
-  to   = module.assets.aws_s3_bucket.this
-}
-
-moved {
-  from = aws_s3_bucket_lifecycle_configuration.assets
-  to   = module.assets.aws_s3_bucket_lifecycle_configuration.this[0]
-}
-
-moved {
-  from = aws_s3_bucket_logging.assets
-  to   = module.assets.aws_s3_bucket_logging.this[0]
-}
-
-moved {
-  from = aws_s3_bucket_versioning.assets
-  to   = module.assets.aws_s3_bucket_versioning.this
-}
