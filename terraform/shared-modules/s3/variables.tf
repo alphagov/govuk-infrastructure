@@ -181,7 +181,7 @@ variable "replication_config" {
       priority = optional(number)
       destination = object({
         bucket        = string
-        storage_class = string
+        storage_class = optional(string)
         account       = optional(string)
         access_control_translation = optional(object({
           owner = string
