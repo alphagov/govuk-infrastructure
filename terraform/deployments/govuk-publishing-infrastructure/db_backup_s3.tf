@@ -64,6 +64,25 @@ module "secure_s3_bucket_db_backup_main" {
       }
     }
   ] : []
+
+  replication_config = {
+    role = aws_iam_role.backup_replication.arn
+    rules = [{
+      id                        = "replicate-db-backups-out-of-region"
+      priority                  = 10
+      status                    = var.govuk_environment == "production" ? "Enabled" : "Disabled"
+      delete_marker_replication = { status = "Disabled" }
+      destination = {
+        bucket        = module.secure_s3_bucket_db_backup_replica.arn
+        storage_class = "STANDARD_IA"
+      }
+    }]
+  }
+}
+
+moved {
+  from = aws_s3_bucket_replication_configuration.backup_main
+  to   = module.secure_s3_bucket_db_backup_main.aws_s3_bucket_replication_configuration.this[0]
 }
 
 module "secure_s3_bucket_db_backup_replica" {
@@ -116,24 +135,6 @@ module "secure_s3_bucket_db_backup_replica" {
   ] : []
 }
 
-resource "aws_s3_bucket_replication_configuration" "backup_main" {
-  depends_on = [module.secure_s3_bucket_db_backup_main] # TF doesn't infer this :(
-
-  bucket = module.secure_s3_bucket_db_backup_main.name
-  role   = aws_iam_role.backup_replication.arn
-
-  rule {
-    id       = "replicate-db-backups-out-of-region"
-    priority = 10
-    status   = var.govuk_environment == "production" ? "Enabled" : "Disabled"
-    delete_marker_replication { status = "Disabled" }
-    destination {
-      bucket        = module.secure_s3_bucket_db_backup_replica.arn
-      storage_class = "STANDARD_IA"
-    }
-    filter {}
-  }
-}
 
 data "aws_iam_policy_document" "backup_s3_can_assume_role" {
   statement {
