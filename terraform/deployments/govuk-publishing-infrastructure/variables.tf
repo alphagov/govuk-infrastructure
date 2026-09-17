@@ -261,3 +261,12 @@ variable "create_google_s3_mirror_role" {
   default     = false
   description = "Whether to create an IAM role for GCP to mirror a number of S3 buckets to Google Cloud Storage"
 }
+
+variable "replicate_assets_to_environments" {
+  type = list(object({
+    destination_environment = string
+    priority                = number
+  }))
+  description = "Replicate the govuk-assets-<env> bucket to these environments"
+  default     = []
+}
