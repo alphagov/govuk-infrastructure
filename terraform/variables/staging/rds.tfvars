@@ -24,6 +24,27 @@ databases = {
     }
   }
 
+  sams_account_api = {
+    engine         = "postgres"
+    engine_version = "14"
+    engine_params = {
+      log_min_duration_statement = { value = 10000 }
+      log_statement              = { value = "ddl" }
+      deadlock_timeout           = { value = 2500 }
+      log_lock_waits             = { value = 1 }
+    }
+    engine_params_family         = "postgres14"
+    name                         = "sams-account-api"
+    allocated_storage            = 100
+    instance_class               = "db.t4g.medium"
+    performance_insights_enabled = true
+    project                      = "GOV.UK - Infrastructure"
+    snapshot_identifier          = "rds:account-api-staging-postgres-2026-09-17-01-08"
+    tags = {
+      "contains_pii" = true
+    }
+  }
+
   authenticating_proxy = {
     engine         = "postgres"
     engine_version = "14"
