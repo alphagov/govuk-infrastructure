@@ -242,8 +242,10 @@ resource "aws_s3_bucket_replication_configuration" "this" {
   dynamic "rule" {
     for_each = var.replication_config.rules
     content {
-      id     = rule.value.id
-      status = rule.value.status
+      id       = rule.value.id
+      status   = rule.value.status
+      priority = rule.value.priority
+
       destination {
         bucket        = rule.value.destination.bucket
         storage_class = rule.value.destination.storage_class
