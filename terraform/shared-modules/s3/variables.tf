@@ -175,7 +175,7 @@ variable "cors_rules" {
 variable "replication_config" {
   type = object({
     role = string
-    rules = optional(set(object({
+    rules = optional(list(object({
       id       = string
       status   = string
       priority = optional(number)
