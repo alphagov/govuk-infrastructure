@@ -1,6 +1,9 @@
-resource "aws_opensearch_domain" "opensearch" {
-  count = var.use_aws_elasticsearch_domain_resource ? 0 : 1
+moved {
+  from = aws_opensearch_domain.opensearch[0]
+  to   = aws_opensearch_domain.opensearch
+}
 
+resource "aws_opensearch_domain" "opensearch" {
   domain_name    = var.opensearch_domain_name
   engine_version = "${var.engine}_${var.engine_version}"
 
@@ -87,19 +90,20 @@ resource "aws_opensearch_domain" "opensearch" {
     subnet_ids         = var.subnet_ids
     security_group_ids = var.security_group_ids
   }
+}
 
-  access_policies = var.inline_access_policy_declaration ? data.aws_iam_policy_document.opensearch_domain.json : null
+moved {
+  from = aws_opensearch_domain_policy.main[0]
+  to   = aws_opensearch_domain_policy.main
 }
 
 resource "aws_opensearch_domain_policy" "main" {
-  count = var.use_aws_elasticsearch_domain_resource || var.inline_access_policy_declaration ? 0 : 1
-
-  domain_name     = aws_opensearch_domain.opensearch[0].domain_name
+  domain_name     = aws_opensearch_domain.opensearch.domain_name
   access_policies = data.aws_iam_policy_document.opensearch_domain.json
 
   lifecycle {
     replace_triggered_by = [
-      aws_opensearch_domain.opensearch[0]
+      aws_opensearch_domain.opensearch
     ]
   }
 }
@@ -115,15 +119,15 @@ data "aws_iam_policy_document" "opensearch_domain" {
 
     actions = ["es:*"]
 
-    // This can be simplified to the second commented out line once the inline_access_policy_declaration option has been removed
-    resources = ["arn:aws:es:${data.aws_region.current.region}:${data.aws_caller_identity.current.account_id}:domain/${var.opensearch_domain_name}/*"]
-    // resources = ["${aws_opensearch_domain.opensearch.arn}/*"]
+    resources = ["${aws_opensearch_domain.opensearch.arn}/*"]
   }
 }
 
 resource "aws_opensearch_vpc_endpoint" "opensearch" {
-  count      = var.create_vpc_endpoint && !var.use_aws_elasticsearch_domain_resource ? 1 : 0
-  domain_arn = aws_opensearch_domain.opensearch[0].arn
+  count = var.create_vpc_endpoint ? 1 : 0
+
+  domain_arn = aws_opensearch_domain.opensearch.arn
+
   vpc_options {
     subnet_ids         = var.subnet_ids
     security_group_ids = var.security_group_ids
@@ -131,7 +135,7 @@ resource "aws_opensearch_vpc_endpoint" "opensearch" {
 
   lifecycle {
     replace_triggered_by = [
-      aws_opensearch_domain.opensearch[0]
+      aws_opensearch_domain.opensearch
     ]
   }
 }

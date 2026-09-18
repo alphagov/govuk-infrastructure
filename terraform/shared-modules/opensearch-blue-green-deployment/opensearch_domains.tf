@@ -5,12 +5,8 @@ locals {
     : subnet_id if startswith(name, "elasticsearch_")
   ])
 
-  blue_domain_name = "${var.opensearch_domain_name}-blue"
-  green_domain_name = (
-    var.green_cluster_options != null && var.green_cluster_options.prefix_colour_instead_of_suffix ?
-    "green-${var.opensearch_domain_name}" :
-    "${var.opensearch_domain_name}-green"
-  )
+  blue_domain_name  = "${var.opensearch_domain_name}-blue"
+  green_domain_name = "${var.opensearch_domain_name}-green"
 }
 
 module "blue_domain" {
@@ -71,19 +67,8 @@ module "green_domain" {
   }
 
   govuk_environment   = var.govuk_environment
-  security_group_ids  = var.override_security_group_ids_for_green_cluster != null ? var.override_security_group_ids_for_green_cluster : local.security_group_ids
+  security_group_ids  = local.security_group_ids
   subnet_ids          = local.subnet_ids
-  custom_endpoint     = var.override_custom_domain_endpoint_for_green_cluster == null ? local.service_record_name : var.override_custom_domain_endpoint_for_green_cluster
+  custom_endpoint     = local.service_record_name
   create_vpc_endpoint = var.green_cluster_options.create_vpc_endpoint // || var.create_remote_connection_to_import_to_blue_from_green // I think the vpc endpoint is being made automatically
-
-  // These options only exist to allow the Search ES6 cluster to be imported and should not be used in the future
-  log_group_name_overrides                 = var.green_cluster_options.log_group_name_overrides
-  log_retention_in_days                    = var.green_cluster_options.log_retention_in_days
-  log_group_prefix_override                = var.green_cluster_options.log_group_prefix_override
-  inline_access_policy_declaration         = var.green_cluster_options.inline_access_policy_declaration
-  use_aws_elasticsearch_domain_resource    = var.use_aws_elasticsearch_domain_resource_for_green_cluster
-  override_aws_elasticsearch_domain_name   = var.override_aws_elasticsearch_domain_name_for_green_cluster
-  log_resource_policy_name_suffix_override = var.log_resource_policy_name_suffix_override_for_green_cluster
-  disable_node_to_node_encryption          = var.disable_node_to_node_encryption_for_green_cluster
-  disable_enforced_https                   = var.disable_enforced_https_for_green_cluster
 }
