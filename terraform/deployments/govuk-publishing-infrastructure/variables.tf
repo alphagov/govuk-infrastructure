@@ -255,7 +255,6 @@ variable "create_licensify_documentdb_clone" {
   description = "Whether to create a v5 clone of the Licensify DocumentDB cluster."
 }
 
-
 variable "create_google_s3_mirror_role" {
   type        = bool
   default     = false
@@ -269,4 +268,16 @@ variable "replicate_assets_to_environments" {
   }))
   description = "Replicate the govuk-assets-<env> bucket to these environments"
   default     = []
+}
+
+variable "allow_assets_to_be_replicated_from_accounts" {
+  type        = list(string)
+  description = "A list of GOV.UK AWS account names which is allowed to replicate to the s3 assets bucket govuk-assets-<env>"
+  default     = []
+}
+
+variable "backup_assets_to_secondary_bucket" {
+  type        = bool
+  description = "Create a second assets bucket in eu-west-2 and replicate assets to them"
+  default     = false
 }
