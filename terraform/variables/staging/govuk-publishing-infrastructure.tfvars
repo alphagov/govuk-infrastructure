@@ -78,3 +78,5 @@ licensify_documentdb_clone_instance_types = {
 }
 
 create_google_s3_mirror_role = true
+
+allow_assets_to_be_replicated_from_accounts = ["production"]

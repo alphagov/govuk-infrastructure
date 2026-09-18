@@ -65,7 +65,7 @@ data "aws_iam_policy_document" "assets_s3_replication" {
       "s3:GetReplicationConfiguration"
     ]
 
-    resources = [module.assets.arn]
+    resources = [module.assets_s3_bucket.arn]
   }
 
   statement {
@@ -73,7 +73,7 @@ data "aws_iam_policy_document" "assets_s3_replication" {
 
     actions = ["s3:GetObjectVersion*"]
 
-    resources = ["${module.assets.arn}/*"]
+    resources = ["${module.assets_s3_bucket.arn}/*"]
   }
 
   statement {
@@ -115,7 +115,12 @@ data "aws_s3_bucket" "assets_s3_backup" {
   bucket = "govuk-assets-backup-${var.govuk_environment}"
 }
 
-module "assets" {
+moved {
+  from = module.assets
+  to   = module.assets_s3_bucket
+}
+
+module "assets_s3_bucket" {
   source = "../../shared-modules/s3"
 
   govuk_environment = var.govuk_environment
@@ -129,6 +134,12 @@ module "assets" {
     target_bucket = "govuk-${var.govuk_environment}-aws-logging"
     target_prefix = "s3/govuk-assets-${var.govuk_environment}/"
   }
+
+  extra_bucket_policies = (
+    length(var.allow_assets_to_be_replicated_from_accounts) > 0
+    ? [data.aws_iam_policy_document.allow_cross_account_assets_s3_replication[0].json]
+    : null
+  )
 
   ownership_controls = {
     rules = [
@@ -172,6 +183,50 @@ module "assets" {
         }
     ])
   } : null
+}
+
+data "aws_iam_policy_document" "allow_cross_account_assets_s3_replication" {
+  count = length(var.allow_assets_to_be_replicated_from_accounts) > 0 ? 1 : 0
+
+  statement {
+    sid = "SetPermissionsForObjects"
+
+    actions = [
+      "s3:ReplicateObject",
+      "s3:ReplicateDelete",
+    ]
+
+    resources = ["${module.assets_s3_bucket.arn}/*"]
+
+    principals {
+      type = "AWS"
+
+      identifiers = [
+        for env in var.allow_assets_to_be_replicated_from_accounts :
+        "arn:aws:iam::${module.govuk_aws_accounts.account_name_to_id[env]}:role/govuk-${env}-assets-s3-replication"
+      ]
+    }
+  }
+
+  statement {
+    sid = "SetPermissionsOnBucket"
+
+    actions = [
+      "s3:GetBucketVersioning",
+      "s3:PutBucketVersioning",
+    ]
+
+    resources = [module.assets_s3_bucket.arn]
+
+    principals {
+      type = "AWS"
+
+      identifiers = [
+        for env in var.allow_assets_to_be_replicated_from_accounts :
+        "arn:aws:iam::${module.govuk_aws_accounts.account_name_to_id[env]}:role/govuk-${env}-assets-s3-replication"
+      ]
+    }
+  }
 }
 
 data "aws_iam_policy_document" "asset_manager_s3" {
