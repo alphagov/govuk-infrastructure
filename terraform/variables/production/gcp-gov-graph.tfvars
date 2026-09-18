@@ -98,6 +98,7 @@ bigquery_publishing_api_data_viewer_members = [
   "serviceAccount:service-942729121218@gcp-sa-dataform.iam.gserviceaccount.com",
   "serviceAccount:custom-publishing-dataform-ser@govuk-publishing.iam.gserviceaccount.com",
   "serviceAccount:publishing-looker-studio-creds@govuk-publishing.iam.gserviceaccount.com",
+  "serviceAccount:taxonomy-pipeline@govuk-publishing.iam.gserviceaccount.com",
 ]
 
 # BigQuery dataset: smart_survey
