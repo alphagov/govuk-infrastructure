@@ -255,6 +255,13 @@ resource "aws_s3_bucket_replication_configuration" "this" {
           status = "Enabled"
         }
 
+        replication_time {
+          status = "Disabled"
+          time {
+            minutes = 15
+          }
+        }
+
         dynamic "access_control_translation" {
           for_each = rule.value.destination.access_control_translation == null ? [] : [rule.value.destination.access_control_translation]
 
@@ -265,8 +272,9 @@ resource "aws_s3_bucket_replication_configuration" "this" {
       }
 
       dynamic "filter" {
-        // Even if there are no filters, if a priority is set we must create an empty filter block
-        for_each = rule.value.filter == null && rule.value.priority != null ? [1] : []
+        // Even if there are no filters we need to ensure we are on the newer schema for replication configuration
+        // and setting an empty filter block should help enforce that
+        for_each = rule.value.filter == null ? [1] : []
         content {}
       }
 
