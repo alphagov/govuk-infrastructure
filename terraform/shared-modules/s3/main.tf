@@ -303,12 +303,8 @@ resource "aws_s3_bucket_replication_configuration" "this" {
         }
       }
 
-      dynamic "delete_marker_replication" {
-        for_each = rule.value.delete_marker_replication == null ? [] : [rule.value.delete_marker_replication]
-
-        content {
-          status = delete_marker_replication.value.status
-        }
+      delete_marker_replication {
+        status = rule.value.delete_marker_replication.status
       }
     }
   }
