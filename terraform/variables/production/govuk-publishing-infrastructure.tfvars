@@ -99,6 +99,7 @@ shared_documentdb_identifier_suffix = "-1"
 
 create_google_s3_mirror_role = false
 
+backup_assets_to_secondary_bucket = true
 replicate_assets_to_environments = [
   { destination_environment = "staging", priority = 20 },
   { destination_environment = "integration", priority = 30 },
