@@ -17,7 +17,8 @@ module "db_backup_iam_role" {
   max_session_duration = 28800
 
   policies = {
-    "${aws_iam_policy.db_backup_s3.name}" = aws_iam_policy.db_backup_s3.arn
+    "${aws_iam_policy.db_backup_s3.name}"  = aws_iam_policy.db_backup_s3.arn,
+    "${aws_iam_policy.db_backup_rds.name}" = aws_iam_policy.db_backup_rds.arn
   }
   oidc_providers = {
     main = {
@@ -54,4 +55,23 @@ resource "aws_iam_policy" "db_backup_s3" {
   name        = "db_backup_s3"
   description = "Permissions over this environment's govuk-*-database-backups bucket."
   policy      = data.aws_iam_policy_document.db_backup_s3.json
+}
+
+data "aws_iam_policy_document" "db_backup_rds" {
+  statement {
+    sid = "Reboot"
+    actions = [
+      "rds:DescribeDBInstances",
+      "rds:RebootDBInstance"
+    ]
+    resources = [
+      "*"
+    ]
+  }
+}
+
+resource "aws_iam_policy" "db_backup_rds" {
+  name        = "db_backup_rds"
+  description = "Permissions to list and reboot RDS instances."
+  policy      = data.aws_iam_policy_document.db_backup_rds.json
 }
