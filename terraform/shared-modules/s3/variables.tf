@@ -200,7 +200,7 @@ variable "replication_config" {
       }))
       delete_marker_replication = optional(object({
         status = string
-      }))
+      }), { status = "Disabled" })
     })))
   })
   description = "Replicate this bucket's content to another bucket. If null, no replication will be configured."
