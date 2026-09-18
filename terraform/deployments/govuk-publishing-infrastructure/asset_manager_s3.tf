@@ -192,6 +192,7 @@ data "aws_iam_policy_document" "allow_cross_account_assets_s3_replication" {
     sid = "SetPermissionsForObjects"
 
     actions = [
+      "s3:ObjectOwnerOverrideToBucketOwner",
       "s3:ReplicateObject",
       "s3:ReplicateDelete",
     ]
