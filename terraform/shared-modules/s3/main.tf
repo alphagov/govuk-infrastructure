@@ -251,6 +251,10 @@ resource "aws_s3_bucket_replication_configuration" "this" {
         storage_class = rule.value.destination.storage_class
         account       = rule.value.destination.account
 
+        metrics {
+          status = "Enabled"
+        }
+
         dynamic "access_control_translation" {
           for_each = rule.value.destination.access_control_translation == null ? [] : [rule.value.destination.access_control_translation]
 
