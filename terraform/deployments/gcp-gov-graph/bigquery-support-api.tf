@@ -54,11 +54,16 @@ resource "google_bigquery_dataset_iam_policy" "govuk_postgres_support_api_raw_s"
 }
 
 resource "google_bigquery_table" "support_api_anonymous_contacts" {
-  dataset_id    = google_bigquery_dataset.support_api.dataset_id
-  table_id      = "anonymous_contacts"
-  friendly_name = "Anonymous contacts"
-  description   = "Contact tickets (anonymous, long-form), problem reports (collected at the bottom of a page), service feedback (rating out of 5, and what could be improved)"
-  schema        = file("schemas/support-api/anonymous-contacts.json")
+  dataset_id               = google_bigquery_dataset.support_api.dataset_id
+  table_id                 = "anonymous_contacts"
+  friendly_name            = "Anonymous contacts"
+  description              = "Contact tickets (anonymous, long-form), problem reports (collected at the bottom of a page), service feedback (rating out of 5, and what could be improved)"
+  schema                   = file("schemas/support-api/anonymous-contacts.json")
+  require_partition_filter = false
+  time_partitioning {
+    field = "created_at"
+    type  = "MONTH"
+  }
 }
 
 resource "google_bigquery_table" "support_api_archived_service_feedbacks" {
