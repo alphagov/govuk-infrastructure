@@ -59,6 +59,7 @@ bigquery_public_data_viewer_members = [
   "serviceAccount:service-419945323196@gcp-sa-dataform.iam.gserviceaccount.com",
   "serviceAccount:service-942729121218@gcp-sa-dataform.iam.gserviceaccount.com",
   "serviceAccount:publishing-looker-studio-creds@govuk-publishing.iam.gserviceaccount.com",
+  "serviceAccount:taxonomy-pipeline@govuk-publishing.iam.gserviceaccount.com",
 ]
 
 bigquery_content_data_viewer_members = [
@@ -124,6 +125,7 @@ bigquery_search_data_viewer_members = [
   "serviceAccount:wif-vectorstore@govuk-llm-question-answering.iam.gserviceaccount.com",
   "serviceAccount:custom-publishing-dataform-ser@govuk-publishing.iam.gserviceaccount.com",
   "serviceAccount:publishing-looker-studio-creds@govuk-publishing.iam.gserviceaccount.com",
+  "serviceAccount:taxonomy-pipeline@govuk-publishing.iam.gserviceaccount.com",
 ]
 
 # BigQuery dataset: test
