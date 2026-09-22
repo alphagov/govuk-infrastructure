@@ -2,65 +2,73 @@
   {
     "mode": "REQUIRED",
     "name": "edition_id",
-    "type": "INTEGER"
+    "type": "INTEGER",
+    "description": "The identifier assigned by the Publishing API to the current English-language edition representing the organisation."
   },
   {
     "mode": "NULLABLE",
     "name": "acronym",
-    "type": "STRING"
+    "type": "STRING",
+    "description": "The organisation’s acronym, if it has one."
   },
   {
     "mode": "NULLABLE",
     "name": "brand",
-    "type": "STRING"
+    "type": "STRING",
+    "description": "The organisation’s brand class name, which is mapped to a colour in the GOV.UK frontend."
   },
   {
     "mode": "REQUIRED",
     "name": "organisation_type",
-    "type": "STRING"
+    "type": "STRING",
+    "description": "The type assigned to the organisation in the Publishing API e.g. executive_ndpb, ministerial_department, devolved_administration, etc."
   },
   {
     "mode": "REQUIRED",
     "name": "foi_exempt",
-    "type": "BOOLEAN"
+    "type": "BOOLEAN",
+    "description": "Indicates whether the organisation is exempt from Freedom of Information requests."
   },
   {
     "mode": "REQUIRED",
     "name": "organisation_status",
-    "type": "STRING"
+    "type": "STRING",
+    "description": "The organisation’s status on GOV.UK. Permitted values include changed_name, merged, no_longer_exists, etc."
   },
   {
     "mode": "NULLABLE",
     "name": "organisation_status_updated_at",
-    "type": "TIMESTAMP"
+    "type": "TIMESTAMP",
+    "description": "The date and time associated with an update to the organisation’s GOV.UK status, where recorded."
   },
   {
     "mode": "NULLABLE",
     "name": "organisation_status_url",
-    "type": "STRING"
+    "type": "STRING",
+    "description": "A URL associated with the organisation’s GOV.UK status, where recorded."
   },
   {
     "mode": "REPEATED",
     "name": "parents",
     "type": "INTEGER",
-    "description": "IDs of any immediate parent organisations"
+    "description": "The edition IDs of organisations recorded directly above this organisation in the GOV.UK organisation hierarchy."
   },
   {
     "mode": "REPEATED",
     "name": "immediate_successors",
     "type": "INTEGER",
-    "description": "IDs of any immediate successors"
+    "description": "The edition IDs of organisations recorded as directly succeeding this organisation."
   },
   {
     "mode": "REPEATED",
     "name": "ancestors",
     "type": "INTEGER",
-    "description": "IDs of all ancestor organisations"
+    "description": "The edition IDs of organisations recorded at any level above this organisation in the GOV.UK organisation hierarchy. The array also includes this organisation’s own edition_id."
   },
   {
     "mode": "REPEATED",
     "name": "all_successors",
     "type": "INTEGER",
-    "description": "IDs of all eventual successors"
+    "description": "The edition IDs of organisations in the recorded succession chain for this organisation, including direct and later successors. The array also includes this organisation’s own edition_id."
   }
 ]
