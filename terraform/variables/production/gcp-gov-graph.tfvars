@@ -75,6 +75,7 @@ bigquery_content_data_viewer_members = [
 bigquery_publisher_data_viewer_members = [
   "group:govgraph-private-data-readers@digital.cabinet-office.gov.uk",
   "serviceAccount:publishing-looker-studio-creds@govuk-publishing.iam.gserviceaccount.com",
+  "serviceAccount:taxonomy-pipeline@govuk-publishing.iam.gserviceaccount.com",
 ]
 
 # BigQuery dataset: functions
