@@ -663,7 +663,6 @@ repos:
       standard_contexts: *standard_govuk_rails_checks
       additional_contexts:
         - Test Ruby
-        - Lint JavaScript / Run Standardx
         - Lint SCSS / Run Stylelint
         - Lint Views
 
