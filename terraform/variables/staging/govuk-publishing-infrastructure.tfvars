@@ -29,6 +29,7 @@ subdomain_dns_records = [
   { type = "CNAME", name = "licensify-admin", ttl = 3600, value = ["licensify-admin.eks.staging.govuk.digital."] },
   { type = "CNAME", name = "licensify.eks", ttl = 3600, value = ["licensify.eks.staging.govuk.digital."] },
   { type = "CNAME", name = "licensify", ttl = 3600, value = ["licensify.eks.staging.govuk.digital."] },
+  { type = "CNAME", name = "licensing-admin", ttl = 3600, value = ["alb-staging-105245073.eu-west-2.elb.amazonaws.com."] },
   { type = "CNAME", name = "local-links-manager", ttl = 3600, value = ["local-links-manager.eks.staging.govuk.digital."] },
   { type = "CNAME", name = "manuals-publisher", ttl = 3600, value = ["manuals-publisher.eks.staging.govuk.digital."] },
   { type = "CNAME", name = "places-manager", ttl = 3600, value = ["places-manager.eks.staging.govuk.digital."] },
