@@ -96,10 +96,6 @@ variable "services" {
   type = list(any)
 }
 
-variable "postgres-startup-script" {
-  type = string
-}
-
 variable "alerts_error_message_old_data" {
   type = string
 }
@@ -301,11 +297,6 @@ data "google_iam_policy" "project" {
         google_service_account.bigquery_page_views.member,
         google_service_account.bigquery_scheduled_queries.member,
         google_service_account.bigquery_scheduled_queries_search.member,
-        google_service_account.gce_publishing_api.member,
-        google_service_account.gce_support_api.member,
-        google_service_account.gce_publisher.member,
-        google_service_account.gce_whitehall.member,
-        google_service_account.gce_asset_manager.member,
         google_service_account.govgraphsearch.member,
         google_service_account.workflow_smart_survey.member,
         google_service_account.workflow_zendesk.member,
@@ -374,19 +365,6 @@ data "google_iam_policy" "project" {
   }
 
   binding {
-    role = "roles/compute.instanceAdmin.v1"
-    members = [
-      google_service_account.gce_publishing_api.member,
-      google_service_account.gce_support_api.member,
-      google_service_account.gce_publisher.member,
-      google_service_account.gce_whitehall.member,
-      google_service_account.gce_asset_manager.member,
-      google_service_account.workflow_govuk_database_backups.member,
-      google_service_account.workflow_redis_cli.member
-    ]
-  }
-
-  binding {
     role = "roles/compute.serviceAgent"
     members = [
       "serviceAccount:service-${var.project_number}@compute-system.iam.gserviceaccount.com",
@@ -432,16 +410,6 @@ data "google_iam_policy" "project" {
     role = "roles/iam.serviceAccountTokenCreator"
     members = [
       "serviceAccount:service-${var.project_number}@gcp-sa-pubsub.iam.gserviceaccount.com",
-    ]
-  }
-
-  binding {
-    role = "roles/logging.logWriter"
-    members = [
-      google_service_account.workflow_govuk_database_backups.member,
-      google_service_account.workflow_redis_cli.member,
-      google_service_account.gce_whitehall.member,
-      google_service_account.gce_asset_manager.member
     ]
   }
 
@@ -538,13 +506,6 @@ data "google_iam_policy" "project" {
     members = [
       google_service_account.workflow_smart_survey.member,
       google_service_account.workflow_zendesk.member,
-    ]
-  }
-
-  binding {
-    role = "roles/redis.admin"
-    members = [
-      google_service_account.gce_redis_cli.member,
     ]
   }
 
