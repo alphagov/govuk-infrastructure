@@ -95,40 +95,33 @@ data "aws_iam_policy_document" "tfc_policy" {
     ]
   }
   statement {
+    sid       = "AllowPassRoleToSelectAWSServices"
     actions   = ["iam:PassRole"]
     resources = ["*"]
     condition {
       test     = "StringEquals"
       variable = "iam:PassedToService"
       values = [
+        "bedrock.amazonaws.com",
         "chatbot.amazonaws.com",
         "eks.amazonaws.com",
+        "events.amazonaws.com",
+        "firehose.amazonaws.com",
+        "glue.amazonaws.com",
+        "lambda.amazonaws.com",
+        "monitoring.rds.amazonaws.com",
+        "pods.eks.amazonaws.com",
         "s3.amazonaws.com",
       ]
     }
   }
+  # separate iam:PassRole statement for roles that aren't
+  # being passed to an AWS service
   statement {
+    sid     = "AllowPassRoleOnSpecificRoles"
     actions = ["iam:PassRole"]
     resources = [
-      "arn:aws:iam::*:role/service-role/AWSGlueServiceRole*",
-      "arn:aws:iam::*:role/AWSGlueServiceRole*"
-    ]
-    condition {
-      test     = "StringEquals"
-      variable = "iam:PassedToService"
-      values   = ["glue.amazonaws.com"]
-    }
-  }
-  statement {
-    actions = ["iam:PassRole"]
-    resources = [
-      "arn:aws:iam::*:role/rds-monitoring-role",
-      "arn:aws:iam::*:role/govuk-*-csp-reports-firehose-role",
       "arn:aws:iam::*:role/govuk-chat-bedrock-access-role",
-      "arn:aws:iam::*:role/govuk-chat-bedrock-cloudwatch-role",
-      "arn:aws:iam::*:role/govuk-chat-eventbridge-health-alert",
-      "arn:aws:iam::*:role/govuk-fastly-diff-generator",
-      "arn:aws:iam::*:role/network-flow-agent-role"
     ]
   }
   statement {
