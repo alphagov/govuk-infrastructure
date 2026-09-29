@@ -1,24 +1,16 @@
-data "aws_lbs" "known_load_balancer_arns" {
-
-}
+data "aws_lbs" "known_load_balancer_arns" {}
 data "aws_lb" "known_load_balancers" {
   for_each = data.aws_lbs.known_load_balancer_arns.arns
   arn      = each.value
 }
 
 locals {
-
-  logging_outputs = one(data.tfe_outputs.logging[*].nonsensitive_values)
-
-  # 2. Safely look up the key inside the map using lookup()
-  logging_access_bucket_id = local.logging_outputs != null ? lookup(local.logging_outputs, "aws_logging_bucket_id", "") : ""
-  # logging_access_bucket_id = try(one(data.tfe_outputs.logging.nonsensitive_values[*].aws_logging_bucket_id), "")
-  lbs_with_access_logging = startswith(var.govuk_environment, "eph-") ? [] : {
+  lbs_with_access_logging = {
     for lb in data.aws_lb.known_load_balancers :
     lb.name => { prefix = coalesce(lb.access_logs[0].prefix, "") } if(
       length(lb.access_logs) == 1 &&
       lb.access_logs[0].enabled &&
-      lb.access_logs[0].bucket == local.logging_access_bucket_id
+      lb.access_logs[0].bucket == data.tfe_outputs.logging.nonsensitive_values.aws_logging_bucket_id
     )
   }
 }
@@ -57,11 +49,11 @@ resource "aws_glue_catalog_table" "alb_logs" {
     "projection.day.interval" = "1"
     "projection.day.digits"   = "2"
 
-    "storage.location.template" = "s3://${local.logging_access_bucket_id}/${each.value.prefix}/AWSLogs/${data.aws_caller_identity.current.account_id}/elasticloadbalancing/${data.aws_region.current.region}/$${year}/$${month}/$${day}"
+    "storage.location.template" = "s3://${data.tfe_outputs.logging.nonsensitive_values.aws_logging_bucket_id}/${each.value.prefix}/AWSLogs/${data.aws_caller_identity.current.account_id}/elasticloadbalancing/${data.aws_region.current.region}/$${year}/$${month}/$${day}"
   }
 
   storage_descriptor {
-    location = "s3://${local.logging_access_bucket_id}/${each.value.prefix}/AWSLogs/${data.aws_caller_identity.current.account_id}/elasticloadbalancing/${data.aws_region.current.region}/"
+    location = "s3://${data.tfe_outputs.logging.nonsensitive_values.aws_logging_bucket_id}/${each.value.prefix}/AWSLogs/${data.aws_caller_identity.current.account_id}/elasticloadbalancing/${data.aws_region.current.region}/"
 
     stored_as_sub_directories = true
     input_format              = "org.apache.hadoop.mapred.TextInputFormat"
