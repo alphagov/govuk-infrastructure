@@ -2,7 +2,8 @@ data "aws_lbs" "known_load_balancer_arns" {
 
 }
 data "aws_lb" "known_load_balancers" {
-  arn = each.value
+  for_each = data.aws_lbs.known_load_balancer_arns
+  arn      = each.value
 }
 
 locals {
