@@ -8,7 +8,7 @@ data "aws_lb" "known_load_balancers" {
 }
 
 locals {
-  logging_access_bucket_name = startswith(var.govuk_environment, "eph-") ? "" : data.tfe_outputs.logging.nonsensitive_values.aws_logging_bucket_id
+  logging_access_bucket_name = startswith(var.govuk_environment, "eph-") ? "" : data.tfe_outputs.logging[0].nonsensitive_values.aws_logging_bucket_id
   lbs_with_access_logging = {
     for lb in data.aws_lb.known_load_balancers :
     lb.name => { prefix = coalesce(lb.access_logs[0].prefix, "") } if(
@@ -53,11 +53,11 @@ resource "aws_glue_catalog_table" "alb_logs" {
     "projection.day.interval" = "1"
     "projection.day.digits"   = "2"
 
-    "storage.location.template" = "s3://${data.tfe_outputs.logging.nonsensitive_values.aws_logging_bucket_id}/${each.value.prefix}/AWSLogs/${data.aws_caller_identity.current.account_id}/elasticloadbalancing/${data.aws_region.current.region}/$${year}/$${month}/$${day}"
+    "storage.location.template" = "s3://${data.tfe_outputs.logging[0].nonsensitive_values.aws_logging_bucket_id}/${each.value.prefix}/AWSLogs/${data.aws_caller_identity.current.account_id}/elasticloadbalancing/${data.aws_region.current.region}/$${year}/$${month}/$${day}"
   }
 
   storage_descriptor {
-    location = "s3://${data.tfe_outputs.logging.nonsensitive_values.aws_logging_bucket_id}/${each.value.prefix}/AWSLogs/${data.aws_caller_identity.current.account_id}/elasticloadbalancing/${data.aws_region.current.region}/"
+    location = "s3://${data.tfe_outputs.logging[0].nonsensitive_values.aws_logging_bucket_id}/${each.value.prefix}/AWSLogs/${data.aws_caller_identity.current.account_id}/elasticloadbalancing/${data.aws_region.current.region}/"
 
     stored_as_sub_directories = true
     input_format              = "org.apache.hadoop.mapred.TextInputFormat"
