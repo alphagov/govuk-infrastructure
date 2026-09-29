@@ -1,4 +1,7 @@
-data "aws_lbs" "known_load_balancer_arns" {}
+data "aws_lbs" "known_load_balancer_arns" {
+  count = startswith(var.govuk_environment, "eph-") ? 1 : 0
+
+}
 data "aws_lb" "known_load_balancers" {
   for_each = data.aws_lbs.known_load_balancer_arns.arns
   arn      = each.value
@@ -21,7 +24,6 @@ resource "aws_glue_catalog_database" "alb_logs" {
 }
 
 resource "aws_glue_catalog_table" "alb_logs" {
-  count    = startswith(var.govuk_environment, "eph-") ? 1 : 0
   for_each = local.lbs_with_access_logging
 
   name          = each.key
