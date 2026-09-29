@@ -2,7 +2,7 @@ data "aws_lbs" "known_load_balancer_arns" {
 
 }
 data "aws_lb" "known_load_balancers" {
-  for_each = data.aws_lbs.known_load_balancer_arns
+  for_each = data.aws_lbs.known_load_balancer_arns.arns
   arn      = each.value
 }
 
