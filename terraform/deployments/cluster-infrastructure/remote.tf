@@ -14,6 +14,7 @@ data "tfe_outputs" "vpc" {
 }
 
 data "tfe_outputs" "logging" {
+  count        = startswith(var.govuk_environment, "eph-") ? 1 : 0
   organization = "govuk"
   workspace    = "logging-${var.govuk_environment}"
 }
