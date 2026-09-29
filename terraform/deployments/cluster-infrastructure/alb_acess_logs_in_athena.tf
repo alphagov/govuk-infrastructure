@@ -7,7 +7,8 @@ data "aws_lb" "known_load_balancers" {
 }
 
 locals {
-  logging_access_bucket_id = startswith(var.govuk_environment, "eph-") ? "" : data.tfe_outputs.logging[0].nonsensitive_values.aws_logging_bucket_id
+
+  logging_access_bucket_id = try(one(data.tfe_outputs.logging[*].nonsensitive_values.aws_logging_bucket_id), "")
   lbs_with_access_logging = startswith(var.govuk_environment, "eph-") ? [] : {
     for lb in data.aws_lb.known_load_balancers :
     lb.name => { prefix = coalesce(lb.access_logs[0].prefix, "") } if(
