@@ -1,20 +1,18 @@
 data "aws_lbs" "known_load_balancer_arns" {
-  count = startswith(var.govuk_environment, "eph-") ? 1 : 0
 
 }
 data "aws_lb" "known_load_balancers" {
-  for_each = data.aws_lbs.known_load_balancer_arns[0].arns
-  arn      = each.value
+  arn = each.value
 }
 
 locals {
-  logging_access_bucket_name = startswith(var.govuk_environment, "eph-") ? "" : data.tfe_outputs.logging[0].nonsensitive_values.aws_logging_bucket_id
+  logging_access_bucket_id = startswith(var.govuk_environment, "eph-") ? "" : data.tfe_outputs.logging[0].nonsensitive_values.aws_logging_bucket_id
   lbs_with_access_logging = startswith(var.govuk_environment, "eph-") ? [] : {
     for lb in data.aws_lb.known_load_balancers :
     lb.name => { prefix = coalesce(lb.access_logs[0].prefix, "") } if(
       length(lb.access_logs) == 1 &&
       lb.access_logs[0].enabled &&
-      lb.access_logs[0].bucket == local.logging_access_bucket_name
+      lb.access_logs[0].bucket == local.logging_access_bucket_id
     )
   }
 }
@@ -53,11 +51,11 @@ resource "aws_glue_catalog_table" "alb_logs" {
     "projection.day.interval" = "1"
     "projection.day.digits"   = "2"
 
-    "storage.location.template" = "s3://${data.tfe_outputs.logging[0].nonsensitive_values.aws_logging_bucket_id}/${each.value.prefix}/AWSLogs/${data.aws_caller_identity.current.account_id}/elasticloadbalancing/${data.aws_region.current.region}/$${year}/$${month}/$${day}"
+    "storage.location.template" = "s3://${local.logging_access_bucket_id}/${each.value.prefix}/AWSLogs/${data.aws_caller_identity.current.account_id}/elasticloadbalancing/${data.aws_region.current.region}/$${year}/$${month}/$${day}"
   }
 
   storage_descriptor {
-    location = "s3://${data.tfe_outputs.logging[0].nonsensitive_values.aws_logging_bucket_id}/${each.value.prefix}/AWSLogs/${data.aws_caller_identity.current.account_id}/elasticloadbalancing/${data.aws_region.current.region}/"
+    location = "s3://${local.logging_access_bucket_id}/${each.value.prefix}/AWSLogs/${data.aws_caller_identity.current.account_id}/elasticloadbalancing/${data.aws_region.current.region}/"
 
     stored_as_sub_directories = true
     input_format              = "org.apache.hadoop.mapred.TextInputFormat"
