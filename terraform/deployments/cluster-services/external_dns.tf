@@ -32,6 +32,8 @@ resource "helm_release" "external_dns" {
     domainFilters = [
       data.tfe_outputs.cluster_infrastructure.nonsensitive_values.external_dns_zone_name
     ]
+    annotationPrefix   = "external-dns.alpha.kubernetes.io/"
+    policy             = "upsert-only"
     interval           = "5m"
     triggerLoopOnEvent = true
   })]
