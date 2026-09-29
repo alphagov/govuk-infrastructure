@@ -21,6 +21,7 @@ resource "aws_glue_catalog_database" "alb_logs" {
 }
 
 resource "aws_glue_catalog_table" "alb_logs" {
+  count    = startswith(var.govuk_environment, "eph-") ? 1 : 0
   for_each = local.lbs_with_access_logging
 
   name          = each.key
