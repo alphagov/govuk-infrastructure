@@ -8,7 +8,11 @@ data "aws_lb" "known_load_balancers" {
 
 locals {
 
-  logging_access_bucket_id = try(one(data.tfe_outputs.logging[*].nonsensitive_values.aws_logging_bucket_id), "")
+  logging_outputs = one(data.tfe_outputs.logging[*].nonsensitive_values)
+
+  # 2. Safely look up the key inside the map using lookup()
+  logging_access_bucket_id = local.logging_outputs != null ? lookup(local.logging_outputs, "aws_logging_bucket_id", "") : ""
+  # logging_access_bucket_id = try(one(data.tfe_outputs.logging.nonsensitive_values[*].aws_logging_bucket_id), "")
   lbs_with_access_logging = startswith(var.govuk_environment, "eph-") ? [] : {
     for lb in data.aws_lb.known_load_balancers :
     lb.name => { prefix = coalesce(lb.access_logs[0].prefix, "") } if(
