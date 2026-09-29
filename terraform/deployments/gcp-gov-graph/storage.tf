@@ -45,17 +45,6 @@ data "google_iam_policy" "bucket_repository" {
   }
 
   binding {
-    role = "roles/storage.objectViewer"
-    members = [
-      google_service_account.gce_publishing_api.member,
-      google_service_account.gce_support_api.member,
-      google_service_account.gce_publisher.member,
-      google_service_account.gce_whitehall.member,
-      google_service_account.gce_asset_manager.member,
-    ]
-  }
-
-  binding {
     role = "roles/storage.legacyBucketOwner"
     members = [
       "projectEditor:${var.project_id}",
@@ -119,8 +108,6 @@ data "google_iam_policy" "bucket_data_processed" {
   binding {
     role = "roles/storage.objectAdmin"
     members = [
-      google_service_account.gce_publisher.member,
-      google_service_account.gce_asset_manager.member,
       google_service_account.rds_parquet_bq_loader.member,
       google_service_account.docdb_bq_loader.member,
     ]

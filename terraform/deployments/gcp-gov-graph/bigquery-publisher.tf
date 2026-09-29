@@ -21,7 +21,6 @@ data "google_iam_policy" "bigquery_dataset_publisher" {
     role = "roles/bigquery.dataEditor"
     members = [
       "projectWriters",
-      google_service_account.gce_publisher.member,
       google_service_account.rds_parquet_bq_loader.member,
     ]
   }

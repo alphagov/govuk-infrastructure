@@ -22,7 +22,6 @@ data "google_iam_policy" "bigquery_dataset_asset_manager" {
     members = [
       "projectWriters",
       google_service_account.bigquery_scheduled_queries.member,
-      google_service_account.gce_asset_manager.member,
       google_service_account.docdb_bq_loader.member,
     ]
   }

@@ -30,16 +30,5 @@ services = [
   "cloudquotas.googleapis.com"
 ]
 
-postgres-startup-script = <<EOF
-#cloud-config
-
-bootcmd:
-- mkfs.ext4 -F /dev/nvme0n1
-- mkdir -p /mnt/disks/local-ssd
-- mount -o discard,defaults,nobarrier /dev/nvme0n1 /mnt/disks/local-ssd
-- mkdir -p /mnt/disks/local-ssd/postgresql-data
-- mkdir -p /mnt/disks/local-ssd/data
-EOF
-
 alerts_error_message_old_data = "Old data in table"
 alerts_error_message_no_data  = "No data in table"

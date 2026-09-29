@@ -22,7 +22,6 @@ data "google_iam_policy" "bigquery_dataset_whitehall" {
     members = [
       "projectWriters",
       google_service_account.bigquery_scheduled_queries.member,
-      google_service_account.gce_whitehall.member,
       google_service_account.rds_parquet_bq_loader.member,
     ]
   }
