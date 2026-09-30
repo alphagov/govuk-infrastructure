@@ -16,7 +16,7 @@ resource "helm_release" "external_dns" {
         value = "eu-west-1"
       }
     ]
-    # extraArgs = ["--aws-zone-type=public", "--enable-legacy-annotation-prefix", "--dry-run"]
+    # annotationPrefix = "external-dns.alpha.kubernetes.io/"
     extraArgs = ["--aws-zone-type=public"]
     serviceAccount = {
       name = "external-dns"
@@ -33,8 +33,8 @@ resource "helm_release" "external_dns" {
     domainFilters = [
       data.tfe_outputs.cluster_infrastructure.nonsensitive_values.external_dns_zone_name
     ]
-    logLevel           = "debug"
-    policy             = "upsert-only"
+    logLevel = "debug"
+    # policy             = "upsert-only"
     interval           = "5m"
     triggerLoopOnEvent = true
   })]
