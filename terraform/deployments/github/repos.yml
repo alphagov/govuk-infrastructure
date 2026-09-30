@@ -1141,3 +1141,13 @@ repos:
       - "alphagov/gov-uk-information-architects"
       - "alphagov/gov-uk-production-admin"
       - "alphagov/gov-uk-production-deploy"
+
+  govuk-feedback-dataform:
+    can_be_deployed: false
+    standard_contexts: *standard_security_checks
+    required_pull_request_reviews:
+      require_code_owner_reviews: true
+    teams:
+      govuk: "maintain"
+      govuk-platform-engineering: "admin"
+      govuk-data-engineering: "admin"
