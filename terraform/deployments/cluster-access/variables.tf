@@ -16,3 +16,8 @@ variable "datagovuk_namespace" {
   default     = "datagovuk"
 }
 
+variable "job_request_operator_smoke_test_namespace" {
+  type        = string
+  description = "Name of the namespace to create for ArgoCD to deploy job request operator smoke test resources into by default."
+  default     = "job-request-operator-smoke-test"
+}
