@@ -144,7 +144,6 @@ resource "github_team" "govuk_data_engineering" {
   name        = "govuk-data-engineering"
   privacy     = "closed"
   description = "Engineers and Developers in GOV.UK data engineering"
-  slug        = "govuk-data-engineering"
 }
 
 data "github_team" "co_platform_engineering" {
