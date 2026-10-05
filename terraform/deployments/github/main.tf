@@ -140,19 +140,19 @@ resource "github_team" "govuk" {
   privacy = "closed"
 }
 
+resource "github_team" "govuk_data_engineering" {
+  name        = "govuk-data-engineering"
+  privacy     = "closed"
+  description = "Engineers and Developers in GOV.UK data engineering"
+  slug        = "govuk-data-engineering"
+}
+
 data "github_team" "co_platform_engineering" {
   slug = "co-platform-engineering"
 }
 
 data "github_team" "govuk_data" {
   slug = "gov-uk-data"
-}
-
-data "github_team" "govuk_data_engineering" {
-  name        = "govuk-data-engineering"
-  privacy     = "closed"
-  description = "Engineers and Developers in GOV.UK data engineering"
-  slug        = "govuk-data-engineering"
 }
 
 resource "github_team_repository" "govuk_ai_accelerator_repos" {
