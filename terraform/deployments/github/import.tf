@@ -4,6 +4,6 @@ import {
 }
 
 import {
-  to = github_team.govuk-data-engineering
+  to = github_team.govuk_data_engineering
   id = "govuk-data-engineering"
 }
