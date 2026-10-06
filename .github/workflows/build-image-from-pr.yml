@@ -32,6 +32,16 @@ on:
         required: false
         type: string
         default: ubuntu-latest
+      push:
+        description: >-
+          Push the built image to ghcr.io, tagged with its branch's HEAD
+          commit SHA (or the release tag on a v* gitRef). Needed by
+          anything that previews a non-main branch, e.g. govuk-preview-app.
+          Untagged images are garbage-collected after a day, tagged ones
+          after 30 - this always produces a real tag, never a bare digest.
+        required: false
+        type: boolean
+        default: false
 
 jobs:
   build-image-from-PR:
@@ -77,3 +87,20 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
           provenance: false
+
+  push-image:
+    name: Push ${{ inputs.imageName }} image from branch ${{ inputs.gitRef }}
+    if: inputs.push
+    needs: build-image-from-PR
+    uses: ./.github/workflows/build-push-arm-image.yml
+    with:
+      imageName: ${{ inputs.imageName }}
+      dockerfilePath: ${{ inputs.dockerfilePath }}
+      context: ${{ inputs.context }}
+      buildArgs: ${{ inputs.buildArgs }}
+      gitRef: ${{ inputs.gitRef }}
+      runnerName: ${{ inputs.arm64_runner_name }}
+    permissions:
+      id-token: write
+      contents: read
+      packages: write
