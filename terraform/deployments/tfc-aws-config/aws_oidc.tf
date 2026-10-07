@@ -111,6 +111,7 @@ data "aws_iam_policy_document" "tfc_policy" {
         "lambda.amazonaws.com",
         "monitoring.rds.amazonaws.com",
         "pods.eks.amazonaws.com",
+        "rds.amazonaws.com",
         "s3.amazonaws.com",
       ]
     }
