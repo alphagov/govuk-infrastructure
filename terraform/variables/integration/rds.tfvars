@@ -305,6 +305,26 @@ databases = {
     }
   }
 
+  govuk_preview_app = {
+    engine         = "postgres"
+    engine_version = "18"
+    engine_params = {
+      log_min_duration_statement = { value = 10000 }
+      log_statement              = { value = "ddl" }
+      deadlock_timeout           = { value = 2500 }
+      log_lock_waits             = { value = 1 }
+    }
+    engine_params_family         = "postgres18"
+    name                         = "govuk-preview-app"
+    allocated_storage            = 100
+    instance_class               = "db.t4g.small"
+    performance_insights_enabled = false
+    project                      = "GOV.UK - Infrastructure"
+    tags = {
+      "used_by" = "govuk-preview-app"
+    }
+  }
+
   link_checker_api = {
     engine         = "postgres"
     engine_version = "14"
