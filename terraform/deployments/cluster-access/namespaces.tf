@@ -50,6 +50,24 @@ resource "kubernetes_namespace_v1" "datagovuk" {
   }
 }
 
+import {
+  to = kubernetes_namespace_v1.job-request-operator
+  id = "job-request-operator"
+}
+
+resource "kubernetes_namespace_v1" "job-request-operator" {
+  metadata {
+    name = var.job_request_operator_namespace
+    annotations = {
+      "argocd.argoproj.io/sync-options" = "ServerSideApply=true"
+    }
+    labels = {
+      "app.kubernetes.io/managed-by"  = "Terraform"
+      "argocd.argoproj.io/managed-by" = "cluster-services"
+    }
+  }
+}
+
 resource "kubernetes_namespace_v1" "job-request-operator-smoke-test" {
   count = startswith(var.govuk_environment, "production") ? 1 : 0
   metadata {
