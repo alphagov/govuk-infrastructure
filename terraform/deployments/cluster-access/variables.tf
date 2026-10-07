@@ -22,6 +22,12 @@ variable "job_request_operator_namespace" {
   default     = "job-request-operator"
 }
 
+variable "enable_job_request_operator_smoke_test_namespace" {
+  type        = bool
+  description = "Whether the job-request-operator-smoke-test namespace should be created"
+  nullable    = false
+}
+
 variable "job_request_operator_smoke_test_namespace" {
   type        = string
   description = "Name of the namespace to create for ArgoCD to deploy job request operator smoke test resources into by default."
