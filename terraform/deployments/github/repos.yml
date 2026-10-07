@@ -491,6 +491,13 @@ repos:
       source_owner: "alexbasista"
       source_repo: "terraform-tfe-workspacer"
 
+  govuk-preview-app:
+    can_be_deployed: true
+    required_status_checks:
+      standard_contexts: *standard_govuk_rails_checks
+      additional_contexts:
+        - Test Ruby / Run RSpec
+
   govuk-publishing-documentation:
     visibility: private
     branch_protection: false
