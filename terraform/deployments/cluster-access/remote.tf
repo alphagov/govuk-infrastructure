@@ -1,5 +1,6 @@
 locals {
-  env_suffix = startswith(var.govuk_environment, "eph-") ? "ephemeral" : "${var.govuk_environment}"
+  env_suffix         = startswith(var.govuk_environment, "eph-") ? "ephemeral" : "${var.govuk_environment}"
+  previews_namespace = "previews"
 }
 
 data "aws_region" "current" {}

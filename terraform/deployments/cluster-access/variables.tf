@@ -33,3 +33,9 @@ variable "job_request_operator_smoke_test_namespace" {
   description = "Name of the namespace to create for ArgoCD to deploy job request operator smoke test resources into by default."
   default     = "job-request-operator-smoke-test"
 }
+
+variable "enable_previews_namespace" {
+  type        = bool
+  description = "Creates the previews namespace for govuk-preview-app's ephemeral per-branch previews of other apps. Set per-environment in that environment's own tfvars, rather than comparing against govuk_environment directly, so adding a new environment never has to reason about this namespace."
+  default     = false
+}
