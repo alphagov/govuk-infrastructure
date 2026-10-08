@@ -22,6 +22,7 @@ locals {
     "feedback",
     "finder-frontend",
     "frontend",
+    "govuk-preview-app",
     "govspeak-preview",
     "hmrc-manuals-api",
     "licensify",
