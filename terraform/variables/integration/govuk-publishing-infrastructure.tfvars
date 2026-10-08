@@ -28,6 +28,7 @@ subdomain_dns_records = [
   { type = "CNAME", name = "draft-origin", ttl = 3600, value = ["draft-origin.eks.integration.govuk.digital."] },
   { type = "CNAME", name = "email-alert-api-public", ttl = 3600, value = ["email-alert-api.eks.integration.govuk.digital."] },
   { type = "CNAME", name = "fact-check-manager", ttl = 3600, value = ["fact-check-manager.eks.integration.govuk.digital."] },
+  { type = "CNAME", name = "govuk-preview-app", ttl = 3600, value = ["govuk-preview-app.eks.integration.govuk.digital."] },
   { type = "CNAME", name = "hmrc-manuals-api", ttl = 3600, value = ["hmrc-manuals-api.eks.integration.govuk.digital."] },
   { type = "CNAME", name = "licensify.eks", ttl = 3600, value = ["licensify.eks.integration.govuk.digital."] },
   { type = "CNAME", name = "licensify", ttl = 3600, value = ["licensify.eks.integration.govuk.digital."] },
