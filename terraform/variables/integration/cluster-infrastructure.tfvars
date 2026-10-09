@@ -2,6 +2,8 @@
 
 cluster_version = "1.36"
 
+enable_govuk_preview_app_wildcard_cert = true
+
 enable_container_network_observability = true
 enable_eks_pod_identity_addon          = true
 enable_network_flow_addon              = true
