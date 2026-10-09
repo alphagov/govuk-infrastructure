@@ -9,6 +9,12 @@ variable "external_dns_subdomain" {
   default     = "eks"
 }
 
+variable "enable_govuk_preview_app_wildcard_cert" {
+  type        = bool
+  description = "Provisions a wildcard ACM cert for *.govuk-preview-app.<external_dns_subdomain>.<domain> - every ephemeral preview's own hostname, one level deeper than the shared cert in external_dns.tf covers. Only exists where govuk-preview-app itself does. Set per-environment in that environment's own tfvars, rather than comparing against govuk_environment directly, so adding a new environment never has to reason about this."
+  default     = false
+}
+
 variable "enable_container_network_observability" {
   type        = bool
   description = "Whether to enable Container Network Observability configuration"
