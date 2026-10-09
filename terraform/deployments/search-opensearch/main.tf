@@ -19,8 +19,12 @@ provider "aws" {
 
   default_tags {
     tags = {
-      aws_environment      = var.govuk_environment
+      Product              = "GOV.UK"
+      Environment          = var.govuk_environment
+      Owner                = "govuk-platform-engineering@digital.cabinet-office.gov.uk"
+      Service              = "govuk-search"
       project              = "GOV.UK - Search"
+      repository           = "govuk-infrastructure"
       terraform_deployment = "search-opensearch"
     }
   }
