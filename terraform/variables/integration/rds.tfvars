@@ -83,7 +83,7 @@ databases = {
       max_logical_replication_workers = { value = 20, apply_method = "pending-reboot" }
       max_worker_processes            = { value = 40, apply_method = "pending-reboot" }
     }
-    engine_params_family         = "postgres18"
+    engine_params_family         = "postgres14"
     name                         = "ckan"
     allocated_storage            = 1000
     instance_class               = "db.m6g.large"
