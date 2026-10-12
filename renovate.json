@@ -98,8 +98,5 @@
             "datasourceTemplate": "docker",
             "depNameTemplate": "elastic/filebeat"
         }
-    ],
-    "ignorePaths": [
-        "terraform/deployments/gcp-gov-graph/**"
     ]
 }
