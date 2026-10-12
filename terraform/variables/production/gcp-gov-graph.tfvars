@@ -108,6 +108,8 @@ bigquery_smart_survey_data_viewer_members = [
   "serviceAccount:data-engineering@govuk-user-feedback-dev.iam.gserviceaccount.com",
   "serviceAccount:data-engineering@govuk-user-feedback-staging.iam.gserviceaccount.com",
   "serviceAccount:data-engineering@govuk-user-feedback.iam.gserviceaccount.com",
+  "serviceAccount:feedback-processing-dev@gds-bq-processing.iam.gserviceaccount.com",
+  "serviceAccount:feedback-processing-prod@gds-bq-processing.iam.gserviceaccount.com",
 ]
 
 # BigQuery dataset: support-api
@@ -115,6 +117,8 @@ bigquery_support_api_data_viewer_members = [
   "serviceAccount:data-engineering@govuk-user-feedback-dev.iam.gserviceaccount.com",
   "serviceAccount:data-engineering@govuk-user-feedback-staging.iam.gserviceaccount.com",
   "serviceAccount:data-engineering@govuk-user-feedback.iam.gserviceaccount.com",
+  "serviceAccount:feedback-processing-dev@gds-bq-processing.iam.gserviceaccount.com",
+  "serviceAccount:feedback-processing-prod@gds-bq-processing.iam.gserviceaccount.com",
 ]
 
 # BigQuery dataset: search
