@@ -158,19 +158,37 @@ resource "aws_security_group_rule" "eks_ingress_www_origin_from_eks_nat" {
 }
 
 resource "aws_vpc_security_group_ingress_rule" "eks_ingress_www_origin_from_fastly_http" {
-  description       = "EKS ingress www-origin accepts requests from Fastly"
+  description       = "EKS ingress www-origin accepts HTTP requests from Fastly"
   prefix_list_id    = aws_ec2_managed_prefix_list.fastly.id
   ip_protocol       = "tcp"
   from_port         = 80
+  to_port           = 80
+  security_group_id = aws_security_group.eks_ingress_www_origin.id
+}
+
+resource "aws_vpc_security_group_ingress_rule" "eks_ingress_www_origin_from_fastly_https" {
+  description       = "EKS ingress www-origin accepts HTTPS requests from Fastly"
+  prefix_list_id    = aws_ec2_managed_prefix_list.fastly.id
+  ip_protocol       = "tcp"
+  from_port         = 443
   to_port           = 443
   security_group_id = aws_security_group.eks_ingress_www_origin.id
 }
 
 resource "aws_vpc_security_group_ingress_rule" "eks_ingress_www_origin_from_office_http" {
-  description       = "EKS ingress www-origin accepts requests from Office IPs"
+  description       = "EKS ingress www-origin accepts HTTP requests from Office IPs"
   prefix_list_id    = aws_ec2_managed_prefix_list.office.id
   ip_protocol       = "tcp"
   from_port         = 80
+  to_port           = 80
+  security_group_id = aws_security_group.eks_ingress_www_origin.id
+}
+
+resource "aws_vpc_security_group_ingress_rule" "eks_ingress_www_origin_from_office_https" {
+  description       = "EKS ingress www-origin accepts HTTPS requests from Office IPs"
+  prefix_list_id    = aws_ec2_managed_prefix_list.office.id
+  ip_protocol       = "tcp"
+  from_port         = 443
   to_port           = 443
   security_group_id = aws_security_group.eks_ingress_www_origin.id
 }
