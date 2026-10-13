@@ -1019,12 +1019,24 @@ repos:
       additional_contexts:
         - Test
 
+  # pull_request_bypassers and push_allowances here use GitHub node IDs
+  # instead of names. This is because we're mixing teams and
+  # GitHub apps, and the API only supports doing this if we
+  # provide node IDs instead of the names of the entities we want
+  # https://github.com/integrations/terraform-provider-github/blob/091a326c9ce492fc5d4586739ef3981aabdc09ca/docs/resources/branch_protection.md?plain=1#L52-L55
   govuk-synthetic-test-app-canary:
     can_be_deployed: true
     required_status_checks:
       additional_contexts:
         - Test
     standard_contexts: *standard_security_checks
+    required_pull_request_reviews:
+      pull_request_bypassers:
+        - "A_kwHOAAkb8c4AUBf1" # gov-uk-synthetic-test-app-canary GitHub app
+    push_allowances:
+      - "A_kwHOAAkb8c4AUBf1" # gov-uk-synthetic-test-app-canary GitHub app
+      - "MDQ6VGVhbTMyNzkyNDQ=" # GOV.UK Production Admin
+      - "T_kwDOAAkb8c4AXIlh" # GOV.UK Production Deploy
 
   govuk-synthetic-test-runner:
     archived: true
