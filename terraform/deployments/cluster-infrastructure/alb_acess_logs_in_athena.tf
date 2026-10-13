@@ -3,7 +3,7 @@ data "aws_lbs" "known_load_balancer_arns" {
 }
 
 data "aws_lb" "known_load_balancers" {
-  for_each = var.enable_lb_access_log_querying_with_athena ? data.aws_lbs.known_load_balancer_arns[0].arns : []
+  for_each = var.enable_lb_access_log_querying_with_athena ? data.aws_lbs.known_load_balancer_arns[0].arns : toset([])
 
   arn = each.value
 }
