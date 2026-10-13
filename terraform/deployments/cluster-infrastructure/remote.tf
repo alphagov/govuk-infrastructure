@@ -14,6 +14,8 @@ data "tfe_outputs" "vpc" {
 }
 
 data "tfe_outputs" "logging" {
+  count = var.enable_lb_access_log_querying_with_athena ? 1 : 0
+
   organization = "govuk"
   workspace    = "logging-${var.govuk_environment}"
 }
