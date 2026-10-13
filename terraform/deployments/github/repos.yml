@@ -1032,11 +1032,7 @@ repos:
     standard_contexts: *standard_security_checks
     required_pull_request_reviews:
       pull_request_bypassers:
-        - "A_kwHOAAkb8c4AUBf1" # gov-uk-synthetic-test-app-canary GitHub app
-    push_allowances:
-      - "A_kwHOAAkb8c4AUBf1" # gov-uk-synthetic-test-app-canary GitHub app
-      - "MDQ6VGVhbTMyNzkyNDQ=" # GOV.UK Production Admin
-      - "T_kwDOAAkb8c4AXIlh" # GOV.UK Production Deploy
+        - "BOT_kgDOFEUNiw" # gov-uk-synthetic-test-app-canary GitHub app (using a bot node_id)
 
   govuk-synthetic-test-runner:
     archived: true
