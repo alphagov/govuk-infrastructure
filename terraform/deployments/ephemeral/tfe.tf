@@ -68,6 +68,10 @@ module "cluster_infrastructure" {
   variable_set_id      = module.var_set.id
   git_branch           = var.git_branch
 
+  tfvars = {
+    enable_lb_access_log_querying_with_athena = false
+  }
+
   depends_on = [module.vpc, tfe_project.project]
 }
 

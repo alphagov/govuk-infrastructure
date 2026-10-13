@@ -1,7 +1,11 @@
-data "aws_lbs" "known_load_balancer_arns" {}
+data "aws_lbs" "known_load_balancer_arns" {
+  count = var.enable_lb_access_log_querying_with_athena ? 1 : 0
+}
+
 data "aws_lb" "known_load_balancers" {
-  for_each = data.aws_lbs.known_load_balancer_arns.arns
-  arn      = each.value
+  for_each = var.enable_lb_access_log_querying_with_athena ? data.aws_lbs.known_load_balancer_arns[0].arns : []
+
+  arn = each.value
 }
 
 locals {
@@ -10,12 +14,14 @@ locals {
     lb.name => { prefix = coalesce(lb.access_logs[0].prefix, "") } if(
       length(lb.access_logs) == 1 &&
       lb.access_logs[0].enabled &&
-      lb.access_logs[0].bucket == data.tfe_outputs.logging.nonsensitive_values.aws_logging_bucket_id
+      lb.access_logs[0].bucket == data.tfe_outputs.logging[0].nonsensitive_values.aws_logging_bucket_id
     )
   }
 }
 
 resource "aws_glue_catalog_database" "alb_logs" {
+  count = var.enable_lb_access_log_querying_with_athena ? 1 : 0
+
   name        = "${var.govuk_environment}_alb_logs"
   description = "Contains access logs from application load balancers in the account"
 }
@@ -25,7 +31,7 @@ resource "aws_glue_catalog_table" "alb_logs" {
 
   name          = each.key
   description   = "Holds all ALB access logs for load balancer ${each.key} in ${var.govuk_environment} environment"
-  database_name = aws_glue_catalog_database.alb_logs.name
+  database_name = aws_glue_catalog_database.alb_logs[0].name
   table_type    = "EXTERNAL_TABLE"
 
 
@@ -49,11 +55,11 @@ resource "aws_glue_catalog_table" "alb_logs" {
     "projection.day.interval" = "1"
     "projection.day.digits"   = "2"
 
-    "storage.location.template" = "s3://${data.tfe_outputs.logging.nonsensitive_values.aws_logging_bucket_id}/${each.value.prefix}/AWSLogs/${data.aws_caller_identity.current.account_id}/elasticloadbalancing/${data.aws_region.current.region}/$${year}/$${month}/$${day}"
+    "storage.location.template" = "s3://${data.tfe_outputs.logging[0].nonsensitive_values.aws_logging_bucket_id}/${each.value.prefix}/AWSLogs/${data.aws_caller_identity.current.account_id}/elasticloadbalancing/${data.aws_region.current.region}/$${year}/$${month}/$${day}"
   }
 
   storage_descriptor {
-    location = "s3://${data.tfe_outputs.logging.nonsensitive_values.aws_logging_bucket_id}/${each.value.prefix}/AWSLogs/${data.aws_caller_identity.current.account_id}/elasticloadbalancing/${data.aws_region.current.region}/"
+    location = "s3://${data.tfe_outputs.logging[0].nonsensitive_values.aws_logging_bucket_id}/${each.value.prefix}/AWSLogs/${data.aws_caller_identity.current.account_id}/elasticloadbalancing/${data.aws_region.current.region}/"
 
     stored_as_sub_directories = true
     input_format              = "org.apache.hadoop.mapred.TextInputFormat"

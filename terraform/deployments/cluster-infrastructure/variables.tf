@@ -230,3 +230,10 @@ variable "use_secretsmanager_endpoints" {
   description = "If true, create VPC endpoints for Secrets Manager, to avoid using the NAT gateway for this traffic."
   default     = true
 }
+
+variable "enable_lb_access_log_querying_with_athena" {
+  type        = bool
+  description = "Setup Athena to query Load Balancer access logs"
+  default     = true
+  nullable    = false
+}
