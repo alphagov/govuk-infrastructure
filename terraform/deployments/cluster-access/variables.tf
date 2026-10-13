@@ -25,7 +25,8 @@ variable "job_request_operator_namespace" {
 variable "enable_job_request_operator_smoke_test_namespace" {
   type        = bool
   description = "Whether the job-request-operator-smoke-test namespace should be created"
-  nullable    = false
+  nullable    = true
+  default     = false
 }
 
 variable "job_request_operator_smoke_test_namespace" {
@@ -39,3 +40,4 @@ variable "enable_previews_namespace" {
   description = "Creates the previews namespace for govuk-preview-app's ephemeral per-branch previews of other apps. Set per-environment in that environment's own tfvars, rather than comparing against govuk_environment directly, so adding a new environment never has to reason about this namespace."
   default     = false
 }
+
