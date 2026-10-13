@@ -13,6 +13,36 @@ data "aws_ec2_managed_prefix_list" "cloudfront" {
   name = "com.amazonaws.global.cloudfront.origin-facing"
 }
 
+# Managed Prefix List for Fastly POPs
+resource "aws_ec2_managed_prefix_list" "fastly" {
+  name           = "fastly-cdn-ranges"
+  address_family = "IPv4"
+  max_entries    = "25"
+
+  dynamic "entry" {
+    for_each = data.fastly_ip_ranges.fastly.cidr_blocks
+    content {
+      cidr        = entry.value
+      description = "Fastly Edge POP"
+    }
+  }
+}
+
+# Managed Prefix List for Fastly POPs
+resource "aws_ec2_managed_prefix_list" "office" {
+  name           = "office-ips"
+  address_family = "IPv4"
+  max_entries    = "20"
+
+  dynamic "entry" {
+    for_each = var.office_ips
+    content {
+      cidr        = entry.value
+      description = "Office IPs"
+    }
+  }
+}
+
 #
 # Frontend memcached
 #
@@ -127,6 +157,25 @@ resource "aws_security_group_rule" "eks_ingress_www_origin_from_eks_nat" {
   security_group_id = aws_security_group.eks_ingress_www_origin.id
 }
 
+resource "aws_vpc_security_group_ingress_rule" "eks_ingress_www_origin_from_fastly_http" {
+  description       = "EKS ingress www-origin accepts requests from Fastly"
+  prefix_list_id    = aws_ec2_managed_prefix_list.fastly.id
+  ip_protocol       = "tcp"
+  from_port         = 80
+  to_port           = 443
+  security_group_id = aws_security_group.eks_ingress_www_origin.id
+}
+
+resource "aws_vpc_security_group_ingress_rule" "eks_ingress_www_origin_from_office_http" {
+  description       = "EKS ingress www-origin accepts requests from Office IPs"
+  prefix_list_id    = aws_ec2_managed_prefix_list.office.id
+  ip_protocol       = "tcp"
+  from_port         = 80
+  to_port           = 443
+  security_group_id = aws_security_group.eks_ingress_www_origin.id
+}
+
+# TODO: Delete me after new SG Ingress Rules (above) are applied:
 resource "aws_security_group_rule" "eks_ingress_www_origin_from_office_and_fastly_http" {
   description       = "EKS ingress www-origin accepts requests from office and Fastly"
   type              = "ingress"
@@ -135,6 +184,10 @@ resource "aws_security_group_rule" "eks_ingress_www_origin_from_office_and_fastl
   protocol          = "tcp"
   cidr_blocks       = concat(var.office_ips, data.fastly_ip_ranges.fastly.cidr_blocks)
   security_group_id = aws_security_group.eks_ingress_www_origin.id
+
+  lifecycle {
+    ignore_changes = [cidr_blocks]
+  }
 }
 
 resource "aws_security_group_rule" "eks_ingress_www_origin_from_cloudfront_https" {
