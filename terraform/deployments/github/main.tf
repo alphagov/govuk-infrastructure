@@ -312,7 +312,8 @@ resource "github_repository_dependabot_security_updates" "govuk_repos" {
 resource "github_branch_protection" "govuk_repos" {
   for_each = { for repo_name, repo_details in local.repositories : repo_name => repo_details if
     try(repo_details["branch_protection"], true) &&
-    !try(repo_details.archived, false)
+    !try(repo_details.archived, false) &&
+    repo_name != "govuk-synthetic-test-app-canary"
   }
 
   repository_id    = github_repository.govuk_repos[each.key].node_id
