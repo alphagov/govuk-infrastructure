@@ -17,7 +17,7 @@ data "aws_ec2_managed_prefix_list" "cloudfront" {
 resource "aws_ec2_managed_prefix_list" "fastly" {
   name           = "fastly-cdn-ranges"
   address_family = "IPv4"
-  max_entries    = "25"
+  max_entries    = 25
 
   dynamic "entry" {
     for_each = data.fastly_ip_ranges.fastly.cidr_blocks
@@ -28,11 +28,11 @@ resource "aws_ec2_managed_prefix_list" "fastly" {
   }
 }
 
-# Managed Prefix List for Fastly POPs
+# Managed Prefix List for Office IPs
 resource "aws_ec2_managed_prefix_list" "office" {
   name           = "office-ips"
   address_family = "IPv4"
-  max_entries    = "20"
+  max_entries    = 20
 
   dynamic "entry" {
     for_each = var.office_ips
@@ -136,6 +136,18 @@ resource "aws_security_group_rule" "efs_from_eks_workers" {
 #
 # EKS Ingress-managed ALBs
 #
+# eks_ingress_www_origin is the base SG attached to every www-origin ALB. It holds
+# egress and is the SG trusted by the EKS nodes. Each upstream source (CloudFront,
+# Fastly, office) has its own SG so that they can be managed independently and each
+# stays within the per-SG rule quota (a rule referencing a prefix list counts the
+# list's max_entries against the quota, once per rule).
+#
+# ALBs select these SGs by name via the alb.ingress.kubernetes.io/security-groups
+# annotation in govuk-helm-charts.
+
+locals {
+  eks_ingress_www_origin_ports = { http = 80, https = 443 }
+}
 
 resource "aws_security_group" "eks_ingress_www_origin" {
   name        = "eks_ingress_www_origin"
@@ -157,43 +169,7 @@ resource "aws_security_group_rule" "eks_ingress_www_origin_from_eks_nat" {
   security_group_id = aws_security_group.eks_ingress_www_origin.id
 }
 
-resource "aws_vpc_security_group_ingress_rule" "eks_ingress_www_origin_from_fastly_http" {
-  description       = "EKS ingress www-origin accepts HTTP requests from Fastly"
-  prefix_list_id    = aws_ec2_managed_prefix_list.fastly.id
-  ip_protocol       = "tcp"
-  from_port         = 80
-  to_port           = 80
-  security_group_id = aws_security_group.eks_ingress_www_origin.id
-}
-
-resource "aws_vpc_security_group_ingress_rule" "eks_ingress_www_origin_from_fastly_https" {
-  description       = "EKS ingress www-origin accepts HTTPS requests from Fastly"
-  prefix_list_id    = aws_ec2_managed_prefix_list.fastly.id
-  ip_protocol       = "tcp"
-  from_port         = 443
-  to_port           = 443
-  security_group_id = aws_security_group.eks_ingress_www_origin.id
-}
-
-resource "aws_vpc_security_group_ingress_rule" "eks_ingress_www_origin_from_office_http" {
-  description       = "EKS ingress www-origin accepts HTTP requests from Office IPs"
-  prefix_list_id    = aws_ec2_managed_prefix_list.office.id
-  ip_protocol       = "tcp"
-  from_port         = 80
-  to_port           = 80
-  security_group_id = aws_security_group.eks_ingress_www_origin.id
-}
-
-resource "aws_vpc_security_group_ingress_rule" "eks_ingress_www_origin_from_office_https" {
-  description       = "EKS ingress www-origin accepts HTTPS requests from Office IPs"
-  prefix_list_id    = aws_ec2_managed_prefix_list.office.id
-  ip_protocol       = "tcp"
-  from_port         = 443
-  to_port           = 443
-  security_group_id = aws_security_group.eks_ingress_www_origin.id
-}
-
-# TODO: Delete me after new SG Ingress Rules (above) are applied:
+# TODO: Delete once the per-source SGs below are attached to all ALBs in govuk-helm-charts.
 resource "aws_security_group_rule" "eks_ingress_www_origin_from_office_and_fastly_http" {
   description       = "EKS ingress www-origin accepts requests from office and Fastly"
   type              = "ingress"
@@ -208,6 +184,7 @@ resource "aws_security_group_rule" "eks_ingress_www_origin_from_office_and_fastl
   }
 }
 
+# TODO: Delete once the per-source SGs below are attached to all ALBs in govuk-helm-charts.
 resource "aws_security_group_rule" "eks_ingress_www_origin_from_cloudfront_https" {
   description       = "EKS ingress www-origin accepts requests from Cloudfront"
   type              = "ingress"
@@ -237,4 +214,66 @@ resource "aws_security_group_rule" "eks_workers_from_eks_ingress_www_origin" {
   protocol                 = "tcp"
   security_group_id        = data.tfe_outputs.cluster_infrastructure.nonsensitive_values.node_security_group_id
   source_security_group_id = aws_security_group.eks_ingress_www_origin.id
+}
+
+# CloudFront
+
+resource "aws_security_group" "eks_ingress_www_origin_from_cloudfront" {
+  name        = "eks_ingress_www_origin_from_cloudfront"
+  vpc_id      = data.tfe_outputs.vpc.nonsensitive_values.id
+  description = "Allows CloudFront to reach EKS www-origin ALBs."
+  tags = {
+    Name   = "eks_ingress_www_origin_from_cloudfront"
+  }
+}
+
+resource "aws_vpc_security_group_ingress_rule" "eks_ingress_www_origin_from_cloudfront_https" {
+  description       = "EKS ingress www-origin accepts HTTPS requests from CloudFront"
+  security_group_id = aws_security_group.eks_ingress_www_origin_from_cloudfront.id
+  prefix_list_id    = data.aws_ec2_managed_prefix_list.cloudfront.id
+  ip_protocol       = "tcp"
+  from_port         = 443
+  to_port           = 443
+}
+
+# Fastly
+
+resource "aws_security_group" "eks_ingress_www_origin_from_fastly" {
+  name        = "eks_ingress_www_origin_from_fastly"
+  vpc_id      = data.tfe_outputs.vpc.nonsensitive_values.id
+  description = "Allows Fastly POPs to reach EKS www-origin ALBs."
+  tags = {
+    Name   = "eks_ingress_www_origin_from_fastly"
+  }
+}
+
+resource "aws_vpc_security_group_ingress_rule" "eks_ingress_www_origin_from_fastly" {
+  for_each          = local.eks_ingress_www_origin_ports
+  description       = "EKS ingress www-origin accepts ${upper(each.key)} requests from Fastly"
+  security_group_id = aws_security_group.eks_ingress_www_origin_from_fastly.id
+  prefix_list_id    = aws_ec2_managed_prefix_list.fastly.id
+  ip_protocol       = "tcp"
+  from_port         = each.value
+  to_port           = each.value
+}
+
+# Office
+
+resource "aws_security_group" "eks_ingress_www_origin_from_office" {
+  name        = "eks_ingress_www_origin_from_office"
+  vpc_id      = data.tfe_outputs.vpc.nonsensitive_values.id
+  description = "Allows office IPs to reach EKS www-origin ALBs."
+  tags = {
+    Name   = "eks_ingress_www_origin_from_office"
+  }
+}
+
+resource "aws_vpc_security_group_ingress_rule" "eks_ingress_www_origin_from_office" {
+  for_each          = local.eks_ingress_www_origin_ports
+  description       = "EKS ingress www-origin accepts ${upper(each.key)} requests from office IPs"
+  security_group_id = aws_security_group.eks_ingress_www_origin_from_office.id
+  prefix_list_id    = aws_ec2_managed_prefix_list.office.id
+  ip_protocol       = "tcp"
+  from_port         = each.value
+  to_port           = each.value
 }
