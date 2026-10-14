@@ -223,7 +223,7 @@ resource "aws_security_group" "eks_ingress_www_origin_from_cloudfront" {
   vpc_id      = data.tfe_outputs.vpc.nonsensitive_values.id
   description = "Allows CloudFront to reach EKS www-origin ALBs."
   tags = {
-    Name   = "eks_ingress_www_origin_from_cloudfront"
+    Name = "eks_ingress_www_origin_from_cloudfront"
   }
 }
 
@@ -243,7 +243,7 @@ resource "aws_security_group" "eks_ingress_www_origin_from_fastly" {
   vpc_id      = data.tfe_outputs.vpc.nonsensitive_values.id
   description = "Allows Fastly POPs to reach EKS www-origin ALBs."
   tags = {
-    Name   = "eks_ingress_www_origin_from_fastly"
+    Name = "eks_ingress_www_origin_from_fastly"
   }
 }
 
@@ -264,7 +264,7 @@ resource "aws_security_group" "eks_ingress_www_origin_from_office" {
   vpc_id      = data.tfe_outputs.vpc.nonsensitive_values.id
   description = "Allows office IPs to reach EKS www-origin ALBs."
   tags = {
-    Name   = "eks_ingress_www_origin_from_office"
+    Name = "eks_ingress_www_origin_from_office"
   }
 }
 
