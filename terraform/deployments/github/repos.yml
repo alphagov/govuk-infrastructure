@@ -1015,9 +1015,6 @@ repos:
 
   govuk-synthetic-test-app:
     can_be_deployed: true
-    required_status_checks:
-      additional_contexts:
-        - Test
 
   # pull_request_bypassers and push_allowances here use GitHub node IDs
   # instead of names. This is because we're mixing teams and
