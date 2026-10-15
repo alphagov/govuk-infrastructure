@@ -381,7 +381,7 @@ data "google_iam_policy" "project" {
   binding {
     role = "roles/dlp.user"
     members = [
-      google_service_account.data_loss_prevention.member,
+      google_service_account.dlp_deidentify_service.member,
     ]
   }
 
