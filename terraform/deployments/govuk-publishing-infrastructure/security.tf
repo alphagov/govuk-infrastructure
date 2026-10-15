@@ -195,6 +195,7 @@ resource "aws_security_group_rule" "eks_ingress_www_origin_from_cloudfront_https
   security_group_id = aws_security_group.eks_ingress_www_origin.id
 }
 
+# TODO: Delete once eks_ingress_www_origin_to_eks_workers (below) is applied in all environments.
 resource "aws_security_group_rule" "eks_ingress_www_origin_to_any_any" {
   description       = "EKS ingress www-origin sends requests to anywhere over any protocol"
   type              = "egress"
@@ -203,6 +204,16 @@ resource "aws_security_group_rule" "eks_ingress_www_origin_to_any_any" {
   protocol          = -1
   cidr_blocks       = ["0.0.0.0/0"]
   security_group_id = aws_security_group.eks_ingress_www_origin.id
+}
+
+# ALBs use target-type ip, so they only need to reach pods (which carry the node SG).
+resource "aws_vpc_security_group_egress_rule" "eks_ingress_www_origin_to_eks_workers" {
+  description                  = "EKS ingress www-origin sends requests to EKS workers"
+  security_group_id            = aws_security_group.eks_ingress_www_origin.id
+  referenced_security_group_id = data.tfe_outputs.cluster_infrastructure.nonsensitive_values.node_security_group_id
+  ip_protocol                  = "tcp"
+  from_port                    = 0
+  to_port                      = 65535
 }
 
 resource "aws_security_group_rule" "eks_workers_from_eks_ingress_www_origin" {
