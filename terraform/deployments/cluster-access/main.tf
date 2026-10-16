@@ -44,8 +44,16 @@ data "aws_iam_roles" "fulladmin" {
   name_regex = "\\..*-fulladmin$"
 }
 
+data "aws_iam_roles" "fulladmin_sso" {
+  name_regex = "^AWSReservedSSO_ApprovedAdmin_[0-9a-f]+$"
+}
+
 data "aws_iam_roles" "platformengineer" {
   name_regex = "\\..*platformengineer$"
+}
+
+data "aws_iam_roles" "platformengineer_sso" {
+  name_regex = "^AWSReservedSSO_GovUkPlatformEngineerPermission_[0-9a-f]+$"
 }
 
 data "aws_iam_roles" "developer" {
@@ -62,6 +70,10 @@ data "aws_iam_roles" "ithctester" {
 
 data "aws_iam_roles" "readonly" {
   name_regex = "\\..*readonly$"
+}
+
+data "aws_iam_roles" "readonly_sso" {
+  name_regex = "^AWSReservedSSO_ReadOnlyAccessPermission_[0-9a-f]+$"
 }
 
 data "aws_iam_roles" "tempadmin" {
