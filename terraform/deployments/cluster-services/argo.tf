@@ -41,6 +41,8 @@ locals {
     p, role:nationaldatalibrary, applications, sync, default/dgu-app-of-apps, allow
     p, role:nationaldatalibrary, applications, override, datagovuk/*, allow
     p, role:nationaldatalibrary, applications, override, default/dgu-app-of-apps, allow
+    p, role:nationaldatalibrary, applications, action, datagovuk/*, allow
+    p, role:nationaldatalibrary, applications, action, default/dgu-app-of-apps, allow
     g, ${var.github_national_data_library_team}, role:nationaldatalibrary
     EOT
   }
