@@ -3,7 +3,7 @@
 resource "google_cloud_run_v2_service" "dlp_deidentify_service" {
   name     = "dlp-deidentify-service"
   location = var.region
-  ingress  = "INGRESS_TRAFFIC_INTERNAL_ONLY"
+  ingress  = "INGRESS_TRAFFIC_ALL"
 
   template {
     service_account = google_service_account.dlp_deidentify_service.email
@@ -31,7 +31,7 @@ resource "google_service_account" "dlp_deidentify_service" {
 data "google_iam_policy" "cloud_run_dlp_deidentify_service" {
   binding {
     role    = "roles/run.invoker"
-    members = [] # will be the BQ connection service account from gds-bq-processing, which will be created in another PR
+    members = ["serviceAccount:bqcx-578894245899-q9ri@gcp-sa-bigquery-condel.iam.gserviceaccount.com"]
   }
 }
 
