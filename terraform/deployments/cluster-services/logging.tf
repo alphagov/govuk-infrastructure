@@ -35,7 +35,7 @@ resource "helm_release" "filebeat" {
     filebeatConfig = {
       "filebeat.yml" = yamlencode(yamldecode(file("${path.module}/filebeat.yml")))
     }
-    imageTag = "8.19.23"
+    imageTag = "9.5.5"
     clusterRoleRules = [
       {
         apiGroups = [""]
