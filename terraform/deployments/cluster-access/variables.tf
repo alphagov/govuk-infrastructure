@@ -41,3 +41,7 @@ variable "enable_previews_namespace" {
   default     = false
 }
 
+variable "disable_shell_access_for_non_admins" {
+  type        = bool
+  description = "Whether non-admin users and roles should be able to get shell access using `kubectl exec`"
+}
