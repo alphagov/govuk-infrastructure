@@ -254,3 +254,11 @@ module "control_global_synonym_uc" {
     }
   }
 }
+
+removed {
+  from = module.control_global_boost_freshness_general
+
+  lifecycle {
+    destroy = false
+  }
+}
