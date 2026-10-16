@@ -9,7 +9,10 @@ module "platformengineer" {
 
   cluster_name = local.cluster_name
 
-  aws_iam_role_arns   = data.aws_iam_roles.platformengineer.arns
+  aws_iam_role_arns = sort(setunion(
+    data.aws_iam_roles.platformengineer.arns,
+    data.aws_iam_roles.platformengineer_sso.arns,
+  ))
   access_policy_arn   = "arn:aws:eks::aws:cluster-access-policy/AmazonEKSClusterAdminPolicy"
   access_policy_scope = "cluster"
 
@@ -31,7 +34,10 @@ module "fulladmin" {
 
   cluster_name = local.cluster_name
 
-  aws_iam_role_arns   = data.aws_iam_roles.fulladmin.arns
+  aws_iam_role_arns = sort(setunion(
+    data.aws_iam_roles.fulladmin.arns,
+    data.aws_iam_roles.fulladmin_sso.arns,
+  ))
   access_policy_arn   = "arn:aws:eks::aws:cluster-access-policy/AmazonEKSClusterAdminPolicy"
   access_policy_scope = "cluster"
 
@@ -184,7 +190,10 @@ module "readonly" {
 
   cluster_name = local.cluster_name
 
-  aws_iam_role_arns        = data.aws_iam_roles.readonly.arns
+  aws_iam_role_arns = sort(setunion(
+    data.aws_iam_roles.readonly.arns,
+    data.aws_iam_roles.readonly_sso.arns,
+  ))
   access_policy_arn        = "arn:aws:eks::aws:cluster-access-policy/AmazonEKSViewPolicy"
   access_policy_scope      = "namespace"
   access_policy_namespaces = local.developer_namespaces
