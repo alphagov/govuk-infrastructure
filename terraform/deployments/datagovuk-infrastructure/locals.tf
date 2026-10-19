@@ -24,5 +24,10 @@ locals {
   ckan_non_api_rate_limit = {
     challenge = 100
   }
+  # CKAN high latency rate limits
+  # All envs: 10 challenge over 5 minutes
+  ckan_high_latency_rate_limit = {
+    challenge = 10
+  }
 }
 
