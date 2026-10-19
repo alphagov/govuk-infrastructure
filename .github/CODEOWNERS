@@ -8,6 +8,7 @@
 # Terraform code
 /terraform/deployments/ @alphagov/gov-uk-platform-engineering
 /terraform/shared-modules/ @alphagov/gov-uk-platform-engineering
+/terraform/variables/production/ @alphagov/gov-uk-platform-engineering
 
 # Data Engineering
 /terraform/deployments/gcp-gov-graph/ @alphagov/gov-uk-platform-engineering @alphagov/govuk-data-engineering
