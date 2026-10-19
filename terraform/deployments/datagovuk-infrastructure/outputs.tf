@@ -42,8 +42,10 @@ output "ckan_cloudwatch_log_group" {
 output "ckan_waf_rate_limits" {
   description = "Current rate limit configuration for CKAN WAF"
   value = {
-    environment = var.govuk_environment
-    warning     = local.ckan_rate_limits.warning
-    block       = local.ckan_rate_limits.block
+    environment            = var.govuk_environment
+    warning                = local.ckan_rate_limits.warning
+    block                  = local.ckan_rate_limits.block
+    challenge              = local.ckan_non_api_rate_limit.challenge
+    high_latency_challenge = local.ckan_high_latency_rate_limit.challenge
   }
 }

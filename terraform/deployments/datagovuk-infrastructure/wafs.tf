@@ -312,6 +312,23 @@ resource "aws_wafv2_regex_pattern_set" "ckan_ai_bots" {
 }
 
 # ===========================================================
+# URL patterns for CKAN
+# ===========================================================
+
+resource "aws_wafv2_regex_pattern_set" "ckan_non_api_data" {
+  name  = "ckan-non-api-data-${var.govuk_environment}"
+  scope = "REGIONAL"
+
+  regular_expression { regex_string = "^(/(dataset|organization|harvest)/).*" }
+
+  tags = {
+    Name        = "ckan-non-api-data-${var.govuk_environment}"
+    Application = "CKAN"
+    Purpose     = "BotRateLimiting"
+  }
+}
+
+# ===========================================================
 # WAF Web ACL and Rules for CKAN application
 # ===========================================================
 
@@ -402,8 +419,69 @@ resource "aws_wafv2_web_acl" "ckan" {
     }
   }
   rule {
-    name     = "ckan-rate-limit-warning"
+    name     = "ckan-non-api-rate-limit-challenge"
     priority = 2
+    action {
+      challenge {
+        custom_request_handling {
+          insert_header {
+            name  = "Retry-After"
+            value = "30"
+          }
+        }
+      }
+    }
+    statement {
+      rate_based_statement {
+        limit              = local.ckan_non_api_rate_limit.challenge
+        aggregate_key_type = "IP"
+        # CKAN traffic does NOT go through Fastly CDN (unlike Find)
+        # It goes directly to ALB, so we use source IP for rate limiting
+        # No forwarded_ip_config needed as there's no CDN in front
+
+        # Only apply rate limiting to CKAN hostname requests
+        scope_down_statement {
+          and_statement {
+            statement {
+              byte_match_statement {
+                search_string = "ckan"
+                field_to_match {
+                  single_header {
+                    name = "host"
+                  }
+                }
+                text_transformation {
+                  priority = 0
+                  type     = "LOWERCASE"
+                }
+                positional_constraint = "CONTAINS"
+              }
+            }
+            statement {
+              regex_pattern_set_reference_statement {
+                arn = aws_wafv2_regex_pattern_set.ckan_non_api_data.arn
+                field_to_match {
+                  uri_path {}
+                }
+                text_transformation {
+                  priority = 0
+                  type     = "LOWERCASE"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    visibility_config {
+      cloudwatch_metrics_enabled = true
+      metric_name                = "ckan-non-api-rate-limit-challenge"
+      sampled_requests_enabled   = true
+    }
+  }
+  rule {
+    name     = "ckan-rate-limit-warning"
+    priority = 3
     action {
       count {}
     }
@@ -441,7 +519,7 @@ resource "aws_wafv2_web_acl" "ckan" {
   }
   rule {
     name     = "ckan-rate-limit-block"
-    priority = 3
+    priority = 4
     action {
       block {
         custom_response {
