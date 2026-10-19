@@ -45,5 +45,6 @@ output "ckan_waf_rate_limits" {
     environment = var.govuk_environment
     warning     = local.ckan_rate_limits.warning
     block       = local.ckan_rate_limits.block
+    challenge   = local.ckan_non_api_rate_limit.challenge
   }
 }

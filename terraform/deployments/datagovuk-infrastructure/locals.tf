@@ -19,5 +19,10 @@ locals {
     warning = 400
     block   = 500
   }
+  # CKAN non API rate limits
+  # All envs: 100 challenge over 5 minutes
+  ckan_non_api_rate_limit = {
+    challenge = 100
+  }
 }
 
