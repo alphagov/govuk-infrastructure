@@ -114,8 +114,9 @@ module "control_global_synonym_id" {
   action = {
     synonymsAction = {
       synonyms = [
-        "i'd",
-        "i’d",
+        "i\u0027d",
+        "i\u2018d",
+        "i\u2019d",
         "id",
       ]
     }
