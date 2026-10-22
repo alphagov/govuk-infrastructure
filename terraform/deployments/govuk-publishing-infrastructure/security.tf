@@ -142,9 +142,11 @@ resource "aws_security_group_rule" "efs_from_eks_workers" {
 # These ALBs are created by the AWS Load Balancer Controller from Kubernetes Ingress
 # resources, and are the origins that Fastly and CloudFront fetch from.
 #
-# eks_ingress_www_origin is the base SG attached to every origin ALB. It holds egress
-# and is the SG trusted by the EKS nodes. Its name predates the naming guidance above
-# and can't be changed in place (it is ForceNew and the SG is in use).
+# eks_ingress_www_origin is the legacy base SG attached to every origin ALB. It holds
+# egress and is the SG trusted by the EKS nodes. Its name predates the naming guidance
+# above and can't be changed in place (it is ForceNew and the SG is in use), so it is
+# being replaced by origin_alb. Both stay attached until every ALB has
+# the new SG; only then can eks_ingress_www_origin be detached and deleted.
 #
 # Each upstream source (CloudFront, Fastly, office) has its own origin_alb_from_* SG
 # so that they can be managed independently and each stays within the per-SG rule
@@ -289,6 +291,55 @@ resource "aws_vpc_security_group_ingress_rule" "origin_alb_from_office" {
   ip_protocol       = "tcp"
   from_port         = each.value
   to_port           = each.value
+}
+
+# Base SG (EKS workers and NAT)
+#
+# Replaces eks_ingress_www_origin as the base SG: it holds the ALBs' only egress (to
+# their targets), is the SG trusted by the EKS nodes, and admits in-cluster clients
+# coming back in via the NAT gateways. Targets are pod IPs (target-type: ip) on the
+# nginx sidecar port, which also serves the /readyz health checks.
+
+locals {
+  origin_alb_target_port = 8080
+}
+
+resource "aws_security_group" "origin_alb" {
+  name        = "origin_alb"
+  vpc_id      = data.tfe_outputs.vpc.nonsensitive_values.id
+  description = "Base SG for origin ALBs: egress to EKS targets and HTTPS from EKS NAT gateways."
+  tags = {
+    System = "Frontend"
+    Name   = "origin_alb"
+  }
+}
+
+resource "aws_vpc_security_group_egress_rule" "origin_alb_to_eks_workers" {
+  description                  = "Origin ALBs send requests to EKS workers"
+  security_group_id            = aws_security_group.origin_alb.id
+  referenced_security_group_id = data.tfe_outputs.cluster_infrastructure.nonsensitive_values.node_security_group_id
+  ip_protocol                  = "tcp"
+  from_port                    = local.origin_alb_target_port
+  to_port                      = local.origin_alb_target_port
+}
+
+resource "aws_vpc_security_group_ingress_rule" "eks_workers_from_origin_alb" {
+  description                  = "EKS workers accept requests from origin ALBs"
+  security_group_id            = data.tfe_outputs.cluster_infrastructure.nonsensitive_values.node_security_group_id
+  referenced_security_group_id = aws_security_group.origin_alb.id
+  ip_protocol                  = "tcp"
+  from_port                    = local.origin_alb_target_port
+  to_port                      = local.origin_alb_target_port
+}
+
+resource "aws_vpc_security_group_ingress_rule" "origin_alb_from_eks_nat" {
+  for_each          = toset(data.tfe_outputs.cluster_infrastructure.nonsensitive_values.public_nat_gateway_ips)
+  description       = "Origin ALBs accept HTTPS requests from EKS NAT gateways"
+  security_group_id = aws_security_group.origin_alb.id
+  cidr_ipv4         = "${each.value}/32"
+  ip_protocol       = "tcp"
+  from_port         = 443
+  to_port           = 443
 }
 
 # TODO: Delete these moved blocks once applied in all environments. The SGs are still
