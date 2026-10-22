@@ -341,36 +341,3 @@ resource "aws_vpc_security_group_ingress_rule" "origin_alb_from_eks_nat" {
   from_port         = 443
   to_port           = 443
 }
-
-# TODO: Delete these moved blocks once applied in all environments. The SGs are still
-# replaced (name is ForceNew); moved only keeps the plan readable.
-
-moved {
-  from = aws_security_group.eks_ingress_www_origin_from_cloudfront
-  to   = aws_security_group.origin_alb_from_cloudfront
-}
-
-moved {
-  from = aws_vpc_security_group_ingress_rule.eks_ingress_www_origin_from_cloudfront_https
-  to   = aws_vpc_security_group_ingress_rule.origin_alb_from_cloudfront_https
-}
-
-moved {
-  from = aws_security_group.eks_ingress_www_origin_from_fastly
-  to   = aws_security_group.origin_alb_from_fastly
-}
-
-moved {
-  from = aws_vpc_security_group_ingress_rule.eks_ingress_www_origin_from_fastly
-  to   = aws_vpc_security_group_ingress_rule.origin_alb_from_fastly
-}
-
-moved {
-  from = aws_security_group.eks_ingress_www_origin_from_office
-  to   = aws_security_group.origin_alb_from_office
-}
-
-moved {
-  from = aws_vpc_security_group_ingress_rule.eks_ingress_www_origin_from_office
-  to   = aws_vpc_security_group_ingress_rule.origin_alb_from_office
-}
