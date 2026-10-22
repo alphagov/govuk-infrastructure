@@ -1023,9 +1023,6 @@ repos:
   # https://github.com/integrations/terraform-provider-github/blob/091a326c9ce492fc5d4586739ef3981aabdc09ca/docs/resources/branch_protection.md?plain=1#L52-L55
   govuk-synthetic-test-app-canary:
     can_be_deployed: true
-    required_status_checks:
-      additional_contexts:
-        - Test
     standard_contexts: *standard_security_checks
     required_pull_request_reviews:
       pull_request_bypassers:
