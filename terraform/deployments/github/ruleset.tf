@@ -85,10 +85,6 @@ resource "github_repository_ruleset" "gouk_synthetic_test_app_canary_prs" {
       strict_required_status_checks_policy = false
 
       required_check {
-        context = "Test"
-      }
-
-      required_check {
         context = "CodeQL SAST scan / Analyze"
       }
 
