@@ -148,7 +148,7 @@ locals {
           cillium-ready = {
             key    = "node.cilium.io/agent-not-ready"
             value  = "true"
-            effect = "NoExecute"
+            effect = "NO_EXECUTE"
           }
         }
         block_device_mappings = local.default_block_device_mappings
