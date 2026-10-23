@@ -9,5 +9,6 @@ output "origin_alb_security_group_names" {
     aws_security_group.origin_alb_from_cloudfront.name,
     aws_security_group.origin_alb_from_fastly.name,
     aws_security_group.origin_alb_from_office.name,
+    aws_security_group.origin_alb.name,
   ]
 }
