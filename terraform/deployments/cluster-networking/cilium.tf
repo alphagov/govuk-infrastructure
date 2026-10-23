@@ -16,6 +16,9 @@ resource "helm_release" "cilium" {
       relay = {
         enabled = true
       }
+      ui = {
+        enabled = true
+      }
     }
   })]
 }
