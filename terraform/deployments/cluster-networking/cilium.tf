@@ -10,7 +10,6 @@ resource "helm_release" "cilium" {
     "cni.exclusive"       = false,
     enableIPv4Masquerade  = false,
     routingMode           = "native",
-    tunnel                = "disabled",
     autoDirectNodeRouting = true
   })]
 }
