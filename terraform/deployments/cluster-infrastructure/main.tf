@@ -137,13 +137,18 @@ locals {
     arm_green = merge(
       local.managed_node_group_defaults,
       {
-        ami_type              = "AL2023_ARM_64_STANDARD"
-        name_prefix           = "${var.cluster_name}-green"
-        desired_size          = var.arm_workers_green_size_desired
-        max_size              = var.arm_workers_green_size_max
-        min_size              = var.arm_workers_green_size_min
-        instance_types        = var.arm_workers_green_instance_types
-        update_config         = { max_unavailable = 1 }
+        ami_type       = "AL2023_ARM_64_STANDARD"
+        name_prefix    = "${var.cluster_name}-green"
+        desired_size   = var.arm_workers_green_size_desired
+        max_size       = var.arm_workers_green_size_max
+        min_size       = var.arm_workers_green_size_min
+        instance_types = var.arm_workers_green_instance_types
+        update_config  = { max_unavailable = 1 }
+        taints = {
+          key    = "node.cilium.io/agent-not-ready"
+          value  = "true"
+          effect = "NoExecute"
+        }
         block_device_mappings = local.default_block_device_mappings
         additional_tags = {
           "k8s.io/cluster-autoscaler/enabled"             = "true"
