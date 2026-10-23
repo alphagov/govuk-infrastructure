@@ -21,7 +21,7 @@ resource "aws_sns_topic_subscription" "slack_channel" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "node_group_limit" {
-  for_each = local.eks_managed_node_groups
+  for_each = {}
 
   alarm_name          = "${var.cluster_name}-${each.key}-node-group-limit"
   alarm_description   = "Cluster about to hit max node group size"
