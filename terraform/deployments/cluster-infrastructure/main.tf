@@ -272,6 +272,11 @@ module "eks" {
   iam_role_additional_policies = {
     AmazonEKSVPCResourceController = "arn:aws:iam::aws:policy/AmazonEKSVPCResourceController"
   }
+
+  create_auto_mode_iam_resources = true
+  compute_config = {
+    enabled = true
+  }
 }
 
 resource "aws_kms_key" "eks" {
