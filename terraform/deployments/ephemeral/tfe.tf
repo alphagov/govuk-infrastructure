@@ -18,8 +18,8 @@ module "var_set" {
 
     publishing_service_domain = "${var.ephemeral_cluster_id}.publishing.service.gov.uk"
 
-    enable_arm_workers_blue    = true
-    enable_arm_workers_green   = false
+    enable_arm_workers_blue    = false
+    enable_arm_workers_green   = true
     enable_x86_workers         = false
     arm_workers_instance_types = ["m7g.2xlarge"]
 
@@ -90,6 +90,19 @@ module "cluster_access" {
   depends_on = [module.cluster_infrastructure, tfe_project.project]
 }
 
+module "cluster_networking" {
+  source = "./ws"
+
+  name                 = "cluster-networking"
+  ephemeral_cluster_id = var.ephemeral_cluster_id
+  variable_set_id      = module.var_set.id
+  git_branch           = var.git_branch
+
+  tfvars = {}
+
+  depends_on = [module.cluster_infrastructure, module.cluster_access, tfe_project.project]
+}
+
 module "cluster_services" {
   source = "./ws"
 
@@ -102,7 +115,7 @@ module "cluster_services" {
     ship_kubernetes_events_to_logit = false
   }
 
-  depends_on = [module.cluster_infrastructure, module.cluster_access, tfe_project.project]
+  depends_on = [module.cluster_networking, module.cluster_access, tfe_project.project]
 }
 
 /*
