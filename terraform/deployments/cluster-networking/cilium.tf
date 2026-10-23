@@ -6,10 +6,10 @@ resource "helm_release" "cilium" {
   version    = "1.20.3"
   repository = "https://helm.cilium.io/"
   values = [yamlencode({
-    "cni.chainingMode"    = "aws-cni",
-    "cni.exclusive"       = false,
-    enableIPv4Masquerade  = false,
-    routingMode           = "native",
-    autoDirectNodeRouting = true
+    "cni.chainingMode"   = "aws-cni",
+    "cni.exclusive"      = false,
+    enableIPv4Masquerade = false,
+    routingMode          = "native",
+    autoDirectNodeRoutes = true
   })]
 }
