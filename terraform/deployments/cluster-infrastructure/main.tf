@@ -144,11 +144,13 @@ locals {
         min_size       = var.arm_workers_green_size_min
         instance_types = var.arm_workers_green_instance_types
         update_config  = { max_unavailable = 1 }
-        taints = [{
-          key    = "node.cilium.io/agent-not-ready"
-          value  = "true"
-          effect = "NoExecute"
-        }]
+        taints = {
+          cillium-ready = {
+            key    = "node.cilium.io/agent-not-ready"
+            value  = "true"
+            effect = "NoExecute"
+          }
+        }
         block_device_mappings = local.default_block_device_mappings
         additional_tags = {
           "k8s.io/cluster-autoscaler/enabled"             = "true"
