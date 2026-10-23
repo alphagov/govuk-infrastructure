@@ -100,11 +100,22 @@ module "developer" {
         verbs      = ["get", "list", "watch", "create"]
       }
     ],
+
+    # allow shell access if not disabled
     var.disable_shell_access_for_non_admins ? [] : [{
       api_groups = [""]
       resources  = ["pods/exec"]
       verbs      = ["create"]
-    }]
+    }],
+
+    # allow job read/write access if shell access is not disabled
+    var.disable_shell_access_for_non_admins ? [] : [
+      {
+        api_groups = ["batch"]
+        resources  = ["jobs", "cronjobs"]
+        verbs      = ["create", "update", "patch", "delete"]
+      }
+    ]
   ])
 
   depends_on = [kubernetes_namespace_v1.apps, kubernetes_namespace_v1.datagovuk, kubernetes_namespace_v1.licensify]
