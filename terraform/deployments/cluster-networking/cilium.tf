@@ -12,7 +12,5 @@ resource "helm_release" "cilium" {
     },
     enableIPv4Masquerade = false,
     routingMode          = "native",
-    autoDirectNodeRoutes = false,
-    bpf                  = { hostLegacyRouting = false }
   })]
 }
