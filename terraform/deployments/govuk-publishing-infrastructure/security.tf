@@ -301,6 +301,10 @@ resource "aws_vpc_security_group_ingress_rule" "origin_alb_from_office" {
 # nginx sidecar port, which also serves the /readyz health checks.
 
 locals {
+  # Port of the nginx sidecar in generic-govuk-app / asset-manager pods (the app itself
+  # listens on 3000). Every origin ALB target uses it: router (www-origin), bouncer, and
+  # asset-manager/frontend/draft-frontend (assets-origin, staging only). Origin ALBs
+  # (target-type: ip) send requests and /readyz health checks straight to it.
   origin_alb_target_port = 8080
 }
 
@@ -324,7 +328,7 @@ resource "aws_vpc_security_group_egress_rule" "origin_alb_to_eks_workers" {
 }
 
 resource "aws_vpc_security_group_ingress_rule" "eks_workers_from_origin_alb" {
-  description                  = "EKS workers accept requests from origin ALBs"
+  description                  = "EKS workers accept requests from origin ALBs on the nginx sidecar port (router, bouncer, assets)"
   security_group_id            = data.tfe_outputs.cluster_infrastructure.nonsensitive_values.node_security_group_id
   referenced_security_group_id = aws_security_group.origin_alb.id
   ip_protocol                  = "tcp"
