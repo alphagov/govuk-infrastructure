@@ -16,6 +16,28 @@ resource "helm_release" "inspektor_gadget" {
           imageName = "ghcr.io/inspektor-gadget/gadget/advise_networkpolicy:latest"
         }
       ]
+
+      operator = {
+        kubemanager = {
+          "fallback-podinformer" = true
+          "hook-mode" = "auto"
+        }
+
+        oci = {
+           verify-image = true
+           public-keys = [
+           <<EOF
+           -----BEGIN PUBLIC KEY-----
+           MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoDOC0gYSxZTopenGmX3ZFvQ1DSfh
+           Ir4EKRt5jC+mXaJ7c7J+oREskYMn/SfZdRHNSOjLTZUMDm60zpXGhkFecg==
+           -----END PUBLIC KEY-----
+           EOF
+           ]
+           allowed-gadgets = ["advise_networkpolicy"]
+           disallow-pulling  = false
+           insecure-registries = []
+        }
+      }
     }
   })]
 }
