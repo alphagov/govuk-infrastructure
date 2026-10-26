@@ -10,7 +10,6 @@ resource "helm_release" "inspektor_gadget" {
   values = [yamlencode({
     config = {
       eventsBufferLength = 32768
-      operator           = {}
       gadgetConfigMaps = [
         {
           name      = "advise_network_policy"
