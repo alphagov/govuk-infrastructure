@@ -26,7 +26,7 @@ resource "aws_iam_role_policy_attachment" "auto_mode_node_class" {
 resource "aws_eks_access_entry" "auto_mode_node_class" {
   cluster_name  = module.eks.cluster_name
   principal_arn = aws_iam_role.auto_mode_node_class.arn
-  type          = "STANDARD"
+  type          = "EC2"
 }
 
 resource "aws_eks_access_policy_association" "auto_mode_node_class" {
