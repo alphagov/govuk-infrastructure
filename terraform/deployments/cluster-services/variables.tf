@@ -98,3 +98,9 @@ variable "gatekeeper_controller_resources" {
     audit_mem_limit = "1Gi"
   }
 }
+
+variable "enable_inspektor_gadget" {
+  type        = bool
+  description = "Whether to enable inspkector gadget"
+  default     = false
+}

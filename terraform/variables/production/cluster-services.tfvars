@@ -6,3 +6,5 @@ gatekeeper_controller_resources = {
   mem_req         = "4Gi"
   mem_limit       = "8Gi"
 }
+
+enable_inspektor_gadget = false
