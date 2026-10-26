@@ -10,7 +10,7 @@ terraform {
   cloud {
     organization = "govuk"
     workspaces {
-      tags = ["cluster-infrastructure"]
+      tags = ["cluster-infrastructure", "eks", "aws"]
     }
   }
   required_version = "~> 1.15"
@@ -267,7 +267,7 @@ module "eks" {
   authentication_mode                      = var.authentication_mode
   enable_cluster_creator_admin_permissions = true
 
-  eks_managed_node_groups = {} # local.eks_managed_node_groups
+  eks_managed_node_groups = local.eks_managed_node_groups
 
   iam_role_additional_policies = {
     AmazonEKSVPCResourceController = "arn:aws:iam::aws:policy/AmazonEKSVPCResourceController"
