@@ -18,7 +18,7 @@ terraform {
     }
     fastly = {
       source  = "fastly/fastly"
-      version = "~> 9.0"
+      version = "~> 10.0"
     }
     tfe = {
       source  = "hashicorp/tfe"
