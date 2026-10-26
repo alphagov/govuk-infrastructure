@@ -82,28 +82,41 @@ module "developer" {
     }
   ]
 
-  namespace_role_rules = [
-    {
-      api_groups = ["", "apps"]
-      resources  = ["pods", "pods/log", "deployments", "replicasets", "statefulsets"]
-      verbs      = ["get", "list", "watch", "create", "update", "patch", "delete"]
-    },
-    {
-      api_groups = ["batch"]
-      resources  = ["jobs", "cronjobs"]
-      verbs      = ["get", "list", "watch", "create", "update", "patch", "delete"]
-    },
-    {
+  namespace_role_rules = flatten([
+    [
+      {
+        api_groups = ["", "apps"]
+        resources  = ["pods", "pods/log", "deployments", "replicasets", "statefulsets"]
+        verbs      = ["get", "list", "watch", "create", "update", "patch", "delete"]
+      },
+      {
+        api_groups = ["batch"]
+        resources  = ["jobs", "cronjobs"]
+        verbs      = ["get", "list", "watch"]
+      },
+      {
+        api_groups = ["platform.publishing.service.gov.uk"]
+        resources  = ["jobrequests", "jobrequestreviews"]
+        verbs      = ["get", "list", "watch", "create"]
+      }
+    ],
+
+    # allow shell access if not disabled
+    var.disable_shell_access_for_non_admins ? [] : [{
       api_groups = [""]
       resources  = ["pods/exec"]
       verbs      = ["create"]
-    },
-    {
-      api_groups = ["platform.publishing.service.gov.uk"]
-      resources  = ["jobrequests", "jobrequestreviews"]
-      verbs      = ["get", "list", "watch", "create"]
-    }
-  ]
+    }],
+
+    # allow job read/write access if shell access is not disabled
+    var.disable_shell_access_for_non_admins ? [] : [
+      {
+        api_groups = ["batch"]
+        resources  = ["jobs", "cronjobs"]
+        verbs      = ["create", "update", "patch", "delete"]
+      }
+    ]
+  ])
 
   depends_on = [kubernetes_namespace_v1.apps, kubernetes_namespace_v1.datagovuk, kubernetes_namespace_v1.licensify]
 }
@@ -120,23 +133,25 @@ module "licensinguser" {
   access_policy_scope      = "namespace"
   access_policy_namespaces = ["licensify"]
 
-  namespace_role_rules = [
-    {
-      api_groups = ["", "apps"]
-      resources  = ["pods", "pods/logs", "deployments", "replicasets", "statefulsets"]
-      verbs      = ["get", "list", "watch"]
-    },
-    {
-      api_groups = ["batch"]
-      resources  = ["jobs", "cronjobs"]
-      verbs      = ["get", "list", "watch"]
-    },
-    {
+  namespace_role_rules = flatten([
+    [
+      {
+        api_groups = ["", "apps"]
+        resources  = ["pods", "pods/logs", "deployments", "replicasets", "statefulsets"]
+        verbs      = ["get", "list", "watch"]
+      },
+      {
+        api_groups = ["batch"]
+        resources  = ["jobs", "cronjobs"]
+        verbs      = ["get", "list", "watch"]
+      },
+    ],
+    var.disable_shell_access_for_non_admins ? [] : [{
       api_groups = [""]
       resources  = ["pods/exec"]
       verbs      = ["create"]
-    }
-  ]
+    }]
+  ])
 
   depends_on = [kubernetes_namespace_v1.apps, kubernetes_namespace_v1.datagovuk, kubernetes_namespace_v1.licensify]
 }
@@ -266,23 +281,25 @@ module "dguengineer" {
   access_policy_scope      = "namespace"
   access_policy_namespaces = ["datagovuk"]
 
-  namespace_role_rules = [
-    {
-      api_groups = ["", "apps"],
-      resources  = ["pods", "pods/logs", "deployments", "replicasets", "statefulsets"]
-      verbs      = ["get", "list", "watch", "create", "update", "patch", "delete"]
-    },
-    {
-      api_groups = ["batch"]
-      resources  = ["jobs", "cronjobs"]
-      verbs      = ["get", "list", "watch", "create", "update", "patch", "delete"]
-    },
-    {
+  namespace_role_rules = flatten([
+    [
+      {
+        api_groups = ["", "apps"],
+        resources  = ["pods", "pods/logs", "deployments", "replicasets", "statefulsets"]
+        verbs      = ["get", "list", "watch", "create", "update", "patch", "delete"]
+      },
+      {
+        api_groups = ["batch"]
+        resources  = ["jobs", "cronjobs"]
+        verbs      = ["get", "list", "watch"]
+      },
+    ],
+    var.disable_shell_access_for_non_admins ? [] : [{
       api_groups = [""]
       resources  = ["pods/exec"]
       verbs      = ["create"]
-    }
-  ]
+    }]
+  ])
 
   depends_on = [kubernetes_namespace_v1.apps, kubernetes_namespace_v1.datagovuk, kubernetes_namespace_v1.licensify]
 }
