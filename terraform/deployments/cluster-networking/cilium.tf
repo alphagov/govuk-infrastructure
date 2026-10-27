@@ -19,6 +19,12 @@ resource "helm_release" "cilium" {
       ui = {
         enabled = true
       }
+      export = {
+        static = {
+          enabled  = true
+          filePath = "/var/run/cilium/hubble/events.log"
+        }
+      }
     }
   })]
 }
