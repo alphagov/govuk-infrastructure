@@ -4,7 +4,7 @@ resource "helm_release" "inspektor_gadget" {
   name       = "inspektor-gadget"
   repository = "https://inspektor-gadget.github.io/charts"
   chart      = "gadget"
-  version    = "0.56.0"
+  version    = "0.57.0"
   namespace  = "cluster-services"
   timeout    = var.helm_timeout_seconds
   values = [yamlencode({
@@ -24,16 +24,7 @@ resource "helm_release" "inspektor_gadget" {
         }
 
         oci = {
-           verify-image = true
-           public-keys = [
-           <<EOF
-           -----BEGIN PUBLIC KEY-----
-           MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoDOC0gYSxZTopenGmX3ZFvQ1DSfh
-           Ir4EKRt5jC+mXaJ7c7J+oREskYMn/SfZdRHNSOjLTZUMDm60zpXGhkFecg==
-           -----END PUBLIC KEY-----
-           EOF
-           ]
-           allowed-gadgets = ["advise_networkpolicy"]
+           allowed-gadgets = []
            disallow-pulling  = false
            insecure-registries = []
         }
