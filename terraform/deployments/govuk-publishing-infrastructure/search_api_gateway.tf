@@ -137,6 +137,43 @@ resource "aws_wafv2_web_acl" "search_api_waf" {
     }
   }
 
+  # Block requests declaring Brotli Content-Encoding before they reach
+  # an origin decoder (CVE-2026-111497). No GOV.UK client legitimately
+  # sends Brotli-encoded request bodies.
+  rule {
+    name     = "block-brotli-request-bodies"
+    priority = 2
+    action {
+      block {
+        custom_response {
+          response_code = 415
+        }
+      }
+    }
+
+    statement {
+      byte_match_statement {
+        field_to_match {
+          single_header {
+            name = "content-encoding"
+          }
+        }
+        positional_constraint = "CONTAINS_WORD"
+        search_string         = "br"
+        text_transformation {
+          type     = "LOWERCASE"
+          priority = 0
+        }
+      }
+    }
+
+    visibility_config {
+      cloudwatch_metrics_enabled = true
+      metric_name                = "search-api-block-brotli-request-bodies"
+      sampled_requests_enabled   = true
+    }
+  }
+
   visibility_config {
     cloudwatch_metrics_enabled = true
     metric_name                = "search-api-waf"
