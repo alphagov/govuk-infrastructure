@@ -36,7 +36,6 @@ locals {
     "release",
     "router",
     "search-admin",
-    "search-analytics",
     "search-api",
     "search-api-v2",
     "search-api-v2-beta-features",
