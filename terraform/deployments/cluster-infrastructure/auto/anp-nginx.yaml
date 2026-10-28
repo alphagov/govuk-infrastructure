@@ -1,0 +1,15 @@
+apiVersion: networking.k8s.aws/v1alpha1
+kind: ApplicationNetworkPolicy
+metadata:
+  name: test-anp
+spec:
+  podSelector:
+    matchLabels:
+      app: nginx-test
+  policyTypes:
+    - Ingress
+  ingress:
+    - from:
+      - podSelector:
+          matchLabels:
+            app: ubuntu-idle

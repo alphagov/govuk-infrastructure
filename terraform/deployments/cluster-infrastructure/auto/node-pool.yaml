@@ -1,0 +1,18 @@
+apiVersion: karpenter.sh/v1
+kind: NodePool
+metadata:
+  name: arm
+spec:
+  template:
+    metadata:
+      labels:
+        instance-kind: arm
+    spec:
+      nodeClassRef:
+        group: eks.amazonaws.com
+        kind: NodeClass
+        name: arm
+      requirements:
+        - key: "node.kubernetes.io/instance-type"
+          operator: In
+          values: ["m8g.4xlarge"]

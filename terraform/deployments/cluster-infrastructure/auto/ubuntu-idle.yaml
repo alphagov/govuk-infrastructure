@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ubuntu-idle
+  labels:
+    app: ubuntu-idle
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ubuntu-idle
+  template:
+    metadata:
+      labels:
+        app: ubuntu-idle
+    spec:
+      terminationGracePeriodSeconds: 5
+      nodeSelector:
+        eks.amazonaws.com/compute-type: auto
+      containers:
+        - name: ubuntu
+          image: ubuntu:26.04
+          command: ["tail", "-f", "/dev/null"]
+          resources:
+            requests:
+              cpu: 50m
+              memory: 1024Mi
+            limits:
+              memory: 1024Mi

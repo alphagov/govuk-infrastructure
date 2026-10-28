@@ -1,0 +1,18 @@
+apiVersion: networking.k8s.aws/v1alpha1
+kind: ApplicationNetworkPolicy
+metadata:
+  name: test-anp-na
+spec:
+  podSelector:
+    matchLabels:
+      app: ubuntu-idle-na
+  policyTypes:
+    - Egress
+  egress:
+    - to:
+      - domainNames: [ports.ubuntu.com]
+    - to:
+      - ipBlock:
+          cidr: 10.0.0.0/8
+      - ipBlock:
+          cidr: 172.0.0.0/8

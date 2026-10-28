@@ -1,0 +1,14 @@
+apiVersion: eks.amazonaws.com/v1
+kind: NodeClass
+metadata:
+  name: arm
+spec:
+  role: eph-samauto-auto-mode-node
+  subnetSelectorTerms:
+    - id: "subnet-0ea0ba947e309af4e"
+    - id: "subnet-01a155f522f582e96"
+    - id: "subnet-0c2dc4f83831b7b46"
+  securityGroupSelectorTerms:
+    - id: "sg-0b00c199b77a01176"
+  networkPolicy: DefaultAllow
+  networkPolicyEventLogs: Enabled

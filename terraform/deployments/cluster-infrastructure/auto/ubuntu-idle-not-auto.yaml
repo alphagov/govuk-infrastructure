@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ubuntu-idle-na
+  labels:
+    app: ubuntu-idle-na
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ubuntu-idle-na
+  template:
+    metadata:
+      labels:
+        app: ubuntu-idle-na
+    spec:
+      terminationGracePeriodSeconds: 5
+      nodeSelector:
+        eks.amazonaws.com/nodegroup: arm_blue-74c71a9869cb56646f982526cf
+      containers:
+        - name: ubuntu
+          image: ubuntu:26.04
+          command: ["tail", "-f", "/dev/null"]
+          resources:
+            requests:
+              cpu: 50m
+              memory: 1024Mi
+            limits:
+              memory: 1024Mi

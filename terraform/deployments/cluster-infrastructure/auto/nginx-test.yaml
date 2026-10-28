@@ -1,0 +1,67 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nginx-test-page
+data:
+  index.html: |
+    <!doctype html>
+    <html>
+      <head><title>nginx test</title></head>
+      <body>
+        <h1>It works!</h1>
+        <p>Served by nginx on Kubernetes.</p>
+      </body>
+    </html>
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-test
+  labels:
+    app: nginx-test
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nginx-test
+  template:
+    metadata:
+      labels:
+        app: nginx-test
+    spec:
+      nodeSelector:
+        eks.amazonaws.com/compute-type: auto
+      containers:
+        - name: nginx
+          image: nginx:stable
+          ports:
+            - containerPort: 80
+          resources:
+            requests:
+              cpu: 100m
+              memory: 64Mi
+            limits:
+              memory: 128Mi
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 80
+          volumeMounts:
+            - name: html
+              mountPath: /usr/share/nginx/html
+              readOnly: true
+      volumes:
+        - name: html
+          configMap:
+            name: nginx-test-page
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-test
+spec:
+  selector:
+    app: nginx-test
+  ports:
+    - port: 80
+      targetPort: 80
