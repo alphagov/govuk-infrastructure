@@ -13,6 +13,7 @@ Autoscaler?s?
 AWS
 CEL
 CI/CD
+CIDR
 CircleCI
 CLI
 CloudFront
@@ -28,6 +29,7 @@ Crossplane
 Dex
 Dhall
 DNS
+EKS
 Fargate
 Fastly
 FileBeat
