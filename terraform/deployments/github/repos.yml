@@ -437,6 +437,8 @@ repos:
     archived: true
 
   govuk-multiple-h1-headings-on-page-prototype:
+    push_allowances:
+      - "alphagov/gov-uk-navigation-prototypes"
     topics:
       - prototype
     need_production_access_to_merge: false
