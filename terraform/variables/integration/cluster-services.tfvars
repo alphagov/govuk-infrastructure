@@ -4,3 +4,5 @@
 github_read_write_team = "alphagov:gov-uk"
 
 desired_ha_replicas = 1
+
+enable_inspektor_gadget = true
