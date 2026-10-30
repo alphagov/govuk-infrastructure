@@ -124,6 +124,9 @@ locals {
         instance_types        = var.arm_workers_blue_instance_types
         update_config         = { max_unavailable = 1 }
         block_device_mappings = local.default_block_device_mappings
+        labels = {
+          cilium-disable = "true"
+        }
         additional_tags = {
           "k8s.io/cluster-autoscaler/enabled"             = "true"
           "k8s.io/cluster-autoscaler/${var.cluster_name}" = "owned"
