@@ -18,8 +18,8 @@ module "var_set" {
 
     publishing_service_domain = "${var.ephemeral_cluster_id}.publishing.service.gov.uk"
 
-    enable_arm_workers_blue    = false
-    enable_arm_workers_green   = true
+    enable_arm_workers_blue    = true
+    enable_arm_workers_green   = false
     enable_x86_workers         = false
     arm_workers_instance_types = ["m7g.2xlarge"]
 
