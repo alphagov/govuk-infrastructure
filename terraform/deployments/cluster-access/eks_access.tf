@@ -60,7 +60,7 @@ module "developer" {
   cluster_name = local.cluster_name
 
   aws_iam_role_arns        = data.aws_iam_roles.developer.arns
-  access_policy_arn        = "arn:aws:eks::aws:cluster-access-policy/AmazonEKSAdminPolicy"
+  access_policy_arn        = "arn:aws:eks::aws:cluster-access-policy/AmazonEKSViewPolicy"
   access_policy_scope      = "namespace"
   access_policy_namespaces = local.developer_namespaces
 
