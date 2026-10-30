@@ -13,6 +13,7 @@ resource "helm_release" "cilium" {
     enableIPv4Masquerade = false,
     routingMode          = "native",
     hubble = {
+      enabled = true
       relay = {
         enabled = true
       }
