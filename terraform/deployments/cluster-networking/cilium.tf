@@ -27,5 +27,38 @@ resource "helm_release" "cilium" {
         }
       }
     }
+    affinity = {
+      podAntiAffinity = {
+        requiredDuringSchedulingIgnoredDuringExecution = [
+          {
+            topologyKey = "kubernetes.io/hostname"
+            labelSelector = {
+              matchExpressions = [
+                {
+                  key      = "k8s-app"
+                  operator = "In"
+                  values   = ["cilium"]
+                }
+              ]
+            }
+          }
+        ]
+      }
+      nodeAffinity = {
+        requiredDuringSchedulingIgnoredDuringExecution = {
+          nodeSelectorTerms = [
+            {
+              matchExpressions = [
+                {
+                  key      = "cilium-disable"
+                  operator = "NotIn"
+                  values   = ["true"]
+                }
+              ]
+            }
+          ]
+        }
+      }
+    }
   })]
 }
