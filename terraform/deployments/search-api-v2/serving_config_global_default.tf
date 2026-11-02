@@ -23,7 +23,6 @@ module "serving_config_global_default" {
     module.control_global_synonym_cos.id,
     module.control_global_synonym_dcms.id,
     module.control_global_synonym_euss.id,
-    module.control_global_synonym_id.id,
     module.control_global_synonym_chat.id,
     module.control_global_synonym_ni.id,
     module.control_global_synonym_nic.id,
@@ -271,24 +270,6 @@ module "control_global_synonym_euss" {
       synonyms = [
         "euss",
         "eu settlement scheme",
-      ]
-    }
-  }
-}
-
-module "control_global_synonym_id" {
-  source = "./modules/control"
-
-  id           = "syn_id"
-  display_name = "Synonyms: id"
-  engine_id    = google_discovery_engine_search_engine.govuk_global.engine_id
-  action = {
-    synonymsAction = {
-      synonyms = [
-        "i\u0027d",
-        "i\u2018d",
-        "i\u2019d",
-        "id",
       ]
     }
   }

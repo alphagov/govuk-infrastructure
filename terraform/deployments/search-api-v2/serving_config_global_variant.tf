@@ -26,7 +26,6 @@ module "serving_config_global_variant" {
     module.control_global_synonym_cos.id,
     module.control_global_synonym_dcms.id,
     module.control_global_synonym_euss.id,
-    module.control_global_synonym_id.id,
     module.control_global_synonym_chat.id,
     module.control_global_synonym_ni.id,
     module.control_global_synonym_nic.id,
