@@ -45,3 +45,8 @@ variable "disable_shell_access_for_non_admins" {
   type        = bool
   description = "Whether non-admin users and roles should be able to get shell access using `kubectl exec`"
 }
+
+variable "disable_port_forwarding_for_non_admins" {
+  type        = bool
+  description = "Whether non-admin users and roles should be able to forward ports using `kubectl port-forward`"
+}
