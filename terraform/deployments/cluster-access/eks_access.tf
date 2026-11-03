@@ -115,6 +115,15 @@ module "developer" {
         resources  = ["jobs", "cronjobs"]
         verbs      = ["create", "update", "patch", "delete"]
       }
+    ],
+
+    # allow port forwarding if not disabled
+    var.disable_port_forwarding_for_non_admins ? [] : [
+      {
+        api_groups = [""]
+        resources  = ["pods/portforward"]
+        verbs      = ["get", "list", "watch", "create", "delete", "patch", "update", "delete"]
+      }
     ]
   ])
 
