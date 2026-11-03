@@ -17,7 +17,7 @@ terraform {
     }
   }
 
-  required_version = "~> 1.14"
+  required_version = "~> 1.17"
 }
 
 locals {
