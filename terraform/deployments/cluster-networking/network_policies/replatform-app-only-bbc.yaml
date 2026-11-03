@@ -1,0 +1,24 @@
+---
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: govuk-replatform-test-app-only-govuk
+  namespace: apps
+spec:
+  endpointSelector:
+    matchLabels:
+      app: govuk-replatform-test-app
+  egress:
+    - toFQDNs:
+        - matchName: "www.gov.uk"
+    - toEndpoints:
+        - matchLabels:
+          "k8s:io.kubernetes.pod.namespace": kube-system
+          "k8s:k8s-app": kube-dns
+      toPorts:
+        - ports:
+            - port: "53"
+              protocol: ANY
+          rules:
+            dns:
+              - matchPattern: "*"
