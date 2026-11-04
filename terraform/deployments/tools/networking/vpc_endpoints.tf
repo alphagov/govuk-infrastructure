@@ -64,10 +64,7 @@ resource "aws_vpc_endpoint" "s3" {
   service_name      = "com.amazonaws.${data.aws_region.current.region}.s3"
   vpc_endpoint_type = "Gateway"
 
-  route_table_ids = concat(
-    [for rt in aws_route_table.eks_private : rt.id],
-    data.tfe_outputs.vpc.nonsensitive_values.private_subnet_route_table_ids,
-  )
+  route_table_ids = [for rt in aws_route_table.eks_private : rt.id]
 
   tags = {
     Name = "s3-endpoint-tools"
