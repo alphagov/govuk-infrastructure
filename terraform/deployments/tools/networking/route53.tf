@@ -1,26 +1,27 @@
 locals {
   external_dns_service_account_name = "external-dns"
   external_dns_zone_name            = "tools.govuk.digital"
+  # external_dns_ns                   = "external-dns"
 }
 
-module "external_dns_iam_role" {
-  source             = "terraform-aws-modules/iam/aws//modules/iam-role"
-  version            = "~> 6.0"
-  name               = "${local.external_dns_service_account_name}-${var.cluster_name}"
-  use_name_prefix    = false
-  description        = "Role for External DNS addon. Corresponds to ${local.external_dns_service_account_name} k8s ServiceAccount."
-  enable_oidc        = true
-  oidc_provider_urls = [module.eks.oidc_provider]
-  policies = {
-    "${aws_iam_policy.external_dns.name}" = aws_iam_policy.external_dns.arn
-  }
-  oidc_subjects = ["system:serviceaccount:external-dns:${local.external_dns_service_account_name}"]
-}
+# module "external_dns_iam_role" {
+#   source             = "terraform-aws-modules/iam/aws//modules/iam-role"
+#   version            = "~> 6.0"
+#   name               = "${local.external_dns_service_account_name}-${var.cluster_name}"
+#   use_name_prefix    = false
+#   description        = "Role for External DNS addon. Corresponds to ${local.external_dns_service_account_name} k8s ServiceAccount."
+#   enable_oidc        = true
+#   oidc_provider_urls = [module.eks.oidc_provider]
+#   policies = {
+#     "${aws_iam_policy.external_dns.name}" = aws_iam_policy.external_dns.arn
+#   }
+#   oidc_subjects = ["system:serviceaccount:${local.external_dns_ns}:${local.external_dns_service_account_name}"]
+# }
 
 
 resource "aws_iam_policy" "external_dns" {
   name        = "EKSExternalDNS-${var.cluster_name}"
-  description = "EKS ${local.external_dns_service_account_name} policy for cluster ${module.eks.cluster_name}"
+  description = "EKS ${local.external_dns_service_account_name} policy for cluster ${var.cluster_name}"
   policy      = data.aws_iam_policy_document.external_dns.json
 }
 

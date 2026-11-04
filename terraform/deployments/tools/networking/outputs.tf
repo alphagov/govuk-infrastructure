@@ -1,8 +1,8 @@
 output "id" { value = aws_vpc.vpc.id }
 
-output "private_subnet_route_table_ids" {
-  value = [for rt in aws_route_table.private_subnet : rt.id]
-}
+# output "private_subnet_route_table_ids" {
+#   value = [for rt in aws_route_table.private_subnet : rt.id]
+# }
 
 output "internet_gateway_id" {
   value = aws_internet_gateway.public.id
@@ -29,10 +29,10 @@ output "external_dns_service_account_name" {
   value       = local.external_dns_service_account_name
 }
 
-output "external_dns_role_arn" {
-  description = "IAM role ARN corresponding to the k8s service account for the external-dns addon."
-  value       = module.external_dns_iam_role.arn
-}
+# output "external_dns_role_arn" {
+#   description = "IAM role ARN corresponding to the k8s service account for the external-dns addon."
+#   value       = module.external_dns_iam_role.arn
+# }
 
 output "external_dns_zone_id" {
   description = "Hosted Zone ID of the Route53 zone to be managed by the external-dns addon."
