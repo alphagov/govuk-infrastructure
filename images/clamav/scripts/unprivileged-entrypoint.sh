@@ -6,7 +6,7 @@
 # Copyright (C) 2021-2023 Cisco Systems, Inc. and/or its affiliates. All rights reserved.
 #
 # The original version of this script can be found at
-# https://github.com/Cisco-Talos/clamav-docker/blob/9ff5b234042d8bc2ca53dfdea83a8576ac9b2822/clamav/1.2/debian/scripts/docker-entrypoint-unprivileged.sh.
+# https://github.com/Cisco-Talos/clamav-docker/blob/b2fea9dbb6cb89ced9bfffdd2e1e684c669c2442/clamav/1.5/debian/scripts/docker-entrypoint-unprivileged.sh.
 
 set -eu
 
@@ -27,7 +27,13 @@ else
 	# Ensure we have some virus data, otherwise clamd refuses to start
 	if [ ! -f "/var/lib/clamav/main.cvd" ]; then
 		echo "Updating initial database"
-		freshclam --foreground --stdout
+		# Set "TestDatabases no" and remove "NotifyClamd" for initial download
+		sed -e 's|^\(TestDatabases \)|\#\1|' \
+			-e '$a TestDatabases no' \
+			-e 's|^\(NotifyClamd \)|\#\1|' \
+			/etc/clamav/freshclam.conf > /tmp/freshclam_initial.conf
+		freshclam --foreground --stdout --config-file=/tmp/freshclam_initial.conf
+		rm /tmp/freshclam_initial.conf
 	fi
 
 	if [ "${CLAMAV_NO_FRESHCLAMD:-false}" != "true" ]; then
