@@ -1,7 +1,7 @@
 resource "aws_security_group" "vpc_endpoints" {
   name        = "vpc-endpoints-tools"
   description = "Allow ingress from VPC on port 443"
-  vpc_id      = data.tfe_outputs.vpc.nonsensitive_values.id
+  vpc_id      = aws_vpc.vpc.id
 
   ingress {
     description = "Port 443 from VPC"
@@ -21,7 +21,7 @@ resource "aws_security_group" "vpc_endpoints" {
 }
 
 resource "aws_vpc_endpoint" "bedrock_runtime" {
-  vpc_id              = data.tfe_outputs.vpc.nonsensitive_values.id
+  vpc_id              = aws_vpc.vpc.id
   service_name        = "com.amazonaws.${data.aws_region.current.region}.bedrock-runtime"
   vpc_endpoint_type   = "Interface"
   private_dns_enabled = true
@@ -34,7 +34,7 @@ resource "aws_vpc_endpoint" "bedrock_runtime" {
 }
 
 resource "aws_vpc_endpoint" "ecr_api" {
-  vpc_id              = data.tfe_outputs.vpc.nonsensitive_values.id
+  vpc_id              = aws_vpc.vpc.id
   service_name        = "com.amazonaws.${data.aws_region.current.region}.ecr.api"
   vpc_endpoint_type   = "Interface"
   private_dns_enabled = true
@@ -47,7 +47,7 @@ resource "aws_vpc_endpoint" "ecr_api" {
 }
 
 resource "aws_vpc_endpoint" "ecr_dkr" {
-  vpc_id              = data.tfe_outputs.vpc.nonsensitive_values.id
+  vpc_id              = aws_vpc.vpc.id
   service_name        = "com.amazonaws.${data.aws_region.current.region}.ecr.dkr"
   vpc_endpoint_type   = "Interface"
   private_dns_enabled = true
@@ -60,7 +60,7 @@ resource "aws_vpc_endpoint" "ecr_dkr" {
 }
 
 resource "aws_vpc_endpoint" "s3" {
-  vpc_id            = data.tfe_outputs.vpc.nonsensitive_values.id
+  vpc_id            = aws_vpc.vpc.id
   service_name      = "com.amazonaws.${data.aws_region.current.region}.s3"
   vpc_endpoint_type = "Gateway"
 
@@ -76,7 +76,7 @@ resource "aws_vpc_endpoint" "s3" {
 
 
 resource "aws_vpc_endpoint" "secretsmanager" {
-  vpc_id              = data.tfe_outputs.vpc.nonsensitive_values.id
+  vpc_id              = aws_vpc.vpc.id
   service_name        = "com.amazonaws.${data.aws_region.current.region}.secretsmanager"
   vpc_endpoint_type   = "Interface"
   private_dns_enabled = true
