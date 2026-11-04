@@ -52,6 +52,17 @@ jobs:
       - run: echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
         id: local-head
 
+      - name: See if gitRef is a tag
+        id: ref-type
+        env:
+          GITREF: ${{ inputs.gitRef }}
+        run: |
+          if git show-ref --verify --quiet "refs/tags/${GITREF}"; then
+            echo "is_tag=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "is_tag=false" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Determine image tags
         id: meta
         uses: docker/metadata-action@dc802804100637a589fabce1cb79ff13a1411302 # v6.2.0
@@ -59,8 +70,8 @@ jobs:
           images: |
             ghcr.io/${{ github.repository_owner }}/govuk/${{ inputs.imageName }}
           tags: |
-            type=raw,priority=500,value=${{ inputs.gitRef }},enable=${{ startsWith(inputs.gitRef, 'v') }}
-            type=raw,priority=400,value=${{ steps.local-head.outputs.sha }},enable=${{ !startsWith(inputs.gitRef, 'v') }}
+            type=raw,priority=500,value=${{ inputs.gitRef }},enable=${{ steps.ref-type.outputs.is_tag == 'true' }}
+            type=raw,priority=400,value=${{ steps.local-head.outputs.sha }},enable=${{ steps.ref-type.outputs.is_tag != 'true' }}
 
       - name: Build and push
         id: build-image
