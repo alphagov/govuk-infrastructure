@@ -30,7 +30,7 @@ resource "helm_release" "external_dns" {
     revisionHistoryLimit = 10
     txtOwnerId           = "govuk"
     domainFilters = [
-      data.tfe_outputs.cluster_infrastructure.nonsensitive_values.external_dns_zone_name
+      data.tfe_outputs.networking.nonsensitive_values.external_dns_zone_name
     ]
     annotationPrefix   = "external-dns.alpha.kubernetes.io/"
     policy             = "upsert-only"
