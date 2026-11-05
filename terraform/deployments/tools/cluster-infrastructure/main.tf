@@ -67,7 +67,7 @@ locals {
 
   managed_node_group_defaults = {
     capacity_type                  = var.x86_workers_default_capacity_type
-    subnet_ids                     = [for s in data.tfe_outputs.networking.nonsensitive_values.private_subnets : s.id]
+    subnet_ids                     = [for s in data.tfe_outputs.networking.nonsensitive_values.private_subnets : s]
     create_security_group          = false
     create_iam_role                = false
     iam_role_arn                   = aws_iam_role.node.arn
@@ -231,7 +231,7 @@ module "eks" {
 
   name               = var.cluster_name
   kubernetes_version = var.cluster_version
-  subnet_ids         = [for s in data.tfe_outputs.networking.nonsensitive_values.control_plane_subnets : s.id]
+  subnet_ids         = [for s in data.tfe_outputs.networking.nonsensitive_values.control_plane_subnets : s]
   vpc_id             = data.tfe_outputs.networking.nonsensitive_values.id
 
   addons = local.enabled_cluster_addons
