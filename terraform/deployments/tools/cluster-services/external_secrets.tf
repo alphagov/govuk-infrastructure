@@ -7,8 +7,6 @@
 # (even if create_namespace = true is set)
 
 resource "helm_release" "external_secrets" {
-  depends_on = [module.gatekeeper]
-
   name             = "external-secrets"
   repository       = "https://charts.external-secrets.io"
   chart            = "external-secrets"
