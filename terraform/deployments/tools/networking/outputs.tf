@@ -29,14 +29,14 @@ output "external_dns_service_account_name" {
   value       = local.external_dns_service_account_name
 }
 
-# output "external_dns_role_arn" {
-#   description = "IAM role ARN corresponding to the k8s service account for the external-dns addon."
-#   value       = module.external_dns_iam_role.arn
-# }
-
 output "external_dns_zone_id" {
   description = "Hosted Zone ID of the Route53 zone to be managed by the external-dns addon."
   value       = aws_route53_zone.cluster_public.zone_id
+}
+
+output "external_dns_zone_arn" {
+  description = "Hosted Zone arn of the Route53 zone to be managed by the external-dns addon."
+  value       = aws_route53_zone.cluster_public.arn
 }
 
 output "external_dns_zone_name" {
