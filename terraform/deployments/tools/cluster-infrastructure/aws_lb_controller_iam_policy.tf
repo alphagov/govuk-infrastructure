@@ -7,6 +7,7 @@
 
 locals {
   aws_lb_controller_service_account_name = "aws-load-balancer-controller"
+  aws_lb_controller_ns                   = "aws-lb-controller"
 }
 
 module "aws_lb_controller_iam_role" {
@@ -20,7 +21,7 @@ module "aws_lb_controller_iam_role" {
   policies = {
     "${aws_iam_policy.aws_lb_controller.name}" = aws_iam_policy.aws_lb_controller.arn
   }
-  oidc_subjects = ["system:serviceaccount:${local.cluster_services_namespace}:${local.aws_lb_controller_service_account_name}"]
+  oidc_subjects = ["system:serviceaccount:${local.aws_lb_controller_ns}:${local.aws_lb_controller_service_account_name}"]
 }
 
 
