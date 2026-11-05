@@ -11,14 +11,16 @@ resource "kubernetes_namespace_v1" "monitoring" {
   }
 }
 
-resource "helm_release" "external_secrets" {
-  depends_on = [module.gatekeeper]
+locals {
+  external_secrets_ns = "external-secrets"
+}
 
+resource "helm_release" "external_secrets" {
   name             = "external-secrets"
   repository       = "https://charts.external-secrets.io"
   chart            = "external-secrets"
   version          = "2.11.0"
-  namespace        = local.services_ns
+  namespace        = local.external_secrets_ns
   create_namespace = true
   values = [yamlencode({
     replicaCount = var.desired_ha_replicas
@@ -48,7 +50,7 @@ resource "helm_release" "cluster_secret_store" {
   repository = "https://alphagov.github.io/govuk-helm-charts/"
   chart      = "cluster-secret-store"
   version    = "0.3.0"
-  namespace  = local.services_ns
+  namespace  = local.external_secrets_ns
   timeout    = var.helm_timeout_seconds
   values = [yamlencode({
     awsRegion          = data.aws_region.current.region
@@ -59,11 +61,11 @@ resource "helm_release" "cluster_secret_store" {
 }
 
 resource "helm_release" "cluster_secrets" {
-  depends_on = [helm_release.cluster_secret_store, kubernetes_namespace_v1.monitoring]
+  depends_on = [helm_release.cluster_secret_store]
 
   chart      = "cluster-secrets"
   name       = "cluster-secrets"
-  namespace  = local.services_ns
+  namespace  = local.external_secrets_ns
   repository = "https://alphagov.github.io/govuk-helm-charts/"
   version    = "0.12.0"
   timeout    = var.helm_timeout_seconds

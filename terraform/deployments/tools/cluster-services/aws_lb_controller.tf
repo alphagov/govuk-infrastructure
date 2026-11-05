@@ -29,7 +29,7 @@ resource "helm_release" "aws_lb_controller" {
     serviceMonitor = {
       enabled = true
     }
-    vpcId = data.tfe_outputs.vpc.nonsensitive_values.id
+    vpcId = data.tfe_outputs.networking.nonsensitive_values.id
     serviceAccount = {
       name = data.tfe_outputs.cluster_infrastructure.nonsensitive_values.aws_lb_controller_service_account_name
       annotations = {
