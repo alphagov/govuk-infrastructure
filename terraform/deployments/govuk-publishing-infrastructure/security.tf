@@ -142,11 +142,9 @@ resource "aws_security_group_rule" "efs_from_eks_workers" {
 # These ALBs are created by the AWS Load Balancer Controller from Kubernetes Ingress
 # resources, and are the origins that Fastly and CloudFront fetch from.
 #
-# eks_ingress_www_origin is the legacy base SG attached to every origin ALB. It holds
-# egress and is the SG trusted by the EKS nodes. Its name predates the naming guidance
-# above and can't be changed in place (it is ForceNew and the SG is in use), so it is
-# being replaced by origin_alb. Both stay attached until every ALB has
-# the new SG; only then can eks_ingress_www_origin be detached and deleted.
+# Each restricted origin ALB has the origin_alb base SG (see below), plus one
+# origin_alb_from_* SG for each upstream source allowed to reach it. (assets-origin in
+# integration and production is public and uses controller-managed SGs instead.)
 #
 # Each upstream source (CloudFront, Fastly, office) has its own origin_alb_from_* SG
 # so that they can be managed independently and each stays within the per-SG rule
@@ -159,73 +157,6 @@ resource "aws_security_group_rule" "efs_from_eks_workers" {
 
 locals {
   origin_alb_ports = { http = 80, https = 443 }
-}
-
-resource "aws_security_group" "eks_ingress_www_origin" {
-  name        = "eks_ingress_www_origin"
-  vpc_id      = data.tfe_outputs.vpc.nonsensitive_values.id
-  description = "ALBs serving EKS www-origin ingress (and signon ALBs in non-prod environments)."
-  tags = {
-    System = "Frontend"
-    Name   = "eks_ingress_www_origin"
-  }
-}
-
-resource "aws_security_group_rule" "eks_ingress_www_origin_from_eks_nat" {
-  description       = "EKS ingress www-origin accepts requests from EKS NAT gateways"
-  type              = "ingress"
-  from_port         = 443
-  to_port           = 443
-  protocol          = "tcp"
-  cidr_blocks       = formatlist("%s/32", data.tfe_outputs.cluster_infrastructure.nonsensitive_values.public_nat_gateway_ips)
-  security_group_id = aws_security_group.eks_ingress_www_origin.id
-}
-
-# TODO: Delete once the per-source SGs below are attached to all ALBs in govuk-helm-charts.
-resource "aws_security_group_rule" "eks_ingress_www_origin_from_office_and_fastly_http" {
-  description       = "EKS ingress www-origin accepts requests from office and Fastly"
-  type              = "ingress"
-  from_port         = 80
-  to_port           = 443
-  protocol          = "tcp"
-  cidr_blocks       = concat(var.office_ips, data.fastly_ip_ranges.fastly.cidr_blocks)
-  security_group_id = aws_security_group.eks_ingress_www_origin.id
-
-  lifecycle {
-    ignore_changes = [cidr_blocks]
-  }
-}
-
-# TODO: Delete once the per-source SGs below are attached to all ALBs in govuk-helm-charts.
-resource "aws_security_group_rule" "eks_ingress_www_origin_from_cloudfront_https" {
-  description       = "EKS ingress www-origin accepts requests from Cloudfront"
-  type              = "ingress"
-  from_port         = 443
-  to_port           = 443
-  protocol          = "tcp"
-  prefix_list_ids   = [data.aws_ec2_managed_prefix_list.cloudfront.id]
-  security_group_id = aws_security_group.eks_ingress_www_origin.id
-}
-
-resource "aws_security_group_rule" "eks_ingress_www_origin_to_any_any" {
-  description       = "EKS ingress www-origin sends requests to anywhere over any protocol"
-  type              = "egress"
-  from_port         = 0
-  to_port           = 0
-  protocol          = -1
-  cidr_blocks       = ["0.0.0.0/0"]
-  security_group_id = aws_security_group.eks_ingress_www_origin.id
-}
-
-resource "aws_security_group_rule" "eks_workers_from_eks_ingress_www_origin" {
-  description = "EKS workers accepts requests from EKS ingress www-origin"
-  type        = "ingress"
-  # TODO: it might be possible to restrict that
-  from_port                = 0
-  to_port                  = 65535
-  protocol                 = "tcp"
-  security_group_id        = data.tfe_outputs.cluster_infrastructure.nonsensitive_values.node_security_group_id
-  source_security_group_id = aws_security_group.eks_ingress_www_origin.id
 }
 
 # CloudFront
@@ -295,10 +226,10 @@ resource "aws_vpc_security_group_ingress_rule" "origin_alb_from_office" {
 
 # Base SG (EKS workers and NAT)
 #
-# Replaces eks_ingress_www_origin as the base SG: it holds the ALBs' only egress (to
-# their targets), is the SG trusted by the EKS nodes, and admits in-cluster clients
-# coming back in via the NAT gateways. Targets are pod IPs (target-type: ip) on the
-# nginx sidecar port, which also serves the /readyz health checks.
+# Holds the ALBs' only egress (to their targets), is the SG trusted by the EKS nodes,
+# and admits in-cluster clients coming back in via the NAT gateways. Targets are pod
+# IPs (target-type: ip) on the nginx sidecar port, which also serves the /readyz
+# health checks.
 
 locals {
   # Port of the nginx sidecar in generic-govuk-app / asset-manager pods (the app itself
