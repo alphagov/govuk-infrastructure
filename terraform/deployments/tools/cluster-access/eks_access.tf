@@ -55,9 +55,8 @@ module "readonly" {
     data.aws_iam_roles.readonly.arns,
     data.aws_iam_roles.readonly_sso.arns,
   ))
-  access_policy_arn        = "arn:aws:eks::aws:cluster-access-policy/AmazonEKSViewPolicy"
-  access_policy_scope      = "namespace"
-  access_policy_namespaces = local.developer_namespaces
+  access_policy_arn   = "arn:aws:eks::aws:cluster-access-policy/AmazonEKSViewPolicy"
+  access_policy_scope = "cluster"
 
   cluster_role_rules = [
     {
