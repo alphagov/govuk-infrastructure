@@ -520,7 +520,6 @@ repos:
 
   govuk-social-data:
     can_be_deployed: false
-    visibility: "private"
     push_allowances:
       - "alphagov/gov-uk-data"
       - "alphagov/gov-uk-production-admin"
@@ -529,7 +528,7 @@ repos:
       pull_request_bypassers:
         - "alphagov/gov-uk-data"
     required_status_checks:
-      # standard security checks are disabled as not configured for a private repo
+      standard_contexts: *standard_security_checks
       additional_contexts: []
 
   govuk_ab_testing:
