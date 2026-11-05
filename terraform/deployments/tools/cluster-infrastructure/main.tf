@@ -58,27 +58,16 @@ locals {
     eks-pod-identity-agent = { addon_version = "v1.3.10-eksbuild.2", resolve_conflicts_on_create = "OVERWRITE" }
   }
 
-  network_flow_agent_addon = {
-    aws-network-flow-monitoring-agent = {
-      addon_version               = "v1.1.3-eksbuild.2"
-      resolve_conflicts_on_create = "OVERWRITE"
-      pod_identity_association = [{
-        role_arn        = try(aws_iam_role.network_flow_agent_role[0].arn, "")
-        service_account = "aws-network-flow-monitor-agent-service-account"
-      }]
-    }
-  }
 
   # Uncomment to configure optional or per-env addons.
   enabled_cluster_addons = merge(
     local.default_cluster_addons,
     var.enable_eks_pod_identity_addon ? local.eks_pod_identity_addon : {},
-    var.enable_network_flow_addon ? local.network_flow_agent_addon : {},
   )
 
   managed_node_group_defaults = {
     capacity_type                  = var.x86_workers_default_capacity_type
-    subnet_ids                     = [for s in aws_subnet.eks_private : s.id]
+    subnet_ids                     = [for s in data.tfe_outputs.networking.nonsensitive_values.eks_private_subnets : s.id]
     create_security_group          = false
     create_iam_role                = false
     iam_role_arn                   = aws_iam_role.node.arn
@@ -243,7 +232,7 @@ module "eks" {
   name               = var.cluster_name
   kubernetes_version = var.cluster_version
   subnet_ids         = [for s in aws_subnet.eks_control_plane : s.id]
-  vpc_id             = data.tfe_outputs.vpc.nonsensitive_values.id
+  vpc_id             = data.tfe_outputs.networking.nonsensitive_values.id
 
   addons = local.enabled_cluster_addons
 
