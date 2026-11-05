@@ -27,7 +27,7 @@ resource "helm_release" "aws_lb_controller" {
     replicaCount        = var.desired_ha_replicas
     region              = data.aws_region.current.region
     serviceMonitor = {
-      enabled = true
+      enabled = false
     }
     vpcId = data.tfe_outputs.networking.nonsensitive_values.id
     serviceAccount = {

@@ -25,7 +25,7 @@ resource "helm_release" "external_dns" {
     }
     automountServiceAccountToken = true
     serviceMonitor = {
-      enabled = var.ext_dns_enable_service_monitor
+      enabled = false
     }
     revisionHistoryLimit = 10
     txtOwnerId           = "govuk"
