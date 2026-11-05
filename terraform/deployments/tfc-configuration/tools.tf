@@ -41,7 +41,7 @@ module "tools_cluster_infrastructure" {
   organization      = var.organization
   workspace_name    = "tools-cluster-infrastructure"
   workspace_desc    = "This module manages foundational cloud resources that are required for the tools eks cluster"
-  workspace_tags    = ["cluster", "infrastructure", "tools"]
+  workspace_tags    = ["cluster-infrastructure", "tools"]
   terraform_version = var.terraform_version
   execution_mode    = "remote"
   working_directory = "/terraform/deployments/tools/cluster-infrastructure/"
@@ -72,7 +72,7 @@ module "tools_cluster_access" {
   organization      = var.organization
   workspace_name    = "tools-cluster-access"
   workspace_desc    = "This module manages access for the tools eks cluster"
-  workspace_tags    = ["cluster", "access", "tools"]
+  workspace_tags    = ["cluster-access", "tools"]
   terraform_version = var.terraform_version
   execution_mode    = "remote"
   working_directory = "/terraform/deployments/tools/cluster-access/"
@@ -104,7 +104,7 @@ module "tools_cluster_services" {
   organization      = var.organization
   workspace_name    = "tools-cluster-infrastructure"
   workspace_desc    = "This module manages foundational cloud resources that are required for the tools eks cluster"
-  workspace_tags    = ["cluster", "services", "tools"]
+  workspace_tags    = ["cluster-services", "tools"]
   terraform_version = var.terraform_version
   execution_mode    = "remote"
   working_directory = "/terraform/deployments/tools/cluster-services/"
