@@ -102,7 +102,7 @@ module "tools_cluster_services" {
   source = "github.com/alphagov/terraform-govuk-tfe-workspacer"
 
   organization      = var.organization
-  workspace_name    = "tools-cluster-infrastructure"
+  workspace_name    = "tools-cluster-services"
   workspace_desc    = "This module manages foundational cloud resources that are required for the tools eks cluster"
   workspace_tags    = ["cluster-services", "tools"]
   terraform_version = var.terraform_version
