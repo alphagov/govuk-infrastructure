@@ -5,6 +5,11 @@
 
 # Required by cluster-secrets chart, but it won't create it itself
 # (even if create_namespace = true is set)
+resource "kubernetes_namespace_v1" "monitoring" {
+  metadata {
+    name = "monitoring"
+  }
+}
 
 resource "helm_release" "external_secrets" {
   name             = "external-secrets"
