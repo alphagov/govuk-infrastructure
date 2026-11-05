@@ -48,7 +48,7 @@ provider "aws" {
       product              = "govuk"
       system               = "govuk-platform-engineering"
       service              = "eks-cluster-services"
-      environment          = var.govuk_environment
+      environment          = "tools"
       owner                = "govuk-platform-engineering@digital.cabinet-office.gov.uk"
       repository           = "govuk-infrastructure"
       terraform-deployment = basename(abspath(path.root))
@@ -57,7 +57,7 @@ provider "aws" {
 }
 
 data "aws_eks_cluster_auth" "cluster_token" {
-  name = var.cluster_name
+  name = data.tfe_outputs.cluster_infrastructure.nonsensitive_values.cluster_id
 }
 
 provider "kubernetes" {
@@ -83,24 +83,24 @@ provider "kubectl" {
   load_config_file       = false
 }
 
-locals {
-  monitoring_ns          = data.tfe_outputs.cluster_infrastructure.nonsensitive_values.monitoring_namespace
-  services_ns            = data.tfe_outputs.cluster_infrastructure.nonsensitive_values.cluster_services_namespace
-  external_dns_zone_name = data.tfe_outputs.cluster_infrastructure.nonsensitive_values.external_dns_zone_name
-  alb_ingress_annotations = {
-    "alb.ingress.kubernetes.io/scheme"       = "internet-facing"
-    "alb.ingress.kubernetes.io/target-type"  = "ip"
-    "alb.ingress.kubernetes.io/listen-ports" = jsonencode([{ HTTP = 80 }, { HTTPS = 443 }])
-    "alb.ingress.kubernetes.io/ssl-redirect" = "443"
-    "alb.ingress.kubernetes.io/ssl-policy"   = "ELBSecurityPolicy-TLS13-1-2-2021-06"
-  }
-  dex_host                  = "dex.${local.external_dns_zone_name}"
-  alertmanager_host         = "alertmanager.${local.external_dns_zone_name}"
-  grafana_host              = "grafana.${local.external_dns_zone_name}"
-  prometheus_host           = "prometheus.${local.external_dns_zone_name}"
-  prometheus_internal_url   = "http://kube-prometheus-stack-prometheus:9090"
-  alertmanager_internal_url = "http://kube-prometheus-stack-alertmanager:9093"
-  is_ephemeral              = startswith(var.govuk_environment, "eph-")
-  elb_name_suffix           = local.is_ephemeral ? "-${var.govuk_environment}" : ""
-}
+# locals {
+#   monitoring_ns          = data.tfe_outputs.cluster_infrastructure.nonsensitive_values.monitoring_namespace
+#   services_ns            = data.tfe_outputs.cluster_infrastructure.nonsensitive_values.cluster_services_namespace
+#   external_dns_zone_name = data.tfe_outputs.cluster_infrastructure.nonsensitive_values.external_dns_zone_name
+#   alb_ingress_annotations = {
+#     "alb.ingress.kubernetes.io/scheme"       = "internet-facing"
+#     "alb.ingress.kubernetes.io/target-type"  = "ip"
+#     "alb.ingress.kubernetes.io/listen-ports" = jsonencode([{ HTTP = 80 }, { HTTPS = 443 }])
+#     "alb.ingress.kubernetes.io/ssl-redirect" = "443"
+#     "alb.ingress.kubernetes.io/ssl-policy"   = "ELBSecurityPolicy-TLS13-1-2-2021-06"
+#   }
+#   dex_host                  = "dex.${local.external_dns_zone_name}"
+#   alertmanager_host         = "alertmanager.${local.external_dns_zone_name}"
+#   grafana_host              = "grafana.${local.external_dns_zone_name}"
+#   prometheus_host           = "prometheus.${local.external_dns_zone_name}"
+#   prometheus_internal_url   = "http://kube-prometheus-stack-prometheus:9090"
+#   alertmanager_internal_url = "http://kube-prometheus-stack-alertmanager:9093"
+#   is_ephemeral              = startswith(var.govuk_environment, "eph-")
+#   elb_name_suffix           = local.is_ephemeral ? "-${var.govuk_environment}" : ""
+# }
 
