@@ -44,3 +44,13 @@ output "external_dns_zone_name" {
   value       = local.external_dns_zone_name
 }
 
+output "external_dns_policy_name" {
+  description = "aws external dns iam policy name"
+  value       = aws_iam_policy.external_dns.name
+}
+
+output "external_dns_policy_arn" {
+  description = "aws external dns iam policy arn"
+  value       = aws_iam_policy.external_dns.arn
+}
+

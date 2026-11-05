@@ -20,30 +20,8 @@ module "external_dns_iam_role" {
   enable_oidc        = true
   oidc_provider_urls = [module.eks.oidc_provider]
   policies = {
-    "${aws_iam_policy.external_dns.name}" = aws_iam_policy.external_dns.arn
+    "${data.tfe_outputs.networking.nonsensitive_values.external_dns_policy_name}" = data.tf_outputs.networking.nonsenstive_values.external_dns_policy_arn
   }
   oidc_subjects = ["system:serviceaccount:${local.external_dns_ns}:${local.external_dns_service_account_name}"]
 }
 
-resource "aws_iam_policy" "external_dns" {
-  name        = "EKSExternalDNS-${var.cluster_name}"
-  description = "EKS ${local.external_dns_service_account_name} policy for cluster ${module.eks.cluster_name}"
-  policy      = data.aws_iam_policy_document.external_dns.json
-}
-
-# https://github.com/kubernetes-sigs/external-dns/blob/master/docs/tutorials/aws.md#iam-policy
-data "aws_iam_policy_document" "external_dns" {
-  statement {
-    effect    = "Allow"
-    actions   = ["route53:ChangeResourceRecordSets"]
-    resources = [data.tfe_outputs.networking.nonsensitive_values.external_dns_zone_arn]
-  }
-  statement {
-    effect = "Allow"
-    actions = [
-      "route53:ListHostedZones",
-      "route53:ListResourceRecordSets",
-    ]
-    resources = ["*"]
-  }
-}
