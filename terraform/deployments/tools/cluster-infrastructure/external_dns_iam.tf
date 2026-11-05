@@ -20,7 +20,7 @@ module "external_dns_iam_role" {
   enable_oidc        = true
   oidc_provider_urls = [module.eks.oidc_provider]
   policies = {
-    "${data.tfe_outputs.networking.nonsensitive_values.external_dns_policy_name}" = data.tfe_outputs.networking.nonsenstive_values.external_dns_policy_arn
+    "${data.tfe_outputs.networking.nonsensitive_values.external_dns_policy_name}" = data.tfe_outputs.networking.nonsensitive_values.external_dns_policy_arn
   }
   oidc_subjects = ["system:serviceaccount:${local.external_dns_ns}:${local.external_dns_service_account_name}"]
 }
