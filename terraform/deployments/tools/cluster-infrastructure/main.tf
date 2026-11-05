@@ -1,4 +1,4 @@
-# The cluster-infrastructure module is responsible for the AWS resources which
+#eThe cluster-infrastructure module is responsible for the AWS resources which
 # constitute the EKS cluster.
 #
 # Any Kubernetes objects which need to be managed via Terraform belong in
@@ -231,7 +231,7 @@ module "eks" {
 
   name               = var.cluster_name
   kubernetes_version = var.cluster_version
-  subnet_ids         = [for s in aws_subnet.eks_control_plane : s.id]
+  subnet_ids         = [for s in data.tfe_outputs.data.tfe_outputs.networking.nonsensitive_values.eks_control_plane : s.id]
   vpc_id             = data.tfe_outputs.networking.nonsensitive_values.id
 
   addons = local.enabled_cluster_addons

@@ -25,3 +25,21 @@ module "external_dns_iam_role" {
   oidc_subjects = ["system:serviceaccount:${local.external_dns_ns}:${local.external_dns_service_account_name}"]
 }
 
+
+
+# https://github.com/kubernetes-sigs/external-dns/blob/master/docs/tutorials/aws.md#iam-policy
+data "aws_iam_policy_document" "external_dns" {
+  statement {
+    effect    = "Allow"
+    actions   = ["route53:ChangeResourceRecordSets"]
+    resources = [aws_route53_zone.cluster_public.arn]
+  }
+  statement {
+    effect = "Allow"
+    actions = [
+      "route53:ListHostedZones",
+      "route53:ListResourceRecordSets",
+    ]
+    resources = ["*"]
+  }
+}

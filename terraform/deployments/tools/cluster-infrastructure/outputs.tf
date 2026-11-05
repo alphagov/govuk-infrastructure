@@ -28,11 +28,6 @@ output "node_security_group_id" {
   value       = module.eks.cluster_primary_security_group_id
 }
 
-output "cluster_autoscaler_service_account_name" {
-  description = "Name of the k8s service account for the cluster autoscaler."
-  value       = local.cluster_autoscaler_service_account_name
-}
-
 output "cluster_autoscaler_role_arn" {
   description = "IAM role ARN corresponding to the k8s service account for the AWS Load Balancer Controller."
   value       = module.cluster_autoscaler_iam_role.arn
@@ -78,11 +73,6 @@ output "external_dns_zone_id" {
   value       = aws_route53_zone.cluster_public.zone_id
 }
 
-output "external_dns_zone_name" {
-  description = "Domain name of the Route53 zone to be managed by the external-dns addon."
-  value       = local.external_dns_zone_name
-}
-
 output "external_secrets_service_account_name" {
   description = "Name of the k8s service account for external-secrets."
   value       = local.external_secrets_service_account_name
@@ -103,34 +93,8 @@ output "aws_lb_controller_service_account_name" {
   value       = local.aws_lb_controller_service_account_name
 }
 
-output "aws_ebs_csi_driver_controller_service_account_name" {
-  description = "Name of the k8s service account for the AWS EBS CSI Controller"
-  value       = local.ebs_csi_driver_controller_service_account_name
-}
-
-output "grafana_iam_role_arn" {
-  description = "IAM role ARN corresponding to the k8s service account for Grafana."
-  value       = module.grafana_iam_role.arn
-}
-
 output "monitoring_namespace" {
   description = "The namespace for monitoring."
   value       = local.monitoring_namespace
-}
-
-output "public_nat_gateway_ips" {
-  value = [for eip in aws_eip.eks_nat : eip.public_ip]
-}
-
-output "private_subnets" {
-  value = [for sn in aws_subnet.eks_private : sn.id]
-}
-
-output "public_subnets" {
-  value = [for sn in aws_subnet.eks_public : sn.id]
-}
-
-output "control_plane_subnets" {
-  value = [for sn in aws_subnet.eks_control_plane : sn.id]
 }
 
