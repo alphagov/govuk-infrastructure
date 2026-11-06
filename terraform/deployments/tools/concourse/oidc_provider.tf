@@ -19,6 +19,13 @@ data "aws_iam_policy_document" "worker_assume_role_policy" {
     effect  = "Allow"
     actions = ["sts:AssumeRoleWithWebIdentity"]
 
+    principals {
+      identifiers = [
+        aws_iam_openid_connect_provider.oidc_provider.arn
+      ]
+      type = "Federated"
+    }
+
     condition {
       test     = "StringEquals"
       values   = [local.oidc_client_id]
