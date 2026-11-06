@@ -63,6 +63,10 @@ on:
         required: false
         type: boolean
         default: true
+      timeoutMinutes:
+        type: number
+        required: false
+        default: 10
     secrets:
       BUILD_SECRETS:
         description: "Allows adding secrets to the docker build task - https://docs.docker.com/build/ci/github-actions/secrets"
@@ -86,7 +90,7 @@ jobs:
   build-and-push-arm-image:
     name: Build and push ARM image for ${{ inputs.imageName }}
     runs-on: ${{ inputs.runnerName }}
-    timeout-minutes: 10
+    timeout-minutes: ${{ inputs.timeoutMinutes }}
     permissions:
       contents: read
       id-token: write
