@@ -26,7 +26,7 @@ resource "helm_release" "concourse" {
         {
           valueFrom = {
             secretKeyRef = {
-              name = kubernetes_secret.concourse_local_user_password.id
+              name = kubernetes_secret_v1.concourse_local_user_password.metadata.name
               key = "value"
             }
           }
@@ -37,8 +37,8 @@ resource "helm_release" "concourse" {
   })]
 }
 
-resource "kubernetes_secret" "concourse_local_user_password" {
-  id = "concourse-web-user"
+resource "kubernetes_secret_v1" "concourse_local_user_password" {
+
   metadata {
     name = "concourse-web-user"
   }
