@@ -1,0 +1,26 @@
+---
+var_sources:
+  - name: aws
+    type: idtoken
+    config:
+      audience: ["aws.oidc.concourse.tools.govuk.digital"]
+
+jobs:
+  - name: assume-role
+    plan:
+      - task: assume-role-with-web-identity
+        config:
+          platform: linux
+          image_resource:
+            type: registry-image
+            source:
+              repository: amazon/aws-cli
+          run:
+            path: bash
+            args:
+              - -xc
+              - |
+                aws sts assume-role-with-web-identity \
+                  --role-arn "arn:aws:iam::900804735337:role/concourse-worker-role" \
+                  --role-session-name "concourse-demo" \
+                  --web-identity-token "((aws:token))"
