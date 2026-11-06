@@ -141,7 +141,7 @@ resource "github_team" "govuk" {
 }
 
 resource "github_team" "govuk_data_engineering" {
-  name           = "govuk-data-engineering"
+  name           = "GOVUK Data Engineering"
   privacy        = "closed"
   description    = "Engineers and Developers in GOV.UK data engineering"
   parent_team_id = github_team.govuk.id
