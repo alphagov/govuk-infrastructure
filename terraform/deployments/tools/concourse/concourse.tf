@@ -30,6 +30,12 @@ resource "helm_release" "concourse" {
         ]
       }
 
+      auth = {
+        mainTeam = {
+          localUser = "admin"
+        }
+      }
+
       env = [
         {
           valueFrom = {
