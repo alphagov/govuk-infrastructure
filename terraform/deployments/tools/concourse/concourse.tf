@@ -43,7 +43,8 @@ resource "helm_release" "concourse" {
 resource "kubernetes_secret_v1" "concourse_local_user_password" {
 
   metadata {
-    name = "concourse-web-user"
+    name      = "concourse-web-user"
+    namespace = "concourse"
   }
   data = {
     value = "admin:${random_password.concourse_local_user_password.result}"
