@@ -11,6 +11,7 @@ resource "helm_release" "concourse" {
       customPgData = "/var/lib/postgresql/data/17"
     }
     web = {
+      externalUrl = "https://concourse.tools.govuk.digital"
       ingress = {
         enabled = true
         annotations = {
