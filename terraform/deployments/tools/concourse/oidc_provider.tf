@@ -1,5 +1,6 @@
 locals {
-  oidc_client_id = "aws.oidc.concourse.tools.govuk.digital"
+  oidc_name = "concourse.tools.govuk.digital"
+  oidc_client_id = "aws.oidc.${local.oidc_name}"
 }
 resource "aws_iam_openid_connect_provider" "oidc_provider" {
   url = "https://concourse.tools.govuk.digital"
@@ -29,13 +30,13 @@ data "aws_iam_policy_document" "worker_assume_role_policy" {
     condition {
       test     = "StringEquals"
       values   = [local.oidc_client_id]
-      variable = "${local.oidc_client_id}:aud"
+      variable = "${local.oidc_name}:aud"
     }
 
     condition {
       test     = "StringEquals"
       values   = ["main/demo"]
-      variable = "${local.oidc_client_id}:sub"
+      variable = "${local.oidc_name}:sub"
     }
   }
 }
