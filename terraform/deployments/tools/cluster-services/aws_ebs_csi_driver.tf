@@ -5,6 +5,7 @@ resource "helm_release" "aws_ebs_csi_driver" {
   version          = "2.67.2"
   namespace        = "aws-ebs-csi-driver"
   create_namespace = true
+  timeout          = 1200
   values = [yamlencode({
     controller = {
       enableMetrics = true
@@ -12,7 +13,7 @@ resource "helm_release" "aws_ebs_csi_driver" {
         create = true
         name   = "ebs-csi-controller-sa"
         annotations = {
-          "eks.amazonaws.com/role-arn" = data.tfe_outputs.cluster_infrastructure.nonsensitive_values.aws_ebs_csi_driver_iam_role_arn
+          "eks.amazonaws.com/role-arn" = module.aws_ebs_csi_driver_iam_role.arn
         }
       }
     }
