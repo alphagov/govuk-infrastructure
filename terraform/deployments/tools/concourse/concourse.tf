@@ -26,7 +26,7 @@ resource "helm_release" "concourse" {
         {
           valueFrom = {
             secretKeyRef = {
-              name = kubernetes_secret_v1.concourse_local_user_password.metadata.name
+              name = kubernetes_secret_v1.concourse_local_user_password.metadata[0].name
               key = "value"
             }
           }
