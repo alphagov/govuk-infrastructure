@@ -20,7 +20,7 @@ jobs:
             args:
               - -xc
               - |
-                aws sts assume-role-with-web-identity \
+                PAGER=cat aws sts assume-role-with-web-identity \
                   --role-arn "arn:aws:iam::900804735337:role/concourse-worker-role" \
                   --role-session-name "concourse-demo" \
                   --web-identity-token "((aws:token))"
