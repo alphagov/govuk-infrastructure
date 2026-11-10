@@ -20,7 +20,22 @@ spec:
             rego: |
               package denycreationdefaultnamespace
 
+              # API server has to be able to create the kubernetes service
+              is_exempt if {
+                input.review.kind.kind == "Service"
+                input.review.name == "kubernetes"
+              }
+
+              # EKS has to be able to create the CA in a ConfigMap
+              is_exempt if {
+                input.review.kind.kind == "ConfigMap"
+                input.review.name == "kube-root-ca.crt"
+              }
+
               violation contains {"msg": msg} if {
+
+                not is_exempt
+
                 input.review.namespace == "default"
 
                 msg := sprintf("(%s) is not allowed to be created, modified or deleted on in the default namespace", [input.review.name])
