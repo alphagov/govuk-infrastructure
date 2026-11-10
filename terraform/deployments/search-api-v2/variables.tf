@@ -68,3 +68,9 @@ variable "discovery_engine_search_add_ons" {
   description = "The search add-on enabled for Discovery Engine, as part of the search config"
   default     = []
 }
+
+variable "create_service_account_token_creator_role" {
+  type        = bool
+  description = "Flag for creation of service account token creator role, to enable service account impersonation"
+  default     = false
+}
