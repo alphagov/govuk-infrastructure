@@ -48,10 +48,10 @@ spec:
                 )
               }
 
-              default parse_gds_username(gds_users_part) := ""
+              default parse_gds_username(role_name) := ""
 
-              parse_gds_username(gds_users_part) := username if {
-                strings.any_suffix_match(gds_users_part, [
+              parse_gds_username(role_name) := username if {
+                strings.any_suffix_match(role_name, [
                   "-fulladmin",
                   "-tempadmin",
                   "-platformengineer",
@@ -59,12 +59,24 @@ spec:
                   "-readonly",
                   "-ithctester",
                 ])
-                user_parts := split(gds_users_part, "-")
+                user_parts := split(role_name, "-")
                 username = concat("-", array.slice(user_parts, 0, count(user_parts) - 1))
               }
 
-              parse_entraid_username(entra_id_part, gds_username) := entra_id_part if {
-                contains(entra_id_part, "@")
+              parse_entraid_username(session_name, role_name, gds_username) := entra_username if {
+                strings.any_suffix_match(session_name, [
+                  "gdsbeta.id.digital.gov.uk",
+                  "id.internal.digital.gov.uk",
+                ])
+
+                role_parts := split(role_name, "_")
+                role_parts_length := count(role_parts)
+                role_parts_length >= 3
+
+                role_parts[0] == "AWSReservedSSO"
+
+                username_parts := split(session_name, "-")
+                entra_username := concat("-", array.slice(username_parts, 0, count(username_parts) - 1))
               } else := gds_username
 
               default parse_username_from_arn(arn) := ""
@@ -79,7 +91,7 @@ spec:
                 endswith(arn_prefix, "assumed-role")
 
                 gds_username := parse_gds_username(arn_parts[1])
-                username := parse_entraid_username(arn_parts[2], gds_username)
+                username := parse_entraid_username(arn_parts[2], arn_parts[1], gds_username)
               }
 
               violation contains {"msg": msg} if {
