@@ -1,0 +1,15 @@
+kind: Suite
+apiVersion: test.gatekeeper.sh/v1alpha1
+tests:
+  - name: deny_creation_default_namespace
+    template: ../../resources/constraint_templates/deny_creation_default_namespace.yaml
+    constraint: ../../resources/constraints/deny_creation_default_namespace.yaml
+    cases:
+      - name: deny creating in the default namespace
+        object: samples/deny_creation_default_namespace/deny_creation_default_namespace/case.yaml
+        assertions:
+          - violations: yes
+      - name: allow creating in a non-default namespace
+        object: samples/deny_creation_default_namespace/allow_creation_non_default_namespace/case.yaml
+        assertions:
+          - violations: no
