@@ -56,3 +56,15 @@ variable "complete_query_requests" {
   description = "The maximum number of complete query requests per minute for Discovery Engine"
   default     = 300
 }
+
+variable "discovery_engine_search_tier" {
+  type        = string
+  description = "The search feature tier of Discovery Engine"
+  default     = "SEARCH_TIER_STANDARD"
+}
+
+variable "discovery_engine_search_add_ons" {
+  type        = list(string)
+  description = "The search add-on enabled for Discovery Engine, as part of the search config"
+  default     = []
+}
