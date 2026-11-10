@@ -5,7 +5,7 @@ metadata:
   name: test-jrr-with-annotation
   namespace: apps
   annotations:
-    platform.publishing.service.gov.uk/reviewed-by: arn:aws:sts::123456789:assumed-role/SomeRole/user.name@example.com
+    platform.publishing.service.gov.uk/reviewed-by: arn:aws:sts::123456789:assumed-role/AWSReservedSSO_Developer_1234abcd/other.user-gdsbeta.id.digital.gov.uk
 spec:
   jobRequestName: test-jr-with-annotation
   decision: Approved
