@@ -5,6 +5,7 @@ module "gatekeeper" {
     immutable_configmap                    = true
     validate_jobrequestreviews             = false
     jobrequestoperator_requiredannotations = false
+    deny_creation_default_namespace        = true
   }
 
   constraint_violations_max_to_display = 25

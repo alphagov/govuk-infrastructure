@@ -4,6 +4,7 @@ variable "dryrun_map" {
     immutable_configmap                    = bool
     validate_jobrequestreviews             = bool
     jobrequestoperator_requiredannotations = bool
+    deny_creation_default_namespace        = bool
   })
 }
 

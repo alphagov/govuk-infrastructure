@@ -1,0 +1,27 @@
+apiVersion: templates.gatekeeper.sh/v1
+kind: ConstraintTemplate
+metadata:
+  name: denycreationdefaultnamespace
+  annotations:
+    metadata.gatekeeper.sh/title: Deny creation of objects in the default namespace
+    description: This constraint ensures that no objects are created in the default namespace
+spec:
+  crd:
+    spec:
+      names:
+        kind: denycreationdefaultnamespace
+
+  targets:
+    - target: admission.k8s.gatekeeper.sh
+      code:
+        - engine: Rego
+          source:
+            version: "v1"
+            rego: |
+              package denycreationdefaultnamespace
+
+              violation contains {"msg": msg} if {
+                input.review.namespace == "default"
+
+                msg := sprintf("(%s) is not allowed to be created, modified or deleted on in the default namespace", [input.review.name])
+              }

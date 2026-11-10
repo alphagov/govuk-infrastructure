@@ -1,0 +1,37 @@
+kind: AdmissionReview
+apiVersion: admission.k8s.io/v1beta1
+request: # Fully-qualified group/version/kind of the incoming object
+  kind:
+    group: apps
+    version: v1
+    kind: Deployment
+
+  operation: "CREATE"
+  # Name of the resource being modified
+  name: app
+  # Namespace of the resource being modified, if the resource is namespaced (or is a Namespace object)
+  namespace: apps
+  userInfo:
+    groups: ["platformengineer", "system:masters", "system:authenticated"]
+    username: "test"
+  object:
+    apiVersion: v1
+    kind: Deployment
+    metadata:
+      name: app
+      namespace: apps
+      labels:
+        app: app
+    spec:
+      replicas: 3
+      selector:
+        matchLabels:
+          app: app
+      template:
+        metadata:
+          labels:
+            app: app
+        spec:
+          containers:
+            - name: web
+              image: nginx:latest
