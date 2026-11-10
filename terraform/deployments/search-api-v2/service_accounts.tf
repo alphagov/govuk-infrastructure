@@ -26,29 +26,32 @@ resource "google_project_iam_custom_role" "api" {
   title       = "search-api-v2"
   description = "Provides the required permissions for Search API v2 to access Discovery Engine"
 
-  permissions = [
-    "discoveryengine.dataStores.completeQuery",
-    "discoveryengine.dataStores.get",
-    "discoveryengine.documents.create",
-    "discoveryengine.documents.delete",
-    "discoveryengine.documents.get",
-    "discoveryengine.documents.import",
-    "discoveryengine.documents.list",
-    "discoveryengine.documents.update",
-    "discoveryengine.evaluations.create",
-    "discoveryengine.evaluations.get",
-    "discoveryengine.evaluations.list",
-    "discoveryengine.operations.get",
-    "discoveryengine.sampleQueries.import",
-    "discoveryengine.sampleQuerySets.create",
-    "discoveryengine.sampleQuerySets.delete",
-    "discoveryengine.sampleQuerySets.get",
-    "discoveryengine.servingConfigs.search",
-    "discoveryengine.suggestionDenyListEntries.import",
-    "discoveryengine.suggestionDenyListEntries.purge",
-    "discoveryengine.userEvents.import",
-    "discoveryengine.userEvents.purge",
-  ]
+  permissions = concat(
+    [
+      "discoveryengine.dataStores.completeQuery",
+      "discoveryengine.dataStores.get",
+      "discoveryengine.documents.create",
+      "discoveryengine.documents.delete",
+      "discoveryengine.documents.get",
+      "discoveryengine.documents.import",
+      "discoveryengine.documents.list",
+      "discoveryengine.documents.update",
+      "discoveryengine.evaluations.create",
+      "discoveryengine.evaluations.get",
+      "discoveryengine.evaluations.list",
+      "discoveryengine.operations.get",
+      "discoveryengine.sampleQueries.import",
+      "discoveryengine.sampleQuerySets.create",
+      "discoveryengine.sampleQuerySets.delete",
+      "discoveryengine.sampleQuerySets.get",
+      "discoveryengine.servingConfigs.search",
+      "discoveryengine.suggestionDenyListEntries.import",
+      "discoveryengine.suggestionDenyListEntries.purge",
+      "discoveryengine.userEvents.import",
+      "discoveryengine.userEvents.purge",
+    ],
+    var.gcp_env == "integration" ? ["discoveryengine.servingConfigs.answer"] : []
+  )
 }
 
 resource "google_project_iam_binding" "api" {
