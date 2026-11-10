@@ -33,12 +33,16 @@ locals {
   ])
 
   update_mask = join(",", concat(keys(local.dynamic_properties), local.action_keys))
+
+  encoded_properties = jsonencode(local.properties)
+
+  escaped_properties = replace(local.encoded_properties, "'", "\\u0027")
 }
 
 resource "restapi_object" "control" {
   path      = local.path
   object_id = var.id
-  data      = jsonencode(local.properties)
+  data      = local.escaped_properties
 
   # On creation, instead of in the path or as part of the data, the API expects the ID of the object
   # to be passed as a query parameter
