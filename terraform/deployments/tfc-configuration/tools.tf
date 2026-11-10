@@ -8,9 +8,9 @@ module "tools_networking" {
   source = "github.com/alphagov/terraform-govuk-tfe-workspacer"
 
   organization      = var.organization
-  workspace_name    = "tools_networking"
-  workspace_desc    = "This module manages foundational cloud resources that are required for the tools account"
-  workspace_tags    = ["networking", "tools"]
+  workspace_name    = "networking-concourse"
+  workspace_desc    = "This module manages foundational cloud resources that are required for the tools account concourse cluster"
+  workspace_tags    = ["networking", "tools", "concourse"]
   terraform_version = var.terraform_version
   execution_mode    = "remote"
   working_directory = "/terraform/deployments/tools/networking/"
@@ -39,9 +39,9 @@ module "tools_cluster_infrastructure" {
   source = "github.com/alphagov/terraform-govuk-tfe-workspacer"
 
   organization      = var.organization
-  workspace_name    = "tools-cluster-infrastructure"
-  workspace_desc    = "This module manages foundational cloud resources that are required for the tools eks cluster"
-  workspace_tags    = ["cluster-infrastructure", "tools"]
+  workspace_name    = "cluster-infrastructure-concourse"
+  workspace_desc    = "This module manages foundational cloud resources that are required for the tools concourse eks cluster"
+  workspace_tags    = ["cluster-infrastructure", "tools", "concourse"]
   terraform_version = var.terraform_version
   execution_mode    = "remote"
   working_directory = "/terraform/deployments/tools/cluster-infrastructure/"
@@ -70,9 +70,9 @@ module "tools_cluster_access" {
   source = "github.com/alphagov/terraform-govuk-tfe-workspacer"
 
   organization      = var.organization
-  workspace_name    = "tools-cluster-access"
-  workspace_desc    = "This module manages access for the tools eks cluster"
-  workspace_tags    = ["cluster-access", "tools"]
+  workspace_name    = "cluster-access-concourse"
+  workspace_desc    = "This module manages access for the tools concourse eks cluster"
+  workspace_tags    = ["cluster-access", "tools", "concourse"]
   terraform_version = var.terraform_version
   execution_mode    = "remote"
   working_directory = "/terraform/deployments/tools/cluster-access/"
@@ -102,9 +102,9 @@ module "tools_cluster_services" {
   source = "github.com/alphagov/terraform-govuk-tfe-workspacer"
 
   organization      = var.organization
-  workspace_name    = "tools-cluster-services"
-  workspace_desc    = "This module manages foundational cloud resources that are required for the tools eks cluster"
-  workspace_tags    = ["cluster-services", "tools"]
+  workspace_name    = "cluster-services-concourse"
+  workspace_desc    = "This module manages foundational cloud resources that are required for the tools concourse eks cluster services"
+  workspace_tags    = ["cluster-services", "tools", "concourse"]
   terraform_version = var.terraform_version
   execution_mode    = "remote"
   working_directory = "/terraform/deployments/tools/cluster-services/"
@@ -134,7 +134,7 @@ module "tools_concourse" {
 
   organization      = var.organization
   workspace_name    = "tools-concourse"
-  workspace_desc    = "This module manages concourse resources"
+  workspace_desc    = "This module manages concourse resources inside the concourse eks cluster"
   workspace_tags    = ["concourse", "tools"]
   terraform_version = var.terraform_version
   execution_mode    = "remote"
