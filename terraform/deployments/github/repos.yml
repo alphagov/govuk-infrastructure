@@ -571,7 +571,8 @@ repos:
       - "alphagov/gov-uk-production-admin"
       - "alphagov/gov-uk-production-deploy"
 
-  govuk_content_item_loader: {}
+  govuk_content_item_loader:
+    archived: true
 
   govuk_document_types:
     homepage_url: "https://docs.publishing.service.gov.uk/document-types.html"
