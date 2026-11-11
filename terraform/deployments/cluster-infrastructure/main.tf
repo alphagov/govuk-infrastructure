@@ -128,7 +128,16 @@ locals {
           "k8s.io/cluster-autoscaler/enabled"             = "true"
           "k8s.io/cluster-autoscaler/${var.cluster_name}" = "owned"
         }
-      }
+      },
+      var.arm_workers_blue_cilium_ready_taint ? {
+        taints = {
+          cilium-ready = {
+            key    = "node.cilium.io/agent-not-ready"
+            value  = "true"
+            effect = "NO_EXECUTE"
+          }
+        }
+      } : {}
     )
   }
 
@@ -149,7 +158,16 @@ locals {
           "k8s.io/cluster-autoscaler/enabled"             = "true"
           "k8s.io/cluster-autoscaler/${var.cluster_name}" = "owned"
         }
-      }
+      },
+      var.arm_workers_green_cilium_ready_taint ? {
+        taints = {
+          cilium-ready = {
+            key    = "node.cilium.io/agent-not-ready"
+            value  = "true"
+            effect = "NO_EXECUTE"
+          }
+        }
+      } : {}
     )
   }
 
