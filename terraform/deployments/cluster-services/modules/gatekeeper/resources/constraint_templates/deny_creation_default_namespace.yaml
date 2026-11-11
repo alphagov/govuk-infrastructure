@@ -22,6 +22,8 @@ spec:
 
               violation contains {"msg": msg} if {
                 input.review.namespace == "default"
+                username := input.review.userInfo.username
+                group := input.review.userInfo.groups
 
-                msg := sprintf("(%s) is not allowed to be created, modified or deleted on in the default namespace", [input.review.name])
+                msg := sprintf("Resource %s cannot be created, modified, or deleted by %s of group %s in the default namespace", [input.review.name, username, group])
               }
