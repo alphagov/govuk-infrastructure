@@ -20,3 +20,6 @@ rds_skip_final_snapshot     = true
 use_bedrock_endpoints = true
 
 secrets_recovery_window_in_days = 0
+
+arm_workers_blue_cilium_ready_taint  = false
+arm_workers_green_cilium_ready_taint = true

@@ -110,6 +110,18 @@ variable "arm_workers_green_size_max" {
   default     = 12
 }
 
+variable "arm_workers_blue_cilium_ready_taint" {
+  type        = bool
+  description = "Apply the cilium-ready taint to the 'blue' managed nodes?"
+  default     = false
+}
+
+variable "arm_workers_green_cilium_ready_taint" {
+  type        = bool
+  description = "Apply the cilium-ready taint to the 'green' managed nodes?"
+  default     = false
+}
+
 variable "enable_x86_workers" {
   type        = bool
   description = "Whether to enable the x86/AMD64 Managed Node Group"
