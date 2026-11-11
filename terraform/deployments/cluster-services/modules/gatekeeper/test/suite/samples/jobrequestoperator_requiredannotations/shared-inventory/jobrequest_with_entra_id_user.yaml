@@ -5,7 +5,7 @@ metadata:
   name: test-jr-with-annotation
   namespace: apps
   annotations:
-    platform.publishing.service.gov.uk/requested-by: arn:aws:sts::123456789:assumed-role/Developer/requesting.user@example.com
+    platform.publishing.service.gov.uk/requested-by: arn:aws:sts::123456789:assumed-role/AWSReservedSSO_Developer_1234abcd/requesting.user-id.internal.digital.gov.uk
 spec:
   containerFrom:
     podSpecFrom:

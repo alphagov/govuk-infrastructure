@@ -4,7 +4,7 @@ kind: JobRequest
 metadata:
   name: test-jr-with-annotation
   annotations:
-    platform.publishing.service.gov.uk/requested-by: arn:aws:sts::123456789:assumed-role/SomeRole/user.name@example.com
+    platform.publishing.service.gov.uk/requested-by: arn:aws:sts::123456789:assumed-role/AWSReservedSSO_Fake_Role_1234abcd/requesting.user-id.internal.digital.gov.uk
 spec:
   containerFrom:
     podSpecFrom:
