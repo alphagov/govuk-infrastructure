@@ -36,8 +36,8 @@ resource "google_discovery_engine_search_engine" "govuk_global" {
   data_store_ids = [google_discovery_engine_data_store.govuk_content.data_store_id]
 
   search_engine_config {
-    search_tier    = "SEARCH_TIER_STANDARD"
-    search_add_ons = []
+    search_tier    = var.discovery_engine_search_tier
+    search_add_ons = var.discovery_engine_search_add_ons
   }
 
   common_config {
