@@ -10,6 +10,9 @@ enable_arm_workers_blue  = false
 enable_arm_workers_green = true
 enable_x86_workers       = false
 
+arm_workers_blue_cilium_ready_taint  = false
+arm_workers_green_cilium_ready_taint = true
+
 use_bedrock_endpoints = true
 
 rds_backup_retention_period = 1

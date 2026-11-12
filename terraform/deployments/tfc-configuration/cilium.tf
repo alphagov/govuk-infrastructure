@@ -6,7 +6,7 @@ module "cilium-integration" {
   workspace_desc         = "Manages the Cilium installation in an EKS cluster"
   workspace_tags         = ["integration", "cilium", "eks"]
   terraform_version      = var.terraform_version
-  auto_apply             = true
+  auto_apply             = false
   auto_apply_run_trigger = true
   execution_mode         = "remote"
   working_directory      = "/terraform/deployments/cilium/"
@@ -45,7 +45,7 @@ module "cilium-staging" {
   workspace_desc         = "Manages the Cilium installation in an EKS cluster"
   workspace_tags         = ["staging", "cilium", "eks"]
   terraform_version      = var.terraform_version
-  auto_apply             = true
+  auto_apply             = false
   auto_apply_run_trigger = true
   execution_mode         = "remote"
   working_directory      = "/terraform/deployments/cilium/"
