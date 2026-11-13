@@ -104,3 +104,5 @@ replicate_assets_to_environments = [
   { destination_environment = "staging", priority = 20 },
   { destination_environment = "integration", priority = 30 },
 ]
+
+assets_s3_replication_backfill = true
