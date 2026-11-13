@@ -1,11 +1,19 @@
 data "aws_caller_identity" "current" {}
 
+data "aws_region" "current" {}
+
 locals {
   logging_target_bucket_default_val = data.aws_caller_identity.current.account_id == "430354129336" ? "govuk-test-aws-logging" : "govuk-${var.govuk_environment}-aws-logging"
 }
 
 resource "aws_s3_bucket" "this" {
   bucket = var.name
+
+  bucket_namespace = (
+    endswith(var.name, "-${data.aws_caller_identity.current.account_id}-${data.aws_region.current.region}-an")
+    ? "account-regional"
+    : "global"
+  )
 
   tags = merge(
     var.tags,
