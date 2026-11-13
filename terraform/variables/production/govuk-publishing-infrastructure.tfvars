@@ -105,4 +105,4 @@ replicate_assets_to_environments = [
   { destination_environment = "integration", priority = 30 },
 ]
 
-assets_s3_replication_backfill = true
+assets_s3_replication_backfill = false
