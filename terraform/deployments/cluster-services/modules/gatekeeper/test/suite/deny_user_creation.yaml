@@ -1,0 +1,23 @@
+kind: Suite
+apiVersion: test.gatekeeper.sh/v1alpha1
+tests:
+  - name: deny_user_creation
+    template: ../../resources/constraint_templates/deny_user_creation.yaml
+    constraint: ../../resources/constraints/deny_user_creation.yaml
+    cases:
+      - name: deny creating a ServiceAccount by user with fulladmin
+        object: samples/deny_user_creation/deny_creation_service_account_fulladmin/case.yaml
+        assertions:
+          - violations: yes
+      - name: deny creating a CertificateSigningRequest by a user with fulladmin
+        object: samples/deny_user_creation/deny_creation_certificate_signing_request_fulladmin/case.yaml
+        assertions:
+          - violations: yes
+      - name: allow creating a ServiceAccount by a system service account
+        object: samples/deny_user_creation/allow_creation_service_account_system/case.yaml
+        assertions:
+          - violations: no
+      - name: allow creating a CertificateSigningRequest by a system service account
+        object: samples/deny_user_creation/allow_creation_certificate_signing_request_system/case.yaml
+        assertions:
+          - violations: no

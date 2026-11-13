@@ -17,7 +17,7 @@ tests:
         object: samples/immutable_configmap/deny_updating_excluded_namespace/case.yaml
         assertions:
           - violations: yes
-      - name: deny updating from a user's group in a user's namepsace
+      - name: deny updating from a user's group in a user's namespace
         object: samples/immutable_configmap/deny_updating_user_group/case.yaml
         assertions:
           - violations: yes
