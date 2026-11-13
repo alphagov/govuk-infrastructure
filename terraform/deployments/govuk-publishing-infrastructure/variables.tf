@@ -281,3 +281,14 @@ variable "backup_assets_to_secondary_bucket" {
   description = "Create a second assets bucket in eu-west-2 and replicate assets to them"
   default     = false
 }
+
+variable "assets_s3_replication_backfill" {
+  type        = bool
+  description = "Backfill assets which failed replication to lower environments"
+  default     = false
+
+  validation {
+    condition     = !var.assets_s3_replication_backfill || length(var.replicate_assets_to_environments) > 0
+    error_message = "You can only backfill assets replication where replication is configured"
+  }
+}

@@ -32,8 +32,11 @@ data "aws_iam_policy_document" "assets_s3_replication_assume_role" {
     actions = ["sts:AssumeRole"]
 
     principals {
-      type        = "Service"
-      identifiers = ["s3.amazonaws.com"]
+      type = "Service"
+      identifiers = concat(
+        ["s3.amazonaws.com"],
+        var.assets_s3_replication_backfill ? ["batchoperations.s3.amazonaws.com"] : [],
+      )
     }
   }
 }
