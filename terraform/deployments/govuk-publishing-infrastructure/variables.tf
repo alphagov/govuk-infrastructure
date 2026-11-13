@@ -162,6 +162,36 @@ variable "backend_public_ja3_denylist" {
   default     = []
 }
 
+variable "signon_public_write_rate_warning" {
+  type        = number
+  description = "A warning rate limit threshold for POST, PUT, PATCH and DELETE requests to the Signon public web ACL"
+  default     = 60
+}
+
+variable "signon_public_write_rate_limit" {
+  type        = number
+  description = "An enforced rate limit threshold for POST, PUT, PATCH and DELETE requests to the Signon public web ACL"
+  default     = 100
+}
+
+variable "signon_public_base_rate_warning" {
+  type        = number
+  description = "A warning rate limit threshold for the Signon public web ACL"
+  default     = 500
+}
+
+variable "signon_public_base_rate_limit" {
+  type        = number
+  description = "An enforced rate limit threshold for the Signon public web ACL"
+  default     = 1000
+}
+
+variable "signon_public_ja3_denylist" {
+  type        = list(string)
+  description = "For the Signon ALB. List of JA3 signatures for which we should block all requests."
+  default     = []
+}
+
 variable "waf_log_retention_days" {
   type        = string
   description = "The number of days CloudWatch will retain WAF logs for."
