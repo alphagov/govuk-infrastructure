@@ -13,3 +13,11 @@ tests:
         object: samples/deny_creation_default_namespace/allow_creation_non_default_namespace/case.yaml
         assertions:
           - violations: no
+      - name: allow creating kubernetes Service in a default namespace
+        object: samples/deny_creation_default_namespace/allow_creation_kubernetes_service_default_namespace/case.yaml
+        assertions:
+          - violations: no
+      - name: allow creating kube-root-ca ConfigMap in a default namespace
+        object: samples/deny_creation_default_namespace/allow_creation_kube_ca_configmap_default_namespace/case.yaml
+        assertions:
+          - violations: no

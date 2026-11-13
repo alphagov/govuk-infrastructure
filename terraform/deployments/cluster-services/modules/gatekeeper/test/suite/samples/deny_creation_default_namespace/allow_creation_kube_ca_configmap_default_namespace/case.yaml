@@ -1,0 +1,29 @@
+kind: AdmissionReview
+apiVersion: admission.k8s.io/v1beta1
+request: # Fully-qualified group/version/kind of the incoming object
+  kind:
+    group: ""
+    version: v1
+    kind: ConfigMap
+
+  operation: "CREATE"
+  # Name of the resource being modified
+  name: kube-root-ca.crt
+  # Namespace of the resource being modified, if the resource is namespaced (or is a Namespace object)
+  namespace: default
+  object:
+    apiVersion: v1
+    kind: ConfigMap
+    metadata:
+      name: kube-root-ca.crt
+      namespace: default
+      annotations:
+        kubernetes.io/description: Contains a CA bundle that can be used to verify the
+          kube-apiserver when using internal endpoints such as the internal service IP
+          or kubernetes.default.svc. No other usage is guaranteed across distributions
+          of Kubernetes clusters.
+    data:
+      ca.crt: |
+        -----BEGIN CERTIFICATE-----
+        test
+        -----END CERTIFICATE-----

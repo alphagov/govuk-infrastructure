@@ -1,0 +1,37 @@
+kind: AdmissionReview
+apiVersion: admission.k8s.io/v1beta1
+request: # Fully-qualified group/version/kind of the incoming object
+  kind:
+    group: ""
+    version: v1
+    kind: Service
+
+  operation: "CREATE"
+  # Name of the resource being modified
+  name: kubernetes
+  # Namespace of the resource being modified, if the resource is namespaced (or is a Namespace object)
+  namespace: default
+  object:
+    apiVersion: v1
+    kind: Service
+    metadata:
+      name: kubernetes
+      namespace: default
+      labels:
+        component: apiserver
+        provider: kubernetes
+    spec:
+      clusterIP: 172.20.0.1
+      clusterIPs:
+        - 172.20.0.1
+      internalTrafficPolicy: Cluster
+      ipFamilies:
+        - IPv4
+      ipFamilyPolicy: SingleStack
+      ports:
+        - name: https
+          port: 443
+          protocol: TCP
+          targetPort: 443
+      sessionAffinity: None
+      type: ClusterIP
