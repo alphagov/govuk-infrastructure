@@ -1,0 +1,50 @@
+apiVersion: templates.gatekeeper.sh/v1
+kind: ConstraintTemplate
+metadata:
+  name: denyusercreation
+  annotations:
+    metadata.gatekeeper.sh/title: Deny creation of users by admins
+    description: This constraint ensures that no users are created by admins
+spec:
+  crd:
+    spec:
+      names:
+        kind: DenyUserCreation
+      validation:
+        openAPIV3Schema:
+          type: object
+          properties:
+            excludedGroups:
+              description: Groups that the policy should apply to.
+              type: array
+              items:
+                type: string
+
+  targets:
+    - target: admission.k8s.gatekeeper.sh
+      code:
+        - engine: Rego
+          source:
+            version: "v1"
+            rego: |
+              package denyusercreation
+
+              isUserInGroup(userInfo, excludedGroups) if {
+                userGroups := object.get(userInfo, "groups", [])
+                groups := {g | g := userGroups[_]}
+                excluded := {g | g := excludedGroups[_]}
+                intersection := groups & excluded
+                count(intersection) > 0
+              }
+
+              violation contains {"msg": msg} if {
+                input.review.operation == "CREATE"
+                username := input.review.userInfo.username
+                params := object.get(input, "parameters", {})
+                excludedGroups := object.get(params, "excludedGroups", [])
+
+                # Disallow if user belongs to an excluded group
+                isUserInGroup(input.review.userInfo, excludedGroups)
+
+                msg := sprintf("%s cannot be created by %s", [input.review.kind.kind, username])
+              }

@@ -1,0 +1,26 @@
+kind: AdmissionReview
+apiVersion: admission.k8s.io/v1beta1
+request: # Fully-qualified group/version/kind of the incoming object
+  kind:
+    group: ""
+    version: v1
+    kind: CertificateSigningRequest
+
+  operation: "CREATE"
+  # Name of the resource being modified
+  name: sa
+  # Namespace of the resource being modified, if the resource is namespaced (or is a Namespace object)
+  namespace: default
+  userInfo:
+    groups: ["fulladmin"]
+    username: "test"
+  object:
+    apiVersion: v1
+    kind: CertificateSigningRequest
+    metadata:
+      name: csa
+      namespace: default
+    spec:
+      request: request
+      signerName: kubernetes.io/kube-apiserver-client
+      expirationSeconds: 80000
