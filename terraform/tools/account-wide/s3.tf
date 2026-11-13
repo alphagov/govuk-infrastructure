@@ -14,6 +14,26 @@ module "logging_bucket" {
     data.aws_iam_policy_document.s3_aws_logging.json
   ]
   force_destroy = false
+
+  lifecycle_rules = [{
+    id     = "IntoGlacier"
+    status = "Enabled"
+
+    expiration = {
+      days = 90
+    }
+
+    noncurrent_version_expiration = {
+      noncurrent_days = 1
+    }
+
+    transition = [
+      {
+        days          = 30
+        storage_class = "GLACIER_IR"
+      }
+    ]
+  }]
 }
 
 data "aws_caller_identity" "current" {}
