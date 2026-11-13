@@ -26,37 +26,19 @@ data "aws_iam_policy_document" "assets_s3_replication_backfill" {
   count = var.assets_s3_replication_backfill ? 1 : 0
 
   statement {
-    sid = "PutObjectInDestinations"
-    actions = [
-      "s3:PutObject",
-      "s3:PutObjectAcl",
-      "s3:PutObjectTagging"
-    ]
-    resources = [
-      for config in var.replicate_assets_to_environments :
-      "arn:aws:s3:::govuk-assets-${config.destination_environment}/*"
-    ]
+    sid       = "InitiateReplication"
+    actions   = ["s3:InitiateReplication"]
+    resources = ["${module.assets_s3_bucket.arn}/*"]
   }
 
   statement {
-    sid = "ListSource"
+    sid = "ConfigureSourceReplication"
     actions = [
-      "s3:ListBucket"
+      "s3:GetReplicationConfiguration",
+      "s3:PutInventoryConfiguration",
     ]
     resources = [
       module.assets_s3_bucket.arn,
-    ]
-  }
-
-  statement {
-    sid = "ReadObjectsFromSource"
-    actions = [
-      "s3:GetObject",
-      "s3:GetObjectAcl",
-      "s3:GetObjectTagging",
-    ]
-    resources = [
-      "${module.assets_s3_bucket.arn}/*",
     ]
   }
 
@@ -72,12 +54,13 @@ data "aws_iam_policy_document" "assets_s3_replication_backfill" {
   }
 
   statement {
-    sid = "WriteReport"
+    sid = "WriteReportAndManifest"
     actions = [
       "s3:PutObject"
     ]
     resources = [
-      "${module.assets_s3_replication_backfill_bucket[0].arn}/report/*"
+      "${module.assets_s3_replication_backfill_bucket[0].arn}/report/*",
+      "${module.assets_s3_replication_backfill_bucket[0].arn}/manifest/*",
     ]
   }
 }
