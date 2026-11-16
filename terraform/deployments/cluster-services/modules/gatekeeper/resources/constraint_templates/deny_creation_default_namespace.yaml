@@ -9,7 +9,7 @@ spec:
   crd:
     spec:
       names:
-        kind: denycreationdefaultnamespace
+        kind: DenyCreationDefaultNamespace
 
   targets:
     - target: admission.k8s.gatekeeper.sh

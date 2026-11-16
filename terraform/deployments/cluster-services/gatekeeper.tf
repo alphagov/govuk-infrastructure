@@ -6,6 +6,7 @@ module "gatekeeper" {
     validate_jobrequestreviews             = false
     jobrequestoperator_requiredannotations = false
     deny_creation_default_namespace        = true
+    deny_user_creation                     = true
   }
 
   constraint_violations_max_to_display = 25

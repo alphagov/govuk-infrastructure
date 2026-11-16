@@ -1,0 +1,10 @@
+apiVersion: constraints.gatekeeper.sh/v1beta1
+kind: DenyUserCreation
+metadata:
+  name: denyusercreation
+spec:
+  match:
+    kinds:
+      - kinds: ["ServiceAccount", "CertificateSigningRequest"]
+  parameters:
+    excludedGroups: ["platformengineer", "fulladmin", "tempadmin", "developer", "licensinguser", "ithctester", "readonly", "dguengineer"]

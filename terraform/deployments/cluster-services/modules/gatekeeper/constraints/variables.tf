@@ -5,6 +5,7 @@ variable "dryrun_map" {
     validate_jobrequestreviews             = bool
     jobrequestoperator_requiredannotations = bool
     deny_creation_default_namespace        = bool
+    deny_user_creation                     = bool
   })
 }
 
