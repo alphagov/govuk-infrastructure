@@ -13,3 +13,6 @@ enable_x86_workers       = false
 arm_workers_green_size_desired = 12
 arm_workers_green_size_min     = 12
 arm_workers_green_size_max     = 24
+
+arm_workers_blue_cilium_ready_taint  = false
+arm_workers_green_cilium_ready_taint = true
