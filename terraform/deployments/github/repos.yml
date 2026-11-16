@@ -910,6 +910,7 @@ repos:
     required_status_checks:
       standard_contexts: *standard_govuk_rails_checks
       additional_contexts:
+        - Lint JavaScript / Run Standard
         - Lint SCSS / Run Stylelint
         - Test JavaScript / Run Jasmine
         - Test Ruby / Run Minitest
