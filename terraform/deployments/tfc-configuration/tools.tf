@@ -22,7 +22,7 @@ module "tools_networking" {
   project_name = tfe_project.tools.name
   vcs_repo = {
     identifier     = "alphagov/govuk-infrastructure"
-    branch         = "tools-concourse"
+    branch         = "main"
     oauth_token_id = data.tfe_oauth_client.github.oauth_token_id
   }
 
@@ -53,7 +53,7 @@ module "tools_cluster_infrastructure" {
   project_name = tfe_project.tools.name
   vcs_repo = {
     identifier     = "alphagov/govuk-infrastructure"
-    branch         = "tools-concourse"
+    branch         = "main"
     oauth_token_id = data.tfe_oauth_client.github.oauth_token_id
   }
 
@@ -84,7 +84,7 @@ module "tools_cluster_access" {
   project_name = tfe_project.tools.name
   vcs_repo = {
     identifier     = "alphagov/govuk-infrastructure"
-    branch         = "tools-concourse"
+    branch         = "main"
     oauth_token_id = data.tfe_oauth_client.github.oauth_token_id
   }
 
@@ -116,7 +116,7 @@ module "tools_cluster_services" {
   project_name = tfe_project.tools.name
   vcs_repo = {
     identifier     = "alphagov/govuk-infrastructure"
-    branch         = "tools-concourse"
+    branch         = "main"
     oauth_token_id = data.tfe_oauth_client.github.oauth_token_id
   }
 
@@ -129,11 +129,11 @@ module "tools_cluster_services" {
   ]
 }
 
-module "tools_concourse" {
+module "concourse_concourse" {
   source = "github.com/alphagov/terraform-govuk-tfe-workspacer"
 
   organization      = var.organization
-  workspace_name    = "tools-concourse"
+  workspace_name    = "concourse-concourse"
   workspace_desc    = "This module manages concourse resources inside the concourse eks cluster"
   workspace_tags    = ["concourse", "tools"]
   terraform_version = var.terraform_version
@@ -147,7 +147,7 @@ module "tools_concourse" {
   project_name = tfe_project.tools.name
   vcs_repo = {
     identifier     = "alphagov/govuk-infrastructure"
-    branch         = "tools-concourse"
+    branch         = "main"
     oauth_token_id = data.tfe_oauth_client.github.oauth_token_id
   }
 
