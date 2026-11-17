@@ -73,4 +73,7 @@ if [ "$BACKEND_DISABLED" == "true" ]; then
 
 	echo "Migrating terraform state to state bucket"
 	terraform init --migrate-state
+
+	echo "Cleaning up local Terraform state"
+	rm terraform.tfstate*
 fi
