@@ -61,7 +61,7 @@ resource "helm_release" "cilium" {
 
   repository = "https://helm.cilium.io/"
   chart      = "cilium"
-  version    = "1.20.3"
+  version    = "1.20.5"
 
   values = [yamlencode({
     cni = {
@@ -79,5 +79,10 @@ resource "helm_release" "cilium" {
         enabled = true
       }
     }
+    # this value is used to ensure Cilium does not make breaking changes
+    # to our config. It should be kept as-is unless a pre-flight check
+    # fails and we have to perform configuration changes for an upgrade
+    # to succeed.
+    upgradeCompatibility = "1.20"
   })]
 }
