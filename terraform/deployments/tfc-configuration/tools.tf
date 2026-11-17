@@ -13,9 +13,9 @@ module "tools_networking" {
   workspace_tags    = ["networking", "tools", "concourse"]
   terraform_version = var.terraform_version
   execution_mode    = "remote"
-  working_directory = "/terraform/deployments/tools/networking/"
+  working_directory = "/terraform/tools/networking/"
   trigger_patterns = [
-    "/terraform/deployments/tools/networking/**/*"
+    "/terraform/tools/networking/**/*"
   ]
   global_remote_state = true
 
@@ -44,9 +44,9 @@ module "tools_cluster_infrastructure" {
   workspace_tags    = ["cluster-infrastructure", "tools", "concourse"]
   terraform_version = var.terraform_version
   execution_mode    = "remote"
-  working_directory = "/terraform/deployments/tools/cluster-infrastructure/"
+  working_directory = "/terraform/tools/cluster-infrastructure/"
   trigger_patterns = [
-    "/terraform/deployments/tools/cluster-infrastructure/**/*"
+    "/terraform/tools/cluster-infrastructure/**/*"
   ]
   global_remote_state = true
 
@@ -75,9 +75,9 @@ module "tools_cluster_access" {
   workspace_tags    = ["cluster-access", "tools", "concourse"]
   terraform_version = var.terraform_version
   execution_mode    = "remote"
-  working_directory = "/terraform/deployments/tools/cluster-access/"
+  working_directory = "/terraform/tools/cluster-access/"
   trigger_patterns = [
-    "/terraform/deployments/tools/cluster-access/**/*"
+    "/terraform/tools/cluster-access/**/*"
   ]
   global_remote_state = true
 
@@ -107,9 +107,9 @@ module "tools_cluster_services" {
   workspace_tags    = ["cluster-services", "tools", "concourse"]
   terraform_version = var.terraform_version
   execution_mode    = "remote"
-  working_directory = "/terraform/deployments/tools/cluster-services/"
+  working_directory = "/terraform/tools/cluster-services/"
   trigger_patterns = [
-    "/terraform/deployments/tools/cluster-services/**/*"
+    "/terraform/tools/cluster-services/**/*"
   ]
   global_remote_state = true
 
@@ -138,9 +138,9 @@ module "tools_concourse" {
   workspace_tags    = ["concourse", "tools"]
   terraform_version = var.terraform_version
   execution_mode    = "remote"
-  working_directory = "/terraform/deployments/tools/concourse/"
+  working_directory = "/terraform/tools/concourse/"
   trigger_patterns = [
-    "/terraform/deployments/tools/concourse/**/*"
+    "/terraform/tools/concourse/**/*"
   ]
   global_remote_state = true
 
