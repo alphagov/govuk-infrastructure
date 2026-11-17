@@ -73,10 +73,12 @@ resource "helm_release" "cilium" {
     hubble = {
       enabled = true
       relay = {
-        enabled = true
+        enabled  = true
+        replicas = 2
       }
       ui = {
-        enabled = true
+        enabled  = true
+        replicas = 2
       }
     }
     # this value is used to ensure Cilium does not make breaking changes
