@@ -98,7 +98,9 @@ module "cluster_access" {
   git_branch           = var.git_branch
 
   tfvars = {
-    ship_kubernetes_events_to_logit = false
+    ship_kubernetes_events_to_logit        = false
+    disable_shell_access_for_non_admins    = false
+    disable_port_forwarding_for_non_admins = false
   }
 
   depends_on = [
