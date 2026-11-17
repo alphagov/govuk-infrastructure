@@ -5,7 +5,7 @@ module "gatekeeper" {
     immutable_configmap                    = true
     validate_jobrequestreviews             = false
     jobrequestoperator_requiredannotations = false
-    deny_creation_default_namespace        = true
+    deny_creation_default_namespace        = false
     deny_user_creation                     = false
   }
 
