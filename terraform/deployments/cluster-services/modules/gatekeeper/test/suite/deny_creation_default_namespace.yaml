@@ -5,11 +5,15 @@ tests:
     template: ../../resources/constraint_templates/deny_creation_default_namespace.yaml
     constraint: ../../resources/constraints/deny_creation_default_namespace.yaml
     cases:
-      - name: deny creating in the default namespace
-        object: samples/deny_creation_default_namespace/deny_creation_default_namespace/case.yaml
+      - name: deny creating in the default namespace by a user with fulladmin
+        object: samples/deny_creation_default_namespace/deny_creation_default_namespace_fulladmin/case.yaml
         assertions:
           - violations: yes
-      - name: allow creating in a non-default namespace
-        object: samples/deny_creation_default_namespace/allow_creation_non_default_namespace/case.yaml
+      - name: allow creating in a non-default namespace by a user with fulladmin
+        object: samples/deny_creation_default_namespace/allow_creation_non_default_namespace_fulladmin/case.yaml
+        assertions:
+          - violations: no
+      - name: allow creating in a default namespace by a system service account
+        object: samples/deny_creation_default_namespace/allow_creation_default_namespace_system/case.yaml
         assertions:
           - violations: no

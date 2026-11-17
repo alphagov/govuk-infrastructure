@@ -14,8 +14,8 @@ spec:
         openAPIV3Schema:
           type: object
           properties:
-            excludedGroups:
-              description: Groups that the policy should apply to.
+            denyForGroups:
+              description: Groups that the policy will not allow to create users
               type: array
               items:
                 type: string
@@ -41,7 +41,7 @@ spec:
                 input.review.operation == "CREATE"
                 username := input.review.userInfo.username
                 params := object.get(input, "parameters", {})
-                excludedGroups := object.get(params, "excludedGroups", [])
+                excludedGroups := object.get(params, "denyForGroups", [])
 
                 # Disallow if user belongs to an excluded group
                 isUserInGroup(input.review.userInfo, excludedGroups)

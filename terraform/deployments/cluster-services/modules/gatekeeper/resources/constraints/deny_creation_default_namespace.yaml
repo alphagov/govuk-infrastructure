@@ -6,3 +6,5 @@ spec:
   match:
     scope: "Namespaced"
     namespaces: ["default"]
+  parameters:
+    denyForGroups: [ "platformengineer", "fulladmin", "tempadmin", "developer", "licensinguser", "ithctester", "readonly", "dguengineer" ]
