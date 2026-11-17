@@ -75,6 +75,20 @@ module "cluster_infrastructure" {
   depends_on = [module.vpc, tfe_project.project]
 }
 
+module "cilium" {
+  source = "./ws"
+
+  name                 = "cilium"
+  ephemeral_cluster_id = var.ephemeral_cluster_id
+  variable_set_id      = module.var_set.id
+  git_branch           = var.git_branch
+
+  depends_on = [
+    module.cluster_infrastructure,
+    tfe_project.project
+  ]
+}
+
 module "cluster_access" {
   source = "./ws"
 
@@ -87,7 +101,11 @@ module "cluster_access" {
     ship_kubernetes_events_to_logit = false
   }
 
-  depends_on = [module.cluster_infrastructure, tfe_project.project]
+  depends_on = [
+    module.cluster_infrastructure,
+    module.cilium,
+    tfe_project.project
+  ]
 }
 
 module "cluster_services" {
@@ -102,34 +120,10 @@ module "cluster_services" {
     ship_kubernetes_events_to_logit = false
   }
 
-  depends_on = [module.cluster_infrastructure, module.cluster_access, tfe_project.project]
+  depends_on = [
+    module.cluster_infrastructure,
+    module.cilium,
+    module.cluster_access,
+    tfe_project.project
+  ]
 }
-
-/*
- * Commented out because it doesn't work, but the workspace it makes
- * causes every RDS PR to show it is failing the build
-module "rds" {
-  source               = "./ws"
-  name                 = "rds"
-  ephemeral_cluster_id = var.ephemeral_cluster_id
-  variable_set_id      = module.var_set.id
-
-  depends_on = [module.cluster_infrastructure, module.vpc, tfe_project.project]
-}
-*/
-
-/*
- * Commented out because DGU no longer belongs to us and we very rarely need
- * to test DGU changes in ephemeral clusters
- *
-module "datagovuk_infrastructure" {
-  source = "./ws"
-
-  name                 = "datagovuk-infrastructure"
-  ephemeral_cluster_id = var.ephemeral_cluster_id
-  variable_set_id      = module.var_set.id
-  git_branch           = var.git_branch
-
-  depends_on = [module.cluster_services, tfe_project.project]
-}
-*/
