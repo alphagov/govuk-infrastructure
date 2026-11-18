@@ -27,8 +27,32 @@ blue_cluster_options = {
   }
 }
 
-launch_green_domain   = false
-green_cluster_options = null
+launch_green_domain = true
+green_cluster_options = {
+  engine         = "OpenSearch"
+  engine_version = "3.7"
+
+  dedicated_master = {
+    instance_count = 3
+    instance_type  = "c7g.xlarge.search"
+  }
+
+  instance_count = 3
+  instance_type  = "r7g.xlarge.search"
+
+  zone_awareness_enabled        = true
+  multi_az_with_standby_enabled = false
+
+  advanced_security_options = null
+
+  endpoint_tls_security_policy = "Policy-Min-TLS-1-2-2019-07"
+  ebs_options = {
+    volume_size = 314
+    volume_type = "gp3"
+    throughput  = 350
+    iops        = 3000
+  }
+}
 
 read_snapshots_from_environments = [
   "staging",
