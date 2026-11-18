@@ -80,6 +80,12 @@ resource "helm_release" "cilium" {
         enabled  = true
         replicas = 2
       }
+      export = {
+        static = {
+          enabled  = true
+          filePath = "/var/run/cilium/hubble/events.log"
+        }
+      }
     }
     # this value is used to ensure Cilium does not make breaking changes
     # to our config. It should be kept as-is unless a pre-flight check
