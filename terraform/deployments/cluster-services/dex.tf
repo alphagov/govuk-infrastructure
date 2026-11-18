@@ -260,6 +260,9 @@ resource "helm_release" "dex" {
   version          = "0.26.0"
   values = [yamlencode({
     replicaCount = var.desired_ha_replicas
+    image = {
+      tag = "v2.46.1" # TODO: Remove me when Dex Chart is updated past 0.26.0
+    }
     config = {
       issuer = "https://${local.dex_host}"
 
