@@ -10,16 +10,16 @@ request: # Fully-qualified group/version/kind of the incoming object
   # Name of the resource being modified
   name: app
   # Namespace of the resource being modified, if the resource is namespaced (or is a Namespace object)
-  namespace: apps
+  namespace: default
   userInfo:
-    groups: ["platformengineer", "system:masters", "system:authenticated"]
+    groups: ["fulladmin"]
     username: "test"
   object:
     apiVersion: v1
     kind: Deployment
     metadata:
       name: app
-      namespace: apps
+      namespace: default
       labels:
         app: app
     spec:
