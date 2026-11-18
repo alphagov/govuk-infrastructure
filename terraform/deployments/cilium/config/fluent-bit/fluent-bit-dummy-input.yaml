@@ -1,0 +1,21 @@
+---
+service:
+  log_level: debug
+
+pipeline:
+  inputs:
+    - name: "dummy"
+      dummy: '{"date":"2026-11-20T16:27:00.448317035Z","flow":{"time":"2026-11-20T16:27:00.448317035Z","uuid":"02674590-a346-4ed4-8ba8-149cb03521e8","emitter":{"name":"Hubble","version":"1.20.5+g15012141"},"verdict":"FORWARDED","ethernet":{"source":"da:8f:0c:2f:a9:07","destination":"82:e3:fd:b2:1b:ed"},"IP":{"source":"10.10.28.107","destination":"10.10.30.148","ipVersion":"IPv4"},"l4":{"TCP":{"source_port":57088,"destination_port":8081,"flags":{"SYN":true}}},"source":{"identity":1,"labels":["reserved:host"]},"destination":{"ID":2549,"identity":8296,"cluster_name":"default","namespace":"cluster-services","labels":["gen:io.cilium.k8s.named-ports=metrics.TCP.8080_ready.TCP.8081_webhook.TCP.10250","k8s:app.kubernetes.io/instance=external-secrets","k8s:app.kubernetes.io/managed-by=Helm","k8s:app.kubernetes.io/name=external-secrets-webhook","k8s:app.kubernetes.io/version=v2.11.0","k8s:helm.sh/chart=external-secrets-2.11.0","k8s:io.cilium.k8s.namespace.labels.kubernetes.io/metadata.name=cluster-services","k8s:io.cilium.k8s.namespace.labels.name=cluster-services","k8s:io.cilium.k8s.policy.cluster=default","k8s:io.cilium.k8s.policy.serviceaccount=external-secrets-webhook","k8s:io.kubernetes.pod.namespace=cluster-services"],"pod_name":"external-secrets-webhook-5875d9956d-k594n","workloads":[{"name":"external-secrets-webhook","kind":"Deployment"}]},"Type":"L3_L4","node_name":"ip-10-10-28-107.eu-west-1.compute.internal","node_labels":["beta.kubernetes.io/arch=arm64","beta.kubernetes.io/instance-type=m8g.4xlarge","beta.kubernetes.io/os=linux","eks.amazonaws.com/capacityType=ON_DEMAND","eks.amazonaws.com/nodegroup-image=ami-04ebb1484837c7404","eks.amazonaws.com/nodegroup=arm_blue-d318e51c1ee2446fe08acc75f4","eks.amazonaws.com/sourceLaunchTemplateId=lt-0cffa042922fe32de","eks.amazonaws.com/sourceLaunchTemplateVersion=1","failure-domain.beta.kubernetes.io/region=eu-west-1","failure-domain.beta.kubernetes.io/zone=eu-west-1b","k8s.io/cloud-provider-aws=b8cc2b60d55750abbd8e31b3e5fe703e","kubernetes.io/arch=arm64","kubernetes.io/hostname=ip-10-10-28-107.eu-west-1.compute.internal","kubernetes.io/os=linux","node.kubernetes.io/instance-type=m8g.4xlarge","topology.ebs.csi.aws.com/zone=eu-west-1b","topology.k8s.aws/zone-id=euw1-az2","topology.kubernetes.io/region=eu-west-1","topology.kubernetes.io/zone=eu-west-1b"],"event_type":{"type":4},"traffic_direction":"EGRESS","trace_observation_point":"TO_ENDPOINT","trace_reason":"NEW","is_reply":false,"interface":{"index":14,"name":"eni9822243f4bf"},"Summary":"TCP Flags: SYN"},"node_name":"ip-10-10-28-107.eu-west-1.compute.internal"}'
+      fixed_timestamp: true
+      copies: 1
+      flush_on_startup: true
+      rate: 1
+      samples: 1
+      tag: "hubble.*"
+
+  outputs:
+    - name: "stdout"
+      alias: "out"
+      format: "json_lines"
+      json_date_key: "date"
+      match: "hubble.*"

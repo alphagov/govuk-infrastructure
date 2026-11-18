@@ -11,6 +11,18 @@ terraform {
       source  = "hashicorp/aws"
       version = "~> 6.28"
     }
+    kubectl = {
+      source  = "alekc/kubectl"
+      version = "3.0.1"
+    }
+    kubernetes = {
+      source  = "hashicorp/kubernetes"
+      version = "~> 3.5.0"
+    }
+    helm = {
+      source  = "hashicorp/helm"
+      version = "~> 3.3.0"
+    }
   }
 }
 
@@ -37,7 +49,6 @@ provider "kubernetes" {
 
   token                  = data.aws_eks_cluster_auth.govuk.token
   cluster_ca_certificate = base64decode(data.tfe_outputs.cluster_infrastructure.nonsensitive_values.cluster_certificate_authority_data)
-
 }
 
 provider "helm" {
@@ -47,6 +58,13 @@ provider "helm" {
     token                  = data.aws_eks_cluster_auth.govuk.token
     cluster_ca_certificate = base64decode(data.tfe_outputs.cluster_infrastructure.nonsensitive_values.cluster_certificate_authority_data)
   }
+}
+
+provider "kubectl" {
+  host                   = data.tfe_outputs.cluster_infrastructure.nonsensitive_values.cluster_endpoint
+  cluster_ca_certificate = base64decode(data.tfe_outputs.cluster_infrastructure.nonsensitive_values.cluster_certificate_authority_data)
+  token                  = data.aws_eks_cluster_auth.govuk.token
+  load_config_file       = false
 }
 
 resource "kubernetes_namespace_v1" "cilium" {
@@ -79,6 +97,12 @@ resource "helm_release" "cilium" {
       ui = {
         enabled  = true
         replicas = 2
+      }
+      export = {
+        static = {
+          enabled  = true
+          filePath = "/var/run/cilium/hubble/events.log"
+        }
       }
     }
     # this value is used to ensure Cilium does not make breaking changes
