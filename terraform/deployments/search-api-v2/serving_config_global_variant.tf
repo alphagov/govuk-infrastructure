@@ -34,5 +34,6 @@ module "serving_config_global_variant" {
     module.control_global_synonym_reg.id,
     module.control_global_synonym_share_code.id,
     module.control_global_synonym_uc.id,
+    module.control_global_synonym_id.id,
   ]
 }
