@@ -16,6 +16,13 @@ resource "helm_release" "fluentbit" {
         flush     = 5
         log_level = "info"
       }
+      parsers = [
+        {
+          name        = "hubble-export"
+          format      = "json"
+          time_format = "%Y-%m-%dT%H:%M:%S.%L%z"
+        }
+      ]
       pipeline = {
         inputs = [
           {
@@ -23,7 +30,7 @@ resource "helm_release" "fluentbit" {
             alias            = "hubble-export"
             path             = "/var/run/cilium/hubble/events.log"
             tag              = "hubble.*"
-            parser           = "json"
+            parser           = "hubble-export"
             refresh_interval = 5
             rotate_wait      = 30
             "storage.type"   = "$${STORAGE_TYPE_PREFER_FS}"
