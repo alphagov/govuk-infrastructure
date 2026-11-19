@@ -12,10 +12,10 @@ resource "aws_eks_cluster" "this" {
   vpc_config {
     vpc_id                 = var.vpc_config.vpc_id
     subnet_ids             = var.vpc_config.control_plane_subnet_ids
-    endpoint_public_access = var.vpc_config.endpoint_public_access
+    endpoint_public_access = true
   }
 
-  bootstrap_self_managed_addons = false
+  bootstrap_self_managed_addons = true
   deletion_protection           = var.deletion_protection
   enabled_cluster_log_types = [
     "api", "audit", "authenticator", "controllerManager", "scheduler"
@@ -38,6 +38,10 @@ resource "aws_eks_cluster" "this" {
     aws_iam_role_policy_attachment.amazon_eks_cluster_policy,
     aws_iam_role_policy_attachment.amazon_vpc_resource_controller
   ]
+
+  lifecycle {
+    create_before_destroy = true
+  }
 }
 
 resource "aws_iam_role" "this" {
