@@ -2,7 +2,7 @@ terraform {
   cloud {
     organization = "govuk"
     workspaces {
-      tags = ["cilium", "eks"]
+      tags = ["cilium", "eks", "aws"]
     }
   }
   required_version = "~> 1.17"

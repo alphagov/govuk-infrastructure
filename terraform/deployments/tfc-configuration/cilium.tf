@@ -4,7 +4,7 @@ module "cilium-integration" {
   organization           = var.organization
   workspace_name         = "cilium-integration"
   workspace_desc         = "Manages the Cilium installation in an EKS cluster"
-  workspace_tags         = ["integration", "cilium", "eks"]
+  workspace_tags         = ["integration", "cilium", "eks", "aws"]
   terraform_version      = var.terraform_version
   auto_apply             = false
   auto_apply_run_trigger = true
@@ -43,7 +43,7 @@ module "cilium-staging" {
   organization           = var.organization
   workspace_name         = "cilium-staging"
   workspace_desc         = "Manages the Cilium installation in an EKS cluster"
-  workspace_tags         = ["staging", "cilium", "eks"]
+  workspace_tags         = ["staging", "cilium", "eks", "aws"]
   terraform_version      = var.terraform_version
   auto_apply             = false
   auto_apply_run_trigger = true
@@ -82,7 +82,7 @@ module "cilium-production" {
   organization           = var.organization
   workspace_name         = "cilium-production"
   workspace_desc         = "Manages the Cilium installation in an EKS cluster"
-  workspace_tags         = ["production", "cilium", "eks"]
+  workspace_tags         = ["production", "cilium", "eks", "aws"]
   terraform_version      = var.terraform_version
   auto_apply             = false
   auto_apply_run_trigger = true
