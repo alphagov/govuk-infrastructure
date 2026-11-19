@@ -40,9 +40,10 @@ resource "helm_release" "fluentbit" {
 
         outputs = [
           {
-            alias = "out"
-            match = "*"
-            name  = "stdout"
+            name   = "stdout"
+            alias  = "out"
+            format = "json_lines"
+            match  = "*"
           }
         ]
       }
