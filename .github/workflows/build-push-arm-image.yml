@@ -82,9 +82,9 @@ on:
         description: "Fully qualified image reference for primary tag."
         value: ${{ jobs.build-and-push-arm-image.outputs.imageRef }}
 
-concurrency:
-  group: build-push-arm-image-${{ github.repository }}-${{ inputs.imageName || github.event.repository.name }}-${{ inputs.gitRef || github.sha }}
-  cancel-in-progress: true
+#concurrency:
+#  group: build-push-arm-image-${{ github.repository }}-${{ inputs.imageName || github.event.repository.name }}-${{ inputs.gitRef || github.sha }}
+#  cancel-in-progress: true
 
 jobs:
   build-and-push-arm-image:
