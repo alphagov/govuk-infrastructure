@@ -32,7 +32,7 @@ terraform {
     # do not add AWS resources to this module.
     aws = {
       source  = "hashicorp/aws"
-      version = "< 6.72.1"
+      version = "< 6.73.1"
     }
     kubectl = {
       source  = "alekc/kubectl"
