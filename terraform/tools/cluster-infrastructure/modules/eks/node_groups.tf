@@ -13,7 +13,7 @@ locals {
       local.managed_node_group_defaults,
       {
         ami_type       = var.blue_node_group_config.ami_type
-        name_prefix    = "${var.environment_name}-blue"
+        name_prefix    = "${var.environment_name}-blue-"
         desired_size   = var.blue_node_group_config.desired_size
         max_size       = var.blue_node_group_config.max_size
         min_size       = var.blue_node_group_config.min_size
@@ -33,7 +33,7 @@ locals {
       local.managed_node_group_defaults,
       {
         ami_type       = var.green_node_group_config.ami_type
-        name_prefix    = "${var.environment_name}-green"
+        name_prefix    = "${var.environment_name}-green-"
         desired_size   = var.green_node_group_config.desired_size
         max_size       = var.green_node_group_config.max_size
         min_size       = var.green_node_group_config.min_size
@@ -117,7 +117,7 @@ resource "aws_iam_role_policy_attachment" "node" {
 resource "aws_eks_node_group" "workers" {
   for_each               = local.eks_managed_node_groups
   cluster_name           = aws_eks_cluster.this.name
-  node_group_name_prefix = each.key
+  node_group_name_prefix = each.value.name_prefix
 
   launch_template {
     id      = aws_launch_template.this[each.key].id
