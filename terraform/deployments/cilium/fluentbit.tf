@@ -65,9 +65,58 @@ resource "helm_release" "fluentbit" {
                 return -1, timestamp, record
               end
               END_OF_LUA
-          }
+          },
+          {
+            name         = "nest"
+            match        = "hubble.*"
+            operation    = "lift"
+            nested_under = "flow"
+            add_prefix   = "flow_"
+          },
+          {
+            name         = "nest"
+            match        = "hubble.*"
+            operation    = "lift"
+            nested_under = "flow_source"
+            add_prefix   = "source_"
+          },
+          {
+            name  = "modify"
+            match = "hubble.*"
+            remove = [
+              "flow_emitter",
+              "flow_ethernet",
+              "flow_node_name",
+              "flow_node_labels",
+              "flow_event_type",
+              "flow_trace_observation_point",
+              "flow_trace_reason",
+              "flow_is_reply",
+              "flow_Summary",
+              "source_ID",
+              "source_identity",
+              "source_cluster_name",
+              "source_labels",
+              "node_name",
+            ]
+          },
+          {
+            name          = "nest"
+            match         = "hubble.*"
+            operation     = "nest"
+            wildcard      = "source_*"
+            nest_under    = "flow_source"
+            remove_prefix = "source_"
+          },
+          {
+            name          = "nest"
+            match         = "hubble.*"
+            operation     = "nest"
+            wildcard      = "flow_*"
+            nest_under    = "flow"
+            remove_prefix = "flow_"
+          },
         ]
-
         outputs = [
           {
             name   = "stdout"
