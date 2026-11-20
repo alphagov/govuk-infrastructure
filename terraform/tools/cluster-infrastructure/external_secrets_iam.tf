@@ -13,7 +13,7 @@ module "external_secrets_iam_role" {
   enable_oidc        = true
   oidc_provider_urls = [module.eks.oidc_provider]
   policies = {
-    aws_iam_policy.external_secrets.name = aws_iam_policy.external_secrets.arn
+    (aws_iam_policy.external_secrets.name) = aws_iam_policy.external_secrets.arn
   }
   oidc_subjects = ["system:serviceaccount:${local.external_secrets_ns}:${local.external_secrets_service_account_name}"]
 }

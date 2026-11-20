@@ -10,7 +10,7 @@ output "cluster_arn" {
 
 
 output "oidc_provider" {
-  value       = aws_eks_cluster.this.identity.oidc.issuer
+  value       = aws_eks_cluster.this.identity.oidc[0].issuer
   description = "The oidc issuer for the cluster"
 }
 
@@ -20,7 +20,7 @@ output "cluster_endpoint" {
 }
 
 output "ca_base64" {
-  value       = aws_eks_cluster.this.certificate_authority.data
+  value       = aws_eks_cluster.this.certificate_authority[0].data
   description = "The base64 encoded ca for the cluster"
 
 }
