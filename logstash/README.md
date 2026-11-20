@@ -146,3 +146,73 @@ Some Sidekiq logs have nested objects (e.g. `logjson_message.queues`) so these a
     "config_file": "config/sidekiq.yml"
 }
 ```
+
+Other Sidekiq logs (e.g. publishing-api's `Unlocked` messages) also put an object in `message`, but without `queues`:
+
+```
+{
+    "@timestamp": "2026-11-19T17:04:41.602Z",
+    "pid": 1,
+    "tid": "xxx",
+    "level": "INFO",
+    "message": {
+        "message": "Unlocked",
+        "args": [
+            {
+                "content_id": "xxxx-xxxx-xxxx-xxxx-xxxx",
+                "locale": "en",
+                "update_dependencies": true,
+                "orphaned_content_ids": [],
+                "source_command": "put_content",
+                "source_fields": ["public_updated_at"]
+            }
+        ],
+        "jid": "xxxx",
+        "lock_args": ["xxxx-xxxx-xxxx-xxxx-xxxx", "en", true, [], "DownstreamDraftJob"],
+        "queue": "downstream_high",
+        ...
+    }
+}
+```
+
+`logjson_message` is mapped as a `keyword`, so OpenSearch rejects these objects (`failed to parse field [logjson_message] of type [keyword]`) and they land in the dead letter queue. When `logjson_message` has a `message` or `jid` key, the job object is moved to `[@metadata]`, which is never indexed, and only its inner `message` string (e.g. `Unlocked`) is kept in `logjson_message`, as with other Sidekiq logs. The full job is still searchable in the raw top-level `message` field.
+
+The job object isn't moved into `logjson_sidekiq_object`, because fields such as `lock_args` mix strings, booleans and arrays, which would cause new mapping conflicts there. Logit doesn't allow the `ruby` filter, so the object can't be converted to a JSON string either.
+
+### Fields with conflicting types
+
+OpenSearch sets the type of each field in a daily index (e.g. `filebeat-2026.11.19`) from the first document of the day that contains it. All apps share the `logjson` object, so when two apps send the same field with different types, the later type is rejected for the rest of the day and those logs go to the dead letter queue. Which apps lose logs can change from day to day, depending on which one logs first after midnight.
+
+These fields are renamed to a `_text` field when they aren't numeric, so the original field always stays numeric:
+
+| Field | Numeric value (kept) | Non-numeric value (renamed) | Renamed to |
+|---|---|---|---|
+| `logjson.status` | `200` (nginx, Ruby apps) | a non-numeric string (email-alert-frontend) | `logjson.status_text` |
+| `logjson.ts` | `1795108151.7868207` (zap apps, e.g. gatekeeper) | `"2026-11-19T17:07:57Z"` (controller-runtime apps, e.g. aws-load-balancer-controller) | `logjson.ts_text` |
+| `logjson.duration` | `0.031` | `"1.518508839s"` (Go durations, e.g. gatekeeper) | `logjson.duration_text` |
+
+For example, aws-load-balancer-controller logs:
+
+```json
+{"level":"info","ts":"2026-11-19T17:07:57Z","msg":"Skipping targetgroupbinding reconcile","tgb":{"name":"k8s-apps-xxxx","namespace":"apps"}}
+```
+
+whereas gatekeeper logs:
+
+```json
+{"level":"info","ts":1795108151.7868207,"logger":"controller","msg":"auditing is complete","process":"audit","event_type":"audit_finished","duration":"1.518508839s"}
+```
+
+The numeric check for `ts` and `duration` also allows `e`, `E` and `+`, so epoch values that Logstash writes in exponent form (e.g. `0.17951081517868207e10`) aren't renamed.
+
+### Investigating the dead letter queue
+
+Rejected events are written to the `dlq-YYYY.MM.DD` index. The `dead_letter_queue_reason` field contains the OpenSearch error, which names the field and its mapped type, for example:
+
+```
+failed to parse field [logjson.ts] of type [float] in document with id '...'. Preview of field's value: '2026-11-19T17:07:57Z'
+```
+
+Group the entries by field and by source (`kubernetes.namespace` and container) to find the apps involved, then add a rule like the ones above. A fix only takes effect from the next daily index, because an existing index keeps its mappings.
+
+Logs that Fluent Bit ships directly to OpenSearch (e.g. `kubernetes-events-*` from kubernetes-events-shipper) don't go through Logstash, so their rejections don't appear in the dead letter queue. Check the shipper's own logs for those.
