@@ -15,16 +15,23 @@ module "tools_networking" {
   execution_mode    = "remote"
   working_directory = "/terraform/tools/networking/"
   trigger_patterns = [
-    "/terraform/tools/networking/**/*"
+    "/terraform/tools/networking/**/*",
+    "/terraform/tools/variables/concourse/common.tfvars",
+    "/terraform/tools/variables/concourse/networking.tfvars",
   ]
   global_remote_state = true
 
   project_name = tfe_project.tools.name
   vcs_repo = {
     identifier     = "alphagov/govuk-infrastructure"
-    branch         = "main"
+    branch         = "cluster-infrastructure-concourse"
     oauth_token_id = data.tfe_oauth_client.github.oauth_token_id
   }
+
+  tfvars_files = [
+    "/terraform/tools/variables/concourse/common.tfvars",
+    "/terraform/tools/variables/concourse/networking.tfvars",
+  ]
 
   team_access = {
     "GOV.UK Production" = "write"
@@ -46,7 +53,10 @@ module "tools_cluster_infrastructure" {
   execution_mode    = "remote"
   working_directory = "/terraform/tools/cluster-infrastructure/"
   trigger_patterns = [
-    "/terraform/tools/cluster-infrastructure/**/*"
+    "/terraform/tools/cluster-infrastructure/**/*",
+    "/terraform/tools/variables/concourse/common.tfvars",
+    "/terraform/tools/variables/concourse/cluster-infrastructure.tfvars",
+
   ]
   global_remote_state = true
 
@@ -56,6 +66,11 @@ module "tools_cluster_infrastructure" {
     branch         = "main"
     oauth_token_id = data.tfe_oauth_client.github.oauth_token_id
   }
+
+  tfvars_files = [
+    "/terraform/tools/variables/concourse/common.tfvars",
+    "/terraform/tools/variables/concourse/cluster-infrastructure.tfvars",
+  ]
 
   team_access = {
     "GOV.UK Production" = "write"
