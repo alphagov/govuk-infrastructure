@@ -27,9 +27,10 @@ resource "aws_iam_policy" "external_dns" {
 # https://github.com/kubernetes-sigs/external-dns/blob/master/docs/tutorials/aws.md#iam-policy
 data "aws_iam_policy_document" "external_dns" {
   statement {
-    effect    = "Allow"
-    actions   = ["route53:ChangeResourceRecordSets"]
-    resources = [data.aws_route53_zone.tools_govuk_digital.arn]
+    effect  = "Allow"
+    actions = ["route53:ChangeResourceRecordSets"]
+    # TODO: resources = [data.aws_route53_zone.tools_govuk_digital.arn]
+    resources = ["arn:aws:route53:::hostedzone/Z06013223IXAZ2MZAWWS6"]
   }
   statement {
     effect = "Allow"

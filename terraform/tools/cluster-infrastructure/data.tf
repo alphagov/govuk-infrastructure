@@ -21,5 +21,5 @@ data "terraform_remote_state" "account_wide" {
 }
 
 data "aws_route53_zone" "tools_govuk_digital" {
-  id = data.terraform_remote_state.account_wide.outputs.tools_govuk_digital_zone_id
+  id = data.terraform_remote_state.account_wide.tools_govuk_digital_zone_id
 }
