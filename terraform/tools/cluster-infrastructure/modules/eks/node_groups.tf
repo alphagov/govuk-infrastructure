@@ -1,9 +1,8 @@
 locals {
 
   managed_node_group_defaults = {
-    capacity_type                  = "ON_DEMAND"
-    enable_monitoring              = true
-    use_latest_ami_release_version = false
+    capacity_type     = "ON_DEMAND"
+    enable_monitoring = true
     metadata_options = {
       http_put_response_hop_limit = 2
     }
@@ -142,8 +141,6 @@ resource "aws_eks_node_group" "workers" {
   ami_type       = each.value.ami_type
   capacity_type  = each.value.capacity_type
   instance_types = each.value.instance_types
-
-  release_version = false
 
   taint {
     key    = "node.cilium.io/agent-not-ready"
