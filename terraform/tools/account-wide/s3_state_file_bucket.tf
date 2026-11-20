@@ -24,7 +24,6 @@ data "aws_iam_policy_document" "s3_tools_state_file" {
       type        = "AWS"
       identifiers = ["arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/terraform-cloud"]
     }
-
     condition {
       test     = "StringEquals"
       variable = "aws:SourceAccount"
