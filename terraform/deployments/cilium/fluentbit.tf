@@ -40,13 +40,21 @@ resource "helm_release" "fluentbit" {
 
         filters = [
           {
-            name       = "grep"
-            match      = "hubble.*"
-            logical_op = "AND"
-            regex = [
-              "$flow['event_type']['type'] ^4$", # Only Trace Events (5 would be for policy verdict)
-              "$flow['trace_reason'] ^NEW$",     # Only NEW flows connections
-            ]
+            name  = "lua"
+            match = "hubble.*"
+            call  = "filter_for_new_traces"
+            code  = <<-END_OF_LUA
+              function filter_for_new_traces(tag, timestamp, record)
+                local flow = record["flow"]
+                if type(flow) == "table"
+                  and type(flow["event_type"]) == "table"
+                  and flow["event_type"]["type"] == 4
+                  and flow["trace_reason"] == "NEW"
+                  then return 0, timestamp, record
+                end
+                return -1, timestamp, record
+              end
+              END_OF_LUA
           }
         ]
 
