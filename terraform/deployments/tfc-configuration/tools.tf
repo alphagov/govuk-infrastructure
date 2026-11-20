@@ -67,7 +67,7 @@ module "tools_cluster_infrastructure" {
     branch         = "main"
     oauth_token_id = data.tfe_oauth_client.github.oauth_token_id
   }
-
+  
   tfvars_files_prefix = "../"
   tfvars_files = [
     "variables/concourse/common.tfvars",
