@@ -3,7 +3,6 @@ resource "tfe_project" "tools" {
   name         = "tools"
 }
 
-
 module "tools_networking" {
   source = "github.com/alphagov/terraform-govuk-tfe-workspacer"
 
