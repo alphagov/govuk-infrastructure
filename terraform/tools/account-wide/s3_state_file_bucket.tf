@@ -14,9 +14,31 @@ module "state_file_bucket" {
 
 data "aws_iam_policy_document" "s3_tools_state_file" {
   statement {
-    sid       = "AllowTFToGetState"
-    actions   = ["s3:GetObject"]
+    sid = "AllowTFRunnerToGetState"
+    actions = [
+      "s3:GetObject",
+    ]
     resources = ["${module.state_file_bucket.arn}/*"]
+
+    principals {
+      type        = "AWS"
+      identifiers = ["arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/terraform-cloud"]
+    }
+
+    condition {
+      test     = "StringEquals"
+      variable = "aws:SourceAccount"
+      values   = [data.aws_caller_identity.current.account_id]
+    }
+  }
+
+  statement {
+    sid = "AllowTFRunnerToLockAndUnlockState"
+    actions = [
+      "s3:PutObject",
+      "s3:DeleteObject",
+    ]
+    resources = ["${module.state_file_bucket.arn}/*.tflock"]
 
     principals {
       type        = "AWS"
