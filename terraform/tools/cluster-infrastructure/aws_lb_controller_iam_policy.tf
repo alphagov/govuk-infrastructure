@@ -12,7 +12,7 @@ module "aws_lb_controller_iam_role" {
   enable_oidc        = true
   oidc_provider_urls = [module.eks.oidc_provider]
   policies = {
-    (aws_iam_policy.aws_lb_controller.name) = aws_iam_policy.aws_lb_controller.arn
+    "${aws_iam_policy.aws_lb_controller.name}" = aws_iam_policy.aws_lb_controller.arn
   }
   oidc_subjects = ["system:serviceaccount:${local.aws_lb_controller_ns}:${local.aws_lb_controller_service_account_name}"]
 }

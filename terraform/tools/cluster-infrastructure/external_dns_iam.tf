@@ -12,7 +12,7 @@ module "external_dns_iam_role" {
   enable_oidc        = true
   oidc_provider_urls = [module.eks.oidc_provider]
   policies = {
-    (aws_iam_policy.external_dns.policy_id) = aws_iam_policy.external_dns.arn
+    "${aws_iam_policy.external_dns.policy_id}" = aws_iam_policy.external_dns.arn
   }
   oidc_subjects = ["system:serviceaccount:${local.external_dns_ns}:${local.external_dns_service_account_name}"]
 }

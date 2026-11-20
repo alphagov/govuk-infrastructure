@@ -11,7 +11,7 @@ module "aws_ebs_csi_driver_iam_role" {
   enable_oidc        = true
   oidc_provider_urls = [module.eks.oidc_provider]
   policies = {
-    (aws_iam_policy.aws_ebs_csi_driver.name) = aws_iam_policy.aws_ebs_csi_driver.arn
+    "${aws_iam_policy.aws_ebs_csi_driver.name}" = aws_iam_policy.aws_ebs_csi_driver.arn
   }
   oidc_subjects = ["system:serviceaccount:kube-system:${local.ebs_csi_driver_controller_service_account_name}"]
 }

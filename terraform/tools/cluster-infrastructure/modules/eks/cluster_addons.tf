@@ -13,7 +13,7 @@ locals {
       })
     }
     eks_pod_identity_addon = {
-      eks-pod-identity-agent = { addon_version = "v1.3.10-eksbuild.2", resolve_conflicts_on_create = "OVERWRITE" }
+      addon_version = "v1.3.10-eksbuild.2", resolve_conflicts_on_create = "OVERWRITE"
     }
   }
 }
