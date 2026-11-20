@@ -23,12 +23,13 @@ resource "aws_iam_policy" "external_dns" {
   policy      = data.aws_iam_policy_document.external_dns.json
 }
 
+
 # https://github.com/kubernetes-sigs/external-dns/blob/master/docs/tutorials/aws.md#iam-policy
 data "aws_iam_policy_document" "external_dns" {
   statement {
     effect    = "Allow"
     actions   = ["route53:ChangeResourceRecordSets"]
-    resources = [aws_route53_zone.cluster_public.arn]
+    resources = [data.aws_route53_zone.tools_govuk_digital.arn]
   }
   statement {
     effect = "Allow"

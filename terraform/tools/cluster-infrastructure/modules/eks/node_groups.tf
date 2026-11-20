@@ -121,8 +121,8 @@ resource "aws_eks_node_group" "workers" {
   node_group_name_prefix = each.key
 
   launch_template {
-    id      = aws_launch_template.this.id
-    version = aws_launch_template.this.default_version
+    id      = aws_launch_template.this[each.key].id
+    version = aws_launch_template.this[each.key].default_version
   }
 
   node_role_arn = aws_iam_role.node.arn
