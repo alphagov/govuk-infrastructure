@@ -14,7 +14,7 @@ data "terraform_remote_state" "account_wide" {
   config = {
     key    = "terraform/tools/account-wide.tfstate"
     bucket = "govuk-tools-state-files"
-    region = data.aws_region.current
+    region = "eu-west-1"
 
     use_lockfile = true
   }

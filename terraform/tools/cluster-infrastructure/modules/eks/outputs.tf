@@ -10,7 +10,7 @@ output "cluster_arn" {
 
 
 output "oidc_provider" {
-  value       = aws_eks_cluster.this.identity.oidc[0].issuer
+  value       = aws_eks_cluster.this.identity[0].oidc[0].issuer
   description = "The oidc issuer for the cluster"
 }
 
