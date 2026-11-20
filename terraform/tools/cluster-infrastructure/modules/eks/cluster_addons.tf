@@ -19,7 +19,7 @@ locals {
 }
 
 resource "aws_eks_addon" "after_node_groups" {
-  for_each = { for k, v in local.default_cluster_addons : k => v if !v.before_compute }
+  for_each = { for k, v in local.default_cluster_addons : k => v if try(!v.before_compute, true) }
 
   cluster_name                = aws_eks_cluster.this.name
   addon_name                  = each.key
@@ -33,7 +33,7 @@ resource "aws_eks_addon" "after_node_groups" {
 }
 
 resource "aws_eks_addon" "before_node_groups" {
-  for_each = { for k, v in local.default_cluster_addons : k => v if !v.before_compute }
+  for_each = { for k, v in local.default_cluster_addons : k => v if try(v.before_compute, false) }
 
   cluster_name                = aws_eks_cluster.this.name
   addon_name                  = each.key
