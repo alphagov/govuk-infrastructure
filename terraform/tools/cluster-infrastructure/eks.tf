@@ -4,7 +4,6 @@ module "eks" {
   environment_name = var.environment_name
   cluster_version  = var.cluster_version
   vpc_config = {
-    vpc_id                   = data.tfe_outputs.networking.nonsensitive_values.vpc_id
     control_plane_subnet_ids = data.tfe_outputs.networking.nonsensitive_values.eks_control_plane_subnet_ids
     node_private_subnet_ids  = data.tfe_outputs.networking.nonsensitive_values.private_subnet_ids
   }

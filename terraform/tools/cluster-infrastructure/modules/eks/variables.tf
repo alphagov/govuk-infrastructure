@@ -11,7 +11,6 @@ variable "cluster_version" {
 
 variable "vpc_config" {
   type = object({
-    vpc_id                   = string
     control_plane_subnet_ids = list(string)
     node_private_subnet_ids  = list(string)
   })
