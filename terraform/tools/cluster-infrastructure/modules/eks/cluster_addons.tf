@@ -24,7 +24,7 @@ resource "aws_eks_addon" "after_node_groups" {
   cluster_name                = aws_eks_cluster.this.name
   addon_name                  = each.key
   addon_version               = each.value.addon_version #e.g., previous version v1.9.3-eksbuild.3 and the new version is v1.10.1-eksbuild.1
-  configuration_values        = each.value.configuration_values
+  configuration_values        = try(each.value.configuration_values, null)
   resolve_conflicts_on_update = each.value.resolve_conflicts_on_create
 
   depends_on = [
@@ -38,7 +38,7 @@ resource "aws_eks_addon" "before_node_groups" {
   cluster_name                = aws_eks_cluster.this.name
   addon_name                  = each.key
   addon_version               = each.value.addon_version #e.g., previous version v1.9.3-eksbuild.3 and the new version is v1.10.1-eksbuild.1
-  configuration_values        = each.value.configuration_values
+  configuration_values        = try(each.value.configuration_values, null)
   resolve_conflicts_on_update = each.value.resolve_conflicts_on_create
 
 }
