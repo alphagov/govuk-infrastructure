@@ -28,7 +28,7 @@ module "tools_networking" {
     oauth_token_id = data.tfe_oauth_client.github.oauth_token_id
   }
 
-  tfvars_files_prefix = "tools/"
+  tfvars_files_prefix = "../"
   tfvars_files = [
     "variables/concourse/common.tfvars",
     "variables/concourse/networking.tfvars",
@@ -68,7 +68,7 @@ module "tools_cluster_infrastructure" {
     oauth_token_id = data.tfe_oauth_client.github.oauth_token_id
   }
 
-  tfvars_files_prefix = "tools/"
+  tfvars_files_prefix = "../"
   tfvars_files = [
     "variables/concourse/common.tfvars",
     "variables/concourse/cluster-infrastructure.tfvars",
@@ -114,7 +114,7 @@ module "tools_cluster_services" {
     local.aws_credentials["tools"],
   ]
 
-  tfvars_files_prefix = "tools/"
+  tfvars_files_prefix = "../"
   tfvars_files = [
     "variables/concourse/common.tfvars",
     "variables/concourse/cluster-services.tfvars",
@@ -152,7 +152,7 @@ module "concourse_concourse" {
     local.aws_credentials["tools"],
   ]
 
-  tfvars_files_prefix = "tools/"
+  tfvars_files_prefix = "../"
   tfvars_files = [
     "variables/concourse/common.tfvars",
     "variables/concourse/concourse.tfvars",
