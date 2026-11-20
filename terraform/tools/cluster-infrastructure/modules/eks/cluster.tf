@@ -2,7 +2,7 @@ resource "aws_eks_cluster" "this" {
   name = var.environment_name
 
   access_config {
-    authentication_mode                         = var.authentication_mode
+    authentication_mode                         = "API"
     bootstrap_cluster_creator_admin_permissions = false
   }
 

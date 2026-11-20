@@ -58,15 +58,3 @@ variable "green_node_group_config" {
   description = "Green node group config"
 }
 
-variable "authentication_mode" {
-  type        = string
-  default     = "API"
-  description = "Authentication mode to use for the cluster"
-}
-
-variable "authentication_mode" {
-  type        = string
-  default     = "API"
-  description = "Authentication mode to use for the cluster"
-}
-
