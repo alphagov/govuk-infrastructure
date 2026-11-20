@@ -12,7 +12,7 @@ data "terraform_remote_state" "account_wide" {
   backend = "s3"
 
   config = {
-    key    = "network.tfstate"
+    key    = "terraform/tools/account-wide.tfstate"
     bucket = "govuk-tools-state-files"
     region = data.aws_region.current
 
@@ -22,5 +22,4 @@ data "terraform_remote_state" "account_wide" {
 
 data "aws_route53_zone" "tools_govuk_digital" {
   id = data.terraform_remote_state.account_wide.outputs.tools_govuk_digital_zone_id
-
 }
