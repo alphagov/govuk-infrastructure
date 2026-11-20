@@ -39,6 +39,16 @@ resource "helm_release" "fluentbit" {
         ]
 
         filters = [
+          // The grep filter cannot perform regex matches against non-string
+          // types, and flow.event_type.type is an integer. Instead of using
+          // lua we could use a filter to type convert the flow.event_type.type
+          // field to a string, and then use a filter grep for it being 4,
+          // however doing so will leave the type incorrect in the final log
+          // entry, which means the actual log structure would deviate from the
+          // hubble flow logs docs and api spec, so you'd want to convert it
+          // back again. In the end it seems easier and safer to use a small
+          // lua function to do the matching. Returning 0 means keep the log
+          // untouched, returning -1 means drop the log.
           {
             name  = "lua"
             match = "hubble.*"
