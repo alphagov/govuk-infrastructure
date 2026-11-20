@@ -28,7 +28,7 @@ resource "aws_eks_addon" "after_node_groups" {
   resolve_conflicts_on_update = each.value.resolve_conflicts_on_create
 
   depends_on = [
-    aws_eks_node_group.workers[*].id
+    aws_eks_node_group.workers
   ]
 }
 
