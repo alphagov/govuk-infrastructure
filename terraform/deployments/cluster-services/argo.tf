@@ -65,16 +65,22 @@ resource "kubernetes_labels" "argocd_secret" {
   }
 }
 
+# Pinned to Chart 10.2.2 (Argo 3.4.x) until we upgrade to Helm v4
 resource "helm_release" "argo_cd" {
   chart            = "argo-cd"
   name             = "argo-cd"
   namespace        = local.services_ns
   create_namespace = true
   repository       = "https://argoproj.github.io/argo-helm"
-  version          = "10.2.0"
+  version          = "10.2.2"
   timeout          = var.helm_timeout_seconds
   values = [yamlencode({
     global = {
+      # Stick to v3.4 until ready for Helm v4
+      image = {
+        repository = "quay.io/argoproj/argocd"
+        tag        = "v3.4.14"
+      }
       logging = {
         format = "json"
         level  = "warn"

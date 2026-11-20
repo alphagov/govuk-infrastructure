@@ -57,6 +57,27 @@
           "matchPackageNames": ["alphagov/govuk-infrastructure"],
           "matchDepTypes": ["action"],
           "enabled": false
+        },
+        {
+            "description": "Hold the argo-cd chart on the Argo CD 3.4 line. Chart 10.2.3+ ships Argo CD 3.5+, which only bundles Helm 4. Remove when ready for Helm 4.",
+            "matchDatasources": [
+                "helm"
+            ],
+            "matchPackageNames": [
+                "argo-cd"
+            ],
+            "allowedVersions": "<10.2.3"
+        },
+        {
+            "description": "Keep the Argo CD image (set via global.image.tag in argo.tf) on v3.4.x, which still bundles Helm 3. Remove when ready for Helm 4.",
+            "matchDatasources": [
+                "docker"
+            ],
+            "matchPackageNames": [
+                "quay.io/argoproj/argocd"
+            ],
+            "allowedVersions": "/^v3\\.4\\.\\d+$/",
+            "minimumReleaseAge": "10 days"
         }
     ],
     "customManagers": [
@@ -97,6 +118,17 @@
             ],
             "datasourceTemplate": "docker",
             "depNameTemplate": "elastic/filebeat"
+        },
+        {
+            "description": "Argo CD image tag pinned in the argo-cd helm_release values.",
+            "customType": "regex",
+            "managerFilePatterns": [
+                "/.*cluster-services\\/argo\\.tf/"
+            ],
+            "matchStrings": [
+                "repository\\s+=\\s+\"(?<depName>quay\\.io\\/argoproj\\/argocd)\"\\s+tag\\s+=\\s+\"(?<currentValue>v[0-9.]+)\""
+            ],
+            "datasourceTemplate": "docker"
         }
     ]
 }
