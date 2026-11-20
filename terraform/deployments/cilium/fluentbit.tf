@@ -38,12 +38,24 @@ resource "helm_release" "fluentbit" {
           }
         ]
 
+        filters = [
+          {
+            name       = "grep"
+            match      = "hubble.*"
+            logical_op = "AND"
+            regex = [
+              "$flow['event_type']['type'] ^4$", # Only Trace Events (5 would be for policy verdict)
+              "$flow['trace_reason'] ^NEW$",     # Only NEW flows connections
+            ]
+          }
+        ]
+
         outputs = [
           {
             name   = "stdout"
             alias  = "out"
             format = "json_lines"
-            match  = "*"
+            match  = "hubble.*"
           }
         ]
       }
