@@ -61,6 +61,16 @@ resource "aws_iam_role" "node" {
   lifecycle { ignore_changes = [name] }
 }
 
+data "aws_iam_policy_document" "node_assumerole" {
+  statement {
+    actions = ["sts:AssumeRole"]
+    principals {
+      type        = "Service"
+      identifiers = ["ec2.amazonaws.com"]
+    }
+  }
+}
+
 data "aws_iam_policy_document" "pull_from_ecr" {
   statement {
     actions = [

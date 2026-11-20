@@ -1,6 +1,7 @@
 locals {
   external_secrets_service_account_name = "external-secrets" # pragma: allowlist secret
   external_secrets_ns                   = "cluster-services"
+  secrets_prefix                        = var.environment_name # pragma: allowlist secret
 }
 
 module "external_secrets_iam_role" {
