@@ -20,7 +20,7 @@ on:
 
 jobs:
   build-and-push-image:
-    uses: alphagov/govuk-infrastructure/.github/workflows/build-push-arm-image.yml@main
+    uses: alphagov/govuk-infrastructure/.github/workflows/build-push-arm-image.yml@3a97c204e07d33a72955f4e73cb3f913a0943174 # main
     with:
       gitRef: ${{ inputs.gitRef || github.ref }}
       imageName: clamav
