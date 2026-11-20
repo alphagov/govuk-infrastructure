@@ -10,7 +10,6 @@ resource "aws_eks_cluster" "this" {
   version  = var.cluster_version
 
   vpc_config {
-    vpc_id                 = var.vpc_config.vpc_id
     subnet_ids             = var.vpc_config.control_plane_subnet_ids
     endpoint_public_access = true
   }
