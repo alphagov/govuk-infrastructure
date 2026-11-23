@@ -12,8 +12,3 @@ import {
   to = github_team.govuk_data_engineering
   id = "govuk-data-engineering"
 }
-
-import {
-  to = github_repository.govuk_repos["disco_prep"]
-  id = "disco_prep"
-}
