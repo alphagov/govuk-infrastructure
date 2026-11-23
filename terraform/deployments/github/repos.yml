@@ -454,15 +454,7 @@ repos:
     teams:
       gov-uk-navigation-prototypes: "admin"
 
-  govuk-ia-utility:
-    can_be_deployed: false
-    push_allowances:
-      - "alphagov/gov-uk-data"
-      - "alphagov/gov-uk-production-admin"
-      - "alphagov/gov-uk-production-deploy"
-    required_pull_request_reviews:
-      pull_request_bypassers:
-        - "alphagov/gov-uk-data"
+  govuk-ia-utility: {}
 
   govuk-infrastructure:
     up_to_date_branches: true
