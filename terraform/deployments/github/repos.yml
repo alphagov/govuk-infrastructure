@@ -172,6 +172,13 @@ repos:
       standard_contexts: []
       additional_contexts: []
 
+  disco_prep:
+    archived: true
+    fork:
+      enabled: true
+      source_owner: "zilnhoj"
+      source_repo: "disco_prep"
+
   email-alert-api:
     can_be_deployed: true
     homepage_url: "https://docs.publishing.service.gov.uk/apps/email-alert-api.html"
