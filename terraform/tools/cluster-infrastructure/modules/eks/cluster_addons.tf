@@ -1,19 +1,17 @@
 locals {
   default_cluster_addons = {
-    coredns            = { addon_version = "v1.14.3-eksbuild.3", resolve_conflicts_on_create = "OVERWRITE" }
-    kube-proxy         = { addon_version = "v1.35.3-eksbuild.13", resolve_conflicts_on_create = "OVERWRITE" }
-    kube-state-metrics = { addon_version = "v2.19.1-eksbuild.1", resolve_conflicts_on_create = "OVERWRITE" }
-    metrics-server     = { addon_version = "v0.8.1-eksbuild.11", resolve_conflicts_on_create = "OVERWRITE" }
+    coredns                = { addon_version = "v1.14.7-eksbuild.35", resolve_conflicts_on_create = "OVERWRITE" }
+    kube-proxy             = { addon_version = "v1.36.0-eksbuild.65", resolve_conflicts_on_create = "OVERWRITE" }
+    kube-state-metrics     = { addon_version = "v2.20.0-eksbuild.10", resolve_conflicts_on_create = "OVERWRITE" }
+    metrics-server         = { addon_version = "v0.9.1-eksbuild.2", resolve_conflicts_on_create = "OVERWRITE" }
+    eks-pod-identity-agent = { addon_version = "v1.4.1-eksbuild.3", resolve_conflicts_on_create = "OVERWRITE" }
     vpc-cni = {
-      addon_version               = "v1.22.2-eksbuild.1",
+      addon_version               = "v1.23.3-eksbuild.1",
       resolve_conflicts_on_create = "OVERWRITE",
       before_compute              = true
       configuration_values = jsonencode({
         enableNetworkPolicy = "true"
       })
-    }
-    eks_pod_identity_addon = {
-      addon_version = "v1.3.10-eksbuild.2", resolve_conflicts_on_create = "OVERWRITE"
     }
   }
 }
