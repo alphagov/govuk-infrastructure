@@ -3,7 +3,7 @@ locals {
 }
 
 module "platformengineer" {
-  source = "./modules/access-entry"
+  source = "../../shared-modules/kubernetes-access-entry"
 
   name = "platformengineer"
 
@@ -28,7 +28,7 @@ module "platformengineer" {
 }
 
 module "fulladmin" {
-  source = "./modules/access-entry"
+  source = "../../shared-modules/kubernetes-access-entry"
 
   name = "fulladmin"
 
@@ -53,7 +53,7 @@ module "fulladmin" {
 }
 
 module "developer" {
-  source = "./modules/access-entry"
+  source = "../../shared-modules/kubernetes-access-entry"
 
   name = "developer"
 
@@ -131,7 +131,7 @@ module "developer" {
 }
 
 module "licensinguser" {
-  source = "./modules/access-entry"
+  source = "../../shared-modules/kubernetes-access-entry"
 
   name = "licensinguser"
 
@@ -166,7 +166,7 @@ module "licensinguser" {
 }
 
 module "ithctester" {
-  source = "./modules/access-entry"
+  source = "../../shared-modules/kubernetes-access-entry"
 
   name = "ithctester"
 
@@ -208,7 +208,7 @@ module "ithctester" {
 }
 
 module "readonly" {
-  source = "./modules/access-entry"
+  source = "../../shared-modules/kubernetes-access-entry"
 
   name = "readonly"
 
@@ -257,7 +257,7 @@ module "readonly" {
 }
 
 module "tempadmin" {
-  source = "./modules/access-entry"
+  source = "../../shared-modules/kubernetes-access-entry"
 
   name = "tempadmin"
 
@@ -279,7 +279,7 @@ module "tempadmin" {
 }
 
 module "dguengineer" {
-  source = "./modules/access-entry"
+  source = "../../shared-modules/kubernetes-access-entry"
 
   name = "dguengineer"
 
