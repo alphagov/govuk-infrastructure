@@ -9,8 +9,17 @@ variable "name" {
   description = "The bucket and IAM policy name. NOTE: This must be a globally unique name for AWS S3"
 
   validation {
-    condition     = startswith(var.name, "govuk-") || startswith(var.name, "datagovuk-")
-    error_message = "The name of the bucket should follow the format 'govuk-{environment}-{purpose}' or 'datagovuk-{environment}-{purpose}'"
+    condition = (
+      startswith(var.name, "govuk-")
+      || startswith(var.name, "datagovuk-")
+      || endswith(var.name, "-${var.govuk_environment}-${data.aws_caller_identity.current.account_id}-${data.aws_region.current.region}-an")
+    )
+    error_message = "The name of the bucket should follow the format 'govuk-{environment}-{purpose}' or 'datagovuk-{environment}-{purpose}', or be an account namespaced bucket with the environment name included (e.g. suffixed with `-<govuk_env>-<account_id>-<region>-an`)"
+  }
+
+  validation {
+    condition     = length(var.name) <= 63
+    error_message = "var.name must be 63 or fewer characters"
   }
 }
 
