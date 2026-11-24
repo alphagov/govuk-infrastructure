@@ -31,5 +31,5 @@ resource "helm_release" "cilium" {
     upgradeCompatibility = "1.20"
   })]
 
-  depends_on = [aws_eks_cluster.this, aws_eks_addon.vpc_cni]
+  depends_on = [aws_eks_cluster.this, aws_eks_addon.vpc_cni, aws_eks_node_group.workers]
 }

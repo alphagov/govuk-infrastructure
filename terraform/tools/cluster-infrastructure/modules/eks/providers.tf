@@ -16,6 +16,6 @@ provider "helm" {
     host = aws_eks_cluster.this.endpoint
 
     token                  = data.aws_eks_cluster_auth.auth.token
-    cluster_ca_certificate = aws_eks_cluster.this.certificate_authority[0].data
+    cluster_ca_certificate = base64decode(aws_eks_cluster.this.certificate_authority[0].data)
   }
 }
