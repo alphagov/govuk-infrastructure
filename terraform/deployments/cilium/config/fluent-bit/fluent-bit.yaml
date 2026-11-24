@@ -111,6 +111,14 @@ pipeline:
           -- See https://docs.cilium.io/en/latest/internals/security-identities/ for security identities
           -- and https://pkg.go.dev/github.com/cilium/cilium/pkg/identity#pkg-constants for the reserved
           -- identities (identities from 1 to 2^8-1)
+          if type(identity) ~= "number" then
+            identity = tonumber(identity)
+
+            if identity == nil then
+              return "UNKNOWN"
+            end
+          end
+
           if identity == 1 then
             return "host"
           elseif identity == 2 then
@@ -197,7 +205,7 @@ pipeline:
       compression: gzip
       upload_timeout: 60s
       total_file_size: 50M
-      s3_key_format: '/logs/network-mapping/json_lines/dt=%Y-%m-%d/h=%H/$UUID.jsonl'
+      s3_key_format: '/logs/network-mapping/json_lines/dt=%Y-%m-%d/h=%H/$UUID.jsonl.gz'
       blob_database_file: "$${STORAGE_PATH}/hubble-export-s3-output.db"
       store_dir: "$${STORAGE_PATH}/hubble-export-s3-output-store-dir/"
       store_dir_limit_size: "5G"
