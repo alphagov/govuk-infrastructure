@@ -20,6 +20,7 @@ CloudFront
 CloudTrail
 CNAME
 CNCF
+CNI
 CodeCommit
 Cognito
 CPU
@@ -93,6 +94,7 @@ declaratively
 destroy
 devops
 equivalent
+failover
 favicon
 legacy
 leveraging
