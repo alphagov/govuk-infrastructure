@@ -2,6 +2,7 @@ data "aws_region" "current" {}
 
 data "aws_caller_identity" "current" {}
 
+data "aws_iam_session_context" "current" {}
 
 data "tfe_outputs" "networking" {
   organization = "govuk"
