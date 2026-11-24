@@ -199,13 +199,13 @@ pipeline:
   outputs:
     - name: s3
       match: 'hubble.*'
-      bucket: ${hubble_log_bucket_name}
-      region: ${hubble_log_bucket_region}
-      format: json_lines
+      bucket: ${hubble_log_s3_bucket_name}
+      region: ${hubble_log_s3_bucket_region}
+      format: ${hubble_log_s3_file_format}
       compression: gzip
       upload_timeout: 60s
       total_file_size: 50M
-      s3_key_format: '/logs/network-mapping/json_lines/dt=%Y-%m-%d/h=%H/$UUID.jsonl.gz'
+      s3_key_format: '/${hubble_log_s3_path_prefix}/${hubble_log_s3_file_format}/dt=%Y-%m-%d/h=%H/$UUID.jsonl.gz'
       blob_database_file: "$${STORAGE_PATH}/hubble-export-s3-output.db"
       store_dir: "$${STORAGE_PATH}/hubble-export-s3-output-store-dir/"
       store_dir_limit_size: "5G"

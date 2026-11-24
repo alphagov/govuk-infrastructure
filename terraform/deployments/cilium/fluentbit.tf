@@ -1,6 +1,8 @@
 locals {
   fluent_bit_service_account_name = "fluent-bit-hubble-export"
-  hubble_log_bucket_name          = "hubble-logs-${var.govuk_environment}-${data.aws_caller_identity.current.account_id}-${data.aws_region.current.region}-an"
+  hubble_log_s3_bucket_name       = "hubble-logs-${var.govuk_environment}-${data.aws_caller_identity.current.account_id}-${data.aws_region.current.region}-an"
+  hubble_log_s3_path_prefix       = "logs/network-mapping"
+  hubble_log_s3_file_format       = "json_lines"
 }
 
 resource "helm_release" "fluent_bit" {
@@ -25,8 +27,10 @@ resource "helm_release" "fluent_bit" {
     }
     config = yamldecode(
       templatefile("${path.module}/config/fluent-bit/fluent-bit.yaml", {
-        hubble_log_bucket_name   = local.hubble_log_bucket_name,
-        hubble_log_bucket_region = data.aws_region.current.region,
+        hubble_log_s3_bucket_name   = local.hubble_log_s3_bucket_name,
+        hubble_log_s3_bucket_region = data.aws_region.current.region,
+        hubble_log_s3_path_prefix   = local.hubble_log_s3_path_prefix
+        hubble_log_s3_file_format   = local.hubble_log_s3_file_format
       })
     )
     hostVolumes = [
@@ -56,7 +60,7 @@ locals {
 module "hubble_logs_bucket" {
   source = "../../shared-modules/s3"
 
-  name              = local.hubble_log_bucket_name
+  name              = local.hubble_log_s3_bucket_name
   govuk_environment = var.govuk_environment
 }
 
