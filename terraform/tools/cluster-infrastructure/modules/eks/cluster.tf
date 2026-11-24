@@ -14,7 +14,7 @@ resource "aws_eks_cluster" "this" {
     endpoint_public_access = true
   }
 
-  bootstrap_self_managed_addons = true
+  bootstrap_self_managed_addons = false
   deletion_protection           = var.deletion_protection
   enabled_cluster_log_types = [
     "api", "audit", "authenticator", "controllerManager", "scheduler"
@@ -73,4 +73,8 @@ data "aws_iam_policy_document" "assume_role_policy" {
       identifiers = ["eks.amazonaws.com"]
     }
   }
+}
+
+data "aws_eks_cluster_auth" "auth" {
+  name = aws_eks_cluster.this.name
 }
