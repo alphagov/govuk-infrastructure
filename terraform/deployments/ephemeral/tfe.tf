@@ -120,6 +120,7 @@ module "cluster_services" {
 
   tfvars = {
     ship_kubernetes_events_to_logit = false
+    force_destroy_tempo_bucket      = true
   }
 
   depends_on = [
