@@ -1,8 +1,9 @@
 module "eks" {
   source = "./modules/eks"
 
-  environment_name = var.environment_name
-  cluster_version  = var.cluster_version
+  environment_name              = var.environment_name
+  cluster_version               = var.cluster_version
+  cluster_creator_principal_arn = data.aws_caller_identity.current.arn
   vpc_config = {
     control_plane_subnet_ids = data.tfe_outputs.networking.nonsensitive_values.eks_control_plane_subnet_ids
     node_private_subnet_ids  = data.tfe_outputs.networking.nonsensitive_values.private_subnet_ids

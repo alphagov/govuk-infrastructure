@@ -116,7 +116,7 @@ resource "aws_iam_role_policy_attachment" "node" {
 
 resource "aws_eks_node_group" "workers" {
   for_each               = local.eks_managed_node_groups
-  cluster_name           = aws_eks_cluster.this.name
+  cluster_name           = time_sleep.readiness.triggers["cluster_name"]
   node_group_name_prefix = each.value.name_prefix
 
   launch_template {

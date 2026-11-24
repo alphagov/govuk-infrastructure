@@ -9,6 +9,11 @@ variable "cluster_version" {
   default     = "1.36"
 }
 
+variable "cluster_creator_principal_arn" {
+  type = string
+  description = "ARN of the principal which is creating the cluster. This will typically be the Terraform runner role ARN"
+}
+
 variable "vpc_config" {
   type = object({
     control_plane_subnet_ids = list(string)

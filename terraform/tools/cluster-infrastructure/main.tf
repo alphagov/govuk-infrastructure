@@ -11,10 +11,6 @@ terraform {
       source  = "hashicorp/aws"
       version = ">= 6.54.0"
     }
-    helm = {
-      source  = "hashicorp/helm"
-      version = "3.3.0"
-    }
   }
 }
 
