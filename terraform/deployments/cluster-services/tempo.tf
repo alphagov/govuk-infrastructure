@@ -9,7 +9,7 @@ module "secure_s3_bucket_tempo" {
   govuk_environment = var.govuk_environment
 
   name               = "govuk-${var.govuk_environment}-tempo"
-  force_destroy      = var.force_destroy
+  force_destroy      = var.force_destroy || var.force_destroy_tempo_bucket
   versioning_enabled = false
 }
 

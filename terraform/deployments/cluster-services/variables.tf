@@ -98,3 +98,9 @@ variable "gatekeeper_controller_resources" {
     audit_mem_limit = "1Gi"
   }
 }
+
+variable "force_destroy_tempo_bucket" {
+  type        = bool
+  description = "Force destroy (and therefore empty prior to delete) the tempo S3 bucket when deleting the terraform aws_s3_bucket resource"
+  default     = false
+}
