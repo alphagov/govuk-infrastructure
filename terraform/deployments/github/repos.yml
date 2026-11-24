@@ -454,7 +454,8 @@ repos:
     teams:
       gov-uk-navigation-prototypes: "admin"
 
-  govuk-ia-utility: {}
+  govuk-ia-utility:
+    archived: true
 
   govuk-infrastructure:
     up_to_date_branches: true
