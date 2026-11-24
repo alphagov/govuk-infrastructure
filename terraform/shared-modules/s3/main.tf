@@ -15,6 +15,8 @@ resource "aws_s3_bucket" "this" {
     : "global"
   )
 
+  force_destroy = var.force_destroy
+
   tags = merge(
     var.tags,
     { Name = var.name }
