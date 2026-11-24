@@ -614,7 +614,7 @@ repos:
       standard_contexts: *standard_security_checks
       additional_contexts:
         - test
-        - visual-regression-test-components
+        - percy/govuk_publishing_components_2025-3f1f7137
 
   govuk_schemas:
     homepage_url: "http://www.rubydoc.info/github/alphagov/govuk_schemas"
