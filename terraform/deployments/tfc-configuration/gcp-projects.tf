@@ -331,40 +331,6 @@ module "gcp-govuk-polling" {
   ]
 }
 
-module "gcp-sde-consent-api" {
-  source = "github.com/alphagov/terraform-govuk-tfe-workspacer"
-
-  organization      = var.organization
-  workspace_name    = "gcp-sde-consent-api"
-  workspace_desc    = "GCP project management for the sde-consent-api production project"
-  workspace_tags    = ["production", "sde-consent-api", "gcp"]
-  terraform_version = var.terraform_version
-  execution_mode    = "remote"
-  working_directory = "/gcp-sde-consent-api/"
-  trigger_patterns = [
-    "/gcp-sde-consent-api/**/*",
-    "/modules/gcp-project-init/**/*",
-  ]
-  global_remote_state = true
-  assessments_enabled = true
-
-  project_name = "govuk-data-infrastructure"
-  vcs_repo = {
-    identifier     = "alphagov/govuk-data-infrastructure"
-    branch         = "main"
-    oauth_token_id = data.tfe_oauth_client.github.oauth_token_id
-  }
-
-  team_access = {
-    "GOV.UK Production"            = "write"
-    "Google Cloud Data Production" = "write"
-  }
-
-  variable_set_ids = [
-    local.gcp_credentials["production"],
-  ]
-}
-
 module "gcp-cpto-content-metadata" {
   source = "github.com/alphagov/terraform-govuk-tfe-workspacer"
 
@@ -445,40 +411,6 @@ module "gcp-data-insights-experimentation" {
   working_directory = "/gcp-data-insights-experimentation/"
   trigger_patterns = [
     "/gcp-data-insights-experimentation/**/*",
-    "/modules/gcp-project-init/**/*",
-  ]
-  global_remote_state = true
-  assessments_enabled = true
-
-  project_name = "govuk-data-infrastructure"
-  vcs_repo = {
-    identifier     = "alphagov/govuk-data-infrastructure"
-    branch         = "main"
-    oauth_token_id = data.tfe_oauth_client.github.oauth_token_id
-  }
-
-  team_access = {
-    "GOV.UK Production"            = "write"
-    "Google Cloud Data Production" = "write"
-  }
-
-  variable_set_ids = [
-    local.gcp_credentials["production"],
-  ]
-}
-
-module "gcp-disco-journeys" {
-  source = "github.com/alphagov/terraform-govuk-tfe-workspacer"
-
-  organization      = var.organization
-  workspace_name    = "gcp-disco-journeys"
-  workspace_desc    = "GCP project management for the disco-journeys production project"
-  workspace_tags    = ["production", "disco-journeys", "gcp"]
-  terraform_version = var.terraform_version
-  execution_mode    = "remote"
-  working_directory = "/gcp-disco-journeys/"
-  trigger_patterns = [
-    "/gcp-disco-journeys/**/*",
     "/modules/gcp-project-init/**/*",
   ]
   global_remote_state = true
@@ -877,74 +809,6 @@ module "gcp-sde-analysis" {
   ]
 }
 
-module "gcp-sde-consent-api-dev" {
-  source = "github.com/alphagov/terraform-govuk-tfe-workspacer"
-
-  organization      = var.organization
-  workspace_name    = "gcp-sde-consent-api-dev"
-  workspace_desc    = "GCP project management for the sde-consent-api-dev project"
-  workspace_tags    = ["dev", "sde-consent-api", "gcp"]
-  terraform_version = var.terraform_version
-  execution_mode    = "remote"
-  working_directory = "/gcp-sde-consent-api-dev/"
-  trigger_patterns = [
-    "/gcp-sde-consent-api-dev/**/*",
-    "/modules/gcp-project-init/**/*",
-  ]
-  global_remote_state = true
-  assessments_enabled = true
-
-  project_name = "govuk-data-infrastructure"
-  vcs_repo = {
-    identifier     = "alphagov/govuk-data-infrastructure"
-    branch         = "main"
-    oauth_token_id = data.tfe_oauth_client.github.oauth_token_id
-  }
-
-  team_access = {
-    "GOV.UK Production"            = "write"
-    "Google Cloud Data Production" = "write"
-  }
-
-  variable_set_ids = [
-    local.gcp_credentials["production"],
-  ]
-}
-
-module "gcp-sde-prototype-service" {
-  source = "github.com/alphagov/terraform-govuk-tfe-workspacer"
-
-  organization      = var.organization
-  workspace_name    = "gcp-sde-prototype-service"
-  workspace_desc    = "GCP project management for the sde-prototype-service production project"
-  workspace_tags    = ["production", "sde-prototype-service", "gcp"]
-  terraform_version = var.terraform_version
-  execution_mode    = "remote"
-  working_directory = "/gcp-sde-prototype-service/"
-  trigger_patterns = [
-    "/gcp-sde-prototype-service/**/*",
-    "/modules/gcp-project-init/**/*",
-  ]
-  global_remote_state = true
-  assessments_enabled = true
-
-  project_name = "govuk-data-infrastructure"
-  vcs_repo = {
-    identifier     = "alphagov/govuk-data-infrastructure"
-    branch         = "main"
-    oauth_token_id = data.tfe_oauth_client.github.oauth_token_id
-  }
-
-  team_access = {
-    "GOV.UK Production"            = "write"
-    "Google Cloud Data Production" = "write"
-  }
-
-  variable_set_ids = [
-    local.gcp_credentials["production"],
-  ]
-}
-
 module "gcp-sde-sandbox-haas" {
   source = "github.com/alphagov/terraform-govuk-tfe-workspacer"
 
@@ -957,40 +821,6 @@ module "gcp-sde-sandbox-haas" {
   working_directory = "/gcp-sde-sandbox-haas/"
   trigger_patterns = [
     "/gcp-sde-sandbox-haas/**/*",
-    "/modules/gcp-project-init/**/*",
-  ]
-  global_remote_state = true
-  assessments_enabled = true
-
-  project_name = "govuk-data-infrastructure"
-  vcs_repo = {
-    identifier     = "alphagov/govuk-data-infrastructure"
-    branch         = "main"
-    oauth_token_id = data.tfe_oauth_client.github.oauth_token_id
-  }
-
-  team_access = {
-    "GOV.UK Production"            = "write"
-    "Google Cloud Data Production" = "write"
-  }
-
-  variable_set_ids = [
-    local.gcp_credentials["production"],
-  ]
-}
-
-module "gcp-single-consent-api-dev" {
-  source = "github.com/alphagov/terraform-govuk-tfe-workspacer"
-
-  organization      = var.organization
-  workspace_name    = "gcp-single-consent-api-dev"
-  workspace_desc    = "GCP project management for the single-consent-api-dev project"
-  workspace_tags    = ["dev", "single-consent-api", "gcp"]
-  terraform_version = var.terraform_version
-  execution_mode    = "remote"
-  working_directory = "/gcp-single-consent-api-dev/"
-  trigger_patterns = [
-    "/gcp-single-consent-api-dev/**/*",
     "/modules/gcp-project-init/**/*",
   ]
   global_remote_state = true
