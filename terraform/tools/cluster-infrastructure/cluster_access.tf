@@ -13,6 +13,7 @@ module "access_entry_cluster_creator" {
 
   access_policy_scope = "cluster"
   access_policy_arn   = "arn:aws:eks::aws:cluster-access-policy/AmazonEKSClusterAdminPolicy"
+  aws_iam_role_arns = []
 }
 
 module "access_entry_platform_engineer" {
