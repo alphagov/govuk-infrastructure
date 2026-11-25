@@ -1,6 +1,6 @@
 resource "aws_glue_catalog_table" "hubble_export_new_traces" {
   // using hyphens in the table name is annoying since you have to always double quote it in athena, so use underscores
-  name          = "hubble_export_new_traces"
+  name          = "hubble_export_new_traces_${replace(var.govuk_environment, "-", "_")}"
   database_name = "default"
   table_type    = "EXTERNAL_TABLE"
 
