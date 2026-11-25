@@ -35,6 +35,7 @@ resource "google_project_iam_custom_role" "api" {
       "discoveryengine.documents.get",
       "discoveryengine.documents.import",
       "discoveryengine.documents.list",
+      "discoveryengine.documents.purge",
       "discoveryengine.documents.update",
       "discoveryengine.evaluations.create",
       "discoveryengine.evaluations.get",
