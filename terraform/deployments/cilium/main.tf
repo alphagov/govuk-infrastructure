@@ -102,7 +102,7 @@ resource "helm_release" "cilium" {
         static = {
           enabled        = true
           filePath       = "/var/run/cilium/hubble/events.log"
-          fileMaxSizeMb  = "1000"
+          fileMaxSizeMb  = 1000
           fileMaxBackups = 2
           fileCompress   = true
         }
