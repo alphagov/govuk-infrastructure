@@ -205,6 +205,15 @@ whereas gatekeeper logs:
 
 The numeric check for `ts` and `duration` also allows `e`, `E` and `+`, so epoch values that Logstash writes in exponent form (e.g. `0.17951081517868207e10`) aren't renamed.
 
+Some fields are an object in some logs and a string in others. OpenSearch rejects the second form with `object mapping for [logjson.<field>] tried to parse field [<field>] as object, but found a concrete value` (or `failed to parse field [logjson.<field>] of type [keyword]` if a string came first that day). For these, the object is kept and strings are renamed to a `_text` field:
+
+| Field | Object value (kept) | String value (renamed) | Renamed to |
+|---|---|---|---|
+| `logjson.source` | `{"function": "...", "file": "...", "line": 42}` (e.g. Go `slog` with source locations) | `"auth-service"` (eks-pod-identity-agent) | `logjson.source_text` |
+| `logjson.tgb` | `{"name": "k8s-apps-xxxx", "namespace": "apps"}` (aws-load-balancer-controller) | `"k8s-apps-xxxx"` (aws-load-balancer-controller, e.g. `enqueued new deferred TGB`) | `logjson.tgb_text` |
+
+These rules use `=~ /.*/` to detect strings. Logstash regex conditionals [only match string values](https://github.com/elastic/logstash/blob/main/logstash-core/src/main/java/org/logstash/config/ir/compiler/EventCondition.java) and are false for objects and numbers, so objects are never renamed, even when their keys aren't known.
+
 ### Investigating the dead letter queue
 
 Rejected events are written to the `dlq-YYYY.MM.DD` index. The `dead_letter_queue_reason` field contains the OpenSearch error, which names the field and its mapped type, for example:
