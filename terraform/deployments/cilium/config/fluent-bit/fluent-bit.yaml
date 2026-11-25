@@ -1,0 +1,211 @@
+---
+service:
+  flush: 5
+  log_level: info
+
+parsers:
+  - name: "json-no-time"
+    format: "json"
+
+  - name: "hubble-export-flow-time"
+    format: "regex"
+    regex: "^(?<flow_time>.*)$"
+    time_key: "flow_time"
+    time_format: "%Y-%m-%dT%H:%M:%S.%L%z"
+    time_keep: true
+    time_strict: true
+
+pipeline:
+  inputs:
+    - name: "tail"
+      alias: "hubble-export"
+      path: "/var/run/cilium/hubble/events.log"
+      tag: "hubble.*"
+      parser: "json-no-time"
+      refresh_interval: 5
+      rotate_wait: 30
+      "storage.type": "$${STORAGE_TYPE_PREFER_FS}"
+      db: "$${STORAGE_PATH}/hubble-export-tail.db"
+
+  filters:
+    ## The grep filter cannot perform regex matches against non-string
+    ## types, and flow.event_type.type is an integer. Instead of using
+    ## lua we could use a filter to type convert the flow.event_type.type
+    ## field to a string, and then use a filter grep for it being 4,
+    ## however doing so will leave the type incorrect in the final log
+    ## entry, which means the actual log structure would deviate from the
+    ## hubble flow logs docs and api spec, so you'd want to convert it
+    ## back again. In the end it seems easier and safer to use a small
+    ## lua function to do the matching. Returning 0 means keep the log
+    ## untouched, returning -1 means drop the log.
+    - name: "lua"
+      match: "hubble.*"
+      call: "filter_for_new_traces"
+      code: |-
+        function filter_for_new_traces(tag, timestamp, record)
+          local flow = record["flow"]
+          if type(flow) == "table"
+            and type(flow["event_type"]) == "table"
+            and flow["event_type"]["type"] == 4 -- event type "trace"
+            and flow["trace_reason"] == "NEW"
+            then return 0, timestamp, record
+          end
+          return -1, timestamp, record
+        end
+
+    - name: "nest"
+      match: "hubble.*"
+      operation: "lift"
+      nested_under: "flow"
+      add_prefix: "flow_"
+
+    - name: "nest"
+      match: "hubble.*"
+      operation: "lift"
+      nested_under: "flow_source"
+      add_prefix: "source_"
+
+    - name: "nest"
+      match: "hubble.*"
+      operation: "lift"
+      nested_under: "flow_destination"
+      add_prefix: "destination_"
+
+    - name: "modify"
+      match: "hubble.*"
+      remove:
+        # Remove the original date, and duplicate time key, the date key
+        # (or whatever is appropriate for the output) will be added again
+        # by the output plugin based on the parsed flow.time
+        - "date"
+        - "time"
+        - "flow_emitter"
+        - "flow_ethernet"
+        - "flow_node_name"
+        - "flow_node_labels"
+        - "flow_event_type"
+        - "flow_trace_observation_point"
+        - "flow_trace_reason"
+        - "flow_is_reply"
+        - "flow_Summary"
+        - "destination_ID"
+        - "destination_cluster_name"
+        - "destination_labels"
+        - "source_ID"
+        - "source_cluster_name"
+        - "source_labels"
+        - "node_name"
+
+    - name: "parser"
+      match: "hubble.*"
+      key_name: "flow_time"
+      parser: "hubble-export-flow-time"
+      preserve_key: true
+      reserve_data: true
+
+    - name: "lua"
+      match: "hubble.*"
+      call: "add_identity_names"
+      code: |-
+        function name_for_identity(identity)
+          -- See https://docs.cilium.io/en/latest/internals/security-identities/ for security identities
+          -- and https://pkg.go.dev/github.com/cilium/cilium/pkg/identity#pkg-constants for the reserved
+          -- identities (identities from 1 to 2^8-1)
+          if type(identity) ~= "number" then
+            identity = tonumber(identity)
+
+            if identity == nil then
+              return "UNKNOWN"
+            end
+          end
+
+          if identity == 1 then
+            return "host"
+          elseif identity == 2 then
+            return "world"
+          elseif identity == 3 then
+            return "unmanaged"
+          elseif identity == 4 then
+            return "cilium-health"
+          elseif identity == 5 then
+            return "init"
+          elseif identity == 6 then
+            return "remote-node"
+          elseif identity == 7 then
+            return "kube-api-server"
+          elseif identity == 8 then
+            return "ingress"
+          elseif identity == 9 then
+            return "world-ipv4"
+          elseif identity == 10 then
+            return "world-ipv6"
+          elseif identity == 11 then
+            return "aggregate-cluster"
+          elseif identity == 12 then
+            return "aggregate-cluster-mesh"
+          elseif identity == 13 then
+            return "aggregate-world"
+          elseif identity == 14 then
+            return "aggregate-remote-node"
+          -- 2^8 to 2^16 - 1
+          elseif identity >= 256 and identity < 65536 then
+            return "cluster-local"
+          -- 2^16 to 2^24 - 1
+          elseif identity >= 65536 and identity < 16777216 then
+            return "remote-cluster"
+          -- 2^24 to 2^25 - 1
+          elseif identity >= 16777216 and identity < 33554432 then
+            return "cidr"
+          -- 2^25 to (2^25 + 2^24) - 1
+          elseif identity >= 33554432 and identity < 50331648 then
+            return "remote-nodes"
+          else
+            return "UNKNOWN"
+          end
+        end
+
+        function add_identity_names(tag, timestamp, record)
+          local source_identity = record["source_identity"]
+          local destination_identity = record["destination_identity"]
+
+          record["source_identity_name"] = name_for_identity(source_identity)
+          record["destination_identity_name"] = name_for_identity(destination_identity)
+
+          -- Return value 2 means timestamp unmodified, record has been modified
+          return 2, timestamp, record
+        end
+
+    - name: "nest"
+      match: "hubble.*"
+      operation: "nest"
+      wildcard: "destination_*"
+      nest_under: "flow_destination"
+      remove_prefix: "destination_"
+
+    - name: "nest"
+      match: "hubble.*"
+      operation: "nest"
+      wildcard: "source_*"
+      nest_under: "flow_source"
+      remove_prefix: "source_"
+
+    - name: "nest"
+      match: "hubble.*"
+      operation: "nest"
+      wildcard: "flow_*"
+      nest_under: "flow"
+      remove_prefix: "flow_"
+
+  outputs:
+    - name: s3
+      match: 'hubble.*'
+      bucket: ${hubble_log_bucket_name}
+      region: ${hubble_log_bucket_region}
+      format: json_lines
+      compression: gzip
+      upload_timeout: 60s
+      total_file_size: 50M
+      s3_key_format: '/logs/network-mapping/json_lines/dt=%Y-%m-%d/h=%H/$UUID.jsonl.gz'
+      blob_database_file: "$${STORAGE_PATH}/hubble-export-s3-output.db"
+      store_dir: "$${STORAGE_PATH}/hubble-export-s3-output-store-dir/"
+      store_dir_limit_size: "5G"
