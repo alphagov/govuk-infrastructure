@@ -1068,7 +1068,8 @@ repos:
   public-asset-checker:
     homepage_url: "https://govuk-public-asset-checker.herokuapp.com"
 
-  govspeak-visual-editor: {}
+  govspeak-visual-editor:
+    archived: true
 
   govuk-knowledge-graph-gcp:
     homepage_url: "https://docs.data-community.publishing.service.gov.uk/tools/govgraph/"
