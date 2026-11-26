@@ -1,5 +1,5 @@
 hosted_zone_name         = "chat"
-engine_version           = "2.13"
+engine_version           = "2.19"
 security_options_enabled = true
 volume_type              = "gp3"
 throughput               = 250
