@@ -3,83 +3,96 @@
     "name": "id",
     "type": "INTEGER",
     "mode": "REQUIRED",
-    "description": "ID of action"
+    "description": "The unique identifier of the Publisher action record."
   },
   {
     "name": "approver_id",
     "type": "INTEGER",
     "mode": "NULLABLE",
-    "description": "ID of user who approved edit if this is an approval action"
+    "description": "The identifier of the Publisher user who approved the action, where the action records an approval."
   },
   {
     "name": "approved_timestamp",
     "type": "TIMESTAMP",
     "mode": "NULLABLE",
-    "description": "Time of approval if this is an approval action"
+    "description": "The date and time when the approval was recorded, where the action records an approval."
   },
   {
     "name": "comment_character",
     "type": "STRING",
-    "mode": "NULLABLE"
+    "mode": "NULLABLE",
+    "description": "The free-text comment or message associated with the workflow action, where provided."
   },
   {
     "name": "comment_sanitized",
     "type": "BOOL",
-    "mode": "REQUIRED"
+    "mode": "REQUIRED",
+    "description": "Comment-sanitisation flag. All observed values in the table are FALSE."
   },
   {
     "name": "request_type",
     "type": "STRING",
-    "mode": "REQUIRED"
+    "mode": "REQUIRED",
+    "description": "The type of Publisher workflow action recorded. Observed values cover assignment, review, fact checking, amendment requests, notes, version creation, scheduling, publishing and archiving."
   },
   {
     "name": "request_details",
     "type": "JSON",
-    "mode": "REQUIRED"
+    "mode": "REQUIRED",
+    "description": "For the request_type called schedule_for_publishing, the JSON contains a key-value pair of the words ‘scheduled_time’ and the scheduled publication time; other actions contain an empty JSON object."
   },
   {
     "name": "requester_name",
     "type": "STRING",
-    "mode": "NULLABLE"
+    "mode": "NULLABLE",
+    "description": "Only populated on receive_fact_check actions. The name of the person who requested the fact check."
   },
   {
     "name": "email_address",
     "type": "STRING",
-    "mode": "NULLABLE"
+    "mode": "NULLABLE",
+    "description": "Only populated for send_fact_check and fact_check_requested actions. The email address identifies the recipient/s of the fact-check request."
   },
   {
     "name": "customised_message",
     "type": "STRING",
-    "mode": "NULLABLE"
+    "mode": "NULLABLE",
+    "description": "Only populated for send_fact_check and fact_check_requested actions. The message contains the content and instructions sent with that request."
   },
   {
     "name": "mongo_id",
     "type": "STRING",
-    "mode": "NULLABLE"
+    "mode": "NULLABLE",
+    "description": "The identifier of the corresponding action record in Publisher’s former MongoDB database, retained to correlate migrated action records with their PostgreSQL records. This field is null where no former MongoDB action identifier is recorded."
   },
   {
     "name": "create_at",
     "type": "TIMESTAMP",
-    "mode": "REQUIRED"
+    "mode": "REQUIRED",
+    "description": "The date and time when the Publisher action record was created."
   },
   {
     "name": "updated_at",
     "type": "TIMESTAMP",
-    "mode": "REQUIRED"
+    "mode": "REQUIRED",
+    "description": "The date and time when the Publisher action record was last updated."
   },
   {
     "name": "edition_id",
     "type": "STRING",
-    "mode": "NULLABLE"
+    "mode": "NULLABLE",
+    "description": "The identifier of the Publisher edition to which the action relates. This joins to id in govuk-knowledge-graph.publisher.editions"
   },
   {
     "name": "requester_id",
     "type": "INTEGER",
-    "mode": "NULLABLE"
+    "mode": "NULLABLE",
+    "description": "The identifier of the Publisher user who initiated the workflow action or request, where recorded."
   },
   {
     "name": "recipient_id",
     "type": "INTEGER",
-    "mode": "NULLABLE"
+    "mode": "NULLABLE",
+    "description": "Only populated for the request_type ‘assign’. The identifier of the Publisher user to whom the edition was assigned."
   }
 ]
