@@ -2,136 +2,163 @@
   {
     "name": "id",
     "type": "STRING",
-    "mode": "REQUIRED"
+    "mode": "REQUIRED",
+    "description": "The UUID identifying the Publisher edition record in the PostgreSQL database."
   },
   {
     "name": "panopticon_id",
     "type": "STRING",
-    "mode": "NULLABLE"
+    "mode": "NULLABLE",
+    "description": "The legacy Panopticon identifier that groups Publisher editions belonging to the same underlying GOV.UK content."
   },
   {
     "name": "version_number",
     "type": "INTEGER",
-    "mode": "REQUIRED"
+    "mode": "REQUIRED",
+    "description": "The sequential version number of the edition within the same underlying Publisher content."
   },
   {
     "name": "sibling_in_progress",
     "type": "INTEGER",
-    "mode": "NULLABLE"
+    "mode": "NULLABLE",
+    "description": "The version number of another edition of the same underlying Publisher content that was recorded as being in progress. The value is stored on a published or archived edition and can sometimes remain after the sibling stops being in progress or disappears from the table."
   },
   {
     "name": "title",
     "type": "STRING",
-    "mode": "NULLABLE"
+    "mode": "NULLABLE",
+    "description": "The title recorded for the Publisher edition."
   },
   {
     "name": "in_beta",
     "type": "BOOL",
-    "mode": "REQUIRED"
+    "mode": "REQUIRED",
+    "description": "Indicates whether the edition is marked as beta in Publisher."
   },
   {
     "name": "publish_at",
     "type": "TIMESTAMP",
-    "mode": "NULLABLE"
+    "mode": "NULLABLE",
+    "description": "The date and time at which the edition is scheduled to be published."
   }, 
   {
     "name": "overview",
     "type": "STRING",
-    "mode": "NULLABLE"
+    "mode": "NULLABLE",
+    "description": "The summary or overview text recorded for the edition."
   },
   {
     "name": "slug",
     "type": "STRING",
-    "mode": "NULLABLE"
+    "mode": "NULLABLE",
+    "description": "The slug recorded for the content in Publisher, used as the human-readable part of its GOV.UK path."
   },
   {
     "name": "rejected_count",
     "type": "INTEGER",
-    "mode": "REQUIRED"
+    "mode": "REQUIRED",
+    "description": "The number of times the edition has been rejected or returned for amendments during the Publisher editorial workflow. A value greater than zero can remain after the edition progresses to a later workflow state." 
   },
   {
     "name": "asignee",
     "type": "STRING",
-    "mode": "NULLABLE"
+    "mode": "NULLABLE",
+    "description": "The name of the Publisher user who was assigned to the edition."
   },
   {
     "name": "reviewer",
     "type": "STRING",
-    "mode": "NULLABLE"
+    "mode": "NULLABLE",
+    "description": "Legacy or unused reviewer field. No populated values were found in the table."
   },
   {
     "name": "creator",
     "type": "STRING",
-    "mode": "NULLABLE"
+    "mode": "NULLABLE",
+    "description": "The name of the Publisher user who created the edition."
   },
   {
     "name": "publisher",
     "type": "STRING",
-    "mode": "NULLABLE"
+    "mode": "NULLABLE",
+    "description": "The name of the Publisher user who published the edition, where recorded."
   },
   {
     "name": "archiver",
     "type": "STRING",
-    "mode": "NULLABLE"
+    "mode": "NULLABLE",
+    "description": "The name of the Publisher user who archived the edition, where recorded."
   },
   {
     "name": "major_change",
     "type": "BOOL",
-    "mode": "REQUIRED"
+    "mode": "REQUIRED",
+    "description": "Indicates whether the edition is marked as a major change."
   },
   {
     "name": "change_note",
     "type": "STRING",
-    "mode": "NULLABLE"
+    "mode": "NULLABLE",
+    "description": "The note describing the change made in this edition, where provided. A major_change should always be accompanied by a change_note."
   },
   {
     "name": "state",
     "type": "STRING",
-    "mode": "REQUIRED"
+    "mode": "REQUIRED",
+    "description": "The editorial workflow state of the Publisher edition. Observed values are draft, fact_check, in_review, amends_needed, ready, scheduled_for_publishing, published and archived."
   },
   {
     "name": "review_requested_at",
     "type": "TIMESTAMP",
-    "mode": "NULLABLE"
+    "mode": "NULLABLE",
+    "description": "The date and time when review or fact checking was requested for the edition, where recorded. The value can remain populated after the edition has progressed to a later workflow state."
   },
   {
     "name": "auth_bypass_id",
     "type": "STRING",
-    "mode": "REQUIRED"
+    "mode": "REQUIRED",
+    "description": "A unique identifier for the edition that can be used to allow access to non-public content without authentication."
   },
   {
     "name": "owning_org_content_ids",
     "type": "STRING",
-    "mode": "NULLABLE"
+    "mode": "NULLABLE",
+    "description": "The content IDs of government organisations recorded as owning the edition’s content, stored as a string representation of an array. An empty array ({}) indicates that no owning organisation is recorded."
   },
   {
     "name": "mongo_id",
     "type": "STRING",
-    "mode": "NULLABLE"
+    "mode": "NULLABLE",
+    "description": "The identifier of the corresponding edition record in Publisher’s former MongoDB database, retained to correlate migrated PostgreSQL editions with their original records."
   },
   {
     "name": "created_at",
     "type": "TIMESTAMP",
-    "mode": "REQUIRED"
+    "mode": "REQUIRED",
+    "description": "The date and time when the Publisher edition record was created."
   },
   {
     "name": "updated_at",
     "type": "TIMESTAMP",
-    "mode": "REQUIRED"
+    "mode": "REQUIRED",
+    "description": "The date and time when the Publisher edition record was last updated."
   },
   {
     "name": "editionable_type",
     "type": "STRING",
-    "mode": "REQUIRED"
+    "mode": "REQUIRED",
+    "description": "The type of content-specific Publisher record associated with the edition, such as GuideEdition, AnswerEdition or TransactionEdition."
   },
   {
     "name": "editionable_id",
     "type": "INTEGER",
-    "mode": "REQUIRED"
+    "mode": "REQUIRED",
+    "description": "The identifier of the content-specific record associated with the edition. The value is unique within an editionable_type and must be used together with editionable_type to identify the record."
   },
   {
     "name": "assigned_to_id",
     "type": "INTEGER",
-    "mode": "NULLABLE"
+    "mode": "NULLABLE",
+    "description": "The identifier of the Publisher user who was assigned to the edition."
   }
 ]
