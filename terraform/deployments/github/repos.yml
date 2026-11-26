@@ -503,7 +503,7 @@ repos:
         - Test Ruby / Run RSpec
 
   govuk-publishing-documentation:
-    visibility: private
+    visibility: internal
     branch_protection: false
     can_be_deployed: false
 
