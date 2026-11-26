@@ -90,9 +90,16 @@ resource "helm_release" "cilium" {
     routingMode          = "native"
     hubble = {
       enabled = true
+      metrics = {
+        enableOpenMetrics = true
+        enabled           = true
+      }
       relay = {
         enabled  = true
         replicas = 2
+      }
+      prometheus = {
+        enabled = true
       }
       ui = {
         enabled  = true
