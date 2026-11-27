@@ -5,8 +5,7 @@ locals {
 }
 
 module "external_secrets_iam_role" {
-  source             = "terraform-aws-modules/iam/aws//modules/iam-role"
-  version            = "~> 6.0"
+  source             = "../../shared-modules/iam-role"
   name               = "${var.environment_name}-${local.external_secrets_service_account_name}"
   use_name_prefix    = false
   description        = "Role for External Secrets addon. Corresponds to ${local.external_secrets_service_account_name} k8s ServiceAccount."

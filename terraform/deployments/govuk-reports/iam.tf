@@ -59,8 +59,7 @@ resource "aws_iam_policy" "govuk_reports" {
 
 # IRSA role for govuk-reports service account
 module "govuk_reports_iam_role" {
-  source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts"
-  version = "~> 6.0"
+  source  = "../../shared-modules/iam-role-for-service-accounts"
 
   name                 = "${local.govuk_reports_service_account_name}-${data.tfe_outputs.cluster_infrastructure.nonsensitive_values.cluster_id}"
   use_name_prefix      = false

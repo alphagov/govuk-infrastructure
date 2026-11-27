@@ -4,8 +4,7 @@ locals {
 }
 
 module "grafana_iam_role" {
-  source             = "terraform-aws-modules/iam/aws//modules/iam-role"
-  version            = "~> 6.0"
+  source             = "../../shared-modules/iam-role"
   name               = "${local.grafana_service_account}-${module.eks.cluster_name}"
   use_name_prefix    = false
   description        = "Role for Grafana to access AWS data sources. Corresponds to ${local.grafana_service_account} k8s ServiceAccount."
