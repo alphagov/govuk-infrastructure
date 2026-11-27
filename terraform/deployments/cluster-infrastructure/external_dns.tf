@@ -12,8 +12,7 @@ locals {
 }
 
 module "external_dns_iam_role" {
-  source             = "terraform-aws-modules/iam/aws//modules/iam-role"
-  version            = "~> 6.0"
+  source             = "../../shared-modules/iam-role"
   name               = "${local.external_dns_service_account_name}-${var.cluster_name}"
   use_name_prefix    = false
   description        = "Role for External DNS addon. Corresponds to ${local.external_dns_service_account_name} k8s ServiceAccount."

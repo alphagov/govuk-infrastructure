@@ -3,8 +3,7 @@ locals {
 }
 
 module "aws_ebs_csi_driver_iam_role" {
-  source             = "terraform-aws-modules/iam/aws//modules/iam-role"
-  version            = "~> 6.0"
+  source             = "../../shared-modules/iam-role"
   name               = "${var.environment_name}-${local.ebs_csi_driver_controller_service_account_name}"
   use_name_prefix    = false
   description        = "Role for the AWS EBS CSI driver controller. Corresponds to ${local.ebs_csi_driver_controller_service_account_name} k8s ServiceAccount."

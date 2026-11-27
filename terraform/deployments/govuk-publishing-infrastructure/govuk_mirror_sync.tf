@@ -338,8 +338,7 @@ resource "aws_iam_policy_attachment" "govuk_mirror_gcp_storage_transfer" {
 }
 
 module "govuk_mirror_sync_iam_role" {
-  source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts"
-  version = "~> 6.0"
+  source  = "../../shared-modules/iam-role-for-service-accounts"
 
   name            = "govuk-mirror-sync"
   use_name_prefix = false

@@ -88,8 +88,7 @@ resource "aws_iam_policy" "govuk_ai_graph_tools_bedrock_access_policy" {
 module "govuk_ai_graph_tools_irsa_role" {
   count = var.enable_govuk_ai_graph_tools ? 1 : 0
 
-  source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts"
-  version = "~> 6.0"
+  source  = "../../shared-modules/iam-role-for-service-accounts"
 
   name                 = "${local.govuk_ai_graph_tools_service_account_name}-${data.tfe_outputs.cluster_infrastructure.nonsensitive_values.cluster_id}"
   use_name_prefix      = false

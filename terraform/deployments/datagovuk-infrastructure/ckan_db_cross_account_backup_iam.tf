@@ -7,8 +7,7 @@ locals {
 module "ckan_database_cross_account_backup_role" {
   count = var.enable_cross_account_database_backup_sync ? 1 : 0
 
-  source             = "terraform-aws-modules/iam/aws//modules/iam-role"
-  version            = "~> 6.0"
+  source             = "../../shared-modules/iam-role"
   name               = local.ckan_database_cross_account_backup_role_name
   use_name_prefix    = false
   description        = "Role for CKAN S3 access. Corresponds to ${var.ckan_service_account_namespace}/${local.ckan_database_cross_account_backup_service_account_name} k8s ServiceAccount."

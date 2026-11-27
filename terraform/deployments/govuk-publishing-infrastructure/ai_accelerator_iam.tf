@@ -88,8 +88,7 @@ resource "aws_iam_policy" "govuk_ai_accelerator_bedrock_access_policy" {
 module "govuk_reports_iam_role" {
   count = var.enable_govuk_ai_accelerator ? 1 : 0
 
-  source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts"
-  version = "~> 6.0"
+  source  = "../../shared-modules/iam-role-for-service-accounts"
 
   name                 = "${local.govuk_ai_accelerator_service_account_name}-${data.tfe_outputs.cluster_infrastructure.nonsensitive_values.cluster_id}"
   use_name_prefix      = false
