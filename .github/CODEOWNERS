@@ -11,8 +11,8 @@
 /terraform/variables/production/ @alphagov/gov-uk-platform-engineering
 
 # Data Engineering
-/terraform/deployments/gcp-gov-graph/ @alphagov/gov-uk-platform-engineering @alphagov/govuk-data-engineering
-/terraform/variables/**/gcp-gov-graph.tfvars @alphagov/gov-uk-platform-engineering @alphagov/govuk-data-engineering
+/terraform/deployments/gcp-gov-graph/ @alphagov/gov-uk-platform-engineering @alphagov/gov-uk-data-engineering
+/terraform/variables/**/gcp-gov-graph.tfvars @alphagov/gov-uk-platform-engineering @alphagov/gov-uk-data-engineering
 
 # National Data Library
 /terraform/deployments/datagovuk-infrastructure/ @alphagov/gov-uk-platform-engineering @alphagov/national-data-library
