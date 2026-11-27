@@ -7,8 +7,3 @@ import {
   to = github_repository.govuk_repos["govuk-preview-app"]
   id = "govuk-preview-app"
 }
-
-import {
-  to = github_team.govuk_data_engineering
-  id = "govuk-data-engineering"
-}

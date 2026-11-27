@@ -166,7 +166,6 @@ repos:
     teams:
       govuk: "maintain"
       govuk-platform-engineering: "admin"
-      govuk-data-engineering: "admin"
 
     required_status_checks:
       standard_contexts: []
@@ -380,7 +379,6 @@ repos:
     teams:
       govuk: "maintain"
       govuk-platform-engineering: "admin"
-      govuk-data-engineering: "admin"
 
   govuk-data-science-workshop:
     archived: true
@@ -1158,4 +1156,3 @@ repos:
     teams:
       govuk: "maintain"
       govuk-platform-engineering: "admin"
-      govuk-data-engineering: "admin"
