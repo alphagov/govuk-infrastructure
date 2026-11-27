@@ -363,6 +363,10 @@ repos:
       standard_contexts: *standard_security_checks
       additional_contexts:
         - Lint Ruby / Run RuboCop
+    push_allowances:
+      - "alphagov/keithkirkwood"
+      - "alphagov/gov-uk-production-admin"
+      - "alphagov/gov-uk-production-deploy"
 
   govuk-cookie-consent:
     topics:
